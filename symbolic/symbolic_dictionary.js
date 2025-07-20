@@ -1,19 +1,12 @@
-// symbolic/symbolic_dictionary.js
-import fs from "fs";
+export const symbolMap = {
+  "dreamgate": "open_cosmic_portal",
+  "regalia": "define_regalia",
+  "tao_te_ching_1": "summarize_tao_te_ching",
+  "bhagavad_gita_1": "summarize_bhagavad_gita",
+  "hermetica_1": "summarize_hermetica",
+  "druidry_handbook_1": "summarize_druidry_handbook"
+};
 
-const dictPath = "./symbolic_memory/dictionary_memory.json";
-
-let dictionary = {};
-
-try {
-  const raw = fs.readFileSync(dictPath, "utf-8");
-  dictionary = JSON.parse(raw);
-} catch (err) {
-  console.warn("⚠️  Failed to load dictionary:", err.message);
-}
-
-export function getDefinitions(word) {
-  if (!word || typeof word !== "string") return [];
-  const key = word.toLowerCase();
-  return dictionary[key] || [];
+export function getMappedAction(symbol) {
+  return symbolMap[symbol] || null;
 }

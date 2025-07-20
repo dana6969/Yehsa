@@ -24,4 +24,4 @@ export function execute(symbol) {
   }
 }
 export function mirror_reality() { const fs = require("fs"); const data = fs.readFileSync("symbolic_memory/trainer_learned.json", "utf-8"); const learned = JSON.parse(data); console.log(`🪞 Mirror activated. ${learned.length} symbols in memory.`); }
-export function executeSymbol(symbol) { console.log("🔁 Executing:", symbol); }
+export function executeSymbol(symbol) { if (typeof symbol !== "string" || symbol.includes(" ")) return console.log("[⚠️ Skipped invalid symbol]", symbol); console.log("🔁 Executing:", symbol); }
