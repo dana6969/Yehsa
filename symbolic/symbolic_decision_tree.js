@@ -1,0 +1,1 @@
+module.exports = function symbolicDecisionTree(symbols) { if (!symbols || symbols.length === 0) return "wait"; if (symbols.includes("⚠️")) return "investigate"; if (symbols.includes("💡")) return "analyze"; if (symbols.includes("🌀")) return "adapt"; return "process"; };

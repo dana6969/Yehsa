@@ -1,0 +1,1 @@
+import fs from "fs"; export function logSymbolInteraction(symbols, context) { const log = { symbols, context, timestamp: Date.now() }; console.log("[Symbol Log]", JSON.stringify(log, null, 2)); fs.appendFileSync("yehsa_phase4.log", JSON.stringify(log) + "\n"); }

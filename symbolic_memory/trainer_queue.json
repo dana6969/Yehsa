@@ -1,0 +1,30 @@
+[
+  {
+    "symbol": "dreamgate",
+    "context": "phase5:test-symbolic-class"
+  },
+  {
+    "symbol": "unlock",
+    "context": "phase4:input_text:open the sealed memory"
+  },
+  {
+    "symbol": "fear",
+    "context": "phase4:input_text:the system is under attack"
+  },
+  {
+    "symbol": "mirror",
+    "context": "phase4:input_text:mirror reality fractal"
+  },
+  {
+    "symbol": "light",
+    "context": "phase5:activate_illumination"
+  },
+  {
+    "symbol": "pulse",
+    "context": "phase5:dispatch_command_to_mesh"
+  },
+  {
+    "symbol": "initiate",
+    "context": "phase3:initiate_yehsa_core_loop"
+  }
+]

@@ -1,0 +1,1 @@
+import { symbolMap } from "./symbol_map.js"; export function handleSymbol(symbol) { const action = symbolMap[symbol]; console.log(`Responding to symbol ${symbol} with action: ${action}`); return action; }

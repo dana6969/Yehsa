@@ -1,0 +1,1 @@
+import fs from "fs"; export function evolve(symbol, action) { const file = "./symbolic_memory/evolution_map.json"; let map = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file)) : {}; map[symbol] = action; fs.writeFileSync(file, JSON.stringify(map, null, 2)); console.log(`[🌱 Evolved] ${symbol} → ${action}`); }

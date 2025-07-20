@@ -1,0 +1,1 @@
+import fs from "fs"; const chain = []; export function addToChain(symbols, reasoning, context) { const entry = { timestamp: new Date().toISOString(), symbols, reasoning, context }; chain.push(entry); fs.appendFileSync("logs/symbol_chain.log", JSON.stringify(entry) + "\n"); } export function getChain() { return chain; }

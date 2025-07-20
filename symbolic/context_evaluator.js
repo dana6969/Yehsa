@@ -1,0 +1,1 @@
+module.exports = function contextEvaluator(input, context) { if (!context) return { relevance: 0 }; const matchScore = context.includes(input) ? 1 : 0; return { relevance: matchScore, contextUsed: context }; };

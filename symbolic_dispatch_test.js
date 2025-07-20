@@ -1,0 +1,1 @@
+import { symbolicDispatcher } from './yesha_modules/core/symbolic_dispatcher.js'; const input = { options: ['A', 'B', 'C'] }; const result = symbolicDispatcher(input); console.log('🧠 Dispatcher Result:', result);

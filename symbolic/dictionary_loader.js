@@ -1,0 +1,1 @@
+import fs from "fs"; const dict = JSON.parse(fs.readFileSync("./symbolic_memory/dictionary_memory.json", "utf-8")); global.getDefinitions = word => dict[word.toLowerCase()] || []; console.log("📚 Dictionary loaded and getDefinitions() is now available.");

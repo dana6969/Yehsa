@@ -1,0 +1,1 @@
+export function resolveMultiPath(input) { console.log('🧠 Resolving multi-path for', input); const paths = input.options.map((opt, i) => ({ option: i, symbol: opt, weight: (i + 1) * 0.5, logic: 'recursive', entropy: (1 / (i + 1)).toFixed(2), trigger: opt === 'C' })); return { resolved: true, meta: { timestamp: new Date().toISOString(), totalPaths: paths.length }, paths }; }

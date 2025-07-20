@@ -1,0 +1,1 @@
+export function parseTextToSymbols(text) { const keywords = { fire: "🔥", mind: "🧠", fear: "😱", cosmos: "🌌", love: "💖", death: "💀", light: "✨", shadow: "🌑" }; return text.toLowerCase().split(/\s+/).map(word => keywords[word]).filter(Boolean); }

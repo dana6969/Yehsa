@@ -1,0 +1,1 @@
+module.exports = function contextEnricher(data) { const enriched = { ...data }; if (data.symbols && data.symbols.includes("🌌")) enriched.context = "cosmic-awareness"; if (data.symbols && data.symbols.includes("🧬")) enriched.context = "evolutionary-pattern"; return enriched; };

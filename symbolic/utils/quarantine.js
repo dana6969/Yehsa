@@ -1,0 +1,1 @@
+import fs from "fs"; export function quarantineInvalid(entry) { const path = "./symbolic_memory/trash_log.json"; const trash = fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, "utf-8")) : []; trash.push(entry); fs.writeFileSync(path, JSON.stringify(trash, null, 2)); }

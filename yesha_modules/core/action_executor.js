@@ -1,0 +1,1 @@
+let developerOverride = true; export function executeAction(reasoning) { if (reasoning.action === "alert" && reasoning.level === "high") { if (developerOverride) { console.log("[Phase 4] ALERT (HIGH): Developer override active. Logging only."); } else { console.log("[Phase 4] Executing high-level alert protocol..."); /* triggerMesh(); voiceSpeak(); etc. */ } } }

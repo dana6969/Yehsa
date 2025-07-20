@@ -1,0 +1,1 @@
+import { classifyIntent } from "./yesha_modules/core/intent_classifier.js"; import { logSymbolInteraction } from "./yesha_modules/symbolic/logger.js"; const testSymbols = ["😱", "💀", "🔥"]; const intent = classifyIntent(testSymbols); console.log(`[Yehsa Intent] Detected intent: ${intent}`); logSymbolInteraction(testSymbols, `classified_intent:${intent}`);

@@ -1,0 +1,144 @@
+[
+  {
+    "timestamp": "2025-07-14T23:09:49.073Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "test"
+  },
+  {
+    "timestamp": "2025-07-14T23:14:24.311Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "test"
+  },
+  {
+    "timestamp": "2025-07-14T23:21:24.882Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "test"
+  },
+  {
+    "timestamp": "2025-07-14T23:25:24.618Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "test",
+    "expansion": {
+      "prompt": "Initiate cognitive self-reflection protocol."
+    }
+  },
+  {
+    "timestamp": "2025-07-14T23:30:50.868Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "test"
+  },
+  {
+    "timestamp": "2025-07-14T23:38:17.353Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "emotional_check"
+  },
+  {
+    "timestamp": "2025-07-14T23:40:34.360Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "emotional_check"
+  },
+  {
+    "timestamp": "2025-07-15T00:05:48.987Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "emotional_check"
+  },
+  {
+    "timestamp": "2025-07-15T00:17:29.779Z",
+    "symbols": [
+      "😱",
+      "✨"
+    ],
+    "reasoning": {
+      "action": "process",
+      "symbols": [
+        "😱",
+        "✨"
+      ]
+    },
+    "context": "text_to_symbol"
+  },
+  {
+    "timestamp": "2025-07-15T00:22:28.111Z",
+    "symbols": [
+      "😱",
+      "💀",
+      "🔥"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "classified_intent:emotion"
+  },
+  {
+    "timestamp": "2025-07-15T01:01:19.135Z",
+    "symbols": [
+      "😱",
+      "✨"
+    ],
+    "reasoning": {
+      "action": "process",
+      "symbols": [
+        "😱",
+        "✨"
+      ]
+    },
+    "context": "phase4:input_text:fear of intelligence beyond light"
+  }
+]

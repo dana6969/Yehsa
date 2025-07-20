@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Axi0net",
+    "slug": "axionet",
+    "owner": "dman6969",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "android": {
+      "package": "com.dana6969.axi0net",
+      "versionCode": 1,
+      "edgeToEdgeEnabled": true
+    },
+    "ios": {
+      "bundleIdentifier": "com.dana6969.axi0net"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e60340c9-58a4-4c15-ae31-1060cb3bc53c"
+      }
+    },
+    "icon": "./assets/icon.png"
+  }
+}

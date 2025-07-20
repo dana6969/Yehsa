@@ -1,0 +1,1 @@
+module.exports = function stateEvaluator(state) { if (!state || typeof state !== "object") return "invalid"; if (state.alert === true) return "critical"; if (state.engaged && state.depth === "deep") return "processing"; if (state.idle) return "standby"; return "active"; };

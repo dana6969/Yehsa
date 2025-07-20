@@ -1,0 +1,1 @@
+import fs from "fs"; export function appendMemory(entry) { const file = "logs/memory_log.json"; const data = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, "utf8")) : []; data.push(entry); fs.writeFileSync(file, JSON.stringify(data, null, 2)); }

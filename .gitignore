@@ -1,0 +1,14 @@
+.android/
+.termux/
+.cache/
+.gradle/
+.npm/
+.expo/
+node_modules/
+*.class
+*.zip
+*.log
+*.tmp
+__MACOSX/
+.DS_Store
+!logs/symbol_chain.log

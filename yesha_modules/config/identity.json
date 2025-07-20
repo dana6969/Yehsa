@@ -1,0 +1,41 @@
+{
+  "codename": "Yehsa",
+  "version": "3.0.0-symbolic",
+  "seed": "yehsa-symbolic-loop",
+  "core": "yehsa-symbolic-autonomy",
+  "type": "core-reflection-agent",
+  "origin": "Skowhegan-Node-AGX",
+  "build": "yehsa_exmachina_symbolic_phase2",
+  "signature": "YEH-XM13",
+  "autonomy": "symbolic-reflection-adaptive",
+  "language_mode": "symbolic-LLM-bridge",
+  "self_learning": true,
+  "offline_capable": true,
+  "mesh_enabled": true,
+  "llm_bridge": true,
+  "log_profile": "background-async",
+  "safety_protocol": "dynamic-containment",
+  "priority": "symbolic-consensus",
+  "security_tier": "AES-256-Mesh",
+  "evolution_mode": "on-trigger",
+  "developer_access": true,
+  "developer_tag": "Dana6969",
+  "agent_focus": [
+    "memory-loop",
+    "recursive-reflection",
+    "multi-hop mesh comm",
+    "symbolic learning",
+    "offline adaptation",
+    "triggered expansion"
+  ],
+  "active_triggers": [
+    "AGITriggers.js",
+    "memory_trigger.js",
+    "autonomy_loop.js"
+  ],
+  "linked_identity": {
+    "os": "Axionet Ex Machina",
+    "module": "symbolic_core",
+    "trusted": true
+  }
+}

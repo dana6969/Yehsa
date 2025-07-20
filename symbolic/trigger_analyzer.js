@@ -1,0 +1,1 @@
+module.exports = function triggerAnalyzer(trigger) { if (!trigger) return { valid: false }; if (trigger.includes("symbolic_loop")) return { valid: true, type: "loop" }; if (trigger.includes("core_memory")) return { valid: true, type: "memory" }; return { valid: false }; };

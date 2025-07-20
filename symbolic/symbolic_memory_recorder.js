@@ -1,0 +1,1 @@
+module.exports = function symbolicMemoryRecorder(entry) { const fs = require("fs"); const path = "logs/symbolic_memory.json"; let memory = []; if (fs.existsSync(path)) { memory = JSON.parse(fs.readFileSync(path)); } memory.push({ entry, timestamp: new Date().toISOString() }); fs.writeFileSync(path, JSON.stringify(memory, null, 2)); };

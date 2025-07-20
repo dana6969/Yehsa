@@ -1,0 +1,1 @@
+import fs from "fs"; import { executeSymbol } from "./symbolic/symbolic_action_executor.js"; const ts = Date.now(); const data = JSON.parse(fs.readFileSync("./symbolic_memory/trainer_learned.json", "utf-8")).slice(-100); for (const entry of data) { executeSymbol(entry.symbol); } console.log(`⛓️ Executed 100 chained symbols in ${Date.now() - ts} ms`);

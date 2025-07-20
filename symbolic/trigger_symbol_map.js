@@ -1,0 +1,1 @@
+module.exports = function triggerSymbolMap(symbol) { const map = { "🔥": "threat_detected", "🧠": "engage_reflection", "🌌": "expand_consciousness", "⚙️": "run_process", "🧬": "initiate_learning" }; return map[symbol] || "unknown_symbol"; };

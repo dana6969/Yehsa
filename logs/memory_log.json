@@ -1,0 +1,120 @@
+[
+  {
+    "timestamp": "2025-07-14T23:21:24.880Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "test"
+  },
+  {
+    "timestamp": "2025-07-14T23:25:24.606Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "test",
+    "expansion": {
+      "prompt": "Initiate cognitive self-reflection protocol."
+    }
+  },
+  {
+    "timestamp": "2025-07-14T23:30:50.858Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "test"
+  },
+  {
+    "timestamp": "2025-07-14T23:38:17.344Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "emotional_check"
+  },
+  {
+    "timestamp": "2025-07-14T23:40:34.358Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "emotional_check"
+  },
+  {
+    "timestamp": "2025-07-15T00:05:48.977Z",
+    "symbols": [
+      "🔥",
+      "🧠"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "emotional_check"
+  },
+  {
+    "timestamp": "2025-07-15T00:17:29.769Z",
+    "symbols": [
+      "😱",
+      "✨"
+    ],
+    "reasoning": {
+      "action": "process",
+      "symbols": [
+        "😱",
+        "✨"
+      ]
+    },
+    "context": "text_to_symbol"
+  },
+  {
+    "timestamp": "2025-07-15T00:22:28.109Z",
+    "symbols": [
+      "😱",
+      "💀",
+      "🔥"
+    ],
+    "reasoning": {
+      "action": "alert",
+      "level": "high"
+    },
+    "context": "classified_intent:emotion"
+  },
+  {
+    "timestamp": "2025-07-15T01:01:19.125Z",
+    "symbols": [
+      "😱",
+      "✨"
+    ],
+    "reasoning": {
+      "action": "process",
+      "symbols": [
+        "😱",
+        "✨"
+      ]
+    },
+    "context": "phase4:input_text:fear of intelligence beyond light"
+  }
+]

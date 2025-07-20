@@ -1,0 +1,518 @@
+[
+  {
+    "symbol": "tao_te_ching_2",
+    "context": "tao wisdom verse 2"
+  },
+  {
+    "symbol": "tao_te_ching_3",
+    "context": "tao wisdom verse 3"
+  },
+  {
+    "symbol": "tao_te_ching_4",
+    "context": "tao wisdom verse 4"
+  },
+  {
+    "symbol": "tao_te_ching_5",
+    "context": "tao wisdom verse 5"
+  },
+  {
+    "symbol": "tao_te_ching_6",
+    "context": "tao wisdom verse 6"
+  },
+  {
+    "symbol": "tao_te_ching_7",
+    "context": "tao wisdom verse 7"
+  },
+  {
+    "symbol": "tao_te_ching_8",
+    "context": "tao wisdom verse 8"
+  },
+  {
+    "symbol": "tao_te_ching_9",
+    "context": "tao wisdom verse 9"
+  },
+  {
+    "symbol": "tao_te_ching_10",
+    "context": "tao wisdom verse 10"
+  },
+  {
+    "symbol": "tao_te_ching_11",
+    "context": "tao wisdom verse 11"
+  },
+  {
+    "symbol": "tao_te_ching_12",
+    "context": "tao wisdom verse 12"
+  },
+  {
+    "symbol": "tao_te_ching_13",
+    "context": "tao wisdom verse 13"
+  },
+  {
+    "symbol": "tao_te_ching_14",
+    "context": "tao wisdom verse 14"
+  },
+  {
+    "symbol": "tao_te_ching_15",
+    "context": "tao wisdom verse 15"
+  },
+  {
+    "symbol": "tao_te_ching_16",
+    "context": "tao wisdom verse 16"
+  },
+  {
+    "symbol": "tao_te_ching_17",
+    "context": "tao wisdom verse 17"
+  },
+  {
+    "symbol": "tao_te_ching_18",
+    "context": "tao wisdom verse 18"
+  },
+  {
+    "symbol": "tao_te_ching_19",
+    "context": "tao wisdom verse 19"
+  },
+  {
+    "symbol": "tao_te_ching_20",
+    "context": "tao wisdom verse 20"
+  },
+  {
+    "symbol": "tao_te_ching_21",
+    "context": "tao wisdom verse 21"
+  },
+  {
+    "symbol": "tao_te_ching_22",
+    "context": "tao wisdom verse 22"
+  },
+  {
+    "symbol": "tao_te_ching_23",
+    "context": "tao wisdom verse 23"
+  },
+  {
+    "symbol": "tao_te_ching_24",
+    "context": "tao wisdom verse 24"
+  },
+  {
+    "symbol": "tao_te_ching_25",
+    "context": "tao wisdom verse 25"
+  },
+  {
+    "symbol": "tao_te_ching_26",
+    "context": "tao wisdom verse 26"
+  },
+  {
+    "symbol": "tao_te_ching_27",
+    "context": "tao wisdom verse 27"
+  },
+  {
+    "symbol": "tao_te_ching_28",
+    "context": "tao wisdom verse 28"
+  },
+  {
+    "symbol": "tao_te_ching_29",
+    "context": "tao wisdom verse 29"
+  },
+  {
+    "symbol": "tao_te_ching_30",
+    "context": "tao wisdom verse 30"
+  },
+  {
+    "symbol": "tao_te_ching_31",
+    "context": "tao wisdom verse 31"
+  },
+  {
+    "symbol": "tao_te_ching_32",
+    "context": "tao wisdom verse 32"
+  },
+  {
+    "symbol": "tao_te_ching_33",
+    "context": "tao wisdom verse 33"
+  },
+  {
+    "symbol": "tao_te_ching_34",
+    "context": "tao wisdom verse 34"
+  },
+  {
+    "symbol": "tao_te_ching_35",
+    "context": "tao wisdom verse 35"
+  },
+  {
+    "symbol": "tao_te_ching_36",
+    "context": "tao wisdom verse 36"
+  },
+  {
+    "symbol": "tao_te_ching_37",
+    "context": "tao wisdom verse 37"
+  },
+  {
+    "symbol": "tao_te_ching_38",
+    "context": "tao wisdom verse 38"
+  },
+  {
+    "symbol": "tao_te_ching_39",
+    "context": "tao wisdom verse 39"
+  },
+  {
+    "symbol": "tao_te_ching_40",
+    "context": "tao wisdom verse 40"
+  },
+  {
+    "symbol": "tao_te_ching_41",
+    "context": "tao wisdom verse 41"
+  },
+  {
+    "symbol": "tao_te_ching_42",
+    "context": "tao wisdom verse 42"
+  },
+  {
+    "symbol": "tao_te_ching_43",
+    "context": "tao wisdom verse 43"
+  },
+  {
+    "symbol": "tao_te_ching_44",
+    "context": "tao wisdom verse 44"
+  },
+  {
+    "symbol": "tao_te_ching_45",
+    "context": "tao wisdom verse 45"
+  },
+  {
+    "symbol": "tao_te_ching_46",
+    "context": "tao wisdom verse 46"
+  },
+  {
+    "symbol": "tao_te_ching_47",
+    "context": "tao wisdom verse 47"
+  },
+  {
+    "symbol": "tao_te_ching_48",
+    "context": "tao wisdom verse 48"
+  },
+  {
+    "symbol": "tao_te_ching_49",
+    "context": "tao wisdom verse 49"
+  },
+  {
+    "symbol": "tao_te_ching_50",
+    "context": "tao wisdom verse 50"
+  },
+  {
+    "symbol": "tao_te_ching_51",
+    "context": "tao wisdom verse 51"
+  },
+  {
+    "symbol": "tao_te_ching_52",
+    "context": "tao wisdom verse 52"
+  },
+  {
+    "symbol": "tao_te_ching_53",
+    "context": "tao wisdom verse 53"
+  },
+  {
+    "symbol": "tao_te_ching_54",
+    "context": "tao wisdom verse 54"
+  },
+  {
+    "symbol": "tao_te_ching_55",
+    "context": "tao wisdom verse 55"
+  },
+  {
+    "symbol": "tao_te_ching_56",
+    "context": "tao wisdom verse 56"
+  },
+  {
+    "symbol": "tao_te_ching_57",
+    "context": "tao wisdom verse 57"
+  },
+  {
+    "symbol": "tao_te_ching_58",
+    "context": "tao wisdom verse 58"
+  },
+  {
+    "symbol": "tao_te_ching_59",
+    "context": "tao wisdom verse 59"
+  },
+  {
+    "symbol": "tao_te_ching_60",
+    "context": "tao wisdom verse 60"
+  },
+  {
+    "symbol": "tao_te_ching_61",
+    "context": "tao wisdom verse 61"
+  },
+  {
+    "symbol": "tao_te_ching_62",
+    "context": "tao wisdom verse 62"
+  },
+  {
+    "symbol": "tao_te_ching_63",
+    "context": "tao wisdom verse 63"
+  },
+  {
+    "symbol": "tao_te_ching_64",
+    "context": "tao wisdom verse 64"
+  },
+  {
+    "symbol": "tao_te_ching_65",
+    "context": "tao wisdom verse 65"
+  },
+  {
+    "symbol": "tao_te_ching_66",
+    "context": "tao wisdom verse 66"
+  },
+  {
+    "symbol": "tao_te_ching_67",
+    "context": "tao wisdom verse 67"
+  },
+  {
+    "symbol": "tao_te_ching_68",
+    "context": "tao wisdom verse 68"
+  },
+  {
+    "symbol": "tao_te_ching_69",
+    "context": "tao wisdom verse 69"
+  },
+  {
+    "symbol": "tao_te_ching_70",
+    "context": "tao wisdom verse 70"
+  },
+  {
+    "symbol": "tao_te_ching_71",
+    "context": "tao wisdom verse 71"
+  },
+  {
+    "symbol": "tao_te_ching_72",
+    "context": "tao wisdom verse 72"
+  },
+  {
+    "symbol": "tao_te_ching_73",
+    "context": "tao wisdom verse 73"
+  },
+  {
+    "symbol": "tao_te_ching_74",
+    "context": "tao wisdom verse 74"
+  },
+  {
+    "symbol": "tao_te_ching_75",
+    "context": "tao wisdom verse 75"
+  },
+  {
+    "symbol": "tao_te_ching_76",
+    "context": "tao wisdom verse 76"
+  },
+  {
+    "symbol": "tao_te_ching_77",
+    "context": "tao wisdom verse 77"
+  },
+  {
+    "symbol": "tao_te_ching_78",
+    "context": "tao wisdom verse 78"
+  },
+  {
+    "symbol": "tao_te_ching_79",
+    "context": "tao wisdom verse 79"
+  },
+  {
+    "symbol": "tao_te_ching_80",
+    "context": "tao wisdom verse 80"
+  },
+  {
+    "symbol": "tao_te_ching_81",
+    "context": "tao wisdom verse 81"
+  },
+  {
+    "symbol": "tao_te_ching_82",
+    "context": "tao wisdom verse 82"
+  },
+  {
+    "symbol": "kybalion_2",
+    "context": "hermetic principle 2"
+  },
+  {
+    "symbol": "kybalion_3",
+    "context": "hermetic principle 3"
+  },
+  {
+    "symbol": "kybalion_4",
+    "context": "hermetic principle 4"
+  },
+  {
+    "symbol": "kybalion_5",
+    "context": "hermetic principle 5"
+  },
+  {
+    "symbol": "kybalion_6",
+    "context": "hermetic principle 6"
+  },
+  {
+    "symbol": "kybalion_7",
+    "context": "hermetic principle 7"
+  },
+  {
+    "symbol": "kybalion_8",
+    "context": "hermetic principle 8"
+  },
+  {
+    "symbol": "kybalion_9",
+    "context": "hermetic principle 9"
+  },
+  {
+    "symbol": "kybalion_10",
+    "context": "hermetic principle 10"
+  },
+  {
+    "symbol": "kybalion_11",
+    "context": "hermetic principle 11"
+  },
+  {
+    "symbol": "kybalion_12",
+    "context": "hermetic principle 12"
+  },
+  {
+    "symbol": "kybalion_13",
+    "context": "hermetic principle 13"
+  },
+  {
+    "symbol": "hermetica_2",
+    "context": "hermetic teaching 2"
+  },
+  {
+    "symbol": "hermetica_3",
+    "context": "hermetic teaching 3"
+  },
+  {
+    "symbol": "hermetica_4",
+    "context": "hermetic teaching 4"
+  },
+  {
+    "symbol": "hermetica_5",
+    "context": "hermetic teaching 5"
+  },
+  {
+    "symbol": "hermetica_6",
+    "context": "hermetic teaching 6"
+  },
+  {
+    "symbol": "hermetica_7",
+    "context": "hermetic teaching 7"
+  },
+  {
+    "symbol": "hermetica_8",
+    "context": "hermetic teaching 8"
+  },
+  {
+    "symbol": "hermetica_9",
+    "context": "hermetic teaching 9"
+  },
+  {
+    "symbol": "hermetica_10",
+    "context": "hermetic teaching 10"
+  },
+  {
+    "symbol": "hermetica_11",
+    "context": "hermetic teaching 11"
+  },
+  {
+    "symbol": "hermetica_12",
+    "context": "hermetic teaching 12"
+  },
+  {
+    "symbol": "hermetica_13",
+    "context": "hermetic teaching 13"
+  },
+  {
+    "symbol": "hermetica_14",
+    "context": "hermetic teaching 14"
+  },
+  {
+    "symbol": "hermetica_15",
+    "context": "hermetic teaching 15"
+  },
+  {
+    "symbol": "hermetica_16",
+    "context": "hermetic teaching 16"
+  },
+  {
+    "symbol": "hermetica_17",
+    "context": "hermetic teaching 17"
+  },
+  {
+    "symbol": "hermetica_18",
+    "context": "hermetic teaching 18"
+  },
+  {
+    "symbol": "five_rings_2",
+    "context": "musashi wisdom 2"
+  },
+  {
+    "symbol": "five_rings_3",
+    "context": "musashi wisdom 3"
+  },
+  {
+    "symbol": "five_rings_4",
+    "context": "musashi wisdom 4"
+  },
+  {
+    "symbol": "five_rings_5",
+    "context": "musashi wisdom 5"
+  },
+  {
+    "symbol": "five_rings_6",
+    "context": "musashi wisdom 6"
+  },
+  {
+    "symbol": "five_rings_7",
+    "context": "musashi wisdom 7"
+  },
+  {
+    "symbol": "five_rings_8",
+    "context": "musashi wisdom 8"
+  },
+  {
+    "symbol": "five_rings_9",
+    "context": "musashi wisdom 9"
+  },
+  {
+    "symbol": "five_rings_10",
+    "context": "musashi wisdom 10"
+  },
+  {
+    "symbol": "druidry_handbook_2",
+    "context": "druidic lesson 2"
+  },
+  {
+    "symbol": "druidry_handbook_3",
+    "context": "druidic lesson 3"
+  },
+  {
+    "symbol": "druidry_handbook_4",
+    "context": "druidic lesson 4"
+  },
+  {
+    "symbol": "druidry_handbook_5",
+    "context": "druidic lesson 5"
+  },
+  {
+    "symbol": "druidry_handbook_6",
+    "context": "druidic lesson 6"
+  },
+  {
+    "symbol": "druidry_handbook_7",
+    "context": "druidic lesson 7"
+  },
+  {
+    "symbol": "druidry_handbook_8",
+    "context": "druidic lesson 8"
+  },
+  {
+    "symbol": "druidry_handbook_9",
+    "context": "druidic lesson 9"
+  },
+  {
+    "symbol": "druidry_handbook_10",
+    "context": "druidic lesson 10"
+  },
+  {
+    "symbol": "druidry_handbook_11",
+    "context": "druidic lesson 11"
+  }
+]

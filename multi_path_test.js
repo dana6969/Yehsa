@@ -1,0 +1,1 @@
+import { resolveMultiPath } from './yesha_modules/core/trainers/multi_path_resolver.js'; const input = { options: ['A', 'B', 'C'] }; const result = resolveMultiPath(input); console.log('🧠 Multi-Path Result:', JSON.stringify(result, null, 2));

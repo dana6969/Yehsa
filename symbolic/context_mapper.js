@@ -1,0 +1,1 @@
+module.exports = function contextMapper(input) { const contextMap = { "fire": "emergency", "mind": "cognition", "stars": "cosmos", "machine": "system", "loop": "recursion", "chain": "causality", "idea": "insight" }; for (const key in contextMap) { if (input.toLowerCase().includes(key)) return contextMap[key]; } return "general"; };

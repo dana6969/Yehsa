@@ -1,0 +1,1 @@
+import fs from "fs"; export function reinforce(symbol) { const log = "./symbolic_memory/reinforce_log.json"; let data = fs.existsSync(log) ? JSON.parse(fs.readFileSync(log)) : {}; data[symbol] = (data[symbol] || 0) + 1; fs.writeFileSync(log, JSON.stringify(data, null, 2)); console.log(`[🧠 Reinforce] ${symbol} → ${data[symbol]}`); }

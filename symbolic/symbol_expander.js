@@ -1,0 +1,1 @@
+module.exports = function symbolExpander(symbol) { const expansions = { "🔥": ["danger", "urgent", "critical"], "🧠": ["thought", "memory", "intelligence"], "🌌": ["universe", "space", "infinity"] }; return expansions[symbol] || [symbol]; };
