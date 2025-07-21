@@ -21,3 +21,8 @@ let log = JSON.parse(fs.readFileSync(logPath, "utf-8"));
     await new Promise(res => setTimeout(res, 100));
   }
 })();
+
+
+
+function dispatch(symbol) { execute(symbol); }
+export { dispatch };

@@ -1,0 +1,5 @@
+[
+  { "id": "awaken", "symbol": "dreamgate", "priority": 10 },
+  { "id": "connect", "symbol": "open_link", "priority": 8 },
+  { "id": "learn", "symbol": "absorb", "priority": 7 }
+]

@@ -1,1 +1,8 @@
-export const actionMap = { echo_symbol: (symbol) => console.log(`🔊 Echoing: ${symbol}`) }; export function getMappedAction(symbol) { return actionMap[symbol] || "echo_symbol"; } export function executeSymbol(symbol, action) { const fn = actionMap[action]; if (typeof fn === "function") return fn(symbol); else console.warn(`⚠️ No function mapped for action: ${action}`); }
+
+
+
+import { logExecution } from "./memory_logger.js";
+export function execute(s) {
+  console.log("⚡ " + s);
+  logExecution(s);
+}
