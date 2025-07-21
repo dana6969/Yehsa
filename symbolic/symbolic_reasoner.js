@@ -1,7 +1,8 @@
 import { getDefinitions } from "./symbolic_dictionary.js";
 
 export async function reasonThrough(symbol) {
-  const def = getDefinitions(symbol);
-  if (def) console.log(`📖 ${symbol}: ${def}`);
-  // Add any other execution logic here if needed
+  const definition = getDefinitions(symbol);
+  if (!definition) return null;
+  console.log(`📖 ${symbol}: ${definition}`);
+  return definition;
 }
