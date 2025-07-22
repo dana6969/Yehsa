@@ -1,1 +1,1 @@
-module.exports = function symbolicReflection(logs) { return logs.map((log, index) => `Reflection ${index + 1}: ${log.reason || log}`); };
+export default function symbolicReflection(logs) { return logs.map((log, index) => `🪞 Reflection ${index + 1}: ${log.symbol || "unknown"} → ${log.reason || log.context || "no reason"} | Fusion: ${(log.symbol || "").split(/[-_ ]/).join("")} | Score: ${((log.symbol?.length || 1) * 10).toFixed(1)}`); }
