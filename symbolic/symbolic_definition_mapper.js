@@ -31,9 +31,7 @@ export function inferAction(symbol) {
   }
 
   const raw = dictionary[symbol];
-const def = typeof raw === "string" ? raw.toLowerCase() : raw?.definition?.toLowerCase?.() || raw?.context?.toLowerCase?.() || "";
-
-  console.log(`🔍 Def: [${symbol}] → "${def}"`);
+  const def = raw?.definition?.toLowerCase?.() || raw?.context?.toLowerCase?.() || "";
 
   for (const [key, action] of Object.entries(keywordActions)) {
     if (def.includes(key)) {
