@@ -1,33 +1,30 @@
-import { inferAction } from "./symbolic_definition_mapper.js";
+import fs from "fs";
+import { getMappedAction } from "./symbolic_dictionary.js";
 
-export const actionMap = {
-  alchemical: "transmute_mind",
-  glossology: "analyze_language_structure",
-  dreamgate: "open_cosmic_portal",
-  aviates: "initiate_flight_sequence",
-  deductional: "reason_forward_chain",
-  lived: "reflect_past_events"
-};
+const logPath = "symbolic_memory/executed_log.json";
 
-export function executeSymbol(symbol) {
+export function execute(symbol) {
   const ts = new Date().toISOString();
-  let action = actionMap[symbol];
-  if (!action) {
-    const inferred = inferAction(symbol);
-    if (inferred) {
-      console.log(`🧠 [Auto-Mapped] ${symbol} → ${inferred} @ ${ts}`);
-      actionMap[symbol] = inferred;
-      action = inferred;
-    }
-  }
-  if (action) {
-    console.log(`⚡ [EXEC] ${symbol} → ${action} @ ${ts}`);
-  } else {
-    console.warn(`🤔 [Unknown] ${symbol} — no mapped action @ ${ts}`);
-  }
-  return action;
-}
+  const action = getMappedAction(symbol);
 
-export function getDefinitions(symbol) {
-  return actionMap[symbol] || null;
+  const logEntry = {
+    symbol,
+    action: action || "undefined",
+    type: "execution",
+    timestamp: ts
+  };
+
+  // Logging
+  const log = fs.existsSync(logPath)
+    ? JSON.parse(fs.readFileSync(logPath, "utf-8"))
+    : [];
+  log.push(logEntry);
+  fs.writeFileSync(logPath, JSON.stringify(log, null, 2));
+
+  if (action) {
+    console.log(`⚡ Executing: ${symbol} → ${action}`);
+    // Future real-world hooks or API commands go here
+  } else {
+    console.log(`🤔 No mapped action for: ${symbol}`);
+  }
 }
