@@ -15,8 +15,12 @@ export async function reasonThrough(symbol) {
 
   // 🧠 Math Fallback
   if (!definition && /^[0-9+*/().\s^-]+$/.test(symbol)) {
+    const mathStart = Date.now();
     const mathResult = solveMathExpression(symbol);
     console.log(`[MATH] ${mathResult}`);
+    const mathEnd = Date.now();
+    const ts = new Date().toISOString();
+    console.log(`[⏱ ${ts}] (${mathEnd - mathStart}ms) → ${symbol}`);
     return mathResult;
   }
 
