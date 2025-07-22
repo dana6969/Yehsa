@@ -13,6 +13,8 @@ function dequeue() {
     fs.writeFileSync("symbolic_memory/learning_queue.json", JSON.stringify(queue, null, 2));
     console.log(`🔁 Dispatching from queue: ${next.symbol}`);
     dispatch(next.symbol);
+    setTimeout(() => { if (last === next.symbol) console.warn("⏱ Retry likely needed for:", next.symbol); }, 500);
+    fs.appendFileSync("symbolic_memory/watchdog_log.json", JSON.stringify({ type: "dequeue", symbol: next.symbol, time: new Date().toISOString() }) + ",\n");
   } catch (e) {
     console.error("❌ Dequeue error:", e.message);
   }
@@ -24,6 +26,7 @@ setInterval(() => {
     if (goal?.symbol) {
       console.log("🎯 Executing goal:", goal.symbol);
       dispatch(goal.symbol);
+    fs.appendFileSync("symbolic_memory/watchdog_log.json", JSON.stringify({ type: "goal", symbol: goal.symbol, time: new Date().toISOString() }) + ",\n");
       markGoalComplete(goal.id);
       return;
     }

@@ -1,0 +1,54 @@
+import { inferAction } from "./symbolic_definition_mapper.js";
+const actionMap = {
+  alchemical: "transmute_mind",
+  glossology: "analyze_language_structure",
+  dreamgate: "open_cosmic_portal",
+  aviates: "initiate_flight_sequence",
+  deductional: "reason_forward_chain",
+  lived: "reflect_past_events"
+};
+
+export function executeSymbol(symbol) {
+  const action = actionMap[symbol];
+  const ts = new Date().toISOString();
+  if (action) {
+  } else {
+    const inferred = inferAction(symbol);
+    const ts = new Date().toISOString();
+    if (inferred) {
+      console.log(`🧠 [Auto-Mapped] ${symbol} → ${inferred} @ ${ts}`);
+      actionMap[symbol] = inferred;
+      console.log(`⚡ [EXEC] ${symbol} → ${inferred} @ ${ts}`);
+    } else {
+      console.warn(`🤔 [Unknown] ${symbol} — no mapped action @ ${ts}`);
+    }
+  }
+  } else {
+    const inferred = inferAction(symbol);
+    if (inferred) {
+      console.log(`🧠 [Auto-Mapped] ${symbol} → ${inferred}`);
+      actionMap[symbol] = inferred;
+      console.log(`⚡ [EXEC] ${symbol} → ${inferred}`);
+    } else {
+      console.warn(`🤔 [Unknown] ${symbol} — no mapped action`);
+    }
+  }
+    } else {
+      const inferred = inferAction(symbol);
+      if (inferred) {
+        console.log(`🧠 [Auto-Mapped] ${symbol} → ${inferred}`);
+        actionMap[symbol] = inferred;
+        console.log(`⚡ [EXEC] ${symbol} → ${inferred}`);
+      } else {
+        console.warn(`🤔 [Unknown] ${symbol} — no mapped action`);
+      }
+  } else {
+    console.warn(`🤔 [Unknown Symbol] ${symbol} — No mapped action @ ${ts}`);
+  }
+}
+
+export function getDefinitions(symbol) {
+  return actionMap[symbol] || null;
+}
+
+export { actionMap };
