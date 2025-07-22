@@ -11,6 +11,7 @@ function solveMathExpression(expr) {
 }
 
 export async function reasonThrough(symbol) {
+  const defStart = Date.now();
   const definition = getDefinitions(symbol);
 
   // 🧠 Math Fallback
@@ -27,5 +28,8 @@ export async function reasonThrough(symbol) {
   if (!definition) return null;
 
   console.log(`📖 ${symbol}: ${definition}`);
+  const defEnd = Date.now();
+  const ts = new Date().toISOString();
+  console.log(`[⏱ ${ts}] (${defEnd - defStart}ms) → ${symbol}`);
   return definition;
 }
