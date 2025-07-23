@@ -11,5 +11,8005 @@
     "priority": "medium",
     "origin": "test-suite",
     "notes": "validation run"
+  },
+  {
+    "symbol": "DIPLOBLASTIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.360Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEFIGURE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.362Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LOMBARD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.363Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BAHAISM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.364Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FUMERELL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.365Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ROYALET",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.365Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TROPHIED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.366Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ZEQUIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.367Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MILLWRIGHT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.367Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PHOTOGRAPHOMETER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.368Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SCHEELIUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.368Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ALVEOLATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.369Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LIMULUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.369Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OSMUND",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.370Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "POTTEEN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.370Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNDERRUN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.371Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EMPLASTIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.371Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RHYTHMICS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.372Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PLEUROPTERA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.372Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNBLOODY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.373Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CINCINNUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.373Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INDOCILITY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.374Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TELEOCEPHIAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.374Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CANEBRAKE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.375Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "QUININIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.375Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RICINIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.376Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TELLURAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.376Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OTHERNESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.377Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FASCICLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.378Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REENJOYMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.378Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LONGIROSTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.379Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RHAPSODIZE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.380Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WATER VIOLET",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.381Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRUNCHEONED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.381Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNDERWENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.382Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "APITPAT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.382Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BRISKET",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.383Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KEPHALIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.383Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "METELY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.384Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "JOHNSON GRASS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.385Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MOP",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.385Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SYMPOSIAC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.386Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ULVA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.387Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "-ANA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.387Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PHARISEAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.388Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PUTRIDNESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.388Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TOUSEL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.389Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TETRAGON",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.390Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HARELD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.390Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PYCNOSTYLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.391Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BOLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.391Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BASISOLUTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.392Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HISTORIOGRAPHY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.393Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CURSORILY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.393Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GLOSSARIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.394Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "APOTACTITE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.395Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FRITHY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.396Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ZECHIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.396Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BESTAR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.397Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CARICATURIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.398Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHAMAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.398Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OPINIATED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.399Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PELICOSAURIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.399Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PICKERY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.400Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DOUR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.401Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AGERATUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.401Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BEDSTAFF",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.402Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GLADFUL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.403Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INDOXYL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.404Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NOTHINGISM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.405Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GNARL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.405Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANGIOSPERMATOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.406Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INCUNABULUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.407Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MORIGERATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.407Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INCOMPARED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.408Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OVERSWAY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.408Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SUBSECUTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.409Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BACILLUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.410Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ETHEREALITY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.410Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REJOICER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.411Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SINGULT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.412Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MELAINOTYPE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.413Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STOPPED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.414Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WESTERING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.415Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHINAMAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.415Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FORESKIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.416Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CEPHALOTOME",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.417Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OVERLOOKER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.418Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CARBINOL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.418Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PROFESSED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.419Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COPPER-NOSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.420Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ESOTERICISM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.420Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "APLACENTAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.421Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "JURAMENTUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.422Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LITHARGYRUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.423Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LUCIFERIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.424Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VERDINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.424Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ARUNDIFEROUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.425Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXCEEDINGLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.426Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STAGNANTLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.427Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNMAGISTRATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.428Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BOTTOM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.429Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CARPETLESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.431Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RESEMBLABLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.432Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RINGBIRD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.433Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OVERGREEDY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.435Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BOUNDING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.436Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ASCERTAINMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.437Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEVOTEMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.438Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CALOTYPE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.439Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SANDWICH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.440Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BORING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.440Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "IMPERIOUSNESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.441Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HAEMOPLASTIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.442Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TANIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.443Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MAINTOP",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.444Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NUMB",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.444Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TANYSTOMATA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.445Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ARLES",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.446Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SACCHARIMETRY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.447Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GRAMOPHONE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.448Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LIMOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.449Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RESORBENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.450Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REIS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.451Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEPHLEGMATOR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.451Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PADDLEWOOD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.452Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MISTITLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.453Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PERSUASIBILITY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.454Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RAFTING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.455Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PROTEROGYNOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.456Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MULTIFACED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.457Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CATCHPENNY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.458Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VILLA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.459Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OARSMAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.460Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MAGNIFICENCE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.461Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "THUNDERHEAD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.462Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SORTANCE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.463Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRIFOLIUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.464Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GLIB",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.465Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FOOTHOT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.466Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ORPHELINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.467Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ADULARIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.468Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "JUMPING DISEASE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.469Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STAGY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.469Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "POLITICASTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.470Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SHRIEKER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.471Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRATIQUE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.477Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HIGH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.478Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PUSILLANIMOUSLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.479Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MALTMAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.480Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VIRGINIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.482Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AMISSIBLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.483Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "QUARTERLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.484Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WATER BELLOWS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.485Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INCORPOREALIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.486Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PROTEUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.488Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANTISYPHILITIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.489Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CATACAUSTIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.490Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RELENTMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.491Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BETTY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.493Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FREN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.494Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRODIGIOUSNESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.495Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INSCRUTABLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.496Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BEJUMBLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.497Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NEMOPHILIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.498Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GOOD-TEMPERED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.499Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RANDON",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.500Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BOTCHEDLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.501Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXCOMMUNE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.502Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BULLOCK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.504Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AKNOW",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.505Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GYROSTATIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.506Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CRURAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.507Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CATCHWORD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.509Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRETENSELESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.510Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PASHAW",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.511Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PERISSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.512Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PECULIARIZE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.513Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PYOPNEUMOTHORAX",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.514Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TIRING-ROOM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.515Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ORCHIDOLOGIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.516Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SEMIBRIEF",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.518Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LUBRICOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.521Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AFFRIENDED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.522Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EPENDYMA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.524Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXTRADITE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.525Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PERMISSIBILITY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.526Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SUPERNATURAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.528Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BROADSPREADING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.529Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FUSS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.530Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REPARTEE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.531Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXTRAMISSION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.532Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANGULOSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.534Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRUSTILY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.535Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANNULLER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.536Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ERYSIPELOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.537Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REPROVINGLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.539Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GEEZ",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.540Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MISTRUSTLESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.541Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXTRUCTION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.542Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CONFLATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.544Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SEA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.545Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BERBE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.547Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TITRATED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.548Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRAMONTANA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.549Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "JAPANNISH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.550Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GRUNTLING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.551Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CONCAUSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.553Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ABJUDICATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.554Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANTIPYRESIS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.555Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RICINOLEIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.557Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COHERER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.558Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "YELLOW",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.559Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DRABBLER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.561Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ICILY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.562Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.563Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ON-HANGER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.565Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PERSALT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.566Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BONIFY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.567Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OVERSHADE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.569Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "YAMMA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.570Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TAWER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.571Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LIMONIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.573Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CYMOPHANE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.574Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BIPOLARITY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.576Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SACCHOLACTATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.577Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ALACRIOUSNESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.578Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BITSTOCK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.580Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PLATYRHINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.581Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PIG",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.582Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PREFIDENCE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.584Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EVERYTHING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.585Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LIGNIFORM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.586Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COPRA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.588Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PINKNESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.589Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ACUTELY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.591Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COMPOS-MENTIS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.592Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANTENICENE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.594Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXPLORING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.595Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NARRATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.597Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DOGATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.598Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KNOUT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.600Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SAFE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.601Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "YTTRIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.602Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ATOLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.604Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EYSELL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.632Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MANUFACTORY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.633Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TIMAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.635Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHELIDONIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.636Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PANSHON",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.638Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WATERCOURSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.639Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CONTROVERSARY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.640Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SICH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.642Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INFUSER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.643Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SUBDULCID",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.645Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ESTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.646Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ARSENICISM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.648Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OVERSPAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.649Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANTIPATHIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.651Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HEURISTIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.652Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BACTERICIDE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.653Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LENGTHY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.655Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EMERSED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.656Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SYNGENESIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.658Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VEILLESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.659Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXPUGN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.660Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RETTERY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.662Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXPULSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.663Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OYSTERING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.664Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PARALYTIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.666Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PESTIFEROUSLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.667Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HEARTSICK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.669Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DINGY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.670Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EIGHT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.671Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FIRELESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.673Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DISVALUATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.674Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FOLIATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.676Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AROMATOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.677Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EVOLVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.679Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LIGSAM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.680Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CORSEPRESENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.682Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LINEARY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.683Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CONCH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.684Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BAROSCOPE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.686Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRUNK STEAMER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.687Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MACROCHIRES",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.689Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RETIPED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.690Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CERTIFICATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.692Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TINSMITH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.693Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MISPLEAD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.695Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WATER BLACKBIRD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.696Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WORNIL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.698Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PENCILED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.699Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HERBALIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.701Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COAITA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.702Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NIPPING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.704Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ZOUNDS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.706Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STELLIONATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.707Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SPORTINGLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.709Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VERMICULE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.711Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FLUTIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.712Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "JETTY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.714Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRANSPECIATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.716Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VAINGLORY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.717Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SPELICANS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.719Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TORRENS SYSTEM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.721Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MORO",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.722Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WHETILE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.724Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DISINCLOSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.726Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FULMINURIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.727Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STRATIGRAPHY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.729Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MODERN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.731Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REMORDENCY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.732Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PAMPHLETEER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.734Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNDERLOCK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.736Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RECLINED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.737Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NAKEDNESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.739Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXTEMPORIZER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.741Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRUDENTIALIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.743Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INACTUATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.744Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SEA DRAKE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.746Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INTERMEMBRANOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.748Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SUMMIT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.750Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INTERMUNDIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.751Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RHOMBUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.753Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CIVILIZATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.755Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COSTAL-NERVED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.756Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BRISTLE-SHAPED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.758Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "IMPROPERIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.760Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SQUALIDITY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.762Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SCUTIPED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.764Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PHARMACIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.765Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ELEVATED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.767Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FIGUREHEAD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.769Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CREBROUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.770Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PROGENY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.772Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "JEWRY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.774Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INKLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.776Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CROUPY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.777Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DISSUADER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.779Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DISTRAIT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.781Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MOSTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.783Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PSEUDONYMOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.785Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TREMOLANDO",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.786Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REPETITIVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.788Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FERRETTO",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.790Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HEALINGLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.792Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TETTISH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.794Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNBELIEVED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.796Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WARP KNITTING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.798Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WREAK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.799Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REVELER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.801Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRESIGNIFICATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.803Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HYPOGYN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.805Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DISIMPASSIONED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.807Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OYSTER-GREEN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.809Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SCAZON",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.810Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INTELLECTIVELY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.812Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INSHEATHE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.814Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DISCALCEATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.816Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TETRARCH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.818Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ABREPTION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.820Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SCOTTERING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.822Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ALTERCATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.824Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BLACK FRIAR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.826Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ARRACK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.828Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ASCEND",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.829Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SHEELING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.831Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CISSOID",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.833Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "POSTAXIAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.835Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TREN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.837Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MODISTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.839Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MACHINAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.841Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "METHEGLIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.843Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TALLOW-FACED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.845Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INTERMUNDANE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.847Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EASEFUL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.849Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WEBEYE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.851Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DISAPPROPRIATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.854Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SLOVENRY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.856Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BRUNONIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.858Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SUBINGRESSION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.860Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "-MENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.863Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KREATIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.865Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHANCELLOR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.868Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CYSTIDEAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.870Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INTERCROP",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.872Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SEMIOCCASIONALLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.874Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GRANITIFORM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.876Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REBURY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.878Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REPRESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.880Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REZ-DE-CHAUSSEE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.882Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "APRICATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.884Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SPICILY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.886Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INEQUAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.888Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MESOTHORAX",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.890Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PINGSTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.892Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FROM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.894Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHIDE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.897Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AUGITIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.898Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CASSIOPEIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.901Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CROSS-ARMED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.903Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BREAST-HIGH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.905Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AGIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.907Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RHYMER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.909Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BOORT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.912Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MONOTOCOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.914Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "JUDEAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.916Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BELAY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.918Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INVINCIBLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.921Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PADNAG",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.923Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHILDISHLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.925Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FINNISH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.927Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FLEXILE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.929Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HELMINTHIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.931Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FRINGE TREE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.934Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNIFLAGELLATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.936Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FLINT GLASS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.938Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRIGGISH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.940Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KILN-DRY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.942Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OUTVOTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.944Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ENDASPIDEAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.947Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AVAUNT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.949Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SANITARY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.952Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXCOMMUNICABLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.954Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SOLVABLENESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.956Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNDULANT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.958Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OCCASIONALLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.961Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "IN TRANSITU",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.963Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "POLYSPAST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.965Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FROST SIGNAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.967Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TURBINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.970Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXUNDATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.972Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CONFECT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.974Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RHEUMATISMOID",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.976Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ALTISONANT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.979Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GLYCIDE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.981Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SIGH-BORN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.983Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CAPRATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.985Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MISAPPROPRIATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.988Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PARAMORPHOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.990Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TURFING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.992Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BUTTRESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.994Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEOXYGENATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.997Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRENATAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:50.999Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OPIFEROUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.001Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BURSTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.004Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KAKOXENE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.006Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SAIMIR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.008Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GROATS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.011Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KIRSCHWASSER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.013Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRISAGION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.016Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MESTEE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.018Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CAMMAS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.020Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXSUFFLATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.023Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SEXENNIAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.025Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SPORTABILITY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.027Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AEROLOGIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.030Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PENTACRINITE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.032Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DENDRIFORM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.034Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LARVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.037Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GENIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.039Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BRAINY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.042Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNCORD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.044Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FRIGHTMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.046Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BARTHOLOMEW TIDE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.049Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CEDULE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.051Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WEARIFUL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.054Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "QUINOLOGIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.056Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GATEWISE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.058Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BUILT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.061Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RIPELY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.063Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INCONVENIENTLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.066Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FLANGED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.068Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEPLANTATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.070Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REFERRER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.073Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TAILED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.075Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VISIONARINESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.078Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DOMAIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.080Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MISCONCEPTION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.083Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DIFFINITIVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.085Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NEZ PERCES",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.087Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KILOVOLT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.090Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SABBATHLESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.092Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PALEOLITH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.095Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GAMOGENESIS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.098Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STAFFISH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.100Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PREOCULAR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.103Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UPSHOOT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.105Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CATENATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.107Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RECONSOLIDATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.110Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KEYSEAT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.112Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SHONDE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.114Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FRAGMENTIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.117Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNSURETY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.119Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DITION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.122Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FLUE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.124Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PROSODIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.127Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INCHWORM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.129Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DISINFECT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.132Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BOTTOM FERMENTATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.134Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CALORIFERE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.137Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CARBURIZATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.139Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PALAEO-",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.142Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PHALANGIOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.144Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GAILLIARDE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.147Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FLOWERAGE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.149Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WRETCHEDLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.152Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ALOIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.154Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BUT-THORN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.157Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "APPROVING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.159Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GALATIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.163Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LACTAM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.166Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CRABBY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.168Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SITFAST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.171Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DISSOCIAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.173Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REVELRY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.176Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEMOCRATIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.178Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CORNIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.181Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GUSHER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.183Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CATARACTOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.186Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PECTIZE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.189Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INDUCTIONAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.192Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COUNTERACTIVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.195Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FOOT VALVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.198Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TEMPESTIVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.200Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NEGLIGENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.203Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COOPERING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.205Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STRICK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.208Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PEDICELED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.211Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CATECHUIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.213Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EMBOSSER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.216Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MAUNDERER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.219Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WHITNEYITE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.221Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PALIFORM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.224Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TREAT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.227Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INEQUATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.229Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "POTICHE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.232Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COMMANDRY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.234Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INEFFACEABLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.237Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OSTEAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.240Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GULES",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.242Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WHORTLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.245Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "JUSTLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.248Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OVERREAD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.250Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LEMMING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.253Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CALUMNIATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.256Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRANSVERBERATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.258Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PROVISORSHIP",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.261Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ARBITRABLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.264Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LIGEANCE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.267Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ZONE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.269Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AIDLESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.272Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ZOANTHARIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.275Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BENGALESE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.277Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "YESTY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.280Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DICEBOX",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.283Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BALD-FACED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.286Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MOMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.288Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DOOMSTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.291Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STICHOMANCY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.294Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NEAR-LEGGED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.297Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OWEN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.299Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CACODOXICAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.302Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EJECT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.305Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PERMUTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.308Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TENSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.310Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EPICORACOID",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.313Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BOLOMETER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.317Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRIMITIVENESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.319Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CAPTAIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.322Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MASTED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.325Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COVEY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.327Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SULPHURINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.330Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BUTT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.333Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "JAG",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.335Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SARCENET",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.338Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CARPOPHORE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.341Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BRAWL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.343Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AMORETTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.346Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MATRIARCHATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.349Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TUMMALS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.351Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FLATBOAT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.354Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BROWNSTONE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.357Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PORTOISE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.359Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STEGNOTIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.362Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TOIL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.365Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRITICUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.368Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PATHOS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.370Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PORTANCE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.373Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CARNAUBA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.376Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HYDROSTATICIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.379Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OINOMANIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.381Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GENET",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.384Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COLCHICUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.387Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AUCTIONEER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.390Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXSICCATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.392Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MESOXALIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.395Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PENTREMITE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.398Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GAULT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.401Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BROWNBACK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.403Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PECK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.406Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AGENTSHIP",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.409Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AUTOGENEAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.412Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AGROSTIS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.414Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SHEEPSHANK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.417Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SOVEREIGNIZE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.420Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VIDAME",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.423Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RAMBLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.426Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CEPHALOTRIBE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.428Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PROSPECTIVELY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.431Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DECLINAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.434Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEBACCHATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.437Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TAURINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.440Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HARMOTOME",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.442Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OVIFEROUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.445Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AFTER-WITTED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.448Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRICHOGYNE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.451Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INSULARLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.454Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ESTREPEMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.457Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHUB-FACED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.459Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANARCHIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.462Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SURVIEW",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.465Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PLIOCENE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.468Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SHAKO",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.471Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MISADVENTURED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.474Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CEROTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.477Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEKASTERE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.480Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LOBE-FOOTED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.482Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PHLEUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.485Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DIFFLUENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.488Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EFFUME",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.491Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ROUP",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.494Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "APACHES",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.497Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HECK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.500Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INDAZOL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.503Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "THEINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.507Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CANAKIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.510Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MYELITIS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.513Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHAIN TIE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.516Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INHUMANITY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.519Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DANK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.522Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INTERNE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.525Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PLENIPOTENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.528Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEMOCRATY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.531Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DERMOSKELETON",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.534Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NORTHEASTERLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.537Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SAMP",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.540Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LOOL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.543Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LACERATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.546Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRICHINOSIS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.549Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FORBEARER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.552Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WARP",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.555Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEMOGRAPHY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.558Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FROSTBITE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.561Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CILL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.564Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEFENSIBLENESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.567Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RESPLENDENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.570Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HORNSNAKE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.573Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MOLYBDENITE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.576Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EMPAWN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.579Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PACA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.582Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DIRECTORY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.585Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ELECTREPETER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.588Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VICKERS-MAXIM AUTOMATIC MACHINE GUN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.591Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AEROYACHT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.594Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STERLET",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.598Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "THOROUGHPIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.601Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CAROMEL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.604Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ROADSTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.607Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SHALT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.610Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LEPROSY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.613Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SUPERCURIOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.616Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "QUATRAIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.619Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ASSOCIATIONISM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.622Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CENTROLINEAD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.625Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HERBARIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.628Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "QUINDECYLIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.631Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TARRY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.634Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEADS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.638Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ELAIODIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.641Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CYSTOTOMY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.644Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANTECURSOR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.647Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FABLER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.650Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OBSTETRICIOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.653Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STRUSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.656Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FAUBOURG",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.660Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HALVED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.663Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HAUYNITE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.666Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LYENCEPHALOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.669Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BYSTANDER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.672Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "QUINDECEMVIRATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.675Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REMOULD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.678Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "IDOLOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.681Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SPARROWGRASS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.685Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "APERCU",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.688Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AU FAIT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.691Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BRANCHIOPODA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.694Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ALANTIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.697Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SUBSTANTIALIZE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.700Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SALTIREWISE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.704Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NAPPE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.708Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MIDDLE-AGED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.711Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ORTHOCLASE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.715Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NOTOTHERIUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.718Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HAIRLESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.721Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WOODMEIL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.724Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ENDMOST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.727Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PAVIIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.730Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "YEARNINGLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.734Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WEALDEN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.737Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RELAXATIVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.740Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AMBULATORIAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.743Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CIRCUMSTANTIALITY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.746Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BESHUT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.750Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COMPACTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.753Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MARMORATUM OPUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.756Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DIBBLER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.759Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TELOOGOO",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.763Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HATEL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.766Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MEGACOSM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.769Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PARTED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.772Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BLANKET STITCH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.775Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LOCHIAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.779Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WATER MONITOR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.782Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "QUADRATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.785Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DELTAFICATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.788Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MOELLON",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.791Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WATER ALOE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.795Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "POSTPOSIT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.798Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REPOSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.801Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RULE-MONGER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.805Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MANUBRIUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.808Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DOS--DOS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.812Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FORMALIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.815Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REPENTANT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.818Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SWILLER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.822Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CAROUSE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.825Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CYSTID",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.828Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNIFIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.832Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ASTRAEAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.835Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "QUADRATIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.838Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GAZEEBO",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.842Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NERVOMUSCULAR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.845Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FORLORNLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.849Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNSYMMETRICAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.852Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MICROGRAPHY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.855Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "IRRECOVERABLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.858Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COMMODATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.862Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BLASTMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.865Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRONELY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.868Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DARTINGLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.872Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRAETORIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.875Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FEATNESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.879Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CERRIAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.882Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DOCK-CRESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.886Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNDENIABLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.889Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EJULATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.893Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BLOBBER-LIPPED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.897Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INFORMALLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.901Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HIPHALT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.904Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WANT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.908Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CANDLELIGHT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.912Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KARAGANE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.916Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HOMOSYSTEMIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.920Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BROOM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.923Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNPURE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.927Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BARBRE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.931Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DAMSEL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.935Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SERENITUDE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.939Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNSINCERE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.942Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BEDAGAT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.946Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BDELLOMETER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.950Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHAJA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.954Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNPOISON",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.958Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHARTERER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.962Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STATEMONGER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.966Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ALVEUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.972Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ALISH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.976Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NEBULAR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.980Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REQUISITIONIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.983Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RELENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.987Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AMOUR PROPRE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.991Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DECUPLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.995Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SERE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:51.999Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GOVERNABLENESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.003Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BROWNISM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.007Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DROCK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.011Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CONNOTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.015Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LITERALISM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.019Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LODGMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.023Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "THYSANOPTERA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.026Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NIOBIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.030Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEEP",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.034Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MESATICEPHALIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.038Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PAROCHIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.042Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DRAVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.046Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ACCEDENCE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.050Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRIMARILY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.053Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SOLENOCONCHA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.057Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HYGIEIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.061Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RECALL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.065Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BOARD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.069Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ALIMENTAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.073Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRACERY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.077Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VERBALIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.081Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INTERMAXILLARY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.084Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HYPERTHYRION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.088Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INFUMATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.092Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GLASS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.096Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SUBSISTENCE DEPARTMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.100Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AUTOMORPHIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.104Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FULL-SAILED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.108Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TREAD",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.112Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "STIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.116Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HELIACAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.120Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KROOMAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.123Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PHOTOTROPIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.128Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BULRUSH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.132Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CICATRICIAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.136Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SAXIFRAGE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.140Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GESTURELESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.144Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SCUTAGE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.148Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HYGIENIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.153Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DIRKNESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.157Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FERIER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.161Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "XENOGAMY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.165Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ABSTRACTEDLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.169Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "XYLOCOPA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.174Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SILICIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.178Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TITAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.182Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DISENTWINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.186Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SUPERINTEND",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.190Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INCREDIBLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.195Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PERMANGANATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.199Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LITHIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.203Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CALIDUCT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.208Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PENOCK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.212Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INTANGLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.216Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PLEIOCENE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.221Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WHIPPER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.225Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MONOPERSONAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.229Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SEERESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.233Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PYCNOGONID",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.238Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LOOCH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.242Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DIFFIDE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.246Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MERCENARINESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.250Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SPASMODIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.255Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TRIBUNATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.259Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LAMENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.264Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ENLACE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.268Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MINIMIZE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.272Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PETIOLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.276Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BOW",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.280Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MISBELIEF",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.285Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HIGHBINDER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.289Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ECHOMETER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.293Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INSISTENTLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.297Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CATEGORICALLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.302Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COFFER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.306Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "URBICOLOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.310Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "IMPARTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.315Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DOWST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.319Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ETTIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.324Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WEAKFISH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.328Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CONCERTANTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.332Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ERRABUND",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.337Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OENANTHOL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.341Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNTONGUE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.345Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DAYFLOWER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.350Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PLURIFARIOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.354Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OUTFLING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.359Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GASCONADER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.363Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ARCHY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.368Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ENERGUMEN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.372Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PINTSCH GAS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.376Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PORTABLENESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.381Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PAT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.385Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RUBBISH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.389Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FORBIDDENLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.394Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CONTRADISTINCT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.398Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EMULSIFY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.402Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ROLLER COASTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.407Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "QUIRKISH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.411Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BILAND",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.416Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GLEE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.420Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BLEAREYEDNESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.425Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BOER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.429Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PIPERIDINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.433Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ACCOMPLISHER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.438Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TALCUM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.442Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SATISFIER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.447Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "IMPREGN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.463Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ACIDIFICATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.467Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PRUDENCY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.471Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "YEAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.476Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "KECKSY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.480Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PHLORETIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.484Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RESOURCEFUL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.489Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ELIMINATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.493Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PITYROID",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.497Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ENCALENDAR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.502Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REFLEX",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.506Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "JOURNEYER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.510Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "TONED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.515Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WITCH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.519Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EQUIVALUE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.523Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PUN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.527Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NALE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.532Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "COMIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.536Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MICKLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.540Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RELIQUIDATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.545Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GLABRATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.549Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REMBLAI",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.553Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "NARIFORM",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.557Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OSTEOGENETIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.562Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RHIPIPTERAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.566Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AIRMANSHIP",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.571Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CONVOLVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.575Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BRYOLOGIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.580Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BUSHELAGE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.584Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DETAILER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.588Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "METTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.592Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ENTASIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.597Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EVACUANT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.601Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SOONEE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.606Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CHRISTLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.610Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ADENOTOMIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.614Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DRAGONLIKE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.619Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ERGAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.623Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HOURLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.628Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OPPUGNER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.632Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "POOLER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.637Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LEVULOSAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.641Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "UNJOINTED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.646Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GENTILIZE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.650Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DURANTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.655Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MELANOSCOPE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.659Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "RED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.664Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OBLECTATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.668Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MUSCOVADO",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.673Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PROTHALLUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.678Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANTIHEMORRHAGIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.682Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REEMBARK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.687Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BARDLING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.692Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CENTIARE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.696Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MAXILLO-PALATINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.701Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SUPERIMPREGNATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.705Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SEVENTEENTH",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.710Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AURICLED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.715Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BRID",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.719Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PREASE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.724Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "FOCAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.728Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OPUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.733Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DEFINITIVENESS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.738Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PLUMBIC",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.742Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GRAIN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.747Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HYDROSULPHURETED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.752Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "WRECKING",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.757Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AGATY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.761Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ASPIRATOR",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.766Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SAND-BLIND",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.771Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "CORRESPONDENT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.775Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PERVICACY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.780Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AVENS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.785Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ENCHONDROMA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.790Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DIGNIFIED",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.795Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "LIBERTY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.800Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ALLEGIANT",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.804Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "BECHANCE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.809Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HYDRIODATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.814Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INEFFABLY",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.819Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ENTOTHORAX",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.824Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AFFINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.828Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MISKNOW",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.833Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GLISSETTE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.838Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AUTOECIOUS",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.843Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PHOTODROME",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.848Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PELOTA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.852Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "GRIL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.857Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "AIR DRILL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.862Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PATELA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.867Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "HYPEROARTIA",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.872Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PHOCINE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.877Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "THUSSOCK",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.882Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "VULCAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.886Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "INTERAXAL",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.891Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "DARTER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.896Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ASSISTIVE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.901Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EMANCIPATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.906Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MONARCHIZER",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.911Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "SELF-COMMAND",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.916Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ANNUNCIATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.921Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "OVERFRIEZE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.938Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "REGLE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.942Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "MONGOLIAN",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.947Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ORTHOEPIST",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.952Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "PEROXIDATION",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.957Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "EXUNDATE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.962Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
+  },
+  {
+    "symbol": "ILE",
+    "reason": "No mapped action",
+    "time": "2025-07-23T00:29:52.967Z",
+    "priority": "low",
+    "origin": "unknown",
+    "notes": ""
   }
 ]
