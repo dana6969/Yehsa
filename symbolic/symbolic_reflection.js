@@ -1,1 +1,9 @@
-export default function symbolicReflection(logs) { return logs.map((log, index) => `🪞 Reflection ${index + 1}: ${log.symbol || "unknown"} → ${log.reason || log.context || "no reason"} | Fusion: ${(log.symbol || "").split(/[-_ ]/).join("")} | Score: ${((log.symbol?.length || 1) * 10).toFixed(1)}`); }
+export default function symbolicReflection(logs) {
+  return logs.map((log, index) => {
+    const symbol = log.symbol || "unknown";
+    const reason = log.reason || "no reason";
+    const fusion = symbol.split(/[-_ ]/).join("");
+    const score = ((symbol.length + reason.length || 1) * 10).toFixed(1);
+    return `🔎 Reflection ${index + 1}: ${symbol} ➜ ${reason} | Fusion: ${fusion} | Score: ${score}`;
+  });
+}
