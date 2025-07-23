@@ -1,1 +1,6 @@
-[]
+[
+  {
+    "symbol": "forbidden_artifact",
+    "context": "quarantine:no mapped action"
+  }
+]

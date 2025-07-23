@@ -3,5 +3,13 @@
     "symbol": "forbidden_artifact",
     "reason": "malformed trigger pattern",
     "time": "2025-07-22T20:20:32.232Z"
+  },
+  {
+    "symbol": "forbidden_artifact",
+    "reason": "no mapped action",
+    "time": "2025-07-23T00:16:21.595Z",
+    "priority": "medium",
+    "origin": "test-suite",
+    "notes": "validation run"
   }
 ]

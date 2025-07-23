@@ -1,3 +1,4 @@
+import { quarantine } from "./quarantine.js";
 import { inferAction } from "./symbolic_definition_mapper.js";
 
 export const actionMap = {
@@ -13,6 +14,7 @@ export function executeSymbol(symbol) {
   const ts = new Date().toISOString();
   let action = actionMap[symbol];
   if (!action) {
+  quarantine(symbol, "No mapped action");
     const inferred = inferAction(symbol);
     if (inferred) {
       console.log(`🧠 [Auto-Mapped] ${symbol} → ${inferred} @ ${ts}`);
