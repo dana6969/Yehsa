@@ -11,4 +11,20 @@ node_modules/
 *.tmp
 __MACOSX/
 .DS_Store
-!logs/symbol_chain.log
+
+# Generated runtime output. Trainer and dictionary corpora stay tracked.
+logs/
+yesha_modules/logs/
+yehsa_http_log.txt
+*.bak
+symbolic_memory/executed_log.json
+symbolic_memory/execution_log.json
+symbolic_memory/yehsa_server.log
+symbolic_memory/trace_log.json
+symbolic_memory/watchdog_log.json
+symbolic_memory/mesh_log.json
+symbolic_memory/quarantine_log.json
+symbolic_memory/reinforce_log.json
+symbolic_memory/learn_log.json
+symbolic_memory/missing_actions_log.json
+symbolic_memory/trash_log.json

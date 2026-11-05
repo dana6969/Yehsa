@@ -1,4 +1,6 @@
 import fs from "fs";
+import path from "path";
+import { pathToFileURL } from "url";
 
 const queuePath = "./symbolic_memory/learning_queue.json";
 const learnedPath = "./symbolic_memory/trainer_learned.json";
@@ -20,7 +22,8 @@ export async function trainSymbol(entry) {
   }
 }
 
-if (import.meta.url.endsWith("symbolic_trainer.js")) {
+const trainerEntry = process.argv[1] ? pathToFileURL(path.resolve(process.argv[1])).href : "";
+if (import.meta.url === trainerEntry) {
   const ts = Date.now();
   const unlearned = queue.filter(e =>
     e.symbol && e.context &&

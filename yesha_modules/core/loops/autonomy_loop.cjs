@@ -8,6 +8,7 @@ const outputPath = path.resolve(__dirname, "../../logs/output.log");
 // Logging function
 const logOut = (msg) => {
   const line = `[${new Date().toISOString()}] ${msg}\n`;
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   fs.appendFileSync(outputPath, line);
   console.log(line.trim());
 };
@@ -16,12 +17,12 @@ const logOut = (msg) => {
  * Main AGI autonomy loop handler.
  * Accepts memory context and determines AGI response or internal action.
  */
-async function runAutonomyLoop(memoryContext) {
+async function runAutonomyLoop(memoryContext = {}) {
   logOut("🌀 [Yehsa] Entered Autonomy Loop");
 
   try {
     // Phase 1: Symbolic intent recognition
-    const symbolicIntent = resolveSymbolicIntent(memoryContext);
+    const symbolicIntent = resolveSymbolicIntent(memoryContext || {});
     logOut("🧠 Resolved Symbolic Intent: " + JSON.stringify(symbolicIntent));
 
     // Phase 2: Dynamic behavior or AGI response generation
@@ -52,7 +53,7 @@ async function runAutonomyLoop(memoryContext) {
 }
 
 // Inject global function for AGI
-function resolveSymbolicIntent(memoryContext) {
+function resolveSymbolicIntent(memoryContext = {}) {
   // future AI reasoning layer
   return {
     type: memoryContext.intent || "unknown",

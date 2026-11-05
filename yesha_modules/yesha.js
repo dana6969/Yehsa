@@ -1,1 +1,9 @@
-import { startAutonomyLoop } from './core/autonomy_loop.js';\nimport { evaluateTriggers } from './core/AGITriggers.js';\n\nconsole.log('🌐 Yehsa Central Dispatch Initialized');\n\nstartAutonomyLoop();\nsetInterval(() => {\n  evaluateTriggers();\n}, 3000);
+import { startAutonomyLoop } from "./core/autonomy_loop.js";
+import { evaluateTriggers } from "./core/AGITriggers.js";
+
+console.log("🌐 Yehsa Central Dispatch Initialized");
+
+startAutonomyLoop();
+setInterval(() => {
+  evaluateTriggers();
+}, 3000);

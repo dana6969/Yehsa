@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports.handle = async function(parsedInput) {
-  const logPath = path.resolve(__dirname, "../../logs/output.log");
+  const logPath = path.resolve(__dirname, "logs/output.log");
 
   function log(msg) {
     const fullMsg = `[${new Date().toISOString()}] ${msg}\n`;

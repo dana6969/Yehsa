@@ -12,6 +12,7 @@ const debug = true;
 function logMemory(msg, isError = false) {
   const prefix = isError ? "❌" : "🧠";
   const line = `[${new Date().toISOString()}] ${prefix} ${msg}\n`;
+  fs.mkdirSync(path.dirname(memoryLogPath), { recursive: true });
   fs.appendFileSync(memoryLogPath, line);
   if (debug) console.log(line.trim());
 }

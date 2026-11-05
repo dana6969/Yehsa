@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useAxionetRuntimeGuarantee } from './src/hooks/useAxionetRuntimeGuarantee';
 
 export default function App() {
-  useAxionetRuntimeGuarantee(); // keeps app alive and active
+  useAxionetRuntimeGuarantee(); // documented stub; does not keep the app alive
 
   return (
     <View style={styles.container}>

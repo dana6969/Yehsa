@@ -12,6 +12,7 @@ const debug = true;
 function logParse(msg, isError = false) {
   const prefix = isError ? "❌" : "🧠";
   const line = `[${new Date().toISOString()}] ${prefix} ${msg}\n`;
+  fs.mkdirSync(path.dirname(intentLogPath), { recursive: true });
   fs.appendFileSync(intentLogPath, line);
   if (debug) console.log(line.trim());
 }

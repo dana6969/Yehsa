@@ -1,1 +1,33 @@
-{ "type": "module" }
+{
+  "name": "Axi0net",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Yehsa / Axi0net experimental offline symbolic agent in an Expo React Native shell. Root package is CommonJS so require() scripts load. ESM stays in .mjs files and in symbolic/ and yesha_modules/.",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "yesha": "node yesha_modules/yesha.js",
+    "trainer": "bash run_trainer.sh",
+    "mesh:http": "node symbolic/symbolic_server.mjs",
+    "mesh:tcp": "node symbolic/symbolic_watchdog_server.js",
+    "autonomy": "node symbolic/symbolic_autonomy_loop.js"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~3.1.3",
+    "@expo/vector-icons": "^14.0.0",
+    "expo": "^53.0.17",
+    "expo-splash-screen": "~0.26.4",
+    "expo-status-bar": "~1.11.1",
+    "express": "^4.22.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-native": "0.79.5"
+  },
+  "devDependencies": {
+    "@expo/cli": "^0.18.0",
+    "metro": "^0.76.8"
+  }
+}

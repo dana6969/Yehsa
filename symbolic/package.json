@@ -1,0 +1,7 @@
+{
+  "name": "yehsa-symbolic",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ESM boundary for Yehsa symbolic scripts. CommonJS helpers in this folder use the .cjs extension."
+}

@@ -1,1 +1,8 @@
-import { startAutonomyLoop } from "./autonomy_loop.js"; import { logSymbolInteraction } from "../symbolic/logger.js"; const input = "I feel anxious and overwhelmed."; console.log("[Yehsa AGI] Starting symbolic + semantic reasoning..."); logSymbolInteraction(input); startAutonomyLoop();
+import { logSymbolInteraction } from "../symbolic/logger.js";
+
+const DEFAULT_INPUT = "I feel anxious and overwhelmed.";
+
+export function evaluateTriggers(input = DEFAULT_INPUT) {
+  console.log("[Yehsa AGI] Starting symbolic + semantic reasoning...");
+  logSymbolInteraction(input);
+}

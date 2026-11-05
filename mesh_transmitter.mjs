@@ -1,4 +1,4 @@
-import { sendMeshSignal } from "./utils/mesh_utils.js";
+import { sendMeshSignal } from "./utils/mesh_utils.mjs";
 import { parseSymbolAction } from "./yehsa_modules/core/action_interpreter.js";
 import { logSymbolInteraction } from "./symbolic/logger.js";
 
