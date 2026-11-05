@@ -19,6 +19,18 @@ function isJunk(text) {
   return false;
 }
 
+function listBookFiles(dir, prefix) {
+  const found = [];
+  for (const name of fs.readdirSync(dir).sort()) {
+    if (name === "README.md") continue;
+    const full = path.join(dir, name);
+    const rel = `${prefix}/${name}`;
+    if (fs.statSync(full).isDirectory()) found.push(...listBookFiles(full, rel));
+    else if (name.endsWith(".txt") || name.endsWith(".json")) found.push({ full, source: rel });
+  }
+  return found;
+}
+
 function readText(file) {
   return fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "");
 }
@@ -134,12 +146,28 @@ export function buildBookIndex() {
     seen
   ));
 
+  const memoryVerseDirs = ["math", "medical"].map((name) => ({
+    dir: path.join(MEMORY_DIR, name),
+    prefix: `symbolic_memory/${name}`
+  }));
+  for (const { dir, prefix } of memoryVerseDirs) {
+    if (!fs.existsSync(dir)) continue;
+    for (const name of fs.readdirSync(dir).filter((entry) => entry.endsWith(".json")).sort()) {
+      sources.push(readVerseFile(
+        path.join(dir, name),
+        name.replace(/\.json$/, ""),
+        `${prefix}/${name}`,
+        passages,
+        seen
+      ));
+    }
+  }
+
   if (fs.existsSync(BOOKS_DIR)) {
-    const files = fs.readdirSync(BOOKS_DIR).filter((name) => name.endsWith(".txt") || name.endsWith(".json")).sort();
-    for (const name of files) {
-      const full = path.join(BOOKS_DIR, name);
+    const files = listBookFiles(BOOKS_DIR, "symbolic_books");
+    for (const { full, source } of files) {
+      const name = path.basename(full);
       const raw = readText(full);
-      const source = `symbolic_books/${name}`;
       if (isJunk(raw) || /^404\b/i.test(raw.trim())) {
         sources.push({ file: source, status: "unavailable", reason: "file is a 404 or empty download placeholder" });
         continue;
@@ -173,7 +201,7 @@ export function buildBookIndex() {
   }
 
   const queuePath = path.join(MEMORY_DIR, "book_queue", "combined_queue.json");
-  if (fs.existsSync(queuePath)) {
+  if (process.env.YEHSA_INDEX_BOOK_QUEUE === "1" && fs.existsSync(queuePath)) {
     let added = 0;
     let skipped = 0;
     for (const entry of readNdjson(queuePath)) {

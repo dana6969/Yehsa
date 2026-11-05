@@ -1,0 +1,15 @@
+[
+  {"symbol": "addition", "context": "Addition combines quantities. a + b is the sum. This is definitional arithmetic, not a computer-algebra system."},
+  {"symbol": "subtraction", "context": "Subtraction removes one quantity from another. a - b is the difference."},
+  {"symbol": "multiplication", "context": "Multiplication is repeated addition. a * b is the product."},
+  {"symbol": "division", "context": "Division splits a quantity into equal parts. Division by zero is undefined."},
+  {"symbol": "exponent", "context": "An exponent repeats multiplication. a^2 is a squared. a^0 is 1 for nonzero a."},
+  {"symbol": "variable", "context": "A variable is a symbol that stands for an unknown or changing number, often written as x or y."},
+  {"symbol": "equation", "context": "An equation says two expressions are equal. Solving it means finding values that make both sides the same."},
+  {"symbol": "triangle", "context": "A triangle is a polygon with three sides. In a flat triangle the interior angles add up to 180 degrees."},
+  {"symbol": "circle", "context": "A circle is the set of points at a fixed radius from a center. Circumference is pi times the diameter. Area is pi times radius squared."},
+  {"symbol": "pythagorean_relation", "context": "In a right triangle, the square of the hypotenuse equals the sum of the squares of the other two sides."},
+  {"symbol": "derivative", "context": "A derivative is the instantaneous rate of change of a function. It is the slope of the tangent line."},
+  {"symbol": "integral", "context": "An integral accumulates a quantity. A definite integral is the signed area between a curve and the axis over an interval."},
+  {"symbol": "limit", "context": "A limit is the value a function approaches as its input approaches some point. Calculus builds on limits."}
+]

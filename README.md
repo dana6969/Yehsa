@@ -44,19 +44,31 @@ TCP expects one JSON object: `{ "token": "<token>", "symbol": "<allowlisted symb
 
 Speech and Bluetooth helpers (`symbolic/symbolic_speaker.js`, `utils/mesh_utils.mjs`) pass arguments with `execFile` and reject unexpected payload text. They still expect Termux commands (`termux-tts-speak`, `termux-bluetooth-send`) when those binaries exist.
 
+## Knowledge areas
+
+Offline reference for a survival-oriented agent. It is not emergency services, not medical advice, and not a foraging or treatment guide.
+
+- Math: `symbolic_memory/math/topics.json` plus the allowlisted arithmetic parser in `symbolic/math_eval.js` (`reasonThrough`). Letters are rejected. There is no computer-algebra system.
+- Medical names already committed: `symbolic_memory/medical_terms_only.txt`, `codesante_en.txt`, `glutanimate.txt`. They are looked up as names only. `desc2023.xml.gz` and `desc2024.xml` are HTML error pages and are not indexed. Short notes live in `symbolic_books/medical/`.
+- Herbology cautions: `symbolic_books/herbology/`.
+- Field notes (water, shelter, fire, navigation, weather, tools, signaling, food): `symbolic_books/survival/`. Signaling means being found. It is not an attack tool.
+- Drop more `.txt` or verse `.json` files in those folders and run `npm run books:ingest`.
+
+Symbol execution (`getMappedAction`) stays a direct map lookup so a thousand known symbols stay on the hot path. Dictionaries, books, math notes, medical names, and survival text are queried by `recallKnowledge` / `semanticAnswer` / `reasonThrough`, not by every mesh dispatch.
+
 ## Dictionaries and books
 
 The running agent reads these local stores. They are not only files sitting next to the code.
 
-- `symbolic/symbolic_dictionary.js` is the curated symbol map used by `getMappedAction`.
-- If a symbol is not in that map, lookup continues through `symbolic_memory/wordnet_raw.json`, `dictionary_memory.json`, `full_dictionary.json`, and `webster_raw.json`.
+- `symbolic/symbolic_dictionary.js` is the curated symbol map. `getMappedAction` reads only that map, which keeps symbol dispatch fast.
+- A single unknown word can still be resolved with `recallKnowledge`: WordNet stub, `dictionary_memory.json`, `full_dictionary.json`, then `webster_raw.json`.
 - `wordnet_raw.json` is the committed stub: one gloss (`fear`). An earlier copy of this file was the text `404: Not Found`. There is no full WordNet download in the repo.
 - `dictionary_memory.json` had one missing headword (`fingle-fangle`) that made the JSON invalid. That key is restored from Webster so the file loads.
-- Books are indexed from `symbolic_memory/full_book_verses.json`, `symbolic_memory/tao_te_ching.json` (two committed verses, not a full translation), usable files in `symbolic_books/`, and non-HTML lines in `symbolic_memory/book_queue/combined_queue.json`.
+- Books are indexed from `symbolic_memory/full_book_verses.json`, `symbolic_memory/tao_te_ching.json` (two committed verses), `symbolic_memory/math/`, and usable files under `symbolic_books/` including `medical/`, `herbology/`, and `survival/`. `book_queue/combined_queue.json` is skipped unless `YEHSA_INDEX_BOOK_QUEUE=1`, because that dump mixes real lines with HTML from failed downloads.
 
 ```bash
 npm run dictionary:load     # parse dictionary_memory.json and print the count
-npm run books:ingest        # rebuild symbolic_memory/books_index.json
+npm run books:ingest        # rebuild symbolic_memory/books_index.json from drop folders
 npm run dictionary:build    # merge Webster and the WordNet stub into full_dictionary.json
 ```
 

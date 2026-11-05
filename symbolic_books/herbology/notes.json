@@ -1,0 +1,5 @@
+[
+  {"symbol": "unknown_plant", "context": "Do not eat a plant you have not identified. Edible species can have toxic lookalikes. This is an offline caution, not a field guide or medical advice."},
+  {"symbol": "plantain_plantago", "context": "Plantago, often called plantain, is a common lawn weed with parallel veins. Crushed leaves have a traditional poultice use. Confirm the species before any use. Not a treatment."},
+  {"symbol": "toxic_vs_edible", "context": "Milky sap, bulb leaves, or umbrella flower clusters are reasons to stop and not taste a plant. Cultivated food is safer than foraging when identification is uncertain."}
+]
