@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-05T20:22:49.178Z",
-  "passageCount": 391,
+  "generatedAt": "2026-11-05T21:21:31.890Z",
+  "passageCount": 394,
   "sources": [
     {
       "file": "symbolic_memory/full_book_verses.json",
@@ -43,7 +43,7 @@
       "file": "symbolic_books/herbology/notes.json",
       "status": "indexed",
       "title": "notes",
-      "passages": 3
+      "passages": 4
     },
     {
       "file": "symbolic_books/hermetica.txt",
@@ -59,7 +59,13 @@
       "file": "symbolic_books/medical/reference.json",
       "status": "indexed",
       "title": "reference",
-      "passages": 3
+      "passages": 4
+    },
+    {
+      "file": "symbolic_books/survival/camp.json",
+      "status": "indexed",
+      "title": "camp",
+      "passages": 1
     },
     {
       "file": "symbolic_books/survival/food.txt",
@@ -2386,7 +2392,13 @@
     },
     {
       "symbol": "plantain_plantago",
-      "context": "Plantago, often called plantain, is a common lawn weed with parallel veins. Crushed leaves have a traditional poultice use. Confirm the species before any use. Not a treatment.",
+      "context": "Plantago, often called plantain, is a common lawn weed with parallel veins. Crushed plantain (Plantago) leaves are a traditional poultice for an itchy insect bite, and only after the plant is identified. Not a treatment.",
+      "title": "notes",
+      "source": "symbolic_books/herbology/notes.json"
+    },
+    {
+      "symbol": "willow_bark",
+      "context": "Willow bark (Salix) is traditionally used for aches, not as a medicine. Salicin from willow is described as an analgesic, and astringent tannins show up in the bark. Identify the tree before any use. This is not a dose or a substitute for emergency care.",
       "title": "notes",
       "source": "symbolic_books/herbology/notes.json"
     },
@@ -2413,6 +2425,18 @@
       "context": "Clean water matters before wound rinsing or rehydration. Boil water when you can. This is a field reminder, not clinical instruction.",
       "title": "reference",
       "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "insect_bite_skin",
+      "context": "A mosquito bite is usually a small itchy spot. Wash it with clean water. Swelling of the face or throat, or trouble breathing, needs a person and emergency services, not a plant.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "mosquito_camp",
+      "context": "Cover skin and avoid standing water when you can, so fewer mosquitoes bite. A plant on the skin does not replace that, and it does not treat diseases mosquitoes can carry.",
+      "title": "camp",
+      "source": "symbolic_books/survival/camp.json"
     },
     {
       "symbol": "food_1",

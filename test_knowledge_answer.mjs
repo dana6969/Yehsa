@@ -24,7 +24,9 @@ test("willow bark is a multi-source answer, not the suede gloss", () => {
   assert.match(lead, /willow/);
   assert.doesNotMatch(lead, /suede/);
   assert.match(answer.text.toLowerCase(), /willow/);
-  assert.match(answer.text, /Also:/);
+  assert.match(answer.text.toLowerCase(), /analgesic|ache|salicin/);
+  assert.doesNotMatch(answer.text, / \| /);
+  assert.doesNotMatch(answer.text, /forsaken|Sir W/);
   const kinds = new Set(answer.hits.map((hit) => hit.kind));
   assert.ok(kinds.has("dictionary"));
   assert.equal(answer.hits.some((hit) => String(hit.symbol).toLowerCase() === "suede"), false);
@@ -53,6 +55,10 @@ test("a full survival question is parsed and answered from several sources", () 
   assert.doesNotMatch(answer.symbol.toLowerCase(), /suede/);
   assert.match(answer.text.toLowerCase(), /willow/);
   assert.match(answer.text.toLowerCase(), /survival/);
+  assert.match(answer.text.toLowerCase(), /analgesic|ache|salicin/);
+  assert.doesNotMatch(answer.text, / \| /);
+  assert.doesNotMatch(answer.text, /forsaken|Sir W/);
+  assert.notEqual(answer.hits[0].kind, "dictionary");
   assert.ok(answer.hits.length >= 2);
   const kinds = new Set(answer.hits.map((hit) => hit.kind));
   assert.ok(kinds.has("dictionary"));
@@ -63,10 +69,36 @@ test("a full survival question is parsed and answered from several sources", () 
     encoding: "utf8"
   });
   assert.equal(cli.status, 0, cli.stderr);
-  const printed = JSON.parse(cli.stdout);
-  assert.equal(printed.question.intent, "use");
-  assert.equal(printed.question.topic, "willow bark");
-  assert.match(printed.text.toLowerCase(), /willow/);
+  assert.equal(cli.stdout.trim(), answer.text);
+  assert.doesNotMatch(cli.stdout.trim(), /^\{/);
+});
+
+test("a plant care question is one answer joined across notes", () => {
+  const raw = "How do I treat a mosquito bite with plants?";
+  const parsed = parseQuestion(raw);
+  assert.equal(parsed.isQuestion, true);
+  assert.equal(parsed.intent, "care");
+  assert.equal(parsed.topic, "mosquito bite");
+  assert.ok(parsed.concerns.includes("plant"));
+  assert.ok(parsed.concerns.includes("insect"));
+  assert.ok(parsed.concerns.includes("skin"));
+  const answer = ask(raw);
+  assert.equal(answer.answered, true);
+  assert.equal(answer.emotion.understood, false);
+  assert.equal(answer.emotion.emotion, "neutral");
+  assert.match(answer.text, /plantain|Plantago/);
+  assert.match(answer.text, /clean water/i);
+  assert.match(answer.text, /identif/i);
+  assert.match(answer.text, /emergency|breathing|swelling/i);
+  assert.match(answer.text, /mosquito/i);
+  assert.doesNotMatch(answer.text, / \| /);
+  assert.doesNotMatch(answer.text, /\nAlso:/);
+  assert.doesNotMatch(answer.text, /\{/);
+  const kinds = new Set(answer.hits.map((hit) => hit.kind));
+  assert.ok(kinds.has("herbology"));
+  assert.ok(kinds.has("medical"));
+  assert.ok(kinds.has("survival"));
+  assert.notEqual(answer.hits[0].kind, "dictionary");
 });
 
 test("survival and math questions stay on those corpora", () => {

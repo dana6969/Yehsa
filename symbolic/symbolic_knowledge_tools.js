@@ -37,7 +37,7 @@ export function semanticAnswer(keyword, options = {}) {
   console.log(text);
   const hits = Array.isArray(knowledge?.hits) ? knowledge.hits : [];
   for (const hit of hits) {
-    console.log(`🔹 [${hit.kind}] ${hit.symbol}: ${hit.text}`);
+    console.log(`🔹 [${hit.kind}] ${hit.symbol}`);
   }
   console.log(`⏱️ Duration: ${Date.now() - ts} ms`);
   logTrace(knowledge?.symbol || emotion.emotion, text);

@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { reasonAnswer, shouldConnect } from "./answer_reasoner.js";
 import { queryTokens, searchBooks, sourceKind } from "./book_index.js";
 import { parseQuestion } from "./question_parse.js";
 
@@ -106,6 +107,11 @@ function subjectToken(tokens) {
   return tokens.find((token) => !PLANT_PARTS.has(token)) || tokens[0] || "";
 }
 
+function hasWord(text, word) {
+  if (!word) return false;
+  return new RegExp(`\\b${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(text);
+}
+
 function collectKnowledge(parsed) {
   const phrase = parsed.topic || parsed.text;
   const tokens = queryTokens(phrase);
@@ -165,6 +171,12 @@ function collectKnowledge(parsed) {
         score -= 22;
       }
       if (plantUse) score = Math.max(score, 44);
+      const statesUse = /\b(analgesic|astringent|tannin|poultice)\b/.test(gloss);
+      // A headword that only mentions the subject (suede, water willow) is not an answer.
+      if (!namedInQuestion && !statesUse && key !== subject) score = Math.min(score, 19);
+      if (key !== subject && key !== phrase && tokens.includes(key) && subject && !hasWord(gloss, subject)) {
+        score -= 30;
+      }
       addHit(bag, {
         kind: "dictionary",
         symbol: key,
@@ -191,24 +203,48 @@ function collectKnowledge(parsed) {
     }
   }
 
+  if (shouldConnect(parsed)) {
+    const concerns = new Set(parsed.concerns || []);
+    const extras = [];
+    if (concerns.has("plant") || concerns.has("skin") || concerns.has("insect") || parsed.intent === "care") {
+      extras.push("plantain", "unknown plant");
+    }
+    if (concerns.has("skin") || concerns.has("insect") || parsed.intent === "care") {
+      extras.push("clean water", "mosquito");
+    }
+    for (const extra of extras) {
+      for (const passage of searchBooks(extra, 4)) {
+        const kind = sourceKind(passage.source);
+        addHit(bag, {
+          kind,
+          symbol: passage.symbol,
+          text: clip(passage.context, 480),
+          title: passage.title || "",
+          source: passage.source || "",
+          score: passage.score
+        });
+      }
+    }
+  }
+
   return [...bag.values()]
     .filter((hit) => hit.score >= 20)
-    .sort((a, b) => b.score - a.score || a.symbol.localeCompare(b.symbol))
-    .slice(0, 5);
+    .sort((a, b) => b.score - a.score || a.symbol.localeCompare(b.symbol));
 }
 
-function synthesize(parsed, hits) {
-  const best = hits[0];
-  const lead = `${best.symbol}: ${best.text}`;
-  const rest = hits.slice(1, 4).map((hit) => `${hit.symbol} (${hit.kind}): ${clip(hit.text, 160)}`);
-  const body = rest.length === 0 ? lead : `${lead}\nAlso: ${rest.join(" | ")}`;
-  if (parsed.intent === "use") {
-    const where = parsed.domain ? ` in a ${parsed.domain} setting` : "";
-    return `For ${parsed.topic}${where}, the closest offline notes — not a passing gloss — say:\n${body}`;
-  }
-  if (parsed.isQuestion && parsed.intent === "how") return `How to approach ${parsed.topic}:\n${body}`;
-  if (parsed.isQuestion && parsed.intent === "what") return `${parsed.topic}:\n${body}`;
-  return body;
+function presentHits(used, ranked) {
+  const out = [];
+  const seen = new Set();
+  const push = (hit) => {
+    if (!hit?.symbol) return;
+    const key = `${hit.kind}:${String(hit.symbol).toLowerCase()}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push(hit);
+  };
+  for (const hit of used || []) push(hit);
+  for (const hit of ranked || []) push(hit);
+  return out.slice(0, 6);
 }
 
 export function recallKnowledge(query) {
@@ -216,23 +252,26 @@ export function recallKnowledge(query) {
   if (raw.length < 2) return null;
   // Full questions are parsed first. getMappedAction does not call this.
   const question = parseQuestion(raw);
-  const hits = collectKnowledge(question);
-  if (hits.length === 0) return null;
-  const best = hits[0];
-  const answer = synthesize(question, hits);
+  const ranked = collectKnowledge(question);
+  if (ranked.length === 0) return null;
+  const deduction = reasonAnswer(question, ranked);
+  if (!deduction.text) return null;
+  const hits = presentHits(deduction.used, ranked);
+  const best = deduction.used[0] || hits[0];
   return {
     kind: best.kind,
     symbol: best.symbol,
-    text: answer,
+    text: deduction.text,
     title: best.title,
     source: best.source,
     hits,
-    answer,
+    answer: deduction.text,
     question: {
       isQuestion: question.isQuestion,
       intent: question.intent,
       topic: question.topic,
-      domain: question.domain
+      domain: question.domain,
+      concerns: question.concerns || []
     }
   };
 }

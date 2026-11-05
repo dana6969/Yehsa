@@ -41,7 +41,11 @@ if (import.meta.url === entry) {
     process.exitCode = 1;
   } else {
     const result = ask(question);
-    console.log(JSON.stringify(result, null, 2));
-    process.exitCode = result.answered ? 0 : 1;
+    if (!result.answered || !result.text) {
+      console.error("No offline note answered that.");
+      process.exitCode = 1;
+    } else {
+      console.log(result.text);
+    }
   }
 }
