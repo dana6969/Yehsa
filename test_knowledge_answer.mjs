@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import fs from "fs";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
 import { recallKnowledge } from "./symbolic/knowledge_index.js";
+import { parseQuestion } from "./symbolic/question_parse.js";
+import { ask } from "./symbolic/ask.js";
 
 test("getMappedAction stays a direct map read", () => {
   const src = fs.readFileSync("symbolic/symbolic_dictionary.js", "utf8");
@@ -33,6 +37,36 @@ test("plantain prefers the herbology note", () => {
   assert.match(String(answer.source), /herbology/);
   assert.match(answer.text.toLowerCase(), /plantain|plantago/);
   assert.ok(answer.hits.length >= 1);
+});
+
+test("a full survival question is parsed and answered from several sources", () => {
+  const raw = "What can willow bark be used for in a survival setting?";
+  const parsed = parseQuestion(raw);
+  assert.equal(parsed.isQuestion, true);
+  assert.equal(parsed.intent, "use");
+  assert.equal(parsed.topic, "willow bark");
+  assert.equal(parsed.domain, "survival");
+  const answer = ask(raw);
+  assert.equal(answer.answered, true);
+  assert.equal(answer.question.topic, "willow bark");
+  assert.match(answer.symbol.toLowerCase(), /willow/);
+  assert.doesNotMatch(answer.symbol.toLowerCase(), /suede/);
+  assert.match(answer.text.toLowerCase(), /willow/);
+  assert.match(answer.text.toLowerCase(), /survival/);
+  assert.ok(answer.hits.length >= 2);
+  const kinds = new Set(answer.hits.map((hit) => hit.kind));
+  assert.ok(kinds.has("dictionary"));
+  assert.ok(kinds.has("herbology") || kinds.has("survival") || kinds.has("medical"));
+  assert.equal(answer.hits.some((hit) => String(hit.symbol).toLowerCase() === "suede"), false);
+  const cli = spawnSync(process.execPath, ["symbolic/ask.js", raw], {
+    cwd: path.dirname(new URL(import.meta.url).pathname),
+    encoding: "utf8"
+  });
+  assert.equal(cli.status, 0, cli.stderr);
+  const printed = JSON.parse(cli.stdout);
+  assert.equal(printed.question.intent, "use");
+  assert.equal(printed.question.topic, "willow bark");
+  assert.match(printed.text.toLowerCase(), /willow/);
 });
 
 test("survival and math questions stay on those corpora", () => {

@@ -1,0 +1,68 @@
+const FRAME = /^(?:please\s+|can you\s+|could you\s+|tell me\s+|explain\s+)?(what|how|why|when|where|who|can|could|should|is|are|does|do)\b/;
+
+const SCAFFOLD = new Set([
+  "what", "how", "why", "when", "where", "who", "can", "could", "should", "is", "are",
+  "does", "do", "be", "been", "being", "used", "use", "using", "for", "in", "on", "a",
+  "an", "the", "to", "of", "me", "my", "please", "tell", "explain", "you", "your",
+  "setting", "context", "about", "with", "from", "that", "this", "and", "not"
+]);
+
+const DOMAIN_WORDS = [
+  ["survival", "survival"],
+  ["herbology", "herbology"],
+  ["herbal", "herbology"],
+  ["medical", "medical"],
+  ["medicine", "medical"],
+  ["math", "math"],
+  ["mathematics", "math"]
+];
+
+const DOMAIN_CUES = [
+  { domain: "survival", test: /\b(survival|field craft|campsite|shelter|foraging)\b/ },
+  { domain: "herbology", test: /\b(herbology|herbal|poultice)\b/ },
+  { domain: "medical", test: /\b(medical|medicine|wound care)\b/ },
+  { domain: "math", test: /\b(math|mathematics|equation|triangle|calculate)\b/ }
+];
+
+function clean(text) {
+  return String(text || "").toLowerCase().replace(/[?!.]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function intentOf(text) {
+  if (/\b(used for|use for|uses of|good for|be used)\b/.test(text)) return "use";
+  if (/\bhow\b/.test(text)) return "how";
+  if (/\bwhat\b/.test(text)) return "what";
+  if (/\bwhy\b/.test(text)) return "why";
+  if (/\bwhere\b/.test(text)) return "where";
+  return "ask";
+}
+
+function domainOf(text) {
+  const setting = text.match(/\bin (?:an?|the) ([a-z]+) (?:setting|context)\b/);
+  if (setting) {
+    const named = DOMAIN_WORDS.find(([word]) => word === setting[1]);
+    if (named) return named[1];
+  }
+  for (const cue of DOMAIN_CUES) {
+    if (cue.test.test(text)) return cue.domain;
+  }
+  return null;
+}
+
+function topicOf(text, domain) {
+  const drop = new Set(SCAFFOLD);
+  if (domain) drop.add(domain);
+  for (const [word] of DOMAIN_WORDS) drop.add(word);
+  const tokens = text.split(/[^a-z0-9+]+/).filter((word) => word.length > 2 && !drop.has(word));
+  return tokens.join(" ");
+}
+
+export function parseQuestion(input) {
+  const raw = String(input || "").trim();
+  const text = clean(raw);
+  const isQuestion = /\?\s*$/.test(raw) || FRAME.test(text);
+  const intent = isQuestion ? intentOf(text) : "ask";
+  const domain = domainOf(text);
+  const topic = topicOf(text, domain) || text;
+  return { raw, text, isQuestion, intent, topic, domain };
+}

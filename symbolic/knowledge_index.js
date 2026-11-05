@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { queryTokens, searchBooks, sourceKind } from "./book_index.js";
+import { parseQuestion } from "./question_parse.js";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const MEDICAL_LISTS = [
@@ -99,11 +100,19 @@ function addHit(bag, hit) {
   if (!prev || hit.score > prev.score) bag.set(key, hit);
 }
 
-function collectKnowledge(query) {
-  const phrase = String(query || "").trim().toLowerCase();
+const PLANT_PARTS = new Set(["bark", "leaf", "leaves", "root", "seed", "flower", "wood"]);
+
+function subjectToken(tokens) {
+  return tokens.find((token) => !PLANT_PARTS.has(token)) || tokens[0] || "";
+}
+
+function collectKnowledge(parsed) {
+  const phrase = parsed.topic || parsed.text;
   const tokens = queryTokens(phrase);
   const longest = tokens.slice().sort((a, b) => b.length - a.length)[0] || "";
+  const subject = subjectToken(tokens);
   const bag = new Map();
+  const boost = (kind, score) => (parsed.domain && kind === parsed.domain ? score + 16 : score);
 
   for (const passage of searchBooks(phrase, 8)) {
     const kind = sourceKind(passage.source);
@@ -113,7 +122,7 @@ function collectKnowledge(query) {
       text: clip(passage.context, 320),
       title: passage.title || "",
       source: passage.source || "",
-      score: passage.score
+      score: boost(kind, passage.score)
     });
   }
 
@@ -130,33 +139,54 @@ function collectKnowledge(query) {
       text: clip(hit.text, 320),
       title: "",
       source: hit.source,
-      score: (nameOnly ? 6 : 42) + exact
+      score: boost("medical", (nameOnly ? 6 : 42) + exact)
     });
   }
 
   if (phrase || tokens.length) {
     for (const [key, text] of loadLexical()) {
-      const related = key === phrase || tokens.includes(key) || (longest && key.includes(longest));
-      if (!related) continue;
+      const gloss = String(text).toLowerCase();
+      const namedInQuestion = key === phrase || tokens.includes(key);
+      const related = namedInQuestion || (longest && key.includes(longest));
+      const plantUse = (parsed.intent === "use" || tokens.some((token) => PLANT_PARTS.has(token)))
+        && subject.length >= 5
+        && !namedInQuestion
+        && gloss.includes(subject)
+        && /\b(salix|analgesic|astringent|tannin|poultice|from a |from the )\b/.test(gloss);
+      if (!related && !plantUse) continue;
       let score = 18;
       if (key === phrase) score += 70;
       else if (key === longest) score += 46;
       else if (tokens.includes(key)) score += 22;
       else if (longest && key.includes(longest)) score += 28;
       else score += 8;
-      const gloss = String(text).toLowerCase();
-      const namedInQuestion = key === phrase || tokens.includes(key);
       if (!namedInQuestion && longest && !gloss.includes(longest)) {
         // A nearby headword that never mentions the subject of the question.
         score -= 22;
       }
+      if (plantUse) score = Math.max(score, 44);
       addHit(bag, {
         kind: "dictionary",
         symbol: key,
         text: clip(text, 320),
         title: "",
         source: "lexical-headword",
-        score
+        score: boost("dictionary", score)
+      });
+    }
+  }
+
+  if (parsed.intent === "use" && (parsed.domain === "survival" || parsed.domain === "herbology")) {
+    const caution = searchBooks("unknown plant", 1)[0];
+    if (caution) {
+      const kind = sourceKind(caution.source);
+      addHit(bag, {
+        kind,
+        symbol: caution.symbol,
+        text: clip(caution.context, 320),
+        title: caution.title || "",
+        source: caution.source || "",
+        score: boost(kind, 50)
       });
     }
   }
@@ -167,23 +197,29 @@ function collectKnowledge(query) {
     .slice(0, 5);
 }
 
-function synthesize(hits) {
+function synthesize(parsed, hits) {
   const best = hits[0];
   const lead = `${best.symbol}: ${best.text}`;
   const rest = hits.slice(1, 4).map((hit) => `${hit.symbol} (${hit.kind}): ${clip(hit.text, 160)}`);
-  if (rest.length === 0) return lead;
-  return `${lead}\nAlso: ${rest.join(" | ")}`;
+  const body = rest.length === 0 ? lead : `${lead}\nAlso: ${rest.join(" | ")}`;
+  if (parsed.intent === "use") {
+    const where = parsed.domain ? ` in a ${parsed.domain} setting` : "";
+    return `For ${parsed.topic}${where}, the closest offline notes — not a passing gloss — say:\n${body}`;
+  }
+  if (parsed.isQuestion && parsed.intent === "how") return `How to approach ${parsed.topic}:\n${body}`;
+  if (parsed.isQuestion && parsed.intent === "what") return `${parsed.topic}:\n${body}`;
+  return body;
 }
 
 export function recallKnowledge(query) {
   const raw = String(query || "").trim();
   if (raw.length < 2) return null;
-  // Ranked read across the small book index and dictionary headwords.
-  // getMappedAction does not call this.
-  const hits = collectKnowledge(raw);
+  // Full questions are parsed first. getMappedAction does not call this.
+  const question = parseQuestion(raw);
+  const hits = collectKnowledge(question);
   if (hits.length === 0) return null;
   const best = hits[0];
-  const answer = synthesize(hits);
+  const answer = synthesize(question, hits);
   return {
     kind: best.kind,
     symbol: best.symbol,
@@ -191,6 +227,12 @@ export function recallKnowledge(query) {
     title: best.title,
     source: best.source,
     hits,
-    answer
+    answer,
+    question: {
+      isQuestion: question.isQuestion,
+      intent: question.intent,
+      topic: question.topic,
+      domain: question.domain
+    }
   };
 }
