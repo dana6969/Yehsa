@@ -3,12 +3,29 @@ import path from "path";
 import { execFile } from "child_process";
 import { pathToFileURL } from "url";
 import { ensureLocalOwner } from "../symbolic/device_owner.js";
+import {
+  MESH_NAME_PREFIX,
+  MESH_SERVICE_UUID,
+  EXTERIOR_PEER,
+  cleanName,
+  normalizeMac,
+  isYehsaName,
+  normalizePeer,
+  parseSightings
+} from "../symbolic/mesh_peers.js";
+
+export {
+  MESH_NAME_PREFIX,
+  MESH_SERVICE_UUID,
+  isYehsaName,
+  normalizePeer,
+  parseSightings
+};
 
 const MAX_PAYLOAD_BYTES = 16 * 1024;
 const BASE64_RE = /^[A-Za-z0-9+/]+={0,2}$/;
 const sentSet = new Set();
 
-const MAC_RE = /^(?:[0-9A-F]{2}:){5}[0-9A-F]{2}$/;
 const SCAN_COMMAND = "termux-bluetooth-scan";
 const CONNECT_COMMAND = "termux-bluetooth-connect";
 const SEND_COMMAND = "termux-bluetooth-send";
@@ -18,16 +35,8 @@ const MAX_PEERS = 64;
 // Local Yehsa mesh marker. Advertisements that do not carry this name or
 // service UUID are not stored. This is peer discovery for this mesh, not a
 // log of every nearby radio.
-export const MESH_NAME_PREFIX = "YEHSA";
-export const MESH_SERVICE_UUID = "59454853-4100-4d45-5348-000000000001";
 export const PASSIVE_SCAN_MARKER = "YEHSA_PASSIVE_LE_SCAN";
 export const PASSIVE_CONNECT_MARKER = "YEHSA_PASSIVE_LE_CONNECT";
-
-// A remembered radio peer is another install. It is not the owner of this one.
-const EXTERIOR_PEER = Object.freeze({
-  owner: false,
-  relation: "exterior-mesh-peer"
-});
 
 let cachedOwner = null;
 
@@ -110,93 +119,6 @@ function writeJson(file, value) {
   const tmp = path.join(dir, `.${path.basename(file)}.${process.pid}.tmp`);
   fs.writeFileSync(tmp, `${JSON.stringify(value, null, 2)}\n`);
   fs.renameSync(tmp, file);
-}
-
-export function isYehsaName(name) {
-  return typeof name === "string" && /^yehsa($|[^a-z0-9])/i.test(name.trim());
-}
-
-function cleanName(name) {
-  if (typeof name !== "string") return "";
-  const cleaned = name.replace(/[\u0000-\u001F\u007F]/g, "").trim();
-  if (!cleaned || cleaned.length > 64) return "";
-  return cleaned;
-}
-
-function normalizeMac(address) {
-  if (typeof address !== "string") return null;
-  const mac = address.trim().toUpperCase();
-  if (!MAC_RE.test(mac)) return null;
-  if (mac === "00:00:00:00:00:00" || mac === "FF:FF:FF:FF:FF:FF") return null;
-  return mac;
-}
-
-function collectUuids(raw) {
-  const found = [];
-  const push = (value) => {
-    if (typeof value === "string" && value.trim()) found.push(value.trim());
-  };
-  push(raw.serviceUuid);
-  push(raw.uuid);
-  if (Array.isArray(raw.serviceUuids)) raw.serviceUuids.forEach(push);
-  if (Array.isArray(raw.uuids)) raw.uuids.forEach(push);
-  return found;
-}
-
-export function normalizePeer(raw) {
-  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
-  const address = normalizeMac(raw.address);
-  if (!address) return null;
-  const uuids = collectUuids(raw);
-  const uuidHit = uuids.some((uuid) => uuid.toLowerCase() === MESH_SERVICE_UUID);
-  const name = cleanName(raw.name);
-  if (!uuidHit && !isYehsaName(name)) return null;
-  let rssi = null;
-  if (typeof raw.rssi === "number" && Number.isFinite(raw.rssi) && raw.rssi <= 20 && raw.rssi >= -127) {
-    rssi = raw.rssi;
-  }
-  return {
-    address,
-    name: isYehsaName(name) ? name : MESH_NAME_PREFIX,
-    rssi,
-    serviceUuid: uuidHit ? MESH_SERVICE_UUID : null,
-    lastSeen: Date.now(),
-    source: "ble-passive",
-    ...EXTERIOR_PEER
-  };
-}
-
-export function parseSightings(stdout) {
-  const text = String(stdout || "").trim();
-  if (!text) return [];
-  const absorb = (parsed, into) => {
-    if (Array.isArray(parsed)) {
-      into.push(...parsed);
-      return;
-    }
-    if (parsed && typeof parsed === "object") {
-      if (Array.isArray(parsed.devices)) into.push(...parsed.devices);
-      else if (Array.isArray(parsed.peers)) into.push(...parsed.peers);
-    }
-  };
-  try {
-    const parsed = JSON.parse(text);
-    const rows = [];
-    absorb(parsed, rows);
-    return rows;
-  } catch {
-    const rows = [];
-    for (const line of text.split(/\n+/)) {
-      const trimmed = line.trim();
-      if (!trimmed) continue;
-      try {
-        absorb(JSON.parse(trimmed), rows);
-      } catch {
-        // Helper chatter that is not a sighting is ignored.
-      }
-    }
-    return rows;
-  }
 }
 
 function readPeers(file) {

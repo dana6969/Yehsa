@@ -11,8 +11,21 @@
       "edgeToEdgeEnabled": true
     },
     "ios": {
-      "bundleIdentifier": "com.dana6969.axi0net"
+      "bundleIdentifier": "com.dana6969.axi0net",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Yehsa uses your location only after you consent to hold a position."
+      }
     },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Yehsa uses your location only after you consent to hold a position.",
+          "isAndroidBackgroundLocationEnabled": false,
+          "isIosBackgroundLocationEnabled": false
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "e60340c9-58a4-4c15-ae31-1060cb3bc53c"

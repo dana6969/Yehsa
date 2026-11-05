@@ -1,8 +1,14 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
+import { createHash } from "node:crypto";
 import { ask } from "./symbolic/ask.js";
 import { askField } from "./symbolic/phone_field.js";
+import { phoneCorpusMeta, phoneLexical } from "./symbolic/phone_corpus.js";
+import { meshScreenStatus } from "./symbolic/phone_mesh.js";
+import { evaluateOwner, sha256Hex } from "./symbolic/owner_bind.js";
+import { applySatelliteReading, chooseLocationRoute } from "./symbolic/position_adapter.js";
+import { bindThisInstall, memoryStore } from "./src/phone/install_owner.js";
 import {
   courseText,
   declinationText,
@@ -11,7 +17,6 @@ import {
   sunText,
   trackText
 } from "./symbolic/phone_land.js";
-import { meshScreenStatus } from "./symbolic/phone_mesh.js";
 import {
   holdTypedFix,
   initialPosition,
@@ -34,6 +39,16 @@ test("the phone shell greets as Yehsa", () => {
   assert.doesNotMatch(appTsx, /Axionet is running|Open up App\.js/);
   assert.match(home, /Yehsa/);
   assert.doesNotMatch(home, /Axionet|Axi0net/);
+  assert.match(home, /phoneCorpusMeta/);
+  assert.match(home, /Scan for Yehsa peers/);
+  assert.match(home, /readPlatformFix/);
+  assert.doesNotMatch(home, /does not start a scan|The large dictionary is not loaded/);
+  const positionStart = home.indexOf("function PositionPane");
+  const meshStart = home.indexOf("function MeshPane");
+  const positionBody = home.slice(positionStart, meshStart);
+  assert.doesNotMatch(positionBody, /useEffect/);
+  assert.match(positionBody, /consent !== true/);
+  assert.match(home, /function changeConsent\(value\) \{\n    const next = setConsent\(position, value\);/);
   assert.equal(manifest.expo.name, "Yehsa");
   assert.equal(manifest.expo.slug, "axionet");
   const dictionary = fs.readFileSync("symbolic/symbolic_dictionary.js", "utf8");
@@ -183,11 +198,135 @@ test("position consent is explicit and share does not send", () => {
   assert.equal(JSON.stringify(cleared).includes("45.1"), false);
 });
 
-test("mesh status on the phone screen is degraded and read only", () => {
+test("mesh status before a scan is degraded and does not invent a radio", () => {
   const status = meshScreenStatus();
   assert.equal(status.readiness, "degraded");
-  assert.match(status.headline, /degraded/i);
-  assert.match(status.detail, /does not scan/);
+  assert.match(status.headline, /not been run/i);
   assert.match(JSON.stringify(status), /No cellular call/);
-  assert.doesNotMatch(JSON.stringify(status), /ready to transmit|radio is up/i);
+  assert.match(JSON.stringify(status), /without a position lock/i);
+  assert.doesNotMatch(JSON.stringify(status), /ready to transmit|radio is up|encrypted/i);
+});
+
+test("the packaged dictionary is a deep subset and the full corpora stay", () => {
+  assert.equal(phoneCorpusMeta.scope, "packaged-subset");
+  assert.equal(phoneCorpusMeta.websterBundled, false);
+  assert.equal(phoneCorpusMeta.fullCorporaRemain, true);
+  assert.ok(phoneCorpusMeta.headwords >= 10000);
+  assert.ok(phoneLexical().has("willow"));
+  assert.ok(phoneLexical().has("salicin"));
+  assert.ok(fs.statSync("symbolic_memory/webster_raw.json").size > 1000000);
+  assert.ok(fs.statSync("symbolic_memory/full_dictionary.json").size > 1000000);
+  assert.ok(fs.existsSync("symbolic_memory/dictionary_memory.json"));
+  const polarity = askField("What is polarity?", passages);
+  assert.equal(polarity.answered, true);
+  assert.equal(polarity.kind, "dictionary");
+  assert.equal(polarity.text, ask("What is polarity?").text);
+  assert.match(polarity.text.toLowerCase(), /opposite|condition/);
+});
+
+test("satellite lock follows the provider and never locks without consent", () => {
+  assert.equal(chooseLocationRoute({ termuxAvailable: true, expoAvailable: true }), "termux-location");
+  assert.equal(chooseLocationRoute({ expoAvailable: true }), "expo-location");
+  assert.equal(chooseLocationRoute({}), "none");
+
+  const start = initialPosition();
+  const blocked = applySatelliteReading(start, {
+    route: "expo-location",
+    fix: { latitude: 44.7128, longitude: -69.0123, accuracy: 5 }
+  });
+  assert.equal(blocked.status, "unlocked");
+  assert.equal(blocked.fix, null);
+  assert.match(blocked.note, /opt-in/);
+
+  const consented = setConsent(start, true);
+  const expoFix = applySatelliteReading(consented, {
+    route: "expo-location",
+    fix: { latitude: 45.1, longitude: -69.2, accuracy: 8, altitude: 12 }
+  });
+  assert.equal(expoFix.status, "locked");
+  assert.equal(expoFix.source, "expo-location");
+  assert.equal(expoFix.shared, false);
+  assert.equal(expoFix.fix.altitude, 12);
+
+  const gnss = applySatelliteReading(consented, {
+    route: "termux-location",
+    stdout: JSON.stringify({ latitude: 10, longitude: 20, accuracy: 4, provider: "gps" })
+  });
+  assert.equal(gnss.status, "locked");
+  assert.equal(gnss.source, "gnss");
+  assert.equal(gnss.shared, false);
+
+  const network = applySatelliteReading(consented, {
+    route: "termux-location",
+    stdout: JSON.stringify({ latitude: 10, longitude: 20, accuracy: 4, provider: "network" })
+  });
+  assert.equal(network.status, "degraded");
+  assert.equal(network.fix, null);
+  assert.match(network.note, /network|GPS/i);
+
+  const missing = applySatelliteReading(consented, { route: "none" });
+  assert.equal(missing.status, "degraded");
+  assert.equal(missing.fix, null);
+
+  const kept = applySatelliteReading(expoFix, {
+    route: "expo-location",
+    reason: "Expo Location did not return a fix. Nothing was stored."
+  });
+  assert.equal(kept.status, "locked");
+  assert.equal(kept.source, "expo-location");
+  assert.equal(kept.fix.latitude, 45.1);
+  assert.equal(kept.shared, false);
+});
+
+test("expo install bind is per-device and does not rewrite a foreign record", async () => {
+  assert.equal(sha256Hex("abc"), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+  const phone = "abcd1234ef567890";
+  assert.equal(
+    sha256Hex(`android-id:${phone}`),
+    createHash("sha256").update(`android-id:${phone}`).digest("hex")
+  );
+  const minted = evaluateOwner({
+    phone: { id: phone, source: "android-id" },
+    randomBytes: () => new Uint8Array(16).fill(1),
+    now: "2026-01-01T00:00:00.000Z"
+  });
+  assert.equal(minted.write, true);
+  assert.equal(minted.recognized, true);
+  assert.equal(minted.exterior, "deny");
+  assert.equal(minted.encryption, "none");
+  assert.equal(minted.ownership, "local-device");
+  const again = evaluateOwner({
+    phone: { id: phone, source: "android-id" },
+    stored: minted.record
+  });
+  assert.equal(again.write, false);
+  assert.equal(again.installId, minted.installId);
+  const other = evaluateOwner({
+    phone: { id: "1234abcd5678ef90", source: "android-id" },
+    stored: minted.record
+  });
+  assert.equal(other.recognized, false);
+  assert.equal(other.write, false);
+  assert.equal(other.record, minted.record);
+  const nobody = evaluateOwner({});
+  assert.equal(nobody.recognized, false);
+  assert.match(nobody.reason, /no phone identity/);
+
+  const store = memoryStore();
+  const first = await bindThisInstall(store);
+  assert.equal(first.recognized, true);
+  assert.equal(first.source, "expo-install");
+  assert.equal(first.exterior, "deny");
+  assert.equal(first.encryption, "none");
+  const second = await bindThisInstall(store);
+  assert.equal(second.write, false);
+  assert.equal(second.installId, first.installId);
+  const saved = JSON.parse(await store.get("yehsa.device_owner.v1"));
+  saved.deviceMark = "0".repeat(64);
+  await store.set("yehsa.device_owner.v1", JSON.stringify(saved));
+  const denied = await bindThisInstall(store);
+  assert.equal(denied.recognized, false);
+  assert.equal(denied.write, false);
+  assert.match(denied.reason, /not this phone/);
+  assert.equal(JSON.parse(await store.get("yehsa.device_owner.v1")).deviceMark, "0".repeat(64));
 });

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -10,6 +10,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import books from "../../symbolic_memory/books_index.json";
 import { askField } from "../../symbolic/phone_field.js";
+import { phoneCorpusMeta } from "../../symbolic/phone_corpus.js";
 import {
   addSessionTrack,
   courseText,
@@ -20,16 +21,27 @@ import {
   sunText,
   trackText
 } from "../../symbolic/phone_land.js";
-import { meshScreenStatus } from "../../symbolic/phone_mesh.js";
+import {
+  applyConnect,
+  applyScan,
+  attachOwner,
+  initialMeshSession,
+  meshScreenStatus,
+  queueServiceText,
+  rememberRadioPeer
+} from "../../symbolic/phone_mesh.js";
+import { applySatelliteReading } from "../../symbolic/position_adapter.js";
 import {
   holdTypedFix,
   initialPosition,
-  noteSatelliteUnavailable,
   setConsent,
   shareAttempt,
   statusLabel,
   unlockPosition
 } from "../../symbolic/phone_position.js";
+import { chooseYehsaDevice, connectRemembered, scanWithPlatform, transmitNote } from "./ble_provider.js";
+import { bindThisInstall } from "./install_owner.js";
+import { readPlatformFix } from "./location_provider.js";
 import { Action, Field, Panel, Prose, colors } from "./ui.js";
 
 const TABS = [
@@ -58,6 +70,25 @@ export default function YehsaApp() {
   const [position, setPosition] = useState(initialPosition);
   const [waypoints, setWaypoints] = useState([]);
   const [track, setTrack] = useState([]);
+  const [owner, setOwner] = useState(null);
+  const [mesh, setMesh] = useState(initialMeshSession);
+
+  useEffect(() => {
+    let live = true;
+    bindThisInstall().then((bound) => {
+      if (!live) return;
+      setOwner(bound);
+      setMesh((current) => attachOwner(current, bound));
+    }).catch(() => {
+      if (!live) return;
+      const failed = { recognized: false, reason: "no phone identity; access refused", source: null, exterior: "deny" };
+      setOwner(failed);
+      setMesh((current) => attachOwner(current, failed));
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
 
   const session = useMemo(() => ({
     consent: position.consent === true,
@@ -110,7 +141,7 @@ export default function YehsaApp() {
           pointerEvents={tab === "mesh" ? "auto" : "none"}
           accessibilityElementsHidden={tab !== "mesh"}
         >
-          <MeshPane />
+          <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} />
         </View>
       </View>
       <View style={styles.tabs}>
@@ -199,7 +230,7 @@ function AskPane({ session }) {
       {phase === "idle" ? (
         <Panel>
           <Prose>
-            Ask in plain language. Yehsa answers from the field notes on this device. A feeling in the wording is a small cue beside the answer, not a replacement for it.
+            Ask in plain language. Yehsa answers from the field notes and a packaged dictionary on this device. A feeling in the wording is a small cue beside the answer, not a replacement for it.
           </Prose>
         </Panel>
       ) : null}
@@ -220,7 +251,7 @@ function AskPane({ session }) {
         </Panel>
       ) : null}
       <Text style={styles.foot}>
-        The large dictionary is not loaded on this screen. Nothing you ask is saved as a profile.
+        {`Packaged dictionary: ${phoneCorpusMeta.headwords} headwords and ${phoneCorpusMeta.medicalNames} medical names that overlap the field notes. ${phoneCorpusMeta.honest} Nothing you ask is saved as a profile.`}
       </Text>
     </ScrollView>
   );
@@ -386,14 +417,38 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
   );
 }
 
+function heldPhrase(source) {
+  if (source === "typed") return "typed coordinates";
+  if (source === "gnss") return "a termux-location GPS fix";
+  if (source === "expo-location") return "an Expo Location fix";
+  return "a fix";
+}
+
 function PositionPane({ position, setPosition, onConsent }) {
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
   const [altitude, setAltitude] = useState("");
   const [shareNote, setShareNote] = useState("Share is a separate action. Nothing is sent when you lock.");
+  const [listening, setListening] = useState(false);
 
   const label = statusLabel(position);
   const tone = position.status === "locked" ? "good" : position.status === "degraded" ? "warn" : undefined;
+
+  async function trySatellite() {
+    if (position.consent !== true) {
+      setPosition(applySatelliteReading(position, { route: "none", fix: null }));
+      return;
+    }
+    setListening(true);
+    try {
+      const reading = await readPlatformFix();
+      setPosition((current) => (
+        current.consent === true ? applySatelliteReading(current, reading) : initialPosition()
+      ));
+    } finally {
+      setListening(false);
+    }
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
@@ -408,7 +463,7 @@ function PositionPane({ position, setPosition, onConsent }) {
         <Text style={styles.note}>{position.note}</Text>
         {position.status === "locked" && position.fix ? (
           <Text style={styles.note}>
-            Held {position.source === "typed" ? "typed coordinates" : "a fix"}: {position.fix.latitude.toFixed(5)}, {position.fix.longitude.toFixed(5)}
+            Held {heldPhrase(position.source)}: {position.fix.latitude.toFixed(5)}, {position.fix.longitude.toFixed(5)}
             {position.fix.altitude != null ? `, ${position.fix.altitude} m` : ""}. Not shared.
           </Text>
         ) : null}
@@ -429,9 +484,10 @@ function PositionPane({ position, setPosition, onConsent }) {
         />
       </View>
       <Action
-        label="Try satellite lock"
-        onPress={() => setPosition(noteSatelliteUnavailable(position))}
-        accessibilityHint="Does not run unless you tap. Needs termux-location, which this screen does not have."
+        label={listening ? "Listening for a fix…" : "Try satellite lock"}
+        onPress={trySatellite}
+        disabled={listening}
+        accessibilityHint="Runs only when you tap, and only after consent. Uses termux-location when that bridge exists, otherwise Expo Location."
       />
       <Field label="Latitude" value={lat} onChangeText={setLat} placeholder="45.1" />
       <Field label="Longitude" value={lon} onChangeText={setLon} placeholder="-69.2" />
@@ -461,22 +517,100 @@ function PositionPane({ position, setPosition, onConsent }) {
         />
       </Panel>
       <Text style={styles.foot}>
-        Expo cannot read the Android id or run termux-location. The owner file and the satellite fix stay on the Termux command. This screen will not pretend either succeeded.
+        Consent stays off until you turn it on. This button does not run by itself. termux-location is used when that command is bridged in; otherwise Expo Location. A missing fix stays Degraded. Share still does not transmit from this screen.
       </Text>
     </ScrollView>
   );
 }
 
-function MeshPane() {
-  const status = meshScreenStatus();
+function peerLabel(peer) {
+  const id = peer.address || peer.id || "peer";
+  const rssi = typeof peer.rssi === "number" ? `, ${peer.rssi} dBm` : "";
+  return `${peer.name} — ${id}${rssi}`;
+}
+
+function MeshPane({ mesh, setMesh, owner, position }) {
+  const status = meshScreenStatus(mesh);
+  const tone = status.readiness === "linked" ? "good" : status.readiness === "degraded" ? "warn" : undefined;
+  const [scanning, setScanning] = useState(false);
+  const [chooser, setChooser] = useState(false);
+  const [note, setNote] = useState("");
+  const [serviceNote, setServiceNote] = useState("The offline phone service does not wait for a position lock.");
+  const bound = owner?.recognized === true;
+  const positionOff = position?.status !== "locked";
+
+  async function scan() {
+    if (scanning) return;
+    setScanning(true);
+    try {
+      const report = await scanWithPlatform();
+      setChooser(report.route === "web-bluetooth-chooser");
+      setMesh((current) => applyScan(current, report));
+    } finally {
+      setScanning(false);
+    }
+  }
+
+  async function connect(peer) {
+    const report = await connectRemembered(peer);
+    setMesh((current) => applyConnect(current, peer.address || peer.id, report).session);
+  }
+
+  async function choose() {
+    const result = await chooseYehsaDevice();
+    if (!result?.peer || result.radio !== true) {
+      setMesh((current) => attachOwner({
+        ...current,
+        scanned: true,
+        degraded: true,
+        invoked: false,
+        reason: result?.reason || "No Yehsa device was chosen."
+      }, current.owner));
+      return;
+    }
+    setMesh((current) => rememberRadioPeer(current, result.peer, {
+      radio: true,
+      scanMode: "chooser",
+      reason: null
+    }).session);
+  }
+
+  async function keepNote() {
+    const queued = queueServiceText(mesh, note);
+    setMesh(queued.session);
+    if (!queued.ok) {
+      setServiceNote(queued.reason || "The note was not kept.");
+      return;
+    }
+    setNote("");
+    if (queued.session.link?.primary?.radio === true) {
+      const sent = await transmitNote(queued.item.text);
+      if (sent.sent === true) {
+        setMesh((current) => {
+          const next = current.outbox.map((item) => (
+            item.queuedAt === queued.item.queuedAt
+              ? { ...item, transmitted: true, delivered: "queued-on-held-link", positionShared: false }
+              : item
+          ));
+          return { ...current, outbox: next };
+        });
+        setServiceNote("Queued on the held link. No cipher is claimed. Position was not shared.");
+        return;
+      }
+    }
+    setServiceNote("Held on this phone. Not transmitted. A position lock is not required.");
+  }
+
   return (
-    <ScrollView contentContainerStyle={styles.scroll}>
+    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <Text style={styles.brand}>Yehsa</Text>
       <Text style={styles.screenTitle}>Mesh</Text>
-      <Text style={styles.lead}>Read only. This screen does not start a scan.</Text>
+      <Text style={styles.lead}>
+        Scan when you ask. A missing radio stays degraded. Peers are other installs and cannot run symbols here.
+      </Text>
       <Panel>
         <Text style={styles.kicker}>{status.title}</Text>
-        <Prose tone="warn">{status.headline}</Prose>
+        <Prose tone={tone}>{status.headline}</Prose>
         <Text style={styles.note}>{status.detail}</Text>
       </Panel>
       {status.rows.map((row) => (
@@ -485,6 +619,67 @@ function MeshPane() {
           <Prose>{row.value}</Prose>
         </Panel>
       ))}
+      <Action
+        label={scanning ? "Scanning…" : "Scan for Yehsa peers"}
+        onPress={scan}
+        disabled={scanning || !bound}
+        accessibilityHint="Passive scan when the radio can do it. Does not disconnect a link already held."
+      />
+      {chooser ? (
+        <Action
+          label="Choose a Yehsa device"
+          tone="quiet"
+          onPress={choose}
+          disabled={!bound}
+          accessibilityHint="Browser chooser filtered to Yehsa. Does not disconnect a link already held."
+        />
+      ) : null}
+      <Panel>
+        <Text style={styles.kicker}>Peers</Text>
+        {status.peers.length === 0 ? (
+          <Prose>None remembered from a real scan.</Prose>
+        ) : status.peers.map((peer) => (
+          <View key={peer.address || peer.id} style={{ marginBottom: 8 }}>
+            <Text style={styles.row}>{peerLabel(peer)}</Text>
+            <Action
+              label={`Connect ${peer.name}`}
+              tone="quiet"
+              onPress={() => connect(peer)}
+              disabled={!bound}
+            />
+          </View>
+        ))}
+      </Panel>
+      <Panel>
+        <Text style={styles.kicker}>Offline phone</Text>
+        <Prose>
+          {positionOff
+            ? "Position lock is off. You can still keep a short note here."
+            : "Position is held. This note does not share it."}
+        </Prose>
+        <View style={{ height: 12 }} />
+        <Field
+          label="Note for the held link"
+          value={note}
+          onChangeText={setNote}
+          placeholder="Short text. No call and no bill."
+          multiline
+        />
+        <Action label="Keep note on this phone" onPress={keepNote} disabled={!bound} />
+        <Text style={styles.note}>{serviceNote}</Text>
+        {(mesh.outbox || []).length > 0 ? (
+          <View style={{ marginTop: 8 }}>
+            {mesh.outbox.map((item) => (
+              <Text key={item.queuedAt} style={styles.row}>
+                {item.transmitted ? "Queued on the held link" : "Held on this phone"} — {item.text}
+              </Text>
+            ))}
+          </View>
+        ) : null}
+      </Panel>
+      <Text style={styles.foot}>
+        Termux still uses termux-bluetooth-scan and termux-bluetooth-connect. This screen uses that bridge when it is present, and Web Bluetooth when the browser has it. No cipher is claimed.
+      </Text>
     </ScrollView>
   );
 }

@@ -23,7 +23,8 @@
     "autonomy": "node symbolic/symbolic_autonomy_loop.js",
     "books:ingest": "node symbolic/book_index.js",
     "dictionary:load": "node symbolic/dictionary_loader.js",
-    "dictionary:build": "node symbolic/tools/build_full_dictionary.js"
+    "dictionary:build": "node symbolic/tools/build_full_dictionary.js",
+    "dictionary:phone": "node symbolic/tools/build_phone_dictionary.js"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.1.3",
@@ -35,7 +36,10 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.5",
-    "react-native-web": "^0.20.0"
+    "react-native-web": "^0.20.0",
+    "expo-location": "~18.1.6",
+    "expo-application": "~6.1.5",
+    "@react-native-async-storage/async-storage": "2.1.2"
   },
   "devDependencies": {
     "@expo/cli": "^0.18.0",
