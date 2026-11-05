@@ -44,6 +44,24 @@ TCP expects one JSON object: `{ "token": "<token>", "symbol": "<allowlisted symb
 
 Speech and Bluetooth helpers (`symbolic/symbolic_speaker.js`, `utils/mesh_utils.mjs`) pass arguments with `execFile` and reject unexpected payload text. They still expect Termux commands (`termux-tts-speak`, `termux-bluetooth-send`) when those binaries exist.
 
+## BLE mesh discovery
+
+Symbol dispatch stays a queue plus send on the link already held (`symbolic/ble_dispatch.js`). It does not scan. Discovery and join are separate (`npm run mesh:discover`, `npm run mesh:join`, or `radio_driver.receive`).
+
+The scan is a BLE passive observer: `termux-bluetooth-scan` with `--transport le --scan-type passive --scan-mode low-power --mode observer --filter YEHSA --keep-link 1`. Join uses `termux-bluetooth-connect` with `--transport le --keep-existing 1` and a remembered Yehsa peer address. Both commands go through `execFile`. A real radio call also requires `YEHSA_MESH_TOKEN`, the same gate as the HTTP and TCP listeners. Discovery does not open a socket, so it does not change `YEHSA_BIND_HOST`.
+
+Peers are remembered in `symbolic_memory/mesh_peers.json` when the advertisement name is `YEHSA` (or `YEHSA` plus a separator) or the service UUID is `59454853-4100-4d45-5348-000000000001`. Other sightings are dropped and not written. Weak RSSI is kept, so a distant advertisement can still be remembered. Join picks the strongest remembered peer. A second Yehsa peer can be added beside the primary. The primary address is not replaced and nothing in this path sends disconnect, unpair, adapter disable, or classic inquiry.
+
+The helper script itself has to be checkable. Yehsa reads it and runs it only when it declares `YEHSA_PASSIVE_LE_SCAN` or `YEHSA_PASSIVE_LE_CONNECT` and does not contain classic inquiry or GATT teardown (`startDiscovery`, `cancelDiscovery`, `scaninfo`, `gatt.disconnect`, `gatt.close`, `adapter.disable`). `termux-bluetooth-scaninfo` is never called.
+
+Termux and Android limits:
+
+- Official Termux:API (current releases, including v0.53) does not ship Bluetooth commands. `termux-bluetooth-send` is the command this repo already used; it is not in the official package. When `termux-bluetooth-scan` or `termux-bluetooth-connect` is missing, or `YEHSA_MESH_DRY_RUN=1`, discover and join return `degraded: true` and do not throw. Peer memory and a dry-run link record still update. `npm run test:mesh` covers that path.
+- Open Termux change `termux/termux-api#686` scans with `BluetoothAdapter.startDiscovery()`. Android documents that classic inquiry as heavyweight: existing links lose bandwidth and gain latency, and new connections should wait until inquiry stops. That API is not used here.
+- Android's public scan settings have no switch named "passive". `SCAN_MODE_LOW_POWER` is the coexistence-friendly userspace mode (about a 512 ms window every 5.1 s). The 12 second helper timeout covers two of those windows so a far advertisement has more than one chance. `SCAN_MODE_OPPORTUNISTIC` only reports other apps' results, so range is not reliable. `SCAN_MODE_LOW_LATENCY` is not requested.
+- A live GATT connection can stay up during an LE scan. Classic RFCOMM connect is not the join path. The helper is killed on timeout; it is not told to drop GATT. A compliant helper must ignore SIGTERM as a disconnect.
+- There is no in-repo Node Bluetooth stack. This machine has no phone radio. A binary helper cannot be checked for the passive contract, so it is refused and the call degrades.
+
 ## Knowledge areas
 
 Offline reference for a survival-oriented agent. It is not emergency services, not medical advice, and not a foraging or treatment guide.
