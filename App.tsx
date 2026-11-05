@@ -1,26 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import { useAxionetRuntimeGuarantee } from './src/hooks/useAxionetRuntimeGuarantee';
+import YehsaApp from './src/phone/YehsaApp';
 
 export default function App() {
-  useAxionetRuntimeGuarantee(); // documented stub; does not keep the app alive
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>🚀 Axionet is running</Text>
-    </View>
-  );
+  useAxionetRuntimeGuarantee();
+  return <YehsaApp />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: '#0ff',
-    fontSize: 20,
-  },
-});
