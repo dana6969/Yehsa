@@ -1,1 +1,8 @@
-export function writeToSymbolicMemory(data) { console.log('🧠 Memory Write:', JSON.stringify(data, null, 2)); }
+import fs from "fs";
+
+export function writeToSymbolicMemory(data) {
+  const row = { ...data, at: new Date().toISOString() };
+  fs.mkdirSync("yesha_modules/logs", { recursive: true });
+  fs.appendFileSync("yesha_modules/logs/symbolic_memory.jsonl", `${JSON.stringify(row)}\n`);
+  return row;
+}

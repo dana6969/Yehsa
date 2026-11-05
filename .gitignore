@@ -29,3 +29,8 @@ symbolic_memory/reinforce_log.json
 symbolic_memory/learn_log.json
 symbolic_memory/missing_actions_log.json
 symbolic_memory/trash_log.json
+symbolic_memory/context_log.jsonl
+symbolic_memory/registry_log.jsonl
+symbolic_memory/hook_log.jsonl
+symbolic_memory/trainer_events.jsonl
+symbolic_memory/mesh_queue.jsonl

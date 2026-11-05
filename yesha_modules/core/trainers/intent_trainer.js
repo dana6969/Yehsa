@@ -1,1 +1,5 @@
-export function trainIntent(input) { console.log('🧠 Training intent:', input); return { trained: true, input }; }
+import { recordTraining } from "./record.js";
+
+export function trainIntent(input) {
+  return recordTraining("intent", input);
+}

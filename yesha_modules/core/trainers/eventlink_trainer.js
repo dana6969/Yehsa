@@ -1,1 +1,5 @@
-export function trainEventLink(info) { console.log('🔗 Training event link:', info); return { linked: true }; }
+import { recordTraining } from "./record.js";
+
+export function trainEventLink(input) {
+  return recordTraining("event_link", input);
+}

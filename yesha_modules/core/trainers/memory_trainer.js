@@ -1,1 +1,5 @@
-export function trainMemory(memory) { console.log('🧠 Training memory:', memory); return { memory }; }
+import { recordTraining } from "./record.js";
+
+export function trainMemory(input) {
+  return recordTraining("memory", input);
+}

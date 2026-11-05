@@ -1,3 +1,6 @@
+import fs from "fs";
+import { sendMeshSignal } from "../utils/mesh_utils.mjs";
+
 function normalizeSend(symbol, action) {
   if (action === undefined && symbol && typeof symbol === "object") {
     return { symbol: symbol.symbol, action: symbol.action };
@@ -17,7 +20,10 @@ function normalizeSend(symbol, action) {
 
 export function sendRaw(symbol, action) {
   const message = normalizeSend(symbol, action);
-  console.log(`[📡 RADIO TX] Symbol: "${message.symbol}" → Action: "${message.action}" sent over mesh.`);
+  const payload = { channel: "radio", ...message, queuedAt: Date.now() };
+  fs.appendFileSync("symbolic_memory/mesh_queue.jsonl", `${JSON.stringify(payload)}\n`);
+  sendMeshSignal(payload);
+  console.log(`[📡 RADIO TX] Symbol: "${message.symbol}" → Action: "${message.action}" queued.`);
 }
 
 export function receive(callback) {
