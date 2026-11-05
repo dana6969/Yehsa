@@ -1,7 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { useAxionetRuntimeGuarantee } from './src/hooks/useAxionetRuntimeGuarantee';
 
 export default function App() {
+  useAxionetRuntimeGuarantee();
   return (
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>

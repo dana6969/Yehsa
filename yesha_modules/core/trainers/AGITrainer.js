@@ -1,1 +1,5 @@
-export function trainAGI(input) { console.log('🧬 Training AGI:', input); return { status: 'learned', input }; }
+import { recordTraining } from "./record.js";
+
+export function trainAGI(input) {
+  return recordTraining("agi", input);
+}

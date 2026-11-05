@@ -1,1 +1,5 @@
-export function trainPattern(pattern) { console.log('🔁 Training pattern:', pattern); return { pattern }; }
+import { recordTraining } from "./record.js";
+
+export function trainPattern(input) {
+  return recordTraining("pattern", input);
+}

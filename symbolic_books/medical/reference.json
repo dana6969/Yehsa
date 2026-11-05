@@ -1,0 +1,5 @@
+[
+  {"symbol": "offline_medical_reference", "context": "Yehsa medical entries are offline reference labels for a personal survival agent. They are not a diagnosis, a prescription, or a substitute for emergency services. In an emergency, contact local emergency services."},
+  {"symbol": "bleeding_pressure", "context": "Serious bleeding needs direct pressure with clean cloth and urgent human help. This note does not teach surgery or medication dosing."},
+  {"symbol": "clean_water_before_care", "context": "Clean water matters before wound rinsing or rehydration. Boil water when you can. This is a field reminder, not clinical instruction."}
+]

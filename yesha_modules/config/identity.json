@@ -11,14 +11,16 @@
   "language_mode": "symbolic-LLM-bridge",
   "self_learning": true,
   "offline_capable": true,
-  "mesh_enabled": true,
+  "mesh_enabled": false,
+  "mesh_status": "experimental-scaffold",
   "llm_bridge": true,
   "log_profile": "background-async",
   "safety_protocol": "dynamic-containment",
   "priority": "symbolic-consensus",
-  "security_tier": "AES-256-Mesh",
+  "security_tier": "unencrypted-local",
+  "encryption": "none",
   "evolution_mode": "on-trigger",
-  "developer_access": true,
+  "developer_access": false,
   "developer_tag": "Dana6969",
   "agent_focus": [
     "memory-loop",
@@ -36,6 +38,6 @@
   "linked_identity": {
     "os": "Axionet Ex Machina",
     "module": "symbolic_core",
-    "trusted": true
+    "trusted": false
   }
 }

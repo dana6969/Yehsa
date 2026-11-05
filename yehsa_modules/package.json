@@ -1,0 +1,7 @@
+{
+  "name": "yehsa_modules",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Thin compatibility layer. Canonical modules live in yesha_modules/."
+}

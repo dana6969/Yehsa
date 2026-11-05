@@ -1,1 +1,5 @@
-// Yehsa Symbolic Trainer\nexport function trainSymbolic(input) { console.log('🧠 Training symbolic memory:', input); }
+import { trainSymbol } from "./symbolic_trainer.js";
+
+export function trainSymbolic(input) {
+  return trainSymbol(input);
+}

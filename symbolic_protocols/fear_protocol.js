@@ -1,1 +1,1 @@
-export function run(context) { console.log(`[Protocol] Fear response triggered for context: "${context}"`); }
+export { run } from "../symbolic/protocols/fear_protocol.js";

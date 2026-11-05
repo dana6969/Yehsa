@@ -1,12 +1,12 @@
 import { getDefinitions } from "./symbolic_dictionary.js";
+import { evaluateMathExpression } from "./math_eval.js";
+import { recallKnowledge } from "./knowledge_index.js";
 
-// 🔢 Math Solver
 function solveMathExpression(expr) {
   try {
-    if (!/^[0-9+\-*/^().\s]+$/.test(expr)) return `❌ Invalid characters in expression`;
-    const jsExpr = expr.replace(/\^/g, "**");
-    const fn = new Function(`return (${jsExpr})`);
-    return `🧠 ${expr} = ${fn()}`;
+    const value = evaluateMathExpression(expr);
+    if (value == null) return null;
+    return `🧠 ${expr} = ${value}`;
   } catch (e) {
     return `❌ Math Error: ${e.message}`;
   }
@@ -14,17 +14,19 @@ function solveMathExpression(expr) {
 
 export async function reasonThrough(symbol) {
   const defStart = Date.now();
-  const definition = getDefinitions(symbol);
-
-  // 🧠 Math Fallback
-  if (!definition && /^[0-9+*/().\s^-]+$/.test(symbol)) {
-    const mathStart = Date.now();
-    const mathResult = solveMathExpression(symbol);
+  const mathResult = solveMathExpression(symbol);
+  if (mathResult) {
     console.log(`[MATH] ${mathResult}`);
-    const mathEnd = Date.now();
     const ts = new Date().toISOString();
-    console.log(`[⏱ ${ts}] (${mathEnd - mathStart}ms) → ${symbol}`);
+    console.log(`[⏱ ${ts}] (${Date.now() - defStart}ms) → ${symbol}`);
     return mathResult;
+  }
+
+  const defs = getDefinitions(symbol);
+  let definition = Array.isArray(defs) ? defs.filter(Boolean).join("\n") : "";
+  if (!definition) {
+    const knowledge = recallKnowledge(symbol);
+    if (knowledge?.text) definition = knowledge.text;
   }
 
   if (!definition) return null;

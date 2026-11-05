@@ -1,1 +1,5 @@
-export function trainFeedback(response) { console.log('📣 Training feedback:', response); return { acknowledged: true }; }
+import { recordTraining } from "./record.js";
+
+export function trainFeedback(input) {
+  return recordTraining("feedback", input);
+}

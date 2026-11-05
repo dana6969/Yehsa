@@ -86229,5 +86229,7 @@ export function getMappedAction(symbol) {
 }
 
 export function getDefinitions(symbol) {
-  return symbolMap[symbol] || null;
+  if (typeof symbol !== "string") return [];
+  const value = symbolMap[symbol];
+  return typeof value === "string" ? [value] : [];
 }

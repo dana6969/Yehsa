@@ -1,1 +1,1 @@
-export function run(context) { console.log(`[Protocol] Unlocking sequence for context: "${context}"`); }
+export { run } from "../symbolic/protocols/unlock_protocol.js";
