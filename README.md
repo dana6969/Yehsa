@@ -30,7 +30,9 @@ Importing that module does not start the loop.
 
 ## HTTP and TCP listeners
 
-Both require `YEHSA_MESH_TOKEN`. They bind to `127.0.0.1` unless you set `YEHSA_BIND_HOST` to another address.
+Yehsa can run on every phone. Each install binds to the device it is created on (`symbolic/device_owner.js`, gitignored `symbolic_memory/device_owner.json`). That record is local ownership. It is not a whitelist of one phone, and a copy of the file does not become the owner on a different device.
+
+Nothing outside that device is admitted. HTTP and TCP listen on `127.0.0.1` only. `YEHSA_BIND_HOST` cannot move them onto a LAN address, a public address, or `0.0.0.0`. A non-loopback value is refused and the process does not listen. A connection whose peer address is not loopback is denied. Both listeners still require `YEHSA_MESH_TOKEN`, a local secret for this install.
 
 ```bash
 export YEHSA_MESH_TOKEN="choose-a-long-random-token"
@@ -40,7 +42,7 @@ npm run mesh:tcp       # JSON over TCP on YEHSA_WATCHDOG_PORT (default 3175)
 
 HTTP accepts the token as `Authorization: Bearer <token>` or `X-Yehsa-Token`. The body is `{ "symbol": "<allowlisted symbol>" }`. The symbol must exist in `symbolic/symbolic_dictionary.js`. The request is executed locally. It is not treated as a trusted mesh command, and a client-supplied `action` is ignored.
 
-TCP expects one JSON object: `{ "token": "<token>", "symbol": "<allowlisted symbol>" }`. After the token and allowlist checks, the symbol is dispatched through the mesh listener.
+TCP expects one JSON object: `{ "token": "<token>", "symbol": "<allowlisted symbol>" }`. The socket has to be loopback on this device. After the owner, token, and allowlist checks, the symbol is dispatched through the mesh listener.
 
 Speech and Bluetooth helpers (`symbolic/symbolic_speaker.js`, `utils/mesh_utils.mjs`) pass arguments with `execFile` and reject unexpected payload text. They still expect Termux commands (`termux-tts-speak`, `termux-bluetooth-send`) when those binaries exist.
 
@@ -48,7 +50,9 @@ Speech and Bluetooth helpers (`symbolic/symbolic_speaker.js`, `utils/mesh_utils.
 
 Symbol dispatch stays a queue plus send on the link already held (`symbolic/ble_dispatch.js`). It does not scan. Discovery and join are separate (`npm run mesh:discover`, `npm run mesh:join`, or `radio_driver.receive`).
 
-The scan is a BLE passive observer: `termux-bluetooth-scan` with `--transport le --scan-type passive --scan-mode low-power --mode observer --filter YEHSA --keep-link 1`. Join uses `termux-bluetooth-connect` with `--transport le --keep-existing 1` and a remembered Yehsa peer address. Both commands go through `execFile`. A real radio call also requires `YEHSA_MESH_TOKEN`, the same gate as the HTTP and TCP listeners. Discovery does not open a socket, so it does not change `YEHSA_BIND_HOST`.
+The scan is a BLE passive observer: `termux-bluetooth-scan` with `--transport le --scan-type passive --scan-mode low-power --mode observer --filter YEHSA --keep-link 1`. Join uses `termux-bluetooth-connect` with `--transport le --keep-existing 1` and a remembered Yehsa peer address. Both commands go through `execFile`. A real radio call requires this device's owner record and `YEHSA_MESH_TOKEN`. Discovery does not open a socket.
+
+A BLE peer is another install. It is labeled `exterior-mesh-peer` and `owner: false`. Seeing or joining that peer does not let it execute symbols here. `receiveMeshCommand` runs a symbol only after loopback admission (`localOwner` plus `ingress: "loopback"`).
 
 Peers are remembered in `symbolic_memory/mesh_peers.json` when the advertisement name is `YEHSA` (or `YEHSA` plus a separator) or the service UUID is `59454853-4100-4d45-5348-000000000001`. Other sightings are dropped and not written. Weak RSSI is kept, so a distant advertisement can still be remembered. Join picks the strongest remembered peer. A second Yehsa peer can be added beside the primary. The primary address is not replaced and nothing in this path sends disconnect, unpair, adapter disable, or classic inquiry.
 

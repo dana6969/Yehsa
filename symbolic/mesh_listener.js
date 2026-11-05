@@ -27,6 +27,12 @@ function meshRelay(symbol, cb) {
  * one-line echo that dropped the relay.
  */
 export function receiveMeshCommand(message = {}) {
+  // Mesh and BLE peers are outside this install. Only a loopback admission
+  // from the local owner may execute a symbol here.
+  if (message.localOwner !== true || message.ingress !== "loopback") {
+    console.warn("[exterior denied] refusing mesh command into this device");
+    return { ok: false, error: "exterior denied" };
+  }
   const symbol = message.symbol;
   const action = message.action;
   console.log(`[📥 MESH RX] Received: ${symbol} → ${action}`);

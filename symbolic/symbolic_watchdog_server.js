@@ -1,6 +1,6 @@
 import net from "net";
 import { receiveMeshCommand } from "./mesh_listener.js";
-import { allowlistedSymbol, bindHost, meshToken, tokenMatches } from "./mesh_guard.js";
+import { admitLocalIngress, bindHost, isLoopbackAddress, meshToken } from "./mesh_guard.js";
 
 const MAX_BYTES = 8192;
 const port = Number(process.env.YEHSA_WATCHDOG_PORT || 3175);
@@ -12,6 +12,11 @@ function reject(socket, error) {
 
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
+    if (!isLoopbackAddress(socket.remoteAddress)) {
+      reject(socket, "exterior denied");
+      socket.destroy();
+      return;
+    }
     if (data.length > MAX_BYTES) {
       reject(socket, "payload too large");
       return;
@@ -33,27 +38,34 @@ const server = net.createServer((socket) => {
       reject(socket, "invalid schema");
       return;
     }
-    if (!meshToken() || typeof parsed.token !== "string" || !tokenMatches(parsed.token)) {
-      reject(socket, "unauthorized");
+    const decision = admitLocalIngress({
+      remoteAddress: socket.remoteAddress,
+      presentedToken: parsed.token,
+      symbol: parsed.symbol
+    });
+    if (!decision.ok) {
+      reject(socket, decision.error);
       return;
     }
 
-    const allowed = allowlistedSymbol(parsed.symbol);
-    if (!allowed) {
-      reject(socket, "symbol is missing or not allowlisted");
-      return;
-    }
-
-    console.log(`[WATCHDOG RX] ${allowed.symbol} → ${allowed.action}`);
-    receiveMeshCommand({ symbol: allowed.symbol, action: allowed.action });
-    socket.write(`${JSON.stringify({ ok: true, symbol: allowed.symbol })}\n`);
+    console.log(`[WATCHDOG RX] ${decision.symbol} → ${decision.action}`);
+    receiveMeshCommand({
+      symbol: decision.symbol,
+      action: decision.action,
+      localOwner: true,
+      ingress: "loopback"
+    });
+    socket.write(`${JSON.stringify({ ok: true, symbol: decision.symbol })}\n`);
   });
 });
 
-if (!meshToken()) {
-  console.error("YEHSA_MESH_TOKEN is not set. Watchdog connections will be rejected.");
+if (!host) {
+  console.error("Exterior bind denied. Watchdog does not listen. Bind stays 127.0.0.1.");
+} else {
+  if (!meshToken()) {
+    console.error("YEHSA_MESH_TOKEN is not set. Watchdog connections will be rejected.");
+  }
+  server.listen(port, host, () => {
+    console.log(`Yehsa Mesh Watchdog listening on ${host}:${port} (this device, exterior denied)`);
+  });
 }
-
-server.listen(port, host, () => {
-  console.log(`Yehsa Mesh Watchdog listening on ${host}:${port}`);
-});

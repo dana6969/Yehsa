@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { execFile } from "child_process";
 import { pathToFileURL } from "url";
+import { ensureLocalOwner } from "../symbolic/device_owner.js";
 
 const MAX_PAYLOAD_BYTES = 16 * 1024;
 const BASE64_RE = /^[A-Za-z0-9+/]+={0,2}$/;
@@ -21,6 +22,31 @@ export const MESH_NAME_PREFIX = "YEHSA";
 export const MESH_SERVICE_UUID = "59454853-4100-4d45-5348-000000000001";
 export const PASSIVE_SCAN_MARKER = "YEHSA_PASSIVE_LE_SCAN";
 export const PASSIVE_CONNECT_MARKER = "YEHSA_PASSIVE_LE_CONNECT";
+
+// A remembered radio peer is another install. It is not the owner of this one.
+const EXTERIOR_PEER = Object.freeze({
+  owner: false,
+  relation: "exterior-mesh-peer"
+});
+
+let cachedOwner = null;
+
+function ownerStatus(options = {}) {
+  if (options.ownerPath) return ensureLocalOwner({ ownerPath: options.ownerPath });
+  if (!cachedOwner) cachedOwner = ensureLocalOwner();
+  return cachedOwner;
+}
+
+function publicOwner(owner) {
+  return {
+    recognized: owner.recognized === true,
+    ownership: "local-device",
+    exterior: "deny",
+    installScope: "every-phone",
+    phoneWhitelist: "none",
+    binding: "this-device"
+  };
+}
 
 // BLE passive / low-power observer. Android can hear advertisements while a
 // GATT link stays up. Classic inquiry (startDiscovery) is intentionally absent:
@@ -133,7 +159,8 @@ export function normalizePeer(raw) {
     rssi,
     serviceUuid: uuidHit ? MESH_SERVICE_UUID : null,
     lastSeen: Date.now(),
-    source: "ble-passive"
+    source: "ble-passive",
+    ...EXTERIOR_PEER
   };
 }
 
@@ -190,7 +217,8 @@ function readLink(file) {
       held: true,
       status: value.radio === true ? "connected" : "dry-run",
       since: typeof value.since === "number" ? value.since : Date.now(),
-      lastSeen: typeof value.lastSeen === "number" ? value.lastSeen : null
+      lastSeen: typeof value.lastSeen === "number" ? value.lastSeen : null,
+      ...EXTERIOR_PEER
     };
   };
   return {
@@ -320,6 +348,10 @@ function readHelperContract(file, marker) {
 }
 
 function prepareRadio(command, marker, options) {
+  const owner = ownerStatus(options);
+  if (!owner.recognized) {
+    return { run: false, absent: false, reason: "device ownership denied" };
+  }
   if (isDry(options)) {
     return { run: false, absent: true, reason: "dry-run: radio was not started" };
   }
@@ -392,6 +424,10 @@ export function sendMeshSignal(data) {
     console.error("[Mesh Error] encoded payload failed charset or size check");
     return;
   }
+  if (!ownerStatus().recognized) {
+    console.error("[Mesh Error] device ownership denied");
+    return;
+  }
 
   sentSet.add(key);
   execFile(SEND_COMMAND, ["--data", encoded], (err) => {
@@ -406,8 +442,22 @@ export function sendMeshSignal(data) {
 export async function discoverMeshPeers(options = {}) {
   const peersFile = peersPath(options);
   const linkFile = linkPath(options);
+  const owner = ownerStatus(options);
   const known = readPeers(peersFile);
   const link = readLink(linkFile);
+  if (!owner.recognized) {
+    return {
+      ok: false,
+      degraded: true,
+      reason: "device ownership denied",
+      invoked: false,
+      interfered: false,
+      scanMode: "passive-observer",
+      activeLink: link.primary || null,
+      peers: known,
+      localOwner: publicOwner(owner)
+    };
+  }
   let sightings = [];
   let invoked = false;
   let degraded = false;
@@ -460,7 +510,8 @@ export async function discoverMeshPeers(options = {}) {
     interfered: false,
     scanMode: "passive-observer",
     activeLink: nextLink.primary || null,
-    peers
+    peers,
+    localOwner: publicOwner(owner)
   };
 }
 
@@ -473,7 +524,8 @@ function rememberDryLink(link, peer, role) {
     held: true,
     status: "dry-run",
     since: Date.now(),
-    lastSeen: peer.lastSeen
+    lastSeen: peer.lastSeen,
+    ...EXTERIOR_PEER
   };
   const next = { primary: link.primary, secondary: link.secondary };
   if (role === "secondary") {
@@ -564,7 +616,8 @@ export async function connectMeshPeer(address, options = {}) {
     held: true,
     status: "connected",
     since: Date.now(),
-    lastSeen: peer.lastSeen
+    lastSeen: peer.lastSeen,
+    ...EXTERIOR_PEER
   };
   const next = { primary: fresh.primary, secondary: fresh.secondary };
   if (role === "secondary") {
@@ -592,6 +645,20 @@ function rssiRank(peer) {
 export async function joinMesh(options = {}) {
   const discovered = await discoverMeshPeers(options);
   const file = linkPath(options);
+  if (discovered.ok === false) {
+    return {
+      ok: false,
+      degraded: true,
+      reason: discovered.reason,
+      interfered: false,
+      invoked: false,
+      scanMode: "passive-observer",
+      peers: discovered.peers || [],
+      link: readLink(file),
+      connected: false,
+      localOwner: discovered.localOwner
+    };
+  }
   let link = readLink(file);
   const ranked = [...discovered.peers].sort((a, b) => rssiRank(b) - rssiRank(a));
   const primaryHeld = link.primary?.radio === true ? link.primary : null;
@@ -631,7 +698,8 @@ export async function joinMesh(options = {}) {
     scanMode: "passive-observer",
     peers: discovered.peers,
     link,
-    connected: link.primary?.radio === true
+    connected: link.primary?.radio === true,
+    localOwner: discovered.localOwner
   };
 }
 

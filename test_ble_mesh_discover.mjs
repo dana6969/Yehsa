@@ -3,7 +3,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { spawnSync } from "node:child_process";
-import test from "node:test";
+import test, { after } from "node:test";
 import { dispatchSymbol } from "./symbolic/ble_dispatch.js";
 import { receive } from "./symbolic/radio_driver.js";
 import {
@@ -13,6 +13,14 @@ import {
   discoverMeshPeers,
   joinMesh
 } from "./utils/mesh_utils.mjs";
+
+const rootDir = path.dirname(new URL(import.meta.url).pathname);
+const defaultOwnerFile = path.join(rootDir, "symbolic_memory/device_owner.json");
+const defaultOwnerBefore = fs.existsSync(defaultOwnerFile) ? fs.readFileSync(defaultOwnerFile) : null;
+after(() => {
+  if (defaultOwnerBefore === null) fs.rmSync(defaultOwnerFile, { force: true });
+  else fs.writeFileSync(defaultOwnerFile, defaultOwnerBefore);
+});
 
 const SCAN_NAME = "termux-bluetooth-scan";
 const CONNECT_NAME = "termux-bluetooth-connect";
@@ -142,6 +150,13 @@ test("dry-run remembers a distant Yehsa peer and does not call the radio", async
   assert.deepEqual(addresses, ["10:00:00:00:00:04", FAR].sort());
   const far = result.peers.find((peer) => peer.address === FAR);
   assert.equal(far.rssi, -95);
+  assert.equal(far.owner, false);
+  assert.equal(far.relation, "exterior-mesh-peer");
+  assert.equal(result.localOwner.recognized, true);
+  assert.equal(result.localOwner.ownership, "local-device");
+  assert.equal(result.localOwner.exterior, "deny");
+  assert.equal(result.localOwner.phoneWhitelist, "none");
+  assert.equal(result.link.primary.owner, false);
 });
 
 test("refuses a classic inquiry helper and leaves the active link up", async () => {
@@ -347,7 +362,9 @@ test("symbol dispatch stays a queue and send, not a scan", () => {
 test("discover CLI degrades cleanly without Termux", () => {
   const root = path.dirname(new URL(import.meta.url).pathname);
   const peersFile = path.join(root, "symbolic_memory/mesh_peers.json");
+  const ownerFile = path.join(root, "symbolic_memory/device_owner.json");
   const before = fs.existsSync(peersFile) ? fs.readFileSync(peersFile) : null;
+  const ownerBefore = fs.existsSync(ownerFile) ? fs.readFileSync(ownerFile) : null;
   const out = spawnSync(process.execPath, ["utils/mesh_utils.mjs", "discover"], {
     cwd: root,
     env: { ...process.env, YEHSA_MESH_DRY_RUN: "1" },
@@ -363,5 +380,7 @@ test("discover CLI degrades cleanly without Termux", () => {
   } finally {
     if (before === null) fs.rmSync(peersFile, { force: true });
     else fs.writeFileSync(peersFile, before);
+    if (ownerBefore === null) fs.rmSync(ownerFile, { force: true });
+    else fs.writeFileSync(ownerFile, ownerBefore);
   }
 });

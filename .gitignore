@@ -36,3 +36,4 @@ symbolic_memory/trainer_events.jsonl
 symbolic_memory/mesh_queue.jsonl
 symbolic_memory/mesh_peers.json
 symbolic_memory/mesh_link.json
+symbolic_memory/device_owner.json
