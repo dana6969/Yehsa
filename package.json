@@ -19,7 +19,7 @@
     "test:mesh": "node --test --test-concurrency=1 test_ble_mesh_discover.mjs test_device_owner.mjs test_mesh_service.mjs",
     "ask": "node symbolic/ask.js",
     "geo": "node symbolic/geo_cli.js",
-    "test:knowledge": "node --test --test-concurrency=1 test_knowledge_answer.mjs test_emotion_wording.mjs test_user_learning.mjs test_landscape_nav.mjs",
+    "test:knowledge": "node --test --test-concurrency=1 test_knowledge_answer.mjs test_emotion_wording.mjs test_user_learning.mjs test_landscape_nav.mjs test_phone_shell.mjs",
     "autonomy": "node symbolic/symbolic_autonomy_loop.js",
     "books:ingest": "node symbolic/book_index.js",
     "dictionary:load": "node symbolic/dictionary_loader.js",
@@ -34,10 +34,11 @@
     "express": "^4.22.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-native": "0.79.5"
+    "react-native": "0.79.5",
+    "react-native-web": "^0.20.0"
   },
   "devDependencies": {
     "@expo/cli": "^0.18.0",
-    "metro": "^0.76.8"
+    "metro": "0.82.4"
   }
 }

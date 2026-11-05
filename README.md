@@ -1,6 +1,6 @@
 # Yehsa / Axi0net
 
-Yehsa (also spelled Yesha) is an experimental offline symbolic agent. The phone shell is the Expo app Axi0net (`App.js`, `App.tsx`, `index.js`). The agent itself is local Node scripts plus Termux/Android helpers for speech and Bluetooth. Optional HTTP and TCP listeners map allowlisted symbols to local actions. They are not open mesh ingress.
+Yehsa (also spelled Yesha) is an experimental offline symbolic agent. The phone app a person opens is Yehsa (`App.js`, `App.tsx`, `index.js`). The npm package name and the Expo slug stay Axi0net so the existing shell and EAS project keep their technical ids. The agent itself is local Node scripts plus Termux/Android helpers for speech and Bluetooth. Optional HTTP and TCP listeners map allowlisted symbols to local actions. They are not open mesh ingress.
 
 Most of this repository is local dictionary and trainer data under `symbolic_memory/`. Mesh, BLE, and radio modules are experimental scaffolds. Many of them only log a line. They do not talk to live radios.
 
@@ -133,8 +133,28 @@ See `symbolic_books/README.md` for how to drop another `.txt` or verse `.json` i
 
 `benchmark_symbol_exec.mjs`, `benchmark_chain_exec.mjs`, and `benchmark_text_search.mjs` are standalone tools. They do not replace the executor or the mesh listener. Symbol execution inside the benchmark is off unless `YEHSA_BENCHMARK_EXECUTE=1`.
 
-## Expo shell
+## Phone app
 
-`npm start` uses Expo and `babel.config.js` (`babel-preset-expo`). `App.js` and `App.tsx` both call `useAxionetRuntimeGuarantee`. That hook is a documented stub: it does not keep the app alive, and it is not a biometric or encryption feature. `assets/icon.png` is a placeholder because the original icon was not committed.
+The home screen says Yehsa. It is the offline interface for someone who does not want a terminal. Four tabs:
 
-This environment has no phone or emulator. `node App.js` still fails on JSX; Metro is what compiles the shell. A web export also needs `react-native-web`, which this package does not depend on. The Node agent paths above are the runnable offline system.
+- **Ask** — type a question and get one short answer from the field notes, using the same parse and `reasonAnswer` path as `npm run ask`. A wording cue appears beside the answer when emotion was read. It does not replace the note. This screen does not write the learning profile.
+- **Land** — distance and bearing, declination from a number you type, waypoints, a track summary, and a rough sunrise. Coordinates are typed. "Use locked position" works only after consent and a held fix. There is no city or point-of-interest search.
+- **Position** — opt-in. The control starts off and nothing locks until you turn it on and then ask. Status is Unlocked, Degraded, or Locked. Satellite lock on this screen reports degraded, because the only GNSS helper is `termux-location` and Expo does not run it. You can hold coordinates you type. Share is a separate button and does not transmit; the send stays `node symbolic/position_lock.js --consent --share` on the phone.
+- **Mesh** — read-only. Discovery is degraded here. The screen does not scan, join, or open a socket, and it does not claim a radio is up.
+
+Waypoints and the track on these screens live in the session. Turning consent off clears them. They are not the Termux owner files (`symbolic_memory/waypoints.json`, `track_log.json`, `position_lock.json`), which still require this phone's Android id and `--consent`.
+
+The Expo bundle cannot import Node `fs` or `child_process`. Landscape math, the field-note ranker, `reasonAnswer`, emotion cues, and the navigation sentence are plain modules the screen imports. Webster, the full dictionary, and the medical name lists stay on `npm run ask`. Mesh ownership, the passive scan, and `termux-location` stay on the Termux commands. Metro is pinned to 0.82.4, the version this Expo SDK expects, so `npx expo start` can bundle the shell.
+
+```bash
+npm install
+npx expo start           # Expo dev server. The app name on the phone is Yehsa.
+npm run android          # expo start --android
+npm run ios              # expo start --ios
+npm run web              # expo start --web
+npx eas build --profile preview
+```
+
+`npm start` is the same Expo entry (`babel.config.js`, `babel-preset-expo`). `App.js` and `App.tsx` both open the Yehsa home and still call `useAxionetRuntimeGuarantee`. That hook is a documented stub: it does not keep the app alive, and it is not a biometric or encryption feature. `assets/icon.png` is a placeholder because the original icon was not committed.
+
+`node App.js` still fails on JSX; Metro is what compiles the shell. The Node agent paths above remain the owner-file, radio, and full-dictionary system.
