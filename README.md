@@ -54,6 +54,10 @@ The scan is a BLE passive observer: `termux-bluetooth-scan` with `--transport le
 
 A BLE peer is another install. It is labeled `exterior-mesh-peer` and `owner: false`. Seeing or joining that peer does not let it execute symbols here. `receiveMeshCommand` runs a symbol only after loopback admission (`localOwner` plus `ingress: "loopback"`).
 
+`npm run mesh:phone` is the user-facing service on that mesh: an offline phone path (short text on the link already held, no cellular call, no bill). It stays up whether or not position is locked. Joining the mesh reports the same `phoneService` view.
+
+Position lock is separate and opt-in. `node symbolic/position_lock.js` does not read a fix. `node symbolic/position_lock.js --consent` asks the local GPS provider with `termux-location -p gps` (`execFile`, fixed arguments). That is the phone's satellite GNSS hook in the same Termux family as `termux-tts-speak`. The repo has no second GNSS stack. A network, passive, or peer-mesh fix is not accepted. If `termux-location` is missing, the lock degrades and the phone service stays up. `--share` sends the fix on the held link only when `--consent` is also present. A BLE or mesh caller cannot lock this install. The fix file is `symbolic_memory/position_lock.json` (gitignored).
+
 Peers are remembered in `symbolic_memory/mesh_peers.json` when the advertisement name is `YEHSA` (or `YEHSA` plus a separator) or the service UUID is `59454853-4100-4d45-5348-000000000001`. Other sightings are dropped and not written. Weak RSSI is kept, so a distant advertisement can still be remembered. Join picks the strongest remembered peer. A second Yehsa peer can be added beside the primary. The primary address is not replaced and nothing in this path sends disconnect, unpair, adapter disable, or classic inquiry.
 
 The helper script itself has to be checkable. Yehsa reads it and runs it only when it declares `YEHSA_PASSIVE_LE_SCAN` or `YEHSA_PASSIVE_LE_CONNECT` and does not contain classic inquiry or GATT teardown (`startDiscovery`, `cancelDiscovery`, `scaninfo`, `gatt.disconnect`, `gatt.close`, `adapter.disable`). `termux-bluetooth-scaninfo` is never called.

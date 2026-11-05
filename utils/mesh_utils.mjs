@@ -642,6 +642,24 @@ function rssiRank(peer) {
   return typeof peer.rssi === "number" ? peer.rssi : -127;
 }
 
+// User-facing mesh service. Position stays opt-in and is not part of this view.
+export function phoneServiceView(mesh) {
+  const available = mesh.localOwner?.recognized !== false && mesh.reason !== "device ownership denied";
+  return {
+    service: "offline-phone",
+    cellular: false,
+    billing: "none",
+    status: mesh.connected ? "up" : "local-only",
+    available,
+    staysUp: available,
+    held: mesh.interfered === false,
+    interfered: false,
+    dependsOnPosition: false,
+    positionLock: "opt-in",
+    positionShared: false
+  };
+}
+
 export async function joinMesh(options = {}) {
   const discovered = await discoverMeshPeers(options);
   const file = linkPath(options);
@@ -656,7 +674,13 @@ export async function joinMesh(options = {}) {
       peers: discovered.peers || [],
       link: readLink(file),
       connected: false,
-      localOwner: discovered.localOwner
+      localOwner: discovered.localOwner,
+      phoneService: phoneServiceView({
+        connected: false,
+        interfered: false,
+        localOwner: discovered.localOwner,
+        reason: discovered.reason
+      })
     };
   }
   let link = readLink(file);
@@ -699,7 +723,13 @@ export async function joinMesh(options = {}) {
     peers: discovered.peers,
     link,
     connected: link.primary?.radio === true,
-    localOwner: discovered.localOwner
+    localOwner: discovered.localOwner,
+    phoneService: phoneServiceView({
+      connected: link.primary?.radio === true,
+      interfered: false,
+      localOwner: discovered.localOwner,
+      reason: connectResult.reason || discovered.reason
+    })
   };
 }
 
