@@ -5,7 +5,7 @@
 const identity = require("../config/identity.json");
 const runAutonomyLoop = require("../core/loops/autonomy_loop.cjs");
 
-console.log(`Axionet Boot: ${identity.codename} v${identity.version}`);
+console.log(`Axionet Boot: ${identity.codename} v${identity.version} ownership=${identity.ownership || "per-device"} exterior=${identity.exterior_access || "deny"}`);
 
 runAutonomyLoop({
   intent: "boot",

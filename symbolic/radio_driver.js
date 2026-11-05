@@ -1,5 +1,5 @@
 import fs from "fs";
-import { sendMeshSignal } from "../utils/mesh_utils.mjs";
+import { joinMesh, sendMeshSignal } from "../utils/mesh_utils.mjs";
 
 function normalizeSend(symbol, action) {
   if (action === undefined && symbol && typeof symbol === "object") {
@@ -26,7 +26,32 @@ export function sendRaw(symbol, action) {
   console.log(`[📡 RADIO TX] Symbol: "${message.symbol}" → Action: "${message.action}" queued.`);
 }
 
-export function receive(callback) {
-  console.log("[📡 RADIO RX] Listening for mesh input...");
-  setTimeout(() => callback({ symbol: "echo", action: "return_ping" }), 3000);
+export function receive(callback, options) {
+  console.log("[📡 RADIO RX] Passive BLE listen. The active mesh link is left up.");
+  const pending = joinMesh(options || {})
+    .then((mesh) => {
+      const message = {
+        symbol: "echo",
+        action: "return_ping",
+        peers: mesh.peers,
+        link: mesh.link,
+        degraded: mesh.degraded,
+        interfered: false
+      };
+      if (typeof callback === "function") callback(message);
+      return message;
+    })
+    .catch((err) => {
+      const message = {
+        symbol: "echo",
+        action: "return_ping",
+        peers: [],
+        degraded: true,
+        interfered: false,
+        error: err.message
+      };
+      if (typeof callback === "function") callback(message);
+      return message;
+    });
+  return pending;
 }

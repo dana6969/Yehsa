@@ -4,7 +4,11 @@
   "seed": "yehsa-symbolic-loop",
   "core": "yehsa-symbolic-autonomy",
   "type": "core-reflection-agent",
-  "origin": "Skowhegan-Node-AGX",
+  "origin": "local-device",
+  "ownership": "per-device",
+  "exterior_access": "deny",
+  "install_scope": "every-phone",
+  "phone_whitelist": "none",
   "build": "yehsa_exmachina_symbolic_phase2",
   "signature": "YEH-XM13",
   "autonomy": "symbolic-reflection-adaptive",
@@ -12,13 +16,15 @@
   "self_learning": true,
   "offline_capable": true,
   "mesh_enabled": false,
-  "mesh_status": "experimental-scaffold",
+  "mesh_status": "local-discovery-exterior-deny",
   "llm_bridge": true,
   "log_profile": "background-async",
   "safety_protocol": "dynamic-containment",
   "priority": "symbolic-consensus",
-  "security_tier": "unencrypted-local",
+  "access": "this-phone",
+  "security_tier": "phone-bound",
   "encryption": "none",
+  "encryption_note": "No cipher is claimed. Mesh, BLE, and control open only on the phone this install is bound to.",
   "evolution_mode": "on-trigger",
   "developer_access": false,
   "developer_tag": "Dana6969",
@@ -38,6 +44,10 @@
   "linked_identity": {
     "os": "Axionet Ex Machina",
     "module": "symbolic_core",
-    "trusted": false
+    "trusted": false,
+    "binding": "this-phone",
+    "attestation": "android-id",
+    "exterior": "deny",
+    "phone_whitelist": "none"
   }
 }

@@ -1,20 +1,9 @@
-import { speakContext } from "./symbolic_speaker.js";
 import { logTrace } from "./symbolic_trace_logger.js";
 import { recallKnowledge } from "./knowledge_index.js";
-import fs from "fs";
+import { mapEmotion } from "./emotion_mapper.js";
+import { adaptToUser, rememberUserTurn } from "./user_learning.js";
 
-function searchLearned(keyword) {
-  const file = "./symbolic_memory/trainer_learned.json";
-  if (!fs.existsSync(file)) return null;
-  const data = JSON.parse(fs.readFileSync(file, "utf-8"));
-  if (!Array.isArray(data)) return null;
-  const needle = keyword.toLowerCase();
-  return data.find((entry) =>
-    typeof entry?.context === "string" && entry.context.toLowerCase().includes(needle)
-  ) || null;
-}
-
-export function semanticAnswer(keyword) {
+export function semanticAnswer(keyword, options = {}) {
   const ts = Date.now();
   const query = String(keyword || "").trim();
   if (!query) {
@@ -22,20 +11,46 @@ export function semanticAnswer(keyword) {
     return null;
   }
 
-  const learned = searchLearned(query);
-  const knowledge = learned
-    ? { kind: "trainer", symbol: learned.symbol, text: learned.context }
-    : recallKnowledge(query);
-
-  if (!knowledge) {
+  const emotion = mapEmotion(query);
+  const knowledge = recallKnowledge(query);
+  const turn = rememberUserTurn({
+    utterance: query,
+    emotion,
+    question: knowledge?.question,
+    options
+  });
+  if (!knowledge && !emotion.understood) {
     console.log(`❌ No matches for "${query}"`);
-    return null;
+    return { emotion, knowledge: null, answered: false, text: null, learning: { learned: turn.learned } };
   }
 
+  const text = adaptToUser(
+    knowledge?.text || emotion.deduction,
+    turn.profile,
+    knowledge?.question,
+    emotion
+  );
   console.log(`🧠 Semantic matches for "${query}":`);
-  console.log(`🔹 ${knowledge.symbol}: ${knowledge.text}`);
+  if (emotion.understood) {
+    console.log(`[emotion:${emotion.emotion} ${emotion.confidence}] ${emotion.deduction}`);
+  }
+  console.log(text);
+  const hits = Array.isArray(knowledge?.hits) ? knowledge.hits : [];
+  for (const hit of hits) {
+    console.log(`🔹 [${hit.kind}] ${hit.symbol}: ${hit.text}`);
+  }
   console.log(`⏱️ Duration: ${Date.now() - ts} ms`);
-  if (knowledge.kind === "trainer") speakContext(knowledge.symbol);
-  logTrace(knowledge.symbol, knowledge.text);
-  return knowledge;
+  logTrace(knowledge?.symbol || emotion.emotion, text);
+  if (!knowledge) {
+    return {
+      kind: "emotion",
+      symbol: emotion.emotion,
+      text,
+      hits: [],
+      answer: text,
+      emotion,
+      answered: true
+    };
+  }
+  return { ...knowledge, text, answer: text, emotion, answered: true, learning: { learned: turn.learned, turns: turn.profile?.turns || 0 } };
 }

@@ -3,21 +3,34 @@ import { mapEmotion } from "../../symbolic/emotion_mapper.js";
 export function parseSemanticInput(text) {
   const lowered = String(text || "").toLowerCase();
   const mapped = mapEmotion(lowered);
-  let intent = "unknown";
-  let symbols = mapped.symbol === "🌀" ? [] : [mapped.symbol];
-  let priority = mapped.intensity === "high" ? "high" : "low";
-  if (/anxious|overwhelmed|stressed|fear/.test(lowered)) {
+  // Emotion never empties the work. A missed feeling still reflects on the words.
+  let intent = "answer";
+  let symbols = ["🧠"];
+  let priority = "low";
+  if (mapped.understood && mapped.emotion === "fear") {
     intent = "emotional_check";
     symbols = ["😱", "🧠"];
     priority = "high";
-  } else if (/curious|wonder|explore/.test(lowered)) {
+  } else if (mapped.understood && mapped.emotion === "anger") {
+    intent = "emotional_check";
+    symbols = ["🔥", "🧠"];
+    priority = "high";
+  } else if (mapped.understood && mapped.emotion === "interest") {
     intent = "curiosity";
     symbols = ["🌌", "🧠"];
     priority = "medium";
-  } else if (/start|run|execute/.test(lowered)) {
+  } else if (/\b(start|run|execute)\b/.test(lowered)) {
     intent = "command";
-    symbols = ["⚙️"];
+    symbols = ["⚙️", "🧠"];
     priority = "medium";
   }
-  return { intent, emotion: mapped.emotion, linkedSymbols: symbols, priority };
+  return {
+    intent,
+    emotion: mapped.emotion,
+    confidence: mapped.confidence,
+    understood: mapped.understood,
+    linkedSymbols: symbols,
+    priority,
+    deduction: mapped.deduction
+  };
 }

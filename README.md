@@ -30,7 +30,9 @@ Importing that module does not start the loop.
 
 ## HTTP and TCP listeners
 
-Both require `YEHSA_MESH_TOKEN`. They bind to `127.0.0.1` unless you set `YEHSA_BIND_HOST` to another address.
+Yehsa can be installed on a phone, and that install binds to that phone. The check is the Android id from `settings get secure android_id` (`symbolic/device_owner.js`). A Linux machine-id, a hostname, or `YEHSA_MESH_TOKEN` alone does not open mesh, BLE, or control. On a machine with no phone id, those paths refuse and do not start a listener or a scan. There is no cipher and no military-style encryption claim: `encryption` in `yesha_modules/config/identity.json` stays `none`. `useAxionetRuntimeGuarantee` does not attest the phone or grant access. `biometric_lock.js` is a local yes/no for unlock, erase, and shutdown after the phone matches. It does not read a fingerprint.
+
+Nothing outside that phone is admitted. HTTP and TCP listen on `127.0.0.1` only, and only after the phone check. `YEHSA_BIND_HOST` cannot move them onto a LAN address, a public address, or `0.0.0.0`. A non-loopback value is refused and the process does not listen. A connection whose peer address is not loopback is denied. On the bound phone, listeners still require `YEHSA_MESH_TOKEN`.
 
 ```bash
 export YEHSA_MESH_TOKEN="choose-a-long-random-token"
@@ -40,9 +42,33 @@ npm run mesh:tcp       # JSON over TCP on YEHSA_WATCHDOG_PORT (default 3175)
 
 HTTP accepts the token as `Authorization: Bearer <token>` or `X-Yehsa-Token`. The body is `{ "symbol": "<allowlisted symbol>" }`. The symbol must exist in `symbolic/symbolic_dictionary.js`. The request is executed locally. It is not treated as a trusted mesh command, and a client-supplied `action` is ignored.
 
-TCP expects one JSON object: `{ "token": "<token>", "symbol": "<allowlisted symbol>" }`. After the token and allowlist checks, the symbol is dispatched through the mesh listener.
+TCP expects one JSON object: `{ "token": "<token>", "symbol": "<allowlisted symbol>" }`. The socket has to be loopback on this device. After the owner, token, and allowlist checks, the symbol is dispatched through the mesh listener.
 
 Speech and Bluetooth helpers (`symbolic/symbolic_speaker.js`, `utils/mesh_utils.mjs`) pass arguments with `execFile` and reject unexpected payload text. They still expect Termux commands (`termux-tts-speak`, `termux-bluetooth-send`) when those binaries exist.
+
+## BLE mesh discovery
+
+Symbol dispatch stays a queue plus send on the link already held (`symbolic/ble_dispatch.js`). It does not scan. Discovery and join are separate (`npm run mesh:discover`, `npm run mesh:join`, or `radio_driver.receive`).
+
+The scan is a BLE passive observer: `termux-bluetooth-scan` with `--transport le --scan-type passive --scan-mode low-power --mode observer --filter YEHSA --keep-link 1`. Join uses `termux-bluetooth-connect` with `--transport le --keep-existing 1` and a remembered Yehsa peer address. Both commands go through `execFile`. A real radio call requires this device's owner record and `YEHSA_MESH_TOKEN`. Discovery does not open a socket.
+
+A BLE peer is another install. It is labeled `exterior-mesh-peer` and `owner: false`. Seeing or joining that peer does not let it execute symbols here. `receiveMeshCommand` runs a symbol only after loopback admission (`localOwner` plus `ingress: "loopback"`).
+
+`npm run mesh:phone` is the user-facing service on that mesh: an offline phone path (short text on the link already held, no cellular call, no bill). It stays up whether or not position is locked. Joining the mesh reports the same `phoneService` view.
+
+Position lock is separate and opt-in. `node symbolic/position_lock.js` does not read a fix. `node symbolic/position_lock.js --consent` asks the local GPS provider with `termux-location -p gps` (`execFile`, fixed arguments). That is the phone's satellite GNSS hook in the same Termux family as `termux-tts-speak`. The repo has no second GNSS stack. A network, passive, or peer-mesh fix is not accepted. If `termux-location` is missing, the lock degrades and the phone service stays up. `--share` sends the fix on the held link only when `--consent` is also present. A BLE or mesh caller cannot lock this install. The fix file is `symbolic_memory/position_lock.json` (gitignored).
+
+Peers are remembered in `symbolic_memory/mesh_peers.json` when the advertisement name is `YEHSA` (or `YEHSA` plus a separator) or the service UUID is `59454853-4100-4d45-5348-000000000001`. Other sightings are dropped and not written. Weak RSSI is kept, so a distant advertisement can still be remembered. Join picks the strongest remembered peer. A second Yehsa peer can be added beside the primary. The primary address is not replaced and nothing in this path sends disconnect, unpair, adapter disable, or classic inquiry.
+
+The helper script itself has to be checkable. Yehsa reads it and runs it only when it declares `YEHSA_PASSIVE_LE_SCAN` or `YEHSA_PASSIVE_LE_CONNECT` and does not contain classic inquiry or GATT teardown (`startDiscovery`, `cancelDiscovery`, `scaninfo`, `gatt.disconnect`, `gatt.close`, `adapter.disable`). `termux-bluetooth-scaninfo` is never called.
+
+Termux and Android limits:
+
+- Official Termux:API (current releases, including v0.53) does not ship Bluetooth commands. `termux-bluetooth-send` is the command this repo already used; it is not in the official package. When `termux-bluetooth-scan` or `termux-bluetooth-connect` is missing, or `YEHSA_MESH_DRY_RUN=1`, discover and join return `degraded: true` and do not throw. Peer memory and a dry-run link record still update. `npm run test:mesh` covers that path.
+- Open Termux change `termux/termux-api#686` scans with `BluetoothAdapter.startDiscovery()`. Android documents that classic inquiry as heavyweight: existing links lose bandwidth and gain latency, and new connections should wait until inquiry stops. That API is not used here.
+- Android's public scan settings have no switch named "passive". `SCAN_MODE_LOW_POWER` is the coexistence-friendly userspace mode (about a 512 ms window every 5.1 s). The 12 second helper timeout covers two of those windows so a far advertisement has more than one chance. `SCAN_MODE_OPPORTUNISTIC` only reports other apps' results, so range is not reliable. `SCAN_MODE_LOW_LATENCY` is not requested.
+- A live GATT connection can stay up during an LE scan. Classic RFCOMM connect is not the join path. The helper is killed on timeout; it is not told to drop GATT. A compliant helper must ignore SIGTERM as a disconnect.
+- There is no in-repo Node Bluetooth stack. This machine has no phone radio. A binary helper cannot be checked for the passive contract, so it is refused and the call degrades.
 
 ## Knowledge areas
 
@@ -74,7 +100,11 @@ npm run dictionary:build    # merge Webster and the WordNet stub into full_dicti
 
 `dictionary:build` rewrites `full_dictionary.json`. It keeps existing keys and adds Webster entries. Run it only when you want that merge.
 
-`yesha.js` asks the knowledge index on each trigger. `semanticAnswer` searches trainer memory, then the dictionaries and book index.
+`yesha.js` asks the knowledge index on each trigger. A full question is parsed first (`symbolic/ask.js`, `npm run ask -- "your question"`): intent, topic, and domain, then `semanticAnswer` / `recallKnowledge` rank herbology, survival, medical, math, and dictionary headwords for that topic. An incidental gloss that only mentions the words does not outrank a field note or the headword. `getMappedAction` stays a single map read and does not search these corpora. The trainer file and the learning queue are left in place.
+
+Emotion is read from wording in `symbolic/emotion_mapper.js`. Each feeling has hardwired cues and a short note used to deduce it. If nothing matches, the read stays neutral with confidence 0, and the knowledge answer is still returned.
+
+On the bound phone, `symbolic/user_learning.js` keeps a small local profile of wording cues, emotion reads, and topics asked. Later answers can note a return to the same topic or a feeling that has shown up before. The profile is not written on a machine that is not that phone, and `learning_queue.json` is not rewritten.
 
 See `symbolic_books/README.md` for how to drop another `.txt` or verse `.json` into the library. Do not commit copyrighted books. Failed Gutenberg downloads are left as placeholders and skipped by the indexer.
 
