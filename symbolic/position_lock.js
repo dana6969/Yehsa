@@ -46,12 +46,24 @@ export function normalizeFix(raw, source) {
     accuracy = Number(raw.accuracy);
     if (!Number.isFinite(accuracy) || accuracy < 0 || accuracy > 100000) return null;
   }
-  return {
+  const fix = {
     latitude,
     longitude,
     accuracy,
     source: source || "local-coords"
   };
+  const altitude = optionalAltitude(raw);
+  if (altitude != null) fix.altitude = altitude;
+  return fix;
+}
+
+function optionalAltitude(raw) {
+  if (!raw || typeof raw !== "object") return undefined;
+  const value = raw.altitude ?? raw.elevation;
+  if (value == null || value === "") return undefined;
+  const altitude = Number(value);
+  if (!Number.isFinite(altitude) || altitude < -500 || altitude > 12000) return undefined;
+  return altitude;
 }
 
 function parseGps(stdout) {
@@ -131,6 +143,7 @@ export async function lockPosition(options = {}) {
     latitude: fix.latitude,
     longitude: fix.longitude,
     accuracy: fix.accuracy,
+    ...(fix.altitude != null ? { altitude: fix.altitude } : {}),
     lockedAt: new Date().toISOString(),
     consent: "local",
     exterior: "deny",
@@ -162,7 +175,12 @@ export async function lockPosition(options = {}) {
     degraded: false,
     provider: "gps",
     source: fix.source,
-    fix: { latitude: fix.latitude, longitude: fix.longitude, accuracy: fix.accuracy },
+    fix: {
+      latitude: fix.latitude,
+      longitude: fix.longitude,
+      accuracy: fix.accuracy,
+      ...(fix.altitude != null ? { altitude: fix.altitude } : {})
+    },
     reason: null
   };
 }

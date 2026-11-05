@@ -4,19 +4,22 @@ import { parseQuestion } from "./question_parse.js";
 import { recallKnowledge } from "./knowledge_index.js";
 import { mapEmotion } from "./emotion_mapper.js";
 import { adaptToUser, rememberUserTurn } from "./user_learning.js";
+import { navigationSentence } from "./landscape_nav.js";
 
 export function ask(input, options = {}) {
   const question = parseQuestion(input);
   if (!question.topic) return { question, answered: false, text: null };
   const emotion = mapEmotion(question.raw);
   const knowledge = recallKnowledge(question.raw);
+  const nav = navigationSentence(question.raw, options);
   const turn = rememberUserTurn({
     utterance: question.raw,
     emotion,
     question: knowledge?.question || question,
     options
   });
-  const base = knowledge?.text || (emotion.understood ? emotion.deduction : null);
+  const note = [knowledge?.text, nav?.sentence].filter(Boolean).join(" ");
+  const base = note || (emotion.understood ? emotion.deduction : null);
   if (!base) {
     return { question, emotion, answered: false, text: null, hits: [], learning: { learned: turn.learned } };
   }
@@ -27,8 +30,8 @@ export function ask(input, options = {}) {
     answered: true,
     text,
     hits: knowledge?.hits || [],
-    kind: knowledge?.kind || "emotion",
-    symbol: knowledge?.symbol || emotion.emotion,
+    kind: knowledge?.kind || (nav?.sentence ? "landscape" : "emotion"),
+    symbol: knowledge?.symbol || (nav?.sentence ? "landscape_nav" : emotion.emotion),
     learning: { learned: turn.learned, turns: turn.profile?.turns || 0 }
   };
 }

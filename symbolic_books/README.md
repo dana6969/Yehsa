@@ -14,4 +14,4 @@ Files that are only `404: Not Found` or an HTML error page are recorded as unava
 
 `five_rings.txt` is a Project Gutenberg copy of The Kybalion, not the Book of Five Rings. `bhagavad_gita.txt` is a Project Gutenberg copy of The Story of the Great War, Volume V, not the Bhagavad Gita. The ingest path keeps the title it finds in the file instead of trusting the filename.
 
-Do not add copyrighted books you do not have the rights to commit.
+`landscape/` holds original terrain notes (watersheds, contours, declination, biomes). It is not a city gazetteer. `survival/` holds field notes. Do not add copyrighted books you do not have the rights to commit.

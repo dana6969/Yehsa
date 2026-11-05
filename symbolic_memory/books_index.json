@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-05T21:21:31.890Z",
-  "passageCount": 394,
+  "generatedAt": "2026-11-05T21:57:21.482Z",
+  "passageCount": 441,
   "sources": [
     {
       "file": "symbolic_memory/full_book_verses.json",
@@ -56,6 +56,12 @@
       "reason": "file is a 404 or empty download placeholder"
     },
     {
+      "file": "symbolic_books/landscape/notes.json",
+      "status": "indexed",
+      "title": "notes",
+      "passages": 19
+    },
+    {
       "file": "symbolic_books/medical/reference.json",
       "status": "indexed",
       "title": "reference",
@@ -65,49 +71,49 @@
       "file": "symbolic_books/survival/camp.json",
       "status": "indexed",
       "title": "camp",
-      "passages": 1
+      "passages": 6
     },
     {
       "file": "symbolic_books/survival/food.txt",
       "status": "indexed",
       "title": "food",
-      "passages": 1
+      "passages": 4
     },
     {
       "file": "symbolic_books/survival/navigation.txt",
       "status": "indexed",
       "title": "navigation",
-      "passages": 1
+      "passages": 4
     },
     {
       "file": "symbolic_books/survival/shelter_fire.txt",
       "status": "indexed",
       "title": "shelter_fire",
-      "passages": 1
+      "passages": 4
     },
     {
       "file": "symbolic_books/survival/signaling.txt",
       "status": "indexed",
       "title": "signaling",
-      "passages": 1
+      "passages": 4
     },
     {
       "file": "symbolic_books/survival/tools_cordage.txt",
       "status": "indexed",
       "title": "tools_cordage",
-      "passages": 1
+      "passages": 4
     },
     {
       "file": "symbolic_books/survival/water.txt",
       "status": "indexed",
       "title": "water",
-      "passages": 1
+      "passages": 5
     },
     {
       "file": "symbolic_books/survival/weather.txt",
       "status": "indexed",
       "title": "weather",
-      "passages": 1
+      "passages": 5
     },
     {
       "file": "symbolic_books/tao_te_ching.txt",
@@ -2409,6 +2415,120 @@
       "source": "symbolic_books/herbology/notes.json"
     },
     {
+      "symbol": "biome_bands",
+      "context": "Biomes are broad living landscapes: forest, grassland, desert, tundra, and coast, set by climate and water more than by towns. Plants and the ground underfoot tell you which pattern you are in. A biome is not a line you can pace to a city limit. Weather still changes inside it.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "terrain_types",
+      "context": "Terrain is the shape you walk: flat, rolling, steep, broken, swampy, or cliffed. Steep ground costs time. Broken rock hides ankles. Soft ground hides depth. Choose the line that keeps you on ground you can see. This is a travel cue, not a soil survey or a road map.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "watershed",
+      "context": "A watershed is the land that drains to one stream, lake, or coast. Ridges are the divides. Water runs away from them into the basin. Following a creek downhill moves you toward that basin's trunk stream, not necessarily toward help. A drainage is not a trail.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "coasts",
+      "context": "A coast is where land meets a large body of water. Tides, cliffs, and headlands change the walkable strip through the day. A headland is a natural landmark. A harbor town is not stored here. Stay off wet rock when the sea is rising, and do not guess a tide table you do not have.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "mountains",
+      "context": "Mountains stack climate. Higher is usually colder, windier, and slower. A pass is a low saddle between higher ground. A peak is a landmark only while you can still see it. Weather arrives fast on ridges. Turn back when the route you can see runs out. This is not a climb grade.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "deserts",
+      "context": "Deserts are water-poor landscapes, hot or cold, where shade and the water you carry matter more than speed. Washes can flood from rain you do not see. Walk the firm edge of a wash, not its throat. Do not chase a shimmer toward a town. Night can turn sharply cold.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "forests",
+      "context": "Forests hide the sun and the distant ridge. Travel is slower, and a handrail such as a stream or a ridge matters more than a bearing you cannot check. Moss is not a compass. Mark the way back while the last sure point is still in sight. This is not a timber or trail catalog.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "arctic_tundra",
+      "context": "Arctic and tundra country is open, cold, and often wet underfoot, with few trees to use as landmarks. When the horizon disappears, a short bearing and a counted pace are safer than a long walk. Summer light can last all day. Winter dark does the opposite. Ice is not a path this note approves.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "river_travel",
+      "context": "River cues: a V of ripples often points at a rock, and smooth dark water can be deep. The outside of a bend cuts the bank. The inside piles gravel. Current is a force, not a trail. Wade only at a wide shallow place you have walked, and do not enter flood water.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "natural_landmarks",
+      "context": "Useful landmarks are natural and stable: a peak, a saddle, a lone butte, a confluence, a waterfall, a headland, a lake outlet. Name them on the map you carry and in a waypoint you save yourself. This store has no city, street, or business directory. If the landmark clouds over, rejoin a handrail.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "climate_bands",
+      "context": "Climate bands follow latitude and altitude in a rough way: tropical, subtropical, temperate, polar, plus dry belts where rain rarely falls. A band says what the season tends to do, not what tomorrow's storm will do. Height can copy a colder band. Watch the sky you actually have.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "magnetic_declination",
+      "context": "Magnetic declination is the angle between magnetic north and true north at a place. It changes slowly over years and with where you stand. A compass needle points magnetic. A map's meridians are the true frame. Set the declination printed on your map before you trust a bearing. There is no live declination feed.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "true_north",
+      "context": "True north follows the planet's axis, toward the geographic pole. Magnetic north is where the needle points, and the gap between them is declination. East declination means magnetic north sits east of true north. Add east declination to a magnetic bearing to plot true. A position lock is a point, not a north reference.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "contour_reading",
+      "context": "Contour lines join points of equal elevation. Lines close together mean steep ground. Wide gaps mean flatter ground. A V in the contours often points upstream in a valley. Index contours are the labeled ones. They show shape, not a trail name. The interval is printed on the map you carry.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "orienteering_map_compass",
+      "context": "Map and compass: set the map to the land, lay the compass edge on the line you mean to walk, turn the housing to north on the map, then turn your body until the needle agrees. Walk a short leg to a landmark you named and count paces. This is a method sketch, not a course certificate.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "elevation_concepts",
+      "context": "Elevation is height above a datum, often mean sea level. A GPS altitude, when a consented fix includes one, is a rough height and is weaker than the horizontal fix. If the lock has no altitude, say so and do not invent one. Contours show shape. A barometer drifts with the weather.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "great_circle",
+      "context": "A great-circle course is the shortest path on a sphere between two latitudes and longitudes. The initial bearing is the direction you start, and it can change as you travel. Reverse bearing is the direction back. These tools use that spherical estimate. They do not follow roads and they do not download tiles.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "track_log_note",
+      "context": "A track log is a list of your own points, saved on this device only after you consent. Distance is the sum of the great-circle legs. Elapsed time is counted only when those points carry timestamps. It is not someone else's path, and it is not sent anywhere unless you say so in your own words.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
+      "symbol": "no_city_maps",
+      "context": "Landscape navigation here is terrain, water, coast, and sky: distance, bearing, waypoints, and a track you record yourself. It deliberately has no city map, no street list, and no points of interest that go stale as towns change. If you need a town, use a map you brought, not this store.",
+      "title": "notes",
+      "source": "symbolic_books/landscape/notes.json"
+    },
+    {
       "symbol": "offline_medical_reference",
       "context": "Yehsa medical entries are offline reference labels for a personal survival agent. They are not a diagnosis, a prescription, or a substitute for emergency services. In an emergency, contact local emergency services.",
       "title": "reference",
@@ -2439,8 +2559,56 @@
       "source": "symbolic_books/survival/camp.json"
     },
     {
+      "symbol": "camp_site",
+      "context": "Camp site: pick flat ground out of a drainage, off the ridge, and clear of dead limbs. Face the opening away from the night wind. A spot near a stream is handy and also a flood risk, so step uphill a little. This is planning, not a permit to camp where rules forbid it.",
+      "title": "camp",
+      "source": "symbolic_books/survival/camp.json"
+    },
+    {
+      "symbol": "camp_sleep",
+      "context": "Sleep: insulation under you matters as much as the cover over you. Change out of wet clothes before you lie down, and keep a dry layer in the bag. Food and scented items stay outside the sleep spot. A closed shelter still needs air. This note does not treat cold injury.",
+      "title": "camp",
+      "source": "symbolic_books/survival/camp.json"
+    },
+    {
+      "symbol": "camp_kitchen",
+      "context": "Kitchen: cook and store food downwind of where you sleep, and seal it so animals are not fed. Drown the fire or stove and feel for heat before you leave. Strain cloudy water, then boil it, before it goes in the pot. Known food only. This is not a foraging menu.",
+      "title": "camp",
+      "source": "symbolic_books/survival/camp.json"
+    },
+    {
+      "symbol": "camp_sanitation",
+      "context": "Sanitation: carry waste out when the land requires it. Otherwise dig a small cathole well away from water, camp, and trails, then cover it. Soap stays out of the creek. Hands are cleaned away from the stream. This is a hygiene reminder, not a medical treatment.",
+      "title": "camp",
+      "source": "symbolic_books/survival/camp.json"
+    },
+    {
+      "symbol": "camp_leave",
+      "context": "Leave the site: pack out what you carried in, put back natural cover you moved, and drown the fire until it is cold. The next person should not be able to tell you cooked there. A waypoint you saved stays on your device. Erasing the camp from the land is the point.",
+      "title": "camp",
+      "source": "symbolic_books/survival/camp.json"
+    },
+    {
       "symbol": "food_1",
       "context": "Food: eat known cultivated food or packaged rations before foraging. Do not taste unknown plants, mushrooms, or unfamiliar meat. Herbology notes in this repo are cautions, not a menu. Hunger is not a reason to experiment.",
+      "title": "food",
+      "source": "symbolic_books/survival/food.txt"
+    },
+    {
+      "symbol": "food_2",
+      "context": "Pack food you already eat, with the first night's portion on top of the bag. Eat small amounts through the day. A pot and a spoon you have used at home beat a new wild food. This sets no calorie target and no meal plan for a clinic.",
+      "title": "food",
+      "source": "symbolic_books/survival/food.txt"
+    },
+    {
+      "symbol": "food_3",
+      "context": "Cook known food until it is hot through, and keep raw scraps away from the cooked pot. Seal or hang leftovers so animals are not invited to where you sleep. A bulging can or a sour smell means you discard it. Do not taste food to decide if it has turned.",
+      "title": "food",
+      "source": "symbolic_books/survival/food.txt"
+    },
+    {
+      "symbol": "food_4",
+      "context": "Berries, fish, and greens are a local-rules question, and only for kinds you already know from a source outside this note. If you are not sure, it does not go in your mouth. Mushrooms are not a trial. Cultivated food is the plan. Wild food is not a backup menu and not a dose guide.",
       "title": "food",
       "source": "symbolic_books/survival/food.txt"
     },
@@ -2451,8 +2619,44 @@
       "source": "symbolic_books/survival/navigation.txt"
     },
     {
+      "symbol": "navigation_2",
+      "context": "Walk to a landmark you can name, a boulder, a saddle, or a distinct tree, then pick the next. Count paces on a stretch you already measured so distance is a number. Stop while the last sure point is still clear. Turning around is a plan, not a failure.",
+      "title": "navigation",
+      "source": "symbolic_books/survival/navigation.txt"
+    },
+    {
+      "symbol": "navigation_3",
+      "context": "A shoreline, a ridge, or a stream can be a handrail you keep beside you. Know which side you are on, and which bend means you have gone too far. A handrail is a landscape line. It is not a street. If it splits and you cannot say which branch, you stop.",
+      "title": "navigation",
+      "source": "symbolic_books/survival/navigation.txt"
+    },
+    {
+      "symbol": "navigation_4",
+      "context": "If you are unsure, sit and sketch a circle of possible places instead of a hopeful dot. Signal from an open spot. Move only toward a feature you can name, in daylight, and camp if dusk is close. These notes do not replace a map you can read, and they do not invent a trail.",
+      "title": "navigation",
+      "source": "symbolic_books/survival/navigation.txt"
+    },
+    {
       "symbol": "shelter_fire_1",
       "context": "Shelter and fire: get out of wind and wet ground first. A small contained fire needs clear fuel, a safe distance from brush, and a way to put it out. Do not light a fire where local rules forbid it. This is a planning note, not a wilderness course.",
+      "title": "shelter_fire",
+      "source": "symbolic_books/survival/shelter_fire.txt"
+    },
+    {
+      "symbol": "shelter_fire_2",
+      "context": "Pick the site before the flame. Choose ground that sheds rain, above a flood line, and clear of dead trees that can drop limbs. Face the opening away from the wind. A finger-width of dry insulation under you holds more heat than a tall roof. This is planning, not a building code.",
+      "title": "shelter_fire",
+      "source": "symbolic_books/survival/shelter_fire.txt"
+    },
+    {
+      "symbol": "shelter_fire_3",
+      "context": "Build a fire only where rules allow it, on scraped mineral soil, with fuel upwind and a way to drown it. Start with tinder and pencil twigs, and add thicker wood after the flame is honest. Feel the ashes cold before you leave. A banned day or a hard wind means no flame.",
+      "title": "shelter_fire",
+      "source": "symbolic_books/survival/shelter_fire.txt"
+    },
+    {
+      "symbol": "shelter_fire_4",
+      "context": "Without a fire, stay dry, covered, and off the ground, and keep the wind off your back. Any flame inside a closed shelter can foul the air, so leave a vent and do not sleep against a heater. Wet clothes next to the skin steal heat even in mild air. This does not treat a cold injury.",
       "title": "shelter_fire",
       "source": "symbolic_books/survival/shelter_fire.txt"
     },
@@ -2463,8 +2667,44 @@
       "source": "symbolic_books/survival/signaling.txt"
     },
     {
+      "symbol": "signaling_2",
+      "context": "A whistle carries farther than a shout and spends less breath. Three short blasts, a pause, then three again is the pattern to repeat. If you hear a reply, answer the same way and stay where you can be seen. Yelling until you are hoarse does not mark your location.",
+      "title": "signaling",
+      "source": "symbolic_books/survival/signaling.txt"
+    },
+    {
+      "symbol": "signaling_3",
+      "context": "Put bright gear in an open sight line, in a straight line or a large X. Flash a mirror toward a ridge or an aircraft in short groups of three, then stop so you do not dazzle someone close. Day smoke and a night flame are signals only where fire is legal and contained.",
+      "title": "signaling",
+      "source": "symbolic_books/survival/signaling.txt"
+    },
+    {
+      "symbol": "signaling_4",
+      "context": "An arrow of stones or packs can show the way you left, if you must leave, and only where the sky can see it. Tell a person your route, your return time, and the color of your pack before you go. If you are unsure, signal and stay visible. This is how to be found, not a radio trick.",
+      "title": "signaling",
+      "source": "symbolic_books/survival/signaling.txt"
+    },
+    {
       "symbol": "tools_cordage_1",
       "context": "Tools and cordage: a knife, cord, and container solve more camp problems than improvising from scratch. Keep edges covered. Natural cord from bark or roots only comes from plants you are allowed to cut and can identify. This is not a weapons guide.",
+      "title": "tools_cordage",
+      "source": "symbolic_books/survival/tools_cordage.txt"
+    },
+    {
+      "symbol": "tools_cordage_2",
+      "context": "Use the knife away from your body, on a firm surface, and sheath it when you move. A dull edge slips, so a small stone belongs with the blade. Do not throw it, and do not pry with the only knife you have. A covered edge does not cut the bottle in the pack. This is handling, not a fight.",
+      "title": "tools_cordage",
+      "source": "symbolic_books/survival/tools_cordage.txt"
+    },
+    {
+      "symbol": "tools_cordage_3",
+      "context": "Carry cord you already trust before you strip a living plant. A few meters can hang a pot clear of flame, tie a shelter ridge, or repair a strap. Learn two knots you can also undo. Wet natural fiber swells and can jam a knot you tied while it was dry.",
+      "title": "tools_cordage",
+      "source": "symbolic_books/survival/tools_cordage.txt"
+    },
+    {
+      "symbol": "tools_cordage_4",
+      "context": "A needle, a little tape, and cord stop a small tear from becoming a lost strap or a split handle. Brighten a tool handle so it shows against leaves. A lighter in a dry bag is the simple spark; practice it at home. This note does not teach you to burn the country.",
       "title": "tools_cordage",
       "source": "symbolic_books/survival/tools_cordage.txt"
     },
@@ -2475,8 +2715,56 @@
       "source": "symbolic_books/survival/water.txt"
     },
     {
+      "symbol": "water_2",
+      "context": "Containers matter. A closed bottle or a pot you can heat beats a leaky bag. Keep the drinking bottle capped and off the ground, and refill it when you pass a source you mean to treat. A spare empty container is how you carry water away from the source.",
+      "title": "water",
+      "source": "symbolic_books/survival/water.txt"
+    },
+    {
+      "symbol": "water_3",
+      "context": "Where to look: green growth on a dry slope, a dark seep, or a stream in the lowest line of a valley are clues. Flowing water is a better clue than a still pool. Clues are not proof. Settle the grit, then boil, and still treat the result as uncertain.",
+      "title": "water",
+      "source": "symbolic_books/survival/water.txt"
+    },
+    {
+      "symbol": "water_4",
+      "context": "Snow and ice need melting before you drink them, and melting spends fuel you may need for warmth. Eating snow when you are already cold cools you further. Salt water and urine are not drinking water. This reminder sets no liter quota and no chemical dose.",
+      "title": "water",
+      "source": "symbolic_books/survival/water.txt"
+    },
+    {
+      "symbol": "water_5",
+      "context": "Carry more than the first hour seems to need, then drink small amounts through the day instead of emptying the bottle at once. In heat, rest in shade before you feel dizzy. If someone stops sweating or grows confused, stop travel and get human help. This is not a medical threshold.",
+      "title": "water",
+      "source": "symbolic_books/survival/water.txt"
+    },
+    {
       "symbol": "weather_1",
       "context": "Weather: dark building clouds, sudden wind, and thunder mean you should leave high ground and open water. Cold plus wet clothing steals heat. This note does not forecast a local storm.",
+      "title": "weather",
+      "source": "symbolic_books/survival/weather.txt"
+    },
+    {
+      "symbol": "weather_2",
+      "context": "Read the sky you have. A hard wind shift, a fast drop in temperature, and a dark towering cloud are reasons to leave ridges and lone tall trees. A shorter gap between flash and thunder only means the cell is closer. Do not wait for a forecast you cannot make. Get lower.",
+      "title": "weather",
+      "source": "symbolic_books/survival/weather.txt"
+    },
+    {
+      "symbol": "weather_3",
+      "context": "Wind that rises and holds one direction often comes before rain. Face the shelter away from it, and weight anything that can blow away. Blowing dust is a reason to seek a low sturdy spot, not a hilltop. This note is not a warning siren and not a local forecast.",
+      "title": "weather",
+      "source": "symbolic_books/survival/weather.txt"
+    },
+    {
+      "symbol": "weather_4",
+      "context": "A clear night is often colder than a cloudy one. Put the rain layer on before you are soaked, and keep a hat where you can reach it. Stop early enough to camp in daylight. The plan is to be dry before the wind arrives, not after.",
+      "title": "weather",
+      "source": "symbolic_books/survival/weather.txt"
+    },
+    {
+      "symbol": "weather_5",
+      "context": "Heat is a travel cost: still air, a high sun, and no shade. Move earlier and later, rest at midday, and cover your head. Pushing on through dizziness is a reason to stop and get help, not a goal. This note does not set a temperature rule.",
       "title": "weather",
       "source": "symbolic_books/survival/weather.txt"
     }
