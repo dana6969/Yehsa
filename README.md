@@ -104,6 +104,8 @@ npm run dictionary:build    # merge Webster and the WordNet stub into full_dicti
 
 Emotion is read from wording in `symbolic/emotion_mapper.js`. Each feeling has hardwired cues and a short note used to deduce it. If nothing matches, the read stays neutral with confidence 0, and the knowledge answer is still returned.
 
+On the bound phone, `symbolic/user_learning.js` keeps a small local profile of wording cues, emotion reads, and topics asked. Later answers can note a return to the same topic or a feeling that has shown up before. The profile is not written on a machine that is not that phone, and `learning_queue.json` is not rewritten.
+
 See `symbolic_books/README.md` for how to drop another `.txt` or verse `.json` into the library. Do not commit copyrighted books. Failed Gutenberg downloads are left as placeholders and skipped by the indexer.
 
 ## Benchmarks

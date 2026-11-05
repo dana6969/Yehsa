@@ -18,7 +18,7 @@
     "mesh:phone": "node utils/mesh_service.mjs",
     "test:mesh": "node --test --test-concurrency=1 test_ble_mesh_discover.mjs test_device_owner.mjs test_mesh_service.mjs",
     "ask": "node symbolic/ask.js",
-    "test:knowledge": "node --test --test-concurrency=1 test_knowledge_answer.mjs test_emotion_wording.mjs",
+    "test:knowledge": "node --test --test-concurrency=1 test_knowledge_answer.mjs test_emotion_wording.mjs test_user_learning.mjs",
     "autonomy": "node symbolic/symbolic_autonomy_loop.js",
     "books:ingest": "node symbolic/book_index.js",
     "dictionary:load": "node symbolic/dictionary_loader.js",

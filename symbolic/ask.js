@@ -3,24 +3,33 @@ import path from "path";
 import { parseQuestion } from "./question_parse.js";
 import { recallKnowledge } from "./knowledge_index.js";
 import { mapEmotion } from "./emotion_mapper.js";
+import { adaptToUser, rememberUserTurn } from "./user_learning.js";
 
-export function ask(input) {
+export function ask(input, options = {}) {
   const question = parseQuestion(input);
   if (!question.topic) return { question, answered: false, text: null };
   const emotion = mapEmotion(question.raw);
   const knowledge = recallKnowledge(question.raw);
-  if (!knowledge && !emotion.understood) {
-    return { question, emotion, answered: false, text: null, hits: [] };
+  const turn = rememberUserTurn({
+    utterance: question.raw,
+    emotion,
+    question: knowledge?.question || question,
+    options
+  });
+  const base = knowledge?.text || (emotion.understood ? emotion.deduction : null);
+  if (!base) {
+    return { question, emotion, answered: false, text: null, hits: [], learning: { learned: turn.learned } };
   }
-  const text = knowledge?.text || emotion.deduction;
+  const text = adaptToUser(base, turn.profile, knowledge?.question || question, emotion);
   return {
-    question,
+    question: knowledge?.question || question,
     emotion,
     answered: true,
     text,
     hits: knowledge?.hits || [],
     kind: knowledge?.kind || "emotion",
-    symbol: knowledge?.symbol || emotion.emotion
+    symbol: knowledge?.symbol || emotion.emotion,
+    learning: { learned: turn.learned, turns: turn.profile?.turns || 0 }
   };
 }
 
