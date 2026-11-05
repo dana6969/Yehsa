@@ -59,8 +59,11 @@ export function bearerOrHeaderToken(authorizationHeader, explicitHeader) {
  * that owns this install. Other phones, mesh peers, and non-loopback sockets are denied.
  * Returns { ok, status, error } or { ok, status, symbol, action }.
  */
-export function admitLocalIngress({ remoteAddress, presentedToken, symbol, ownerPath } = {}) {
-  const owner = ensureLocalOwner(ownerPath ? { ownerPath } : {});
+export function admitLocalIngress({ remoteAddress, presentedToken, symbol, ownerPath, phoneId } = {}) {
+  const owner = ensureLocalOwner({ ownerPath, phoneId });
+  if (!owner.phoneBound) {
+    return { ok: false, status: 403, error: "no phone identity; access refused" };
+  }
   if (!owner.recognized) {
     return { ok: false, status: 403, error: "device ownership denied" };
   }

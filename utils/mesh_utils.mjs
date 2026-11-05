@@ -32,7 +32,9 @@ const EXTERIOR_PEER = Object.freeze({
 let cachedOwner = null;
 
 function ownerStatus(options = {}) {
-  if (options.ownerPath) return ensureLocalOwner({ ownerPath: options.ownerPath });
+  if (options.ownerPath || options.phoneId) {
+    return ensureLocalOwner({ ownerPath: options.ownerPath, phoneId: options.phoneId });
+  }
   if (!cachedOwner) cachedOwner = ensureLocalOwner();
   return cachedOwner;
 }
@@ -424,8 +426,9 @@ export function sendMeshSignal(data) {
     console.error("[Mesh Error] encoded payload failed charset or size check");
     return;
   }
-  if (!ownerStatus().recognized) {
-    console.error("[Mesh Error] device ownership denied");
+  const owner = ownerStatus();
+  if (!owner.recognized) {
+    console.error(`[Mesh Error] ${owner.reason || "device ownership denied"}`);
     return;
   }
 
@@ -449,7 +452,7 @@ export async function discoverMeshPeers(options = {}) {
     return {
       ok: false,
       degraded: true,
-      reason: "device ownership denied",
+      reason: owner.reason || "device ownership denied",
       invoked: false,
       interfered: false,
       scanMode: "passive-observer",

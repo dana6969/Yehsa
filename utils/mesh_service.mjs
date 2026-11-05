@@ -50,7 +50,7 @@ export function sendMeshMessage(text, options = {}) {
   if (!spoken) {
     return { ok: false, service: "offline-phone", reason: "mesh message rejected", positionShared: false };
   }
-  const owner = ensureLocalOwner(options.ownerPath ? { ownerPath: options.ownerPath } : {});
+  const owner = ensureLocalOwner({ ownerPath: options.ownerPath, phoneId: options.phoneId });
   if (!owner.recognized) {
     return { ok: false, service: "offline-phone", reason: "device ownership denied", positionShared: false };
   }

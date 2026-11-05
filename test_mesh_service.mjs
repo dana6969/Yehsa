@@ -14,13 +14,16 @@ function tempDir() {
   return fs.mkdtempSync(path.join(os.tmpdir(), "yehsa-svc-"));
 }
 
+const PHONE = "abcd1234ef567890";
+
 function paths(dir) {
   return {
     peersPath: path.join(dir, "peers.json"),
     linkPath: path.join(dir, "link.json"),
     ownerPath: path.join(dir, "owner.json"),
     positionPath: path.join(dir, "position.json"),
-    queuePath: path.join(dir, "queue.jsonl")
+    queuePath: path.join(dir, "queue.jsonl"),
+    phoneId: PHONE
   };
 }
 
@@ -52,7 +55,7 @@ test("offline phone service stays up without a position lock", async () => {
 test("position lock does nothing until local consent", async () => {
   const dir = tempDir();
   const file = paths(dir);
-  ensureLocalOwner({ ownerPath: file.ownerPath });
+  ensureLocalOwner({ ownerPath: file.ownerPath, phoneId: PHONE });
   let calls = 0;
   const refused = await lockPosition({
     ...file,
@@ -75,7 +78,7 @@ test("position lock does nothing until local consent", async () => {
 test("consented lock uses the satellite gps provider and does not share", async () => {
   const dir = tempDir();
   const file = paths(dir);
-  ensureLocalOwner({ ownerPath: file.ownerPath });
+  ensureLocalOwner({ ownerPath: file.ownerPath, phoneId: PHONE });
   const calls = [];
   const locked = await lockPosition({
     ...file,
@@ -108,7 +111,7 @@ test("consented lock uses the satellite gps provider and does not share", async 
 test("a local coordinate is used when the satellite helper is absent", async () => {
   const dir = tempDir();
   const file = paths(dir);
-  ensureLocalOwner({ ownerPath: file.ownerPath });
+  ensureLocalOwner({ ownerPath: file.ownerPath, phoneId: PHONE });
   const locked = await lockPosition({
     ...file,
     consent: true,
@@ -135,7 +138,7 @@ test("a local coordinate is used when the satellite helper is absent", async () 
 test("network and peer fixes are not a position lock", async () => {
   const dir = tempDir();
   const file = paths(dir);
-  ensureLocalOwner({ ownerPath: file.ownerPath });
+  ensureLocalOwner({ ownerPath: file.ownerPath, phoneId: PHONE });
   const network = await lockPosition({
     ...file,
     consent: true,
@@ -160,7 +163,7 @@ test("network and peer fixes are not a position lock", async () => {
 test("sharing requires consent and does not drop the held link", async () => {
   const dir = tempDir();
   const file = paths(dir);
-  ensureLocalOwner({ ownerPath: file.ownerPath });
+  ensureLocalOwner({ ownerPath: file.ownerPath, phoneId: PHONE });
   const link = {
     primary: { address: FAR, name: "YEHSA-far", radio: true, held: true, since: 1 },
     secondary: null
@@ -188,7 +191,7 @@ test("sharing requires consent and does not drop the held link", async () => {
 test("a mesh phone message carries no coordinates", () => {
   const dir = tempDir();
   const file = paths(dir);
-  ensureLocalOwner({ ownerPath: file.ownerPath });
+  ensureLocalOwner({ ownerPath: file.ownerPath, phoneId: PHONE });
   const sent = [];
   const message = sendMeshMessage("three flashes, staying at the ridge", {
     ...file,
@@ -219,13 +222,13 @@ test("phone service cli does not lock position", () => {
     encoding: "utf8"
   });
   try {
-    assert.equal(out.status, 0, out.stderr);
+    assert.notEqual(out.status, 0);
     const parsed = JSON.parse(out.stdout);
-    assert.equal(parsed.service, "offline-phone");
-    assert.equal(parsed.staysUp, true);
-    assert.equal(parsed.positionLock, "opt-in");
+    assert.equal(parsed.available, false);
+    assert.equal(parsed.staysUp, false);
     assert.equal(parsed.positionShared, false);
     assert.equal(fs.existsSync(positionFile), false);
+    if (beforeOwner === null) assert.equal(fs.existsSync(ownerFile), false);
   } finally {
     if (beforeOwner === null) fs.rmSync(ownerFile, { force: true });
     else fs.writeFileSync(ownerFile, beforeOwner);

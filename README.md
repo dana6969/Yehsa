@@ -30,9 +30,9 @@ Importing that module does not start the loop.
 
 ## HTTP and TCP listeners
 
-Yehsa can run on every phone. Each install binds to the device it is created on (`symbolic/device_owner.js`, gitignored `symbolic_memory/device_owner.json`). That record is local ownership. It is not a whitelist of one phone, and a copy of the file does not become the owner on a different device.
+Yehsa can be installed on a phone, and that install binds to that phone. The check is the Android id from `settings get secure android_id` (`symbolic/device_owner.js`). A Linux machine-id, a hostname, or `YEHSA_MESH_TOKEN` alone does not open mesh, BLE, or control. On a machine with no phone id, those paths refuse and do not start a listener or a scan. There is no cipher and no military-style encryption claim: `encryption` in `yesha_modules/config/identity.json` stays `none`. `useAxionetRuntimeGuarantee` does not attest the phone or grant access. `biometric_lock.js` is a local yes/no for unlock, erase, and shutdown after the phone matches. It does not read a fingerprint.
 
-Nothing outside that device is admitted. HTTP and TCP listen on `127.0.0.1` only. `YEHSA_BIND_HOST` cannot move them onto a LAN address, a public address, or `0.0.0.0`. A non-loopback value is refused and the process does not listen. A connection whose peer address is not loopback is denied. Both listeners still require `YEHSA_MESH_TOKEN`, a local secret for this install.
+Nothing outside that phone is admitted. HTTP and TCP listen on `127.0.0.1` only, and only after the phone check. `YEHSA_BIND_HOST` cannot move them onto a LAN address, a public address, or `0.0.0.0`. A non-loopback value is refused and the process does not listen. A connection whose peer address is not loopback is denied. On the bound phone, listeners still require `YEHSA_MESH_TOKEN`.
 
 ```bash
 export YEHSA_MESH_TOKEN="choose-a-long-random-token"

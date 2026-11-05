@@ -1,49 +1,44 @@
 import crypto from "crypto";
 import fs from "fs";
-import os from "os";
 import path from "path";
 import { execFileSync } from "child_process";
 
 const DEFAULT_OWNER = "symbolic_memory/device_owner.json";
 const INSTALL_ID_RE = /^[a-f0-9]{32}$/;
 
+const PHONE_ID_RE = /^[A-Za-z0-9]{8,64}$/;
+
 /**
- * Local marks for THIS device only. There is no phone whitelist.
- * A copied owner file fails closed when these marks do not match.
+ * The phone this process is actually on. A Linux machine-id or hostname is not a phone.
+ * options.phoneId is only for a local test harness; it is not read from the environment
+ * or from a network client.
  */
-export function currentDeviceMark() {
-  const sources = [];
-  for (const file of ["/etc/machine-id", "/var/lib/dbus/machine-id"]) {
-    try {
-      const text = fs.readFileSync(file, "utf8").trim();
-      if (/^[A-Za-z0-9-]{8,128}$/.test(text)) {
-        sources.push(`machine-id:${text}`);
-        break;
-      }
-    } catch {
-      // This platform has no machine-id file.
+export function readPhoneId(options = {}) {
+  if (typeof options.phoneId === "string" && PHONE_ID_RE.test(options.phoneId)) {
+    return { id: options.phoneId, source: "android-id" };
+  }
+  try {
+    const androidId = execFileSync("settings", ["get", "secure", "android_id"], {
+      encoding: "utf8",
+      timeout: 1500,
+      stdio: ["ignore", "pipe", "ignore"]
+    }).trim();
+    if (PHONE_ID_RE.test(androidId) && androidId.toLowerCase() !== "null") {
+      return { id: androidId, source: "android-id" };
     }
+  } catch {
+    // Not the Termux/Android shell.
   }
-  if (sources.length === 0) {
-    try {
-      const androidId = execFileSync("settings", ["get", "secure", "android_id"], {
-        encoding: "utf8",
-        timeout: 1500,
-        stdio: ["ignore", "pipe", "ignore"]
-      }).trim();
-      if (/^[A-Za-z0-9]{8,64}$/.test(androidId) && androidId.toLowerCase() !== "null") {
-        sources.push(`android-id:${androidId}`);
-      }
-    } catch {
-      // Not an Android shell.
-    }
-  }
-  if (sources.length === 0) {
-    sources.push(`hostname:${os.hostname()}`);
-  }
+  return null;
+}
+
+export function currentDeviceMark(options = {}) {
+  const phone = readPhoneId(options);
+  if (!phone) return { mark: null, sources: [], phoneBound: false };
   return {
-    mark: crypto.createHash("sha256").update(sources.join("\n")).digest("hex"),
-    sources: sources.map((entry) => entry.split(":")[0])
+    mark: crypto.createHash("sha256").update(`android-id:${phone.id}`).digest("hex"),
+    sources: [phone.source],
+    phoneBound: true
   };
 }
 
@@ -64,7 +59,8 @@ function labels(extra) {
     exterior: "deny",
     installScope: "every-phone",
     phoneWhitelist: "none",
-    binding: "this-device",
+    binding: "this-phone",
+    phoneBound: false,
     installId: null,
     ...extra
   };
@@ -77,7 +73,14 @@ function labels(extra) {
  */
 export function ensureLocalOwner(options = {}) {
   const file = options.ownerPath || DEFAULT_OWNER;
-  const current = currentDeviceMark();
+  const current = currentDeviceMark(options);
+  if (!current.phoneBound) {
+    return labels({
+      recognized: false,
+      phoneBound: false,
+      reason: "no phone identity; access refused"
+    });
+  }
   const existing = readOwner(file);
   if (existing) {
     const recognized = typeof existing.installId === "string"
@@ -87,8 +90,9 @@ export function ensureLocalOwner(options = {}) {
       && existing.exterior === "deny";
     return labels({
       recognized,
+      phoneBound: true,
       installId: recognized ? existing.installId : null,
-      reason: recognized ? null : "owner file is not this device"
+      reason: recognized ? null : "owner file is not this phone"
     });
   }
 
@@ -97,7 +101,7 @@ export function ensureLocalOwner(options = {}) {
     exterior: "deny",
     installScope: "every-phone",
     phoneWhitelist: "none",
-    binding: "this-device",
+    binding: "this-phone",
     installId: crypto.randomBytes(16).toString("hex"),
     deviceMark: current.mark,
     markSources: current.sources,
@@ -114,6 +118,7 @@ export function ensureLocalOwner(options = {}) {
   }
   return labels({
     recognized: true,
+    phoneBound: true,
     installId: record.installId,
     reason: null
   });

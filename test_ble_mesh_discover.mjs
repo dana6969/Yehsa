@@ -32,10 +32,13 @@ function tempDir() {
   return fs.mkdtempSync(path.join(os.tmpdir(), "yehsa-ble-"));
 }
 
+const PHONE = "abcd1234ef567890";
+
 function paths(dir) {
   return {
     peersPath: path.join(dir, "peers.json"),
-    linkPath: path.join(dir, "link.json")
+    linkPath: path.join(dir, "link.json"),
+    phoneId: PHONE
   };
 }
 
@@ -185,6 +188,7 @@ test("refuses a classic inquiry helper and leaves the active link up", async () 
     const result = await discoverMeshPeers({
       peersPath,
       linkPath,
+      phoneId: PHONE,
       resolveCommand: (name) => (name === SCAN_NAME ? scan : null),
       runFile: () => {
         calls.push("called");
@@ -246,6 +250,7 @@ test("joins a second peer without replacing the active link", async () => {
     const result = await joinMesh({
       peersPath,
       linkPath,
+      phoneId: PHONE,
       resolveCommand: (name) => {
         if (name === SCAN_NAME) return scan;
         if (name === CONNECT_NAME) return connect;
@@ -289,6 +294,7 @@ test("a failed connect does not clear the primary link", async () => {
     const result = await joinMesh({
       peersPath,
       linkPath,
+      phoneId: PHONE,
       resolveCommand: (name) => (name === SCAN_NAME ? scan : connect),
       runFile(file, args, _options, cb) {
         if (path.basename(file) === SCAN_NAME) {
@@ -330,6 +336,7 @@ test("radio receive discovers without dropping a held link", async () => {
   const message = await receive(undefined, {
     peersPath,
     linkPath,
+    phoneId: PHONE,
     observations: [
       { name: "YEHSA-near", address: NEAR, rssi: -40 },
       { name: "YEHSA-far", address: FAR, rssi: -99 }
@@ -371,12 +378,13 @@ test("discover CLI degrades cleanly without Termux", () => {
     encoding: "utf8"
   });
   try {
-    assert.equal(out.status, 0, out.stderr);
+    assert.notEqual(out.status, 0);
     const parsed = JSON.parse(out.stdout);
-    assert.equal(parsed.degraded, true);
-    assert.equal(parsed.interfered, false);
+    assert.equal(parsed.ok, false);
     assert.equal(parsed.invoked, false);
-    assert.equal(parsed.scanMode, "passive-observer");
+    assert.equal(parsed.interfered, false);
+    assert.match(parsed.reason, /no phone identity/);
+    if (ownerBefore === null) assert.equal(fs.existsSync(ownerFile), false);
   } finally {
     if (before === null) fs.rmSync(peersFile, { force: true });
     else fs.writeFileSync(peersFile, before);

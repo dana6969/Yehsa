@@ -87,7 +87,7 @@ export async function lockPosition(options = {}) {
   if (options.ingress && options.ingress !== "local") {
     return { ok: false, locked: false, shared: false, degraded: false, fix: null, reason: "exterior denied" };
   }
-  const owner = ensureLocalOwner(options.ownerPath ? { ownerPath: options.ownerPath } : {});
+  const owner = ensureLocalOwner({ ownerPath: options.ownerPath, phoneId: options.phoneId });
   if (!owner.recognized) {
     return { ok: false, locked: false, shared: false, degraded: false, fix: null, reason: "device ownership denied" };
   }

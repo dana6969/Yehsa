@@ -21,8 +21,10 @@
   "log_profile": "background-async",
   "safety_protocol": "dynamic-containment",
   "priority": "symbolic-consensus",
-  "security_tier": "local-owner-exterior-deny",
+  "access": "this-phone",
+  "security_tier": "phone-bound",
   "encryption": "none",
+  "encryption_note": "No cipher is claimed. Mesh, BLE, and control open only on the phone this install is bound to.",
   "evolution_mode": "on-trigger",
   "developer_access": false,
   "developer_tag": "Dana6969",
@@ -43,7 +45,8 @@
     "os": "Axionet Ex Machina",
     "module": "symbolic_core",
     "trusted": false,
-    "binding": "this-device",
+    "binding": "this-phone",
+    "attestation": "android-id",
     "exterior": "deny",
     "phone_whitelist": "none"
   }

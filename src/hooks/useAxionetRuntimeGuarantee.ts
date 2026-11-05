@@ -5,9 +5,18 @@
  * implementation is gone. This function does not keep the app alive, take wake
  * locks, start background work, or guarantee a runtime.
  */
-export function useAxionetRuntimeGuarantee(): { active: false; reason: string } {
+export function useAxionetRuntimeGuarantee(): {
+  active: false;
+  grantsAccess: false;
+  encryption: "none";
+  access: "bound-phone";
+  reason: string;
+} {
   return {
     active: false,
-    reason: "stub: original runtime-guarantee hook is not in this repository"
+    grantsAccess: false,
+    encryption: "none",
+    access: "bound-phone",
+    reason: "stub: does not attest the phone and does not grant mesh or control access"
   };
 }
