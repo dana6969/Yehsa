@@ -4,7 +4,8 @@ const SCAFFOLD = new Set([
   "what", "how", "why", "when", "where", "who", "can", "could", "should", "is", "are",
   "does", "do", "be", "been", "being", "used", "use", "using", "for", "in", "on", "a",
   "an", "the", "to", "of", "me", "my", "please", "tell", "explain", "you", "your",
-  "setting", "context", "about", "with", "from", "that", "this", "and", "not"
+  "setting", "context", "about", "with", "from", "that", "this", "and", "not",
+  "treat", "treating", "treatment", "soothe", "relieve"
 ]);
 
 const DOMAIN_WORDS = [
@@ -30,11 +31,22 @@ function clean(text) {
 
 function intentOf(text) {
   if (/\b(used for|use for|uses of|good for|be used)\b/.test(text)) return "use";
+  if (/\b(treat|treating|treatment|soothe|relieve)\b/.test(text)) return "care";
   if (/\bhow\b/.test(text)) return "how";
   if (/\bwhat\b/.test(text)) return "what";
   if (/\bwhy\b/.test(text)) return "why";
   if (/\bwhere\b/.test(text)) return "where";
   return "ask";
+}
+
+function concernsOf(text) {
+  const concerns = [];
+  if (/\b(plant|plants|herb|herbs|herbal|poultice|bark|leaf|leaves|root)\b/.test(text)) concerns.push("plant");
+  if (/\b(bite|bites|sting|stings|itch|itchy|rash|wound|skin)\b/.test(text)) concerns.push("skin");
+  if (/\b(mosquito|mosquitoes|insect|insects|bug|bugs)\b/.test(text)) concerns.push("insect");
+  if (/\b(water|thirst|drink|drinking)\b/.test(text)) concerns.push("water");
+  if (/\b(pain|ache|aches|fever|headache)\b/.test(text)) concerns.push("pain");
+  return concerns;
 }
 
 function domainOf(text) {
@@ -50,10 +62,14 @@ function domainOf(text) {
 }
 
 function topicOf(text, domain) {
+  let stripped = text.replace(/\b(?:with|using) (?:plants|herbs)\b/g, " ");
+  if (/\b(treat|treating|treatment|soothe|relieve)\b/.test(stripped)) {
+    stripped = stripped.replace(/\b(plants|herbs)\b/g, " ");
+  }
   const drop = new Set(SCAFFOLD);
   if (domain) drop.add(domain);
   for (const [word] of DOMAIN_WORDS) drop.add(word);
-  const tokens = text.split(/[^a-z0-9+]+/).filter((word) => word.length > 2 && !drop.has(word));
+  const tokens = stripped.split(/[^a-z0-9+]+/).filter((word) => word.length > 2 && !drop.has(word));
   return tokens.join(" ");
 }
 
@@ -64,5 +80,6 @@ export function parseQuestion(input) {
   const intent = isQuestion ? intentOf(text) : "ask";
   const domain = domainOf(text);
   const topic = topicOf(text, domain) || text;
-  return { raw, text, isQuestion, intent, topic, domain };
+  const concerns = concernsOf(text);
+  return { raw, text, isQuestion, intent, topic, domain, concerns };
 }
