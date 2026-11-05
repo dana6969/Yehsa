@@ -7,6 +7,13 @@ import test from "node:test";
 import { GPS_ARGS, lockPosition } from "./symbolic/position_lock.js";
 import { ensureLocalOwner } from "./symbolic/device_owner.js";
 import { meshPhoneService, sendMeshMessage } from "./utils/mesh_service.mjs";
+import {
+  applyConnect,
+  applyScan,
+  attachOwner,
+  initialMeshSession,
+  queueServiceText
+} from "./symbolic/phone_mesh.js";
 
 const FAR = "11:22:33:44:55:66";
 
@@ -236,4 +243,81 @@ test("phone service cli does not lock position", () => {
     else fs.writeFileSync(peersFile, beforePeers);
     fs.rmSync(positionFile, { force: true });
   }
+});
+
+test("the phone mesh adapter scans only real peers and keeps the phone hook without a position lock", () => {
+  const owner = { recognized: true, source: "expo-install", exterior: "deny", encryption: "none" };
+  const bound = attachOwner(initialMeshSession(), owner);
+  assert.equal(bound.phone.available, true);
+  assert.equal(bound.phone.dependsOnPosition, false);
+  assert.equal(bound.phone.cellular, false);
+  assert.equal(bound.phone.billing, "none");
+  assert.equal(bound.phone.positionLock, "opt-in");
+
+  const invented = applyScan(bound, {
+    available: false,
+    invoked: false,
+    peers: [{ name: "YEHSA-fake", address: FAR, rssi: -40 }],
+    reason: "This runtime has no Bluetooth API. No peers were invented."
+  });
+  assert.equal(invented.degraded, true);
+  assert.equal(invented.invoked, false);
+  assert.equal(invented.peers.length, 0);
+  assert.equal(invented.interfered, false);
+  assert.match(invented.reason, /No peers were invented/);
+
+  const heard = applyScan(bound, {
+    available: true,
+    invoked: true,
+    scanMode: "passive-observer",
+    peers: [
+      { name: "YEHSA-near", address: "AA:BB:CC:DD:EE:01", rssi: -40 },
+      { name: "Other Radio", address: "AA:BB:CC:DD:EE:09", rssi: -30 }
+    ]
+  });
+  assert.equal(heard.degraded, false);
+  assert.equal(heard.peers.length, 1);
+  assert.equal(heard.peers[0].owner, false);
+  assert.equal(heard.peers[0].relation, "exterior-mesh-peer");
+  assert.equal(heard.link.primary, null);
+
+  const linked = applyConnect(heard, "AA:BB:CC:DD:EE:01", { radio: true });
+  assert.equal(linked.ok, true);
+  assert.equal(linked.interfered, false);
+  assert.equal(linked.session.link.primary.radio, true);
+  assert.equal(linked.session.link.primary.address, "AA:BB:CC:DD:EE:01");
+
+  const second = applyConnect(linked.session, FAR, { radio: false });
+  assert.equal(second.ok, false);
+  assert.match(second.reason, /not a remembered/);
+  assert.equal(second.session.link.primary.radio, true);
+
+  const extra = applyScan(linked.session, {
+    available: true,
+    invoked: true,
+    peers: [{ name: "YEHSA-far", address: FAR, rssi: -80 }]
+  });
+  assert.equal(extra.link.primary.radio, true);
+  assert.equal(extra.link.primary.address, "AA:BB:CC:DD:EE:01");
+  const joined = applyConnect(extra, FAR, { radio: true });
+  assert.equal(joined.ok, true);
+  assert.equal(joined.interfered, false);
+  assert.equal(joined.session.link.primary.address, "AA:BB:CC:DD:EE:01");
+  assert.equal(joined.session.link.secondary.address, FAR);
+  assert.equal(joined.session.link.secondary.owner, false);
+
+  const replaced = applyConnect(joined.session, FAR, { radio: true });
+  assert.equal(replaced.session.link.primary.address, "AA:BB:CC:DD:EE:01");
+  assert.equal(replaced.interfered, false);
+
+  const note = queueServiceText(bound, "three flashes, staying at the ridge");
+  assert.equal(note.ok, true);
+  assert.equal(note.transmitted, false);
+  assert.equal(note.positionShared, false);
+  assert.equal(note.session.phone.dependsOnPosition, false);
+  assert.equal(note.session.phone.available, true);
+  assert.equal(JSON.stringify(note.item).includes("latitude"), false);
+  const denied = queueServiceText(initialMeshSession(), "hello");
+  assert.equal(denied.ok, false);
+  assert.match(denied.reason, /ownership/);
 });

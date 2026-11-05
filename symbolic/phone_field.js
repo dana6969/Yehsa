@@ -1,91 +1,14 @@
-// Phone ask path. Same question parse, field-note ranking, and reasonAnswer as the CLI.
-// Dictionary dumps and medical name lists stay on `npm run ask` (they need Node fs).
-// Emotion is read from the same cues and does not replace a note. No profile file is written.
+// Phone ask path. Same question parse, ranking, and reasonAnswer as `npm run ask`.
+// The Expo bundle carries a packaged dictionary subset. The full corpora stay on disk.
+// Emotion is a cue beside the note. No profile file is written.
 
-import { reasonAnswer, shouldConnect } from "./answer_reasoner.js";
-import { queryTokens, searchPassages, sourceKind } from "./book_search.js";
 import { readEmotion } from "./emotion_read.js";
+import { haversineKm, initialBearingDeg } from "./landscape_math.js";
 import { navigationSentence } from "./nav_sentence.js";
+import { phoneCorpus, phoneCorpusMeta } from "./phone_corpus.js";
+import { recallFromCorpora } from "./knowledge_rank.js";
 import { parseQuestion } from "./question_parse.js";
-import {
-  haversineKm,
-  initialBearingDeg
-} from "./landscape_math.js";
-
-function clip(text, limit) {
-  const flat = String(text || "").replace(/\s+/g, " ").trim();
-  if (flat.length <= limit) return flat;
-  return `${flat.slice(0, limit - 1).trimEnd()}…`;
-}
-
-function addHit(bag, hit) {
-  if (!hit || !hit.symbol || !hit.text || !(hit.score > 0)) return;
-  const key = `${hit.kind}:${String(hit.symbol).toLowerCase()}`;
-  const prev = bag.get(key);
-  if (!prev || hit.score > prev.score) bag.set(key, hit);
-}
-
-function collectField(parsed, passages) {
-  const phrase = parsed.topic || parsed.text;
-  const tokens = queryTokens(phrase);
-  const bag = new Map();
-  const boost = (kind, score) => (parsed.domain && kind === parsed.domain ? score + 16 : score);
-
-  for (const passage of searchPassages(passages, phrase, 8)) {
-    const kind = sourceKind(passage.source);
-    addHit(bag, {
-      kind,
-      symbol: passage.symbol,
-      text: clip(passage.context, 320),
-      title: passage.title || "",
-      source: passage.source || "",
-      score: boost(kind, passage.score)
-    });
-  }
-
-  if (parsed.intent === "use" && (parsed.domain === "survival" || parsed.domain === "herbology")) {
-    const caution = searchPassages(passages, "unknown plant", 1)[0];
-    if (caution) {
-      const kind = sourceKind(caution.source);
-      addHit(bag, {
-        kind,
-        symbol: caution.symbol,
-        text: clip(caution.context, 320),
-        title: caution.title || "",
-        source: caution.source || "",
-        score: boost(kind, 50)
-      });
-    }
-  }
-
-  if (shouldConnect(parsed)) {
-    const concerns = new Set(parsed.concerns || []);
-    const extras = [];
-    if (concerns.has("plant") || concerns.has("skin") || concerns.has("insect") || parsed.intent === "care") {
-      extras.push("plantain", "unknown plant");
-    }
-    if (concerns.has("skin") || concerns.has("insect") || parsed.intent === "care") {
-      extras.push("clean water", "mosquito");
-    }
-    for (const extra of extras) {
-      for (const passage of searchPassages(passages, extra, 4)) {
-        const kind = sourceKind(passage.source);
-        addHit(bag, {
-          kind,
-          symbol: passage.symbol,
-          text: clip(passage.context, 480),
-          title: passage.title || "",
-          source: passage.source || "",
-          score: passage.score
-        });
-      }
-    }
-  }
-
-  return [...bag.values()]
-    .filter((hit) => hit.score >= 20)
-    .sort((a, b) => b.score - a.score || a.symbol.localeCompare(b.symbol));
-}
+import { searchPassages } from "./book_search.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -149,10 +72,20 @@ function cueFor(emotion, hasNote) {
   return `Wording cue: ${emotion.emotion}. The note above still stands.`;
 }
 
+function corporaFor(passages, override) {
+  if (override) return override;
+  return {
+    search: (query, limit) => searchPassages(passages, query, limit),
+    lookupMedical: phoneCorpus.lookupMedical,
+    lexical: phoneCorpus.lexical
+  };
+}
+
 /**
  * One short answer for the phone screen.
  * passages: the field-note index (books_index.json passages).
  * options.session: { consent, fix, waypoints } for "from here" courses. Never assumed.
+ * options.corpora: optional { search, lookupMedical, lexical } when a test supplies the full maps.
  */
 export function askField(input, passages, options = {}) {
   const raw = String(input ?? "");
@@ -163,7 +96,8 @@ export function askField(input, passages, options = {}) {
       text: null,
       cue: null,
       emotion: null,
-      miss: null
+      miss: null,
+      corpus: phoneCorpusMeta
     };
   }
   if (!Array.isArray(passages)) {
@@ -175,11 +109,7 @@ export function askField(input, passages, options = {}) {
   const emotion = readEmotion(question.raw);
   let knowledge = null;
   if (question.topic) {
-    const ranked = collectField(question, passages);
-    const deduction = reasonAnswer(question, ranked);
-    if (deduction.text) {
-      knowledge = { text: deduction.text };
-    }
+    knowledge = recallFromCorpora(question.raw, corporaFor(passages, options.corpora));
   }
   const nav = navigationSentence(question.raw, {
     consent: options.session?.consent === true,
@@ -195,7 +125,8 @@ export function askField(input, passages, options = {}) {
       text: null,
       cue: null,
       emotion: { understood: false, emotion: "neutral" },
-      miss: "No offline note answered that."
+      miss: "No offline note answered that.",
+      corpus: phoneCorpusMeta
     };
   }
   return {
@@ -204,6 +135,8 @@ export function askField(input, passages, options = {}) {
     text,
     cue: cueFor(emotion, Boolean(note)),
     emotion: { understood: emotion.understood, emotion: emotion.emotion },
-    miss: null
+    miss: null,
+    corpus: phoneCorpusMeta,
+    kind: knowledge?.kind || null
   };
 }
