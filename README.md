@@ -102,6 +102,8 @@ npm run dictionary:build    # merge Webster and the WordNet stub into full_dicti
 
 `yesha.js` asks the knowledge index on each trigger. `semanticAnswer` / `recallKnowledge` rank the book index (herbology, survival, medical, math) and dictionary headwords together, and return the best hits as one short answer. An incidental gloss that only mentions the words does not outrank a field note or the headword. `getMappedAction` stays a single map read and does not search these corpora. The trainer file and the learning queue are left in place.
 
+Emotion is read from wording in `symbolic/emotion_mapper.js`. Each feeling has hardwired cues and a short note used to deduce it. If nothing matches, the read stays neutral with confidence 0, and the knowledge answer is still returned.
+
 See `symbolic_books/README.md` for how to drop another `.txt` or verse `.json` into the library. Do not commit copyrighted books. Failed Gutenberg downloads are left as placeholders and skipped by the indexer.
 
 ## Benchmarks

@@ -141,13 +141,14 @@ function collectKnowledge(query) {
       let score = 18;
       if (key === phrase) score += 70;
       else if (key === longest) score += 46;
+      else if (tokens.includes(key)) score += 22;
       else if (longest && key.includes(longest)) score += 28;
       else score += 8;
       const gloss = String(text).toLowerCase();
-      const others = tokens.filter((token) => token !== key);
-      if (tokens.length > 1 && others.length && others.every((token) => !gloss.includes(token))) {
-        // Headword is only one word of the question, and the gloss never mentions the rest.
-        score -= key === longest ? 8 : 22;
+      const namedInQuestion = key === phrase || tokens.includes(key);
+      if (!namedInQuestion && longest && !gloss.includes(longest)) {
+        // A nearby headword that never mentions the subject of the question.
+        score -= 22;
       }
       addHit(bag, {
         kind: "dictionary",
