@@ -86224,10 +86224,23 @@ export const symbolMap = {
   "bhagavad_gita": "Hindu scripture exploring duty, righteousness, and devotion."
 };
 
+import { lookupLexical } from "./knowledge_index.js";
+import { lookupBook } from "./book_index.js";
+
 export function getMappedAction(symbol) {
-  return symbolMap[symbol] || null;
+  if (typeof symbol === "string" && symbolMap[symbol]) return symbolMap[symbol];
+  const lexical = lookupLexical(symbol);
+  if (lexical) return lexical;
+  const book = lookupBook(symbol);
+  return book?.context || null;
 }
 
 export function getDefinitions(symbol) {
-  return symbolMap[symbol] || null;
+  const defs = [];
+  if (typeof symbol === "string" && typeof symbolMap[symbol] === "string") defs.push(symbolMap[symbol]);
+  const lexical = lookupLexical(symbol);
+  if (lexical && !defs.includes(lexical)) defs.push(lexical);
+  const book = lookupBook(symbol);
+  if (book?.context && !defs.includes(book.context)) defs.push(book.context);
+  return defs;
 }

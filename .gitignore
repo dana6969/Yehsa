@@ -22,6 +22,7 @@ symbolic_memory/execution_log.json
 symbolic_memory/yehsa_server.log
 symbolic_memory/trace_log.json
 symbolic_memory/watchdog_log.json
+symbolic_memory/watchdog_cursor.json
 symbolic_memory/mesh_log.json
 symbolic_memory/quarantine_log.json
 symbolic_memory/reinforce_log.json

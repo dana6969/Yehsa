@@ -14,7 +14,8 @@ function solveMathExpression(expr) {
 
 export async function reasonThrough(symbol) {
   const defStart = Date.now();
-  const definition = getDefinitions(symbol);
+  const defs = getDefinitions(symbol);
+  const definition = Array.isArray(defs) ? defs.filter(Boolean).join("\n") : "";
 
   // 🧠 Math Fallback
   if (!definition && /^[0-9+*/().\s^-]+$/.test(symbol)) {

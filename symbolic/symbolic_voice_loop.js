@@ -1,4 +1,5 @@
 import { listenAndTrigger } from "./symbolic_voice_listener.js";
+import { isDirectRun } from "./direct_run.js";
 
 async function loopVoiceInput() {
   console.log("🔁 Voice loop started. Say a symbol or press Ctrl+C to exit.");
@@ -12,4 +13,4 @@ async function loopVoiceInput() {
   }
 }
 
-loopVoiceInput();
+if (isDirectRun(import.meta.url)) loopVoiceInput();
