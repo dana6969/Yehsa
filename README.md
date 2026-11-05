@@ -77,10 +77,31 @@ Offline reference for a survival-oriented agent. It is not emergency services, n
 - Math: `symbolic_memory/math/topics.json` plus the allowlisted arithmetic parser in `symbolic/math_eval.js` (`reasonThrough`). Letters are rejected. There is no computer-algebra system.
 - Medical names already committed: `symbolic_memory/medical_terms_only.txt`, `codesante_en.txt`, `glutanimate.txt`. They are looked up as names only. `desc2023.xml.gz` and `desc2024.xml` are HTML error pages and are not indexed. Short notes live in `symbolic_books/medical/`.
 - Herbology cautions: `symbolic_books/herbology/`.
-- Field notes (water, shelter, fire, navigation, weather, tools, signaling, food): `symbolic_books/survival/`. Signaling means being found. It is not an attack tool.
+- Field notes (water, shelter, fire, navigation, weather, tools, signaling, food, camp): `symbolic_books/survival/`. Signaling means being found. It is not an attack tool.
+- Landscape notes (biomes, terrain, watersheds, coasts, mountains, deserts, forests, arctic and tundra, river cues, natural landmarks, climate bands, declination, contours, map and compass): `symbolic_books/landscape/`. Natural features only. No city directory.
 - Drop more `.txt` or verse `.json` files in those folders and run `npm run books:ingest`.
 
-Symbol execution (`getMappedAction`) stays a direct map lookup so a thousand known symbols stay on the hot path. Dictionaries, books, math notes, medical names, and survival text are queried by `recallKnowledge` / `semanticAnswer` / `reasonThrough`, not by every mesh dispatch.
+Symbol execution (`getMappedAction`) stays a direct map lookup so a thousand known symbols stay on the hot path. Dictionaries, books, math notes, medical names, survival text, and landscape notes are queried by `recallKnowledge` / `semanticAnswer` / `reasonThrough`, not by every mesh dispatch. The geo tools are not on that path.
+
+## Offline landscape tools
+
+These are the terrain tools a handheld can run with no signal. Distance, bearing, a destination point, waypoints, a track, compass labels, declination arithmetic, and a rough sunrise are local math plus files on this phone. There is no map tile client, no street database, and no city or point-of-interest gazetteer. Towns change; this layer does not try to follow them.
+
+The earth model is a sphere of radius 6371 km, not a survey ellipsoid. Declination is not downloaded: east-positive degrees are the angle you read off the map you carry. Sunrise and sunset use a low-accuracy solar approximation. Expect errors of a few minutes, and ignore terrain on the horizon. Polar day and polar night come back as a condition instead of a clock time. If a consented GPS fix has no altitude, elevation stays unknown.
+
+Waypoints and the track are `symbolic_memory/waypoints.json` and `symbolic_memory/track_log.json` (gitignored, same treatment as `position_lock.json`). Saving or reading them requires this phone's owner record and `--consent`. A course "from here" uses the opt-in position lock and does not run for a mesh or BLE caller. Coordinates you type into the command are that command's input. They are not a lookup of a place name.
+
+```bash
+npm run ask -- "What is magnetic declination?"
+npm run ask -- "What is the distance and bearing from 0,0 to 0,1?"
+npm run geo -- distance --from 0,0 --to 0,1
+npm run geo -- bearing --from 0,0 --to 0,1
+npm run geo -- waypoint save camp --at 45.1,-69.2 --consent
+npm run test:knowledge
+npm run test:mesh
+```
+
+`npm run geo` with no arguments lists destination, reverse bearing, compass, declination, sun, goto, track, and elevation.
 
 ## Dictionaries and books
 
@@ -90,7 +111,7 @@ The running agent reads these local stores. They are not only files sitting next
 - A single unknown word can still be resolved with `recallKnowledge`: WordNet stub, `dictionary_memory.json`, `full_dictionary.json`, then `webster_raw.json`.
 - `wordnet_raw.json` is the committed stub: one gloss (`fear`). An earlier copy of this file was the text `404: Not Found`. There is no full WordNet download in the repo.
 - `dictionary_memory.json` had one missing headword (`fingle-fangle`) that made the JSON invalid. That key is restored from Webster so the file loads.
-- Books are indexed from `symbolic_memory/full_book_verses.json`, `symbolic_memory/tao_te_ching.json` (two committed verses), `symbolic_memory/math/`, and usable files under `symbolic_books/` including `medical/`, `herbology/`, and `survival/`. `book_queue/combined_queue.json` is skipped unless `YEHSA_INDEX_BOOK_QUEUE=1`, because that dump mixes real lines with HTML from failed downloads.
+- Books are indexed from `symbolic_memory/full_book_verses.json`, `symbolic_memory/tao_te_ching.json` (two committed verses), `symbolic_memory/math/`, and usable files under `symbolic_books/` including `medical/`, `herbology/`, `survival/`, and `landscape/`. `book_queue/combined_queue.json` is skipped unless `YEHSA_INDEX_BOOK_QUEUE=1`, because that dump mixes real lines with HTML from failed downloads.
 
 ```bash
 npm run dictionary:load     # parse dictionary_memory.json and print the count
@@ -100,7 +121,7 @@ npm run dictionary:build    # merge Webster and the WordNet stub into full_dicti
 
 `dictionary:build` rewrites `full_dictionary.json`. It keeps existing keys and adds Webster entries. Run it only when you want that merge.
 
-`yesha.js` asks the knowledge index on each trigger. A full question is parsed first (`symbolic/ask.js`, `npm run ask -- "your question"`), which prints the answer as plain prose. `recallKnowledge` still gathers herbology, survival, medical, math, and dictionary evidence, then `reasonAnswer` deduces one reply: the use or care step first, then the limit. A care question that names a plant, a bite, or both joins those notes instead of listing ranked glosses. An incidental dictionary headword does not become the answer. `getMappedAction` stays a single map read and does not search these corpora. The trainer file and the learning queue are left in place.
+`yesha.js` asks the knowledge index on each trigger. A full question is parsed first (`symbolic/ask.js`, `npm run ask -- "your question"`), which prints the answer as plain prose. `recallKnowledge` still gathers herbology, survival, landscape, medical, math, and dictionary evidence, then `reasonAnswer` deduces one reply: the use or care step first, then the limit. When the question includes coordinates, or a consented position lock and a from-here course, `ask` adds one sentence from the offline landscape tools. An exterior caller does not get that sentence. A care question that names a plant, a bite, or both joins those notes instead of listing ranked glosses. An incidental dictionary headword does not become the answer. `getMappedAction` stays a single map read and does not search these corpora. The trainer file and the learning queue are left in place.
 
 Emotion is read from wording in `symbolic/emotion_mapper.js`. Each feeling has hardwired cues and a short note used to deduce it. If nothing matches, the read stays neutral with confidence 0, and the knowledge answer is still returned.
 

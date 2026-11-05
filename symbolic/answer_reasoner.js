@@ -1,5 +1,5 @@
 // One prose answer from field notes. Dictionary hits stay evidence unless no note answers.
-const FIELD = new Set(["herbology", "survival", "medical", "math"]);
+const FIELD = new Set(["herbology", "survival", "medical", "math", "landscape"]);
 
 const ROLES = [
   { id: "wash", test: /\b(wash|clean water|rins(?:e|ing))\b/i, kind: "medical" },

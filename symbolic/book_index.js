@@ -269,6 +269,7 @@ export function queryTokens(query) {
 export function sourceKind(source) {
   const value = String(source || "").toLowerCase();
   if (value.includes("herbology")) return "herbology";
+  if (value.includes("landscape")) return "landscape";
   if (value.includes("survival")) return "survival";
   if (value.includes("medical")) return "medical";
   if (value.includes("math")) return "math";
@@ -278,6 +279,7 @@ export function sourceKind(source) {
 function domainWeight(source) {
   const kind = sourceKind(source);
   if (kind === "herbology") return 55;
+  if (kind === "landscape") return 52;
   if (kind === "survival") return 48;
   if (kind === "medical") return 42;
   if (kind === "math") return 42;

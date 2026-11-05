@@ -15,14 +15,17 @@ const DOMAIN_WORDS = [
   ["medical", "medical"],
   ["medicine", "medical"],
   ["math", "math"],
-  ["mathematics", "math"]
+  ["mathematics", "math"],
+  ["landscape", "landscape"],
+  ["geography", "landscape"]
 ];
 
 const DOMAIN_CUES = [
   { domain: "survival", test: /\b(survival|field craft|campsite|shelter|foraging)\b/ },
   { domain: "herbology", test: /\b(herbology|herbal|poultice)\b/ },
   { domain: "medical", test: /\b(medical|medicine|wound care)\b/ },
-  { domain: "math", test: /\b(math|mathematics|equation|triangle|calculate)\b/ }
+  { domain: "math", test: /\b(math|mathematics|equation|triangle|calculate)\b/ },
+  { domain: "landscape", test: /\b(landscape|geography|biome|ecosystem|watershed|declination|orienteering|contour|tundra|coastline|terrain|deserts?|arctic|forests?|mountains?|true north|magnetic north|great-circle|great circle)\b/ }
 ];
 
 function clean(text) {
