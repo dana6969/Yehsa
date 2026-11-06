@@ -1,4 +1,6 @@
 // One prose answer from field notes. Dictionary hits stay evidence unless no note answers.
+import { textHasToken } from "./book_search.js";
+
 const FIELD = new Set(["herbology", "survival", "medical", "math", "landscape"]);
 
 const ROLES = [
@@ -39,9 +41,9 @@ function isField(hit) {
 }
 
 export function shouldConnect(parsed) {
-  if (!parsed?.isQuestion) return false;
+  if (!parsed) return false;
   const concerns = new Set(parsed.concerns || []);
-  if (parsed.intent === "care" && (concerns.has("plant") || concerns.has("skin") || concerns.has("insect"))) {
+  if (parsed.isQuestion && parsed.intent === "care" && (concerns.has("plant") || concerns.has("skin") || concerns.has("insect"))) {
     return true;
   }
   if (concerns.has("plant") && (concerns.has("skin") || concerns.has("insect"))) return true;
@@ -68,7 +70,7 @@ function roleFit(hit, role, parsed) {
   let score = 10;
   const text = blob(hit);
   for (const token of topicTokens(parsed)) {
-    if (text.includes(token)) score += 25;
+    if (textHasToken(text, token)) score += 25;
   }
   if (hit.kind === role.kind) score += 15;
   if (GENERIC.has(hit.symbol)) score -= 12;
@@ -98,7 +100,16 @@ function articleTopic(topic) {
   const value = String(topic || "").trim();
   if (!value) return "this";
   if (/^(a|an|the)\b/i.test(value)) return value;
+  const parts = value.split(/\s+/);
+  if (parts.length === 1) return value;
+  if (/s$/i.test(parts[parts.length - 1])) return value;
   return `a ${value}`;
+}
+
+function topicCovered(body, topic) {
+  const tokens = String(topic || "").split(/\s+/).filter((token) => token.length > 2);
+  if (tokens.length === 0) return true;
+  return tokens.every((token) => textHasToken(body, token));
 }
 
 function frame(parsed, text) {
@@ -108,7 +119,10 @@ function frame(parsed, text) {
     return `In a ${parsed.domain} setting, ${lowerFirst(body)}`;
   }
   if ((parsed.intent === "care" || shouldConnect(parsed)) && parsed.topic) {
-    if (!body.toLowerCase().includes(String(parsed.topic).toLowerCase())) {
+    const tokens = String(parsed.topic).split(/\s+/).filter((token) => token.length > 2);
+    const covered = topicCovered(body, parsed.topic);
+    if (!covered && tokens.length > 1) return body;
+    if (!covered || !body.toLowerCase().includes(String(parsed.topic).toLowerCase())) {
       return `For ${articleTopic(parsed.topic)}, ${lowerFirst(body)}`;
     }
   }
@@ -148,7 +162,7 @@ function topicScore(hit, parsed) {
   const tokens = topicTokens(parsed);
   let overlap = 0;
   for (const token of tokens) {
-    if (text.includes(token)) overlap += 1;
+    if (textHasToken(text, token)) overlap += 1;
   }
   if (tokens.length && overlap === 0) return 0;
   let score = (hit.score || 0) + overlap * 40;
@@ -219,12 +233,36 @@ function readableGloss(text) {
   return /[.!?]$/.test(flat) ? flat : `${flat}.`;
 }
 
+function otherContentMissed(parsed, gloss, subject) {
+  const extras = topicTokens(parsed).filter((token) => token !== subject);
+  if (extras.length === 0) return false;
+  return !extras.some((token) => textHasToken(gloss, token));
+}
+
+function dehydrationNote(parsed, field) {
+  if (!/\bdehydr/.test(`${parsed?.topic || ""} ${parsed?.text || ""}`)) return null;
+  const useful = /\b(rehydrat|drink|drinking|sweating|dizzy|boil|boiling|known-safe)\b/i;
+  let best = null;
+  let bestScore = 0;
+  for (const hit of field) {
+    if (!useful.test(hit.text || "")) continue;
+    let score = hit.score || 0;
+    if (/\b(sweating|dizzy|rehydrat)\b/i.test(hit.text || "")) score += 30;
+    if (score > bestScore) {
+      best = hit;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
 function dictionaryAnswer(parsed, hits) {
   const subject = subjectOf(parsed);
   const head = hits.find((hit) => hit.kind === "dictionary" && hit.symbol === subject)
     || hits.find((hit) => hit.kind === "dictionary" && subject && new RegExp(`\\b${subject}\\b`, "i").test(hit.text || ""))
     || hits.find((hit) => hit.kind === "dictionary");
   if (!head) return null;
+  if (subject && otherContentMissed(parsed, head.text, subject)) return null;
   const gloss = readableGloss(head.text);
   const clause = dictionaryUseClause(hits, subject);
   const text = clause && !gloss.toLowerCase().includes("analgesic") ? `${clause} ${gloss}` : gloss;
@@ -250,7 +288,7 @@ export function reasonAnswer(parsed, hits) {
     const pieces = selectPieces(parsed, field);
     if (pieces.length) return { text: connect(parsed, pieces), used: uniqueHits(pieces) };
   }
-  const best = bestField(parsed, field);
+  const best = dehydrationNote(parsed, field) || bestField(parsed, field);
   if (best) {
     const sentences = orderSentences(splitSentences(best.text).slice(0, 4), parsed);
     let text = frame(parsed, sentences.join(" "));

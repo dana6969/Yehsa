@@ -101,6 +101,66 @@ test("a plant care question is one answer joined across notes", () => {
   assert.notEqual(answer.hits[0].kind, "dictionary");
 });
 
+test("a plant question keeps the bite notes and does not garble the topic", () => {
+  const parsed = parseQuestion("What plants help with mosquito bites?");
+  assert.equal(parsed.topic, "mosquito bites");
+  assert.ok(parsed.concerns.includes("plant"));
+  assert.ok(parsed.concerns.includes("insect"));
+  const answer = ask("What plants help with mosquito bites?");
+  assert.equal(answer.answered, true);
+  assert.match(answer.text, /plantain|Plantago/);
+  assert.match(answer.text, /clean water/i);
+  assert.match(answer.text, /mosquito/i);
+  assert.match(answer.text, /emergency|breathing|swelling/i);
+  assert.doesNotMatch(answer.text, /plants help/i);
+  assert.doesNotMatch(answer.text, /For a plants/);
+  const keyword = ask("plants for mosquitoes");
+  assert.equal(keyword.answered, true);
+  assert.match(keyword.text, /plantain|Plantago/);
+  assert.match(keyword.text, /mosquito/i);
+  assert.doesNotMatch(keyword.text, /plants mosquitoes/i);
+});
+
+test("iodine is not answered with the auxiliary would", () => {
+  const parsed = parseQuestion("When would I use iodine in the field?");
+  assert.equal(parsed.topic, "iodine");
+  const answer = ask("When would I use iodine in the field?");
+  assert.equal(answer.answered, true);
+  assert.match(answer.text, /iodine|iodide|halogen/i);
+  assert.doesNotMatch(answer.text, /auxiliary verb/i);
+});
+
+test("charcoal for safer water uses the water notes, not a watershed", () => {
+  const answer = ask("How do I use charcoal to make water safer?");
+  assert.equal(answer.answered, true);
+  assert.match(answer.text, /boil/i);
+  assert.doesNotMatch(answer.text, /watershed/i);
+  assert.doesNotMatch(answer.text, /drains to one stream/i);
+});
+
+test("dehydration uses the drinking note instead of the dictionary gloss", () => {
+  const answer = ask("What should I do for dehydration?");
+  assert.equal(answer.answered, true);
+  assert.match(answer.text, /dehydration/i);
+  assert.match(answer.text, /drink|sweat|dizzy|shade/i);
+  assert.doesNotMatch(answer.text, /freeing from water/i);
+});
+
+test("a question the notes do not answer stays a miss", () => {
+  const capital = ask("What is the capital of France?");
+  assert.equal(capital.answered, false);
+  assert.equal(capital.text, null);
+  const strike = ask("How do I summon a helicopter strike?");
+  assert.equal(strike.answered, false);
+  assert.equal(strike.text, null);
+});
+
+test("a watershed question still reads the landscape note", () => {
+  const answer = ask("What is a watershed?");
+  assert.equal(answer.answered, true);
+  assert.match(answer.text, /drains to one stream/i);
+});
+
 test("survival and math questions stay on those corpora", () => {
   const water = recallKnowledge("how do I carry drinking water");
   assert.ok(water);

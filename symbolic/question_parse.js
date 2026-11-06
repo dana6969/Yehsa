@@ -1,12 +1,16 @@
 const FRAME = /^(?:please\s+|can you\s+|could you\s+|tell me\s+|explain\s+)?(what|how|why|when|where|who|can|could|should|is|are|does|do)\b/;
 
 const SCAFFOLD = new Set([
-  "what", "how", "why", "when", "where", "who", "can", "could", "should", "is", "are",
-  "does", "do", "be", "been", "being", "used", "use", "using", "for", "in", "on", "a",
-  "an", "the", "to", "of", "me", "my", "please", "tell", "explain", "you", "your",
-  "setting", "context", "about", "with", "from", "that", "this", "and", "not",
-  "treat", "treating", "treatment", "soothe", "relieve"
+  "what", "how", "why", "when", "where", "who", "can", "could", "should", "would", "might",
+  "shall", "will", "is", "are", "does", "do", "be", "been", "being", "used", "use", "using",
+  "for", "in", "on", "a", "an", "the", "to", "of", "me", "my", "please", "tell", "explain",
+  "you", "your", "setting", "context", "about", "with", "from", "that", "this", "and", "not",
+  "treat", "treating", "treatment", "soothe", "relieve", "help", "helps", "good", "make",
+  "makes", "take", "takes", "give", "gives", "need", "needs", "want", "wants", "let"
 ]);
+
+// A place-setting word, dropped only when the question still names something else.
+const SETTING = new Set(["field", "fields"]);
 
 const DOMAIN_WORDS = [
   ["survival", "survival"],
@@ -34,7 +38,7 @@ function clean(text) {
 
 function intentOf(text) {
   if (/\b(used for|use for|uses of|good for|be used)\b/.test(text)) return "use";
-  if (/\b(treat|treating|treatment|soothe|relieve)\b/.test(text)) return "care";
+  if (/\b(treat|treating|treatment|soothe|relieve|dehydration|dehydrated)\b/.test(text)) return "care";
   if (/\bhow\b/.test(text)) return "how";
   if (/\bwhat\b/.test(text)) return "what";
   if (/\bwhy\b/.test(text)) return "why";
@@ -47,7 +51,7 @@ function concernsOf(text) {
   if (/\b(plant|plants|herb|herbs|herbal|poultice|bark|leaf|leaves|root)\b/.test(text)) concerns.push("plant");
   if (/\b(bite|bites|sting|stings|itch|itchy|rash|wound|skin)\b/.test(text)) concerns.push("skin");
   if (/\b(mosquito|mosquitoes|insect|insects|bug|bugs)\b/.test(text)) concerns.push("insect");
-  if (/\b(water|thirst|drink|drinking)\b/.test(text)) concerns.push("water");
+  if (/\b(water|thirst|thirsty|drink|drinking|dehydration|dehydrated)\b/.test(text)) concerns.push("water");
   if (/\b(pain|ache|aches|fever|headache)\b/.test(text)) concerns.push("pain");
   return concerns;
 }
@@ -69,11 +73,16 @@ function topicOf(text, domain) {
   if (/\b(treat|treating|treatment|soothe|relieve)\b/.test(stripped)) {
     stripped = stripped.replace(/\b(plants|herbs)\b/g, " ");
   }
+  const concerns = concernsOf(text);
+  if (concerns.includes("insect") || concerns.includes("skin")) {
+    stripped = stripped.replace(/\b(plants|herbs)\b/g, " ");
+  }
   const drop = new Set(SCAFFOLD);
   if (domain) drop.add(domain);
   for (const [word] of DOMAIN_WORDS) drop.add(word);
   const tokens = stripped.split(/[^a-z0-9+]+/).filter((word) => word.length > 2 && !drop.has(word));
-  return tokens.join(" ");
+  const core = tokens.filter((word) => !SETTING.has(word));
+  return (core.length ? core : tokens).join(" ");
 }
 
 export function parseQuestion(input) {
