@@ -5,10 +5,22 @@
     "owner": "dman6969",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#141a16",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#141a16"
+    },
     "android": {
       "package": "com.dana6969.axi0net",
       "versionCode": 1,
       "edgeToEdgeEnabled": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#141a16"
+      },
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
@@ -58,6 +70,11 @@
         "projectId": "e60340c9-58a4-4c15-ae31-1060cb3bc53c"
       }
     },
-    "icon": "./assets/icon.png"
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "name": "Yehsa",
+      "backgroundColor": "#141a16",
+      "themeColor": "#141a16"
+    }
   }
 }

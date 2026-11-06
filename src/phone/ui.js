@@ -133,8 +133,12 @@ export function Prose({ children, tone, live }) {
   );
 }
 
-export function Quiet({ children }) {
-  return <Text style={styles.quiet}>{children}</Text>;
+export function Quiet({ children, live }) {
+  return (
+    <Text accessibilityLiveRegion={live ? "polite" : undefined} style={styles.quiet}>
+      {children}
+    </Text>
+  );
 }
 
 const styles = StyleSheet.create({

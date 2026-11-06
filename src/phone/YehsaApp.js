@@ -500,8 +500,8 @@ function AskPane({ session, owner, active }) {
         </View>
       ) : null}
       {notice ? (
-        <View style={styles.notice}>
-          <Prose tone={phase === "error" ? "warn" : undefined}>{notice}</Prose>
+        <View style={[styles.notice, phase === "error" && styles.noticeWarn]} accessibilityLiveRegion="polite">
+          {phase === "error" ? <Prose tone="warn">{notice}</Prose> : <Quiet>{notice}</Quiet>}
         </View>
       ) : null}
       <Text style={styles.foot}>
@@ -509,6 +509,12 @@ function AskPane({ session, owner, active }) {
       </Text>
     </ScrollView>
   );
+}
+
+function ResultText({ result }) {
+  if (!result?.text) return null;
+  if (result.tone === "quiet") return <Quiet live>{result.text}</Quiet>;
+  return <Prose live tone={result.tone === "warn" ? "warn" : undefined}>{result.text}</Prose>;
 }
 
 function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
@@ -527,16 +533,30 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
   const [trackTime, setTrackTime] = useState("");
   const [sunPoint, setSunPoint] = useState("");
   const [sunDate, setSunDate] = useState(todayUtc);
-  const [result, setResult] = useState("Type coordinates. There is no city search and no downloaded map.");
+  const [result, setResult] = useState({
+    text: "Type coordinates. There is no city search and no downloaded map.",
+    tone: "quiet"
+  });
+
+  function showReport(report) {
+    const empty = report.ok !== false && /^No track points yet/.test(report.text || "");
+    setResult({
+      text: report.text,
+      tone: report.ok === false ? "warn" : empty ? "quiet" : "ink"
+    });
+  }
 
   function useLocked(setter) {
     const filled = lockedFill(position);
     if (!filled.ok) {
-      setResult(filled.text);
+      showReport(filled);
       return;
     }
     setter(filled.text);
-    setResult("Filled from the position you chose to hold. It is not a city lookup.");
+    setResult({
+      text: "Filled from the position you chose to hold. It is not a city lookup.",
+      tone: "quiet"
+    });
   }
 
   return (
@@ -569,17 +589,17 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
           <Field label="To (latitude, longitude)" value={toText} onChangeText={setToText} placeholder="0, 1" />
           <Action
             label="Distance and bearing"
-            onPress={() => setResult(courseText(fromText, toText).text)}
+            onPress={() => showReport(courseText(fromText, toText))}
           />
-          <View style={styles.readout}>
-            <Prose>{result}</Prose>
+          <View style={[styles.readout, result.tone === "warn" && styles.readoutWarn]}>
+            <ResultText result={result} />
           </View>
           <Field label="Magnetic bearing (degrees)" value={magnetic} onChangeText={setMagnetic} placeholder="90" />
           <Field label="Declination from your map (east positive)" value={declination} onChangeText={setDeclination} placeholder="12" />
           <Action
             label="Apply declination"
             tone="quiet"
-            onPress={() => setResult(declinationText(magnetic, declination).text)}
+            onPress={() => showReport(declinationText(magnetic, declination))}
           />
         </View>
       ) : null}
@@ -600,7 +620,7 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
                 altitudeText: altitude
               });
               setWaypoints(saved.list);
-              setResult(saved.text);
+              showReport(saved);
             }}
           />
           <Field label="Go to name" value={gotoName} onChangeText={setGotoName} placeholder="camp" />
@@ -608,12 +628,12 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
           <Action label="Use locked position as start" tone="quiet" onPress={() => useLocked(setGotoFrom)} />
           <Action
             label="Go to waypoint"
-            onPress={() => setResult(gotoSessionWaypoint(waypoints, {
+            onPress={() => showReport(gotoSessionWaypoint(waypoints, {
               consent: position.consent,
               name: gotoName,
               fromText: gotoFrom,
               locked: position.status === "locked" ? position.fix : null
-            }).text)}
+            }))}
           />
           <View style={styles.group}>
             <Text style={styles.sectionLabel}>Waypoints on this screen</Text>
@@ -645,10 +665,10 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
                 timeText: trackTime
               });
               setTrack(added.points);
-              setResult(added.ok ? trackText(added.points).text : added.text);
+              showReport(added.ok ? trackText(added.points) : added);
             }}
           />
-          <Action label="Track summary" tone="quiet" onPress={() => setResult(trackText(track).text)} />
+          <Action label="Track summary" tone="quiet" onPress={() => showReport(trackText(track))} />
         </View>
       ) : null}
 
@@ -657,13 +677,13 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
           <Field label="At (latitude, longitude)" value={sunPoint} onChangeText={setSunPoint} placeholder="45.1, -69.2" />
           <Action label="Use locked position" tone="quiet" onPress={() => useLocked(setSunPoint)} />
           <Field label="Date (YYYY-MM-DD)" value={sunDate} onChangeText={setSunDate} placeholder="2026-06-21" />
-          <Action label="Rough sunrise and sunset" onPress={() => setResult(sunText(sunPoint, sunDate).text)} />
+          <Action label="Rough sunrise and sunset" onPress={() => showReport(sunText(sunPoint, sunDate))} />
         </View>
       ) : null}
 
       {section !== "course" ? (
-        <View style={styles.readout}>
-          <Prose>{result}</Prose>
+        <View style={[styles.readout, result.tone === "warn" && styles.readoutWarn]}>
+          <ResultText result={result} />
         </View>
       ) : null}
     </ScrollView>
@@ -1014,6 +1034,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8
   },
+  noticeWarn: {
+    paddingLeft: 12,
+    borderLeftWidth: 2,
+    borderLeftColor: colors.clay
+  },
   foot: {
     color: colors.muted,
     fontSize: 12,
@@ -1095,6 +1120,11 @@ const styles = StyleSheet.create({
     paddingTop: 14,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.line
+  },
+  readoutWarn: {
+    paddingLeft: 12,
+    borderLeftWidth: 2,
+    borderLeftColor: colors.clay
   },
   consentRow: {
     flexDirection: "row",
