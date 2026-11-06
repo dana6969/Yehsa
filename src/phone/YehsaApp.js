@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -43,7 +43,15 @@ import { EXPO_LOCK_ACCURACY_M } from "../../symbolic/position_fix.js";
 import { chooseYehsaDevice, connectRemembered, scanWithPlatform, transmitNote } from "./ble_provider.js";
 import { bindThisInstall } from "./install_owner.js";
 import { readPlatformFix } from "./location_provider.js";
-import { Action, Field, Panel, Prose, colors } from "./ui.js";
+import { openMic, probeVoice, silenceSpeakers, speakProse, stopProse } from "./speech_provider.js";
+import {
+  recognitionErrorNotice,
+  reduceVoiceGesture,
+  speakHint,
+  submitHeard,
+  voiceButtonLabel
+} from "../../symbolic/voice_adapter.js";
+import { Action, Field, HoldTalk, Panel, Prose, colors } from "./ui.js";
 
 const TABS = [
   { id: "ask", label: "Ask" },
@@ -115,7 +123,7 @@ export default function YehsaApp() {
           pointerEvents={tab === "ask" ? "auto" : "none"}
           accessibilityElementsHidden={tab !== "ask"}
         >
-          <AskPane session={session} owner={owner} />
+          <AskPane session={session} owner={owner} active={tab === "ask"} />
         </View>
         <View
           style={[styles.pane, tab !== "land" && styles.hidden]}
@@ -166,15 +174,74 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ session, owner }) {
+function AskPane({ session, owner, active }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [answer, setAnswer] = useState(null);
   const [cue, setCue] = useState(null);
   const [notice, setNotice] = useState(null);
+  const [voicePlan, setVoicePlan] = useState(null);
+  const [gesture, setGesture] = useState({ phase: "idle", pressedAt: null, action: "none" });
+  const [voiceNote, setVoiceNote] = useState(null);
+  const gestureRef = useRef(gesture);
+  const phaseRef = useRef(phase);
+  const heardRef = useRef("");
+  const errorRef = useRef(null);
+  const handleRef = useRef(null);
+  const pendingStop = useRef(false);
+  const startingRef = useRef(false);
+  const finishing = useRef(false);
+  const pointerUsed = useRef(false);
+  const liveRef = useRef(true);
+  const askGen = useRef(0);
+  const activeRef = useRef(active);
+  phaseRef.current = phase;
+  activeRef.current = active;
 
-  function ask() {
-    const text = question.trim();
+  function setGestureBoth(next) {
+    gestureRef.current = next;
+    setGesture(next);
+  }
+
+  function abortMic() {
+    const handle = handleRef.current;
+    handleRef.current = null;
+    pendingStop.current = false;
+    setGestureBoth({ phase: "idle", pressedAt: null, action: "none" });
+    try {
+      handle?.abort?.();
+    } catch {
+      // The microphone is already closed.
+    }
+  }
+
+  const abortRef = useRef(abortMic);
+  abortRef.current = abortMic;
+
+  useEffect(() => {
+    let live = true;
+    probeVoice().then((plan) => {
+      if (live) setVoicePlan(plan);
+    }).catch(() => {
+      if (live) setVoicePlan({ route: "none", onDevice: false, service: "none", speakRoute: "none", notice: "This screen has no speech recognizer. Type the question. The notes stay on this phone." });
+    });
+    return () => {
+      live = false;
+      liveRef.current = false;
+      abortRef.current();
+      stopProse();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (active) return undefined;
+    abortRef.current();
+    stopProse();
+    return undefined;
+  }, [active]);
+
+  function runAsk(raw, { speak } = {}) {
+    const text = String(raw ?? "").trim();
     if (!text) {
       setPhase("empty");
       setAnswer(null);
@@ -182,9 +249,13 @@ function AskPane({ session, owner }) {
       setNotice("Type a question first.");
       return;
     }
+    stopProse();
+    setQuestion(text);
     setPhase("loading");
     setNotice(null);
+    const generation = ++askGen.current;
     setTimeout(() => {
+      if (askGen.current !== generation) return;
       try {
         const result = askField(text, books.passages, { session });
         if (result.empty) {
@@ -205,6 +276,13 @@ function AskPane({ session, owner }) {
         setAnswer(result.text);
         setCue(result.cue);
         setNotice(null);
+        if (speak) {
+          setVoiceNote("Speaking the answer.");
+          speakProse(result.text, {
+            onDone: () => setVoiceNote((current) => (current === "Speaking the answer." ? null : current)),
+            onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
+          });
+        }
       } catch (err) {
         setPhase("error");
         setAnswer(null);
@@ -213,6 +291,143 @@ function AskPane({ session, owner }) {
       }
     }, 40);
   }
+
+  function ask() {
+    setVoiceNote(null);
+    runAsk(question);
+  }
+
+  function finishListen() {
+    if (finishing.current) return;
+    finishing.current = true;
+    const handle = handleRef.current;
+    handleRef.current = null;
+    pendingStop.current = false;
+    setGestureBoth({ phase: "idle", pressedAt: null, action: "none" });
+    const afterStop = handle?.stop ? handle.stop() : Promise.resolve(heardRef.current);
+    Promise.resolve(afterStop).then((stopped) => {
+      finishing.current = false;
+      if (!liveRef.current || activeRef.current === false) return;
+      const text = stopped || heardRef.current;
+      const decision = submitHeard(text, errorRef.current);
+      if (!decision.submit) {
+        if (decision.notice) setVoiceNote(decision.notice);
+        return;
+      }
+      setVoiceNote(null);
+      runAsk(decision.text, { speak: true });
+    }).catch(() => {
+      finishing.current = false;
+      if (!liveRef.current) return;
+      const decision = submitHeard(heardRef.current, errorRef.current);
+      if (decision.submit) runAsk(decision.text, { speak: true });
+      else if (decision.notice) setVoiceNote(decision.notice);
+    });
+  }
+
+  function beginListen({ lock, pressedAt }) {
+    if (startingRef.current || voicePlan?.route === "none" || voicePlan?.route == null || phaseRef.current === "loading") return;
+    startingRef.current = true;
+    pendingStop.current = false;
+    errorRef.current = null;
+    heardRef.current = "";
+    silenceSpeakers();
+    setGestureBoth({
+      phase: lock ? "locked" : "arming",
+      pressedAt: lock ? null : pressedAt,
+      action: "start"
+    });
+    Promise.resolve(openMic({
+      onDevice: voicePlan?.onDevice === true,
+      onTranscript: (text) => {
+        heardRef.current = text;
+        if (liveRef.current) setQuestion(text);
+      },
+      onError: (code) => {
+        errorRef.current = code;
+      },
+      onEnd: (text) => {
+        if (text) heardRef.current = text;
+        if (gestureRef.current.phase === "locked") finishListen();
+      }
+    })).then((handle) => {
+      startingRef.current = false;
+      if (!liveRef.current || activeRef.current === false) {
+        try {
+          handle?.abort?.();
+        } catch {
+          // The screen is gone.
+        }
+        return;
+      }
+      if (!handle?.started) {
+        setGestureBoth({ phase: "idle", pressedAt: null, action: "none" });
+        setVoiceNote(handle?.reason || recognitionErrorNotice(handle?.code || "service-not-allowed"));
+        return;
+      }
+      handleRef.current = handle;
+      const released = pendingStop.current || (!lock && gestureRef.current.phase === "idle");
+      if (released) {
+        finishListen();
+        return;
+      }
+      if (!lock && gestureRef.current.phase === "arming") {
+        setGestureBoth(reduceVoiceGesture(gestureRef.current, { type: "hearing" }));
+      }
+    }).catch(() => {
+      startingRef.current = false;
+      setGestureBoth({ phase: "idle", pressedAt: null, action: "none" });
+      setVoiceNote(recognitionErrorNotice("service-not-allowed"));
+    });
+  }
+
+  function onMicIn() {
+    if (voicePlan?.route !== "native-speech" && voicePlan?.route !== "web-speech") return;
+    if (phaseRef.current === "loading") return;
+    pointerUsed.current = true;
+    const next = reduceVoiceGesture(gestureRef.current, { type: "press-in", at: Date.now() });
+    if (next.action === "stop") {
+      setGestureBoth(next);
+      if (handleRef.current) finishListen();
+      else pendingStop.current = true;
+      return;
+    }
+    beginListen({ lock: false, pressedAt: next.pressedAt });
+  }
+
+  function onMicOut() {
+    if (gestureRef.current.phase !== "arming" && gestureRef.current.phase !== "listening") return;
+    const next = reduceVoiceGesture(gestureRef.current, { type: "press-out", at: Date.now() });
+    setGestureBoth(next);
+    if (next.action === "stop") {
+      if (handleRef.current) finishListen();
+      else pendingStop.current = true;
+    }
+  }
+
+  function onMicPress() {
+    if (pointerUsed.current) {
+      pointerUsed.current = false;
+      return;
+    }
+    if (voicePlan?.route !== "native-speech" && voicePlan?.route !== "web-speech") return;
+    if (phaseRef.current === "loading") return;
+    if (gestureRef.current.phase === "idle") {
+      beginListen({ lock: true, pressedAt: null });
+      return;
+    }
+    setGestureBoth({ phase: "idle", pressedAt: null, action: "stop" });
+    if (handleRef.current) finishListen();
+    else pendingStop.current = true;
+  }
+
+  const canListen = voicePlan?.route === "native-speech" || voicePlan?.route === "web-speech";
+  const micLabel = voiceButtonLabel({
+    gesture: gesture.phase,
+    canListen,
+    checked: voicePlan != null
+  });
+  const listening = gesture.phase === "arming" || gesture.phase === "listening" || gesture.phase === "locked";
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
@@ -227,11 +442,24 @@ function AskPane({ session, owner }) {
         placeholder="How do I carry drinking water?"
         multiline
       />
+      <HoldTalk
+        label={micLabel}
+        hint="Hold to talk, or tap once to keep listening and tap again to ask. Yehsa fills the question and uses the same notes as typing."
+        onPressIn={onMicIn}
+        onPressOut={onMicOut}
+        onPress={onMicPress}
+        disabled={!canListen || phase === "loading"}
+        live={listening}
+      />
+      <Text style={styles.hint}>
+        {voicePlan ? `${voicePlan.notice} ${speakHint(voicePlan.speakRoute)}` : "Checking the microphone…"}
+      </Text>
+      {voiceNote ? <Text accessibilityLiveRegion="polite" style={styles.hint}>{voiceNote}</Text> : null}
       <Action label={phase === "loading" ? "Reading notes…" : "Ask"} onPress={ask} disabled={phase === "loading"} />
       {phase === "idle" ? (
         <Panel>
           <Prose>
-            Ask in plain language. Yehsa answers from the field notes and a packaged dictionary on this device. A feeling in the wording is a small cue beside the answer, not a replacement for it.
+            Ask in plain language, or hold the button and speak. Yehsa answers from the field notes and a packaged dictionary on this device. A feeling in the wording is a small cue beside the answer. The note still comes back when that feeling is unclear.
           </Prose>
         </Panel>
       ) : null}
@@ -245,6 +473,19 @@ function AskPane({ session, owner }) {
           <Prose>{answer}</Prose>
           {cue ? <Text style={styles.cue}>{cue}</Text> : null}
         </Panel>
+      ) : null}
+      {answer && voicePlan?.speakRoute && voicePlan.speakRoute !== "none" ? (
+        <Action
+          label="Hear the answer"
+          tone="quiet"
+          onPress={() => {
+            setVoiceNote("Speaking the answer.");
+            speakProse(answer, {
+              onDone: () => setVoiceNote((current) => (current === "Speaking the answer." ? null : current)),
+              onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
+            });
+          }}
+        />
       ) : null}
       {notice ? (
         <Panel>

@@ -40,6 +40,29 @@ export function Action({ label, onPress, disabled, tone = "brass", accessibility
   );
 }
 
+export function HoldTalk({ label, hint, onPressIn, onPressOut, onPress, disabled, live }) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityHint={hint}
+      accessibilityState={{ disabled: Boolean(disabled), busy: Boolean(live) }}
+      disabled={disabled}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.mic,
+        live && styles.micLive,
+        disabled && styles.disabled,
+        pressed && !disabled && styles.pressed
+      ]}
+    >
+      <Text style={[styles.micText, { color: live ? colors.ink : colors.brassInk }]}>{label}</Text>
+    </Pressable>
+  );
+}
+
 export function Field({ label, value, onChangeText, placeholder, multiline, hint }) {
   return (
     <View style={styles.fieldWrap}>
@@ -86,6 +109,27 @@ const styles = StyleSheet.create({
   },
   disabled: { opacity: 0.45 },
   pressed: { opacity: 0.8 },
+  mic: {
+    minHeight: 64,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.brass,
+    backgroundColor: colors.brass,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    marginBottom: 8
+  },
+  micLive: {
+    backgroundColor: "#6e463c",
+    borderColor: colors.clay
+  },
+  micText: {
+    fontSize: 18,
+    fontWeight: "700",
+    textAlign: "center"
+  },
   fieldWrap: { marginBottom: 14 },
   label: {
     color: colors.muted,
