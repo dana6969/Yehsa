@@ -6,6 +6,7 @@ import test from "node:test";
 import { recallKnowledge } from "./symbolic/knowledge_index.js";
 import { parseQuestion } from "./symbolic/question_parse.js";
 import { ask } from "./symbolic/ask.js";
+import { askField } from "./symbolic/phone_field.js";
 
 test("getMappedAction stays a direct map read", () => {
   const src = fs.readFileSync("symbolic/symbolic_dictionary.js", "utf8");
@@ -153,6 +154,51 @@ test("a question the notes do not answer stays a miss", () => {
   const strike = ask("How do I summon a helicopter strike?");
   assert.equal(strike.answered, false);
   assert.equal(strike.text, null);
+});
+
+test("tourniquet, frostbite, splint, and yarrow answer from field notes", () => {
+  const passages = JSON.parse(fs.readFileSync("symbolic_memory/books_index.json", "utf8")).passages;
+  const cases = [
+    {
+      q: "How do I use a tourniquet?",
+      kind: "medical",
+      symbol: "tourniquet_last_resort",
+      need: [/last resort/i, /life-threatening/i, /note the time/i, /direct pressure/i],
+      gloss: /essentiallyof|istightened/
+    },
+    {
+      q: "How do I treat frostbite?",
+      kind: "medical",
+      symbol: "frostbite_warming",
+      need: [/do not rub snow/i, /not hot/i, /thawed foot/i],
+      gloss: /thebody|Kane/
+    },
+    {
+      q: "How do I splint a broken arm?",
+      kind: "medical",
+      symbol: "splint_immobilize",
+      need: [/pad/i, /circulation/i, /do not set the bone/i, /broken arm/i],
+      gloss: /whenset|inplace/
+    },
+    {
+      q: "What is yarrow used for?",
+      kind: "herbology",
+      symbol: "yarrow_achillea",
+      need: [/identified/i, /not a dose/i, /emergency care/i, /yarrow/i],
+      gloss: /corymbed|Millefolium\)with/
+    }
+  ];
+  for (const item of cases) {
+    const answer = ask(item.q);
+    const phone = askField(item.q, passages);
+    assert.equal(answer.answered, true, item.q);
+    assert.equal(answer.kind, item.kind, item.q);
+    assert.equal(answer.symbol, item.symbol, item.q);
+    assert.equal(phone.text, answer.text, item.q);
+    for (const pattern of item.need) assert.match(answer.text, pattern, item.q);
+    assert.doesNotMatch(answer.text, item.gloss, item.q);
+    assert.notEqual(answer.hits[0].kind, "dictionary", item.q);
+  }
 });
 
 test("a watershed question still reads the landscape note", () => {

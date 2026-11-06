@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-05T21:57:21.482Z",
-  "passageCount": 441,
+  "generatedAt": "2026-11-06T11:49:02.239Z",
+  "passageCount": 445,
   "sources": [
     {
       "file": "symbolic_memory/full_book_verses.json",
@@ -43,7 +43,7 @@
       "file": "symbolic_books/herbology/notes.json",
       "status": "indexed",
       "title": "notes",
-      "passages": 4
+      "passages": 5
     },
     {
       "file": "symbolic_books/hermetica.txt",
@@ -65,7 +65,7 @@
       "file": "symbolic_books/medical/reference.json",
       "status": "indexed",
       "title": "reference",
-      "passages": 4
+      "passages": 7
     },
     {
       "file": "symbolic_books/survival/camp.json",
@@ -2415,6 +2415,12 @@
       "source": "symbolic_books/herbology/notes.json"
     },
     {
+      "symbol": "yarrow_achillea",
+      "context": "Yarrow (Achillea millefolium) is a field plant for a small bleeding scrape, and only after the plant is identified. Feathery leaves and a flat white flower cluster are the usual look, and lookalikes are easy to mistake. Do not use a plant you have not identified. This is not a dose or a substitute for emergency care.",
+      "title": "notes",
+      "source": "symbolic_books/herbology/notes.json"
+    },
+    {
       "symbol": "biome_bands",
       "context": "Biomes are broad living landscapes: forest, grassland, desert, tundra, and coast, set by climate and water more than by towns. Plants and the ground underfoot tell you which pattern you are in. A biome is not a line you can pace to a city limit. Weather still changes inside it.",
       "title": "notes",
@@ -2549,6 +2555,24 @@
     {
       "symbol": "insect_bite_skin",
       "context": "A mosquito bite is usually a small itchy spot. Wash it with clean water. Swelling of the face or throat, or trouble breathing, needs a person and emergency services, not a plant.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "tourniquet_last_resort",
+      "context": "A tourniquet is a last resort for life-threatening limb bleeding, when direct pressure with clean cloth does not stop the blood. Put it between the wound and the heart, and note the time it went on. Do not loosen it in the field. This is not surgery and not a substitute for emergency care.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "frostbite_warming",
+      "context": "Frostbite is frozen skin, often fingers, toes, ears, or the nose. Get to shelter and put on dry layers. Do not rub the skin, and do not rub snow on it. Warm it against healthy skin or in warm, not hot, water, and do not walk on a thawed foot if you still must travel; this is not a substitute for emergency care.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "splint_immobilize",
+      "context": "A splint keeps a suspected broken bone still, such as a broken arm or leg. Pad it, include the joints above and below, and tie it snug enough to stop motion without cutting off circulation. Skin beyond it should stay warm and able to feel. Do not set the bone; this is not surgery or a substitute for emergency care.",
       "title": "reference",
       "source": "symbolic_books/medical/reference.json"
     },
