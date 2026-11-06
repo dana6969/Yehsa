@@ -2,7 +2,7 @@
   "expo": {
     "name": "Yehsa",
     "slug": "axionet",
-    "owner": "dman6969",
+    "owner": "yehsa",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -67,7 +67,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "e60340c9-58a4-4c15-ae31-1060cb3bc53c"
+        "projectId": "c8d0656a-c831-48f6-99e5-967719915699"
       }
     },
     "web": {
