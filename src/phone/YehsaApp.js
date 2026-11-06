@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -51,7 +52,9 @@ import {
   submitHeard,
   voiceButtonLabel
 } from "../../symbolic/voice_adapter.js";
-import { Action, Field, HoldTalk, Panel, Prose, colors } from "./ui.js";
+import { Action, Field, HoldTalk, Prose, Quiet, ScreenHeader, StatusPill, colors } from "./ui.js";
+
+const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
 const TABS = [
   { id: "ask", label: "Ask" },
@@ -117,6 +120,7 @@ export default function YehsaApp() {
   return (
     <View style={styles.root}>
       <StatusBar style="light" />
+      <View style={styles.column}>
       <View style={styles.body}>
         <View
           style={[styles.pane, tab !== "ask" && styles.hidden]}
@@ -153,7 +157,7 @@ export default function YehsaApp() {
           <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} />
         </View>
       </View>
-      <View style={styles.tabs}>
+      <View style={styles.tabs} accessibilityRole="tablist">
         {TABS.map((item) => {
           const selected = tab === item.id;
           return (
@@ -163,12 +167,14 @@ export default function YehsaApp() {
               accessibilityState={{ selected }}
               accessibilityLabel={item.label}
               onPress={() => setTab(item.id)}
-              style={[styles.tab, selected && styles.tabOn]}
+              style={[styles.tab, webPointer, selected && styles.tabOn]}
             >
+              <View style={[styles.tabMark, selected && styles.tabMarkOn]} />
               <Text style={[styles.tabText, selected && styles.tabTextOn]}>{item.label}</Text>
             </Pressable>
           );
         })}
+      </View>
       </View>
     </View>
   );
@@ -431,10 +437,10 @@ function AskPane({ session, owner, active }) {
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <Text style={styles.brand}>Yehsa</Text>
-      <Text style={styles.lead}>
-        A field companion for one phone. Notes, courses, and a position you choose to hold. Offline. No city map.
-      </Text>
+      <ScreenHeader
+        title="Ask"
+        lead="A field companion for one phone. Notes, courses, and a position you choose to hold. Offline. No city map."
+      />
       <Field
         label="Question"
         value={question}
@@ -451,52 +457,64 @@ function AskPane({ session, owner, active }) {
         disabled={!canListen || phase === "loading"}
         live={listening}
       />
-      <Text style={styles.hint}>
+      <Text style={styles.speech}>
         {voicePlan ? `${voicePlan.notice} ${speakHint(voicePlan.speakRoute)}` : "Checking the microphone…"}
       </Text>
-      {voiceNote ? <Text accessibilityLiveRegion="polite" style={styles.hint}>{voiceNote}</Text> : null}
-      <Action label={phase === "loading" ? "Reading notes…" : "Ask"} onPress={ask} disabled={phase === "loading"} />
+      {voiceNote ? <Text accessibilityLiveRegion="polite" style={styles.liveNote}>{voiceNote}</Text> : null}
+      <Action
+        label={phase === "loading" ? "Reading notes…" : "Ask"}
+        tone={canListen ? "quiet" : "brass"}
+        onPress={ask}
+        disabled={phase === "loading"}
+      />
       {phase === "idle" ? (
-        <Panel>
-          <Prose>
+        <View style={styles.idle}>
+          <Quiet>
             Ask in plain language, or hold the button and speak. Yehsa answers from the field notes and a packaged dictionary on this device. A feeling in the wording is a small cue beside the answer. The note still comes back when that feeling is unclear.
-          </Prose>
-        </Panel>
+          </Quiet>
+        </View>
       ) : null}
       {phase === "loading" ? (
-        <Panel>
-          <Prose>Reading field notes…</Prose>
-        </Panel>
+        <View style={styles.idle}>
+          <Quiet>Reading field notes…</Quiet>
+        </View>
       ) : null}
       {answer ? (
-        <Panel>
-          <Prose>{answer}</Prose>
+        <View style={styles.answer}>
+          <Prose live>{answer}</Prose>
           {cue ? <Text style={styles.cue}>{cue}</Text> : null}
-        </Panel>
-      ) : null}
-      {answer && voicePlan?.speakRoute && voicePlan.speakRoute !== "none" ? (
-        <Action
-          label="Hear the answer"
-          tone="quiet"
-          onPress={() => {
-            setVoiceNote("Speaking the answer.");
-            speakProse(answer, {
-              onDone: () => setVoiceNote((current) => (current === "Speaking the answer." ? null : current)),
-              onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
-            });
-          }}
-        />
+          {voicePlan?.speakRoute && voicePlan.speakRoute !== "none" ? (
+            <Action
+              label="Hear the answer"
+              tone="quiet"
+              style={styles.hear}
+              onPress={() => {
+                setVoiceNote("Speaking the answer.");
+                speakProse(answer, {
+                  onDone: () => setVoiceNote((current) => (current === "Speaking the answer." ? null : current)),
+                  onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
+                });
+              }}
+            />
+          ) : null}
+        </View>
       ) : null}
       {notice ? (
-        <Panel>
-          <Prose tone={phase === "error" ? "warn" : undefined}>{notice}</Prose>
-        </Panel>
+        <View style={[styles.notice, phase === "error" && styles.noticeWarn]} accessibilityLiveRegion="polite">
+          {phase === "error" ? <Prose tone="warn">{notice}</Prose> : <Quiet>{notice}</Quiet>}
+        </View>
       ) : null}
       <Text style={styles.foot}>
         {`Packaged dictionary: ${phoneCorpusMeta.headwords} headwords and ${phoneCorpusMeta.medicalNames} medical names. ${phoneCorpusMeta.honest} ${phoneCorpusMeta.fieldNoteHonest} ${phoneCorpusMeta.medicalHonest} Nothing you ask is saved as a profile. ${owner?.recognized ? `This install is bound to this device (${owner.source}). Exterior access is denied.` : (owner?.reason || "Binding this install to this device.")}`}
       </Text>
     </ScrollView>
   );
+}
+
+function ResultText({ result }) {
+  if (!result?.text) return null;
+  if (result.tone === "quiet") return <Quiet live>{result.text}</Quiet>;
+  return <Prose live tone={result.tone === "warn" ? "warn" : undefined}>{result.text}</Prose>;
 }
 
 function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
@@ -515,25 +533,38 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
   const [trackTime, setTrackTime] = useState("");
   const [sunPoint, setSunPoint] = useState("");
   const [sunDate, setSunDate] = useState(todayUtc);
-  const [result, setResult] = useState("Type coordinates. There is no city search and no downloaded map.");
+  const [result, setResult] = useState({
+    text: "Type coordinates. There is no city search and no downloaded map.",
+    tone: "quiet"
+  });
+
+  function showReport(report) {
+    const empty = report.ok !== false && /^No track points yet/.test(report.text || "");
+    setResult({
+      text: report.text,
+      tone: report.ok === false ? "warn" : empty ? "quiet" : "ink"
+    });
+  }
 
   function useLocked(setter) {
     const filled = lockedFill(position);
     if (!filled.ok) {
-      setResult(filled.text);
+      showReport(filled);
       return;
     }
     setter(filled.text);
-    setResult("Filled from the position you chose to hold. It is not a city lookup.");
+    setResult({
+      text: "Filled from the position you chose to hold. It is not a city lookup.",
+      tone: "quiet"
+    });
   }
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <Text style={styles.brand}>Yehsa</Text>
-      <Text style={styles.screenTitle}>Landscape</Text>
-      <Text style={styles.lead}>
-        Distance, bearing, waypoints, a track, and a rough sunrise. A sphere of 6371 km. No streets and no places of interest.
-      </Text>
+      <ScreenHeader
+        title="Landscape"
+        lead="Distance, bearing, waypoints, a track, and a rough sunrise. A sphere of 6371 km. No streets and no places of interest."
+      />
       <View style={styles.chips}>
         {LANDS.map((item) => {
           const selected = section === item.id;
@@ -543,7 +574,7 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
               accessibilityRole="button"
               accessibilityState={{ selected }}
               onPress={() => setSection(item.id)}
-              style={[styles.chip, selected && styles.chipOn]}
+              style={[styles.chip, webPointer, selected && styles.chipOn]}
             >
               <Text style={[styles.chipText, selected && styles.chipTextOn]}>{item.label}</Text>
             </Pressable>
@@ -558,17 +589,17 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
           <Field label="To (latitude, longitude)" value={toText} onChangeText={setToText} placeholder="0, 1" />
           <Action
             label="Distance and bearing"
-            onPress={() => setResult(courseText(fromText, toText).text)}
+            onPress={() => showReport(courseText(fromText, toText))}
           />
-          <Panel>
-            <Prose>{result}</Prose>
-          </Panel>
+          <View style={[styles.readout, result.tone === "warn" && styles.readoutWarn]}>
+            <ResultText result={result} />
+          </View>
           <Field label="Magnetic bearing (degrees)" value={magnetic} onChangeText={setMagnetic} placeholder="90" />
           <Field label="Declination from your map (east positive)" value={declination} onChangeText={setDeclination} placeholder="12" />
           <Action
             label="Apply declination"
             tone="quiet"
-            onPress={() => setResult(declinationText(magnetic, declination).text)}
+            onPress={() => showReport(declinationText(magnetic, declination))}
           />
         </View>
       ) : null}
@@ -589,7 +620,7 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
                 altitudeText: altitude
               });
               setWaypoints(saved.list);
-              setResult(saved.text);
+              showReport(saved);
             }}
           />
           <Field label="Go to name" value={gotoName} onChangeText={setGotoName} placeholder="camp" />
@@ -597,24 +628,24 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
           <Action label="Use locked position as start" tone="quiet" onPress={() => useLocked(setGotoFrom)} />
           <Action
             label="Go to waypoint"
-            onPress={() => setResult(gotoSessionWaypoint(waypoints, {
+            onPress={() => showReport(gotoSessionWaypoint(waypoints, {
               consent: position.consent,
               name: gotoName,
               fromText: gotoFrom,
               locked: position.status === "locked" ? position.fix : null
-            }).text)}
+            }))}
           />
-          <Panel>
-            <Text style={styles.label}>Waypoints on this screen</Text>
+          <View style={styles.group}>
+            <Text style={styles.sectionLabel}>Waypoints on this screen</Text>
             {waypoints.length === 0 ? (
-              <Prose>None yet. Saving needs consent on the Position screen. Turning consent off clears this list.</Prose>
+              <Quiet>None yet. Saving needs consent on the Position screen. Turning consent off clears this list.</Quiet>
             ) : waypoints.map((item) => (
               <Text key={item.name} style={styles.row}>
                 {item.name} — {item.latitude.toFixed(5)}, {item.longitude.toFixed(5)}
                 {item.altitude != null ? `, ${item.altitude} m` : ""}
               </Text>
             ))}
-          </Panel>
+          </View>
         </View>
       ) : null}
 
@@ -634,10 +665,10 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
                 timeText: trackTime
               });
               setTrack(added.points);
-              setResult(added.ok ? trackText(added.points).text : added.text);
+              showReport(added.ok ? trackText(added.points) : added);
             }}
           />
-          <Action label="Track summary" tone="quiet" onPress={() => setResult(trackText(track).text)} />
+          <Action label="Track summary" tone="quiet" onPress={() => showReport(trackText(track))} />
         </View>
       ) : null}
 
@@ -646,14 +677,14 @@ function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
           <Field label="At (latitude, longitude)" value={sunPoint} onChangeText={setSunPoint} placeholder="45.1, -69.2" />
           <Action label="Use locked position" tone="quiet" onPress={() => useLocked(setSunPoint)} />
           <Field label="Date (YYYY-MM-DD)" value={sunDate} onChangeText={setSunDate} placeholder="2026-06-21" />
-          <Action label="Rough sunrise and sunset" onPress={() => setResult(sunText(sunPoint, sunDate).text)} />
+          <Action label="Rough sunrise and sunset" onPress={() => showReport(sunText(sunPoint, sunDate))} />
         </View>
       ) : null}
 
       {section !== "course" ? (
-        <Panel>
-          <Prose>{result}</Prose>
-        </Panel>
+        <View style={[styles.readout, result.tone === "warn" && styles.readoutWarn]}>
+          <ResultText result={result} />
+        </View>
       ) : null}
     </ScrollView>
   );
@@ -692,26 +723,33 @@ function PositionPane({ position, setPosition, onConsent }) {
     }
   }
 
+  const consented = position.consent === true;
+
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <Text style={styles.brand}>Yehsa</Text>
-      <Text style={styles.screenTitle}>Position</Text>
-      <Text style={styles.lead}>
-        Off until you consent. Yehsa does not lock a position by itself, and it does not share one unless you use the separate share action.
-      </Text>
-      <Panel>
-        <Text style={styles.kicker}>Status</Text>
-        <Prose tone={tone}>{label}</Prose>
+      <ScreenHeader
+        title="Position"
+        lead="Off until you consent. Yehsa does not lock a position by itself, and it does not share one unless you use the separate share action."
+      />
+      <View style={styles.statusBlock}>
+        <StatusPill label={label} tone={tone} />
         <Text style={styles.note}>{position.note}</Text>
         {position.status === "locked" && position.fix ? (
-          <Text style={styles.note}>
+          <Text style={styles.fixLine}>
             Held {heldPhrase(position.source)}: {position.fix.latitude.toFixed(5)}, {position.fix.longitude.toFixed(5)}
             {position.fix.altitude != null ? `, ${position.fix.altitude} m` : ""}
             {position.fix.accuracy != null ? `. Accuracy about ${Math.round(position.fix.accuracy)} m` : ""}. Not shared.
           </Text>
         ) : null}
-      </Panel>
-      <View style={styles.consentRow}>
+      </View>
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityLabel="Consent to hold a position"
+        accessibilityHint="Turning this off clears the lock, the waypoints, and the track on this screen."
+        accessibilityState={{ checked: consented }}
+        onPress={() => onConsent(!consented)}
+        style={[styles.consentRow, webPointer, consented && styles.consentOn]}
+      >
         <View style={styles.consentCopy}>
           <Text style={styles.consentTitle}>I consent to hold a position on this device</Text>
           <Text style={styles.hint}>
@@ -719,13 +757,14 @@ function PositionPane({ position, setPosition, onConsent }) {
           </Text>
         </View>
         <Switch
-          accessibilityLabel="Consent to hold a position"
-          value={position.consent === true}
-          onValueChange={onConsent}
-          trackColor={{ false: "#3d4a40", true: "#8eaa74" }}
-          thumbColor={position.consent ? "#f4f0e6" : "#c5cbbd"}
+          pointerEvents="none"
+          importantForAccessibility="no"
+          accessibilityElementsHidden
+          value={consented}
+          trackColor={{ false: "#2c3830", true: "#6d8a62" }}
+          thumbColor={consented ? "#f4f0e6" : "#d7ddd2"}
         />
-      </View>
+      </Pressable>
       <Action
         label={listening ? "Listening for a fix…" : "Try satellite lock"}
         onPress={trySatellite}
@@ -745,20 +784,20 @@ function PositionPane({ position, setPosition, onConsent }) {
         }}
       />
       <Action label="Unlock" tone="quiet" onPress={() => setPosition(unlockPosition(position))} />
-      <Panel>
-        <Text style={styles.kicker}>Share, separately</Text>
+      <View style={styles.group}>
+        <Text style={styles.sectionLabel}>Share, separately</Text>
         <Prose>{shareNote}</Prose>
-        <View style={{ height: 12 }} />
         <Action
           label="Share position"
           tone="clay"
+          style={styles.follow}
           onPress={() => {
             const attempt = shareAttempt(position);
             setPosition(attempt.state);
             setShareNote(attempt.message);
           }}
         />
-      </Panel>
+      </View>
       <Text style={styles.foot}>
         {`Consent stays off until you turn it on. This button does not run by itself. termux-location is used when that command is bridged in; otherwise Expo Location at high accuracy. A reading coarser than ${EXPO_LOCK_ACCURACY_M} m, a missing permission, or a missing radio stays Degraded. Share still does not transmit from this screen.`}
       </Text>
@@ -844,24 +883,36 @@ function MeshPane({ mesh, setMesh, owner, position }) {
     setServiceNote("Held on this phone. Not transmitted. A position lock is not required.");
   }
 
+  const pill = status.readiness === "degraded"
+    ? "Degraded"
+    : status.readiness === "linked"
+      ? "Link held"
+      : status.readiness === "heard"
+        ? "Peers heard"
+        : "No peers";
+
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <Text style={styles.brand}>Yehsa</Text>
-      <Text style={styles.screenTitle}>Mesh</Text>
-      <Text style={styles.lead}>
-        Scan when you ask. A missing radio stays degraded. Peers are other installs and cannot run symbols here.
-      </Text>
-      <Panel>
-        <Text style={styles.kicker}>{status.title}</Text>
-        <Prose tone={tone}>{status.headline}</Prose>
-        <Text style={styles.note}>{status.detail}</Text>
-      </Panel>
-      {status.rows.map((row) => (
-        <Panel key={row.label}>
-          <Text style={styles.kicker}>{row.label}</Text>
-          <Prose>{row.value}</Prose>
-        </Panel>
-      ))}
+      <ScreenHeader
+        title="Mesh"
+        lead="Scan when you ask. A missing radio stays degraded. Peers are other installs and cannot run symbols here."
+      />
+      <View style={styles.statusBlock}>
+        <Text style={styles.sectionLabel}>{status.title}</Text>
+        <StatusPill label={pill} tone={tone} />
+        <Prose>{status.headline}</Prose>
+        {status.detail && status.detail !== status.headline ? (
+          <Text style={styles.note}>{status.detail}</Text>
+        ) : null}
+      </View>
+      <View style={styles.facts}>
+        {status.rows.map((row) => (
+          <View key={row.label} style={styles.fact}>
+            <Text style={styles.factLabel}>{row.label}</Text>
+            <Text style={styles.factValue}>{row.value}</Text>
+          </View>
+        ))}
+      </View>
       <Action
         label={scanning ? "Scanning…" : "Scan for Yehsa peers"}
         onPress={scan}
@@ -877,12 +928,12 @@ function MeshPane({ mesh, setMesh, owner, position }) {
           accessibilityHint="Browser chooser filtered to Yehsa. Does not disconnect a link already held."
         />
       ) : null}
-      <Panel>
-        <Text style={styles.kicker}>Peers</Text>
+      <View style={styles.group}>
+        <Text style={styles.sectionLabel}>Peers</Text>
         {status.peers.length === 0 ? (
-          <Prose>None remembered from a real scan.</Prose>
+          <Quiet>None remembered from a real scan.</Quiet>
         ) : status.peers.map((peer) => (
-          <View key={peer.address || peer.id} style={{ marginBottom: 8 }}>
+          <View key={peer.address || peer.id} style={styles.peer}>
             <Text style={styles.row}>{peerLabel(peer)}</Text>
             <Action
               label={`Connect ${peer.name}`}
@@ -892,9 +943,9 @@ function MeshPane({ mesh, setMesh, owner, position }) {
             />
           </View>
         ))}
-      </Panel>
-      <Panel>
-        <Text style={styles.kicker}>Offline phone</Text>
+      </View>
+      <View style={styles.group}>
+        <Text style={styles.sectionLabel}>Offline phone</Text>
         <Prose>
           {positionOff
             ? "Position is Unlocked. You can still keep a short note here. It is not a call and it is not billed."
@@ -905,7 +956,6 @@ function MeshPane({ mesh, setMesh, owner, position }) {
             ? "A link is held. The note is written there only when that peer exposes the Yehsa note characteristic. Otherwise it stays on this phone."
             : "No link is held. The note stays on this phone."}
         </Text>
-        <View style={{ height: 12 }} />
         <Field
           label="Note for the held link"
           value={note}
@@ -916,7 +966,7 @@ function MeshPane({ mesh, setMesh, owner, position }) {
         <Action label="Keep note on this phone" onPress={keepNote} disabled={!bound} />
         <Text style={styles.note}>{serviceNote}</Text>
         {(mesh.outbox || []).length > 0 ? (
-          <View style={{ marginTop: 8 }}>
+          <View style={styles.outbox}>
             {mesh.outbox.map((item) => (
               <Text key={item.queuedAt} style={styles.row}>
                 {item.transmitted ? "Queued on the held link" : "Held on this phone"} — {item.text}
@@ -924,7 +974,7 @@ function MeshPane({ mesh, setMesh, owner, position }) {
             ))}
           </View>
         ) : null}
-      </Panel>
+      </View>
       <Text style={styles.foot}>
         Termux still uses termux-bluetooth-scan and termux-bluetooth-connect. Android and iOS use the phone radio when this build includes it. The browser keeps Web Bluetooth. A missing radio stays Degraded. No cipher is claimed.
       </Text>
@@ -935,13 +985,16 @@ function MeshPane({ mesh, setMesh, owner, position }) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: colors.bg
+    backgroundColor: colors.bg,
+    alignItems: "center"
   },
-  body: {
+  column: {
     flex: 1,
     width: "100%",
-    maxWidth: 560,
-    alignSelf: "center"
+    maxWidth: 480
+  },
+  body: {
+    flex: 1
   },
   pane: {
     flex: 1
@@ -950,104 +1003,187 @@ const styles = StyleSheet.create({
     display: "none"
   },
   scroll: {
-    paddingTop: 28,
-    paddingHorizontal: 18,
-    paddingBottom: 28
+    paddingTop: Platform.OS === "ios" ? 52 : 22,
+    paddingHorizontal: 22,
+    paddingBottom: 36
   },
-  brand: {
-    color: colors.brass,
-    fontSize: 34,
-    fontWeight: "700",
-    letterSpacing: 0.4,
-    marginBottom: 6
-  },
-  screenTitle: {
-    color: colors.ink,
-    fontSize: 22,
-    fontWeight: "700",
-    marginBottom: 6
-  },
-  lead: {
-    color: colors.muted,
-    fontSize: 16,
-    lineHeight: 23,
-    marginBottom: 16
+  answer: {
+    marginTop: 8,
+    paddingTop: 18,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.line,
+    marginBottom: 4
   },
   cue: {
-    color: colors.moss,
-    fontSize: 15,
-    lineHeight: 21,
-    marginTop: 12
+    color: colors.muted,
+    fontSize: 13,
+    lineHeight: 19,
+    marginTop: 14,
+    paddingLeft: 12,
+    borderLeftWidth: 2,
+    borderLeftColor: colors.lineStrong
+  },
+  hear: {
+    marginTop: 16
+  },
+  idle: {
+    marginTop: 6,
+    marginBottom: 4
+  },
+  notice: {
+    marginTop: 8,
+    marginBottom: 8
+  },
+  noticeWarn: {
+    paddingLeft: 12,
+    borderLeftWidth: 2,
+    borderLeftColor: colors.clay
   },
   foot: {
+    color: colors.muted,
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 22,
+    paddingTop: 16,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.line
+  },
+  row: {
+    color: colors.ink,
+    fontSize: 16,
+    lineHeight: 24,
+    fontVariant: ["tabular-nums"],
+    paddingVertical: 4
+  },
+  note: {
+    color: colors.muted,
+    fontSize: 15,
+    lineHeight: 22
+  },
+  fixLine: {
+    color: colors.ink,
+    fontSize: 16,
+    lineHeight: 24,
+    fontVariant: ["tabular-nums"]
+  },
+  statusBlock: {
+    marginBottom: 18,
+    gap: 10
+  },
+  sectionLabel: {
+    color: colors.muted,
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: "600"
+  },
+  facts: {
+    marginBottom: 8
+  },
+  fact: {
+    paddingVertical: 12,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.line,
+    gap: 4
+  },
+  factLabel: {
+    color: colors.muted,
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: "500"
+  },
+  factValue: {
+    color: colors.ink,
+    fontSize: 16,
+    lineHeight: 23
+  },
+  group: {
+    marginTop: 6,
+    marginBottom: 8,
+    paddingTop: 16,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.line,
+    gap: 10
+  },
+  follow: {
+    marginTop: 4
+  },
+  peer: {
+    marginTop: 8
+  },
+  outbox: {
+    marginTop: 4,
+    gap: 4
+  },
+  readout: {
+    marginTop: 2,
+    marginBottom: 16,
+    paddingTop: 14,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.line
+  },
+  readoutWarn: {
+    paddingLeft: 12,
+    borderLeftWidth: 2,
+    borderLeftColor: colors.clay
+  },
+  consentRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    minHeight: 72,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.lineStrong,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    marginBottom: 18,
+    backgroundColor: "transparent"
+  },
+  consentOn: {
+    borderColor: "#5f7d56",
+    backgroundColor: "#161e18"
+  },
+  consentCopy: { flex: 1 },
+  consentTitle: {
+    color: colors.ink,
+    fontSize: 16,
+    lineHeight: 22,
+    fontWeight: "600"
+  },
+  hint: {
     color: colors.muted,
     fontSize: 13,
     lineHeight: 19,
     marginTop: 4
   },
-  label: {
+  speech: {
     color: colors.muted,
-    fontSize: 14,
-    marginBottom: 8
-  },
-  row: {
-    color: colors.ink,
-    fontSize: 17,
-    lineHeight: 26
-  },
-  kicker: {
-    color: colors.brass,
     fontSize: 13,
-    fontWeight: "700",
-    letterSpacing: 0.6,
-    textTransform: "uppercase",
-    marginBottom: 6
-  },
-  note: {
-    color: colors.muted,
-    fontSize: 15,
-    lineHeight: 22,
-    marginTop: 8
-  },
-  consentRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    backgroundColor: colors.card,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.line,
-    padding: 14,
+    lineHeight: 19,
     marginBottom: 14
   },
-  consentCopy: { flex: 1 },
-  consentTitle: {
+  liveNote: {
     color: colors.ink,
-    fontSize: 17,
-    fontWeight: "700",
-    lineHeight: 23
-  },
-  hint: {
-    color: colors.muted,
-    fontSize: 13,
-    lineHeight: 18,
-    marginTop: 4
+    fontSize: 14,
+    lineHeight: 20,
+    marginTop: -4,
+    marginBottom: 14
   },
   chips: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
-    marginBottom: 16
+    marginBottom: 18
   },
   chip: {
     minHeight: 44,
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: colors.line,
+    borderColor: colors.lineStrong,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.card
+    backgroundColor: "transparent"
   },
   chipOn: {
     backgroundColor: colors.brass,
@@ -1056,16 +1192,15 @@ const styles = StyleSheet.create({
   chipText: {
     color: colors.ink,
     fontSize: 15,
-    fontWeight: "700"
+    fontWeight: "600"
   },
   chipTextOn: { color: colors.brassInk },
   tabs: {
     flexDirection: "row",
-    borderTopWidth: 1,
-    borderTopColor: colors.line,
-    backgroundColor: "#161c18",
-    paddingBottom: 10,
-    paddingTop: 6
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.lineStrong,
+    backgroundColor: colors.bg,
+    paddingBottom: Platform.OS === "ios" ? 18 : 6
   },
   tab: {
     flex: 1,
@@ -1074,10 +1209,22 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   tabOn: {},
+  tabMark: {
+    position: "absolute",
+    top: 0,
+    width: 28,
+    height: 2,
+    borderRadius: 1,
+    backgroundColor: "transparent"
+  },
+  tabMarkOn: {
+    backgroundColor: colors.brass
+  },
   tabText: {
     color: colors.muted,
-    fontSize: 15,
-    fontWeight: "600"
+    fontSize: 13,
+    fontWeight: "600",
+    letterSpacing: 0.2
   },
   tabTextOn: {
     color: colors.brass

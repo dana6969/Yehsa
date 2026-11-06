@@ -1,24 +1,55 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 export const colors = {
-  bg: "#1c241e",
-  card: "#273029",
+  bg: "#141a16",
+  surface: "#1b2420",
   ink: "#f4f0e6",
-  muted: "#c5cbbd",
-  line: "#3d4a40",
+  muted: "#b7bfb2",
+  line: "#2a352e",
+  lineStrong: "#3d4c43",
   brass: "#e2b15a",
   brassInk: "#1c241e",
   moss: "#b7d0a4",
   clay: "#e7b5a0",
-  field: "#141a16"
+  field: "#0e1411"
 };
 
-export function Action({ label, onPress, disabled, tone = "brass", accessibilityHint }) {
+const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
+
+export function ScreenHeader({ title, lead }) {
+  return (
+    <View style={styles.header}>
+      <Text style={styles.wordmark}>Yehsa</Text>
+      <Text accessibilityRole="header" style={styles.title}>{title}</Text>
+      {lead ? <Text style={styles.lead}>{lead}</Text> : null}
+    </View>
+  );
+}
+
+export function StatusPill({ label, tone }) {
+  const palette = tone === "good"
+    ? { fg: colors.moss, bg: "#17211b", border: "#3f5646" }
+    : tone === "warn"
+      ? { fg: colors.clay, bg: "#241c19", border: "#6d5148" }
+      : { fg: colors.ink, bg: "transparent", border: colors.lineStrong };
+  return (
+    <View
+      accessibilityRole="text"
+      accessibilityLabel={label}
+      style={[styles.pill, { backgroundColor: palette.bg, borderColor: palette.border }]}
+    >
+      <View style={[styles.pillDot, { backgroundColor: palette.fg }]} />
+      <Text style={[styles.pillText, { color: palette.fg }]}>{label}</Text>
+    </View>
+  );
+}
+
+export function Action({ label, onPress, disabled, tone = "brass", accessibilityHint, style }) {
   const palette = tone === "quiet"
-    ? { bg: colors.card, ink: colors.ink, border: colors.line }
+    ? { bg: "transparent", ink: colors.ink, border: colors.lineStrong }
     : tone === "clay"
-      ? { bg: "#6e463c", ink: colors.ink, border: "#6e463c" }
+      ? { bg: "transparent", ink: colors.clay, border: "#8d675c" }
       : { bg: colors.brass, ink: colors.brassInk, border: colors.brass };
   return (
     <Pressable
@@ -30,9 +61,11 @@ export function Action({ label, onPress, disabled, tone = "brass", accessibility
       onPress={onPress}
       style={({ pressed }) => [
         styles.action,
+        webPointer,
         { backgroundColor: palette.bg, borderColor: palette.border },
         disabled && styles.disabled,
-        pressed && !disabled && styles.pressed
+        pressed && !disabled && styles.pressed,
+        style
       ]}
     >
       <Text style={[styles.actionText, { color: palette.ink }]}>{label}</Text>
@@ -41,6 +74,8 @@ export function Action({ label, onPress, disabled, tone = "brass", accessibility
 }
 
 export function HoldTalk({ label, hint, onPressIn, onPressOut, onPress, disabled, live }) {
+  const resting = disabled && !live;
+  const ink = live ? colors.brass : resting ? colors.muted : colors.brassInk;
   return (
     <Pressable
       accessibilityRole="button"
@@ -53,12 +88,14 @@ export function HoldTalk({ label, hint, onPressIn, onPressOut, onPress, disabled
       onPress={onPress}
       style={({ pressed }) => [
         styles.mic,
+        webPointer,
         live && styles.micLive,
+        resting && styles.micResting,
         disabled && styles.disabled,
         pressed && !disabled && styles.pressed
       ]}
     >
-      <Text style={[styles.micText, { color: live ? colors.ink : colors.brassInk }]}>{label}</Text>
+      <Text style={[styles.micText, { color: ink }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -72,13 +109,13 @@ export function Field({ label, value, onChangeText, placeholder, multiline, hint
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor="#8d978a"
+        placeholderTextColor="#8f9a8c"
         multiline={multiline}
         autoCorrect={false}
         autoCapitalize="none"
         style={[styles.input, multiline && styles.inputMulti]}
       />
-      {hint ? <Text style={styles.hint}>{hint}</Text> : null}
+      {hint ? <Text style={styles.fieldHint}>{hint}</Text> : null}
     </View>
   );
 }
@@ -87,30 +124,91 @@ export function Panel({ children }) {
   return <View style={styles.panel}>{children}</View>;
 }
 
-export function Prose({ children, tone }) {
+export function Prose({ children, tone, live }) {
   const color = tone === "warn" ? colors.clay : tone === "good" ? colors.moss : colors.ink;
-  return <Text style={[styles.prose, { color }]}>{children}</Text>;
+  return (
+    <Text accessibilityLiveRegion={live ? "polite" : undefined} style={[styles.prose, { color }]}>
+      {children}
+    </Text>
+  );
+}
+
+export function Quiet({ children, live }) {
+  return (
+    <Text accessibilityLiveRegion={live ? "polite" : undefined} style={styles.quiet}>
+      {children}
+    </Text>
+  );
 }
 
 const styles = StyleSheet.create({
+  header: {
+    marginBottom: 22
+  },
+  wordmark: {
+    color: colors.brass,
+    fontSize: 12,
+    fontWeight: "600",
+    letterSpacing: 2.2,
+    textTransform: "uppercase",
+    marginBottom: 8
+  },
+  title: {
+    color: colors.ink,
+    fontSize: 26,
+    lineHeight: 32,
+    fontWeight: "600",
+    letterSpacing: -0.4
+  },
+  lead: {
+    color: colors.muted,
+    fontSize: 16,
+    lineHeight: 24,
+    marginTop: 8
+  },
+  pill: {
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    minHeight: 32,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+    borderWidth: 1
+  },
+  pillDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4
+  },
+  pillText: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: "600",
+    letterSpacing: 0.2
+  },
   action: {
-    minHeight: 52,
+    minHeight: 48,
     borderRadius: 12,
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 16,
-    paddingVertical: 14,
-    marginBottom: 10
+    paddingVertical: 12,
+    marginBottom: 8
   },
   actionText: {
-    fontSize: 17,
-    fontWeight: "700"
+    fontSize: 16,
+    lineHeight: 22,
+    fontWeight: "600",
+    letterSpacing: 0.1,
+    textAlign: "center"
   },
-  disabled: { opacity: 0.45 },
-  pressed: { opacity: 0.8 },
+  disabled: { opacity: 0.5 },
+  pressed: { opacity: 0.82 },
   mic: {
-    minHeight: 64,
+    minHeight: 52,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.brass,
@@ -118,56 +216,62 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingVertical: 12,
     marginBottom: 8
   },
   micLive: {
-    backgroundColor: "#6e463c",
-    borderColor: colors.clay
+    backgroundColor: "#1c1810",
+    borderColor: colors.brass
+  },
+  micResting: {
+    backgroundColor: "transparent",
+    borderColor: colors.lineStrong
   },
   micText: {
-    fontSize: 18,
-    fontWeight: "700",
+    fontSize: 16,
+    lineHeight: 22,
+    fontWeight: "600",
     textAlign: "center"
   },
-  fieldWrap: { marginBottom: 14 },
+  fieldWrap: { marginBottom: 12 },
   label: {
     color: colors.muted,
-    fontSize: 14,
-    marginBottom: 6,
-    letterSpacing: 0.2
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: "500",
+    marginBottom: 8
   },
   input: {
     backgroundColor: colors.field,
     color: colors.ink,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.line,
-    minHeight: 52,
+    borderColor: colors.lineStrong,
+    minHeight: 48,
     paddingHorizontal: 14,
     paddingVertical: 12,
-    fontSize: 18
+    fontSize: 17
   },
   inputMulti: {
-    minHeight: 120,
+    minHeight: 96,
     textAlignVertical: "top"
   },
-  hint: {
+  fieldHint: {
     color: colors.muted,
     fontSize: 13,
-    marginTop: 6,
-    lineHeight: 18
+    lineHeight: 18,
+    marginTop: 6
   },
   panel: {
-    backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 14,
-    borderWidth: 1,
-    borderColor: colors.line
+    marginBottom: 16
   },
   prose: {
-    fontSize: 18,
+    fontSize: 17,
     lineHeight: 26
+  },
+  quiet: {
+    color: colors.muted,
+    fontSize: 15,
+    lineHeight: 22
   }
 });

@@ -167,17 +167,32 @@ Listening prefers an on-device recognizer and says when it has to use an OS or b
 
 Permission is requested on hold or tap, not at launch. Leaving the Ask tab closes the microphone and stops the voice. A device without a microphone can still be installed: the mic feature is optional, and typing still asks.
 
-### Testing Expo and Termux
+### Tester commands
+
+These are the commands for a consumer pass. The display name is Yehsa. The Expo slug stays `axionet`.
 
 ```bash
 npm install
+npm run web
+npx expo start
+npx eas build --profile preview --platform android
+```
+
+`npm run web` opens the same shell in a browser. `npx expo start` is the Expo dev server; the phone shows Yehsa, and Expo Go can run Ask, landscape math, consent, Expo Location, and Expo Speech. `npx eas build --profile preview --platform android` builds the internal APK. That preview profile does not replace the permission list, so the APK keeps what `app.json` already declares:
+
+- Microphone: `RECORD_AUDIO`, and the microphone hardware feature stays optional so a phone without one can still install. Listening is requested on hold or tap, not at launch.
+- Speech: the `expo-speech-recognition` plugin, plus the iOS microphone and speech-recognition usage strings. A missing recognizer stays unavailable. Typed Ask still runs.
+- Location: `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION`, when-in-use only. Background location is off. The screen reads a fix only after consent and a tap on **Try satellite lock**.
+- Bluetooth: `BLUETOOTH`, `BLUETOOTH_ADMIN`, `BLUETOOTH_CONNECT`, and `BLUETOOTH_SCAN`. Bluetooth LE stays optional hardware. A missing radio stays Degraded and does not invent peers. A scan does not drop a link already held.
+
+The checks that guard those rules:
+
+```bash
 npm run test:knowledge
 npm run test:mesh
-npx expo start           # Expo dev server. The app name on the phone is Yehsa.
-npm run web              # same shell in a browser
-npm run android          # expo start --android
-npm run ios              # expo start --ios
 ```
+
+`npm run android` and `npm run ios` are `expo start` for those platforms. They are not the preview APK.
 
 What a tester should expect:
 
@@ -206,6 +221,6 @@ The project id is already in `app.json` (`extra.eas.projectId`). The first Andro
 
 `npx expo start` is still the dev server. Expo Go can run Ask, the landscape math, consent, Expo Location, and Expo Speech. It cannot run the native Bluetooth module or `expo-speech-recognition`. Those modules are in the preview binary. Full native voice, like the radio, needs an EAS preview (or another dev client built from this project), not Expo Go.
 
-`npm start` is the same Expo entry (`babel.config.js`, `babel-preset-expo`). `App.js` and `App.tsx` both open the Yehsa home and still call `useAxionetRuntimeGuarantee`. That hook is a documented stub: it does not keep the app alive, and it is not a biometric or encryption feature. `assets/icon.png` is a placeholder because the original icon was not committed.
+`npm start` is the same Expo entry (`babel.config.js`, `babel-preset-expo`). `App.js` and `App.tsx` both open the Yehsa home and still call `useAxionetRuntimeGuarantee`. That hook is a documented stub: it does not keep the app alive, and it is not a biometric or encryption feature. The launcher icon, adaptive icon, splash, and web favicon are the Yehsa mark (`assets/icon.png`, `assets/adaptive-icon.png`, `assets/splash.png`, `assets/favicon.png`) on the field color `#141a16`. The slug in `app.json` stays `axionet`.
 
 `node App.js` still fails on JSX; Metro is what compiles the shell. The Node agent paths above remain the owner-file, radio, and full-dictionary system. Symbol benchmarks stay separate and are not started by the phone shell.
