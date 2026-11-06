@@ -33,6 +33,49 @@ function optionalAltitude(raw) {
   return altitude;
 }
 
+// Expo Location reports accuracy in meters. A coarser reading is not a lock.
+export const EXPO_LOCK_ACCURACY_M = 100;
+
+/**
+ * One Expo reading. High accuracy can lock. A missing or coarse accuracy does not.
+ * The reason never includes coordinates.
+ */
+export function decideExpoReading(coords) {
+  if (!coords || typeof coords !== "object" || Array.isArray(coords)) {
+    return { fix: null, reason: "Expo Location did not return a fix. Nothing was stored." };
+  }
+  const accuracy = Number(coords.accuracy);
+  if (!Number.isFinite(accuracy)) {
+    return { fix: null, reason: "Expo Location did not report an accuracy. Nothing was stored." };
+  }
+  if (accuracy > EXPO_LOCK_ACCURACY_M) {
+    return {
+      fix: null,
+      reason: `Expo Location reported about ${Math.round(accuracy)} m. A lock needs ${EXPO_LOCK_ACCURACY_M} m or better. Nothing was stored.`
+    };
+  }
+  const fix = normalizeFix(coords, "expo-location");
+  if (!fix) {
+    return { fix: null, reason: "Expo Location did not return a usable fix. Nothing was stored." };
+  }
+  return { fix, reason: null };
+}
+
+/**
+ * Keep the tightest sample from one tap. The first sample that can lock wins
+ * only when nothing tighter is already in the list; the best accuracy is used.
+ */
+export function pickAccurateSample(samples) {
+  let best = null;
+  for (const coords of samples || []) {
+    if (!coords || typeof coords !== "object") continue;
+    const accuracy = Number(coords.accuracy);
+    if (!Number.isFinite(accuracy)) continue;
+    if (!best || accuracy < Number(best.accuracy)) best = coords;
+  }
+  return decideExpoReading(best);
+}
+
 /**
  * termux-location -p gps prints JSON. Missing provider is treated as gps,
  * matching the Termux helper. Any other provider is refused.

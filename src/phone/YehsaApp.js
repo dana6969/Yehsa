@@ -39,6 +39,7 @@ import {
   statusLabel,
   unlockPosition
 } from "../../symbolic/phone_position.js";
+import { EXPO_LOCK_ACCURACY_M } from "../../symbolic/position_fix.js";
 import { chooseYehsaDevice, connectRemembered, scanWithPlatform, transmitNote } from "./ble_provider.js";
 import { bindThisInstall } from "./install_owner.js";
 import { readPlatformFix } from "./location_provider.js";
@@ -114,7 +115,7 @@ export default function YehsaApp() {
           pointerEvents={tab === "ask" ? "auto" : "none"}
           accessibilityElementsHidden={tab !== "ask"}
         >
-          <AskPane session={session} />
+          <AskPane session={session} owner={owner} />
         </View>
         <View
           style={[styles.pane, tab !== "land" && styles.hidden]}
@@ -165,7 +166,7 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ session }) {
+function AskPane({ session, owner }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [answer, setAnswer] = useState(null);
@@ -251,7 +252,7 @@ function AskPane({ session }) {
         </Panel>
       ) : null}
       <Text style={styles.foot}>
-        {`Packaged dictionary: ${phoneCorpusMeta.headwords} headwords and ${phoneCorpusMeta.medicalNames} medical names that overlap the field notes. ${phoneCorpusMeta.honest} Nothing you ask is saved as a profile.`}
+        {`Packaged dictionary: ${phoneCorpusMeta.headwords} headwords and ${phoneCorpusMeta.medicalNames} medical names. ${phoneCorpusMeta.honest} ${phoneCorpusMeta.fieldNoteHonest} ${phoneCorpusMeta.medicalHonest} Nothing you ask is saved as a profile. ${owner?.recognized ? `This install is bound to this device (${owner.source}). Exterior access is denied.` : (owner?.reason || "Binding this install to this device.")}`}
       </Text>
     </ScrollView>
   );
@@ -464,7 +465,8 @@ function PositionPane({ position, setPosition, onConsent }) {
         {position.status === "locked" && position.fix ? (
           <Text style={styles.note}>
             Held {heldPhrase(position.source)}: {position.fix.latitude.toFixed(5)}, {position.fix.longitude.toFixed(5)}
-            {position.fix.altitude != null ? `, ${position.fix.altitude} m` : ""}. Not shared.
+            {position.fix.altitude != null ? `, ${position.fix.altitude} m` : ""}
+            {position.fix.accuracy != null ? `. Accuracy about ${Math.round(position.fix.accuracy)} m` : ""}. Not shared.
           </Text>
         ) : null}
       </Panel>
@@ -517,7 +519,7 @@ function PositionPane({ position, setPosition, onConsent }) {
         />
       </Panel>
       <Text style={styles.foot}>
-        Consent stays off until you turn it on. This button does not run by itself. termux-location is used when that command is bridged in; otherwise Expo Location. A missing fix stays Degraded. Share still does not transmit from this screen.
+        {`Consent stays off until you turn it on. This button does not run by itself. termux-location is used when that command is bridged in; otherwise Expo Location at high accuracy. A reading coarser than ${EXPO_LOCK_ACCURACY_M} m, a missing permission, or a missing radio stays Degraded. Share still does not transmit from this screen.`}
       </Text>
     </ScrollView>
   );
@@ -584,7 +586,7 @@ function MeshPane({ mesh, setMesh, owner, position }) {
     }
     setNote("");
     if (queued.session.link?.primary?.radio === true) {
-      const sent = await transmitNote(queued.item.text);
+      const sent = await transmitNote(queued.item.text, queued.session.link?.primary);
       if (sent.sent === true) {
         setMesh((current) => {
           const next = current.outbox.map((item) => (
@@ -654,9 +656,14 @@ function MeshPane({ mesh, setMesh, owner, position }) {
         <Text style={styles.kicker}>Offline phone</Text>
         <Prose>
           {positionOff
-            ? "Position lock is off. You can still keep a short note here."
+            ? "Position is Unlocked. You can still keep a short note here. It is not a call and it is not billed."
             : "Position is held. This note does not share it."}
         </Prose>
+        <Text style={styles.note}>
+          {mesh.link?.primary?.radio === true
+            ? "A link is held. The note is written there only when that peer exposes the Yehsa note characteristic. Otherwise it stays on this phone."
+            : "No link is held. The note stays on this phone."}
+        </Text>
         <View style={{ height: 12 }} />
         <Field
           label="Note for the held link"
@@ -678,7 +685,7 @@ function MeshPane({ mesh, setMesh, owner, position }) {
         ) : null}
       </Panel>
       <Text style={styles.foot}>
-        Termux still uses termux-bluetooth-scan and termux-bluetooth-connect. This screen uses that bridge when it is present, and Web Bluetooth when the browser has it. No cipher is claimed.
+        Termux still uses termux-bluetooth-scan and termux-bluetooth-connect. Android and iOS use the phone radio when this build includes it. The browser keeps Web Bluetooth. A missing radio stays Degraded. No cipher is claimed.
       </Text>
     </ScrollView>
   );

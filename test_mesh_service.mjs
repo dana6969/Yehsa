@@ -320,4 +320,19 @@ test("the phone mesh adapter scans only real peers and keeps the phone hook with
   const denied = queueServiceText(initialMeshSession(), "hello");
   assert.equal(denied.ok, false);
   assert.match(denied.reason, /ownership/);
+
+  const dropped = applyScan(joined.session, {
+    available: true,
+    invoked: true,
+    peers: [{ name: "YEHSA-near", address: "AA:BB:CC:DD:EE:01", rssi: -40 }],
+    lostIds: ["AA:BB:CC:DD:EE:01"]
+  });
+  assert.equal(dropped.link.primary, null);
+  assert.equal(dropped.interfered, true);
+  assert.equal(dropped.phone.dependsOnPosition, false);
+  assert.equal(dropped.phone.available, true);
+  assert.match(dropped.reason, /did not send a disconnect/);
+  assert.match(dropped.reason, /No cipher/);
+  assert.equal(dropped.peers[0].owner, false);
+  assert.equal(dropped.peers[0].relation, "exterior-mesh-peer");
 });

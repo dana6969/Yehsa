@@ -8,12 +8,22 @@
     "android": {
       "package": "com.dana6969.axi0net",
       "versionCode": 1,
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "BLUETOOTH",
+        "BLUETOOTH_ADMIN",
+        "BLUETOOTH_CONNECT",
+        "BLUETOOTH_SCAN"
+      ]
     },
     "ios": {
       "bundleIdentifier": "com.dana6969.axi0net",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Yehsa uses your location only after you consent to hold a position."
+        "NSLocationWhenInUseUsageDescription": "Yehsa uses your location only after you consent to hold a position.",
+        "NSBluetoothAlwaysUsageDescription": "Yehsa scans for nearby Yehsa peers only after you tap Scan. It does not scan at launch.",
+        "NSBluetoothPeripheralUsageDescription": "Yehsa connects to a Yehsa peer you choose. It does not disconnect a link already held."
       }
     },
     "plugins": [
@@ -24,7 +34,8 @@
           "isAndroidBackgroundLocationEnabled": false,
           "isIosBackgroundLocationEnabled": false
         }
-      ]
+      ],
+      "./plugins/withYehsaRadio.js"
     ],
     "extra": {
       "eas": {

@@ -2,7 +2,7 @@
 
 Yehsa (also spelled Yesha) is an experimental offline symbolic agent. The phone app a person opens is Yehsa (`App.js`, `App.tsx`, `index.js`). The npm package name and the Expo slug stay Axi0net so the existing shell and EAS project keep their technical ids. The agent itself is local Node scripts plus Termux/Android helpers for speech and Bluetooth. Optional HTTP and TCP listeners map allowlisted symbols to local actions. They are not open mesh ingress.
 
-Most of this repository is local dictionary and trainer data under `symbolic_memory/`. Mesh, BLE, and radio modules are experimental scaffolds. Many of them only log a line. They do not talk to live radios.
+Most of this repository is local dictionary and trainer data under `symbolic_memory/`. The Termux mesh helpers call `termux-bluetooth-scan` and `termux-bluetooth-connect` when those binaries exist, and they degrade when they do not. An EAS preview build uses the phone's Bluetooth radio through `react-native-ble-plx`. Many older symbolic radio files still only log a line.
 
 The root `package.json` is CommonJS, matching the Expo lockfile. ESM code stays in `.mjs` files and in the `symbolic/` and `yesha_modules/` packages (`"type": "module"`). `yehsa_modules/` re-exports the canonical `yesha_modules/` path.
 
@@ -117,10 +117,12 @@ The running agent reads these local stores. They are not only files sitting next
 npm run dictionary:load     # parse dictionary_memory.json and print the count
 npm run books:ingest        # rebuild symbolic_memory/books_index.json from drop folders
 npm run dictionary:build    # merge Webster and the WordNet stub into full_dictionary.json
-npm run dictionary:phone   # rebuild the Expo packaged subset; does not delete the full files
+npm run dictionary:phone   # rebuild the Expo pack from the same merge as npm run ask; does not delete the full files
 ```
 
 `dictionary:build` rewrites `full_dictionary.json`. It keeps existing keys and adds Webster entries. Run it only when you want that merge.
+
+`dictionary:phone` writes `symbolic_memory/phone_lexical.js` and `symbolic_memory/phone_medical.js`. The lexical pack is the ask merge: the WordNet stub, `dictionary_memory.json`, `full_dictionary.json`, then Webster for headwords those files do not already define. Glosses are not shortened. The medical pack is every name in `medical_terms_only.txt`, `codesante_en.txt`, and `glutanimate.txt`. Herbology, medical reference, survival, and landscape notes already ride along in `books_index.json`. The source files stay on disk.
 
 `yesha.js` asks the knowledge index on each trigger. A full question is parsed first (`symbolic/ask.js`, `npm run ask -- "your question"`), which prints the answer as plain prose. `recallKnowledge` still gathers herbology, survival, landscape, medical, math, and dictionary evidence, then `reasonAnswer` deduces one reply: the use or care step first, then the limit. When the question includes coordinates, or a consented position lock and a from-here course, `ask` adds one sentence from the offline landscape tools. An exterior caller does not get that sentence. A care question that names a plant, a bite, or both joins those notes instead of listing ranked glosses. An incidental dictionary headword does not become the answer. `getMappedAction` stays a single map read and does not search these corpora. The trainer file and the learning queue are left in place.
 
@@ -138,11 +140,11 @@ See `symbolic_books/README.md` for how to drop another `.txt` or verse `.json` i
 
 The home screen says Yehsa. It is the offline interface for someone who does not want a terminal. Four tabs share the same ranking, position rules, and mesh peer rules as the Termux commands. Platform differences sit in adapters (`src/phone/location_provider.js`, `src/phone/ble_provider.js`, `src/phone/install_owner.js`). The screen does not pretend a sensor or a radio worked when the platform has no API for it.
 
-- **Ask** — same parse, rank, and `reasonAnswer` path as `npm run ask`. The bundle includes the field notes plus a packaged dictionary (`symbolic_memory/phone_lexical.js`, `symbolic_memory/phone_medical.js`): headwords that overlap those notes, longer headwords that contain them, and plant-use glosses. Rebuild it with `npm run dictionary:phone` after you change the corpora. It is not the full Webster dump. `dictionary_memory.json`, `full_dictionary.json`, `webster_raw.json`, and the long medical name lists stay on disk for `npm run ask`. A wording cue appears beside the answer when emotion was read. It does not replace the note. This screen does not write the learning profile.
+- **Ask** — same parse, rank, and `reasonAnswer` path as `npm run ask`. The bundle includes the field notes plus the packaged merge (`symbolic_memory/phone_lexical.js`, `symbolic_memory/phone_medical.js`): the same headwords `npm run ask` reads, and the full medical name lists. Rebuild it with `npm run dictionary:phone` after you change the corpora. `dictionary_memory.json`, `full_dictionary.json`, `webster_raw.json`, and the medical name lists stay on disk. A wording cue appears beside the answer when emotion was read. It does not replace the note. This screen does not write the learning profile. If a wording cue is unclear, the note is still returned.
 - **Land** — distance and bearing, declination from a number you type, waypoints, a track summary, and a rough sunrise. Coordinates are typed. "Use locked position" works only after consent and a held fix. There is no city or point-of-interest search.
-- **Position** — opt-in. The control starts off and nothing locks until you turn it on and then tap **Try satellite lock**. Status is Unlocked, Degraded, or Locked. If a Termux bridge exposes `termux-location`, that GPS read is used and a network provider is refused. Otherwise the screen asks Expo Location (high accuracy) for one fix. Permission is requested on that tap, not at launch. A missing permission, a missing API, or a bad read is Degraded and does not invent coordinates. Typed coordinates still lock after consent. Share is a separate button and does not transmit; the send stays `node symbolic/position_lock.js --consent --share` on the phone.
-- **Mesh** — **Scan for Yehsa peers** runs a real probe. A Termux BLE bridge is used when present. A browser with Web Bluetooth uses a passive LE scan when `requestLEScan` exists, or a Yehsa-filtered chooser when it does not. No Bluetooth API means Degraded, and the screen does not invent peers. Connecting a second peer does not replace a link already held. Peers stay exterior and cannot run symbols here. No cipher is claimed.
-- **Offline phone** — on the Mesh tab, a short note can be kept on the device whether or not position is locked. It is not described as transmitted unless a bridge send reports that it queued the text on the held link. There is no cellular call and no bill.
+- **Position** — opt-in. The control starts off and nothing locks until you turn it on and then tap **Try satellite lock**. Status is Unlocked, Degraded, or Locked. If a Termux bridge exposes `termux-location`, that GPS read is used and a network provider is refused. Otherwise the screen asks Expo Location for one high-accuracy fix (`BestForNavigation`, then a short watch on that same tap). A fix coarser than 100 m is not stored. Permission is requested on that tap, not at launch. A missing permission, location services that are off, a missing API, or a bad read is Degraded and does not invent coordinates. An existing lock is kept when a later read fails. Typed coordinates still lock after consent. Share is a separate button and does not transmit; the send stays `node symbolic/position_lock.js --consent --share` on the phone.
+- **Mesh** — **Scan for Yehsa peers** runs a real probe. A Termux BLE bridge is used when present. On Android and iOS, an EAS build uses `react-native-ble-plx` (low-power scan, connect without cancelling a different link). A browser with Web Bluetooth uses a passive LE scan when `requestLEScan` exists, or a Yehsa-filtered chooser when it does not. Expo Go and a machine with no radio stay Degraded, and the screen does not invent peers. Connecting a second peer does not replace a link already held. If a link that was connected before the scan is gone afterward, the screen says so and does not claim Yehsa disconnected it. Peers stay exterior and cannot run symbols here. No cipher is claimed.
+- **Offline phone** — on the Mesh tab, a short note can be kept on the device whether or not position is locked. It is not described as transmitted unless a bridge send, a native write, or a Web Bluetooth write to the Yehsa note characteristic reports that it queued the text on the held link. There is no cellular call and no bill.
 
 Each Expo install binds to that device: Android id when Expo Application can read it, the iOS vendor id on iOS, or a stored install id in the browser. The record is `ownership: local-device`, `exterior: deny`. A stored record whose device mark does not match is left in place and denied. That store is not `symbolic_memory/device_owner.json`. Termux still mints that file from `settings get secure android_id`.
 
@@ -164,14 +166,29 @@ npm run ios              # expo start --ios
 
 What a tester should expect:
 
-| Action | Expo (`npx expo start`, including web) | Termux |
-| --- | --- | --- |
-| Ask a field question | Same prose as `npm run ask` for notes the packaged dictionary covers. The footer states the headword count and that Webster is not bundled. | `npm run ask` reads the full dictionaries and medical name lists. |
-| Position, consent off | Stays Unlocked. The satellite button does not read a fix. | `node symbolic/position_lock.js` without `--consent` does not read a fix. |
-| Position, consent on, then Try satellite lock | Expo Location when there is no Termux bridge. Grant location to reach Locked. Deny it, or run where geolocation is missing, and the status stays Degraded. | `node symbolic/position_lock.js --consent` uses `termux-location -p gps`. A missing binary is Degraded. |
-| Mesh scan | Scan or the Yehsa chooser when Bluetooth exists. Otherwise the tab says discovery is degraded and lists no peers. | `npm run mesh:discover` / `npm run mesh:join` with `termux-bluetooth-scan` and `termux-bluetooth-connect`. A missing helper is degraded and does not drop a held link. |
-| Offline phone note | Available after the install binds, including while position is Unlocked. The note stays on the phone unless a bridge send accepts it. | `npm run mesh:phone` and `node utils/mesh_service.mjs send ...` queue on the held link without a position lock. |
-| Device bind | Happens when the shell opens. Web uses a browser install id and says it is not an Android id. | `symbolic/device_owner.js` via `settings get secure android_id`. A Linux machine with no phone id is refused. |
+| Action | Expo web | Expo Go (`npx expo start` on a phone) | EAS preview APK / iOS binary | Termux |
+| --- | --- | --- | --- | --- |
+| Ask a field question | Same prose as `npm run ask` for the packaged merge, including Webster headwords the smaller files do not already define, the full medical name lists, and the field notes. The footer states the counts. | Same bundle as web. | Same bundle as web. | `npm run ask` reads the corpora from disk. The prose matches the phone for those questions. |
+| Position, consent off | Stays Unlocked. The satellite button does not read a fix. | Same. | Same. | `node symbolic/position_lock.js` without `--consent` does not read a fix. |
+| Position, consent on, then Try satellite lock | Expo Location through the browser. A fix coarser than 100 m stays Degraded. Grant location to reach Locked when the browser can supply that accuracy. | Expo Location, which Expo Go includes. High accuracy can reach Locked and hold. Deny permission, or turn location services off, and the status stays Degraded. | Same Expo Location path as Expo Go, in the preview binary. | `node symbolic/position_lock.js --consent` uses `termux-location -p gps`. A missing binary is Degraded. |
+| Mesh scan | Web Bluetooth scan or the Yehsa chooser when the browser has it. Otherwise Degraded, and no peers are invented. | Degraded. Expo Go does not include `react-native-ble-plx`. No peers are invented. | Native low-power scan and connect on Android and iOS. A missing radio or a denied permission stays Degraded. A held link is not cancelled by the scan. | `npm run mesh:discover` / `npm run mesh:join` with `termux-bluetooth-scan` and `termux-bluetooth-connect`. A missing helper is degraded and does not drop a held link. |
+| Offline phone note | Available after the install binds, including while position is Unlocked. The note stays on the phone unless a write to the held link accepts it. | Same. The note stays on the phone. | Same, and a connected peer that exposes the Yehsa note characteristic can take the text. Otherwise it stays on the phone. | `npm run mesh:phone` and `node utils/mesh_service.mjs send ...` queue on the held link without a position lock. |
+| Device bind | A browser install id, stored in the shell. A copied owner record whose device mark does not match is denied and left in place. | Android id, or the iOS vendor id, from Expo Application. A copied mismatched record stays denied. | Same native ids as Expo Go. | `symbolic/device_owner.js` via `settings get secure android_id`. A Linux machine with no phone id is refused. |
+
+## EAS preview
+
+The display name is Yehsa. The Expo slug stays `axionet`. `eas.json` profile `preview` is an internal build. Android is an APK (`buildType: apk`). iOS is a device build and needs Apple credentials; without them, use the Android APK.
+
+```bash
+npm install
+npx eas login
+npx eas build --profile preview --platform android
+npx eas build --profile preview --platform ios
+```
+
+The project id is already in `app.json` (`extra.eas.projectId`). The first Android build asks EAS to create or reuse the project for slug `axionet`. When it finishes, EAS prints a URL for the APK. Install that APK on the phone. It is not a Play Store listing. The iOS command is the same profile; EAS will stop if this Apple account has no distribution certificate.
+
+`npx expo start` is still the dev server. Expo Go can run Ask, the landscape math, consent, and Expo Location. It cannot run the native Bluetooth module. That module is in the preview binary.
 
 `npm start` is the same Expo entry (`babel.config.js`, `babel-preset-expo`). `App.js` and `App.tsx` both open the Yehsa home and still call `useAxionetRuntimeGuarantee`. That hook is a documented stub: it does not keep the app alive, and it is not a biometric or encryption feature. `assets/icon.png` is a placeholder because the original icon was not committed.
 

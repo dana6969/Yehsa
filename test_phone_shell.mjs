@@ -4,7 +4,10 @@ import test from "node:test";
 import { createHash } from "node:crypto";
 import { ask } from "./symbolic/ask.js";
 import { askField } from "./symbolic/phone_field.js";
-import { phoneCorpusMeta, phoneLexical } from "./symbolic/phone_corpus.js";
+import { lookupPhoneMedical, phoneCorpusMeta, phoneLexical, phoneMedicalSize } from "./symbolic/phone_corpus.js";
+import { lookupMedical } from "./symbolic/knowledge_index.js";
+import { EXPO_LOCK_ACCURACY_M, pickAccurateSample } from "./symbolic/position_fix.js";
+import { chooseRadioRoute } from "./symbolic/radio_adapter.js";
 import { meshScreenStatus } from "./symbolic/phone_mesh.js";
 import { evaluateOwner, sha256Hex } from "./symbolic/owner_bind.js";
 import { applySatelliteReading, chooseLocationRoute } from "./symbolic/position_adapter.js";
@@ -207,21 +210,49 @@ test("mesh status before a scan is degraded and does not invent a radio", () => 
   assert.doesNotMatch(JSON.stringify(status), /ready to transmit|radio is up|encrypted/i);
 });
 
-test("the packaged dictionary is a deep subset and the full corpora stay", () => {
-  assert.equal(phoneCorpusMeta.scope, "packaged-subset");
-  assert.equal(phoneCorpusMeta.websterBundled, false);
+test("the packaged dictionary matches ask and the full corpora stay", () => {
+  assert.equal(phoneCorpusMeta.scope, "ask-merge");
+  assert.equal(phoneCorpusMeta.websterBundled, true);
   assert.equal(phoneCorpusMeta.fullCorporaRemain, true);
-  assert.ok(phoneCorpusMeta.headwords >= 10000);
+  assert.equal(phoneCorpusMeta.fieldNotesComplete, true);
+  assert.ok(phoneCorpusMeta.headwords >= 100000);
+  assert.ok(phoneCorpusMeta.medicalNames >= 170000);
+  assert.equal(phoneLexical().size, phoneCorpusMeta.headwords);
+  assert.equal(phoneMedicalSize(), phoneCorpusMeta.medicalNames);
   assert.ok(phoneLexical().has("willow"));
   assert.ok(phoneLexical().has("salicin"));
+  assert.ok(phoneLexical().has("tourniquet"));
+  assert.ok(phoneLexical().has("frostbite"));
+  assert.ok(phoneLexical().has("yarrow"));
   assert.ok(fs.statSync("symbolic_memory/webster_raw.json").size > 1000000);
   assert.ok(fs.statSync("symbolic_memory/full_dictionary.json").size > 1000000);
-  assert.ok(fs.existsSync("symbolic_memory/dictionary_memory.json"));
-  const polarity = askField("What is polarity?", passages);
-  assert.equal(polarity.answered, true);
-  assert.equal(polarity.kind, "dictionary");
-  assert.equal(polarity.text, ask("What is polarity?").text);
-  assert.match(polarity.text.toLowerCase(), /opposite|condition/);
+  assert.ok(fs.statSync("symbolic_memory/dictionary_memory.json").size > 1000000);
+  assert.ok(fs.statSync("symbolic_memory/medical_terms_only.txt").size > 100000);
+  assert.ok(fs.statSync("codesante_en.txt").size > 1000000);
+  assert.ok(fs.statSync("glutanimate.txt").size > 100000);
+  for (const term of ["tourniquet", "iodine", "willow", "water"]) {
+    assert.deepEqual(lookupPhoneMedical(term), lookupMedical(term), term);
+  }
+  assert.equal(lookupPhoneMedical("not-a-real-term-zzqq"), null);
+  const questions = [
+    "What is polarity?",
+    "What is a tourniquet?",
+    "What is frostbite?",
+    "What is dehydration?",
+    "What is yarrow?",
+    "What is charcoal?",
+    "What is a splint?",
+    "What is iodine?"
+  ];
+  for (const raw of questions) {
+    const phone = askField(raw, passages);
+    const cli = ask(raw);
+    assert.equal(phone.answered, cli.answered, raw);
+    assert.equal(phone.text, cli.text, raw);
+  }
+  assert.match(phoneCorpusMeta.honest, /Webster/);
+  assert.match(phoneCorpusMeta.honest, /stay on disk/);
+  assert.match(phoneCorpusMeta.fieldNoteHonest, /full field notes/);
 });
 
 test("satellite lock follows the provider and never locks without consent", () => {
@@ -276,6 +307,33 @@ test("satellite lock follows the provider and never locks without consent", () =
   assert.equal(kept.source, "expo-location");
   assert.equal(kept.fix.latitude, 45.1);
   assert.equal(kept.shared, false);
+
+  const coarse = applySatelliteReading(consented, {
+    route: "expo-location",
+    fix: { latitude: 45.1, longitude: -69.2, accuracy: EXPO_LOCK_ACCURACY_M + 50 }
+  });
+  assert.equal(coarse.status, "degraded");
+  assert.equal(coarse.fix, null);
+  assert.equal(JSON.stringify(coarse).includes("45.1"), false);
+  assert.match(coarse.note, new RegExp(String(EXPO_LOCK_ACCURACY_M)));
+
+  const tight = pickAccurateSample([
+    { latitude: 1, longitude: 2, accuracy: 180 },
+    { latitude: 3, longitude: 4, accuracy: 12 }
+  ]);
+  assert.equal(tight.fix.latitude, 3);
+  assert.equal(tight.fix.accuracy, 12);
+  assert.equal(tight.fix.source, "expo-location");
+  const rejected = pickAccurateSample([{ latitude: 9, longitude: 8, accuracy: 400 }]);
+  assert.equal(rejected.fix, null);
+  assert.equal(JSON.stringify(rejected).includes("9"), false);
+
+  const locationSrc = fs.readFileSync("src/phone/location_provider.js", "utf8");
+  assert.match(locationSrc, /BestForNavigation/);
+  assert.match(locationSrc, /watchPositionAsync/);
+  assert.match(locationSrc, /termuxLocation/);
+  assert.doesNotMatch(locationSrc, /getLastKnownPositionAsync/);
+  assert.doesNotMatch(locationSrc, /useEffect/);
 });
 
 test("expo install bind is per-device and does not rewrite a foreign record", async () => {
@@ -329,4 +387,58 @@ test("expo install bind is per-device and does not rewrite a foreign record", as
   assert.equal(denied.write, false);
   assert.match(denied.reason, /not this phone/);
   assert.equal(JSON.parse(await store.get("yehsa.device_owner.v1")).deviceMark, "0".repeat(64));
+
+  const ownerSrc = fs.readFileSync("src/phone/install_owner.js", "utf8");
+  assert.match(ownerSrc, /expo-application/);
+  assert.match(ownerSrc, /getAndroidId|androidId/);
+  assert.match(ownerSrc, /getIosIdForVendorAsync/);
+  assert.doesNotMatch(ownerSrc, /device_owner\.json/);
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.match(home, /bound to this device/);
+  assert.match(home, /Exterior access is denied/);
+});
+
+test("native ble is real on android and ios and a scan does not cancel a held link", () => {
+  const native = fs.readFileSync("src/phone/ble_native.native.js", "utf8");
+  const stub = fs.readFileSync("src/phone/ble_native.js", "utf8");
+  const provider = fs.readFileSync("src/phone/ble_provider.js", "utf8");
+  assert.match(native, /react-native-ble-plx/);
+  assert.match(native, /LowPower/);
+  assert.doesNotMatch(native, /LowLatency/);
+  assert.doesNotMatch(native, /destroy\(/);
+  const scanBody = native.slice(
+    native.indexOf("export async function scanNative"),
+    native.indexOf("export async function connectNative")
+  );
+  assert.doesNotMatch(scanBody, /cancelDeviceConnection/);
+  const connectBody = native.slice(
+    native.indexOf("export async function connectNative"),
+    native.indexOf("export async function writeNativeNote")
+  );
+  assert.match(connectBody, /cancelDeviceConnection/);
+  assert.match(connectBody, /The link already in use was left alone/);
+  assert.match(stub, /No peers were invented/);
+  assert.equal(stub.includes("react-native-ble-plx"), false);
+  assert.match(provider, /chooseRadioRoute/);
+  assert.match(provider, /requestLEScan/);
+  assert.match(provider, /MESH_NOTE_UUID/);
+  assert.equal(chooseRadioRoute({
+    termuxAvailable: true,
+    nativeOs: true,
+    nativeModule: true,
+    webBluetooth: true
+  }), "termux-bluetooth");
+  assert.equal(chooseRadioRoute({ nativeOs: true, nativeModule: true, webBluetooth: true }), "native-ble");
+  assert.equal(chooseRadioRoute({ nativeOs: true, nativeModule: false, webBluetooth: true }), "none");
+  assert.equal(chooseRadioRoute({ webBluetooth: true }), "web-bluetooth");
+  assert.equal(chooseRadioRoute({}), "none");
+
+  const manifest = JSON.parse(fs.readFileSync("app.json", "utf8"));
+  assert.equal(manifest.expo.name, "Yehsa");
+  assert.equal(manifest.expo.slug, "axionet");
+  assert.ok(manifest.expo.android.permissions.includes("BLUETOOTH_SCAN"));
+  assert.match(manifest.expo.ios.infoPlist.NSBluetoothAlwaysUsageDescription, /Scan/);
+  const eas = JSON.parse(fs.readFileSync("eas.json", "utf8"));
+  assert.equal(eas.build.preview.distribution, "internal");
+  assert.equal(eas.build.preview.android.buildType, "apk");
 });
