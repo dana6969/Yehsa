@@ -2,7 +2,7 @@
 // getMappedAction does not call this. Symbol dispatch stays a direct map read.
 
 import { reasonAnswer, shouldConnect } from "./answer_reasoner.js";
-import { queryTokens, sourceKind } from "./book_search.js";
+import { queryTokens, sourceKind, textHasToken } from "./book_search.js";
 import { parseQuestion } from "./question_parse.js";
 
 function clip(text, limit) {
@@ -73,20 +73,20 @@ export function rankKnowledge(parsed, corpora) {
     for (const [key, text] of lexical) {
       const gloss = String(text).toLowerCase();
       const namedInQuestion = key === phrase || tokens.includes(key);
-      const related = namedInQuestion || (longest && key.includes(longest));
+      const related = namedInQuestion || (longest && textHasToken(key, longest));
       const plantUse = (parsed.intent === "use" || tokens.some((token) => PLANT_PARTS.has(token)))
         && subject.length >= 5
         && !namedInQuestion
-        && gloss.includes(subject)
+        && textHasToken(gloss, subject)
         && /\b(salix|analgesic|astringent|tannin|poultice|from a |from the )\b/.test(gloss);
       if (!related && !plantUse) continue;
       let score = 18;
       if (key === phrase) score += 70;
       else if (key === longest) score += 46;
       else if (tokens.includes(key)) score += 22;
-      else if (longest && key.includes(longest)) score += 28;
+      else if (longest && textHasToken(key, longest)) score += 28;
       else score += 8;
-      if (!namedInQuestion && longest && !gloss.includes(longest)) {
+      if (!namedInQuestion && longest && !textHasToken(gloss, longest)) {
         // A nearby headword that never mentions the subject of the question.
         score -= 22;
       }
@@ -134,6 +134,22 @@ export function rankKnowledge(parsed, corpora) {
     }
     for (const extra of extras) {
       for (const passage of search(extra, 4)) {
+        const kind = sourceKind(passage.source);
+        addHit(bag, {
+          kind,
+          symbol: passage.symbol,
+          text: clip(passage.context, 480),
+          title: passage.title || "",
+          source: passage.source || "",
+          score: passage.score
+        });
+      }
+    }
+  }
+
+  if (/\bdehydr/.test(phrase)) {
+    for (const extra of ["drink small amounts", "rehydration"]) {
+      for (const passage of search(extra, 3)) {
         const kind = sourceKind(passage.source);
         addHit(bag, {
           kind,
