@@ -2,5 +2,6 @@
   {"symbol": "unknown_plant", "context": "Do not eat a plant you have not identified. Edible species can have toxic lookalikes. This is an offline caution, not a field guide or medical advice."},
   {"symbol": "plantain_plantago", "context": "Plantago, often called plantain, is a common lawn weed with parallel veins. Crushed plantain (Plantago) leaves are a traditional poultice for an itchy insect bite, and only after the plant is identified. Not a treatment."},
   {"symbol": "willow_bark", "context": "Willow bark (Salix) is traditionally used for aches, not as a medicine. Salicin from willow is described as an analgesic, and astringent tannins show up in the bark. Identify the tree before any use. This is not a dose or a substitute for emergency care."},
-  {"symbol": "toxic_vs_edible", "context": "Milky sap, bulb leaves, or umbrella flower clusters are reasons to stop and not taste a plant. Cultivated food is safer than foraging when identification is uncertain."}
+  {"symbol": "toxic_vs_edible", "context": "Milky sap, bulb leaves, or umbrella flower clusters are reasons to stop and not taste a plant. Cultivated food is safer than foraging when identification is uncertain."},
+  {"symbol": "yarrow_achillea", "context": "Yarrow (Achillea millefolium) is a field plant for a small bleeding scrape, and only after the plant is identified. Feathery leaves and a flat white flower cluster are the usual look, and lookalikes are easy to mistake. Do not use a plant you have not identified. This is not a dose or a substitute for emergency care."}
 ]
