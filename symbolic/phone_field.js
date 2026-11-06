@@ -1,6 +1,6 @@
 // Phone ask path. Same question parse, ranking, and reasonAnswer as `npm run ask`.
-// The Expo bundle carries a packaged dictionary subset. The full corpora stay on disk.
-// Emotion is a cue beside the note. No profile file is written.
+// The Expo bundle carries that dictionary merge and the full medical name lists.
+// The original corpora stay on disk. Emotion is a cue beside the note. No profile file is written.
 
 import { readEmotion } from "./emotion_read.js";
 import { haversineKm, initialBearingDeg } from "./landscape_math.js";

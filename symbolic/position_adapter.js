@@ -2,7 +2,7 @@
 // Consent stays the gate. Nothing here reads a sensor by itself.
 
 import { initialPosition } from "./phone_position.js";
-import { normalizeFix, parseTermuxGps } from "./position_fix.js";
+import { decideExpoReading, normalizeFix, parseTermuxGps } from "./position_fix.js";
 
 export function chooseLocationRoute(caps = {}) {
   if (caps.termuxAvailable === true) return "termux-location";
@@ -37,6 +37,7 @@ export function applySatelliteReading(state, reading) {
 
   const route = reading?.route || "none";
   let fix = null;
+  let reason = reading?.reason || null;
   if (route === "termux-location") {
     fix = reading?.stdout != null ? parseTermuxGps(reading.stdout) : null;
     if (!fix && reading?.fix) {
@@ -44,7 +45,9 @@ export function applySatelliteReading(state, reading) {
       fix = provider === "gps" ? normalizeFix(reading.fix, "gnss") : null;
     }
   } else if (route === "expo-location") {
-    fix = normalizeFix(reading?.fix, "expo-location");
+    const decision = decideExpoReading(reading?.fix);
+    fix = decision.fix;
+    if (!fix && !reason) reason = decision.reason;
   }
 
   if (fix && (route === "termux-location" || route === "expo-location")) {
@@ -61,7 +64,7 @@ export function applySatelliteReading(state, reading) {
     };
   }
 
-  const why = reading?.reason
+  const why = reason
     || (route === "termux-location"
       ? "termux-location did not return a GPS fix. No network fix was stored."
       : route === "expo-location"

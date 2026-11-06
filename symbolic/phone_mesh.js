@@ -15,8 +15,9 @@ export function assertMeshText(text) {
   return trimmed;
 }
 
-export function phoneHooks({ radioUp = false, owner } = {}) {
+export function phoneHooks({ radioUp = false, owner, interfered = false } = {}) {
   const recognized = owner?.recognized === true;
+  const dropped = interfered === true;
   return {
     service: "offline-phone",
     cellular: false,
@@ -24,8 +25,8 @@ export function phoneHooks({ radioUp = false, owner } = {}) {
     status: radioUp && recognized ? "up" : "local-only",
     available: recognized,
     staysUp: recognized,
-    held: true,
-    interfered: false,
+    held: !dropped,
+    interfered: dropped,
     dependsOnPosition: false,
     positionLock: "opt-in",
     positionShared: false,
@@ -52,12 +53,30 @@ export function initialMeshSession() {
 
 function withPhone(session) {
   const radioUp = session.link?.primary?.radio === true;
+  const interfered = session.interfered === true;
   return {
     ...session,
-    interfered: false,
-    phone: phoneHooks({ radioUp, owner: session.owner })
+    interfered,
+    phone: phoneHooks({ radioUp, owner: session.owner, interfered })
   };
 }
+
+function applyLostIds(link, lostIds, keepKey) {
+  if (!Array.isArray(lostIds) || lostIds.length === 0) return link;
+  const lost = new Set(lostIds);
+  const next = {
+    primary: link?.primary || null,
+    secondary: link?.secondary || null
+  };
+  for (const slot of ["primary", "secondary"]) {
+    const record = next[slot];
+    const key = record?.address || record?.id;
+    if (key && lost.has(key) && key !== keepKey) next[slot] = null;
+  }
+  return next;
+}
+
+const LOST_NOTE = "A link that was held before this radio step was no longer connected afterward. Yehsa did not send a disconnect. Peers stay exterior. No cipher is claimed.";
 
 export function attachOwner(session, owner) {
   return withPhone({ ...(session || initialMeshSession()), owner: owner || null });
@@ -117,13 +136,16 @@ export function applyScan(session, report) {
   const available = report?.available === true;
   const invoked = report?.invoked === true;
   if (!available || !invoked) {
+    const lost = Array.isArray(report?.lostIds) && report.lostIds.length > 0;
     return withPhone({
       ...current,
       scanned: true,
       degraded: true,
       invoked: false,
-      reason: report?.reason || "Discovery is degraded. No radio scan ran.",
-      scanMode: report?.scanMode || null
+      interfered: lost,
+      reason: lost ? LOST_NOTE : (report?.reason || "Discovery is degraded. No radio scan ran."),
+      scanMode: report?.scanMode || null,
+      link: applyLostIds(current.link, report?.lostIds, null)
     });
   }
   const accepted = [];
@@ -133,15 +155,20 @@ export function applyScan(session, report) {
   }
   const pinned = [peerKey(current.link?.primary), peerKey(current.link?.secondary)].filter(Boolean);
   const peers = mergePeers(current.peers, accepted, pinned);
+  const lost = Array.isArray(report?.lostIds) && report.lostIds.length > 0;
+  const link = applyLostIds(touchLink(current.link, accepted), report?.lostIds, null);
   return withPhone({
     ...current,
     scanned: true,
-    degraded: false,
+    degraded: lost && !link.primary,
     invoked: true,
-    reason: accepted.length ? null : "Scan finished. No Yehsa peers heard.",
+    interfered: lost,
+    reason: lost
+      ? LOST_NOTE
+      : (accepted.length ? null : "Scan finished. No Yehsa peers heard."),
     scanMode: report.scanMode || "passive-observer",
     peers,
-    link: touchLink(current.link, accepted)
+    link
   });
 }
 
@@ -222,20 +249,23 @@ export function applyConnect(session, addressOrId, report) {
     };
   }
   const record = linkRecord(peer, true);
-  const link = {
+  let link = {
     primary: current.link?.primary || null,
     secondary: current.link?.secondary || null
   };
   if (role === "secondary") link.secondary = record;
   else link.primary = record;
+  const lost = Array.isArray(report?.lostIds) && report.lostIds.length > 0;
+  link = applyLostIds(link, report?.lostIds, key);
   const next = withPhone({
     ...current,
     degraded: false,
     invoked: true,
-    reason: null,
+    interfered: lost,
+    reason: lost ? LOST_NOTE : null,
     link
   });
-  return { ok: true, degraded: false, interfered: false, reason: null, session: next };
+  return { ok: true, degraded: false, interfered: lost, reason: lost ? LOST_NOTE : null, session: next };
 }
 
 export function rememberRadioPeer(session, raw, report) {

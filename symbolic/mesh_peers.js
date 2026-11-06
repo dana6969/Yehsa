@@ -3,6 +3,8 @@
 
 export const MESH_NAME_PREFIX = "YEHSA";
 export const MESH_SERVICE_UUID = "59454853-4100-4d45-5348-000000000001";
+// Optional write target for a short offline note. Absent means the note stays on the phone.
+export const MESH_NOTE_UUID = "59454853-4100-4d45-5348-000000000002";
 
 export const EXTERIOR_PEER = Object.freeze({
   owner: false,

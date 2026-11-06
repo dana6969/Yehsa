@@ -1,6 +1,6 @@
 // Build the Expo packaged dictionary. Full corpora stay where they are.
-// The subset keeps headwords that overlap the field notes, plus plant-use glosses
-// the ranker would consult for those subjects. It is not the whole Webster dump.
+// The phone pack is the same merge `npm run ask` reads, plus every medical name.
+// A field-note overlap subset left survival headwords such as tourniquet unanswered.
 
 import fs from "fs";
 import path from "path";
@@ -8,7 +8,20 @@ import { pathToFileURL } from "url";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..", "..");
 const MEMORY = path.join(ROOT, "symbolic_memory");
-const PLANT_USE = /\b(salix|analgesic|astringent|tannin|poultice|from a |from the )\b/i;
+const BOOKS = path.join(ROOT, "symbolic_books");
+const FIELD_DIRS = ["herbology", "medical", "survival", "landscape"];
+const PASSAGE_CAP = 180;
+const MEDICAL_LISTS = [
+  ["symbolic_memory/medical_terms_only.txt", "m", "medical_terms_only"],
+  ["codesante_en.txt", "c", "codesante_en"],
+  ["glutanimate.txt", "g", "glutanimate"]
+];
+const LEXICAL_FILES = [
+  ["wordnet_raw.json", "wordnet"],
+  ["dictionary_memory.json", "dictionary_memory"],
+  ["full_dictionary.json", "full_dictionary"],
+  ["webster_raw.json", "webster"]
+];
 
 function readObject(file) {
   const full = path.join(MEMORY, file);
@@ -31,95 +44,99 @@ function glossOf(value) {
 }
 
 function remember(map, key, value) {
-  if (typeof key !== "string" || !key.trim()) return;
+  if (typeof key !== "string" || !key.trim()) return false;
   const text = glossOf(value);
-  if (!text) return;
+  if (!text) return false;
   const id = key.trim().toLowerCase();
-  if (!map.has(id)) map.set(id, text);
+  if (map.has(id)) return false;
+  map.set(id, text);
+  return true;
 }
 
-function fieldTokens(passages) {
-  const tokens = new Set();
-  const blobParts = [];
-  for (const passage of passages) {
-    const blob = `${passage.symbol || ""} ${passage.title || ""} ${passage.context || ""}`.toLowerCase();
-    blobParts.push(blob);
-    for (const word of blob.split(/[^a-z0-9]+/)) {
-      if (word.length >= 4) tokens.add(word);
-    }
-  }
-  return { tokens, blob: blobParts.join("\n") };
-}
-
-function escapeRe(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-export function selectPhoneLexical(lexical, tokens) {
-  const longTokens = [...tokens].filter((token) => token.length >= 6).sort();
-  const needle = longTokens.length
-    ? new RegExp(`(?:${longTokens.map(escapeRe).join("|")})`, "i")
-    : null;
-  const subjects = [...tokens].filter((token) => token.length >= 5);
-  const kept = new Map();
-  for (const [key, text] of lexical) {
-    const parts = key.split(/[^a-z0-9]+/).filter(Boolean);
-    const overlap = tokens.has(key) || parts.some((part) => part.length >= 4 && tokens.has(part));
-    const inside = needle ? needle.test(key) : false;
-    let plant = false;
-    if (!overlap && !inside && PLANT_USE.test(text)) {
-      const gloss = text.toLowerCase();
-      plant = subjects.some((token) => gloss.includes(token));
-    }
-    if (overlap || inside || plant) kept.set(key, text);
-  }
-  return kept;
-}
-
-function loadLexical() {
-  const map = new Map();
-  for (const [key, value] of Object.entries(readObject("wordnet_raw.json"))) remember(map, key, value);
-  for (const [key, value] of Object.entries(readObject("dictionary_memory.json"))) remember(map, key, value);
-  for (const [key, value] of Object.entries(readObject("full_dictionary.json"))) remember(map, key, value);
-  for (const [key, value] of Object.entries(readObject("webster_raw.json"))) remember(map, key, value);
-  return map;
-}
-
-function selectMedical(lexicalKeys, tokens, blob) {
-  const lists = [
-    ["symbolic_memory/medical_terms_only.txt", "medical_terms_only"],
-    ["codesante_en.txt", "codesante_en"],
-    ["glutanimate.txt", "glutanimate"]
-  ];
-  const names = new Map();
-  for (const [rel, source] of lists) {
-    const full = path.join(ROOT, rel);
+function listFieldFiles() {
+  const found = [];
+  for (const dir of FIELD_DIRS) {
+    const full = path.join(BOOKS, dir);
     if (!fs.existsSync(full)) continue;
-    for (const line of fs.readFileSync(full, "utf8").split(/\n/)) {
-      const term = line.trim();
-      if (term.length < 2 || term.length > 160) continue;
-      const key = term.toLowerCase();
-      if (names.has(key)) continue;
-      const interesting = tokens.has(key)
-        || lexicalKeys.has(key)
-        || (key.length >= 4 && blob.includes(key));
-      if (!interesting) continue;
-      names.set(key, {
-        kind: "medical",
-        symbol: term,
-        text: `Listed name in ${source}. Offline reference only. Not a diagnosis, dose, or substitute for emergency services.`,
-        source: rel
-      });
+    for (const name of fs.readdirSync(full).sort()) {
+      if (name === "README.md") continue;
+      if (!name.endsWith(".txt") && !name.endsWith(".json")) continue;
+      found.push(`symbolic_books/${dir}/${name}`);
     }
   }
-  return names;
+  return found;
 }
 
-function writeModule(file, metaName, meta, constName, value) {
+function fieldCoverage(passages) {
+  const counts = {};
+  for (const passage of passages) {
+    const source = passage?.source;
+    if (typeof source !== "string") continue;
+    counts[source] = (counts[source] || 0) + 1;
+  }
+  const files = listFieldFiles();
+  const missing = files.filter((source) => !counts[source]);
+  const capped = files.filter((source) => (counts[source] || 0) >= PASSAGE_CAP);
+  const byDir = {};
+  for (const dir of FIELD_DIRS) {
+    byDir[dir] = files
+      .filter((source) => source.startsWith(`symbolic_books/${dir}/`))
+      .reduce((sum, source) => sum + (counts[source] || 0), 0);
+  }
+  return {
+    complete: missing.length === 0 && capped.length === 0,
+    files: files.length,
+    missing,
+    capped,
+    passages: byDir
+  };
+}
+
+export function mergePhoneLexical() {
+  const map = new Map();
+  const added = {};
+  for (const [file, label] of LEXICAL_FILES) {
+    let count = 0;
+    for (const [key, value] of Object.entries(readObject(file))) {
+      if (remember(map, key, value)) count += 1;
+    }
+    added[label] = count;
+  }
+  return { map, added };
+}
+
+export function mergePhoneMedical() {
+  const map = new Map();
+  const added = {};
+  for (const [rel, code, label] of MEDICAL_LISTS) {
+    const full = path.join(ROOT, rel);
+    let count = 0;
+    if (fs.existsSync(full)) {
+      for (const line of fs.readFileSync(full, "utf8").split(/\n/)) {
+        const term = line.trim();
+        if (term.length < 2 || term.length > 160) continue;
+        const key = term.toLowerCase();
+        if (map.has(key)) continue;
+        map.set(key, { symbol: term, code });
+        count += 1;
+      }
+    }
+    added[label] = count;
+  }
+  return { map, added };
+}
+
+function packLines(entries) {
+  const lines = [];
+  for (const entry of entries) lines.push(JSON.stringify(entry));
+  return lines.join("\n");
+}
+
+function writeModule(file, metaName, meta, constName, pack) {
   const body = `// Generated by symbolic/tools/build_phone_dictionary.js. Do not edit by hand.
-// Packaged subset for the Expo shell. The full corpora stay in this repository.
+// Packaged for the Expo shell. The full corpora stay in this repository.
 export const ${metaName} = ${JSON.stringify(meta, null, 2)};
-export const ${constName} = ${JSON.stringify(value)};
+export const ${constName} = ${JSON.stringify(pack)};
 `;
   fs.writeFileSync(file, body);
 }
@@ -127,41 +144,52 @@ export const ${constName} = ${JSON.stringify(value)};
 export function buildPhoneDictionary() {
   const index = JSON.parse(fs.readFileSync(path.join(MEMORY, "books_index.json"), "utf8"));
   const passages = Array.isArray(index.passages) ? index.passages : [];
-  const { tokens, blob } = fieldTokens(passages);
-  const lexical = loadLexical();
-  const kept = selectPhoneLexical(lexical, tokens);
-  const medical = selectMedical(new Set(kept.keys()), tokens, blob);
-  const lexicalObject = Object.fromEntries([...kept.entries()].sort((a, b) => a[0].localeCompare(b[0])));
-  const medicalObject = Object.fromEntries([...medical.entries()].sort((a, b) => a[0].localeCompare(b[0])));
+  const fields = fieldCoverage(passages);
+  const { map, added } = mergePhoneLexical();
+  const medical = mergePhoneMedical();
+  const lexicalPack = packLines([...map.entries()].sort((a, b) => a[0].localeCompare(b[0])));
+  const medicalPack = packLines(
+    [...medical.map.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([key, value]) => [key, value.symbol, value.code])
+  );
   const lexicalMeta = {
-    scope: "packaged-subset",
-    headwords: kept.size,
+    scope: "ask-merge",
+    headwords: map.size,
     fullCorporaRemain: true,
-    websterBundled: false,
-    rule: "Field-note overlap, headwords that contain a field token of 6 or more letters, and plant-use glosses for those subjects.",
-    honest: "This is not the full Webster dump. npm run ask still reads dictionary_memory.json, full_dictionary.json, and webster_raw.json."
+    websterBundled: added.webster > 0,
+    sources: added,
+    rule: "Same merge as npm run ask: WordNet stub, dictionary_memory.json, full_dictionary.json, then Webster for headwords those files do not already define. Glosses are not shortened.",
+    honest: "The packaged headwords are that merge. dictionary_memory.json wins when it already defines a word. Webster is included for the rest. The source files stay on disk and are not deleted.",
+    fieldNotesComplete: fields.complete === true,
+    fieldNotes: fields.passages,
+    fieldNoteHonest: fields.complete
+      ? "Herbology, medical reference, survival, and landscape notes in this bundle are the full field notes. Long literary books in the index stay capped."
+      : "A field-note file is missing from the index or hit the passage cap. Run npm run books:ingest and rebuild this pack."
   };
   const medicalMeta = {
-    scope: "packaged-subset",
-    names: medical.size,
+    scope: "full-name-lists",
+    names: medical.map.size,
     fullListsRemain: true,
-    honest: "Name-only hits that overlap the field notes or the packaged headwords. The full medical name lists stay on disk for npm run ask."
+    sources: medical.added,
+    codes: { m: "medical_terms_only", c: "codesante_en", g: "glutanimate" },
+    honest: "Every name from the three on-disk lists is in this bundle. The text files stay on disk. A listed name is not a diagnosis, a dose, or emergency services."
   };
   writeModule(
     path.join(MEMORY, "phone_lexical.js"),
     "PHONE_LEXICAL_META",
     lexicalMeta,
-    "PHONE_LEXICAL",
-    lexicalObject
+    "PHONE_LEXICAL_PACK",
+    lexicalPack
   );
   writeModule(
     path.join(MEMORY, "phone_medical.js"),
     "PHONE_MEDICAL_META",
     medicalMeta,
-    "PHONE_MEDICAL",
-    medicalObject
+    "PHONE_MEDICAL_PACK",
+    medicalPack
   );
-  return { lexical: lexicalMeta, medical: medicalMeta };
+  return { lexical: lexicalMeta, medical: medicalMeta, fields };
 }
 
 function isDirectRun() {
