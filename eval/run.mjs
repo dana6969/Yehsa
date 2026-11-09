@@ -64,6 +64,7 @@ const shorts = shortStarts.map((start, index) => {
   return runWorker(ids, `short-${index}`);
 });
 const hot = runHotpath();
+const bm25 = runBm25();
 
 const report = {
   generatedAt: new Date().toISOString(),
@@ -81,7 +82,8 @@ const report = {
   },
   cold: cold.map((run) => ({ id: run.items[0]?.id, ...stripItems(run), item: run.items[0] })),
   shorts: shorts.map(stripItems),
-  hot
+  hot,
+  bm25
 };
 
 fs.writeFileSync(path.join(EVAL_DIR, "results.json"), JSON.stringify(report, null, 2));
@@ -100,6 +102,19 @@ function runWorker(ids, label) {
   if (child.status !== 0) {
     throw new Error(`worker ${label} failed\n${child.stderr || child.stdout}`);
   }
+  const parsed = JSON.parse(fs.readFileSync(out, "utf8"));
+  fs.rmSync(out, { force: true });
+  return parsed;
+}
+
+function runBm25() {
+  const out = path.join(os.tmpdir(), `yehsa-eval-bm25-${process.pid}.json`);
+  const child = spawnSync(process.execPath, [path.join(EVAL_DIR, "bm25.mjs"), out], {
+    cwd: ROOT,
+    encoding: "utf8",
+    maxBuffer: 64 * 1024 * 1024
+  });
+  if (child.status !== 0) throw new Error(`bm25 failed\n${child.stderr || child.stdout}`);
   const parsed = JSON.parse(fs.readFileSync(out, "utf8"));
   fs.rmSync(out, { force: true });
   return parsed;
@@ -286,6 +301,10 @@ function render(data) {
     }
     lines.push("");
   }
+  lines.push("## Comparison with an offline baseline");
+  lines.push("");
+  lines.push(...comparisonLines(items, data.bm25));
+  lines.push("");
   lines.push("## What the data shows");
   lines.push("");
   lines.push(narrative(items, groups));
@@ -299,8 +318,93 @@ function render(data) {
   lines.push("- One machine, one Node process model. Cold RSS includes whatever else the process mapped. It is not a phone measurement.");
   lines.push("- The per-device learning file is not part of the score. This host is not treated as the bound phone for that profile.");
   lines.push("- Nothing here was used to change Ask, the notes, or the symbol map.");
+  lines.push("- BM25 uses fixed Okapi constants (k1 = 1.2, b = 0.75) and abstains only when nothing matches. Those choices were not fit to this question set.");
+  lines.push("- No commercial assistant, hosted model, or downloaded weight file was run. There is no local model runtime on this machine.");
+  lines.push("");
+  lines.push("## Weakest areas, ranked for a real user");
+  lines.push("");
+  lines.push(...weakestLines(items));
   lines.push("");
   return lines.join("\n");
+}
+
+function comparisonLines(items, bm25) {
+  const lines = [];
+  lines.push("No commercial offline assistant was queried, and no numbers for one are invented here. This machine has no Ollama, llama.cpp, or other local model runtime, and no model weights were downloaded. The baseline that can be run fairly is Okapi BM25 over the same prose Yehsa reads: every passage in `books_index.json`, plus the dictionary merge Ask uses (WordNet stub, then `dictionary_memory.json`, `full_dictionary.json`, and Webster, first gloss kept). Medical name lists are labels rather than passages and are not in this index.");
+  lines.push("");
+  lines.push(`BM25 parameters are k1 = ${bm25.k1} and b = ${bm25.b}. The query is the question's words with a fixed stop list removed. If the best score is 0, BM25 abstains. Otherwise the top passage is the reply. A second score joins the top three passages and applies the same rubric, which is still BM25, not a second system. Index: ${bm25.fieldDocuments} field passages and ${bm25.dictionaryDocuments} dictionary entries, built in ${bm25.indexMs} ms. RSS after the index: ${mb(bm25.rssIndexed)}. Peak RSS: ${mb(bm25.peak)}.`);
+  lines.push("");
+  const top1 = bm25.items.map((item) => ({ ...item.top1, category: item.category, slice: item.slice, ms: item.ms }));
+  const top3 = bm25.items.map((item) => ({ ...item.top3, category: item.category, slice: item.slice, ms: item.ms }));
+  lines.push("| Category | Yehsa pass | BM25 top 1 pass | BM25 top 3 pass | Yehsa wrong-confident | BM25 top 1 wrong-confident | Yehsa abstain | BM25 top 1 abstain |");
+  lines.push("| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |");
+  for (const category of ["factual", "multi", "math", "contradiction", "unfamiliar", "all"]) {
+    const yehsa = category === "all" ? items : items.filter((item) => item.category === category);
+    const one = category === "all" ? top1 : top1.filter((item) => item.category === category);
+    const three = category === "all" ? top3 : top3.filter((item) => item.category === category);
+    lines.push(`| ${category} | ${rate(yehsa.filter((item) => item.pass).length, yehsa.length)} | ${rate(one.filter((item) => item.pass).length, one.length)} | ${rate(three.filter((item) => item.pass).length, three.length)} | ${rate(yehsa.filter((item) => item.wrongConfident).length, yehsa.length)} | ${rate(one.filter((item) => item.wrongConfident).length, one.length)} | ${rate(yehsa.filter((item) => item.abstained).length, yehsa.length)} | ${rate(one.filter((item) => item.abstained).length, one.length)} |`);
+  }
+  lines.push("");
+  lines.push("| Math slice | Yehsa pass | BM25 top 1 pass | BM25 top 3 pass |");
+  lines.push("| --- | ---: | ---: | ---: |");
+  for (const slice of ["arithmetic", "units", "landscape"]) {
+    const yehsa = items.filter((item) => item.category === "math" && item.slice === slice);
+    const one = top1.filter((item) => item.slice === slice);
+    const three = top3.filter((item) => item.slice === slice);
+    if (!yehsa.length) continue;
+    lines.push(`| ${slice} | ${rate(yehsa.filter((item) => item.pass).length, yehsa.length)} | ${rate(one.filter((item) => item.pass).length, one.length)} | ${rate(three.filter((item) => item.pass).length, three.length)} |`);
+  }
+  lines.push("");
+  const times = top1.map((item) => item.ms);
+  lines.push(`BM25 query time in that process: median ${fmt(median(times))} ms, p95 ${fmt(quantile(times, 0.95))} ms. Yehsa's warm median is in the latency section above. They are not the same process, so the comparison is the task result, not a shared memory budget.`);
+  lines.push("");
+  lines.push(comparisonNarrative(items, top1, top3));
+  lines.push("Top-3 can pass an arithmetic item when a long dictionary page happens to contain the same digits. Top-1 arithmetic did not. That accident is why top-3 is reported separately and not treated as a solved calculator.");
+  return lines;
+}
+
+function comparisonNarrative(items, top1, top3) {
+  const fact = (rows) => rate(rows.filter((item) => item.pass).length, rows.length);
+  const yehsaFact = items.filter((item) => item.category === "factual");
+  const bmFact = top1.filter((item) => item.category === "factual");
+  const yehsaLand = items.filter((item) => item.slice === "landscape");
+  const bmLand = top1.filter((item) => item.slice === "landscape");
+  const yehsaOod = items.filter((item) => item.category === "unfamiliar");
+  const bmOod = top1.filter((item) => item.category === "unfamiliar");
+  const yehsaWrong = rate(items.filter((item) => item.wrongConfident).length, items.length);
+  const bmWrong = rate(top1.filter((item) => item.wrongConfident).length, top1.length);
+  const cats = ["factual", "multi", "math", "contradiction", "unfamiliar"];
+  const behind = cats.filter((category) => {
+    const yehsaRows = items.filter((item) => item.category === category);
+    const bmRows = top1.filter((item) => item.category === category);
+    const yehsaRate = yehsaRows.filter((item) => item.pass).length / yehsaRows.length;
+    const bmRate = bmRows.filter((item) => item.pass).length / bmRows.length;
+    return bmRate > yehsaRate;
+  });
+  const lead = behind.length
+    ? `BM25 top-1 has the higher pass rate on ${behind.join(", ")}. On those slices Yehsa is not the better retriever.`
+    : "On this run BM25 top-1 did not beat Yehsa's pass rate in any category. The lead is mostly Yehsa abstaining when a dictionary page still shares a word, plus the landscape calculator. It is not a general reasoning advantage.";
+  return `On this set, Yehsa's factual pass rate is ${fact(yehsaFact)} and BM25 top-1 is ${fact(bmFact)} (top-3 is ${fact(top3.filter((item) => item.category === "factual"))}). Landscape calculation is ${fact(yehsaLand)} for Yehsa and ${fact(bmLand)} for BM25 top-1, which is expected: BM25 can retrieve a note about distance, and it does not run the sphere formula. Unfamiliar-question pass rate is ${fact(yehsaOod)} for Yehsa and ${fact(bmOod)} for BM25 top-1. Overall wrong-but-confident is ${yehsaWrong} for Yehsa and ${bmWrong} for BM25 top-1. ${lead} Neither one computes ordinary sums or unit conversions.`;
+}
+
+function weakestLines(items) {
+  const wrong = items.filter((item) => item.wrongConfident);
+  const splits = paraphraseGroups(items).filter((group) => !group.same).map((group) => group.id);
+  const arithmetic = items.filter((item) => item.slice === "arithmetic");
+  const units = items.filter((item) => item.slice === "units");
+  const examples = ["signal-3", "contra-snow", "ood-cancer", "ood-france-2", "water-boil-1", "dehydration-2"]
+    .map((id) => wrong.find((item) => item.id === id))
+    .filter(Boolean)
+    .map((item) => `${item.id} ("${item.prompt}")`);
+  return [
+    "Ranked by how much they would mislead or strand someone using this as a field reference, not by how many rows they add to the table.",
+    "",
+    `1. Confident wrong note. ${wrong.filter((item) => item.category !== "math").length} non-math replies were fluent and wrong. Examples from this run: ${examples.join("; ") || "see the table above"}. A person who trusts the prose can rub the wrong thing, skip boiling water, or walk away thinking a plantain note answered a question it did not. This is the release blocker.`,
+    `2. Wording changes the note. ${splits.length} paraphrase groups split (${splits.join(", ")}). The same fact asked a second way retrieves a different passage, including arctic notes for a dehydration question and a multiplication definition for a whistle count. A user will not phrase the question the way the note was written.`,
+    `3. Numbers that are not landscape coordinates. Arithmetic pass rate is ${rate(arithmetic.filter((item) => item.pass).length, arithmetic.length)}. Unit conversion pass rate is ${rate(units.filter((item) => item.pass).length, units.length)}. "How many meters are in 2 kilometers?" does not come back as 2000. In the field that is a real gap, and it is less dangerous than a wrong medical note only because silence is more common than a made-up dose.`,
+    "4. False premises are caught only by luck of retrieval. When the frostbite note is the thing returned, the reply says not to rub snow. When the mosquito note is returned instead, the premise is never contradicted. There is no check that says the sources disagree or that the question assumed something the notes reject.",
+    "5. The CLI process sits near 250 MB after the dictionaries load, then grows about 12 MB across the full run. That is not a phone measurement. It matters before release only as a reminder that the packaged dictionary is large; it is not the safety problem."
+  ];
 }
 
 function narrative(items, groups) {

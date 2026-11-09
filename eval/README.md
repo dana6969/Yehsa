@@ -30,10 +30,13 @@ node eval/run.mjs
 - three fresh processes, 25 questions each
 - a separate fresh process that times `getMappedAction` only
 
-The symbol timing can also be run by itself:
+The symbol timing and the BM25 baseline can also be run by themselves:
 
 ```bash
 node eval/hotpath.mjs /tmp/yehsa-hotpath.json
+node eval/bm25.mjs /tmp/yehsa-bm25.json
 ```
+
+BM25 is Okapi (k1 = 1.2, b = 0.75) over the field passages and the same dictionary merge Ask reads. It abstains only when no query word matches. No commercial product and no downloaded model is part of this comparison.
 
 `REPORT.md` is the results write-up, including the category table and the wrong-but-confident replies.
