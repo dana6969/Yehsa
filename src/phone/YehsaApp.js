@@ -40,7 +40,7 @@ import {
 import { EXPO_LOCK_ACCURACY_M } from "../../symbolic/position_fix.js";
 import { chooseYehsaDevice, connectRemembered, scanWithPlatform, transmitNote } from "./ble_provider.js";
 import { bindThisInstall } from "./install_owner.js";
-import { readPlatformFix } from "./location_provider.js";
+import { readPlatformFix, watchPlatformGps } from "./location_provider.js";
 import { openMic, probeVoice, silenceSpeakers, speakProse, stopProse } from "./speech_provider.js";
 import {
   recognitionErrorNotice,
@@ -83,6 +83,17 @@ import {
 } from "../../symbolic/learned_notes.js";
 import { capabilitySummary, continueUtterance, isCapabilityQuestion, sourceChips } from "../../symbolic/chat_turn.js";
 import LandscapeMap from "./LandscapeMap.js";
+import {
+  applyGpsSample,
+  gpsStatusLabel,
+  grantGpsConsent,
+  initialGpsMap,
+  markSignalLost,
+  noteUserPan,
+  recenterOnMe,
+  revokeGpsConsent,
+  startNavigation
+} from "../../symbolic/gps_map.js";
 
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
@@ -215,6 +226,8 @@ export default function YehsaApp() {
         >
           <LandPane
             position={position}
+            setPosition={setPosition}
+            onConsent={changeConsent}
             waypoints={waypoints}
             track={track}
             onMapTap={setMapTap}
@@ -1004,31 +1017,103 @@ function ResultText({ result }) {
   return <Prose live tone={result.tone === "warn" ? "warn" : undefined}>{result.text}</Prose>;
 }
 
-function LandPane({ position, waypoints, track, onMapTap }) {
+function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap }) {
   const [declination, setDeclination] = useState("0");
   const [importNote, setImportNote] = useState("No terrain file is loaded. This is a blank landscape canvas.");
-  const origin = position?.consent === true && position.status === "locked" && position.fix
-    ? position.fix
-    : { latitude: 0, longitude: 0 };
-  const held = position?.consent === true && position.status === "locked" ? position.fix : null;
+  const [features, setFeatures] = useState([]);
+  const [gps, setGps] = useState(initialGpsMap);
+  const [gpsWanted, setGpsWanted] = useState(false);
+  const [backgroundGps, setBackgroundGps] = useState(false);
+  const consented = position?.consent === true;
+  const origin = gps.follow && gps.fix
+    ? gps.fix
+    : (gps.fix || (consented && position.status === "locked" && position.fix ? position.fix : { latitude: 0, longitude: 0 }));
+  const held = gps.fix || (consented && position.status === "locked" ? position.fix : null);
+  const crumbs = gps.track.length ? gps.track : track;
+
+  useEffect(() => {
+    if (!consented || !gpsWanted) {
+      if (!consented) setGps(revokeGpsConsent());
+      return undefined;
+    }
+    let live = true;
+    let stop = () => {};
+    setGps((current) => grantGpsConsent(current.consent ? current : initialGpsMap()));
+    watchPlatformGps({
+      consent: true,
+      background: backgroundGps,
+      onUpdate(coords) {
+        if (!live) return;
+        setGps((current) => {
+          const base = current.consent ? current : grantGpsConsent(current);
+          const next = applyGpsSample(base, coords);
+          if (next.status === "locked") {
+            setPosition((place) => place.consent === true
+              ? applySatelliteReading(place, { route: "expo-location", fix: coords })
+              : place);
+          }
+          return next;
+        });
+      }
+    }).then((handle) => {
+      if (!live) {
+        handle.stop();
+        return;
+      }
+      stop = handle.stop;
+      if (!handle.started && handle.reason) setImportNote(handle.reason);
+    });
+    const timer = setInterval(() => setGps((current) => markSignalLost(current, Date.now())), 5000);
+    return () => {
+      live = false;
+      clearInterval(timer);
+      stop();
+    };
+  }, [consented, gpsWanted, backgroundGps, setPosition]);
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="Map"
-        lead="A blank landscape you can pan and zoom. No streets and no cities are stored here."
+        lead="A blank landscape. No streets and no cities. GPS centers it only after you turn it on, and the fix is not shared."
       />
+      <StatusPill label={gpsStatusLabel(gps)} tone={gps.status === "locked" ? "good" : gps.status === "lost" ? "warn" : undefined} />
+      {!consented || !gpsWanted ? (
+        <View style={styles.card}>
+          <Text style={styles.bubbleText}>Turn on GPS</Text>
+          <Quiet>The map stays a landscape canvas until you consent. GPS is the satellite on this device. It does not need a data connection, and it is not shared.</Quiet>
+          <Action label="Turn on GPS" onPress={() => { onConsent(true); setGpsWanted(true); }} />
+        </View>
+      ) : (
+        <Action label={backgroundGps ? "Background GPS on" : "Foreground GPS only"} tone="quiet" onPress={() => setBackgroundGps((value) => !value)} />
+      )}
       <LandscapeMap
         origin={origin}
         held={held}
         waypoints={waypoints}
-        track={track}
+        track={crumbs}
+        features={features}
         declination={declination}
+        follow={gps.follow}
+        headingDeg={gps.headingDeg}
+        accuracyM={gps.accuracyM}
+        nav={gps.nav ? { ...gps.nav, name: gps.target?.name } : null}
+        navTarget={gps.target}
+        onRecenter={() => setGps((current) => recenterOnMe(current))}
+        onUserPan={() => setGps((current) => noteUserPan(current))}
         onWaypoint={(point) => {
           if (onMapTap) onMapTap(point);
           setImportNote(`Proposed ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Approve it in Chat. Consent on Me is still required.`);
         }}
       />
+      {waypoints.map((point) => (
+        <Action
+          key={point.name}
+          label={`Navigate to ${point.name}`}
+          tone="quiet"
+          onPress={() => setGps((current) => startNavigation(current, point))}
+        />
+      ))}
       <Field label="Declination from your map, east positive" value={declination} onChangeText={setDeclination} placeholder="0" />
       <Quiet>{importNote}</Quiet>
       <Action
@@ -1053,10 +1138,25 @@ function LandPane({ position, waypoints, track, onMapTap }) {
             reader.onload = () => {
               try {
                 const json = JSON.parse(String(reader.result || ""));
-                const count = Array.isArray(json.features) ? json.features.length : 0;
-                setImportNote(count
-                  ? `Read ${count} features from your file. They are not drawn as a city map in this version, and nothing was downloaded.`
-                  : "That file had no GeoJSON features. Nothing was added.");
+                const list = json.type === "FeatureCollection" ? json.features : json.type === "Feature" ? [json] : [];
+                const points = [];
+                for (const feature of list || []) {
+                  const coordinates = feature?.geometry?.type === "Point"
+                    ? [feature.geometry.coordinates]
+                    : feature?.geometry?.type === "LineString"
+                      ? feature.geometry.coordinates
+                      : [];
+                  for (const pair of coordinates) {
+                    if (points.length >= 80) break;
+                    const longitude = Number(pair?.[0]);
+                    const latitude = Number(pair?.[1]);
+                    if (Number.isFinite(latitude) && Number.isFinite(longitude)) points.push({ latitude, longitude });
+                  }
+                }
+                setFeatures(points);
+                setImportNote(points.length
+                  ? `Drew ${points.length} points from your file under the GPS dot. Nothing was downloaded, and this is not a street map.`
+                  : "That file had no points to draw. The canvas stays blank.");
               } catch {
                 setImportNote("That file was not usable GeoJSON. Nothing was added.");
               }

@@ -30,7 +30,15 @@ export default function LandscapeMap({
   track,
   declination,
   onWaypoint,
-  onLongPress
+  onLongPress,
+  follow,
+  headingDeg,
+  accuracyM,
+  nav,
+  navTarget,
+  onRecenter,
+  onUserPan,
+  features
 }) {
   const [size, setSize] = useState({ width: 320, height: 360 });
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -66,7 +74,10 @@ export default function LandscapeMap({
     const dx = touch.locationX - current.x;
     const dy = touch.locationY - current.y;
     if (Math.hypot(dx, dy) > 8) current.moved = true;
-    if (current.moved) setPan({ x: current.panX + dx, y: current.panY + dy });
+    if (current.moved) {
+      setPan({ x: current.panX + dx, y: current.panY + dy });
+      if (onUserPan) onUserPan();
+    }
   }
 
   function onRelease(event) {
@@ -82,6 +93,11 @@ export default function LandscapeMap({
       return;
     }
     if (current.moved) return;
+    if (held) {
+      const km = haversineKm(held, point);
+      const bearing = initialBearingDeg(held, point);
+      setReadout(courseSentence(km, bearing, "from your GPS fix"));
+    }
     const next = [...measure, point].slice(-2);
     setMeasure(next);
     if (next.length === 2) {
@@ -98,6 +114,9 @@ export default function LandscapeMap({
   const lines = [-3, -2, -1, 0, 1, 2, 3];
   const magnetic = Number(declination);
   const magTurn = Number.isFinite(magnetic) ? `${magnetic}deg` : "0deg";
+  const rotation = follow === true && Number.isFinite(Number(headingDeg)) ? `${-Number(headingDeg)}deg` : "0deg";
+  const accuracyPx = Number.isFinite(Number(accuracyM)) ? (Number(accuracyM) / 1000) * zoom : 0;
+  const you = held ? project(held) : null;
 
   return (
     <View>
@@ -121,6 +140,7 @@ export default function LandscapeMap({
           overflow: "hidden"
         }}
       >
+        <View style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0, transform: [{ rotate: rotation }] }}>
         {lines.map((index) => (
           <View
             key={`h${index}`}
@@ -152,6 +172,10 @@ export default function LandscapeMap({
           <Text style={{ color: "#e2b15a", fontSize: 12 }}>N</Text>
           <View style={{ width: 2, height: 18, backgroundColor: "#b7d0a4", transform: [{ rotate: magTurn }] }} />
         </View>
+        {(features || []).map((point, index) => {
+          const xy = project(point);
+          return xy ? <Dot key={`f${index}`} x={xy.x} y={xy.y} color="#6f8f78" /> : null;
+        })}
         {measure.map((point, index) => {
           const xy = project(point);
           return xy ? <Dot key={`m${index}`} x={xy.x} y={xy.y} color="#f4f0e6" /> : null;
@@ -167,7 +191,26 @@ export default function LandscapeMap({
           if (!xy) return null;
           return <Dot key={point.name || `${point.latitude}`} x={xy.x} y={xy.y} color="#e2b15a" label={point.name} />;
         })}
-        {held ? <Dot x={project(held)?.x} y={project(held)?.y} color="#b7d0a4" label="You" /> : null}
+        {you && accuracyPx > 2 ? (
+          <View
+            style={{
+              position: "absolute",
+              left: you.x - accuracyPx,
+              top: you.y - accuracyPx,
+              width: accuracyPx * 2,
+              height: accuracyPx * 2,
+              borderRadius: accuracyPx,
+              borderWidth: 1,
+              borderColor: "#b7d0a4"
+            }}
+          />
+        ) : null}
+        {you ? <Dot x={you.x} y={you.y} color="#b7d0a4" label="You" /> : null}
+        {you && Number.isFinite(Number(headingDeg)) ? (
+          <View style={{ position: "absolute", left: you.x - 1, top: you.y - 18, width: 2, height: 18, backgroundColor: "#f4f0e6", transform: [{ rotate: `${Number(headingDeg)}deg` }] }} />
+        ) : null}
+        {you && navTarget ? <MeasureLine from={you} to={project(navTarget)} /> : null}
+        </View>
         <View style={{ position: "absolute", left: 12, bottom: 12 }}>
           <View style={{ width: 80, height: 3, backgroundColor: "#f4f0e6" }} />
           <Text style={{ color: "#f4f0e6", fontSize: 12 }}>{barKm >= 1 ? `${barKm.toFixed(1)} km` : `${Math.round(barKm * 1000)} m`}</Text>
@@ -183,7 +226,15 @@ export default function LandscapeMap({
         <Pressable accessibilityRole="button" accessibilityLabel="Clear the measured line" onPress={() => { setMeasure([]); setReadout("Measured line cleared. The canvas is still blank landscape, not a city map."); }} style={[zoomStyle, { backgroundColor: "transparent", borderColor: "#3d4c43", paddingHorizontal: 12 }]}>
           <Text style={{ color: "#f4f0e6" }}>Clear line</Text>
         </Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel="Recenter on me" onPress={() => { setPan({ x: 0, y: 0 }); if (onRecenter) onRecenter(); }} style={[zoomStyle, { backgroundColor: "transparent", borderColor: "#e2b15a", paddingHorizontal: 12 }]}>
+          <Text style={{ color: "#e2b15a" }}>Recenter</Text>
+        </Pressable>
       </View>
+      {nav ? (
+        <Text style={{ color: "#e2b15a", marginTop: 8 }}>
+          {`${nav.name || "Waypoint"} ${nav.distanceM >= 1000 ? `${(nav.distanceM / 1000).toFixed(2)} km` : `${Math.round(nav.distanceM)} m`} at ${Math.round(nav.bearingDeg)}° ${nav.label || ""}. Not a road.`}
+        </Text>
+      ) : null}
       <Text style={{ color: "#b7bfb2", marginTop: 8, lineHeight: 20 }}>{readout}</Text>
       <Text style={{ color: "#8f9a8c", marginTop: 4, fontSize: 13 }}>
         {Platform.OS === "web"
