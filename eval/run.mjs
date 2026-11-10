@@ -5,7 +5,8 @@ import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
 import { buildQuestions } from "./questions.mjs";
-import { judge, selfCheck } from "./score.mjs";
+import { enforceBaseline } from "./gate.mjs";
+import { classifyOutcome, judge, selfCheck, tallyOutcomes } from "./score.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const EVAL_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -28,17 +29,20 @@ for (let index = 0; index < questions.length; index += 1) {
   const memory = rss();
   if (memory > peak) peak = memory;
   const verdict = judge(question, result);
+  const outcome = classifyOutcome(question, { ...verdict, text: result?.text });
   long.push({
     id: question.id,
     category: question.category,
     slice: question.slice || null,
     paraphraseOf: question.paraphraseOf || null,
     prompt: question.prompt,
+    expectKind: question.expect.kind,
     ms: round(ms),
     rss: memory,
     pass: verdict.pass,
     wrongConfident: verdict.wrongConfident,
     abstained: verdict.abstained,
+    outcome,
     reason: verdict.reason,
     text: excerpt(result?.text)
   });
@@ -83,12 +87,15 @@ const report = {
   cold: cold.map((run) => ({ id: run.items[0]?.id, ...stripItems(run), item: run.items[0] })),
   shorts: shorts.map(stripItems),
   hot,
-  bm25
+  bm25,
+  breakdown: tallyOutcomes(long)
 };
 
 fs.writeFileSync(path.join(EVAL_DIR, "results.json"), JSON.stringify(report, null, 2));
 fs.writeFileSync(path.join(EVAL_DIR, "REPORT.md"), render(report));
 console.error(`wrote eval/REPORT.md and eval/results.json (${questions.length} questions)`);
+console.error(`breakdown correct=${report.breakdown.correct} incorrect-confident=${report.breakdown.incorrectConfident} incorrect-hedged=${report.breakdown.incorrectHedged} appropriate-abstention=${report.breakdown.appropriateAbstention} unnecessary-refusal=${report.breakdown.unnecessaryRefusal} total=${report.breakdown.total}`);
+if (!enforceBaseline(report.breakdown)) process.exit(1);
 
 function runWorker(ids, label) {
   const out = path.join(os.tmpdir(), `yehsa-eval-${label}-${process.pid}.json`);
@@ -173,6 +180,16 @@ function render(data) {
   lines.push(`- Host: ${data.platform}`);
   lines.push(`- Generated: ${data.generatedAt}`);
   lines.push(`- Questions: ${data.questionCount}`);
+  lines.push("");
+  lines.push("## Outcome breakdown");
+  lines.push("");
+  lines.push("Each question is one of these. Correct, incorrect, and refusals add up to the question count. Incorrect is incorrect-confident plus incorrect-hedged. Refusals are appropriate abstentions plus unnecessary refusals.");
+  lines.push("");
+  const breakdown = data.breakdown || tallyOutcomes(items);
+  lines.push(`- Correct: ${breakdown.correct}`);
+  lines.push(`- Incorrect: ${breakdown.incorrect} (incorrect-confident ${breakdown.incorrectConfident}, incorrect-hedged ${breakdown.incorrectHedged})`);
+  lines.push(`- Refusals: ${breakdown.refusals} (appropriate abstentions ${breakdown.appropriateAbstention}, unnecessary refusals ${breakdown.unnecessaryRefusal})`);
+  lines.push(`- Total: ${breakdown.total}`);
   lines.push("");
   lines.push("## Scoring");
   lines.push("");

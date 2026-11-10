@@ -25,7 +25,8 @@
     "books:spiritual": "node symbolic/tools/build_spiritual_index.js",
     "dictionary:load": "node symbolic/dictionary_loader.js",
     "dictionary:build": "node symbolic/tools/build_full_dictionary.js",
-    "dictionary:phone": "node symbolic/tools/build_phone_dictionary.js"
+    "dictionary:phone": "node symbolic/tools/build_phone_dictionary.js",
+    "eval:gate": "node eval/gate.mjs"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.1.3",
