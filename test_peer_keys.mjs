@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import test from "node:test";
-import { createPeerVault, memoryAdapter, secureStoreOptions } from "./symbolic/peer_vault.js";
-import { generateIdentity } from "./symbolic/peer_chat.js";
+import { SCRYPT_PARAMS, createPeerVault, memoryAdapter, notePeerKey, secureStoreOptions } from "./symbolic/peer_vault.js";
+import { generateIdentity, publicCard } from "./symbolic/peer_chat.js";
 
 test("a secure-store mock round trip keeps the key and seals history", async () => {
   const vault = createPeerVault(memoryAdapter());
@@ -44,4 +44,61 @@ test("prebuild keeps peer keys out of Android backup", () => {
   const plugin = fs.readFileSync("plugins/withPeerKeyBackup.js", "utf8");
   assert.match(plugin, /allowBackup/);
   assert.equal(generateIdentity().boxSecret.length > 0, true);
+});
+
+test("the identity survives a restart and reset deletes it only after approval", async () => {
+  const disk = new Map();
+  const first = createPeerVault(memoryAdapter(disk));
+  const created = await first.loadOrCreate();
+  await first.saveHistory({ messages: [{ text: "keep" }], peers: {} });
+  const second = createPeerVault(memoryAdapter(disk));
+  const loaded = await second.loadOrCreate();
+  assert.equal(loaded.identity.boxSecret, created.identity.boxSecret);
+  assert.equal(loaded.created, false);
+  assert.equal((await second.loadHistory()).messages[0].text, "keep");
+  const held = await second.reset({ approved: false });
+  assert.equal(held.ok, false);
+  assert.equal((await second.loadOrCreate()).identity.boxPublic, created.identity.boxPublic);
+  const wiped = await second.reset({ approved: true });
+  assert.equal(wiped.ok, true);
+  assert.match(wiped.warning, /re-verify/);
+  const third = createPeerVault(memoryAdapter(disk));
+  const fresh = await third.loadOrCreate();
+  assert.notEqual(fresh.identity.boxPublic, created.identity.boxPublic);
+  assert.equal(await third.loadHistory(), null);
+  const home = fs.readFileSync("src/phone/PeerSecurity.js", "utf8");
+  assert.match(home, /Approve reset/);
+  assert.match(home, /Your key fingerprint/);
+  assert.match(home, /Contacts must re-verify/);
+});
+
+test("a backup round trip needs the passphrase and a peer key change warns", async () => {
+  assert.ok(SCRYPT_PARAMS.N >= 16384);
+  const fast = { N: 1024, r: 8, p: 1, dkLen: 32 };
+  const vault = createPeerVault(memoryAdapter());
+  const { identity } = await vault.loadOrCreate();
+  const file = vault.exportBackup(identity, "correct horse", fast);
+  assert.equal(file.ok, true);
+  assert.equal(JSON.stringify(file.file).includes(identity.boxSecret), false);
+  assert.equal(file.file.kdf, "scrypt");
+  assert.equal(vault.importBackup(file.file, "wrong horse", { approved: true }, fast).ok, false);
+  assert.match(vault.importBackup(file.file, "correct horse", { approved: false }, fast).reason, /until you approve/);
+  const opened = vault.importBackup(file.file, "correct horse", { approved: true }, fast);
+  assert.equal(opened.ok, true);
+  assert.equal(opened.identity.boxSecret, identity.boxSecret);
+  assert.match(opened.warning, /re-verify/);
+  const card = publicCard(identity);
+  const other = publicCard(generateIdentity());
+  const seen = notePeerKey({}, "ada", card);
+  assert.equal(seen.changed, false);
+  const changed = notePeerKey(seen.known, "ada", other);
+  assert.equal(changed.changed, true);
+  assert.match(changed.warning, /Safety number changed/);
+  assert.match(changed.warning, /Re-verify/);
+  const same = notePeerKey(changed.known, "ada", other);
+  assert.equal(same.changed, false);
+  const screen = fs.readFileSync("src/phone/PeerChat.js", "utf8");
+  assert.match(screen, /Safety number changed|warning/);
+  assert.match(screen, /demo identity only/);
+  assert.match(fs.readFileSync("src/phone/mesh_keys.js", "utf8"), /demo identity only/);
 });

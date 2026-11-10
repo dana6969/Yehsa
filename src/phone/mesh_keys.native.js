@@ -71,6 +71,10 @@ export async function readPeerSecret() {
   return identity ? JSON.stringify(identity) : null;
 }
 
+export async function readChatUnlock() {
+  return vault.deviceAuth();
+}
+
 export async function setChatUnlock(requireAuthentication) {
   session = null;
   return vault.setDeviceAuth(requireAuthentication === true);

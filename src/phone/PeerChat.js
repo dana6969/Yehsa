@@ -13,7 +13,8 @@ import {
   sealDirect,
   sweepExpired
 } from "../../symbolic/peer_chat.js";
-import { savePeerSecret } from "./mesh_keys.js";
+import { KEY_CHANGE_WARNING, notePeerKey } from "../../symbolic/peer_vault.js";
+import { loadOrCreateIdentity, loadPeerHistory, savePeerHistory } from "./mesh_keys.js";
 import { Action, Quiet, colors } from "./ui.js";
 
 function qrCells(text) {
@@ -28,28 +29,54 @@ function qrCells(text) {
 }
 
 export default function PeerChat({ includeLocation = false }) {
-  const [me] = useState(() => generateIdentity());
+  const [me, setMe] = useState(null);
   const [view, setView] = useState("list");
-  const [practice] = useState(() => generateIdentity());
+  const [practice, setPractice] = useState(null);
   const [trusted, setTrusted] = useState(false);
   const [typedNumber, setTypedNumber] = useState("");
   const [draft, setDraft] = useState("");
   const [messages, setMessages] = useState([]);
+  const [peers, setPeers] = useState({});
   const [nearby, setNearby] = useState(false);
   const [vanish, setVanish] = useState(false);
   const [sosPlace, setSosPlace] = useState(false);
-  const [storeNote, setStoreNote] = useState("");
+  const [demo, setDemo] = useState(false);
+  const [warning, setWarning] = useState("");
+  const [ready, setReady] = useState(false);
   const [about, setAbout] = useState(false);
   useEffect(() => {
-    savePeerSecret(me).then((result) => {
-      if (!result?.ok && result?.reason) setStoreNote(result.reason);
-    }).catch(() => setStoreNote("The private key was not saved."));
-  }, [me]);
-  const number = safetyNumber(me.boxPublic, practice.boxPublic);
-  const cells = useMemo(() => qrCells(qrPayload(me)), [me]);
+    let live = true;
+    loadOrCreateIdentity().then(async (result) => {
+      if (!live) return;
+      setMe(result.identity);
+      setDemo(result.demo === true);
+      const history = await loadPeerHistory();
+      if (!live) return;
+      const storedPractice = history?.practice?.boxSecret ? history.practice : generateIdentity();
+      const known = history?.peers || {};
+      const noticed = notePeerKey(known, "practice", publicCard(storedPractice));
+      setPractice(storedPractice);
+      setPeers(noticed.known);
+      setMessages(history?.messages || []);
+      if (noticed.changed) setWarning(noticed.warning || KEY_CHANGE_WARNING);
+      setReady(true);
+    }).catch(() => {
+      if (live) setWarning("The private key was not saved.");
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
+  useEffect(() => {
+    if (!ready || !practice) return;
+    savePeerHistory({ messages, peers, practice }).catch(() => {});
+  }, [ready, messages, peers, practice]);
+  const number = me && practice ? safetyNumber(me.boxPublic, practice.boxPublic) : "";
+  const cells = useMemo(() => (me ? qrCells(qrPayload(me)) : []), [me]);
   const visible = sweepExpired(messages, Date.now());
 
   function send(text, { sos = false } = {}) {
+    if (!me || !practice) return;
     const envelope = sealDirect(me, publicCard(practice), text, {
       includeLocation: sos && sosPlace === true && includeLocation === true,
       fix: includeLocation ? { latitude: 45.1, longitude: -69.2 } : null,
@@ -79,7 +106,9 @@ export default function PeerChat({ includeLocation = false }) {
         </Pressable>
       </View>
       <Quiet>Private: only you and this person can read these</Quiet>
-      {about ? <Quiet>{`${PEER_CHAT_PLAIN} ${storeNote}`}</Quiet> : null}
+      {demo ? <Quiet>This web preview is a demo identity only.</Quiet> : null}
+      {warning ? <Quiet>{warning}</Quiet> : null}
+      {about ? <Quiet>{PEER_CHAT_PLAIN}</Quiet> : null}
       <View style={styles.row}>
         <Action label="Contacts" tone={view === "list" ? "brass" : "quiet"} onPress={() => setView("list")} />
         <Action label="Pair" tone={view === "pair" ? "brass" : "quiet"} onPress={() => setView("pair")} />

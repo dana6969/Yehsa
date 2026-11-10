@@ -108,6 +108,7 @@ import { decode as decodePng, encode as encodePng } from "fast-png";
 import OfflineMap from "./OfflineMap";
 import { publishArchive, publishDem, startTileServer } from "./tile_server";
 import PeerChat from "./PeerChat.js";
+import PeerSecurity from "./PeerSecurity.js";
 import {
   applyGpsSample,
   gpsStatusLabel,
@@ -287,6 +288,7 @@ export default function YehsaApp() {
                 />
               </View>
             ))}
+            <PeerSecurity />
             <Text style={styles.sectionLabel}>Approved</Text>
             {(actions?.log || []).filter((item) => item.status === "approved").map((item) => (
               <View key={`${item.id}-${item.at || item.status}`} style={styles.card}>

@@ -13,7 +13,7 @@ import {
 
 export const KEY_ACCESS = "WHEN_UNLOCKED_THIS_DEVICE_ONLY";
 export const SCRYPT_PARAMS = { N: 32768, r: 8, p: 1, dkLen: 32 };
-export const KEY_CHANGE_WARNING = "Safety number changed. Verify this person again before you trust the new key.";
+export const KEY_CHANGE_WARNING = "Safety number changed. Re-verify this person before you trust the new key.";
 export const RESET_WARNING = "Your keys and chat history are gone. Contacts must re-verify you.";
 
 const IDENTITY = "identity";
@@ -108,6 +108,9 @@ export function createPeerVault(adapter) {
       const identity = generateIdentity();
       await writeIdentity(identity);
       return { identity, created: true };
+    },
+    async deviceAuth() {
+      return secretValue(await adapter.getSecret(AUTH)) === "1";
     },
     async setDeviceAuth(requireAuthentication) {
       const identity = await this.loadIdentity();
