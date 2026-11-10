@@ -92,6 +92,19 @@ test("a feeling is a cue and does not block the note", () => {
   const miss = askField("qqqq zzzzz ploverish", passages);
   assert.equal(miss.answered, false);
   assert.match(miss.miss, /No offline note/);
+  const lightMiss = askField("What is light?", passages);
+  assert.equal(lightMiss.answered, false);
+  assert.match(lightMiss.miss, /scripture index/);
+  const scripture = JSON.parse(fs.readFileSync("symbolic_memory/spiritual_index.json", "utf8"));
+  const light = askField("What is light?", passages, { spiritualIndex: scripture });
+  assert.equal(light.answered, true);
+  assert.match(light.text, /Bible \(KJV\)/);
+  assert.match(light.text, /\d+:\d+/);
+  assert.doesNotMatch(light.text, /tundra/);
+  const life = askField("What is the meaning of life?", passages, { spiritualIndex: scripture });
+  assert.match(life.text, /This is what these texts say/);
+  const meters = askField("How many meters are in 2 kilometers?", passages);
+  assert.match(meters.text, /2000/);
 });
 
 test("from here stays opt-in on the phone session", () => {

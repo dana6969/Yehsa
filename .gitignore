@@ -38,6 +38,9 @@ symbolic_memory/mesh_peers.json
 symbolic_memory/mesh_link.json
 symbolic_memory/device_owner.json
 symbolic_memory/user_learning.json
+symbolic_memory/agent_settings.json
+symbolic_memory/agent_log.jsonl
+symbolic_memory/agent_learning.json
 symbolic_memory/position_lock.json
 symbolic_memory/waypoints.json
 symbolic_memory/track_log.json

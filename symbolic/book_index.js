@@ -25,7 +25,8 @@ function isJunk(text) {
 function listBookFiles(dir, prefix) {
   const found = [];
   for (const name of fs.readdirSync(dir).sort()) {
-    if (name === "README.md") continue;
+    if (name === "README.md" || name === "spiritual") continue;
+    if (name === "tao_te_ching.txt" || name === "kybalion.txt") continue;
     const full = path.join(dir, name);
     const rel = `${prefix}/${name}`;
     if (fs.statSync(full).isDirectory()) found.push(...listBookFiles(full, rel));

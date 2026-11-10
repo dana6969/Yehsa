@@ -1,5 +1,7 @@
 // One prose answer from field notes. Dictionary hits stay evidence unless no note answers.
 import { textHasToken } from "./book_search.js";
+import { hitIsRelevant, specificTokens, tokenCoverage } from "./relevance.js";
+import { disagreementFlag } from "./premise.js";
 
 const FIELD = new Set(["herbology", "survival", "medical", "math", "landscape"]);
 
@@ -120,9 +122,7 @@ function frame(parsed, text) {
   }
   if ((parsed.intent === "care" || shouldConnect(parsed)) && parsed.topic) {
     const tokens = String(parsed.topic).split(/\s+/).filter((token) => token.length > 2);
-    const covered = topicCovered(body, parsed.topic);
-    if (!covered && tokens.length > 1) return body;
-    if (!covered || !body.toLowerCase().includes(String(parsed.topic).toLowerCase())) {
+    if (!topicCovered(body, parsed.topic) && tokens.length === 1) {
       return `For ${articleTopic(parsed.topic)}, ${lowerFirst(body)}`;
     }
   }
@@ -164,8 +164,9 @@ function topicScore(hit, parsed) {
   for (const token of tokens) {
     if (textHasToken(text, token)) overlap += 1;
   }
-  if (tokens.length && overlap === 0) return 0;
-  let score = (hit.score || 0) + overlap * 40;
+  const covered = tokenCoverage(hit, parsed);
+  if (tokens.length && overlap === 0 && covered === 0) return 0;
+  let score = (hit.score || 0) + covered * 100 + overlap * 20;
   if (GENERIC.has(hit.symbol)) score -= 35;
   return score;
 }
@@ -184,11 +185,21 @@ function bestField(parsed, field) {
 }
 
 function orderSentences(sentences, parsed) {
-  if (parsed.intent !== "use" && parsed.intent !== "care") return sentences;
+  const { specific } = specificTokens(parsed);
+  const tagged = sentences.map((sentence, index) => ({
+    sentence,
+    index,
+    hits: specific.filter((token) => textHasToken(sentence, token)).length
+  }));
+  const matching = tagged.filter((item) => item.hits > 0).sort((a, b) => b.hits - a.hits || a.index - b.index);
+  const rest = tagged.filter((item) => item.hits === 0);
+  const chosen = [...matching, ...rest].slice(0, 4).sort((a, b) => a.index - b.index);
+  const ordered = chosen.map((item) => item.sentence);
+  if (parsed.intent !== "use" && parsed.intent !== "care") return ordered;
   const useRe = /\b(analgesic|astringent|tannin|ache|aches|poultice|wash|clean water)\b/i;
-  const leading = sentences.filter((sentence) => useRe.test(sentence));
-  const rest = sentences.filter((sentence) => !useRe.test(sentence));
-  return leading.length ? [...leading, ...rest] : sentences;
+  const leading = ordered.filter((sentence) => useRe.test(sentence));
+  const tail = ordered.filter((sentence) => !useRe.test(sentence));
+  return leading.length ? [...leading, ...tail] : ordered;
 }
 
 function subjectOf(parsed) {
@@ -259,8 +270,7 @@ function dehydrationNote(parsed, field) {
 function dictionaryAnswer(parsed, hits) {
   const subject = subjectOf(parsed);
   const head = hits.find((hit) => hit.kind === "dictionary" && hit.symbol === subject)
-    || hits.find((hit) => hit.kind === "dictionary" && subject && new RegExp(`\\b${subject}\\b`, "i").test(hit.text || ""))
-    || hits.find((hit) => hit.kind === "dictionary");
+    || hits.find((hit) => hit.kind === "dictionary" && subject && new RegExp(`\\b${subject}\\b`, "i").test(hit.text || ""));
   if (!head) return null;
   if (subject && otherContentMissed(parsed, head.text, subject)) return null;
   const gloss = readableGloss(head.text);
@@ -282,7 +292,7 @@ function uniqueHits(pieces) {
 }
 
 export function reasonAnswer(parsed, hits) {
-  const list = Array.isArray(hits) ? hits : [];
+  const list = (Array.isArray(hits) ? hits : []).filter((hit) => hitIsRelevant(hit, parsed));
   const field = list.filter(isField);
   if (shouldConnect(parsed)) {
     const pieces = selectPieces(parsed, field);
@@ -290,10 +300,12 @@ export function reasonAnswer(parsed, hits) {
   }
   const best = dehydrationNote(parsed, field) || bestField(parsed, field);
   if (best) {
-    const sentences = orderSentences(splitSentences(best.text).slice(0, 4), parsed);
+    const sentences = orderSentences(splitSentences(best.text), parsed);
     let text = frame(parsed, sentences.join(" "));
     const clause = dictionaryUseClause(list, subjectOf(parsed));
     if (clause && !/\b(analgesic|astringent|poultice)\b/i.test(text)) text = `${clause} ${text}`;
+    const conflict = disagreementFlag(field);
+    if (conflict) text = `${text} ${conflict}`;
     return { text, used: [best] };
   }
   return dictionaryAnswer(parsed, list) || { text: null, used: [] };
