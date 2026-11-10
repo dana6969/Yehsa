@@ -14,17 +14,7 @@ import { askField } from "../../symbolic/phone_field.js";
 import { expandParaphrase } from "../../symbolic/paraphrase.js";
 import { parseQuestion } from "../../symbolic/question_parse.js";
 import { routesToSpiritual } from "../../symbolic/spiritual_route.js";
-
-let scripturePromise = null;
-function loadScriptureIndex() {
-  if (!scripturePromise) {
-    scripturePromise = fetch("/spiritual_index.json").then((response) => {
-      if (!response.ok) throw new Error("The scripture index did not load.");
-      return response.json();
-    });
-  }
-  return scripturePromise;
-}
+import { loadScriptureIndex } from "./scripture_index";
 import { phoneCorpusMeta } from "../../symbolic/phone_corpus.js";
 import {
   addSessionTrack,

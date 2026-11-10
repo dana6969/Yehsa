@@ -10,6 +10,8 @@ import { calculate } from "./calculator.js";
 import { spiritualAnswer } from "./spiritual_answer.js";
 import { routesToSpiritual } from "./spiritual_route.js";
 import { premiseFlag } from "./premise.js";
+import { safetyAnswer } from "./safety.js";
+import { searchBooks } from "./book_index.js";
 import { proposeAgents } from "./agents/host.js";
 
 function premiseFromKnowledge(question, knowledge) {
@@ -67,6 +69,16 @@ export function ask(input, options = {}) {
     const spiritual = spiritualAnswer(original);
     if (!spiritual) return finish(question, emotion, null, { text: null, confidence: "low" }, options);
     return finish(question, emotion, null, spiritual, options);
+  }
+  const safety = safetyAnswer(original, searchBooks);
+  if (safety?.abstain) return finish(question, emotion, null, { text: null, confidence: "low" }, options);
+  if (safety?.text) {
+    return finish(question, emotion, null, {
+      text: safety.text,
+      kind: safety.kind,
+      symbol: safety.symbol,
+      hits: []
+    }, options);
   }
   const knowledge = recallKnowledge(expanded);
   const nav = navigationSentence(original, options);

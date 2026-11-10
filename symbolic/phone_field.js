@@ -14,6 +14,7 @@ import { premiseFlag } from "./premise.js";
 import { routesToSpiritual } from "./spiritual_route.js";
 import { quoteSpiritual } from "./spiritual_quote.js";
 import { searchPassages } from "./book_search.js";
+import { safetyAnswer } from "./safety.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -118,6 +119,19 @@ export function askField(input, passages, options = {}) {
     const error = new Error("Field notes could not be read offline.");
     error.code = "NOTES_UNAVAILABLE";
     throw error;
+  }
+  const safety = safetyAnswer(raw, (query, limit) => searchPassages(passages, query, limit));
+  if (safety?.abstain || safety?.text) {
+    return {
+      answered: Boolean(safety.text),
+      empty: false,
+      text: safety.text || null,
+      cue: null,
+      emotion: { understood: false, emotion: "neutral" },
+      miss: safety.text ? null : "No offline note answered that.",
+      corpus: phoneCorpusMeta,
+      kind: safety.kind || null
+    };
   }
   const calc = calculate(raw);
   if (calc) {
