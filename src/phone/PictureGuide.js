@@ -4,7 +4,7 @@ import manifest from "../../assets/pictures/manifest.json";
 import { guideView, imageHref, packDecision, pictureHealth, PICTURE_BUDGET_BYTES } from "../../symbolic/picture_guide.js";
 import { Quiet, ScreenHeader, colors } from "./ui.js";
 
-const DOMAINS = ["", "herbology", "first-aid", "knots", "fire", "shelter", "sky", "landscape", "signaling"];
+const DOMAINS = ["", "herbology", "first-aid", "knots", "fire", "shelter", "water", "sky", "landscape", "signaling"];
 
 export default function PictureGuide() {
   const [query, setQuery] = useState("");

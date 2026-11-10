@@ -5,7 +5,7 @@ export const PICTURE_BUDGET_BYTES = 150 * 1024 * 1024;
 
 export const PLANT_CAUTION = "A picture is not a safe identification. Never eat or use a plant from a photo alone. Look-alikes can be toxic.";
 
-const ALLOWED = /^(public domain|cc0|cc zero|cc by( [0-9.]+)?|cc by-sa( [0-9.]+)?)$/i;
+const ALLOWED = /^(public domain|cc0|cc zero|cc by( [0-9.]+)?( [a-z]{2})?|cc by-sa( [0-9.]+)?( [a-z]{2})?)$/i;
 const FORBIDDEN = /\b(nc|nd|gfdl|all rights|fair use|no restrictions)\b/i;
 
 export const GUIDE_ENTRIES = [
@@ -18,10 +18,17 @@ export const GUIDE_ENTRIES = [
   { symbol: "tourniquet_last_resort", title: "Tourniquet", domain: "first-aid", plant: false },
   { symbol: "bleeding_pressure", title: "Pressure on bleeding", domain: "first-aid", plant: false },
   { symbol: "frostbite_warming", title: "Frostbite", domain: "first-aid", plant: false },
+  { symbol: "recovery_position", title: "Recovery position", domain: "first-aid", plant: false },
   { symbol: "bowline_knot", title: "Bowline", domain: "knots", plant: false },
+  { symbol: "square_knot", title: "Square knot", domain: "knots", plant: false },
+  { symbol: "taut_line", title: "Taut-line hitch", domain: "knots", plant: false },
+  { symbol: "truckers_hitch", title: "Trucker's hitch", domain: "knots", plant: false },
   { symbol: "clove_hitch", title: "Clove hitch", domain: "knots", plant: false },
+  { symbol: "figure_eight", title: "Figure-eight", domain: "knots", plant: false },
+  { symbol: "two_half_hitches", title: "Two half hitches", domain: "knots", plant: false },
   { symbol: "fire_lay", title: "Log fire lay", domain: "fire", plant: false },
   { symbol: "shelter_fire", title: "Shelter", domain: "shelter", plant: false },
+  { symbol: "clean_water_before_care", title: "Boil water", domain: "water", plant: false },
   { symbol: "weather_cloud", title: "Cumulonimbus", domain: "sky", plant: false },
   { symbol: "watershed", title: "Watershed", domain: "landscape", plant: false },
   { symbol: "signaling", title: "Signaling", domain: "signaling", plant: false }

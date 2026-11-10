@@ -35,12 +35,15 @@ test("every picture has a source, a license, and an author, and none are unlicen
 
 test("a note with no accepted picture stays a placeholder and is flagged", () => {
   const tourniquet = guideView(manifest).find((entry) => entry.symbol === "tourniquet_last_resort");
-  assert.equal(tourniquet.placeholder, true);
-  assert.equal(tourniquet.images.length, 0);
+  assert.equal(tourniquet.placeholder, false);
+  assert.ok(tourniquet.images.some((image) => /FM 4-25\.11/.test(image.attribution) && image.license === "Public domain"));
+  const unknown = guideView(manifest).find((entry) => entry.symbol === "unknown_plant");
+  assert.equal(unknown.placeholder, true);
+  assert.equal(unknown.images.length, 0);
   assert.match(guideView(manifest).find((entry) => entry.symbol === "yarrow_achillea").caution, /Never eat or use a plant/);
   assert.equal(PLANT_CAUTION.includes("Look-alikes can be toxic"), true);
   const missing = pictureHealth(manifest, files).filter((item) => item.problem === "missing");
-  assert.ok(missing.some((item) => item.id === "tourniquet_last_resort"));
+  assert.ok(missing.some((item) => item.id === "unknown_plant"));
   const yarrow = picturesFor(manifest, "yarrow_achillea");
   assert.ok(yarrow.some((image) => image.role === "lookalike" && image.warning));
 });
