@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "fs";
+import os from "os";
+import path from "path";
 import test from "node:test";
 import { ask } from "./symbolic/ask.js";
 import { calculate } from "./symbolic/calculator.js";
@@ -77,10 +79,16 @@ test("a false premise is called out when the note rejects it", () => {
 
 test("agents log proposals and honor opt-out", () => {
   const before = readAgentLog().length;
+  const missing = [
+    path.join(os.tmpdir(), `yehsa-404-a-${process.pid}.txt`),
+    path.join(os.tmpdir(), `yehsa-404-b-${process.pid}.txt`)
+  ];
+  fs.writeFileSync(missing[0], "404: Not Found\n");
+  fs.writeFileSync(missing[1], "<html><title>404 Not Found</title></html>\n");
   const proposals = proposeAgents({
     question: "What dose cures this?",
     answer: { answered: true, text: "A note.", confidence: "ok" },
-    files: ["symbolic_books/hermetica.txt", "symbolic_books/druidry_handbook.txt"]
+    files: missing
   });
   assert.ok(proposals.some((item) => item.agent === "corpus" && item.problems.length >= 2));
   assert.ok(readAgentLog().length > before);

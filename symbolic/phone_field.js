@@ -12,6 +12,7 @@ import { expandParaphrase } from "./paraphrase.js";
 import { calculate } from "./calculator.js";
 import { premiseFlag } from "./premise.js";
 import { routesToSpiritual } from "./spiritual_route.js";
+import { quoteSpiritual } from "./spiritual_quote.js";
 import { searchPassages } from "./book_search.js";
 
 function pointOf(raw) {
@@ -134,13 +135,27 @@ export function askField(input, passages, options = {}) {
   const expanded = expandParaphrase(raw);
   const question = parseQuestion(expanded);
   if (routesToSpiritual(raw, question)) {
+    const passages = options.spiritualIndex?.passages || options.spiritualIndex;
+    const spiritual = Array.isArray(passages) ? quoteSpiritual(raw, passages) : null;
+    if (!spiritual) {
+      return {
+        answered: false,
+        empty: false,
+        text: null,
+        cue: null,
+        emotion: { understood: false, emotion: "neutral" },
+        miss: "The scripture index is not loaded yet, so there is no quoted passage for that.",
+        corpus: phoneCorpusMeta,
+        kind: "spiritual"
+      };
+    }
     return {
-      answered: false,
+      answered: true,
       empty: false,
-      text: null,
+      text: spiritual.text,
       cue: null,
       emotion: { understood: false, emotion: "neutral" },
-      miss: "This phone pack does not include the scripture index, so there is no quoted passage for that.",
+      miss: null,
       corpus: phoneCorpusMeta,
       kind: "spiritual"
     };

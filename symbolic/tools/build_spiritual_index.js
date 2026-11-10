@@ -234,19 +234,57 @@ function kjv(file, out) {
   flush();
 }
 
+function ocrBook(file, title, out) {
+  let raw = fs.readFileSync(path.join(DIR, file), "utf8").replace(/\r/g, "");
+  raw = raw.replace(/Digitized\s+by\s+Microsoft[^\n]*/gi, "");
+  raw = raw.replace(/[ \t]{2,}/g, " ");
+  let heading = "opening";
+  let buf = [];
+  let part = 0;
+  const flush = () => {
+    const quote = tidy(buf.join(" "));
+    buf = [];
+    const letters = (quote.match(/[A-Za-z]/g) || []).length;
+    if (quote.length < 80 || letters < quote.length * 0.55) return;
+    if (/digitized by|internet archive|project gutenberg|fair use/i.test(quote)) return;
+    part += 1;
+    push(out, title, `${heading}, part ${part}`, quote, `symbolic_books/spiritual/${file}`);
+  };
+  for (const line of raw.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      flush();
+      continue;
+    }
+    const headingLike = trimmed.length < 70 && !/[.]/.test(trimmed) && trimmed === trimmed.toUpperCase() && /[A-Z]/.test(trimmed);
+    if (headingLike) {
+      flush();
+      heading = trimmed.replace(/\s+/g, " ");
+      part = 0;
+      continue;
+    }
+    buf.push(trimmed);
+  }
+  flush();
+}
+
 const passages = [];
 tao("tao_te_ching.txt", passages);
 dhammapada("dhammapada.txt", passages);
 gita("bhagavad_gita.txt", passages);
 kybalion("kybalion.txt", passages);
 kjv("kjv.txt", passages);
+ocrBook("hermetica_mead_vol2.txt", "Thrice-Greatest Hermes (Mead)", passages);
+ocrBook("barddas.txt", "Barddas (Williams, 1862)", passages);
 
 const sources = [
   { file: "symbolic_books/spiritual/tao_te_ching.txt", title: "Tao Te Ching", translator: "James Legge", origin: "Project Gutenberg eBook 216" },
   { file: "symbolic_books/spiritual/bhagavad_gita.txt", title: "Bhagavad Gita (The Song Celestial)", translator: "Edwin Arnold", origin: "Project Gutenberg eBook 2388" },
   { file: "symbolic_books/spiritual/dhammapada.txt", title: "Dhammapada", translator: "F. Max Muller", origin: "Project Gutenberg eBook 2017" },
   { file: "symbolic_books/spiritual/kybalion.txt", title: "The Kybalion", translator: "Three Initiates", origin: "Project Gutenberg eBook 14209" },
-  { file: "symbolic_books/spiritual/kjv.txt", title: "Bible, King James Version", translator: "", origin: "Project Gutenberg eBook 10" }
+  { file: "symbolic_books/spiritual/kjv.txt", title: "Bible, King James Version", translator: "", origin: "Project Gutenberg eBook 10" },
+  { file: "symbolic_books/spiritual/hermetica_mead_vol2.txt", title: "Thrice-Greatest Hermes, Volume II", translator: "G. R. S. Mead", origin: "London: Theosophical Publishing Society, 1906. OCR from Internet Archive MeadGRSThriceGreatestHermesVolII1906. Not a Project Gutenberg file." },
+  { file: "symbolic_books/spiritual/barddas.txt", title: "Barddas", translator: "J. Williams Ab Ithel, from Iolo Morganwg", origin: "London: Welsh Manuscript Society, 1862. OCR from Internet Archive barddasoracolle00willgoog. Iolo's papers are not a verified ancient druid liturgy." }
 ];
 
 fs.writeFileSync(OUT, JSON.stringify({ sources, count: passages.length, passages }));

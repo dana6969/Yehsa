@@ -11,6 +11,20 @@ import {
 import { StatusBar } from "expo-status-bar";
 import books from "../../symbolic_memory/books_index.json";
 import { askField } from "../../symbolic/phone_field.js";
+import { expandParaphrase } from "../../symbolic/paraphrase.js";
+import { parseQuestion } from "../../symbolic/question_parse.js";
+import { routesToSpiritual } from "../../symbolic/spiritual_route.js";
+
+let scripturePromise = null;
+function loadScriptureIndex() {
+  if (!scripturePromise) {
+    scripturePromise = fetch("/spiritual_index.json").then((response) => {
+      if (!response.ok) throw new Error("The scripture index did not load.");
+      return response.json();
+    });
+  }
+  return scripturePromise;
+}
 import { phoneCorpusMeta } from "../../symbolic/phone_corpus.js";
 import {
   addSessionTrack,
@@ -262,8 +276,15 @@ function AskPane({ session, owner, active }) {
     const generation = ++askGen.current;
     setTimeout(() => {
       if (askGen.current !== generation) return;
+      const run = async () => {
+        const spiritualIndex = routesToSpiritual(text, parseQuestion(expandParaphrase(text)))
+          ? await loadScriptureIndex()
+          : null;
+        return askField(text, books.passages, { session, spiritualIndex });
+      };
+      run().then((result) => {
+      if (askGen.current !== generation) return;
       try {
-        const result = askField(text, books.passages, { session });
         if (result.empty) {
           setPhase("empty");
           setAnswer(null);
@@ -295,6 +316,13 @@ function AskPane({ session, owner, active }) {
         setCue(null);
         setNotice(err?.message || "That question could not be read offline.");
       }
+      }).catch((err) => {
+        if (askGen.current !== generation) return;
+        setPhase("error");
+        setAnswer(null);
+        setCue(null);
+        setNotice(err?.message || "That question could not be read offline.");
+      });
     }, 40);
   }
 

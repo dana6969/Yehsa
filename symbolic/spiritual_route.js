@@ -9,7 +9,7 @@ export function isSpiritualQuestion(raw) {
   const text = String(raw || "");
   if (isFieldLightQuestion(text)) return false;
   if (/\b(life-threatening|tourniquet|splint|dehydration|frostbite)\b/i.test(text)) return false;
-  if (/\b(meaning of life|purpose of life|why are we here|why do we live|what is the soul|what is god|what is the tao|afterlife|scripture|spiritual)\b/i.test(text)) return true;
+  if (/\b(meaning of life|purpose of life|why are we here|why do we live|what is the soul|what is god|what is the tao|afterlife|scripture|spiritual|hermetica|hermes|barddas|druid)\b/i.test(text)) return true;
   if (/\bwhat is light\b/i.test(text)) return true;
   if (/\bwhat is (?:a |the )?(?:soul|spirit|heaven|salvation)\b/i.test(text)) return true;
   return false;

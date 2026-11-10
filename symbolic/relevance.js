@@ -31,8 +31,17 @@ export function hitIsRelevant(hit, parsed) {
   if (/\b(mosquito\w*|insect\w*|bite\w*)\b/i.test(`${parsed?.topic || ""} ${parsed?.text || ""}`) && /\b(plantain|plantago|poultice)\b/i.test(hit?.text || "")) {
     return true;
   }
+  const symbol = String(hit?.symbol || "").toLowerCase();
+  if (specific.some((token) => token.length >= 5 && symbol.includes(token))) return true;
   const matched = needed.filter((token) => textHasToken(blob, token));
-  if (specific.length) return matched.length > 0;
+  if (specific.length >= 2) return matched.length >= 2;
+  if (specific.length === 1) return matched.length >= 1;
   const minimum = Math.min(2, needed.length);
   return matched.length >= minimum;
+}
+
+export function tokenCoverage(hit, parsed) {
+  const { specific } = specificTokens(parsed);
+  const blob = `${hit?.symbol || ""} ${hit?.text || ""}`;
+  return specific.filter((token) => textHasToken(blob, token)).length;
 }

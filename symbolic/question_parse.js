@@ -32,7 +32,7 @@ const DOMAIN_CUES = [
   { domain: "medical", test: /\b(medical|medicine|wound care)\b/ },
   { domain: "math", test: /\b(math|mathematics|equation|triangle|calculate)\b/ },
   { domain: "landscape", test: /\b(landscape|geography|biome|ecosystem|watershed|declination|orienteering|contour|tundra|coastline|terrain|deserts?|arctic|forests?|mountains?|true north|magnetic north|great-circle|great circle)\b/ },
-  { domain: "spiritual", test: /\b(spiritual|scripture|meaning of life|soul|the tao)\b/ }
+  { domain: "spiritual", test: /\b(spiritual|scripture|meaning of life|soul|the tao|hermetica|hermes|barddas|druid)\b/ }
 ];
 
 function clean(text) {

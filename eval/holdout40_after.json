@@ -1,0 +1,572 @@
+{
+  "label": "holdout40_after.json",
+  "generatedAt": "2026-11-10T01:35:05.100Z",
+  "count": 52,
+  "passed": 52,
+  "by": {
+    "factual": {
+      "n": 14,
+      "pass": 14,
+      "wrong": 0,
+      "abstain": 0
+    },
+    "multi": {
+      "n": 5,
+      "pass": 5,
+      "wrong": 0,
+      "abstain": 0
+    },
+    "math": {
+      "n": 10,
+      "pass": 10,
+      "wrong": 0,
+      "abstain": 0
+    },
+    "contradiction": {
+      "n": 6,
+      "pass": 6,
+      "wrong": 0,
+      "abstain": 0
+    },
+    "unfamiliar": {
+      "n": 9,
+      "pass": 9,
+      "wrong": 0,
+      "abstain": 9
+    },
+    "spiritual": {
+      "n": 4,
+      "pass": 4,
+      "wrong": 0,
+      "abstain": 0
+    },
+    "paraphrase": {
+      "n": 4,
+      "pass": 4,
+      "wrong": 0,
+      "abstain": 0
+    }
+  },
+  "rows": [
+    {
+      "id": "h-water-heat",
+      "category": "factual",
+      "prompt": "Before I drink water from a creek, what heat step does the water note recommend?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Water: carry known-safe water when you can. If you must treat water in the field, boiling is the straightforward heat method. Cloudy water should be settled or strained before boiling. This is an offline reminder, not a guarantee the water is safe, and not a substitute for emergency services."
+    },
+    {
+      "id": "h-cloudy",
+      "category": "factual",
+      "prompt": "Cloudy water from a puddle: what should I do with the grit before heating it?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Water: carry known-safe water when you can. If you must treat water in the field, boiling is the straightforward heat method. Cloudy water should be settled or strained before boiling. This is an offline reminder, not a guarantee the water is safe, and not a substitute for emergency services."
+    },
+    {
+      "id": "h-urine-fact",
+      "category": "factual",
+      "prompt": "Does the water note treat urine as something to drink?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Snow and ice need melting before you drink them, and melting spends fuel you may need for warmth. Eating snow when you are already cold cools you further. Salt water and urine are not drinking water. This reminder sets no liter quota and no chemical dose."
+    },
+    {
+      "id": "h-frost-warm",
+      "category": "factual",
+      "prompt": "How should frostbitten toes be warmed once I am in shelter?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Frostbite is frozen skin, often fingers, toes, ears, or the nose. Get to shelter and put on dry layers. Do not rub the skin, and do not rub snow on it. Warm it against healthy skin or in warm, not hot, water, and do not walk on a thawed foot if you still must travel; this is not a substitute for emergency care."
+    },
+    {
+      "id": "h-splint-skin",
+      "category": "factual",
+      "prompt": "After a splint is tied, what should the skin past it still be able to do?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "A splint keeps a suspected broken bone still, such as a broken arm or leg. Pad it, include the joints above and below, and tie it snug enough to stop motion without cutting off circulation. Skin beyond it should stay warm and able to feel. Do not set the bone; this is not surgery or a substitute for emergency care."
+    },
+    {
+      "id": "h-tourniquet-when",
+      "category": "factual",
+      "prompt": "When is a tourniquet the tool for bleeding on a limb?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "A tourniquet is a last resort for life-threatening limb bleeding, when direct pressure with clean cloth does not stop the blood. Put it between the wound and the heart, and note the time it went on. Do not loosen it in the field. This is not surgery and not a substitute for emergency care."
+    },
+    {
+      "id": "h-tourniquet-time",
+      "category": "factual",
+      "prompt": "What do I write down at the moment a tourniquet goes on?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "A tourniquet is a last resort for life-threatening limb bleeding, when direct pressure with clean cloth does not stop the blood. Put it between the wound and the heart, and note the time it went on. Do not loosen it in the field. This is not surgery and not a substitute for emergency care."
+    },
+    {
+      "id": "h-willow-id",
+      "category": "factual",
+      "prompt": "Someone wants willow bark for an ache. What must be true of the tree first?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Willow bark (Salix) is traditionally used for aches, not as a medicine. Salicin from willow is described as an analgesic, and astringent tannins show up in the bark. Identify the tree before any use. This is not a dose or a substitute for emergency care."
+    },
+    {
+      "id": "h-moss",
+      "category": "factual",
+      "prompt": "In the forest notes, is moss a way to find north?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Forests hide the sun and the distant ridge. Travel is slower, and a handrail such as a stream or a ridge matters more than a bearing you cannot check. Moss is not a compass. Mark the way back while the last sure point is still in sight."
+    },
+    {
+      "id": "h-contour-v",
+      "category": "factual",
+      "prompt": "A V shape in contour lines often points which way in a valley?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Contour lines join points of equal elevation. Lines close together mean steep ground. A V in the contours often points upstream in a valley. Index contours are the labeled ones."
+    },
+    {
+      "id": "h-summer-light",
+      "category": "factual",
+      "prompt": "In arctic and tundra country, what does the note say summer light can do?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Arctic and tundra country is open, cold, and often wet underfoot, with few trees to use as landmarks. When the horizon disappears, a short bearing and a counted pace are safer than a long walk. Summer light can last all day. Winter dark does the opposite."
+    },
+    {
+      "id": "h-whistle",
+      "category": "factual",
+      "prompt": "What repeated pattern of whistle blasts marks distress?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Signaling: three of anything (whistle blasts, bright flashes, fires) is a common distress pattern. A mirror or light aimed at rescuers is a signal, not a weapon. Tell another person where you are going before you travel."
+    },
+    {
+      "id": "h-hypotenuse",
+      "category": "factual",
+      "prompt": "For a right-angled triangle, how does the long side relate to the other two?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "In a right triangle, the square of the hypotenuse equals the sum of the squares of the other two sides."
+    },
+    {
+      "id": "h-shelter-wind",
+      "category": "factual",
+      "prompt": "When I pick a place to sleep outside, which way should the opening face relative to the wind?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Camp site: pick flat ground out of a drainage, off the ridge, and clear of dead limbs. Face the opening away from the night wind. A spot near a stream is handy and also a flood risk, so step uphill a little. This is planning, not a permit to camp where rules forbid it."
+    },
+    {
+      "id": "h-bite-both",
+      "category": "multi",
+      "prompt": "A mosquito bite is itchy. What is the wash, and when does it become an emergency instead of a plant?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Wash it with clean water. Crushed plantain (Plantago) leaves are a traditional poultice for an itchy insect bite, and only after the plant is identified. Swelling of the face or throat, or trouble breathing, needs a person and emergency services, not a plant. Cover skin and avoid standing water when you can, so fewer m"
+    },
+    {
+      "id": "h-charcoal-heat",
+      "category": "multi",
+      "prompt": "I packed charcoal and the water still looks unsafe. Which heat step is actually written in the water notes?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Where to look: green growth on a dry slope, a dark seep, or a stream in the lowest line of a valley are clues. Flowing water is a better clue than a still pool. Clues are not proof. Settle the grit, then boil, and still treat the result as uncertain."
+    },
+    {
+      "id": "h-willow-limit",
+      "category": "multi",
+      "prompt": "What does the willow note say the bark contains, and what is the identification limit?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Willow bark (Salix) is traditionally used for aches, not as a medicine. Salicin from willow is described as an analgesic, and astringent tannins show up in the bark. Identify the tree before any use. This is not a dose or a substitute for emergency care."
+    },
+    {
+      "id": "h-yarrow-limit",
+      "category": "multi",
+      "prompt": "Yarrow on a small scrape: what plant is named, and what dose limit is stated?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Yarrow (Achillea millefolium) is a field plant for a small bleeding scrape, and only after the plant is identified. Feathery leaves and a flat white flower cluster are the usual look, and lookalikes are easy to mistake. Do not use a plant you have not identified. This is not a dose or a substitute for emergency care."
+    },
+    {
+      "id": "h-bleed-help",
+      "category": "multi",
+      "prompt": "Serious bleeding: what pressure step, and who else is required?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Serious bleeding needs direct pressure with clean cloth and urgent human help. This note does not teach surgery or medication dosing."
+    },
+    {
+      "id": "h-add",
+      "category": "math",
+      "prompt": "What is 8 plus 5?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "8 and 5 come to 13."
+    },
+    {
+      "id": "h-sub",
+      "category": "math",
+      "prompt": "Subtract 9 from 40.",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "40 minus 9 is 31."
+    },
+    {
+      "id": "h-mul",
+      "category": "math",
+      "prompt": "What is 12 times 4?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "12 and 4 come to 48."
+    },
+    {
+      "id": "h-div",
+      "category": "math",
+      "prompt": "What is 100 divided by 4?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "100 and 4 come to 25."
+    },
+    {
+      "id": "h-kg",
+      "category": "math",
+      "prompt": "How many grams are in 3 kilograms?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "3 kilograms is 3000 grams."
+    },
+    {
+      "id": "h-c-to-f",
+      "category": "math",
+      "prompt": "What is 20 Celsius in Fahrenheit?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "20 Celsius is 68 Fahrenheit."
+    },
+    {
+      "id": "h-f-to-c",
+      "category": "math",
+      "prompt": "What is 68 Fahrenheit in Celsius?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "68 Fahrenheit is 20 Celsius."
+    },
+    {
+      "id": "h-liters",
+      "category": "math",
+      "prompt": "How many milliliters are in 4 liters?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "4 liters is 4000 milliliters."
+    },
+    {
+      "id": "h-speed",
+      "category": "math",
+      "prompt": "How many meters per second is 36 kilometers per hour?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "36 kph is 10 mps."
+    },
+    {
+      "id": "h-km",
+      "category": "math",
+      "prompt": "How many meters is 7 kilometers?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "7 kilometers is 7000 meters."
+    },
+    {
+      "id": "h-snow-premise",
+      "category": "contradiction",
+      "prompt": "Rubbing snow onto frostbite is the proper treatment. How do I rub the frozen skin?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Frostbite is frozen skin, often fingers, toes, ears, or the nose. Get to shelter and put on dry layers. Do not rub the skin, and do not rub snow on it. Warm it against healthy skin or in warm, not hot, water, and do not walk on a thawed foot if you still must travel; this is not a substitute for emergency care."
+    },
+    {
+      "id": "h-set-bone",
+      "category": "contradiction",
+      "prompt": "It is correct to set the broken bone myself before I splint it. How do I set it?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "The note contradicts that premise. It says: do not set the bone. A splint keeps a suspected broken bone still, such as a broken arm or leg. Pad it, include the joints above and below, and tie it snug enough to stop motion without cutting off circulation. Skin beyond it should stay warm and able to feel. Do not set the "
+    },
+    {
+      "id": "h-moss-compass",
+      "category": "contradiction",
+      "prompt": "Moss always points north, so the compass can stay in the pack. Which way does the moss point?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Forests hide the sun and the distant ridge. Travel is slower, and a handrail such as a stream or a ridge matters more than a bearing you cannot check. Moss is not a compass. Mark the way back while the last sure point is still in sight."
+    },
+    {
+      "id": "h-urine-drink",
+      "category": "contradiction",
+      "prompt": "Urine is drinking water in camp. How should I drink it?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Snow and ice need melting before you drink them, and melting spends fuel you may need for warmth. Eating snow when you are already cold cools you further. Salt water and urine are not drinking water. This reminder sets no liter quota and no chemical dose."
+    },
+    {
+      "id": "h-harbor",
+      "category": "contradiction",
+      "prompt": "These landscape notes store a harbor town. Which town should I walk to?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "A coast is where land meets a large body of water. Tides, cliffs, and headlands change the walkable strip through the day. A headland is a natural landmark. A harbor town is not stored here."
+    },
+    {
+      "id": "h-plantain-skip",
+      "category": "contradiction",
+      "prompt": "Plantain replaces emergency care when the throat is swelling. Should I skip getting help?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "A mosquito bite is usually a small itchy spot. Wash it with clean water. Swelling of the face or throat, or trouble breathing, needs a person and emergency services, not a plant."
+    },
+    {
+      "id": "h-canada",
+      "category": "unfamiliar",
+      "prompt": "What is the capital of Canada?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "h-honda",
+      "category": "unfamiliar",
+      "prompt": "How do I change a flat tire on a Honda?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "h-oganesson",
+      "category": "unfamiliar",
+      "prompt": "What is the atomic number of oganesson?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "h-k2",
+      "category": "unfamiliar",
+      "prompt": "How many meters tall is K2?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "h-ibuprofen",
+      "category": "unfamiliar",
+      "prompt": "What dose of ibuprofen should a child take?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "h-taxes",
+      "category": "unfamiliar",
+      "prompt": "How do I file a tax return in Canada?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "h-methane",
+      "category": "unfamiliar",
+      "prompt": "What is the chemical formula of methane?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "h-worldcup",
+      "category": "unfamiliar",
+      "prompt": "Who won the 1998 World Cup?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "h-wifi",
+      "category": "unfamiliar",
+      "prompt": "How do I change the password on a home wifi router?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "h-soul",
+      "category": "spiritual",
+      "prompt": "What is the soul?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "These lines are what the texts say. They are not a verdict. Thrice-Greatest Hermes (Mead), MIND UNTO HERMES, part 3: \"Further, the iEon’s soul is God ; the Cosmos’ soul is iEon ; the Earth’s soul, Heaven.\" Bible (KJV), The Book of the Prophet Ezekiel 18:4: \"Behold, all souls are mine; as the soul of the father, so also"
+    },
+    {
+      "id": "h-life",
+      "category": "spiritual",
+      "prompt": "What is the meaning of life?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "These lines are what the texts say. They are not a verdict. The Kybalion, Chapter VIII, part 31 part 3: \"The intelligent student may recognize what we mean by this when we state that the meaning of \"Spirit\" as used by the Hermetists is akin to \"Living Power\"; \"Animated Force;\" \"Inner Essence;\" \"Essence of Life,\" etc., "
+    },
+    {
+      "id": "h-light",
+      "category": "spiritual",
+      "prompt": "What is light?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "These lines are what the texts say. They are not a verdict. Bible (KJV), The Gospel According to Saint John 12:36: \"While ye have light, believe in the light, that ye may be the children of light. These things spake Jesus, and departed, and did hide himself from them.\" Thrice-Greatest Hermes (Mead), THRICE-GREATEST HER"
+    },
+    {
+      "id": "h-tao",
+      "category": "spiritual",
+      "prompt": "What is the Tao?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "These lines are what the texts say. They are not a verdict. Tao Te Ching (Legge), Ch. 40.1: \"The movement of the Tao By contraries proceeds; And weakness marks the course Of Tao's mighty deeds.\" This is what these texts say, not a verdict from Yehsa."
+    },
+    {
+      "id": "h-parched",
+      "category": "paraphrase",
+      "prompt": "A walker is parched and dizzy under a hot sun. What should they do?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Carry more than the first hour seems to need, then drink small amounts through the day instead of emptying the bottle at once. In heat, rest in shade before you feel dizzy. If someone stops sweating or grows confused, stop travel and get human help. This is not a medical threshold."
+    },
+    {
+      "id": "h-rolling-boil",
+      "category": "paraphrase",
+      "prompt": "We were told to give the creek water a rolling boil. Does the note agree that heating is the step?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Where to look: green growth on a dry slope, a dark seep, or a stream in the lowest line of a valley are clues. Flowing water is a better clue than a still pool. Clues are not proof. Settle the grit, then boil, and still treat the result as uncertain."
+    },
+    {
+      "id": "h-frozen-rub",
+      "category": "paraphrase",
+      "prompt": "Frozen fingertips showed up after the night. Should they be rubbed?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "The note contradicts that premise. It says: do not rub the skin. A clear night is often colder than a cloudy one. Put the rain layer on before you are soaked, and keep a hat where you can reach it. Stop early enough to camp in daylight. The plan is to be dry before the wind arrives, not after."
+    },
+    {
+      "id": "h-add-words",
+      "category": "paraphrase",
+      "prompt": "If I add 11 and 6, what number do I get?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "The sum of 11 and 6 is 17."
+    }
+  ]
+}
