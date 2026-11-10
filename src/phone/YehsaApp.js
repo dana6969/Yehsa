@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Switch,
+  Image,
   Text,
   TextInput,
   View
@@ -67,6 +68,9 @@ import { sendToModel } from "./model_client.js";
 import { deleteModelKey, readModelKey, saveModelKey } from "./model_secrets.js";
 import ModelsPane from "./ModelsPane.js";
 import LearnedPane from "./LearnedPane.js";
+import PictureGuide from "./PictureGuide.js";
+import pictureManifest from "../../assets/pictures/manifest.json";
+import { imageHref, picturesFor } from "../../symbolic/picture_guide.js";
 import {
   approveLearned,
   emptyLearned,
@@ -115,6 +119,7 @@ const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 const TABS = [
   { id: "ask", label: "Chat", mark: "○" },
   { id: "land", label: "Map", mark: "◇" },
+  { id: "guide", label: "Guide", mark: "▣" },
   { id: "position", label: "Me", mark: "•" },
   { id: "mesh", label: "Mesh", mark: "⋮" }
 ];
@@ -251,6 +256,13 @@ export default function YehsaApp() {
             mapPacks={mapPacks}
             setMapPacks={setMapPacks}
           />
+        </View>
+        <View
+          style={[styles.pane, tab !== "guide" && styles.hidden]}
+          pointerEvents={tab === "guide" ? "auto" : "none"}
+          accessibilityElementsHidden={tab !== "guide"}
+        >
+          <PictureGuide />
         </View>
         <View
           style={[styles.pane, tab !== "position" && styles.hidden]}
@@ -754,6 +766,12 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
             role: "yehsa",
             text: proposed.card ? offer : "That action is switched off, so I did not send anything.",
             chips: sourceChips(result),
+            pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
+              id: image.id,
+              href: imageHref(image.file),
+              attribution: image.attribution,
+              warning: image.warning
+            })),
             card: proposed.card,
             question: text,
             symbol: result?.symbol || null,
@@ -776,6 +794,12 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
           role: "yehsa",
           text: reply,
           chips: sourceChips(result),
+          pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
+            id: image.id,
+            href: imageHref(image.file),
+            attribution: image.attribution,
+            warning: image.warning
+          })),
           question: text,
           symbol: result?.symbol || null,
           learnedId: result?.learnedId || null
@@ -976,6 +1000,13 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
         {messages.map((item) => (
           <View key={item.id} style={item.role === "you" ? styles.bubbleYou : styles.bubbleYehsa}>
             <Text style={styles.bubbleText}>{item.text}</Text>
+            {item.pictures?.map((picture) => (
+              <View key={picture.id}>
+                {picture.warning ? <Text style={{ color: colors.clay }}>{picture.warning}</Text> : null}
+                <Image accessibilityLabel={picture.attribution} source={{ uri: picture.href }} style={{ width: 140, height: 100, borderRadius: 8, marginTop: 8 }} />
+                <Quiet>{picture.attribution}</Quiet>
+              </View>
+            ))}
             {item.chips?.length ? (
               <View style={styles.chips}>
                 {item.chips.map((chip) => (
