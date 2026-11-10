@@ -19,7 +19,7 @@ export default function PictureGuide() {
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="Picture guide"
-        lead="Real pictures with a named source and license. Nothing here was generated and then called a plant."
+        lead="Real pictures, with credits when you ask."
       />
       <Quiet>{decision.text} Budget {Math.round(PICTURE_BUDGET_BYTES / (1024 * 1024))} MB.</Quiet>
       <TextInput accessibilityLabel="Search pictures" value={query} onChangeText={setQuery} placeholder="Search" placeholderTextColor="#8f9a8c" style={styles.input} />

@@ -67,7 +67,7 @@ export default function LearnedPane({ store, deviceId, onChange, onShare }) {
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="What Yehsa has learned"
-        lead="This is retrieval memory on this phone, not retraining of a neural model. Yehsa can answer a learned question after you teach it, and abstains otherwise."
+        lead="Notes this phone has learned. Not a retrained model."
       />
       <Quiet>{learnedSummary(store)} Notes stay bound to this device. They are not shared over the mesh unless you approve a share.</Quiet>
       {store?.rejected ? <Quiet>Notes from another device were not opened.</Quiet> : null}

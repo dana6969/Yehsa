@@ -93,6 +93,28 @@ export function packDecision(totalBytes) {
   };
 }
 
+const FRIENDLY_SOURCES = {
+  herbology: "Plants",
+  willow_bark: "Willow",
+  plantain_plantago: "Plantain",
+  yarrow_achillea: "Yarrow",
+  dictionary: "Dictionary",
+  survival: "Field notes",
+  landscape: "Landscape",
+  medical: "First aid",
+  about: "About",
+  capabilities: "This phone",
+  learned: "Learned here",
+  spiritual: "Scripture",
+  calculator: "Math"
+};
+
+export function friendlySource(chip) {
+  const key = String(chip || "");
+  if (FRIENDLY_SOURCES[key]) return FRIENDLY_SOURCES[key];
+  return key.replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 export function imageHref(file) {
   return `/pictures/files/${file}`;
 }

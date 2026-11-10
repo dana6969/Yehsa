@@ -70,7 +70,8 @@ import ModelsPane from "./ModelsPane.js";
 import LearnedPane from "./LearnedPane.js";
 import PictureGuide from "./PictureGuide.js";
 import pictureManifest from "../../assets/pictures/manifest.json";
-import { imageHref, picturesFor } from "../../symbolic/picture_guide.js";
+import { friendlySource, imageHref, picturesFor } from "../../symbolic/picture_guide.js";
+import { Ionicons } from "@expo/vector-icons";
 import {
   approveLearned,
   emptyLearned,
@@ -117,11 +118,11 @@ import {
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
 const TABS = [
-  { id: "ask", label: "Chat", mark: "○" },
-  { id: "land", label: "Map", mark: "◇" },
-  { id: "guide", label: "Guide", mark: "▣" },
-  { id: "position", label: "Me", mark: "•" },
-  { id: "mesh", label: "Mesh", mark: "⋮" }
+  { id: "ask", label: "Chat", icon: "chatbubble-ellipses" },
+  { id: "land", label: "Map", icon: "map" },
+  { id: "guide", label: "Guide", icon: "images" },
+  { id: "position", label: "Me", icon: "person" },
+  { id: "mesh", label: "Mesh", icon: "bluetooth" }
 ];
 
 export default function YehsaApp() {
@@ -131,6 +132,7 @@ export default function YehsaApp() {
   const [track, setTrack] = useState([]);
   const [mapTap, setMapTap] = useState(null);
   const [mapPacks, setMapPacks] = useState(emptyPackStore);
+  const [actions, setActions] = useState(null);
   const [models, setModels] = useState(emptyModelSettings);
   const [learned, setLearned] = useState(emptyLearned);
   const [owner, setOwner] = useState(null);
@@ -239,6 +241,7 @@ export default function YehsaApp() {
             ownerId={owner?.installId || null}
             learned={learned}
             setLearned={storeLearned}
+            onActions={setActions}
           />
         </View>
         <View
@@ -264,12 +267,44 @@ export default function YehsaApp() {
         >
           <PictureGuide />
         </View>
+        <View style={[styles.pane, tab !== "settings" && styles.hidden]} pointerEvents={tab === "settings" ? "auto" : "none"}>
+          <ScrollView contentContainerStyle={styles.scroll}>
+            <ScreenHeader title="Actions" lead="Choose what I may ask to do." />
+            {(actions?.settings ? Object.keys(actions.settings) : []).map((type) => (
+              <View key={type} style={styles.switchRow}>
+                <Text style={styles.switchLabel}>{friendlySource(type)}</Text>
+                <Switch
+                  accessibilityLabel={`${type} ${actions.settings[type] ? "on" : "off"}`}
+                  value={actions.settings[type] === true}
+                  onValueChange={() => actions.toggle(type)}
+                />
+              </View>
+            ))}
+            <Text style={styles.sectionLabel}>Approved</Text>
+            {(actions?.log || []).filter((item) => item.status === "approved").map((item) => (
+              <View key={`${item.id}-${item.at || item.status}`} style={styles.card}>
+                <Text style={styles.bubbleText}>{friendlySource(item.type)}</Text>
+                {item.undo && item.undone !== true ? (
+                  <Pressable accessibilityRole="button" accessibilityLabel="Undo" onPress={() => actions.undo(item.id)}>
+                    <Text style={styles.undoLink}>Undo</Text>
+                  </Pressable>
+                ) : null}
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={[styles.pane, tab !== "about" && styles.hidden]} pointerEvents={tab === "about" ? "auto" : "none"}>
+          <ScrollView contentContainerStyle={styles.scroll}>
+            <ScreenHeader title="About" lead="What stays on this phone." />
+            <Quiet>Yehsa answers from the notes on this phone. A model, a map pack, and GPS each stay off until you ask. A picture is not a safe identification. Nothing is shared unless you use a separate share action. Packaged dictionary: {phoneCorpusMeta.headwords} headwords and {phoneCorpusMeta.medicalNames} medical names. {phoneCorpusMeta.honest} This install is bound to this device. Exterior access is denied.</Quiet>
+          </ScrollView>
+        </View>
         <View
           style={[styles.pane, tab !== "position" && styles.hidden]}
           pointerEvents={tab === "position" ? "auto" : "none"}
           accessibilityElementsHidden={tab !== "position"}
         >
-          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} onOpenModels={() => setTab("models")} onOpenLearned={() => setTab("learned")} />
+          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} onOpenModels={() => setTab("models")} onOpenLearned={() => setTab("learned")} onOpenSettings={() => setTab("settings")} onOpenAbout={() => setTab("about")} />
         </View>
         <View
           style={[styles.pane, tab !== "mesh" && styles.hidden]}
@@ -352,7 +387,7 @@ export default function YehsaApp() {
               onPress={() => setTab(item.id)}
               style={[styles.tab, webPointer, selected && styles.tabOn]}
             >
-              <Text style={[styles.tabMark, selected && styles.tabTextOn]}>{item.mark}</Text>
+              <Ionicons name={item.icon} size={22} color={selected ? colors.brass : colors.muted} />
               <Text style={[styles.tabText, selected && styles.tabTextOn]}>{item.label}</Text>
             </Pressable>
           );
@@ -363,7 +398,7 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ session, owner, active, docked, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks }) {
+function AskPane({ session, owner, active, docked, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [messages, setMessages] = useState([]);
@@ -371,6 +406,7 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
   const [notes, setNotes] = useState([]);
   const priorRef = useRef(null);
   const [correction, setCorrection] = useState(null);
+  const [credits, setCredits] = useState(null);
   const gateRef = useRef(gate);
   function rememberGate(next) {
     gateRef.current = next;
@@ -590,7 +626,8 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
   function onApprove(id) {
     const decision = approveAction(gateRef.current, id, applyCard);
     rememberGate(decision.gate);
-    pushMessage({ role: "yehsa", text: decision.result?.text || "Nothing ran." });
+    const undoId = decision.result?.undo ? id : null;
+    pushMessage({ role: "yehsa", text: decision.result?.text || "Nothing ran.", undoId });
   }
 
   function onDecline(id) {
@@ -971,6 +1008,20 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
       : "That trusted note stays. Type a correction if you want a learned one. Nothing is saved until you approve." });
   }
 
+  useEffect(() => {
+    if (!onActions) return;
+    onActions({
+      settings: gate.settings,
+      log: gate.log,
+      toggle(type) {
+        rememberGate(setActionEnabled(gateRef.current, type, gateRef.current.settings?.[type] !== true));
+      },
+      undo(id) {
+        onUndo(id);
+      }
+    });
+  }, [gate, onActions]);
+
   const latest = messages.length ? messages[messages.length - 1] : null;
 
   return (
@@ -994,23 +1045,28 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
       <ScrollView ref={threadRef} contentContainerStyle={styles.thread} keyboardShouldPersistTaps="handled">
         {messages.length === 0 ? (
           <View style={styles.bubbleYehsa}>
-            <Text style={styles.bubbleText}>I'm here on this phone. Talk naturally from any screen. I'll say what I understood, and I wait for Approve before I use a tool.</Text>
+            <Text style={styles.bubbleText}>Ask me anything on this phone. I wait for Approve before I change anything.</Text>
           </View>
         ) : null}
         {messages.map((item) => (
           <View key={item.id} style={item.role === "you" ? styles.bubbleYou : styles.bubbleYehsa}>
             <Text style={styles.bubbleText}>{item.text}</Text>
-            {item.pictures?.map((picture) => (
-              <View key={picture.id}>
-                {picture.warning ? <Text style={{ color: colors.clay }}>{picture.warning}</Text> : null}
-                <Image accessibilityLabel={picture.attribution} source={{ uri: picture.href }} style={{ width: 140, height: 100, borderRadius: 8, marginTop: 8 }} />
-                <Quiet>{picture.attribution}</Quiet>
+            {item.pictures?.length ? (
+              <View style={styles.cardRow}>
+                {item.pictures.map((picture) => (
+                  <View key={picture.id}>
+                    <Image accessibilityLabel={friendlySource(picture.id)} source={{ uri: picture.href }} style={styles.thumb} />
+                    <Pressable accessibilityRole="button" accessibilityLabel="Picture credits" onPress={() => setCredits(picture)} style={styles.info}>
+                      <Ionicons name="information-circle" size={18} color={colors.brass} />
+                    </Pressable>
+                  </View>
+                ))}
               </View>
-            ))}
+            ) : null}
             {item.chips?.length ? (
               <View style={styles.chips}>
                 {item.chips.map((chip) => (
-                  <Text key={chip} style={styles.chipText}>{chip}</Text>
+                  <Text key={chip} style={styles.sourceChip}>{friendlySource(chip)}</Text>
                 ))}
               </View>
             ) : null}
@@ -1030,6 +1086,11 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
                 </View>
               </View>
             ) : null}
+            {item.undoId ? (
+              <Pressable accessibilityRole="button" accessibilityLabel="Undo" onPress={() => onUndo(item.undoId)}>
+                <Text style={styles.undoLink}>Undo</Text>
+              </Pressable>
+            ) : null}
           </View>
         ))}
         {phase === "loading" ? <Text style={styles.typing}>Yehsa is reading the notes…</Text> : null}
@@ -1047,43 +1108,39 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
           placeholderTextColor="#8f9a8c"
           style={styles.composerInput}
         />
-        <HoldTalk
-          label={canListen ? "Mic" : micLabel}
-          hint="Hold to talk, or tap once to keep listening and tap again to ask."
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={canListen ? "Mic" : micLabel}
+          accessibilityHint="Hold to talk, or tap once to keep listening and tap again to ask."
           onPressIn={onMicIn}
           onPressOut={onMicOut}
           onPress={onMicPress}
           disabled={!canListen || phase === "loading"}
-          live={listening}
-        />
-        <Action label="Send" onPress={ask} disabled={phase === "loading"} />
-        {docked ? null : <Action label="Hear the answer" tone="quiet" onPress={() => {
+          style={styles.iconButton}
+        >
+          <Ionicons name="mic" size={22} color={listening ? colors.clay : colors.brassInk} />
+        </Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel="Send" onPress={ask} disabled={phase === "loading"} style={styles.iconButton}>
+          <Ionicons name="send" size={20} color={colors.brassInk} />
+        </Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel="Hear the answer" onPress={() => {
           const last = [...messages].reverse().find((item) => item.role === "yehsa" && item.text);
           if (!last) return;
           speakProse(last.text, {
             onDone: () => setVoiceNote(null),
             onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
           });
-        }} />}
+        }} style={styles.iconButtonQuiet}>
+          <Ionicons name="volume-high" size={20} color={colors.ink} />
+        </Pressable>
       </View>
-      {docked ? null : <View style={styles.cardRow}>
-        {Object.keys(gate.settings).map((type) => (
-          <Pressable
-            key={type}
-            accessibilityRole="switch"
-            accessibilityLabel={`${type} ${gate.settings[type] ? "on" : "off"}`}
-            accessibilityState={{ checked: gate.settings[type] === true }}
-            onPress={() => rememberGate(setActionEnabled(gateRef.current, type, gate.settings[type] !== true))}
-            style={styles.chip}
-          >
-            <Text style={styles.chipText}>{`${type} ${gate.settings[type] ? "on" : "off"}`}</Text>
-          </Pressable>
-        ))}
-      </View>}
-      {docked ? null : <Action label="Undo last approved action" tone="quiet" onPress={() => {
-        const last = [...gate.log].reverse().find((item) => item.status === "approved" && item.undo && item.undone !== true);
-        if (last) onUndo(last.id);
-      }} />}
+      {credits ? (
+        <View style={styles.credits}>
+          <Text style={styles.bubbleText}>{credits.attribution}</Text>
+          <Quiet>{credits.warning || "Picture credits"}</Quiet>
+          <Action label="Close" tone="quiet" onPress={() => setCredits(null)} />
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -1190,7 +1247,7 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="Map"
-        lead="A blank landscape. No streets and no cities. GPS centers it only after you turn it on, and the fix is not shared."
+        lead="Your map, after you turn GPS on."
       />
       <StatusPill label={gpsStatusLabel(gps)} tone={gps.status === "locked" ? "good" : gps.status === "lost" ? "warn" : undefined} />
       {!consented || !gpsWanted ? (
@@ -1304,7 +1361,7 @@ function heldPhrase(source) {
   return "a fix";
 }
 
-function PositionPane({ position, setPosition, onConsent, onOpenModels, onOpenLearned }) {
+function PositionPane({ position, setPosition, onConsent, onOpenModels, onOpenLearned, onOpenSettings, onOpenAbout }) {
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
   const [altitude, setAltitude] = useState("");
@@ -1336,9 +1393,11 @@ function PositionPane({ position, setPosition, onConsent, onOpenModels, onOpenLe
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="Me"
-        lead="Your place stays off until you turn it on. Sharing is a separate choice and does not send from this screen. A language model is a separate choice under Models."
+        lead="Your place stays off until you turn it on."
       />
       <Action label="Models" tone="quiet" onPress={onOpenModels} accessibilityHint="Connect a language model. It stays off until you turn one on." />
+      <Action label="Settings" tone="quiet" onPress={onOpenSettings} />
+      <Action label="About" tone="quiet" onPress={onOpenAbout} />
       <Action label="What Yehsa has learned" tone="quiet" onPress={onOpenLearned} accessibilityHint="Notes Yehsa has learned on this phone. Nothing is uploaded." />
       <View style={styles.statusBlock}>
         <StatusPill label={position.status === "degraded" ? "Couldn't get a fix" : position.status === "locked" ? "Holding a place" : consented ? "Ready when you ask" : "Place is off"} tone={tone} />
@@ -1509,7 +1568,7 @@ function MeshPane({ mesh, setMesh, owner, position }) {
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="Mesh"
-        lead="Look for other Yehsa phones when you ask. A missing radio is said in plain words. Other phones cannot run actions here."
+        lead="Look for other Yehsa phones when you ask."
       />
       <View style={styles.statusBlock}>
         <Text style={styles.sectionLabel}>{status.title}</Text>
@@ -1853,6 +1912,15 @@ const styles = StyleSheet.create({
   bubbleYehsa: { alignSelf: "flex-start", maxWidth: "86%", backgroundColor: "#1b2420", borderRadius: 16, padding: 12 },
   bubbleText: { color: colors.ink, fontSize: 16, lineHeight: 22 },
   typing: { color: colors.brass, marginTop: 8 },
+  thumb: { width: 88, height: 66, borderRadius: 10, backgroundColor: colors.field },
+  info: { position: "absolute", right: 4, bottom: 4 },
+  sourceChip: { color: colors.muted, fontSize: 12, marginRight: 8 },
+  undoLink: { color: colors.brass, fontSize: 15, marginTop: 6 },
+  iconButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.brass, alignItems: "center", justifyContent: "center" },
+  iconButtonQuiet: { width: 48, height: 48, borderRadius: 24, alignItems: "center", justifyContent: "center" },
+  credits: { backgroundColor: colors.surface, borderRadius: 16, padding: 12, gap: 8, marginTop: 8 },
+  switchRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", minHeight: 48 },
+  switchLabel: { color: colors.ink, fontSize: 16, flex: 1 },
   composer: { flexDirection: "row", alignItems: "center", gap: 8, marginTop: 8 },
   composerInput: { flex: 1, minHeight: 48, color: colors.ink, backgroundColor: colors.surface, borderRadius: 12, paddingHorizontal: 12 },
   card: { marginTop: 8, gap: 8 },

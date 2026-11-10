@@ -11,7 +11,8 @@ import {
   licenseAllowed,
   packDecision,
   pictureHealth,
-  picturesFor
+  picturesFor,
+  friendlySource
 } from "./symbolic/picture_guide.js";
 
 const files = fs.readdirSync("public/pictures/files");
@@ -42,6 +43,15 @@ test("a note with no accepted picture stays a placeholder and is flagged", () =>
   assert.ok(missing.some((item) => item.id === "tourniquet_last_resort"));
   const yarrow = picturesFor(manifest, "yarrow_achillea");
   assert.ok(yarrow.some((image) => image.role === "lookalike" && image.warning));
+});
+
+test("picture credits use a friendly name and stay out of the chip", () => {
+  assert.equal(friendlySource("herbology"), "Plants");
+  assert.equal(friendlySource("willow_bark"), "Willow");
+  assert.doesNotMatch(friendlySource("willow_bark"), /herbology|_/);
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.match(home, /Picture credits/);
+  assert.doesNotMatch(home, /<Quiet>\{picture\.attribution\}<\/Quiet>/);
 });
 
 test("pictures stay under the size budget and are not pulled into the ask hot path", () => {
