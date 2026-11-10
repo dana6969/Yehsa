@@ -19,6 +19,7 @@ export const GUIDE_ENTRIES = [
   { symbol: "bleeding_pressure", title: "Pressure on bleeding", domain: "first-aid", plant: false },
   { symbol: "frostbite_warming", title: "Frostbite", domain: "first-aid", plant: false },
   { symbol: "bowline_knot", title: "Bowline", domain: "knots", plant: false },
+  { symbol: "clove_hitch", title: "Clove hitch", domain: "knots", plant: false },
   { symbol: "fire_lay", title: "Log fire lay", domain: "fire", plant: false },
   { symbol: "shelter_fire", title: "Shelter", domain: "shelter", plant: false },
   { symbol: "weather_cloud", title: "Cumulonimbus", domain: "sky", plant: false },
