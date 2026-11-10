@@ -10,7 +10,8 @@ export const ACTION_TYPES = [
   "speak",
   "field-note",
   "ask-model",
-  "save-model-note"
+  "save-model-note",
+  "save-learned"
 ];
 
 export function defaultActionSettings() {

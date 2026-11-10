@@ -66,6 +66,21 @@ import {
 import { sendToModel } from "./model_client.js";
 import { deleteModelKey, readModelKey, saveModelKey } from "./model_secrets.js";
 import ModelsPane from "./ModelsPane.js";
+import LearnedPane from "./LearnedPane.js";
+import {
+  approveLearned,
+  emptyLearned,
+  exportLearned,
+  learnedShareText,
+  markHelpful,
+  markNotRight,
+  openLearned,
+  phraseFromFeedback,
+  proposeLearned,
+  recordLearnedAnswer,
+  recordModelAsk,
+  rememberPhrase
+} from "../../symbolic/learned_notes.js";
 import { capabilitySummary, continueUtterance, isCapabilityQuestion, sourceChips } from "../../symbolic/chat_turn.js";
 import LandscapeMap from "./LandscapeMap.js";
 
@@ -85,6 +100,9 @@ export default function YehsaApp() {
   const [track, setTrack] = useState([]);
   const [mapTap, setMapTap] = useState(null);
   const [models, setModels] = useState(emptyModelSettings);
+  const [learned, setLearned] = useState(emptyLearned);
+  const [owner, setOwner] = useState(null);
+  const [mesh, setMesh] = useState(initialMeshSession);
   const [modelTestNote, setModelTestNote] = useState("A connection test sends only the word ready, and only after Approve test.");
 
   useEffect(() => {
@@ -106,13 +124,29 @@ export default function YehsaApp() {
     };
   }, []);
 
+  function storeLearned(next) {
+    const stamped = { ...next, deviceId: owner?.installId || next?.deviceId || null };
+    setLearned(stamped);
+    AsyncStorage.setItem("yehsa.learned.v1", exportLearned(stamped)).catch(() => {});
+  }
+
+  useEffect(() => {
+    let live = true;
+    AsyncStorage.getItem("yehsa.learned.v1").then((raw) => {
+      if (!live || !raw) return;
+      const opened = openLearned(JSON.parse(raw), owner?.installId || null);
+      setLearned(opened);
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [owner?.installId]);
+
   function storeModels(next) {
     const packed = packModelSettings(next);
     setModels(packed);
     AsyncStorage.setItem("yehsa.model.public.v1", JSON.stringify(packed)).catch(() => {});
   }
-  const [owner, setOwner] = useState(null);
-  const [mesh, setMesh] = useState(initialMeshSession);
 
   useEffect(() => {
     let live = true;
@@ -170,6 +204,8 @@ export default function YehsaApp() {
             models={models}
             setModels={storeModels}
             ownerId={owner?.installId || null}
+            learned={learned}
+            setLearned={storeLearned}
           />
         </View>
         <View
@@ -189,7 +225,7 @@ export default function YehsaApp() {
           pointerEvents={tab === "position" ? "auto" : "none"}
           accessibilityElementsHidden={tab !== "position"}
         >
-          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} onOpenModels={() => setTab("models")} />
+          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} onOpenModels={() => setTab("models")} onOpenLearned={() => setTab("learned")} />
         </View>
         <View
           style={[styles.pane, tab !== "mesh" && styles.hidden]}
@@ -241,6 +277,24 @@ export default function YehsaApp() {
             }}
           />
         </View>
+        <View
+          style={[styles.pane, tab !== "learned" && styles.hidden]}
+          pointerEvents={tab === "learned" ? "auto" : "none"}
+          accessibilityElementsHidden={tab !== "learned"}
+        >
+          <LearnedPane
+            store={learned}
+            deviceId={owner?.installId || null}
+            onChange={storeLearned}
+            onShare={(note) => {
+              const queued = queueServiceText(mesh, learnedShareText(note));
+              setMesh(queued.session);
+              return queued.ok
+                ? "Held on this phone for the mesh. It was not uploaded, and position was not included."
+                : (queued.reason || "The note was not queued.");
+            }}
+          />
+        </View>
       </View>
       <View style={styles.tabs} accessibilityRole="tablist">
         {TABS.map((item) => {
@@ -265,13 +319,14 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ session, owner, active, docked, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId }) {
+function AskPane({ session, owner, active, docked, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [messages, setMessages] = useState([]);
   const [gate, setGate] = useState({ settings: { waypoint: true, measure: true, "position-hold": true, "position-unlock": true, "mesh-scan": true, calculate: true, speak: true, "field-note": true }, log: [], pending: null });
   const [notes, setNotes] = useState([]);
   const priorRef = useRef(null);
+  const [correction, setCorrection] = useState(null);
   const gateRef = useRef(gate);
   function rememberGate(next) {
     gateRef.current = next;
@@ -400,7 +455,15 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
     if (card.type === "field-note") {
       const note = { id: `note-${Date.now()}`, text: card.payload.text };
       setNotes((current) => [...current, note]);
-      return { ok: true, text: "Saved on this phone only. It was not sent.", undo: { type: "field-note", id: note.id } };
+      setLearned(approveLearned(learned, proposeLearned({
+        id: note.id,
+        title: "Field note",
+        text: note.text,
+        source: "your field log",
+        question: note.text,
+        tags: ["field"]
+      })));
+      return { ok: true, text: "Saved on this phone only. It was not sent. It can be retrieved later as a learned note.", undo: { type: "field-note", id: note.id } };
     }
     if (card.type === "measure") {
       const from = card.payload.from;
@@ -424,6 +487,7 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
         approved: true,
         fetchImpl: globalThis.fetch
       })).then((result) => {
+        if (!/Nothing was sent/.test(result.reason || "")) setLearned(recordModelAsk(learned));
         if (!result.ok) {
           pushMessage({ role: "yehsa", text: result.reason || "Nothing was sent." });
           return;
@@ -451,13 +515,25 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
       });
       return { ok: true, text: "Sending only the text shown on the card.", undo: null };
     }
+    if (card.type === "save-learned") {
+      setLearned(approveLearned(learned, card.payload));
+      return { ok: true, text: "Learned on this device from your correction. It is unverified until you confirm it or mark it helpful twice.", undo: { type: "learned", id: card.payload?.note?.id } };
+    }
     if (card.type === "save-model-note") {
       const entryId = card.payload.id;
       setModels({
         ...models,
         unverified: rememberModelEntry(models?.unverified, { ...card.payload, id: entryId })
       });
-      return { ok: true, text: "Saved on this phone as from model, unverified. It is not part of the trusted notes.", undo: { type: "model-note", id: entryId } };
+      setLearned(approveLearned(learned, proposeLearned({
+        id: entryId,
+        title: String(card.payload.question || "Model answer").slice(0, 80),
+        text: card.payload.text,
+        source: card.payload.providerName || "a connected model",
+        question: card.payload.question,
+        tags: ["model"]
+      })));
+      return { ok: true, text: "Saved on this phone as learned from the model, unverified. It is not part of the trusted notes. This does not retrain a model.", undo: { type: "model-note", id: entryId } };
     }
     return { ok: false, text: "That action is not available.", undo: null };
   }
@@ -494,6 +570,32 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
     if (!typed) {
       setPhase("empty");
       setNotice("Type a message first.");
+      return;
+    }
+    if (correction) {
+      const proposal = proposeLearned({
+        title: String(correction.question || "Correction").slice(0, 80),
+        text: typed,
+        source: "your correction",
+        question: correction.question || typed
+      });
+      setCorrection(null);
+      pushMessage({ role: "you", text: typed });
+      const proposed = proposeAction(gateRef.current, {
+        type: "save-learned",
+        id: `act-${Date.now()}`,
+        label: "Save your correction as an unverified note on this phone",
+        payload: proposal
+      });
+      rememberGate(proposed.gate);
+      setPhase("ready");
+      pushMessage({
+        role: "yehsa",
+        text: proposed.card
+          ? "I understood a correction. Nothing is saved until you tap Approve. This is memory on this phone, not retraining."
+          : "Saving a correction is switched off, so I did not keep it.",
+        card: proposed.card
+      });
       return;
     }
     const text = continueUtterance(typed, priorRef.current);
@@ -549,7 +651,7 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
         const spiritualIndex = routesToSpiritual(text, parseQuestion(expandParaphrase(text)))
           ? await loadScriptureIndex()
           : null;
-        return askField(text, books.passages, { session, spiritualIndex });
+        return askField(text, books.passages, { session, spiritualIndex, learned });
       };
       run().then((result) => {
         if (askGen.current !== generation) return;
@@ -593,7 +695,10 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
             role: "yehsa",
             text: proposed.card ? offer : "That action is switched off, so I did not send anything.",
             chips: sourceChips(result),
-            card: proposed.card
+            card: proposed.card,
+            question: text,
+            symbol: result?.symbol || null,
+            learnedId: result?.learnedId || null
           });
           return;
         }
@@ -601,16 +706,20 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
           const reply = result?.text || "No model is connected, so nothing was sent. Add one under Me, Models. It stays off until you turn it on.";
           priorRef.current = { utterance: text };
           setPhase(result?.answered ? "ready" : "miss");
-          pushMessage({ role: "yehsa", text: result?.text ? `${reply} No model is connected, so nothing was sent.` : reply, chips: sourceChips(result) });
+          pushMessage({ role: "yehsa", text: result?.text ? `${reply} No model is connected, so nothing was sent.` : reply, chips: sourceChips(result), question: text, symbol: result?.symbol || null, learnedId: result?.learnedId || null });
           return;
         }
         const reply = result?.text || result?.miss || "I don't have an installed note for that.";
+        if (result?.kind === "learned") setLearned(recordLearnedAnswer(learned));
         priorRef.current = { utterance: text };
         setPhase(result?.answered ? "ready" : "miss");
         pushMessage({
           role: "yehsa",
           text: reply,
-          chips: sourceChips(result)
+          chips: sourceChips(result),
+          question: text,
+          symbol: result?.symbol || null,
+          learnedId: result?.learnedId || null
         });
         if (speak && result?.text) {
           speakProse(result.text, {
@@ -763,6 +872,22 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
   });
   const listening = gesture.phase === "arming" || gesture.phase === "listening" || gesture.phase === "locked";
 
+  function onHelpful(item) {
+    let next = item.learnedId ? markHelpful(learned, item.learnedId) : learned;
+    const pair = phraseFromFeedback(item.question, item.symbol);
+    if (pair) next = rememberPhrase(next, pair.from, pair.to);
+    setLearned(next);
+    pushMessage({ role: "yehsa", text: "Marked helpful. I'll remember that phrasing on this phone. This is retrieval memory, not retraining." });
+  }
+
+  function onNotRight(item) {
+    if (item.learnedId) setLearned(markNotRight(learned, item.learnedId));
+    setCorrection({ question: item.question || "" });
+    pushMessage({ role: "yehsa", text: item.learnedId
+      ? "Hidden on this phone. Trusted notes are unchanged. Type a correction if you want one taught. Nothing is saved until you approve."
+      : "That trusted note stays. Type a correction if you want a learned one. Nothing is saved until you approve." });
+  }
+
   const latest = messages.length ? messages[messages.length - 1] : null;
 
   return (
@@ -797,6 +922,12 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
                 {item.chips.map((chip) => (
                   <Text key={chip} style={styles.chipText}>{chip}</Text>
                 ))}
+              </View>
+            ) : null}
+            {item.role === "yehsa" ? (
+              <View style={styles.cardRow}>
+                <Action label="Helpful" tone="quiet" onPress={() => onHelpful(item)} />
+                <Action label="Not right" tone="clay" onPress={() => onNotRight(item)} />
               </View>
             ) : null}
             {item.card && gate.pending?.id === item.card.id ? (
@@ -946,7 +1077,7 @@ function heldPhrase(source) {
   return "a fix";
 }
 
-function PositionPane({ position, setPosition, onConsent, onOpenModels }) {
+function PositionPane({ position, setPosition, onConsent, onOpenModels, onOpenLearned }) {
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
   const [altitude, setAltitude] = useState("");
@@ -981,6 +1112,7 @@ function PositionPane({ position, setPosition, onConsent, onOpenModels }) {
         lead="Your place stays off until you turn it on. Sharing is a separate choice and does not send from this screen. A language model is a separate choice under Models."
       />
       <Action label="Models" tone="quiet" onPress={onOpenModels} accessibilityHint="Connect a language model. It stays off until you turn one on." />
+      <Action label="What Yehsa has learned" tone="quiet" onPress={onOpenLearned} accessibilityHint="Notes Yehsa has learned on this phone. Nothing is uploaded." />
       <View style={styles.statusBlock}>
         <StatusPill label={position.status === "degraded" ? "Couldn't get a fix" : position.status === "locked" ? "Holding a place" : consented ? "Ready when you ask" : "Place is off"} tone={tone} />
         <Text style={styles.note}>{position.note}</Text>

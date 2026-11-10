@@ -56,7 +56,7 @@ export default function ModelsPane({ settings, onChange, onSaveKey, onDeleteProv
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="Models"
-        lead="Off until you connect one. This does not retrain Yehsa. It can send a question you approve and return that model's answer for you to keep or delete."
+        lead="Off until you connect one. The point of a model is to teach this phone so you need it less. This does not retrain Yehsa. A saved answer becomes a learned note only after you approve it."
       />
       <Quiet>With no model on, Yehsa stays on this phone and makes no network call. A key is stored only in the device secure store. It is never shown again and never written into the app.</Quiet>
       <Text style={styles.section}>Add a provider</Text>
