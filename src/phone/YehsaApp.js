@@ -105,6 +105,7 @@ import {
 } from "../../symbolic/map_packs.js";
 import { planDemDownload } from "../../symbolic/dem_tiles.js";
 import OfflineMap from "./OfflineMap.js";
+import PeerChat from "./PeerChat.js";
 import {
   applyGpsSample,
   gpsStatusLabel,
@@ -1524,6 +1525,7 @@ function MeshPane({ mesh, setMesh, owner, position }) {
   const [chooser, setChooser] = useState(false);
   const [note, setNote] = useState("");
   const [serviceNote, setServiceNote] = useState("The offline phone service does not wait for a position lock.");
+  const [people, setPeople] = useState(false);
   const bound = owner?.recognized === true;
   const positionOff = position?.status !== "locked";
 
@@ -1599,12 +1601,22 @@ function MeshPane({ mesh, setMesh, owner, position }) {
           ? "Peers heard"
           : "No peers";
 
+  if (people) {
+    return (
+      <View style={{ flex: 1 }}>
+        <PeerChat includeLocation={position?.consent === true && position.status === "locked"} />
+        <Action label="Back to mesh" tone="quiet" onPress={() => setPeople(false)} />
+      </View>
+    );
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="Mesh"
         lead="Look for other Yehsa phones when you ask."
       />
+      <Action label="People" onPress={() => setPeople(true)} />
       <View style={styles.statusBlock}>
         <Text style={styles.sectionLabel}>{status.title}</Text>
         <StatusPill label={pill} tone={tone} />
