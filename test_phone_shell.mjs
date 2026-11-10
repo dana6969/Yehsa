@@ -92,6 +92,12 @@ test("a feeling is a cue and does not block the note", () => {
   const miss = askField("qqqq zzzzz ploverish", passages);
   assert.equal(miss.answered, false);
   assert.match(miss.miss, /No offline note/);
+  const light = askField("What is light?", passages);
+  assert.equal(light.answered, false);
+  assert.match(light.miss, /scripture index/);
+  assert.equal(light.text, null);
+  const meters = askField("How many meters are in 2 kilometers?", passages);
+  assert.match(meters.text, /2000/);
 });
 
 test("from here stays opt-in on the phone session", () => {

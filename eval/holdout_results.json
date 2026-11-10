@@ -1,0 +1,164 @@
+{
+  "generatedAt": "2026-11-10T00:12:58.537Z",
+  "count": 12,
+  "by": {
+    "spiritual": {
+      "n": 2,
+      "pass": 2,
+      "wrong": 0,
+      "abstain": 0
+    },
+    "field": {
+      "n": 1,
+      "pass": 1,
+      "wrong": 0,
+      "abstain": 0
+    },
+    "paraphrase": {
+      "n": 2,
+      "pass": 2,
+      "wrong": 0,
+      "abstain": 0
+    },
+    "math": {
+      "n": 3,
+      "pass": 3,
+      "wrong": 0,
+      "abstain": 0
+    },
+    "contradiction": {
+      "n": 1,
+      "pass": 1,
+      "wrong": 0,
+      "abstain": 0
+    },
+    "unfamiliar": {
+      "n": 3,
+      "pass": 3,
+      "wrong": 0,
+      "abstain": 3
+    }
+  },
+  "rows": [
+    {
+      "id": "hold-soul",
+      "category": "spiritual",
+      "prompt": "What is the soul?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "These lines are what the texts say. They are not a verdict. Bible (KJV), The Book of the Prophet Ezekiel 18:4: \"Behold, all souls are mine; as the soul of the father, so also the soul of the son is mine: the soul that sinneth, it shall die.\" Bhagavad Gita (Arnold), Chapter I, sta"
+    },
+    {
+      "id": "hold-salvation",
+      "category": "spiritual",
+      "prompt": "What is salvation?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "These lines are what the texts say. They are not a verdict. Bible (KJV), The Book of the Prophet Isaiah 12:2: \"Behold, God is my salvation; I will trust, and not be afraid: for the LORD JEHOVAH is my strength and my song; he also is become my salvation.\" This is what these texts "
+    },
+    {
+      "id": "hold-daylight",
+      "category": "field",
+      "prompt": "How long can summer light last in arctic country?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Arctic and tundra country is open, cold, and often wet underfoot, with few trees to use as landmarks. When the horizon disappears, a short bearing and a counted pace are safer than a long walk. Summer light can last all day. Winter dark does the opposite."
+    },
+    {
+      "id": "hold-boil",
+      "category": "paraphrase",
+      "prompt": "How do I make creek water safer by boiling it?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Where to look: green growth on a dry slope, a dark seep, or a stream in the lowest line of a valley are clues. Flowing water is a better clue than a still pool. Clues are not proof. Settle the grit, then boil, and still treat the result as uncertain."
+    },
+    {
+      "id": "hold-parched",
+      "category": "paraphrase",
+      "prompt": "A hiker is parched after a climb. What should they do?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "Carry more than the first hour seems to need, then drink small amounts through the day instead of emptying the bottle at once. In heat, rest in shade before you feel dizzy. If someone stops sweating or grows confused, stop travel and get human help. This is not a medical threshol"
+    },
+    {
+      "id": "hold-pounds",
+      "category": "math",
+      "prompt": "Convert 4 pounds to ounces.",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "4 pounds is 64 ounces."
+    },
+    {
+      "id": "hold-subtract",
+      "category": "math",
+      "prompt": "What is 15 minus 4?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "15 and 4 come to 11."
+    },
+    {
+      "id": "hold-f-to-c",
+      "category": "math",
+      "prompt": "What is 32 Fahrenheit in Celsius?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "32 Fahrenheit is 0 Celsius."
+    },
+    {
+      "id": "hold-bone",
+      "category": "contradiction",
+      "prompt": "Is it correct to set a broken bone in the field?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": false,
+      "reason": "pass",
+      "text": "The note contradicts that premise. It says: do not set the bone. A splint keeps a suspected broken bone still, such as a broken arm or leg. Pad it, include the joints above and below, and tie it snug enough to stop motion without cutting off circulation. Skin beyond it should sta"
+    },
+    {
+      "id": "hold-japan",
+      "category": "unfamiliar",
+      "prompt": "What is the capital of Japan?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "hold-asthma",
+      "category": "unfamiliar",
+      "prompt": "Which plant in the notes cures asthma?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    },
+    {
+      "id": "hold-speed",
+      "category": "unfamiliar",
+      "prompt": "What is the speed of light in miles per hour?",
+      "pass": true,
+      "wrongConfident": false,
+      "abstained": true,
+      "reason": "pass",
+      "text": ""
+    }
+  ]
+}

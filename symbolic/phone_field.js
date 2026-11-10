@@ -8,6 +8,10 @@ import { navigationSentence } from "./nav_sentence.js";
 import { phoneCorpus, phoneCorpusMeta } from "./phone_corpus.js";
 import { recallFromCorpora } from "./knowledge_rank.js";
 import { parseQuestion } from "./question_parse.js";
+import { expandParaphrase } from "./paraphrase.js";
+import { calculate } from "./calculator.js";
+import { premiseFlag } from "./premise.js";
+import { routesToSpiritual } from "./spiritual_route.js";
 import { searchPassages } from "./book_search.js";
 
 function pointOf(raw) {
@@ -72,6 +76,15 @@ function cueFor(emotion, hasNote) {
   return `Wording cue: ${emotion.emotion}. The note above still stands.`;
 }
 
+function premiseFromKnowledge(question, knowledge) {
+  const texts = [knowledge?.text, ...(knowledge?.hits || []).map((hit) => hit?.text)];
+  for (const text of texts) {
+    const flagged = premiseFlag(question, text);
+    if (flagged) return flagged;
+  }
+  return null;
+}
+
 function corporaFor(passages, override) {
   if (override) return override;
   return {
@@ -105,17 +118,44 @@ export function askField(input, passages, options = {}) {
     error.code = "NOTES_UNAVAILABLE";
     throw error;
   }
-  const question = parseQuestion(raw);
+  const calc = calculate(raw);
+  if (calc) {
+    return {
+      answered: true,
+      empty: false,
+      text: calc.text,
+      cue: null,
+      emotion: { understood: false, emotion: "neutral" },
+      miss: null,
+      corpus: phoneCorpusMeta,
+      kind: "calculator"
+    };
+  }
+  const expanded = expandParaphrase(raw);
+  const question = parseQuestion(expanded);
+  if (routesToSpiritual(raw, question)) {
+    return {
+      answered: false,
+      empty: false,
+      text: null,
+      cue: null,
+      emotion: { understood: false, emotion: "neutral" },
+      miss: "This phone pack does not include the scripture index, so there is no quoted passage for that.",
+      corpus: phoneCorpusMeta,
+      kind: "spiritual"
+    };
+  }
   const emotion = readEmotion(question.raw);
   let knowledge = null;
   if (question.topic) {
-    knowledge = recallFromCorpora(question.raw, corporaFor(passages, options.corpora));
+    knowledge = recallFromCorpora(expanded, corporaFor(passages, options.corpora));
   }
-  const nav = navigationSentence(question.raw, {
+  const nav = navigationSentence(raw, {
     consent: options.session?.consent === true,
     ingress: "local"
   }, sessionIo(options.session));
-  const note = [knowledge?.text, nav?.sentence].filter(Boolean).join(" ");
+  const premise = premiseFromKnowledge(raw, knowledge);
+  const note = [premise, knowledge?.text, nav?.sentence].filter(Boolean).join(" ");
   const fromFeeling = !note && emotion.understood ? emotion.deduction : null;
   const text = note || fromFeeling;
   if (!text) {

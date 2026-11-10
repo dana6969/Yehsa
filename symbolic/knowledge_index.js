@@ -43,7 +43,8 @@ export function lookupMedical(term) {
 
 const MEMORY = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..", "symbolic_memory");
 
-let lexical = null;
+let smallLexical = null;
+let websterLexical = null;
 
 function readObject(file) {
   const full = path.join(MEMORY, file);
@@ -69,22 +70,41 @@ function remember(map, key, value) {
   if (!map.has(id)) map.set(id, text);
 }
 
-function loadLexical() {
-  if (lexical) return lexical;
+function loadSmallLexical() {
+  if (smallLexical) return smallLexical;
   const map = new Map();
-  // Smaller committed glosses win over the large Webster dumps.
   for (const [key, value] of Object.entries(readObject("wordnet_raw.json"))) remember(map, key, value);
   for (const [key, value] of Object.entries(readObject("dictionary_memory.json"))) remember(map, key, value);
   for (const [key, value] of Object.entries(readObject("full_dictionary.json"))) remember(map, key, value);
-  for (const [key, value] of Object.entries(readObject("webster_raw.json"))) remember(map, key, value);
-  lexical = map;
+  smallLexical = map;
   return map;
 }
 
-export function lookupLexical(term) {
+function loadWebster() {
+  if (websterLexical) return websterLexical;
+  const map = new Map();
+  for (const [key, value] of Object.entries(readObject("webster_raw.json"))) remember(map, key, value);
+  websterLexical = map;
+  return map;
+}
+
+export function lookupHeadword(term) {
   const key = String(term || "").trim().toLowerCase();
   if (!key) return null;
-  return loadLexical().get(key) || null;
+  if (loadSmallLexical().has(key)) return loadSmallLexical().get(key);
+  return loadWebster().get(key) || null;
+}
+
+export function forEachGloss(fn) {
+  const small = loadSmallLexical();
+  for (const [key, value] of small) fn(key, value);
+  for (const [key, value] of loadWebster()) {
+    if (!small.has(key)) fn(key, value);
+  }
+}
+
+export function lookupLexical(term) {
+  return lookupHeadword(term);
 }
 
 // Full questions are parsed first. getMappedAction does not call this.
@@ -92,6 +112,12 @@ export function recallKnowledge(query) {
   return recallFromCorpora(query, {
     search: searchBooks,
     lookupMedical,
-    lexical: loadLexical
+    lookupHeadword,
+    forEachGloss,
+    lexical: () => {
+      const map = new Map();
+      forEachGloss((key, value) => map.set(key, value));
+      return map;
+    }
   });
 }

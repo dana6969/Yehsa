@@ -4,6 +4,7 @@
 import { reasonAnswer, shouldConnect } from "./answer_reasoner.js";
 import { queryTokens, sourceKind, textHasToken } from "./book_search.js";
 import { parseQuestion } from "./question_parse.js";
+import { specificTokens } from "./relevance.js";
 
 function clip(text, limit) {
   const flat = String(text || "").replace(/\s+/g, " ").trim();
@@ -32,7 +33,6 @@ function hasWord(text, word) {
 export function rankKnowledge(parsed, corpora) {
   const search = corpora.search;
   const lookupMedical = corpora.lookupMedical;
-  const lexical = typeof corpora.lexical === "function" ? corpora.lexical() : corpora.lexical;
   const phrase = parsed.topic || parsed.text;
   const tokens = queryTokens(phrase);
   const longest = tokens.slice().sort((a, b) => b.length - a.length)[0] || "";
@@ -40,6 +40,7 @@ export function rankKnowledge(parsed, corpora) {
   const bag = new Map();
   const boost = (kind, score) => (parsed.domain && kind === parsed.domain ? score + 16 : score);
 
+  const { specific } = specificTokens(parsed);
   for (const passage of search(phrase, 8)) {
     const kind = sourceKind(passage.source);
     addHit(bag, {
@@ -50,6 +51,19 @@ export function rankKnowledge(parsed, corpora) {
       source: passage.source || "",
       score: boost(kind, passage.score)
     });
+  }
+  for (const token of specific) {
+    for (const passage of search(token, 3)) {
+      const kind = sourceKind(passage.source);
+      addHit(bag, {
+        kind,
+        symbol: passage.symbol,
+        text: clip(passage.context, 320),
+        title: passage.title || "",
+        source: passage.source || "",
+        score: boost(kind, passage.score)
+      });
+    }
   }
 
   const medicalKeys = [phrase, ...tokens];
@@ -69,8 +83,26 @@ export function rankKnowledge(parsed, corpora) {
     });
   }
 
-  if ((phrase || tokens.length) && lexical && typeof lexical[Symbol.iterator] === "function") {
-    for (const [key, text] of lexical) {
+  const lookupHeadword = corpora.lookupHeadword;
+  const plantScan = (parsed.intent === "use" || tokens.some((token) => PLANT_PARTS.has(token))) && subject.length >= 5;
+  if (typeof lookupHeadword === "function") {
+    const keys = new Set(tokens);
+    if (phrase) keys.add(String(phrase).toLowerCase());
+    for (const key of keys) {
+      const text = lookupHeadword(key);
+      if (!text) continue;
+      addHit(bag, {
+        kind: "dictionary",
+        symbol: key,
+        text: clip(text, 320),
+        title: "",
+        source: "lexical-headword",
+        score: boost("dictionary", key === phrase ? 88 : key === longest ? 64 : 40)
+      });
+    }
+  }
+  const glossScan = plantScan || typeof lookupHeadword !== "function";
+  const visitGloss = (key, text) => {
       const gloss = String(text).toLowerCase();
       const namedInQuestion = key === phrase || tokens.includes(key);
       const related = namedInQuestion || (longest && textHasToken(key, longest));
@@ -79,7 +111,8 @@ export function rankKnowledge(parsed, corpora) {
         && !namedInQuestion
         && textHasToken(gloss, subject)
         && /\b(salix|analgesic|astringent|tannin|poultice|from a |from the )\b/.test(gloss);
-      if (!related && !plantUse) continue;
+      if (!related && !plantUse) return;
+      if (plantScan && typeof lookupHeadword === "function" && !plantUse) return;
       let score = 18;
       if (key === phrase) score += 70;
       else if (key === longest) score += 46;
@@ -105,6 +138,15 @@ export function rankKnowledge(parsed, corpora) {
         source: "lexical-headword",
         score: boost("dictionary", score)
       });
+  };
+  if ((phrase || tokens.length) && glossScan) {
+    if (typeof corpora.forEachGloss === "function" && typeof lookupHeadword === "function") {
+      corpora.forEachGloss(visitGloss);
+    } else if (corpora.lexical) {
+      const lexical = typeof corpora.lexical === "function" ? corpora.lexical() : corpora.lexical;
+      if (lexical && typeof lexical[Symbol.iterator] === "function") {
+        for (const [key, text] of lexical) visitGloss(key, text);
+      }
     }
   }
 

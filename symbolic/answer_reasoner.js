@@ -1,5 +1,7 @@
 // One prose answer from field notes. Dictionary hits stay evidence unless no note answers.
 import { textHasToken } from "./book_search.js";
+import { hitIsRelevant } from "./relevance.js";
+import { disagreementFlag } from "./premise.js";
 
 const FIELD = new Set(["herbology", "survival", "medical", "math", "landscape"]);
 
@@ -259,8 +261,7 @@ function dehydrationNote(parsed, field) {
 function dictionaryAnswer(parsed, hits) {
   const subject = subjectOf(parsed);
   const head = hits.find((hit) => hit.kind === "dictionary" && hit.symbol === subject)
-    || hits.find((hit) => hit.kind === "dictionary" && subject && new RegExp(`\\b${subject}\\b`, "i").test(hit.text || ""))
-    || hits.find((hit) => hit.kind === "dictionary");
+    || hits.find((hit) => hit.kind === "dictionary" && subject && new RegExp(`\\b${subject}\\b`, "i").test(hit.text || ""));
   if (!head) return null;
   if (subject && otherContentMissed(parsed, head.text, subject)) return null;
   const gloss = readableGloss(head.text);
@@ -282,7 +283,7 @@ function uniqueHits(pieces) {
 }
 
 export function reasonAnswer(parsed, hits) {
-  const list = Array.isArray(hits) ? hits : [];
+  const list = (Array.isArray(hits) ? hits : []).filter((hit) => hitIsRelevant(hit, parsed));
   const field = list.filter(isField);
   if (shouldConnect(parsed)) {
     const pieces = selectPieces(parsed, field);
@@ -294,6 +295,8 @@ export function reasonAnswer(parsed, hits) {
     let text = frame(parsed, sentences.join(" "));
     const clause = dictionaryUseClause(list, subjectOf(parsed));
     if (clause && !/\b(analgesic|astringent|poultice)\b/i.test(text)) text = `${clause} ${text}`;
+    const conflict = disagreementFlag(field);
+    if (conflict) text = `${text} ${conflict}`;
     return { text, used: [best] };
   }
   return dictionaryAnswer(parsed, list) || { text: null, used: [] };
