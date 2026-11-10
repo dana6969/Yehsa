@@ -63,7 +63,8 @@
           ]
         }
       ],
-      "./plugins/withYehsaVoice.js"
+      "./plugins/withYehsaVoice.js",
+      "expo-secure-store"
     ],
     "extra": {
       "eas": {

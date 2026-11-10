@@ -8,7 +8,9 @@ export const ACTION_TYPES = [
   "mesh-scan",
   "calculate",
   "speak",
-  "field-note"
+  "field-note",
+  "ask-model",
+  "save-model-note"
 ];
 
 export function defaultActionSettings() {

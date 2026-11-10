@@ -140,6 +140,24 @@ export function readAssistant(text, context = {}) {
     };
   }
 
+  if (/\bask the model\b/i.test(raw)) {
+    const question = raw.replace(/^[\s\S]*?\bask the model\b(?:\s+about)?\s*/i, "").trim();
+    if (!question) {
+      return {
+        kind: "clarify",
+        understood: "I understood that you want a connected model.",
+        question: "What should I ask it? Nothing is sent until you approve the exact text."
+      };
+    }
+    return {
+      kind: "action",
+      type: "ask-model",
+      label: "Ask the connected model",
+      payload: { question },
+      understood: "I understood: ask the connected model. I still answer from the notes on this phone first. Nothing is sent until you tap Approve."
+    };
+  }
+
   if (/\b(convert|calculate)\b/i.test(raw)) {
     const math = calculate(raw);
     if (!math?.text) {

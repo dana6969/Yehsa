@@ -32,7 +32,8 @@ export function capabilitySummary(meta = {}) {
     "I can draw a blank landscape canvas, measure two points, and keep waypoints and a track after you consent to hold a place.",
     "If you ask me to save a waypoint, measure, hold or unlock a place, scan for peers, speak an answer, or save a note, I show an approval card. Nothing in that list runs until you tap Approve.",
     "Holding a place and sharing a place each need their own consent. Sharing still does not transmit from this screen.",
-    "I cannot reach the internet, I have no live city or street map, and I cannot open or control other apps.",
+    "I cannot reach the internet on my own. A language model stays off until you connect one and approve the exact question. Connecting one does not retrain me.",
+    "I have no live city or street map, and I cannot open or control other apps.",
     dictionary,
     "Counts and the longer limits are on the Details screen."
   ].join(" ");

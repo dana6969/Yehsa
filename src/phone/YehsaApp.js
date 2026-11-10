@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Platform,
   Pressable,
@@ -51,6 +52,20 @@ import {
 import { Action, Field, HoldTalk, Prose, Quiet, ScreenHeader, StatusPill, colors } from "./ui.js";
 import { approveAction, declineAction, proposeAction, setActionEnabled, undoApproved } from "../../symbolic/action_gate.js";
 import { readAssistant } from "../../symbolic/assistant_intent.js";
+import {
+  buildOutbound,
+  deleteModelEntry,
+  emptyModelSettings,
+  labelModelAnswer,
+  missModelOffer,
+  packModelSettings,
+  previewModelSend,
+  rememberModelEntry,
+  selectedProvider
+} from "../../symbolic/model_link.js";
+import { sendToModel } from "./model_client.js";
+import { deleteModelKey, readModelKey, saveModelKey } from "./model_secrets.js";
+import ModelsPane from "./ModelsPane.js";
 import { capabilitySummary, continueUtterance, isCapabilityQuestion, sourceChips } from "../../symbolic/chat_turn.js";
 import LandscapeMap from "./LandscapeMap.js";
 
@@ -69,6 +84,33 @@ export default function YehsaApp() {
   const [waypoints, setWaypoints] = useState([]);
   const [track, setTrack] = useState([]);
   const [mapTap, setMapTap] = useState(null);
+  const [models, setModels] = useState(emptyModelSettings);
+  const [modelTestNote, setModelTestNote] = useState("A connection test sends only the word ready, and only after Approve test.");
+
+  useEffect(() => {
+    let live = true;
+    AsyncStorage.getItem("yehsa.model.public.v1").then((raw) => {
+      if (!live || !raw) return;
+      const packed = packModelSettings(JSON.parse(raw));
+      setModels(packed);
+      return Promise.all(packed.providers.map(async (provider) => {
+        if (provider.needsKey === false) return provider;
+        const saved = await readModelKey(provider.id);
+        return { ...provider, keySaved: Boolean(saved) };
+      })).then((providers) => {
+        if (live) setModels({ ...packed, providers });
+      });
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  function storeModels(next) {
+    const packed = packModelSettings(next);
+    setModels(packed);
+    AsyncStorage.setItem("yehsa.model.public.v1", JSON.stringify(packed)).catch(() => {});
+  }
   const [owner, setOwner] = useState(null);
   const [mesh, setMesh] = useState(initialMeshSession);
 
@@ -125,6 +167,9 @@ export default function YehsaApp() {
             setWaypoints={setWaypoints}
             setMesh={setMesh}
             mapTap={mapTap}
+            models={models}
+            setModels={storeModels}
+            ownerId={owner?.installId || null}
           />
         </View>
         <View
@@ -144,7 +189,7 @@ export default function YehsaApp() {
           pointerEvents={tab === "position" ? "auto" : "none"}
           accessibilityElementsHidden={tab !== "position"}
         >
-          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} />
+          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} onOpenModels={() => setTab("models")} />
         </View>
         <View
           style={[styles.pane, tab !== "mesh" && styles.hidden]}
@@ -152,6 +197,49 @@ export default function YehsaApp() {
           accessibilityElementsHidden={tab !== "mesh"}
         >
           <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} />
+        </View>
+        <View
+          style={[styles.pane, tab !== "models" && styles.hidden]}
+          pointerEvents={tab === "models" ? "auto" : "none"}
+          accessibilityElementsHidden={tab !== "models"}
+        >
+          <ModelsPane
+            settings={models}
+            onChange={storeModels}
+            testNote={modelTestNote}
+            onSaveKey={async (id, key) => {
+              const saved = await saveModelKey(id, key);
+              if (saved.ok) {
+                storeModels({
+                  ...models,
+                  providers: models.providers.map((item) => item.id === id ? { ...item, keySaved: true } : item)
+                });
+              }
+              return saved;
+            }}
+            onDeleteProvider={async (id) => {
+              await deleteModelKey(id);
+              storeModels({
+                ...models,
+                selectedId: models.selectedId === id ? null : models.selectedId,
+                providers: models.providers.filter((item) => item.id !== id)
+              });
+            }}
+            onTest={async (provider) => {
+              const outbound = buildOutbound({ question: "Reply with the word ready." });
+              const apiKey = provider.needsKey === false ? "" : await readModelKey(provider.id);
+              const result = await sendToModel({
+                provider,
+                apiKey,
+                outbound,
+                approved: true,
+                fetchImpl: globalThis.fetch
+              });
+              setModelTestNote(result.ok
+                ? `${provider.name} answered the test. That was the model, not a Yehsa note. Connecting a model does not retrain Yehsa.`
+                : result.reason);
+            }}
+          />
         </View>
       </View>
       <View style={styles.tabs} accessibilityRole="tablist">
@@ -177,7 +265,7 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ session, owner, active, docked, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap }) {
+function AskPane({ session, owner, active, docked, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [messages, setMessages] = useState([]);
@@ -326,6 +414,51 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
     if (card.type === "calculate") {
       return { ok: true, text: card.payload.text || "I had no calculation to keep.", undo: null };
     }
+    if (card.type === "ask-model") {
+      const provider = (models?.providers || []).find((item) => item.id === card.payload.providerId) || selectedProvider(models);
+      const apiKeyPromise = provider?.needsKey === false ? Promise.resolve("") : readModelKey(provider?.id);
+      apiKeyPromise.then((apiKey) => sendToModel({
+        provider,
+        apiKey,
+        outbound: card.payload.outbound,
+        approved: true,
+        fetchImpl: globalThis.fetch
+      })).then((result) => {
+        if (!result.ok) {
+          pushMessage({ role: "yehsa", text: result.reason || "Nothing was sent." });
+          return;
+        }
+        const labeled = labelModelAnswer({
+          providerName: provider?.name,
+          text: result.text,
+          offlineNote: card.payload.offlineNote || null
+        });
+        const entryId = `model-note-${Date.now()}`;
+        const proposed = proposeAction(gateRef.current, {
+          type: "save-model-note",
+          id: `act-${Date.now()}`,
+          label: `Save this as unverified from ${provider?.name || "the model"}`,
+          payload: { id: entryId, question: card.payload.question, text: result.text, providerName: provider?.name }
+        });
+        rememberGate(proposed.gate);
+        pushMessage({
+          role: "yehsa",
+          text: `${labeled.text} This does not retrain me. Save it only if you want an unverified note on this phone.`,
+          card: proposed.card
+        });
+      }).catch(() => {
+        pushMessage({ role: "yehsa", text: "No network, or the endpoint could not be reached. Nothing else was sent." });
+      });
+      return { ok: true, text: "Sending only the text shown on the card.", undo: null };
+    }
+    if (card.type === "save-model-note") {
+      const entryId = card.payload.id;
+      setModels({
+        ...models,
+        unverified: rememberModelEntry(models?.unverified, { ...card.payload, id: entryId })
+      });
+      return { ok: true, text: "Saved on this phone as from model, unverified. It is not part of the trusted notes.", undo: { type: "model-note", id: entryId } };
+    }
     return { ok: false, text: "That action is not available.", undo: null };
   }
 
@@ -349,6 +482,9 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
     }
     if (decision.undo?.type === "field-note") {
       setNotes((current) => current.filter((item) => item.id !== decision.undo.id));
+    }
+    if (decision.undo?.type === "model-note") {
+      setModels({ ...models, unverified: deleteModelEntry(models?.unverified, decision.undo.id) });
     }
     pushMessage({ role: "yehsa", text: decision.undo ? "Undone on this phone." : "That one cannot be undone." });
   }
@@ -378,7 +514,7 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
     setQuestion("");
     setNotice(null);
     pushMessage({ role: "you", text: typed });
-    if (intent.kind !== "talk") {
+    if (intent.kind !== "talk" && intent.type !== "ask-model") {
       let card = null;
       if (intent.kind === "action") {
         const proposed = proposeAction(gateRef.current, {
@@ -417,6 +553,57 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
       };
       run().then((result) => {
         if (askGen.current !== generation) return;
+        const provider = selectedProvider(models);
+        const askedModel = intent.type === "ask-model";
+        const questionForModel = askedModel ? intent.payload.question : text;
+        const standing = result?.answered && /contradicts that premise|last resort|do not rub|not drinking water/i.test(result.text || "")
+          ? result.text
+          : null;
+        const wantsModel = askedModel || (!result?.answered && provider);
+        if (wantsModel && provider) {
+          const outbound = buildOutbound({
+            question: questionForModel,
+            include: models?.include,
+            position: held,
+            deviceId: ownerId,
+            contacts: [],
+            notes: models?.unverified
+          });
+          let offer = !result?.answered && !askedModel
+            ? missModelOffer(provider, outbound)
+            : previewModelSend(provider, outbound);
+          if (models?.include?.contacts === true) {
+            offer = `${offer} Contacts were ticked, but this phone has no contact list, so none are sent.`;
+          }
+          if (standing) {
+            offer = `${standing} The offline note stands. The model will not replace it. ${offer}`;
+          } else if (result?.answered) {
+            offer = `${result.text} ${offer}`;
+          }
+          const proposed = proposeAction(gateRef.current, {
+            type: "ask-model",
+            id: `act-${Date.now()}`,
+            label: offer,
+            payload: { question: questionForModel, outbound, providerId: provider.id, offlineNote: standing }
+          });
+          rememberGate(proposed.gate);
+          priorRef.current = { utterance: text };
+          setPhase("ready");
+          pushMessage({
+            role: "yehsa",
+            text: proposed.card ? offer : "That action is switched off, so I did not send anything.",
+            chips: sourceChips(result),
+            card: proposed.card
+          });
+          return;
+        }
+        if (askedModel && !provider) {
+          const reply = result?.text || "No model is connected, so nothing was sent. Add one under Me, Models. It stays off until you turn it on.";
+          priorRef.current = { utterance: text };
+          setPhase(result?.answered ? "ready" : "miss");
+          pushMessage({ role: "yehsa", text: result?.text ? `${reply} No model is connected, so nothing was sent.` : reply, chips: sourceChips(result) });
+          return;
+        }
         const reply = result?.text || result?.miss || "I don't have an installed note for that.";
         priorRef.current = { utterance: text };
         setPhase(result?.answered ? "ready" : "miss");
@@ -759,7 +946,7 @@ function heldPhrase(source) {
   return "a fix";
 }
 
-function PositionPane({ position, setPosition, onConsent }) {
+function PositionPane({ position, setPosition, onConsent, onOpenModels }) {
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
   const [altitude, setAltitude] = useState("");
@@ -791,8 +978,9 @@ function PositionPane({ position, setPosition, onConsent }) {
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="Me"
-        lead="Your place stays off until you turn it on. Sharing is a separate choice and does not send from this screen."
+        lead="Your place stays off until you turn it on. Sharing is a separate choice and does not send from this screen. A language model is a separate choice under Models."
       />
+      <Action label="Models" tone="quiet" onPress={onOpenModels} accessibilityHint="Connect a language model. It stays off until you turn one on." />
       <View style={styles.statusBlock}>
         <StatusPill label={position.status === "degraded" ? "Couldn't get a fix" : position.status === "locked" ? "Holding a place" : consented ? "Ready when you ask" : "Place is off"} tone={tone} />
         <Text style={styles.note}>{position.note}</Text>
