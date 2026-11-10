@@ -103,6 +103,8 @@ import {
   resumeDownload,
   validateImport
 } from "../../symbolic/map_packs.js";
+import { planDemDownload } from "../../symbolic/dem_tiles.js";
+import OfflineMap from "./OfflineMap.js";
 import {
   applyGpsSample,
   gpsStatusLabel,
@@ -1155,6 +1157,8 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
   const [declination, setDeclination] = useState("0");
   const [importNote, setImportNote] = useState("No terrain file is loaded. This is a blank landscape canvas.");
   const [packOffer, setPackOffer] = useState(null);
+  const [demOffer, setDemOffer] = useState(false);
+  const [demUrl, setDemUrl] = useState(null);
   const downloadAbort = useRef(null);
   const [gps, setGps] = useState(initialGpsMap);
   const [gpsWanted, setGpsWanted] = useState(false);
@@ -1259,6 +1263,15 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
       ) : (
         <Action label={backgroundGps ? "Background GPS on" : "Foreground GPS only"} tone="quiet" onPress={() => setBackgroundGps((value) => !value)} />
       )}
+      {demUrl ? <Image source={{ uri: demUrl }} accessibilityLabel="Elevation hillshade" style={{ height: 180, borderRadius: 12 }} /> : null}
+      {(mapPacks?.packs || []).some((pack) => pack.archive) ? (
+        <OfflineMap
+          archive={(mapPacks.packs.find((pack) => pack.archive) || {}).archive}
+          format={(mapPacks.packs.find((pack) => pack.archive) || {}).format}
+          attribution={attributionLine(mapPacks)}
+          demUrl={demUrl}
+        />
+      ) : null}
       <LandscapeMap
         origin={origin}
         held={held}
@@ -1290,6 +1303,26 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
       <Quiet>{attributionLine(mapPacks || emptyPackStore())}</Quiet>
       <Quiet>{elevationNear(mapPacks || emptyPackStore(), held).text}</Quiet>
       <Quiet>{importNote}</Quiet>
+      <Action label="Review elevation" tone="quiet" onPress={() => setDemOffer(true)} />
+      {demOffer ? (
+        <View style={styles.card}>
+          <Quiet>{planDemDownload({ approved: false, latitude: held?.latitude || 45, longitude: held?.longitude || -69, zoom: 6 }).reason}</Quiet>
+          <Action label="Approve elevation" onPress={async () => {
+            const plan = planDemDownload({ approved: true, latitude: held?.latitude || 45, longitude: held?.longitude || -69, zoom: 6 });
+            if (!plan.fetch) return;
+            try {
+              const response = await fetch(plan.url);
+              const blob = await response.blob();
+              setDemUrl(URL.createObjectURL(blob));
+              setImportNote(`${plan.attribution} May be out of date.`);
+              setDemOffer(false);
+            } catch {
+              setImportNote("The elevation tile did not download. Nothing was stored.");
+            }
+          }} />
+          <Action label="Decline" tone="clay" onPress={() => setDemOffer(false)} />
+        </View>
+      ) : null}
       <Text style={styles.sectionLabel}>Map packs</Text>
       <Quiet>{`Storage ${formatBytes((mapPacks || emptyPackStore()).usedBytes)} of ${formatBytes((mapPacks || emptyPackStore()).budgetBytes)}. Packs stay in app storage, not in the install file. The whole world is not offered.`}</Quiet>
       {(mapPacks?.packs || []).map((pack) => (
@@ -1338,7 +1371,9 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
             if (!file) return;
             const reader = new FileReader();
             reader.onload = () => {
-              const pack = validateImport(file.name, new Uint8Array(reader.result));
+              const bytes = new Uint8Array(reader.result);
+              const pack = validateImport(file.name, bytes);
+              if (pack.ok && (pack.format === "pmtiles" || pack.format === "mbtiles")) pack.archive = bytes;
               const saved = addPack(mapPacks, pack);
               if (saved.added) setMapPacks(saved.store);
               setImportNote(saved.added
