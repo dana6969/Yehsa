@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { approveAction, declineAction, proposeAction, setActionEnabled } from "./symbolic/action_gate.js";
+import { readAssistant } from "./symbolic/assistant_intent.js";
 import { capabilitySummary, continueUtterance, isCapabilityQuestion } from "./symbolic/chat_turn.js";
 import { phoneCorpusMeta } from "./symbolic/phone_corpus.js";
 
@@ -47,4 +48,36 @@ test("nothing runs without approve, decline is a no-op, and a switch blocks the 
   const blocked = proposeAction(off, { type: "mesh-scan", label: "Scan" });
   assert.equal(blocked.card, null);
   assert.equal(blocked.gate.log.at(-1).status, "blocked");
+});
+
+test("natural commands are read offline and do not run by themselves", () => {
+  const here = { latitude: 45.1, longitude: -69.2 };
+  const drop = readAssistant("drop a waypoint here", { here, hereLabel: "the last place you tapped" });
+  assert.equal(drop.kind, "action");
+  assert.equal(drop.type, "waypoint");
+  assert.equal(drop.payload.point.latitude, 45.1);
+  assert.match(drop.understood, /I understood/);
+  assert.equal(readAssistant("drop a waypoint here", {}).kind, "clarify");
+
+  const far = readAssistant("how far to the last point", {
+    held: { latitude: 45, longitude: -69 },
+    waypoints: [{ name: "camp", latitude: 45.2, longitude: -69.1 }]
+  });
+  assert.equal(far.kind, "action");
+  assert.equal(far.type, "measure");
+  assert.equal(far.payload.to.name, undefined);
+  assert.equal(far.payload.to.latitude, 45.2);
+  assert.equal(readAssistant("how far to the last point", {}).kind, "clarify");
+
+  const scan = readAssistant("start a mesh scan");
+  assert.equal(scan.kind, "action");
+  assert.equal(scan.type, "mesh-scan");
+  assert.match(scan.understood, /will not invent a peer/);
+
+  const cannot = readAssistant("open google and download a city map");
+  assert.equal(cannot.kind, "cannot");
+  assert.match(cannot.reply, /no internet/i);
+  assert.match(cannot.reply, /can't open or control other apps/i);
+  assert.deepEqual(readAssistant("What can willow bark be used for?"), { kind: "talk" });
+  assert.doesNotMatch(JSON.stringify(scan), /model|openai|network request/i);
 });

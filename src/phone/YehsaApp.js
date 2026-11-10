@@ -17,7 +17,7 @@ import { parseQuestion } from "../../symbolic/question_parse.js";
 import { routesToSpiritual } from "../../symbolic/spiritual_route.js";
 import { loadScriptureIndex } from "./scripture_index";
 import { phoneCorpusMeta } from "../../symbolic/phone_corpus.js";
-import { saveSessionWaypoint } from "../../symbolic/phone_land.js";
+import { courseText, saveSessionWaypoint } from "../../symbolic/phone_land.js";
 import {
   applyConnect,
   applyScan,
@@ -49,7 +49,8 @@ import {
   voiceButtonLabel
 } from "../../symbolic/voice_adapter.js";
 import { Action, Field, HoldTalk, Prose, Quiet, ScreenHeader, StatusPill, colors } from "./ui.js";
-import { actionIntent, approveAction, declineAction, proposeAction, setActionEnabled, undoApproved } from "../../symbolic/action_gate.js";
+import { approveAction, declineAction, proposeAction, setActionEnabled, undoApproved } from "../../symbolic/action_gate.js";
+import { readAssistant } from "../../symbolic/assistant_intent.js";
 import { capabilitySummary, continueUtterance, isCapabilityQuestion, sourceChips } from "../../symbolic/chat_turn.js";
 import LandscapeMap from "./LandscapeMap.js";
 
@@ -109,14 +110,15 @@ export default function YehsaApp() {
       <View style={styles.column}>
       <View style={styles.body}>
         <View
-          style={[styles.pane, tab !== "ask" && styles.hidden]}
-          pointerEvents={tab === "ask" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "ask"}
+          style={tab === "ask" ? styles.pane : styles.dockHost}
+          pointerEvents="box-none"
         >
           <AskPane
             session={session}
             owner={owner}
-            active={tab === "ask"}
+            active
+            docked={tab !== "ask"}
+            screen={tab}
             position={position}
             setPosition={setPosition}
             waypoints={waypoints}
@@ -175,7 +177,7 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ session, owner, active, position, setPosition, waypoints, setWaypoints, setMesh, mapTap }) {
+function AskPane({ session, owner, active, docked, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [messages, setMessages] = useState([]);
@@ -252,7 +254,7 @@ function AskPane({ session, owner, active, position, setPosition, waypoints, set
     });
     rememberGate(proposed.gate);
     if (proposed.card) {
-      pushMessage({ role: "yehsa", text: "That tap is only a proposal. It is not saved until you tap Approve, and consent on Me still has to be on.", card: proposed.card });
+      pushMessage({ role: "yehsa", text: "I understood a tap as a waypoint. Nothing is saved until you tap Approve, and consent on Me still has to be on.", card: proposed.card });
     }
     return undefined;
   }, [mapTap]);
@@ -313,7 +315,16 @@ function AskPane({ session, owner, active, position, setPosition, waypoints, set
       return { ok: true, text: "Saved on this phone only. It was not sent.", undo: { type: "field-note", id: note.id } };
     }
     if (card.type === "measure") {
-      return { ok: true, text: "Use two taps on the map. The line is a measurement, not a saved place.", undo: null };
+      const from = card.payload.from;
+      const to = card.payload.to;
+      if (!from || !to) {
+        return { ok: false, text: "I still need two places before I can measure.", undo: null };
+      }
+      const report = courseText(`${from.latitude}, ${from.longitude}`, `${to.latitude}, ${to.longitude}`);
+      return { ok: report.ok === true, text: report.text, undo: null };
+    }
+    if (card.type === "calculate") {
+      return { ok: true, text: card.payload.text || "I had no calculation to keep.", undo: null };
     }
     return { ok: false, text: "That action is not available.", undo: null };
   }
@@ -350,11 +361,48 @@ function AskPane({ session, owner, active, position, setPosition, waypoints, set
       return;
     }
     const text = continueUtterance(typed, priorRef.current);
+    const held = position?.consent === true && position.status === "locked" ? position.fix : null;
+    const origin = held || { latitude: 0, longitude: 0 };
+    let here = mapTap || null;
+    let hereLabel = mapTap ? "the last place you tapped" : "";
+    if (!here && held) {
+      here = held;
+      hereLabel = "the place you are holding";
+    }
+    if (!here && screen === "land") {
+      here = origin;
+      hereLabel = "the center of this blank canvas, not a city";
+    }
+    const intent = readAssistant(typed, { here, hereLabel, held, waypoints });
     stopProse();
     setQuestion("");
-    setPhase("loading");
     setNotice(null);
     pushMessage({ role: "you", text: typed });
+    if (intent.kind !== "talk") {
+      let card = null;
+      if (intent.kind === "action") {
+        const proposed = proposeAction(gateRef.current, {
+          type: intent.type,
+          label: intent.label,
+          payload: intent.payload,
+          id: `act-${Date.now()}`
+        });
+        rememberGate(proposed.gate);
+        card = proposed.card;
+      }
+      const reply = intent.kind === "clarify"
+        ? `${intent.understood} ${intent.question}`
+        : intent.kind === "cannot"
+          ? `${intent.understood} ${intent.reply}`
+          : card
+            ? `${intent.understood} Nothing runs until you tap Approve.`
+            : `${intent.understood} That action is switched off, so I did not propose it.`;
+      priorRef.current = { utterance: typed };
+      setPhase("ready");
+      pushMessage({ role: "yehsa", text: reply, card });
+      return;
+    }
+    setPhase("loading");
     const generation = ++askGen.current;
     setTimeout(() => {
       if (askGen.current !== generation) return;
@@ -369,17 +417,13 @@ function AskPane({ session, owner, active, position, setPosition, waypoints, set
       };
       run().then((result) => {
         if (askGen.current !== generation) return;
-        const intent = actionIntent(typed);
-        const proposed = intent ? proposeAction(gateRef.current, { ...intent, id: `act-${Date.now()}` }) : { card: null };
-        if (intent) rememberGate(proposed.gate);
         const reply = result?.text || result?.miss || "I don't have an installed note for that.";
         priorRef.current = { utterance: text };
         setPhase(result?.answered ? "ready" : "miss");
         pushMessage({
           role: "yehsa",
           text: reply,
-          chips: sourceChips(result),
-          card: proposed.card
+          chips: sourceChips(result)
         });
         if (speak && result?.text) {
           speakProse(result.text, {
@@ -532,12 +576,30 @@ function AskPane({ session, owner, active, position, setPosition, waypoints, set
   });
   const listening = gesture.phase === "arming" || gesture.phase === "listening" || gesture.phase === "locked";
 
+  const latest = messages.length ? messages[messages.length - 1] : null;
+
   return (
-    <View style={styles.chatWrap}>
+    <View style={docked ? styles.dock : styles.chatWrap}>
+      {docked && latest?.role === "yehsa" ? (
+        <View style={styles.bubbleYehsa}>
+          <Text numberOfLines={4} style={styles.bubbleText}>{latest.text}</Text>
+          {latest.card && gate.pending?.id === latest.card.id ? (
+            <View style={styles.card}>
+              <Text style={styles.bubbleText}>{latest.card.label}</Text>
+              <View style={styles.cardRow}>
+                <Action label="Approve" onPress={() => onApprove(latest.card.id)} />
+                <Action label="Edit" tone="quiet" onPress={() => setQuestion(latest.card.label)} />
+                <Action label="Decline" tone="clay" onPress={() => onDecline(latest.card.id)} />
+              </View>
+            </View>
+          ) : null}
+        </View>
+      ) : null}
+      {docked ? null : (
       <ScrollView ref={threadRef} contentContainerStyle={styles.thread} keyboardShouldPersistTaps="handled">
         {messages.length === 0 ? (
           <View style={styles.bubbleYehsa}>
-            <Text style={styles.bubbleText}>Ask in plain words. I answer from the notes on this phone. I will not change your place or the radio until you tap Approve.</Text>
+            <Text style={styles.bubbleText}>I'm here on this phone. Talk naturally from any screen. I'll say what I understood, and I wait for Approve before I use a tool.</Text>
           </View>
         ) : null}
         {messages.map((item) => (
@@ -566,7 +628,8 @@ function AskPane({ session, owner, active, position, setPosition, waypoints, set
         {notice ? <Quiet>{notice}</Quiet> : null}
         {voiceNote ? <Quiet>{voiceNote}</Quiet> : null}
       </ScrollView>
-      {notes.length ? <Quiet>{`${notes.length} note${notes.length === 1 ? "" : "s"} saved on this phone.`}</Quiet> : null}
+      )}
+      {docked ? null : notes.length ? <Quiet>{`${notes.length} note${notes.length === 1 ? "" : "s"} saved on this phone.`}</Quiet> : null}
       <View style={styles.composer}>
         <TextInput
           accessibilityLabel="Message"
@@ -586,16 +649,16 @@ function AskPane({ session, owner, active, position, setPosition, waypoints, set
           live={listening}
         />
         <Action label="Send" onPress={ask} disabled={phase === "loading"} />
-        <Action label="Hear the answer" tone="quiet" onPress={() => {
+        {docked ? null : <Action label="Hear the answer" tone="quiet" onPress={() => {
           const last = [...messages].reverse().find((item) => item.role === "yehsa" && item.text);
           if (!last) return;
           speakProse(last.text, {
             onDone: () => setVoiceNote(null),
             onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
           });
-        }} />
+        }} />}
       </View>
-      <View style={styles.cardRow}>
+      {docked ? null : <View style={styles.cardRow}>
         {Object.keys(gate.settings).map((type) => (
           <Pressable
             key={type}
@@ -608,11 +671,11 @@ function AskPane({ session, owner, active, position, setPosition, waypoints, set
             <Text style={styles.chipText}>{`${type} ${gate.settings[type] ? "on" : "off"}`}</Text>
           </Pressable>
         ))}
-      </View>
-      <Action label="Undo last approved action" tone="quiet" onPress={() => {
+      </View>}
+      {docked ? null : <Action label="Undo last approved action" tone="quiet" onPress={() => {
         const last = [...gate.log].reverse().find((item) => item.status === "approved" && item.undo && item.undone !== true);
         if (last) onUndo(last.id);
-      }} />
+      }} />}
     </View>
   );
 }
@@ -1001,7 +1064,22 @@ const styles = StyleSheet.create({
     maxWidth: 480
   },
   body: {
-    flex: 1
+    flex: 1,
+    position: "relative"
+  },
+  dockHost: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 5
+  },
+  dock: {
+    backgroundColor: colors.bg,
+    borderTopWidth: 1,
+    borderTopColor: colors.lineStrong,
+    padding: 12,
+    gap: 8
   },
   pane: {
     flex: 1
@@ -1012,7 +1090,7 @@ const styles = StyleSheet.create({
   scroll: {
     paddingTop: Platform.OS === "ios" ? 52 : 22,
     paddingHorizontal: 22,
-    paddingBottom: 36
+    paddingBottom: 168
   },
   answer: {
     marginTop: 8,
