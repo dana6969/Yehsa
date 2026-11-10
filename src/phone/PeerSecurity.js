@@ -24,6 +24,10 @@ export default function PeerSecurity() {
 
   useEffect(() => {
     loadOrCreateIdentity().then((result) => {
+      if (result.foreign || !result.identity) {
+        setNote(result.message || "This copy can't open the original owner's chats");
+        return;
+      }
       setFingerprint(keyFingerprint(result.identity.boxPublic));
       setDemo(result.demo === true);
     }).catch(() => setNote("The key could not be read."));

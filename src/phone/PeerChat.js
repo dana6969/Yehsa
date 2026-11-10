@@ -13,8 +13,8 @@ import {
   sealDirect,
   sweepExpired
 } from "../../symbolic/peer_chat.js";
-import { KEY_CHANGE_WARNING, notePeerKey } from "../../symbolic/peer_vault.js";
-import { loadOrCreateIdentity, loadPeerHistory, savePeerHistory } from "./mesh_keys.js";
+import { CLONE_MESSAGE, KEY_CHANGE_WARNING, notePeerKey } from "../../symbolic/peer_vault.js";
+import { approveFreshIdentity, loadOrCreateIdentity, loadPeerHistory, savePeerHistory } from "./mesh_keys.js";
 import { Action, Quiet, colors } from "./ui.js";
 
 function qrCells(text) {
@@ -42,12 +42,18 @@ export default function PeerChat({ includeLocation = false }) {
   const [sosPlace, setSosPlace] = useState(false);
   const [demo, setDemo] = useState(false);
   const [warning, setWarning] = useState("");
+  const [foreign, setForeign] = useState(false);
   const [ready, setReady] = useState(false);
   const [about, setAbout] = useState(false);
   useEffect(() => {
     let live = true;
     loadOrCreateIdentity().then(async (result) => {
       if (!live) return;
+      if (result.foreign) {
+        setForeign(true);
+        setDemo(false);
+        return;
+      }
       setMe(result.identity);
       setDemo(result.demo === true);
       const history = await loadPeerHistory();
@@ -106,8 +112,22 @@ export default function PeerChat({ includeLocation = false }) {
         </Pressable>
       </View>
       <Quiet>Private: only you and this person can read these</Quiet>
+      {foreign ? <Quiet>{CLONE_MESSAGE}</Quiet> : null}
       {demo ? <Quiet>This web preview is a demo identity only.</Quiet> : null}
       {warning ? <Quiet>{warning}</Quiet> : null}
+      {foreign ? (
+        <Action label="Approve a new identity" onPress={async () => {
+          const next = await approveFreshIdentity();
+          if (!next?.ok) return;
+          setMe(next.identity);
+          setForeign(false);
+          setWarning(next.warning || KEY_CHANGE_WARNING);
+          setPractice(generateIdentity());
+          setMessages([]);
+          setPeers({});
+          setReady(true);
+        }} />
+      ) : null}
       {about ? <Quiet>{PEER_CHAT_PLAIN}</Quiet> : null}
       <View style={styles.row}>
         <Action label="Contacts" tone={view === "list" ? "brass" : "quiet"} onPress={() => setView("list")} />

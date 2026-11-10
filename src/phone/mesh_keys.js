@@ -14,7 +14,11 @@ export function peerVault() {
 export async function loadOrCreateIdentity() {
   if (!session) session = vault.loadOrCreate();
   const loaded = await session;
-  return { identity: loaded.identity, persisted: false, demo: true, created: loaded.created, reason: DEMO };
+  return { identity: loaded.identity, foreign: false, persisted: false, demo: true, created: loaded.created, reason: DEMO, message: null };
+}
+
+export async function approveFreshIdentity() {
+  return { ok: false, foreign: false, reason: DEMO };
 }
 
 export async function savePeerSecret() {

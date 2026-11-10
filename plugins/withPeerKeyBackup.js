@@ -6,25 +6,25 @@ const fs = require("fs");
 const path = require("path");
 const { AndroidConfig, withAndroidManifest, withDangerousMod } = require("expo/config-plugins");
 
+const EXCLUDE_ALL = `  <exclude domain="root" path="."/>
+  <exclude domain="file" path="."/>
+  <exclude domain="database" path="."/>
+  <exclude domain="sharedpref" path="."/>
+  <exclude domain="external" path="."/>`;
+
 const BACKUP_XML = `<?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
-  <exclude domain="sharedpref" path="SecureStore"/>
-  <exclude domain="database" path="RKStorage"/>
-  <exclude domain="file" path="yehsa-peer-history"/>
+${EXCLUDE_ALL}
 </full-backup-content>
 `;
 
 const EXTRACTION_XML = `<?xml version="1.0" encoding="utf-8"?>
 <data-extraction-rules>
   <cloud-backup>
-    <exclude domain="sharedpref" path="SecureStore"/>
-    <exclude domain="database" path="RKStorage"/>
-    <exclude domain="file" path="yehsa-peer-history"/>
+${EXCLUDE_ALL}
   </cloud-backup>
   <device-transfer>
-    <exclude domain="sharedpref" path="SecureStore"/>
-    <exclude domain="database" path="RKStorage"/>
-    <exclude domain="file" path="yehsa-peer-history"/>
+${EXCLUDE_ALL}
   </device-transfer>
 </data-extraction-rules>
 `;

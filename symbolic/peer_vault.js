@@ -10,6 +10,7 @@ import {
   publicCard,
   sealAtRest
 } from "./peer_chat.js";
+import { CLONE_MESSAGE, bindCommitment, cloneDecision, deviceBindAgrees } from "./clone_guard.js";
 
 export const KEY_ACCESS = "WHEN_UNLOCKED_THIS_DEVICE_ONLY";
 export const SCRYPT_PARAMS = { N: 32768, r: 8, p: 1, dkLen: 32 };
@@ -20,6 +21,9 @@ const IDENTITY = "identity";
 const HISTORY_KEY = "historyKey";
 const HISTORY = "history";
 const AUTH = "authFlag";
+const BIND = "bindToken";
+
+export { CLONE_MESSAGE };
 
 export function secureStoreOptions(requireAuthentication) {
   return {
@@ -30,14 +34,23 @@ export function secureStoreOptions(requireAuthentication) {
   };
 }
 
-export function memoryAdapter(disk = new Map()) {
+export function memoryAdapter(disk = new Map(), device = "local") {
   return {
     disk,
+    device,
     async getSecret(name) {
-      return disk.has(`secret:${name}`) ? disk.get(`secret:${name}`) : null;
+      const key = `secret:${name}`;
+      if (!disk.has(key)) return null;
+      const stored = disk.get(key);
+      if (stored?.device && stored.device !== device) {
+        const err = new Error("SecureStore unwrap failed");
+        err.code = "unwrap-failed";
+        throw err;
+      }
+      return stored;
     },
     async setSecret(name, value, options) {
-      disk.set(`secret:${name}`, { value, options });
+      disk.set(`secret:${name}`, { value, options, device });
     },
     async deleteSecret(name) {
       disk.delete(`secret:${name}`);
@@ -102,12 +115,61 @@ export function createPeerVault(adapter) {
     async saveIdentity(identity) {
       return writeIdentity(identity);
     },
+    async readBindToken() {
+      const raw = secretValue(await adapter.getSecret(BIND));
+      if (!raw) return null;
+      return decode(raw);
+    },
+    async openSession() {
+      try {
+        const identity = await this.loadIdentity();
+        let token = await this.readBindToken();
+        if (identity?.boxSecret) {
+          if (!token) {
+            token = nacl.randomBytes(32);
+            await adapter.setSecret(BIND, encode(token), secureStoreOptions(await authOn(adapter)));
+          }
+          const bind = deviceBindAgrees(null, token);
+          const decision = cloneDecision({ unwrapFailed: false, bindOk: bind.ok, ownerRecognized: true });
+          return { ...decision, identity, created: false, commitment: bindCommitment(token) };
+        }
+        if (!token) {
+          const residue = await adapter.getData(HISTORY);
+          if (residue) {
+            return { foreign: true, useOldIdentity: false, identity: null, created: false, message: CLONE_MESSAGE, recover: false };
+          }
+          const created = generateIdentity();
+          await writeIdentity(created);
+          token = nacl.randomBytes(32);
+          await adapter.setSecret(BIND, encode(token), secureStoreOptions(false));
+          return { foreign: false, useOldIdentity: true, identity: created, created: true, message: null, commitment: bindCommitment(token) };
+        }
+        return { foreign: true, useOldIdentity: false, identity: null, created: false, message: CLONE_MESSAGE, recover: false };
+      } catch (err) {
+        if (err?.code === "unwrap-failed") {
+          return { foreign: true, useOldIdentity: false, identity: null, created: false, message: CLONE_MESSAGE, recover: false };
+        }
+        throw err;
+      }
+    },
     async loadOrCreate() {
-      const existing = await this.loadIdentity();
-      if (existing?.boxSecret) return { identity: existing, created: false };
+      const session = await this.openSession();
+      if (session.foreign) return session;
+      return session;
+    },
+    async replaceForeign({ approved } = {}) {
+      if (approved !== true) {
+        return { ok: false, foreign: true, identity: null, message: CLONE_MESSAGE, reason: "Nothing was replaced." };
+      }
+      await adapter.deleteSecret(IDENTITY);
+      await adapter.deleteSecret(HISTORY_KEY);
+      await adapter.deleteSecret(BIND);
+      await adapter.deleteData(HISTORY);
       const identity = generateIdentity();
       await writeIdentity(identity);
-      return { identity, created: true };
+      const token = nacl.randomBytes(32);
+      await adapter.setSecret(BIND, encode(token), secureStoreOptions(false));
+      return { ok: true, foreign: false, identity, warning: KEY_CHANGE_WARNING, commitment: bindCommitment(token) };
     },
     async deviceAuth() {
       return secretValue(await adapter.getSecret(AUTH)) === "1";
@@ -136,6 +198,7 @@ export function createPeerVault(adapter) {
       }
       await adapter.deleteSecret(IDENTITY);
       await adapter.deleteSecret(HISTORY_KEY);
+      await adapter.deleteSecret(BIND);
       await adapter.deleteData(HISTORY);
       return { ok: true, warning: RESET_WARNING };
     },
@@ -174,6 +237,13 @@ export function createPeerVault(adapter) {
       const identity = openAtRest({ nonce: file.nonce, box: file.box }, key);
       if (!identity?.boxSecret) return { ok: false, identity: null, reason: "That passphrase did not open the backup." };
       return { ok: true, identity, warning: "Your safety number changed. Contacts must re-verify you." };
+    },
+    async exportForDevice(passphrase, params) {
+      const session = await this.openSession();
+      if (session.foreign || !session.identity) {
+        return { ok: false, reason: "A copied directory is not a backup. The passphrase file is the only way to move an identity." };
+      }
+      return this.exportBackup(session.identity, passphrase, params);
     },
     async adoptImported(identity) {
       await adapter.deleteData(HISTORY);

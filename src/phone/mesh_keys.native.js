@@ -5,7 +5,7 @@
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
-import { createPeerVault, secureStoreOptions } from "../../symbolic/peer_vault.js";
+import { CLONE_MESSAGE, createPeerVault, secureStoreOptions } from "../../symbolic/peer_vault.js";
 
 const NAMES = {
   identity: "yehsa.peer.secret.v1",
@@ -55,9 +55,18 @@ export function peerVault() {
 }
 
 export async function loadOrCreateIdentity() {
-  if (!session) session = vault.loadOrCreate();
+  if (!session) session = vault.openSession();
   const loaded = await session;
-  return { identity: loaded.identity, persisted: true, demo: false, created: loaded.created };
+  if (loaded.foreign) {
+    return { foreign: true, identity: null, persisted: false, demo: false, created: false, message: loaded.message || CLONE_MESSAGE };
+  }
+  return { identity: loaded.identity, foreign: false, persisted: true, demo: false, created: loaded.created, message: null };
+}
+
+export async function approveFreshIdentity() {
+  const result = await vault.replaceForeign({ approved: true });
+  if (result.ok) session = Promise.resolve({ identity: result.identity, foreign: false, created: true });
+  return result;
 }
 
 export async function savePeerSecret(identity) {
