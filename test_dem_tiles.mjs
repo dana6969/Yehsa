@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { lonLatToTile, mbtilesQuery, planDemDownload, terrariumMeters, tmsRow } from "./symbolic/dem_tiles.js";
+import { hillshadeShade, lonLatToTile, mbtilesQuery, planDemDownload, planDemRegion, terrariumMeters, tmsRow } from "./symbolic/dem_tiles.js";
 
 test("terrarium pixels become meters and a download waits for approval", () => {
   assert.equal(terrariumMeters(128, 0, 0), 0);
@@ -20,4 +20,11 @@ test("terrarium pixels become meters and a download waits for approval", () => {
   const query = mbtilesQuery(tile.z, tile.x, tile.y);
   assert.equal(query.args[2], tmsRow(tile.z, tile.y));
   assert.match(query.sql, /tile_data/);
+  const region = planDemRegion({ approved: false, around: { latitude: 45.1, longitude: -69.2, radiusKm: 40 } });
+  assert.equal(region.fetch, false);
+  assert.ok(region.tiles.length >= 4);
+  assert.match(region.reason, /tiles/);
+  assert.match(region.reason, /until you approve/);
+  assert.ok(hillshadeShade(0, 0) > 0.4);
+  assert.ok(hillshadeShade(40, 0) < hillshadeShade(0, 0));
 });

@@ -103,7 +103,7 @@ import {
   resumeDownload,
   validateImport
 } from "../../symbolic/map_packs.js";
-import { planDemDownload } from "../../symbolic/dem_tiles.js";
+import { planDemRegion } from "../../symbolic/dem_tiles.js";
 import OfflineMap from "./OfflineMap.js";
 import PeerChat from "./PeerChat.js";
 import {
@@ -1307,18 +1307,23 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
       <Action label="Review elevation" tone="quiet" onPress={() => setDemOffer(true)} />
       {demOffer ? (
         <View style={styles.card}>
-          <Quiet>{planDemDownload({ approved: false, latitude: held?.latitude || 45, longitude: held?.longitude || -69, zoom: 6 }).reason}</Quiet>
+          <Quiet>{planDemRegion({ approved: false, around: { latitude: held?.latitude || 45, longitude: held?.longitude || -69, radiusKm: 40 } }).reason}</Quiet>
           <Action label="Approve elevation" onPress={async () => {
-            const plan = planDemDownload({ approved: true, latitude: held?.latitude || 45, longitude: held?.longitude || -69, zoom: 6 });
+            const plan = planDemRegion({ approved: true, around: { latitude: held?.latitude || 45, longitude: held?.longitude || -69, radiusKm: 40 } });
             if (!plan.fetch) return;
             try {
-              const response = await fetch(plan.url);
-              const blob = await response.blob();
-              setDemUrl(URL.createObjectURL(blob));
-              setImportNote(`${plan.attribution} May be out of date.`);
+              const urls = [];
+              for (const url of plan.urls) {
+                const response = await fetch(url);
+                if (!response.ok) continue;
+                urls.push(URL.createObjectURL(await response.blob()));
+              }
+              if (!urls.length) throw new Error("empty");
+              setDemUrl(urls[0]);
+              setImportNote(`${urls.length} elevation tiles. ${plan.attribution} May be out of date.`);
               setDemOffer(false);
             } catch {
-              setImportNote("The elevation tile did not download. Nothing was stored.");
+              setImportNote("The elevation tiles did not download. Nothing was stored.");
             }
           }} />
           <Action label="Decline" tone="clay" onPress={() => setDemOffer(false)} />
