@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { hillshadeShade, lonLatToTile, mbtilesQuery, planDemDownload, planDemRegion, terrariumMeters, tmsRow } from "./symbolic/dem_tiles.js";
+import { contourGeoJSON, elevationAt, hillshadeRgba, hillshadeShade, lonLatToTile, mbtilesQuery, planDemDownload, planDemRegion, terrariumGrid, terrariumMeters, tmsRow } from "./symbolic/dem_tiles.js";
 
 test("terrarium pixels become meters and a download waits for approval", () => {
   assert.equal(terrariumMeters(128, 0, 0), 0);
@@ -27,4 +27,20 @@ test("terrarium pixels become meters and a download waits for approval", () => {
   assert.match(region.reason, /until you approve/);
   assert.ok(hillshadeShade(0, 0) > 0.4);
   assert.ok(hillshadeShade(40, 0) < hillshadeShade(0, 0));
+  const rgba = new Uint8Array([
+    128, 0, 0, 255, 128, 40, 0, 255,
+    128, 0, 0, 255, 128, 40, 0, 255
+  ]);
+  const grid = terrariumGrid(rgba, 2, 2);
+  assert.equal(grid[0], 0);
+  assert.equal(grid[1], 40);
+  const shade = hillshadeRgba(grid, 2, 2);
+  assert.equal(shade.length, 16);
+  assert.ok(shade[3] > 0);
+  const bounds = { west: 0, south: 0, east: 2, north: 2 };
+  assert.equal(elevationAt(grid, 2, 2, bounds, 1.5, 1), 40);
+  assert.equal(elevationAt(grid, 2, 2, bounds, 9, 9), null);
+  const lines = contourGeoJSON(grid, 2, 2, bounds, 20);
+  assert.ok(lines.features.length >= 1);
+  assert.equal(lines.features[0].geometry.type, "LineString");
 });

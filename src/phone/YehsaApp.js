@@ -103,8 +103,10 @@ import {
   resumeDownload,
   validateImport
 } from "../../symbolic/map_packs.js";
-import { planDemRegion } from "../../symbolic/dem_tiles.js";
-import OfflineMap from "./OfflineMap.js";
+import { DEM_ATTRIBUTION, contourGeoJSON, elevationAt, hillshadeRgba, planDemRegion, terrariumGrid, tileBounds } from "../../symbolic/dem_tiles.js";
+import { decode as decodePng, encode as encodePng } from "fast-png";
+import OfflineMap from "./OfflineMap";
+import { publishArchive, publishDem, startTileServer } from "./tile_server";
 import PeerChat from "./PeerChat.js";
 import {
   applyGpsSample,
@@ -134,6 +136,7 @@ export default function YehsaApp() {
   const [waypoints, setWaypoints] = useState([]);
   const [track, setTrack] = useState([]);
   const [mapTap, setMapTap] = useState(null);
+  const [peopleOpen, setPeopleOpen] = useState(false);
   const [mapPacks, setMapPacks] = useState(emptyPackStore);
   const [actions, setActions] = useState(null);
   const [models, setModels] = useState(emptyModelSettings);
@@ -230,6 +233,7 @@ export default function YehsaApp() {
             session={session}
             owner={owner}
             active
+            hidden={tab === "mesh" && peopleOpen}
             docked={tab !== "ask"}
             screen={tab}
             position={position}
@@ -314,7 +318,7 @@ export default function YehsaApp() {
           pointerEvents={tab === "mesh" ? "auto" : "none"}
           accessibilityElementsHidden={tab !== "mesh"}
         >
-          <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} />
+          <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} onPeople={setPeopleOpen} />
         </View>
         <View
           style={[styles.pane, tab !== "models" && styles.hidden]}
@@ -401,7 +405,7 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ session, owner, active, docked, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
+function AskPane({ session, owner, active, docked, hidden, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [messages, setMessages] = useState([]);
@@ -1026,6 +1030,7 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
   }, [gate, onActions]);
 
   const latest = messages.length ? messages[messages.length - 1] : null;
+  if (hidden) return null;
 
   return (
     <View style={docked ? styles.dock : styles.chatWrap}>
@@ -1154,12 +1159,41 @@ function ResultText({ result }) {
   return <Prose live tone={result.tone === "warn" ? "warn" : undefined}>{result.text}</Prose>;
 }
 
+class MapBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
+  }
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch() {
+    this.props.onFail?.();
+  }
+  render() {
+    if (this.state.failed) return null;
+    return this.props.children;
+  }
+}
+
+function pngDataUrl(bytes) {
+  let binary = "";
+  const step = 0x8000;
+  for (let i = 0; i < bytes.length; i += step) binary += String.fromCharCode(...bytes.subarray(i, i + step));
+  return `data:image/png;base64,${globalThis.btoa(binary)}`;
+}
+
 function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks }) {
   const [declination, setDeclination] = useState("0");
   const [importNote, setImportNote] = useState("No terrain file is loaded. This is a blank landscape canvas.");
   const [packOffer, setPackOffer] = useState(null);
   const [demOffer, setDemOffer] = useState(false);
-  const [demUrl, setDemUrl] = useState(null);
+  const [demTiles, setDemTiles] = useState([]);
+  const [contours, setContours] = useState({ type: "FeatureCollection", features: [] });
+  const [mapFailed, setMapFailed] = useState(false);
+  const [tilePort, setTilePort] = useState(null);
+  const [elevNote, setElevNote] = useState("");
+  const demRef = useRef([]);
   const downloadAbort = useRef(null);
   const [gps, setGps] = useState(initialGpsMap);
   const [gpsWanted, setGpsWanted] = useState(false);
@@ -1170,6 +1204,28 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
     : (gps.fix || (consented && position.status === "locked" && position.fix ? position.fix : { latitude: 0, longitude: 0 }));
   const held = gps.fix || (consented && position.status === "locked" ? position.fix : null);
   const crumbs = gps.track.length ? gps.track : track;
+  const tiledPack = (mapPacks?.packs || []).find((pack) => pack.archive);
+  const metersHere = held ? demRef.current.reduce((found, tile) => {
+    if (found != null) return found;
+    return elevationAt(tile.elev, tile.width, tile.height, tile.bounds, held.longitude, held.latitude);
+  }, null) : null;
+
+  useEffect(() => {
+    let live = true;
+    if (Platform.OS === "web") return undefined;
+    startTileServer().then((next) => {
+      if (live && next) setTilePort(next);
+    }).catch(() => {
+      if (live) setMapFailed(true);
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    publishArchive(tiledPack || null);
+  }, [tiledPack]);
 
   useEffect(() => {
     if (!consented || !gpsWanted) {
@@ -1258,21 +1314,35 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
       {!consented || !gpsWanted ? (
         <View style={styles.card}>
           <Text style={styles.bubbleText}>Turn on GPS</Text>
-          <Quiet>The map stays a landscape canvas until you consent. GPS is the satellite on this device. It does not need a data connection, and it is not shared.</Quiet>
+          <Quiet>GPS stays off until you turn it on.</Quiet>
           <Action label="Turn on GPS" onPress={() => { onConsent(true); setGpsWanted(true); }} />
         </View>
       ) : (
         <Action label={backgroundGps ? "Background GPS on" : "Foreground GPS only"} tone="quiet" onPress={() => setBackgroundGps((value) => !value)} />
       )}
-      {demUrl ? <Image source={{ uri: demUrl }} accessibilityLabel="Elevation hillshade" style={{ height: 180, borderRadius: 12 }} /> : null}
-      {(mapPacks?.packs || []).some((pack) => pack.archive) ? (
-        <OfflineMap
-          archive={(mapPacks.packs.find((pack) => pack.archive) || {}).archive}
-          format={(mapPacks.packs.find((pack) => pack.archive) || {}).format}
-          attribution={attributionLine(mapPacks)}
-          demUrl={demUrl}
-        />
-      ) : null}
+      {(tiledPack || demTiles.length > 0) && !mapFailed ? (
+        <MapBoundary onFail={() => setMapFailed(true)}>
+          <OfflineMap
+            archive={tiledPack.archive}
+            format={tiledPack.format}
+            tileTemplate={tilePort ? `http://127.0.0.1:${tilePort}/pack/{z}/{x}/{y}` : null}
+            demTemplate={tilePort && demTiles.length ? `http://127.0.0.1:${tilePort}/dem/{z}/{x}/{y}.png` : null}
+            demTiles={demTiles}
+            contours={contours}
+            shapes={packShapes(mapPacks || emptyPackStore())}
+            fix={held}
+            follow={gps.follow}
+            headingDeg={gps.headingDeg}
+            attribution={attributionLine(mapPacks)}
+            onFail={() => setMapFailed(true)}
+            onPress={(point) => {
+              if (onMapTap) onMapTap(point);
+              const meters = demRef.current.reduce((found, tile) => found != null ? found : elevationAt(tile.elev, tile.width, tile.height, tile.bounds, point.longitude, point.latitude), null);
+              setElevNote(meters == null ? "No elevation tile covers that point." : `About ${Math.round(meters)} m at the tapped point. ${DEM_ATTRIBUTION}`);
+            }}
+          />
+        </MapBoundary>
+      ) : (
       <LandscapeMap
         origin={origin}
         held={held}
@@ -1289,9 +1359,12 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
         onUserPan={() => setGps((current) => noteUserPan(current))}
         onWaypoint={(point) => {
           if (onMapTap) onMapTap(point);
-          setImportNote(`Proposed ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Approve it in Chat. Consent on Me is still required.`);
+          const meters = demRef.current.reduce((found, tile) => found != null ? found : elevationAt(tile.elev, tile.width, tile.height, tile.bounds, point.longitude, point.latitude), null);
+          setElevNote(meters == null ? "" : `About ${Math.round(meters)} m at the tapped point. ${DEM_ATTRIBUTION}`);
+          setImportNote(`Proposed ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Approve it in Chat.`);
         }}
       />
+      )}
       {waypoints.map((point) => (
         <Action
           key={point.name}
@@ -1302,7 +1375,8 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
       ))}
       <Field label="Declination from your map, east positive" value={declination} onChangeText={setDeclination} placeholder="0" />
       <Quiet>{attributionLine(mapPacks || emptyPackStore())}</Quiet>
-      <Quiet>{elevationNear(mapPacks || emptyPackStore(), held).text}</Quiet>
+      <Quiet>{metersHere == null ? elevationNear(mapPacks || emptyPackStore(), held).text : `About ${Math.round(metersHere)} m here. ${DEM_ATTRIBUTION}`}</Quiet>
+      {elevNote ? <Quiet>{elevNote}</Quiet> : null}
       <Quiet>{importNote}</Quiet>
       <Action label="Review elevation" tone="quiet" onPress={() => setDemOffer(true)} />
       {demOffer ? (
@@ -1310,17 +1384,50 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
           <Quiet>{planDemRegion({ approved: false, around: { latitude: held?.latitude || 45, longitude: held?.longitude || -69, radiusKm: 40 } }).reason}</Quiet>
           <Action label="Approve elevation" onPress={async () => {
             const plan = planDemRegion({ approved: true, around: { latitude: held?.latitude || 45, longitude: held?.longitude || -69, radiusKm: 40 } });
-            if (!plan.fetch) return;
+            if (!plan.fetch || plan.tiles.length < 2) return;
             try {
-              const urls = [];
-              for (const url of plan.urls) {
-                const response = await fetch(url);
+              const stored = [];
+              const lines = [];
+              for (let index = 0; index < plan.tiles.length; index += 1) {
+                const response = await fetch(plan.urls[index]);
                 if (!response.ok) continue;
-                urls.push(URL.createObjectURL(await response.blob()));
+                const bytes = new Uint8Array(await response.arrayBuffer());
+                const png = decodePng(bytes);
+                const channels = png.channels || Math.round(png.data.length / (png.width * png.height));
+                const rgba = channels === 4 ? png.data : new Uint8Array(png.width * png.height * 4);
+                if (channels !== 4) {
+                  for (let pixel = 0; pixel < png.width * png.height; pixel += 1) {
+                    rgba[pixel * 4] = png.data[pixel * channels];
+                    rgba[pixel * 4 + 1] = png.data[pixel * channels + 1];
+                    rgba[pixel * 4 + 2] = png.data[pixel * channels + 2];
+                    rgba[pixel * 4 + 3] = 255;
+                  }
+                }
+                const elev = terrariumGrid(rgba, png.width, png.height);
+                const shade = hillshadeRgba(elev, png.width, png.height);
+                const encoded = encodePng({ width: png.width, height: png.height, data: shade, channels: 4 });
+                const tile = plan.tiles[index];
+                const bounds = tileBounds(tile.z, tile.x, tile.y);
+                const drawn = contourGeoJSON(elev, png.width, png.height, bounds, 100);
+                lines.push(...drawn.features);
+                stored.push({
+                  z: tile.z,
+                  x: tile.x,
+                  y: tile.y,
+                  bounds,
+                  elev,
+                  width: png.width,
+                  height: png.height,
+                  url: pngDataUrl(encoded),
+                  png: encoded
+                });
               }
-              if (!urls.length) throw new Error("empty");
-              setDemUrl(urls[0]);
-              setImportNote(`${urls.length} elevation tiles. ${plan.attribution} May be out of date.`);
+              if (stored.length < 2) throw new Error("empty");
+              demRef.current = stored;
+              setDemTiles(stored.map((tile) => ({ url: tile.url, bounds: tile.bounds, z: tile.z, x: tile.x, y: tile.y })));
+              setContours({ type: "FeatureCollection", features: lines.slice(0, 400) });
+              publishDem(stored);
+              setImportNote(`${stored.length} elevation tiles, hillshade and contours. ${plan.attribution} May be out of date.`);
               setDemOffer(false);
             } catch {
               setImportNote("The elevation tiles did not download. Nothing was stored.");
@@ -1330,7 +1437,7 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
         </View>
       ) : null}
       <Text style={styles.sectionLabel}>Map packs</Text>
-      <Quiet>{`Storage ${formatBytes((mapPacks || emptyPackStore()).usedBytes)} of ${formatBytes((mapPacks || emptyPackStore()).budgetBytes)}. Packs stay in app storage, not in the install file. The whole world is not offered.`}</Quiet>
+      <Quiet>{`Storage ${formatBytes((mapPacks || emptyPackStore()).usedBytes)} of ${formatBytes((mapPacks || emptyPackStore()).budgetBytes)}. The whole world is not offered.`}</Quiet>
       {(mapPacks?.packs || []).map((pack) => (
         <View key={pack.id} style={styles.card}>
           <Text style={styles.bubbleText}>{`${pack.name}. ${formatBytes(pack.bytes)}. May be out of date.`}</Text>
@@ -1507,12 +1614,7 @@ function PositionPane({ position, setPosition, onConsent, onOpenModels, onOpenLe
           }}
         />
       </View>
-      <Text style={styles.foot}>
-        {"Turn this on yourself, then tap Try satellite lock. A coarse or missing reading stays unheld. Share still does not transmit from this screen."}
-      </Text>
-      <Text style={styles.foot}>
-        {`Details. Packaged dictionary: ${phoneCorpusMeta.headwords} headwords and ${phoneCorpusMeta.medicalNames} medical names. ${phoneCorpusMeta.honest} ${phoneCorpusMeta.fieldNoteHonest} ${phoneCorpusMeta.medicalHonest} A reading coarser than ${EXPO_LOCK_ACCURACY_M} m is not stored. Nothing you ask is saved as a profile. This install is bound to this device. Exterior access is denied.`}
-      </Text>
+      <Text style={styles.foot}>Turn this on yourself. Nothing is shared from this screen.</Text>
     </ScrollView>
   );
 }
@@ -1523,7 +1625,7 @@ function peerLabel(peer) {
   return `${peer.name} — ${id}${rssi}`;
 }
 
-function MeshPane({ mesh, setMesh, owner, position }) {
+function MeshPane({ mesh, setMesh, owner, position, onPeople }) {
   const status = meshScreenStatus(mesh);
   const tone = status.readiness === "linked" ? "good" : status.readiness === "degraded" ? "warn" : undefined;
   const [scanning, setScanning] = useState(false);
@@ -1610,7 +1712,7 @@ function MeshPane({ mesh, setMesh, owner, position }) {
     return (
       <View style={{ flex: 1 }}>
         <PeerChat includeLocation={position?.consent === true && position.status === "locked"} />
-        <Action label="Back to mesh" tone="quiet" onPress={() => setPeople(false)} />
+        <Action label="Back to mesh" tone="quiet" onPress={() => { setPeople(false); onPeople?.(false); }} />
       </View>
     );
   }
@@ -1621,7 +1723,7 @@ function MeshPane({ mesh, setMesh, owner, position }) {
         title="Mesh"
         lead="Look for other Yehsa phones when you ask."
       />
-      <Action label="People" onPress={() => setPeople(true)} />
+      <Action label="People" onPress={() => { setPeople(true); onPeople?.(true); }} />
       <View style={styles.statusBlock}>
         <Text style={styles.sectionLabel}>{status.title}</Text>
         <StatusPill label={pill} tone={tone} />

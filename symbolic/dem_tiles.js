@@ -116,6 +116,88 @@ export function planDemDownload({ approved, latitude = 0, longitude = 0, zoom = 
   return { fetch: true, tile, url, attribution: DEM_ATTRIBUTION, reason: null };
 }
 
+export function terrariumGrid(rgba, width, height) {
+  const elev = new Float32Array(width * height);
+  for (let i = 0; i < elev.length; i += 1) {
+    const offset = i * 4;
+    elev[i] = terrariumMeters(rgba[offset], rgba[offset + 1], rgba[offset + 2]);
+  }
+  return elev;
+}
+
+export function hillshadeRgba(elev, width, height) {
+  const out = new Uint8Array(width * height * 4);
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const left = elev[y * width + Math.max(0, x - 1)];
+      const right = elev[y * width + Math.min(width - 1, x + 1)];
+      const up = elev[Math.max(0, y - 1) * width + x];
+      const down = elev[Math.min(height - 1, y + 1) * width + x];
+      const tone = Math.round(hillshadeShade(right - left, down - up) * 255);
+      const offset = (y * width + x) * 4;
+      out[offset] = tone;
+      out[offset + 1] = Math.round(tone * 0.92);
+      out[offset + 2] = Math.round(tone * 0.78);
+      out[offset + 3] = 210;
+    }
+  }
+  return out;
+}
+
+export function elevationAt(elev, width, height, bounds, longitude, latitude) {
+  if (!bounds) return null;
+  if (longitude < bounds.west || longitude > bounds.east || latitude < bounds.south || latitude > bounds.north) return null;
+  const xSpan = bounds.east - bounds.west || 1;
+  const ySpan = bounds.north - bounds.south || 1;
+  const x = Math.min(width - 1, Math.max(0, Math.floor(((longitude - bounds.west) / xSpan) * width)));
+  const y = Math.min(height - 1, Math.max(0, Math.floor(((bounds.north - latitude) / ySpan) * height)));
+  return elev[y * width + x];
+}
+
+function pointOnTile(px, py, width, height, bounds) {
+  return [
+    bounds.west + (px / Math.max(1, width - 1)) * (bounds.east - bounds.west),
+    bounds.north - (py / Math.max(1, height - 1)) * (bounds.north - bounds.south)
+  ];
+}
+
+export function contourGeoJSON(elev, width, height, bounds, interval = 100) {
+  const step = Math.max(1, Math.floor(Math.min(width, height) / 32));
+  const gw = Math.max(2, Math.floor(width / step));
+  const gh = Math.max(2, Math.floor(height / step));
+  const grid = new Float32Array(gw * gh);
+  let low = Infinity;
+  let high = -Infinity;
+  for (let y = 0; y < gh; y += 1) {
+    for (let x = 0; x < gw; x += 1) {
+      const value = elev[Math.min(height - 1, y * step) * width + Math.min(width - 1, x * step)];
+      grid[y * gw + x] = value;
+      if (value < low) low = value;
+      if (value > high) high = value;
+    }
+  }
+  const features = [];
+  const start = Math.ceil(low / interval) * interval;
+  for (let level = start; level <= high && features.length < 400; level += interval) {
+    const segments = contourSegments(grid, gw, gh, level);
+    for (const [a, b] of segments) {
+      if (features.length >= 400) break;
+      features.push({
+        type: "Feature",
+        properties: { level },
+        geometry: {
+          type: "LineString",
+          coordinates: [
+            pointOnTile(a[0], a[1], gw, gh, bounds),
+            pointOnTile(b[0], b[1], gw, gh, bounds)
+          ]
+        }
+      });
+    }
+  }
+  return { type: "FeatureCollection", features };
+}
+
 export function mbtilesQuery(zoom, x, y) {
   return {
     sql: "SELECT tile_data FROM tiles WHERE zoom_level = ? AND tile_column = ? AND tile_row = ?",

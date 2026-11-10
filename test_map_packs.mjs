@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { encode } from "fast-png";
+import { readPmTile, writeRasterPmtiles } from "./symbolic/archive_tiles.js";
 import {
   addPack,
   attributionLine,
@@ -38,8 +40,9 @@ test("a corrupt map file is rejected and a real one keeps attribution", () => {
   assert.equal(tiles.ok, true);
   assert.equal(tiles.minZoom, 0);
   assert.equal(tiles.maxZoom, 6);
-  assert.equal(tiles.paintsTiles, false);
-  assert.match(tiles.note, /not painted/);
+  assert.equal(tiles.paintsTiles, true);
+  assert.match(tiles.note, /Tiles in this file are drawn/);
+  assert.match(tiles.note, /only if this file contains them/);
 
   const water = validateImport("creek.geojson", JSON.stringify({
     type: "FeatureCollection",
@@ -94,4 +97,12 @@ test("a download does not touch the network until she approves, and a huge pack 
   assert.equal(again.fetch, true);
   const blocked = resumeDownload(pauseDownload({ ...emptyPackStore(), jobs: [{ id: "x", approved: false, status: "fetching" }] }, "x"), "x");
   assert.equal(blocked.fetch, false);
+});
+
+test("a stored raster tile can be read back from the archive", async () => {
+  const png = encode({ width: 2, height: 2, data: Uint8Array.from({ length: 16 }, () => 180), channels: 4 });
+  const archive = writeRasterPmtiles(png, { z: 8, x: 77, y: 94 });
+  const tile = await readPmTile(archive, 8, 77, 94);
+  assert.equal(tile.length, png.length);
+  assert.equal(await readPmTile(archive, 8, 0, 0), null);
 });

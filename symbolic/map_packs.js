@@ -265,8 +265,8 @@ function parsePmtiles(name, bytes) {
     minZoom,
     maxZoom,
     source: "Imported PMTiles",
-    paintsTiles: false,
-    note: "Coverage box only. Vector tiles inside are not painted, so no streets are invented. May be out of date."
+    paintsTiles: true,
+    note: "Tiles in this file are drawn. Streets appear only if this file contains them. May be out of date."
   });
 }
 
@@ -306,8 +306,8 @@ function parseMbtiles(name, bytes) {
     source: "Imported MBTiles",
     license,
     attribution,
-    paintsTiles: false,
-    note: "Archive checked. Individual tiles are not painted, so no streets are invented. May be out of date."
+    paintsTiles: true,
+    note: "Tiles in this file are drawn. Streets appear only if this file contains them. May be out of date."
   });
 }
 

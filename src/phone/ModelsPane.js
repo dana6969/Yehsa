@@ -11,6 +11,7 @@ export default function ModelsPane({ settings, onChange, onSaveKey, onDeleteProv
   const [keyDraft, setKeyDraft] = useState("");
   const [keyNote, setKeyNote] = useState("A key is hidden after you save it. This screen cannot show it again.");
   const [pendingTest, setPendingTest] = useState(null);
+  const [about, setAbout] = useState(false);
   const preset = MODEL_PRESETS.find((item) => item.id === presetId) || MODEL_PRESETS[0];
 
   function choosePreset(next) {
@@ -56,9 +57,12 @@ export default function ModelsPane({ settings, onChange, onSaveKey, onDeleteProv
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="Models"
-        lead="Off until you connect one. It does not retrain Yehsa."
+        lead="Off until you connect one."
       />
-      <Quiet>With no model on, Yehsa stays on this phone and makes no network call. A key is stored only in the device secure store. It is never shown again and never written into the app.</Quiet>
+      <Pressable accessibilityRole="button" accessibilityLabel="About models" onPress={() => setAbout((value) => !value)}>
+        <Text style={{ color: "#d7c4a3" }}>i</Text>
+      </Pressable>
+      {about ? <Quiet>A key stays in the device secure store. It is never shown again and never written into the app. Yehsa is not retrained.</Quiet> : null}
       <Text style={styles.section}>Add a provider</Text>
       <View style={styles.row}>
         {MODEL_PRESETS.map((item) => (

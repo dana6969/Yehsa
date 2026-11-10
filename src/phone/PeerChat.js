@@ -14,7 +14,7 @@ import {
   sweepExpired
 } from "../../symbolic/peer_chat.js";
 import { savePeerSecret } from "./mesh_keys.js";
-import { Action, Quiet, ScreenHeader, colors } from "./ui.js";
+import { Action, Quiet, colors } from "./ui.js";
 
 function qrCells(text) {
   const code = QRCode.create(text, { errorCorrectionLevel: "L" });
@@ -29,7 +29,7 @@ function qrCells(text) {
 
 export default function PeerChat({ includeLocation = false }) {
   const [me] = useState(() => generateIdentity());
-  const [view, setView] = useState("pair");
+  const [view, setView] = useState("list");
   const [practice] = useState(() => generateIdentity());
   const [trusted, setTrusted] = useState(false);
   const [typedNumber, setTypedNumber] = useState("");
@@ -39,6 +39,7 @@ export default function PeerChat({ includeLocation = false }) {
   const [vanish, setVanish] = useState(false);
   const [sosPlace, setSosPlace] = useState(false);
   const [storeNote, setStoreNote] = useState("");
+  const [about, setAbout] = useState(false);
   useEffect(() => {
     savePeerSecret(me).then((result) => {
       if (!result?.ok && result?.reason) setStoreNote(result.reason);
@@ -70,20 +71,23 @@ export default function PeerChat({ includeLocation = false }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader title="People" lead="End-to-end encrypted. A relay cannot read it." />
-      <Quiet>{PEER_CHAT_PLAIN}</Quiet>
-      {storeNote ? <Quiet>{storeNote}</Quiet> : null}
+    <View style={styles.screen}>
+      <View style={styles.top}>
+        <Text style={styles.title}>People</Text>
+        <Pressable accessibilityRole="button" accessibilityLabel="About this chat" onPress={() => setAbout((value) => !value)} style={styles.info}>
+          <Ionicons name="information-circle-outline" size={22} color={colors.brass} />
+        </Pressable>
+      </View>
+      <Quiet>Private: only you and this person can read these</Quiet>
+      {about ? <Quiet>{`${PEER_CHAT_PLAIN} ${storeNote}`}</Quiet> : null}
       <View style={styles.row}>
         <Action label="Contacts" tone={view === "list" ? "brass" : "quiet"} onPress={() => setView("list")} />
         <Action label="Pair" tone={view === "pair" ? "brass" : "quiet"} onPress={() => setView("pair")} />
-        <Action label="Chat" tone={view === "chat" ? "brass" : "quiet"} onPress={() => setView("chat")} />
       </View>
 
       {view === "pair" ? (
-        <View style={styles.card}>
-          <Text style={styles.title}>Pair this phone</Text>
-          <Quiet>Compare this safety number, or let the other phone scan the code. The private key stays on this phone.</Quiet>
+        <ScrollView contentContainerStyle={styles.pair} keyboardShouldPersistTaps="handled">
+          <Quiet>Compare this safety number, or let the other phone scan the code.</Quiet>
           <Text accessibilityLabel="Safety number" style={styles.number}>{number}</Text>
           <View accessibilityLabel="Pairing code" style={styles.qr}>
             {cells.map((row, y) => (
@@ -95,58 +99,69 @@ export default function PeerChat({ includeLocation = false }) {
           <TextInput accessibilityLabel="Their safety number" value={typedNumber} onChangeText={setTypedNumber} placeholder="Their safety number" placeholderTextColor="#8f9a8c" style={styles.input} />
           <Action label="Trust this number" onPress={() => setTrusted(typedNumber.replace(/\s+/g, "") === number.replace(/\s+/g, ""))} />
           <Quiet>{trusted ? "Trusted on this phone." : "Unverified until the numbers match."}</Quiet>
-        </View>
-      ) : null}
-
-      {view === "list" ? (
-        <Pressable accessibilityRole="button" accessibilityLabel="Practice contact" onPress={() => setView("chat")} style={styles.card}>
-          <View style={styles.row}>
-            <Ionicons name="lock-closed" size={18} color={colors.brass} />
-            <Text style={styles.title}>Practice contact</Text>
-            <Text style={styles.badge}>{trusted ? "Trusted" : "Unverified"}</Text>
-          </View>
-          <Quiet>Not another phone. Nearby channel is less private.</Quiet>
+        </ScrollView>
+      ) : view === "list" ? (
+        <Pressable accessibilityRole="button" accessibilityLabel="Practice contact" onPress={() => setView("chat")} style={styles.person}>
+          <Ionicons name="lock-closed" size={16} color={colors.brass} />
+          <Text style={styles.personName}>Practice contact</Text>
+          <Text style={styles.badge}>{trusted ? "Trusted" : "Unverified"}</Text>
+          <Quiet>Not another phone.</Quiet>
         </Pressable>
-      ) : null}
-
-      {view === "chat" ? (
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <Ionicons name="lock-closed" size={18} color={colors.brass} />
-            <Text style={styles.title}>Practice contact</Text>
+      ) : (
+        <View style={styles.chat}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Practice contact" onPress={() => setView("list")} style={styles.person}>
+            <Ionicons name="lock-closed" size={16} color={colors.brass} />
+            <Text style={styles.personName}>Practice contact</Text>
             <Text style={styles.badge}>{trusted ? "Trusted" : "Unverified"}</Text>
+          </Pressable>
+          <ScrollView contentContainerStyle={styles.thread} keyboardShouldPersistTaps="handled">
+            {visible.map((message) => (
+              <View key={message.id} style={[styles.bubble, message.mine && styles.mine]}>
+                <Text style={styles.body}>{message.text}</Text>
+                <Text style={styles.meta}>{message.status}{message.location ? " · location" : ""}</Text>
+              </View>
+            ))}
+          </ScrollView>
+          <View style={styles.composer}>
+            <TextInput accessibilityLabel="Peer message" value={draft} onChangeText={setDraft} placeholder="Message" placeholderTextColor="#8f9a8c" style={styles.input} />
+            <Pressable accessibilityRole="button" accessibilityLabel="Send" onPress={() => draft && send(draft)} style={styles.send}>
+              <Ionicons name="send" size={18} color="#141a16" />
+            </Pressable>
           </View>
-          {visible.map((message) => (
-            <View key={message.id} style={styles.bubble}>
-              <Text style={styles.body}>{message.text}</Text>
-              <Quiet>{`${message.status}${message.nearby ? " · Nearby, less private" : ""}${message.location ? " · location included" : ""}`}</Quiet>
-            </View>
-          ))}
-          <TextInput accessibilityLabel="Peer message" value={draft} onChangeText={setDraft} placeholder="Message" placeholderTextColor="#8f9a8c" style={styles.input} />
           <View style={styles.row}>
-            <Action label="Send" onPress={() => draft && send(draft)} />
-            <Action label={nearby ? "Nearby on" : "Nearby off"} tone="quiet" onPress={() => setNearby((value) => !value)} />
+            <Action label={nearby ? "Nearby on" : "Nearby"} tone="quiet" onPress={() => setNearby((value) => !value)} />
             <Action label={vanish ? "Disappearing" : "Keep"} tone="quiet" onPress={() => setVanish((value) => !value)} />
+            <Action label="SOS" tone="clay" onPress={() => send("SOS", { sos: true })} />
+            <Action label="Delete" tone="clay" onPress={() => setMessages((current) => deleteChat(current, "practice"))} />
           </View>
-          <Action label={sosPlace ? "SOS with location" : "SOS without location"} tone="quiet" onPress={() => setSosPlace((value) => !value)} />
-          <Action label="Send SOS" tone="clay" onPress={() => send("SOS", { sos: true })} />
-          <Action label="Delete chat" tone="clay" onPress={() => setMessages((current) => deleteChat(current, "practice"))} />
+          <Quiet>{sosPlace ? "SOS can include your location." : "SOS does not include your location."}</Quiet>
+          <Action label={sosPlace ? "Location on for SOS" : "Location off for SOS"} tone="quiet" onPress={() => setSosPlace((value) => !value)} />
         </View>
-      ) : null}
-    </ScrollView>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: { paddingTop: 22, paddingHorizontal: 22, paddingBottom: 180, gap: 10 },
-  card: { backgroundColor: colors.surface, borderRadius: 16, padding: 12, gap: 8 },
-  title: { color: colors.ink, fontSize: 18, fontWeight: "600" },
-  number: { color: colors.brass, fontSize: 20, letterSpacing: 1, lineHeight: 28 },
+  screen: { flex: 1, paddingTop: 12, paddingHorizontal: 16, gap: 8 },
+  top: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  title: { color: colors.ink, fontSize: 28, fontWeight: "600" },
+  info: { padding: 6 },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" },
+  pair: { gap: 8, paddingBottom: 24 },
+  chat: { flex: 1, gap: 8 },
+  person: { flexDirection: "row", alignItems: "center", gap: 8 },
+  personName: { color: colors.ink, fontSize: 16, fontWeight: "600" },
   badge: { color: colors.clay, fontSize: 13 },
-  input: { minHeight: 48, color: colors.ink, backgroundColor: colors.field, borderRadius: 12, paddingHorizontal: 12 },
-  bubble: { backgroundColor: "#243029", borderRadius: 12, padding: 10 },
+  thread: { gap: 8, paddingVertical: 8 },
+  bubble: { alignSelf: "flex-start", maxWidth: "80%", backgroundColor: "#243029", borderRadius: 16, paddingHorizontal: 12, paddingVertical: 8 },
+  mine: { alignSelf: "flex-end", backgroundColor: "#3c4a34" },
   body: { color: colors.ink, fontSize: 16 },
+  meta: { color: "#8f9a8c", fontSize: 12, marginTop: 2 },
+  composer: { flexDirection: "row", alignItems: "center", gap: 8 },
+  input: { flex: 1, minHeight: 48, color: colors.ink, backgroundColor: colors.field, borderRadius: 22, paddingHorizontal: 14 },
+  send: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.brass, alignItems: "center", justifyContent: "center" },
+  number: { color: colors.brass, fontSize: 20, letterSpacing: 1, lineHeight: 28 },
   qr: { alignSelf: "flex-start", backgroundColor: "#f4f0e6", padding: 6 },
   qrRow: { flexDirection: "row" },
   cell: { width: 5, height: 5, backgroundColor: "#f4f0e6" },
