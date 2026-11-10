@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { Text, View } from "react-native";
-import { PMTiles } from "pmtiles";
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { PMTiles, Protocol } from "pmtiles";
 import { attributionLine } from "../../symbolic/map_packs.js";
 import { MemorySource } from "../../symbolic/archive_tiles.js";
 
@@ -32,15 +34,12 @@ export default function OfflineMap({
   const label = attribution || "No map pack. Blank landscape. No streets are stored.";
 
   useEffect(() => {
-    const node = host.current;
-    if (!node) return undefined;
+    const node = host.current?.nodeType === 1 ? host.current : host.current?._nativeNode || host.current;
+    if (!node || node.nodeType !== 1) return undefined;
     if (!archive && !(demTiles && demTiles.length)) return undefined;
     let map;
     let alive = true;
     (async () => {
-      const maplibre = await import("maplibre-gl");
-      const maplibregl = maplibre.default || maplibre;
-      await import("maplibre-gl/dist/maplibre-gl.css");
       if (!alive) return;
       const sourceId = "pack";
       let source;
@@ -48,7 +47,7 @@ export default function OfflineMap({
       if (format === "pmtiles") {
         const archiveReader = new PMTiles(new MemorySource(archive));
         const header = await archiveReader.getHeader();
-        const protocol = new (await import("pmtiles")).Protocol();
+        const protocol = new Protocol();
         try { maplibregl.addProtocol("pmtiles", protocol.tile); } catch { /* already registered */ }
         protocol.add(archiveReader);
         const key = archiveReader.source.getKey();
@@ -136,7 +135,10 @@ export default function OfflineMap({
       map.on("click", (event) => {
         pressRef.current?.({ latitude: event.lngLat.lat, longitude: event.lngLat.lng });
       });
-    })().catch(() => failRef.current?.());
+    })().catch((err) => {
+      console.error("offline map", err);
+      failRef.current?.();
+    });
     return () => {
       alive = false;
       map?.remove();
