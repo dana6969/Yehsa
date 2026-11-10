@@ -69,7 +69,7 @@ test("a corrupt map file is rejected and a real one keeps attribution", () => {
   assert.match(attributionLine(cleared), /No map pack/);
 });
 
-test("a download does not touch the network until she approves, and a huge pack is refused", async () => {
+test("a download does not touch the network until you approve, and a huge pack is refused", async () => {
   let calls = 0;
   const fetchImpl = async () => {
     calls += 1;
