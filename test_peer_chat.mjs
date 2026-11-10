@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
+import fs from "node:fs";
 import test from "node:test";
+import { installSecurePrng, prngSource } from "./symbolic/secure_prng.js";
 import { attachOwner, initialMeshSession, queueServiceText } from "./symbolic/phone_mesh.js";
 import {
   acceptOnce,
@@ -19,6 +22,29 @@ import {
   storageKeyFrom,
   sweepExpired
 } from "./symbolic/peer_chat.js";
+
+test("peer keys come from the installed CSPRNG and Math.random is refused", () => {
+  assert.throws(() => installSecurePrng(Math.random), /Math\.random is not a CSPRNG/);
+  assert.throws(() => installSecurePrng(() => 0.5), /32 CSPRNG bytes/);
+  let calls = 0;
+  installSecurePrng((length) => {
+    calls += 1;
+    return new Uint8Array(crypto.randomBytes(length));
+  }, "test-csprng");
+  const before = calls;
+  const identity = generateIdentity();
+  assert.ok(calls > before);
+  assert.equal(prngSource(), "test-csprng");
+  assert.equal(typeof identity.boxSecret, "string");
+  const installer = fs.readFileSync("src/phone/install_prng.js", "utf8");
+  const prng = fs.readFileSync("symbolic/secure_prng.js", "utf8");
+  const chat = fs.readFileSync("symbolic/peer_chat.js", "utf8");
+  assert.match(installer, /expo-crypto/);
+  assert.match(installer, /getRandomBytes/);
+  assert.match(installer, /react-native-get-random-values/);
+  assert.match(prng, /setPRNG/);
+  for (const source of [installer, prng, chat]) assert.doesNotMatch(source, /Math\.random\s*\(/);
+});
 
 test("two peers round-trip, a tamper is rejected, and a relay cannot read", () => {
   const alice = generateIdentity();

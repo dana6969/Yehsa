@@ -3,6 +3,7 @@
 // A relay that does not hold the recipient key cannot read the message.
 
 import nacl from "tweetnacl";
+import { ensureSecurePrng } from "./secure_prng.js";
 
 const BLE_CHUNK = 160;
 
@@ -30,6 +31,7 @@ function textOf(bytes) {
 }
 
 export function generateIdentity() {
+  ensureSecurePrng();
   const box = nacl.box.keyPair();
   const sign = nacl.sign.keyPair();
   return {
@@ -45,6 +47,10 @@ export function publicCard(identity) {
     boxPublic: identity.boxPublic,
     signPublic: identity.signPublic
   };
+}
+
+export function keyFingerprint(boxPublic) {
+  return safetyNumber(boxPublic, boxPublic);
 }
 
 export function safetyNumber(first, second) {
