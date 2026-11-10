@@ -8,8 +8,10 @@ export function isFieldLightQuestion(raw) {
 export function isSpiritualQuestion(raw) {
   const text = String(raw || "");
   if (isFieldLightQuestion(text)) return false;
-  if (/\b(life-threatening|tourniquet|splint|dehydration|frostbite)\b/i.test(text)) return false;
-  if (/\b(meaning of life|purpose of life|why are we here|why do we live|what is the soul|what is god|what is the tao|afterlife|scripture|spiritual|hermetica|hermes|barddas|druid)\b/i.test(text)) return true;
+  if (/\b(life-threatening|tourniquet|splint|dehydration|frostbite|nosebleed|choking|cpr|seizure)\b/i.test(text)) return false;
+  if (/\b(meaning of life|purpose of life|why are we here|why do we live|what is the soul|what is god|what is the tao|tao|afterlife|scripture|spiritual|hermetica|hermes|barddas|druid|gita|dhammapada|kybalion|kjv)\b/i.test(text)) return true;
+  if (/\b\d{1,3}:\d{1,3}\b/.test(text) && /\b(genesis|exodus|psalm|matthew|mark|luke|john|isaiah|proverbs)\b/i.test(text)) return true;
+  if (/\b(grief|grieving|heartbroken|why am i angry|anger at life)\b/i.test(text) && !/\b(willow|plantain|yarrow|water|wound|bleed)\b/i.test(text)) return true;
   if (/\bwhat is light\b/i.test(text)) return true;
   if (/\bwhat is (?:a |the )?(?:soul|spirit|heaven|salvation)\b/i.test(text)) return true;
   return false;

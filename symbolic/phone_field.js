@@ -185,7 +185,7 @@ export function askField(input, passages, options = {}) {
     ingress: "local"
   }, sessionIo(options.session));
   const premise = premiseFromKnowledge(raw, knowledge);
-  const note = [premise, knowledge?.text, nav?.sentence].filter(Boolean).join(" ");
+  const note = nav?.sentence || [premise, knowledge?.text].filter(Boolean).join(" ");
   const fromFeeling = !note && emotion.understood ? emotion.deduction : null;
   const text = note || fromFeeling;
   const learnedHit = options.learned ? retrieveLearned(expanded, options.learned) : null;

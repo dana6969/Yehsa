@@ -11,6 +11,7 @@ import { spiritualAnswer } from "./spiritual_answer.js";
 import { routesToSpiritual } from "./spiritual_route.js";
 import { premiseFlag } from "./premise.js";
 import { safetyAnswer } from "./safety.js";
+import { compoundParts, dictionaryLookup, isEmergency, reassurance, shouldAbstain } from "./answer_gate.js";
 import { searchBooks } from "./book_index.js";
 import { proposeAgents } from "./agents/host.js";
 
@@ -61,6 +62,22 @@ export function ask(input, options = {}) {
     return { question, answered: false, text: null };
   }
   const emotion = mapEmotion(original);
+  if (shouldAbstain(original)) {
+    return finish(question, emotion, null, { text: null, confidence: "low" }, options);
+  }
+  const parts = options._part ? null : compoundParts(original);
+  if (parts) {
+    const math = calculate(parts.math);
+    const rest = ask(parts.other, { ...options, agents: false, _part: true });
+    const text = [math?.text, rest?.text].filter(Boolean).join(" ");
+    return finish(question, emotion, null, {
+      text: text || null,
+      kind: "compound",
+      symbol: "compound",
+      hits: rest?.hits || [],
+      adapt: false
+    }, options);
+  }
   const calc = calculate(original);
   if (calc) {
     return finish(question, emotion, null, { text: calc.text, kind: "calculator", symbol: "calculate", hits: [] }, options);
@@ -80,11 +97,16 @@ export function ask(input, options = {}) {
       hits: []
     }, options);
   }
+  const defined = dictionaryLookup(original);
+  if (defined) {
+    return finish(question, emotion, null, defined, options);
+  }
   const knowledge = recallKnowledge(expanded);
   const nav = navigationSentence(original, options);
   const premise = premiseFromKnowledge(original, knowledge);
-  const note = [premise, knowledge?.text, nav?.sentence].filter(Boolean).join(" ");
-  const base = note || (emotion.understood ? emotion.deduction : null);
+  const note = nav?.sentence || [premise, knowledge?.text].filter(Boolean).join(" ");
+  let base = note || (emotion.understood ? emotion.deduction : null);
+  if (note && base && isEmergency(original) && emotion.understood) base = `${note} ${reassurance()}`;
   if (!base) return finish(question, emotion, knowledge, { text: null, confidence: "low" }, options);
   return finish(question, emotion, knowledge, {
     text: base,

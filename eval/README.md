@@ -4,6 +4,8 @@
 
 This folder scores `ask()` without changing Yehsa. The product code, the field notes, and the dictionaries stay as they are. Expo and EAS are not used. Knowledge is not tuned to these questions.
 
+`eval/dev_set.mjs` is a separate development set. `node eval/dev_run.mjs` scores it. The v1 runner does not load it, and it is not the external holdout.
+
 The question set is built by `questions.mjs` (about 400 to 1000 full-sentence questions). Each item has a rubric: required phrases, a required number, a forbidden claim, or a required abstention (`No offline note answered that.`). Out-of-corpus probes are checked against `symbolic_memory/books_index.json` when the set is built. If a probe is actually in that index, the builder throws.
 
 Categories:
