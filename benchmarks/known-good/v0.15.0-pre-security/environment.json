@@ -1,0 +1,11 @@
+{
+  "commit": "caa053578aaefd7d9136e3432e937532d59c9cc9",
+  "tag": "yehsa-v0.15.0-pre-security",
+  "branch": "known-good/pre-security",
+  "node": "v22.23.4",
+  "expoCli": "0.24.18",
+  "packageVersions": "^53.0.17 0.79.5",
+  "platform": "linux 6.12.113+",
+  "webExportRelease": "https://github.com/dana6969/Yehsa/releases/tag/yehsa-v0.15.0-pre-security",
+  "webExportAsset": "yehsa-v0.15.0-pre-security-web.zip"
+}

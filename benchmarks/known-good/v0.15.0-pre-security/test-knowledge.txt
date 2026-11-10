@@ -1,0 +1,545 @@
+
+> Axi0net@1.0.0 test:knowledge
+> node --test --test-concurrency=1 test_knowledge_answer.mjs test_emotion_wording.mjs test_user_learning.mjs test_landscape_nav.mjs test_phone_shell.mjs test_voice_adapter.mjs test_restore.mjs test_chat_actions.mjs test_model_link.mjs test_learned_notes.mjs test_gps_map.mjs test_map_packs.mjs test_picture_guide.mjs test_dem_tiles.mjs test_peer_chat.mjs
+
+TAP version 13
+# Subtest: a follow-up keeps the previous question
+ok 1 - a follow-up keeps the previous question
+  ---
+  duration_ms: 1.032228
+  type: 'test'
+  ...
+# Subtest: capabilities stay inside what is installed
+ok 2 - capabilities stay inside what is installed
+  ---
+  duration_ms: 0.419879
+  type: 'test'
+  ...
+# Subtest: nothing runs without approve, decline is a no-op, and a switch blocks the action
+ok 3 - nothing runs without approve, decline is a no-op, and a switch blocks the action
+  ---
+  duration_ms: 0.367234
+  type: 'test'
+  ...
+# Subtest: natural commands are read offline and do not run by themselves
+ok 4 - natural commands are read offline and do not run by themselves
+  ---
+  duration_ms: 1.863114
+  type: 'test'
+  ...
+# Subtest: terrarium pixels become meters and a download waits for approval
+ok 5 - terrarium pixels become meters and a download waits for approval
+  ---
+  duration_ms: 1.111231
+  type: 'test'
+  ...
+# 🧠 Semantic matches for "willow bark":
+# Willow bark (Salix) is traditionally used for aches, not as a medicine. Salicin from willow is described as an analgesic, and astringent tannins show up in the bark. Identify the tree before any use. This is not a dose or a substitute for emergency care.
+# 🔹 [herbology] willow_bark
+# 🔹 [dictionary] willow
+# 🔹 [dictionary] salicin
+# 🔹 [dictionary] tannic
+# 🔹 [dictionary] bark
+# 🔹 [survival] tools_cordage_1
+# ⏱️ Duration: 1902 ms
+# 🧾 Trace logged: willow_bark
+# [Yehsa AGI] Starting symbolic + semantic reasoning...
+# [Yehsa Reflect] Depth: deep
+# [knowledge:survival] water_2: Containers matter. A closed bottle or a pot you can heat beats a leaky bag. Keep the drinking bottle capped and off the ground, and refill it when you pass a source you mean to tre
+# [knowledge] log skipped: ENOENT: no such file or directory, open 'logs/memory_log.json'
+# 🧠 Semantic matches for "I am scared of the dark willow":
+# [emotion:fear 0.8] Fear reads as threat nearby: the body braces and the wording reaches for safety or escape. Wording: named-fear.
+# Willow bark (Salix) is traditionally used for aches, not as a medicine. Salicin from willow is described as an analgesic, and astringent tannins show up in the bark. Identify the tree before any use. This is not a dose or a substitute for emergency care.
+# 🔹 [herbology] willow_bark
+# 🔹 [landscape] river_travel
+# 🔹 [survival] water_3
+# 🔹 [survival] weather_1
+# 🔹 [dictionary] dark
+# 🔹 [dictionary] willow
+# ⏱️ Duration: 23 ms
+# 🧾 Trace logged: willow_bark
+# Subtest: wording cues deduce fear without the word fear
+ok 6 - wording cues deduce fear without the word fear
+  ---
+  duration_ms: 1.693626
+  type: 'test'
+  ...
+# Subtest: anger and sadness come from how the sentence is said
+ok 7 - anger and sadness come from how the sentence is said
+  ---
+  duration_ms: 0.573656
+  type: 'test'
+  ...
+# Subtest: a factual question is not forced into an emotion
+ok 8 - a factual question is not forced into an emotion
+  ---
+  duration_ms: 0.093352
+  type: 'test'
+  ...
+# Subtest: low emotion confidence still returns the knowledge answer
+ok 9 - low emotion confidence still returns the knowledge answer
+  ---
+  duration_ms: 1902.277488
+  type: 'test'
+  ...
+# Subtest: an understood feeling does not replace a useful answer
+ok 10 - an understood feeling does not replace a useful answer
+  ---
+  duration_ms: 53.895521
+  type: 'test'
+  ...
+# (node:36838) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/yehsa-known-good/src/phone/location_provider.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/yehsa-known-good/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: GPS is not read without consent
+ok 11 - GPS is not read without consent
+  ---
+  duration_ms: 1.173846
+  type: 'test'
+  ...
+# Subtest: a consented watch is foreground only until background is asked for
+ok 12 - a consented watch is foreground only until background is asked for
+  ---
+  duration_ms: 0.259388
+  type: 'test'
+  ...
+# Subtest: recenter restores follow, and navigation distance counts down
+ok 13 - recenter restores follow, and navigation distance counts down
+  ---
+  duration_ms: 0.480335
+  type: 'test'
+  ...
+# Subtest: getMappedAction stays a direct map read
+ok 14 - getMappedAction stays a direct map read
+  ---
+  duration_ms: 31.631413
+  type: 'test'
+  ...
+# Subtest: willow bark is a multi-source answer, not the suede gloss
+ok 15 - willow bark is a multi-source answer, not the suede gloss
+  ---
+  duration_ms: 1869.509604
+  type: 'test'
+  ...
+# Subtest: plantain prefers the herbology note
+ok 16 - plantain prefers the herbology note
+  ---
+  duration_ms: 19.757094
+  type: 'test'
+  ...
+# Subtest: a full survival question is parsed and answered from several sources
+ok 17 - a full survival question is parsed and answered from several sources
+  ---
+  duration_ms: 3060.486638
+  type: 'test'
+  ...
+# Subtest: a plant care question is one answer joined across notes
+ok 18 - a plant care question is one answer joined across notes
+  ---
+  duration_ms: 45.383618
+  type: 'test'
+  ...
+# Subtest: a plant question keeps the bite notes and does not garble the topic
+ok 19 - a plant question keeps the bite notes and does not garble the topic
+  ---
+  duration_ms: 71.067723
+  type: 'test'
+  ...
+# Subtest: iodine is not answered with the auxiliary would
+ok 20 - iodine is not answered with the auxiliary would
+  ---
+  duration_ms: 12.082419
+  type: 'test'
+  ...
+# Subtest: charcoal for safer water uses the water notes, not a watershed
+ok 21 - charcoal for safer water uses the water notes, not a watershed
+  ---
+  duration_ms: 28.56632
+  type: 'test'
+  ...
+# Subtest: dehydration uses the drinking note instead of the dictionary gloss
+ok 22 - dehydration uses the drinking note instead of the dictionary gloss
+  ---
+  duration_ms: 24.300436
+  type: 'test'
+  ...
+# Subtest: a question the notes do not answer stays a miss
+ok 23 - a question the notes do not answer stays a miss
+  ---
+  duration_ms: 42.100952
+  type: 'test'
+  ...
+# Subtest: tourniquet, frostbite, splint, and yarrow answer from field notes
+ok 24 - tourniquet, frostbite, splint, and yarrow answer from field notes
+  ---
+  duration_ms: 1798.104307
+  type: 'test'
+  ...
+# Subtest: a watershed question still reads the landscape note
+ok 25 - a watershed question still reads the landscape note
+  ---
+  duration_ms: 12.448697
+  type: 'test'
+  ...
+# Subtest: survival and math questions stay on those corpora
+ok 26 - survival and math questions stay on those corpora
+  ---
+  duration_ms: 30.643442
+  type: 'test'
+  ...
+# Subtest: haversine and bearing match known spherical fixtures
+ok 27 - haversine and bearing match known spherical fixtures
+  ---
+  duration_ms: 0.839847
+  type: 'test'
+  ...
+# Subtest: destination, compass labels, and declination stay on the sphere
+ok 28 - destination, compass labels, and declination stay on the sphere
+  ---
+  duration_ms: 0.258643
+  type: 'test'
+  ...
+# Subtest: sunrise approximation is offline and bounded
+ok 29 - sunrise approximation is offline and bounded
+  ---
+  duration_ms: 1.222913
+  type: 'test'
+  ...
+# Subtest: waypoints round-trip and the track summary uses time when it is present
+ok 30 - waypoints round-trip and the track summary uses time when it is present
+  ---
+  duration_ms: 2.344121
+  type: 'test'
+  ...
+# Subtest: stored coordinates require consent and exterior callers are denied
+ok 31 - stored coordinates require consent and exterior callers are denied
+  ---
+  duration_ms: 1.193437
+  type: 'test'
+  ...
+# Subtest: ask answers a landscape question from the notes and can use supplied coordinates
+ok 32 - ask answers a landscape question from the notes and can use supplied coordinates
+  ---
+  duration_ms: 786.337095
+  type: 'test'
+  ...
+# Subtest: ask does not read a position lock without consent or for an exterior caller
+ok 33 - ask does not read a position lock without consent or for an exterior caller
+  ---
+  duration_ms: 50.64413
+  type: 'test'
+  ...
+# Subtest: geo cli prints a great-circle distance
+ok 34 - geo cli prints a great-circle distance
+  ---
+  duration_ms: 33.080112
+  type: 'test'
+  ...
+# (node:36890) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/yehsa-known-good/src/phone/model_client.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/yehsa-known-good/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a learned note is retrieved for a paraphrase only after approval
+ok 35 - a learned note is retrieved for a paraphrase only after approval
+  ---
+  duration_ms: 272.768983
+  type: 'test'
+  ...
+# Subtest: Not right hides a learned note, a safety note wins, and reset clears the store
+ok 36 - Not right hides a learned note, a safety note wins, and reset clears the store
+  ---
+  duration_ms: 1.065611
+  type: 'test'
+  ...
+# Subtest: another device's notes are not opened, and learning makes no network call
+ok 37 - another device's notes are not opened, and learning makes no network call
+  ---
+  duration_ms: 41.850277
+  type: 'test'
+  ...
+# Subtest: a corrupt map file is rejected and a real one keeps attribution
+ok 38 - a corrupt map file is rejected and a real one keeps attribution
+  ---
+  duration_ms: 1.972373
+  type: 'test'
+  ...
+# Subtest: a download does not touch the network until she approves, and a huge pack is refused
+ok 39 - a download does not touch the network until she approves, and a huge pack is refused
+  ---
+  duration_ms: 0.422505
+  type: 'test'
+  ...
+# Subtest: a stored raster tile can be read back from the archive
+ok 40 - a stored raster tile can be read back from the archive
+  ---
+  duration_ms: 4.906006
+  type: 'test'
+  ...
+# (node:36904) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/yehsa-known-good/src/phone/model_client.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/yehsa-known-good/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: nothing is sent without approve, and an off model makes no network call
+ok 41 - nothing is sent without approve, and an off model makes no network call
+  ---
+  duration_ms: 0.898908
+  type: 'test'
+  ...
+# Subtest: a key is not logged and is not in the message body
+ok 42 - a key is not logged and is not in the message body
+  ---
+  duration_ms: 0.585663
+  type: 'test'
+  ...
+# Subtest: model answers are labeled and do not replace a safety note
+ok 43 - model answers are labeled and do not replace a safety note
+  ---
+  duration_ms: 0.546483
+  type: 'test'
+  ...
+# Subtest: the preview shows the question and omits unticked private fields
+ok 44 - the preview shows the question and omits unticked private fields
+  ---
+  duration_ms: 0.28981
+  type: 'test'
+  ...
+# Subtest: two peers round-trip, a tamper is rejected, and a relay cannot read
+ok 45 - two peers round-trip, a tamper is rejected, and a relay cannot read
+  ---
+  duration_ms: 68.203653
+  type: 'test'
+  ...
+# Subtest: replay is rejected, chunks reassemble, and the held mesh link is not replaced
+ok 46 - replay is rejected, chunks reassemble, and the held mesh link is not replaced
+  ---
+  duration_ms: 21.524623
+  type: 'test'
+  ...
+# Subtest: location is omitted unless opted in, and stored messages stay sealed
+ok 47 - location is omitted unless opted in, and stored messages stay sealed
+  ---
+  duration_ms: 38.206384
+  type: 'test'
+  ...
+# (node:36918) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/yehsa-known-good/src/phone/install_owner.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/yehsa-known-good/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: the phone shell greets as Yehsa
+ok 48 - the phone shell greets as Yehsa
+  ---
+  duration_ms: 49.962352
+  type: 'test'
+  ...
+# Subtest: field ask follows the reasoner for notes and a typed course
+ok 49 - field ask follows the reasoner for notes and a typed course
+  ---
+  duration_ms: 2554.120823
+  type: 'test'
+  ...
+# Subtest: a feeling is a cue and does not block the note
+ok 50 - a feeling is a cue and does not block the note
+  ---
+  duration_ms: 462.826442
+  type: 'test'
+  ...
+# Subtest: from here stays opt-in on the phone session
+ok 51 - from here stays opt-in on the phone session
+  ---
+  duration_ms: 88.849919
+  type: 'test'
+  ...
+# Subtest: landscape screen math, waypoints, sun, and track stay local
+ok 52 - landscape screen math, waypoints, sun, and track stay local
+  ---
+  duration_ms: 1.250887
+  type: 'test'
+  ...
+# Subtest: position consent is explicit and share does not send
+ok 53 - position consent is explicit and share does not send
+  ---
+  duration_ms: 0.294672
+  type: 'test'
+  ...
+# Subtest: mesh status before a scan is degraded and does not invent a radio
+ok 54 - mesh status before a scan is degraded and does not invent a radio
+  ---
+  duration_ms: 0.39861
+  type: 'test'
+  ...
+# Subtest: the packaged dictionary matches ask and the full corpora stay
+ok 55 - the packaged dictionary matches ask and the full corpora stay
+  ---
+  duration_ms: 447.434178
+  type: 'test'
+  ...
+# Subtest: satellite lock follows the provider and never locks without consent
+ok 56 - satellite lock follows the provider and never locks without consent
+  ---
+  duration_ms: 0.889143
+  type: 'test'
+  ...
+# Subtest: expo install bind is per-device and does not rewrite a foreign record
+ok 57 - expo install bind is per-device and does not rewrite a foreign record
+  ---
+  duration_ms: 4.445684
+  type: 'test'
+  ...
+# Subtest: native ble is real on android and ios and a scan does not cancel a held link
+ok 58 - native ble is real on android and ios and a scan does not cancel a held link
+  ---
+  duration_ms: 0.498214
+  type: 'test'
+  ...
+# Subtest: every picture has a source, a license, and an author, and none are unlicensed
+ok 59 - every picture has a source, a license, and an author, and none are unlicensed
+  ---
+  duration_ms: 1.496075
+  type: 'test'
+  ...
+# Subtest: a note with no accepted picture stays a placeholder and is flagged
+ok 60 - a note with no accepted picture stays a placeholder and is flagged
+  ---
+  duration_ms: 0.559623
+  type: 'test'
+  ...
+# Subtest: picture credits use a friendly name and stay out of the chip
+ok 61 - picture credits use a friendly name and stay out of the chip
+  ---
+  duration_ms: 0.513997
+  type: 'test'
+  ...
+# Subtest: pictures stay under the size budget and are not pulled into the ask hot path
+ok 62 - pictures stay under the size budget and are not pulled into the ask hot path
+  ---
+  duration_ms: 38.242011
+  type: 'test'
+  ...
+# Subtest: what is light quotes scripture and is not the arctic note
+ok 63 - what is light quotes scripture and is not the arctic note
+  ---
+  duration_ms: 174.903285
+  type: 'test'
+  ...
+# Subtest: meaning of life quotes indexed lines and cites them
+ok 64 - meaning of life quotes indexed lines and cites them
+  ---
+  duration_ms: 197.25083
+  type: 'test'
+  ...
+# Subtest: field frostbite and willow answers stay field notes
+ok 65 - field frostbite and willow answers stay field notes
+  ---
+  duration_ms: 1884.734191
+  type: 'test'
+  ...
+# Subtest: off-topic notes abstain instead of a fluent wrong answer
+ok 66 - off-topic notes abstain instead of a fluent wrong answer
+  ---
+  duration_ms: 67.952581
+  type: 'test'
+  ...
+# Subtest: drying out reaches the dehydration note
+ok 67 - drying out reaches the dehydration note
+  ---
+  duration_ms: 36.877149
+  type: 'test'
+  ...
+# Subtest: calculator and unit conversion are exact
+ok 68 - calculator and unit conversion are exact
+  ---
+  duration_ms: 2.304896
+  type: 'test'
+  ...
+# Subtest: a false premise is called out when the note rejects it
+ok 69 - a false premise is called out when the note rejects it
+  ---
+  duration_ms: 6.18421
+  type: 'test'
+  ...
+# Subtest: agents log proposals and honor opt-out
+ok 70 - agents log proposals and honor opt-out
+  ---
+  duration_ms: 3.63557
+  type: 'test'
+  ...
+# Subtest: off this phone, use is not stored and the answer still arrives
+ok 71 - off this phone, use is not stored and the answer still arrives
+  ---
+  duration_ms: 1899.484944
+  type: 'test'
+  ...
+# Subtest: the bound phone remembers topic and wording and adapts the next reply
+ok 72 - the bound phone remembers topic and wording and adapts the next reply
+  ---
+  duration_ms: 2439.030071
+  type: 'test'
+  ...
+# Subtest: unclear emotion still answers, and a repeated feeling is remembered
+ok 73 - unclear emotion still answers, and a repeated feeling is remembered
+  ---
+  duration_ms: 44.070691
+  type: 'test'
+  ...
+# (node:36968) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///tmp/yehsa-known-good/src/phone/speech_listen.js is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /tmp/yehsa-known-good/package.json.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: listen and speak routes stay honest when a platform is missing
+ok 74 - listen and speak routes stay honest when a platform is missing
+  ---
+  duration_ms: 0.811704
+  type: 'test'
+  ...
+# Subtest: on-device start options are requested only when the recognizer can do it
+ok 75 - on-device start options are requested only when the recognizer can do it
+  ---
+  duration_ms: 0.517405
+  type: 'test'
+  ...
+# Subtest: transcripts keep wording and a later final segment
+ok 76 - transcripts keep wording and a later final segment
+  ---
+  duration_ms: 0.318564
+  type: 'test'
+  ...
+# Subtest: a spoken question keeps the wording cue and still answers when the cue is unclear
+ok 77 - a spoken question keeps the wording cue and still answers when the cue is unclear
+  ---
+  duration_ms: 379.538247
+  type: 'test'
+  ...
+# Subtest: hold releases to ask and a short tap stays listening
+ok 78 - hold releases to ask and a short tap stays listening
+  ---
+  duration_ms: 0.342941
+  type: 'test'
+  ...
+# Subtest: empty audio does not become an answer
+ok 79 - empty audio does not become an answer
+  ---
+  duration_ms: 0.161652
+  type: 'test'
+  ...
+# Subtest: the ask screen uses the same path for speech and keeps typing
+ok 80 - the ask screen uses the same path for speech and keeps typing
+  ---
+  duration_ms: 0.848842
+  type: 'test'
+  ...
+# Subtest: a runtime with no Web Speech API does not invent words
+ok 81 - a runtime with no Web Speech API does not invent words
+  ---
+  duration_ms: 0.235182
+  type: 'test'
+  ...
+1..81
+# tests 81
+# suites 0
+# pass 81
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 23380.44092
