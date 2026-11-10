@@ -3,17 +3,22 @@ name: eval-gate
 on:
   pull_request:
   push:
-    branches:
-      - main
 
 jobs:
-  breakdown:
+  regression:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: npm ci
+      - name: Frozen v1 suite
+        env:
+          REGRESSION_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: node eval/regression/check.mjs
+      - run: node --test test_regression_freeze.mjs
       - run: node eval/run.mjs
       - run: node eval/gate.mjs

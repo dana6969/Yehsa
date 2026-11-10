@@ -1,4 +1,4 @@
-// Fail when correct falls below the known-good count, or any incorrect-confident answer appears.
+// Fail when correct falls below 349, any incorrect-confident answer appears, or an expected answer is refused.
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -19,14 +19,20 @@ export function enforceBaseline(breakdown, baseline = readBaseline()) {
   if ((breakdown?.incorrectConfident || 0) > 0) {
     errors.push(`incorrect-confident is ${breakdown.incorrectConfident}, above 0`);
   }
+  if ((breakdown?.unnecessaryRefusal || 0) > 0) {
+    errors.push(`unnecessary refusals are ${breakdown.unnecessaryRefusal}, above 0`);
+  }
   if ((breakdown?.correct || 0) < baseline.correct) {
     errors.push(`correct dropped from ${baseline.correct} to ${breakdown.correct}`);
+  }
+  if (baseline.correct < 349) {
+    errors.push(`baseline correct ${baseline.correct} is below the frozen floor of 349`);
   }
   if (errors.length) {
     console.error(errors.join("\n"));
     return false;
   }
-  console.error(`eval gate passed: correct ${breakdown.correct}, incorrect-confident ${breakdown.incorrectConfident}, total ${breakdown.total}`);
+  console.error(`eval gate passed: correct ${breakdown.correct}, incorrect-confident ${breakdown.incorrectConfident}, unnecessary refusals ${breakdown.unnecessaryRefusal}, total ${breakdown.total}`);
   return true;
 }
 

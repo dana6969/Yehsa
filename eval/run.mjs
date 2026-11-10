@@ -4,8 +4,8 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
-import { buildQuestions } from "./questions.mjs";
 import { enforceBaseline } from "./gate.mjs";
+import { loadRegressionV1 } from "./regression/v1/load.mjs";
 import { classifyOutcome, judge, selfCheck, tallyOutcomes } from "./score.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -13,7 +13,7 @@ const EVAL_DIR = path.dirname(fileURLToPath(import.meta.url));
 const { ask } = await import("../symbolic/ask.js");
 
 selfCheck();
-const questions = buildQuestions();
+const questions = loadRegressionV1().questions;
 if (questions.length < 400 || questions.length > 1000) {
   throw new Error(`question count ${questions.length} is outside 400..1000`);
 }
