@@ -106,6 +106,52 @@ export function magneticToTrue(magneticDeg, declinationDeg) {
   return normalizeDegrees(magnetic + declination);
 }
 
+export function paceCount(distanceM, paceM) {
+  const distance = Number(distanceM);
+  const pace = Number(paceM);
+  if (!Number.isFinite(distance) || !Number.isFinite(pace) || pace <= 0) return null;
+  return distance / pace;
+}
+
+export function mapScaleMeters(mapCm, denominator) {
+  const cm = Number(mapCm);
+  const scale = Number(denominator);
+  if (!Number.isFinite(cm) || !Number.isFinite(scale) || scale <= 0) return null;
+  return cm * scale / 100;
+}
+
+export function contourClimbM(crossed, intervalM) {
+  const lines = Number(crossed);
+  const interval = Number(intervalM);
+  if (!Number.isFinite(lines) || !Number.isFinite(interval)) return null;
+  return lines * interval;
+}
+
+export function slopePercent(rise, run) {
+  const up = Number(rise);
+  const across = Number(run);
+  if (!Number.isFinite(up) || !Number.isFinite(across) || across === 0) return null;
+  return (up / across) * 100;
+}
+
+export function declinationAdjust(bearingDeg, declinationDeg, east) {
+  const sign = east === false ? -1 : 1;
+  return magneticToTrue(bearingDeg, sign * Number(declinationDeg));
+}
+
+export function naismithHours(distanceKm, ascentM) {
+  const distance = Number(distanceKm);
+  const ascent = Number(ascentM) || 0;
+  if (!Number.isFinite(distance) || distance < 0) return null;
+  return distance / 5 + Math.max(0, ascent) / 600;
+}
+
+export function sunFingerMinutes(fingers) {
+  const count = Number(fingers);
+  if (!Number.isFinite(count) || count < 0) return null;
+  return count * 15;
+}
+
 export function trueToMagnetic(trueDeg, declinationDeg) {
   const geographic = normalizeDegrees(trueDeg);
   const declination = Number(declinationDeg);

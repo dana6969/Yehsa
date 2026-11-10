@@ -188,7 +188,7 @@ test("the ask screen uses the same path for speech and keeps typing", () => {
   assert.match(askBody, /askField\(text, books\.passages/);
   assert.match(askBody, /speakProse\(result\.text/);
   assert.doesNotMatch(askBody, /speakProse\(result\.cue/);
-  assert.match(askBody, /label="Question"/);
+  assert.match(askBody, /accessibilityLabel="Message"/);
   assert.match(askBody, /Hold to talk/);
   assert.match(askBody, /function ask\(\)/);
   assert.match(askBody, /probeVoice/);

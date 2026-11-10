@@ -3,6 +3,7 @@
 // This file does not read a fix until readPlatformFix() is called.
 // Nothing here runs at launch, and a coarse reading is not stored.
 
+import { gpsWatchPlan } from "../../symbolic/gps_map.js";
 import { chooseLocationRoute } from "../../symbolic/position_adapter.js";
 import { parseTermuxGps, pickAccurateSample } from "../../symbolic/position_fix.js";
 
@@ -62,6 +63,81 @@ async function readExpoFix(Location) {
     route: "expo-location",
     fix: null,
     reason: decision.reason || "Expo Location did not return a high-accuracy fix. Nothing was stored."
+  };
+}
+
+/**
+ * Foreground GPS watch. Consent false returns before any provider call.
+ * Background permission is requested only when background is explicitly true.
+ */
+export async function watchPlatformGps({ consent, background = false, onUpdate, Location: injected } = {}) {
+  const plan = gpsWatchPlan({ consent, background });
+  if (plan.watch !== true) {
+    return { started: false, foreground: false, background: false, reason: plan.reason, stop() {} };
+  }
+  let Location = injected || null;
+  if (!Location) {
+    try {
+      Location = await import("expo-location");
+    } catch {
+      Location = null;
+    }
+  }
+  if (!Location || typeof Location.watchPositionAsync !== "function" || typeof Location.requestForegroundPermissionsAsync !== "function") {
+    return {
+      started: false,
+      foreground: true,
+      background: false,
+      reason: "Expo Location is not available on this screen. No fix was stored.",
+      stop() {}
+    };
+  }
+  const perm = await Location.requestForegroundPermissionsAsync();
+  if (perm?.status !== "granted") {
+    return {
+      started: false,
+      foreground: true,
+      background: false,
+      reason: "Expo Location permission was not granted. No fix was stored.",
+      stop() {}
+    };
+  }
+  let backgroundOn = false;
+  if (plan.background === true && typeof Location.requestBackgroundPermissionsAsync === "function") {
+    const extra = await Location.requestBackgroundPermissionsAsync();
+    backgroundOn = extra?.status === "granted";
+  }
+  const accuracy = Location.Accuracy?.BestForNavigation ?? Location.Accuracy?.Highest ?? 6;
+  let subscription = null;
+  try {
+    subscription = await Location.watchPositionAsync({
+      accuracy,
+      timeInterval: 2000,
+      distanceInterval: 1
+    }, (pos) => {
+      if (typeof onUpdate === "function") onUpdate(pos?.coords || null);
+    });
+  } catch {
+    return {
+      started: false,
+      foreground: true,
+      background: false,
+      reason: "The GPS watch did not start. Nothing was stored.",
+      stop() {}
+    };
+  }
+  return {
+    started: true,
+    foreground: true,
+    background: backgroundOn,
+    reason: null,
+    stop() {
+      try {
+        subscription?.remove?.();
+      } catch {
+        // Stopping the watch is not a stored fix.
+      }
+    }
   };
 }
 

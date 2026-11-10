@@ -1,11 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Switch,
+  Image,
   Text,
+  TextInput,
   View
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -16,16 +19,7 @@ import { parseQuestion } from "../../symbolic/question_parse.js";
 import { routesToSpiritual } from "../../symbolic/spiritual_route.js";
 import { loadScriptureIndex } from "./scripture_index";
 import { phoneCorpusMeta } from "../../symbolic/phone_corpus.js";
-import {
-  addSessionTrack,
-  courseText,
-  declinationText,
-  gotoSessionWaypoint,
-  lockedFill,
-  saveSessionWaypoint,
-  sunText,
-  trackText
-} from "../../symbolic/phone_land.js";
+import { courseText, saveSessionWaypoint } from "../../symbolic/phone_land.js";
 import {
   applyConnect,
   applyScan,
@@ -47,7 +41,7 @@ import {
 import { EXPO_LOCK_ACCURACY_M } from "../../symbolic/position_fix.js";
 import { chooseYehsaDevice, connectRemembered, scanWithPlatform, transmitNote } from "./ble_provider.js";
 import { bindThisInstall } from "./install_owner.js";
-import { readPlatformFix } from "./location_provider.js";
+import { readPlatformFix, watchPlatformGps } from "./location_provider.js";
 import { openMic, probeVoice, silenceSpeakers, speakProse, stopProse } from "./speech_provider.js";
 import {
   recognitionErrorNotice,
@@ -57,37 +51,143 @@ import {
   voiceButtonLabel
 } from "../../symbolic/voice_adapter.js";
 import { Action, Field, HoldTalk, Prose, Quiet, ScreenHeader, StatusPill, colors } from "./ui.js";
+import { approveAction, declineAction, proposeAction, setActionEnabled, undoApproved } from "../../symbolic/action_gate.js";
+import { readAssistant } from "../../symbolic/assistant_intent.js";
+import {
+  buildOutbound,
+  deleteModelEntry,
+  emptyModelSettings,
+  labelModelAnswer,
+  missModelOffer,
+  packModelSettings,
+  previewModelSend,
+  rememberModelEntry,
+  selectedProvider
+} from "../../symbolic/model_link.js";
+import { sendToModel } from "./model_client.js";
+import { deleteModelKey, readModelKey, saveModelKey } from "./model_secrets.js";
+import ModelsPane from "./ModelsPane.js";
+import LearnedPane from "./LearnedPane.js";
+import PictureGuide from "./PictureGuide.js";
+import pictureManifest from "../../assets/pictures/manifest.json";
+import { friendlySource, imageHref, picturesFor } from "../../symbolic/picture_guide.js";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  approveLearned,
+  emptyLearned,
+  exportLearned,
+  learnedShareText,
+  markHelpful,
+  markNotRight,
+  openLearned,
+  phraseFromFeedback,
+  proposeLearned,
+  recordLearnedAnswer,
+  recordModelAsk,
+  rememberPhrase
+} from "../../symbolic/learned_notes.js";
+import { capabilitySummary, continueUtterance, isCapabilityQuestion, sourceChips } from "../../symbolic/chat_turn.js";
+import LandscapeMap from "./LandscapeMap.js";
+import {
+  PACK_CATALOG,
+  addPack,
+  attributionLine,
+  beginDownload,
+  deletePack,
+  elevationNear,
+  emptyPackStore,
+  formatBytes,
+  nearestWater,
+  packShapes,
+  pauseDownload,
+  resumeDownload,
+  validateImport
+} from "../../symbolic/map_packs.js";
+import { DEM_ATTRIBUTION, contourGeoJSON, elevationAt, hillshadeRgba, planDemRegion, terrariumGrid, tileBounds } from "../../symbolic/dem_tiles.js";
+import { decode as decodePng, encode as encodePng } from "fast-png";
+import OfflineMap from "./OfflineMap";
+import { publishArchive, publishDem, startTileServer } from "./tile_server";
+import PeerChat from "./PeerChat.js";
+import PeerSecurity from "./PeerSecurity.js";
+import {
+  applyGpsSample,
+  gpsStatusLabel,
+  grantGpsConsent,
+  initialGpsMap,
+  markSignalLost,
+  noteUserPan,
+  recenterOnMe,
+  revokeGpsConsent,
+  startNavigation
+} from "../../symbolic/gps_map.js";
 
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
 const TABS = [
-  { id: "ask", label: "Ask" },
-  { id: "land", label: "Land" },
-  { id: "position", label: "Position" },
-  { id: "mesh", label: "Mesh" }
+  { id: "ask", label: "Chat", icon: "chatbubble-ellipses" },
+  { id: "land", label: "Map", icon: "map" },
+  { id: "guide", label: "Guide", icon: "images" },
+  { id: "position", label: "Me", icon: "person" },
+  { id: "mesh", label: "Mesh", icon: "bluetooth" }
 ];
-
-const LANDS = [
-  { id: "course", label: "Course" },
-  { id: "points", label: "Points" },
-  { id: "track", label: "Track" },
-  { id: "sun", label: "Sun" }
-];
-
-function todayUtc() {
-  const now = new Date();
-  const month = String(now.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(now.getUTCDate()).padStart(2, "0");
-  return `${now.getUTCFullYear()}-${month}-${day}`;
-}
 
 export default function YehsaApp() {
   const [tab, setTab] = useState("ask");
   const [position, setPosition] = useState(initialPosition);
   const [waypoints, setWaypoints] = useState([]);
   const [track, setTrack] = useState([]);
+  const [mapTap, setMapTap] = useState(null);
+  const [peopleOpen, setPeopleOpen] = useState(false);
+  const [mapPacks, setMapPacks] = useState(emptyPackStore);
+  const [actions, setActions] = useState(null);
+  const [models, setModels] = useState(emptyModelSettings);
+  const [learned, setLearned] = useState(emptyLearned);
   const [owner, setOwner] = useState(null);
   const [mesh, setMesh] = useState(initialMeshSession);
+  const [modelTestNote, setModelTestNote] = useState("A connection test sends only the word ready, and only after Approve test.");
+
+  useEffect(() => {
+    let live = true;
+    AsyncStorage.getItem("yehsa.model.public.v1").then((raw) => {
+      if (!live || !raw) return;
+      const packed = packModelSettings(JSON.parse(raw));
+      setModels(packed);
+      return Promise.all(packed.providers.map(async (provider) => {
+        if (provider.needsKey === false) return provider;
+        const saved = await readModelKey(provider.id);
+        return { ...provider, keySaved: Boolean(saved) };
+      })).then((providers) => {
+        if (live) setModels({ ...packed, providers });
+      });
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  function storeLearned(next) {
+    const stamped = { ...next, deviceId: owner?.installId || next?.deviceId || null };
+    setLearned(stamped);
+    AsyncStorage.setItem("yehsa.learned.v1", exportLearned(stamped)).catch(() => {});
+  }
+
+  useEffect(() => {
+    let live = true;
+    AsyncStorage.getItem("yehsa.learned.v1").then((raw) => {
+      if (!live || !raw) return;
+      const opened = openLearned(JSON.parse(raw), owner?.installId || null);
+      setLearned(opened);
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [owner?.installId]);
+
+  function storeModels(next) {
+    const packed = packModelSettings(next);
+    setModels(packed);
+    AsyncStorage.setItem("yehsa.model.public.v1", JSON.stringify(packed)).catch(() => {});
+  }
 
   useEffect(() => {
     let live = true;
@@ -127,11 +227,30 @@ export default function YehsaApp() {
       <View style={styles.column}>
       <View style={styles.body}>
         <View
-          style={[styles.pane, tab !== "ask" && styles.hidden]}
-          pointerEvents={tab === "ask" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "ask"}
+          style={tab === "ask" ? styles.pane : styles.dockHost}
+          pointerEvents="box-none"
         >
-          <AskPane session={session} owner={owner} active={tab === "ask"} />
+          <AskPane
+            session={session}
+            owner={owner}
+            active
+            hidden={tab === "mesh" && peopleOpen}
+            docked={tab !== "ask"}
+            screen={tab}
+            position={position}
+            setPosition={setPosition}
+            waypoints={waypoints}
+            setWaypoints={setWaypoints}
+            setMesh={setMesh}
+            mapTap={mapTap}
+            mapPacks={mapPacks}
+            models={models}
+            setModels={storeModels}
+            ownerId={owner?.installId || null}
+            learned={learned}
+            setLearned={storeLearned}
+            onActions={setActions}
+          />
         </View>
         <View
           style={[styles.pane, tab !== "land" && styles.hidden]}
@@ -140,25 +259,129 @@ export default function YehsaApp() {
         >
           <LandPane
             position={position}
+            setPosition={setPosition}
+            onConsent={changeConsent}
             waypoints={waypoints}
-            setWaypoints={setWaypoints}
             track={track}
-            setTrack={setTrack}
+            onMapTap={setMapTap}
+            mapPacks={mapPacks}
+            setMapPacks={setMapPacks}
           />
+        </View>
+        <View
+          style={[styles.pane, tab !== "guide" && styles.hidden]}
+          pointerEvents={tab === "guide" ? "auto" : "none"}
+          accessibilityElementsHidden={tab !== "guide"}
+        >
+          <PictureGuide />
+        </View>
+        <View style={[styles.pane, tab !== "settings" && styles.hidden]} pointerEvents={tab === "settings" ? "auto" : "none"}>
+          <ScrollView contentContainerStyle={styles.scroll}>
+            <ScreenHeader title="Actions" lead="Choose what I may ask to do." />
+            {(actions?.settings ? Object.keys(actions.settings) : []).map((type) => (
+              <View key={type} style={styles.switchRow}>
+                <Text style={styles.switchLabel}>{friendlySource(type)}</Text>
+                <Switch
+                  accessibilityLabel={`${type} ${actions.settings[type] ? "on" : "off"}`}
+                  value={actions.settings[type] === true}
+                  onValueChange={() => actions.toggle(type)}
+                />
+              </View>
+            ))}
+            <PeerSecurity />
+            <Text style={styles.sectionLabel}>Approved</Text>
+            {(actions?.log || []).filter((item) => item.status === "approved").map((item) => (
+              <View key={`${item.id}-${item.at || item.status}`} style={styles.card}>
+                <Text style={styles.bubbleText}>{friendlySource(item.type)}</Text>
+                {item.undo && item.undone !== true ? (
+                  <Pressable accessibilityRole="button" accessibilityLabel="Undo" onPress={() => actions.undo(item.id)}>
+                    <Text style={styles.undoLink}>Undo</Text>
+                  </Pressable>
+                ) : null}
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={[styles.pane, tab !== "about" && styles.hidden]} pointerEvents={tab === "about" ? "auto" : "none"}>
+          <ScrollView contentContainerStyle={styles.scroll}>
+            <ScreenHeader title="About" lead="What stays on this phone." />
+            <Quiet>Yehsa answers from the notes on this phone. A model, a map pack, and GPS each stay off until you ask. A picture is not a safe identification. Nothing is shared unless you use a separate share action. Packaged dictionary: {phoneCorpusMeta.headwords} headwords and {phoneCorpusMeta.medicalNames} medical names. {phoneCorpusMeta.honest} This install is bound to this device. Exterior access is denied.</Quiet>
+          </ScrollView>
         </View>
         <View
           style={[styles.pane, tab !== "position" && styles.hidden]}
           pointerEvents={tab === "position" ? "auto" : "none"}
           accessibilityElementsHidden={tab !== "position"}
         >
-          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} />
+          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} onOpenModels={() => setTab("models")} onOpenLearned={() => setTab("learned")} onOpenSettings={() => setTab("settings")} onOpenAbout={() => setTab("about")} />
         </View>
         <View
           style={[styles.pane, tab !== "mesh" && styles.hidden]}
           pointerEvents={tab === "mesh" ? "auto" : "none"}
           accessibilityElementsHidden={tab !== "mesh"}
         >
-          <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} />
+          <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} onPeople={setPeopleOpen} />
+        </View>
+        <View
+          style={[styles.pane, tab !== "models" && styles.hidden]}
+          pointerEvents={tab === "models" ? "auto" : "none"}
+          accessibilityElementsHidden={tab !== "models"}
+        >
+          <ModelsPane
+            settings={models}
+            onChange={storeModels}
+            testNote={modelTestNote}
+            onSaveKey={async (id, key) => {
+              const saved = await saveModelKey(id, key);
+              if (saved.ok) {
+                storeModels({
+                  ...models,
+                  providers: models.providers.map((item) => item.id === id ? { ...item, keySaved: true } : item)
+                });
+              }
+              return saved;
+            }}
+            onDeleteProvider={async (id) => {
+              await deleteModelKey(id);
+              storeModels({
+                ...models,
+                selectedId: models.selectedId === id ? null : models.selectedId,
+                providers: models.providers.filter((item) => item.id !== id)
+              });
+            }}
+            onTest={async (provider) => {
+              const outbound = buildOutbound({ question: "Reply with the word ready." });
+              const apiKey = provider.needsKey === false ? "" : await readModelKey(provider.id);
+              const result = await sendToModel({
+                provider,
+                apiKey,
+                outbound,
+                approved: true,
+                fetchImpl: globalThis.fetch
+              });
+              setModelTestNote(result.ok
+                ? `${provider.name} answered the test. That was the model, not a Yehsa note. Connecting a model does not retrain Yehsa.`
+                : result.reason);
+            }}
+          />
+        </View>
+        <View
+          style={[styles.pane, tab !== "learned" && styles.hidden]}
+          pointerEvents={tab === "learned" ? "auto" : "none"}
+          accessibilityElementsHidden={tab !== "learned"}
+        >
+          <LearnedPane
+            store={learned}
+            deviceId={owner?.installId || null}
+            onChange={storeLearned}
+            onShare={(note) => {
+              const queued = queueServiceText(mesh, learnedShareText(note));
+              setMesh(queued.session);
+              return queued.ok
+                ? "Held on this phone for the mesh. It was not uploaded, and position was not included."
+                : (queued.reason || "The note was not queued.");
+            }}
+          />
         </View>
       </View>
       <View style={styles.tabs} accessibilityRole="tablist">
@@ -173,7 +396,7 @@ export default function YehsaApp() {
               onPress={() => setTab(item.id)}
               style={[styles.tab, webPointer, selected && styles.tabOn]}
             >
-              <View style={[styles.tabMark, selected && styles.tabMarkOn]} />
+              <Ionicons name={item.icon} size={22} color={selected ? colors.brass : colors.muted} />
               <Text style={[styles.tabText, selected && styles.tabTextOn]}>{item.label}</Text>
             </Pressable>
           );
@@ -184,11 +407,20 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ session, owner, active }) {
+function AskPane({ session, owner, active, docked, hidden, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
-  const [answer, setAnswer] = useState(null);
-  const [cue, setCue] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [gate, setGate] = useState({ settings: { waypoint: true, measure: true, "position-hold": true, "position-unlock": true, "mesh-scan": true, calculate: true, speak: true, "field-note": true }, log: [], pending: null });
+  const [notes, setNotes] = useState([]);
+  const priorRef = useRef(null);
+  const [correction, setCorrection] = useState(null);
+  const [credits, setCredits] = useState(null);
+  const gateRef = useRef(gate);
+  function rememberGate(next) {
+    gateRef.current = next;
+    setGate(next);
+  }
   const [notice, setNotice] = useState(null);
   const [voicePlan, setVoicePlan] = useState(null);
   const [gesture, setGesture] = useState({ phase: "idle", pressedAt: null, action: "none" });
@@ -204,6 +436,7 @@ function AskPane({ session, owner, active }) {
   const pointerUsed = useRef(false);
   const liveRef = useRef(true);
   const askGen = useRef(0);
+  const threadRef = useRef(null);
   const activeRef = useRef(active);
   phaseRef.current = phase;
   activeRef.current = active;
@@ -244,74 +477,389 @@ function AskPane({ session, owner, active }) {
   }, []);
 
   useEffect(() => {
+    if (!mapTap) return undefined;
+    const proposed = proposeAction(gateRef.current, {
+      type: "waypoint",
+      id: `act-${Date.now()}`,
+      label: `Save waypoint at ${mapTap.latitude.toFixed(4)}, ${mapTap.longitude.toFixed(4)}`,
+      payload: { name: "point", point: mapTap }
+    });
+    rememberGate(proposed.gate);
+    if (proposed.card) {
+      pushMessage({ role: "yehsa", text: "I understood a tap as a waypoint. Nothing is saved until you tap Approve, and consent on Me still has to be on.", card: proposed.card });
+    }
+    return undefined;
+  }, [mapTap]);
+
+  useEffect(() => {
     if (active) return undefined;
     abortRef.current();
     stopProse();
     return undefined;
   }, [active]);
 
+  function pushMessage(message) {
+    setMessages((current) => [...current, { id: `m-${Date.now()}-${current.length}`, ...message }]);
+    setTimeout(() => threadRef.current?.scrollToEnd?.({ animated: false }), 50);
+  }
+
+  function applyCard(card) {
+    if (card.type === "waypoint") {
+      if (position?.consent !== true) {
+        return { ok: false, text: "Consent is still off, so I did not save a waypoint.", undo: null };
+      }
+      const point = card.payload.point;
+      const pointText = point ? `${point.latitude}, ${point.longitude}` : "";
+      const saved = saveSessionWaypoint(waypoints, {
+        consent: true,
+        name: card.payload.name || "point",
+        pointText,
+        altitudeText: ""
+      });
+      if (saved.ok) setWaypoints(saved.list);
+      return { ok: saved.ok === true, text: saved.text, undo: saved.ok ? { type: "waypoint", name: card.payload.name || "point" } : null };
+    }
+    if (card.type === "position-unlock") {
+      setPosition(unlockPosition(position));
+      return { ok: true, text: "Unlocked. Consent stays on until you turn it off.", undo: null };
+    }
+    if (card.type === "position-hold") {
+      if (position?.consent !== true) {
+        return { ok: false, text: "Consent is still off. Approve does not turn that on.", undo: null };
+      }
+      return { ok: false, text: "There is no new satellite reading on this card. Use Try satellite lock on Me.", undo: null };
+    }
+    if (card.type === "mesh-scan") {
+      scanWithPlatform().then((report) => {
+        setMesh((current) => applyScan(current, report));
+      }).catch(() => {});
+      return { ok: true, text: "Scan started. A peer is shown only if the radio hears one. Nothing is invented.", undo: null };
+    }
+    if (card.type === "speak") {
+      const last = [...messages].reverse().find((item) => item.role === "yehsa" && item.text);
+      if (!last) return { ok: false, text: "There is no answer to speak yet.", undo: null };
+      speakProse(last.text, {});
+      return { ok: true, text: "Speaking the last answer on this phone.", undo: null };
+    }
+    if (card.type === "field-note") {
+      const note = { id: `note-${Date.now()}`, text: card.payload.text };
+      setNotes((current) => [...current, note]);
+      setLearned(approveLearned(learned, proposeLearned({
+        id: note.id,
+        title: "Field note",
+        text: note.text,
+        source: "your field log",
+        question: note.text,
+        tags: ["field"]
+      })));
+      return { ok: true, text: "Saved on this phone only. It was not sent. It can be retrieved later as a learned note.", undo: { type: "field-note", id: note.id } };
+    }
+    if (card.type === "measure") {
+      const from = card.payload.from;
+      const to = card.payload.to;
+      if (!from || !to) {
+        return { ok: false, text: "I still need two places before I can measure.", undo: null };
+      }
+      const report = courseText(`${from.latitude}, ${from.longitude}`, `${to.latitude}, ${to.longitude}`);
+      return { ok: report.ok === true, text: report.text, undo: null };
+    }
+    if (card.type === "calculate") {
+      return { ok: true, text: card.payload.text || "I had no calculation to keep.", undo: null };
+    }
+    if (card.type === "ask-model") {
+      const provider = (models?.providers || []).find((item) => item.id === card.payload.providerId) || selectedProvider(models);
+      const apiKeyPromise = provider?.needsKey === false ? Promise.resolve("") : readModelKey(provider?.id);
+      apiKeyPromise.then((apiKey) => sendToModel({
+        provider,
+        apiKey,
+        outbound: card.payload.outbound,
+        approved: true,
+        fetchImpl: globalThis.fetch
+      })).then((result) => {
+        if (!/Nothing was sent/.test(result.reason || "")) setLearned(recordModelAsk(learned));
+        if (!result.ok) {
+          pushMessage({ role: "yehsa", text: result.reason || "Nothing was sent." });
+          return;
+        }
+        const labeled = labelModelAnswer({
+          providerName: provider?.name,
+          text: result.text,
+          offlineNote: card.payload.offlineNote || null
+        });
+        const entryId = `model-note-${Date.now()}`;
+        const proposed = proposeAction(gateRef.current, {
+          type: "save-model-note",
+          id: `act-${Date.now()}`,
+          label: `Save this as unverified from ${provider?.name || "the model"}`,
+          payload: { id: entryId, question: card.payload.question, text: result.text, providerName: provider?.name }
+        });
+        rememberGate(proposed.gate);
+        pushMessage({
+          role: "yehsa",
+          text: `${labeled.text} This does not retrain me. Save it only if you want an unverified note on this phone.`,
+          card: proposed.card
+        });
+      }).catch(() => {
+        pushMessage({ role: "yehsa", text: "No network, or the endpoint could not be reached. Nothing else was sent." });
+      });
+      return { ok: true, text: "Sending only the text shown on the card.", undo: null };
+    }
+    if (card.type === "map-query") {
+      const from = position?.consent === true && position.status === "locked" ? position.fix : null;
+      const answer = card.payload?.kind === "elevation" ? elevationNear(mapPacks, from) : nearestWater(mapPacks, from);
+      return { ok: true, text: answer.text, undo: null };
+    }
+    if (card.type === "save-learned") {
+      setLearned(approveLearned(learned, card.payload));
+      return { ok: true, text: "Learned on this device from your correction. It is unverified until you confirm it or mark it helpful twice.", undo: { type: "learned", id: card.payload?.note?.id } };
+    }
+    if (card.type === "save-model-note") {
+      const entryId = card.payload.id;
+      setModels({
+        ...models,
+        unverified: rememberModelEntry(models?.unverified, { ...card.payload, id: entryId })
+      });
+      setLearned(approveLearned(learned, proposeLearned({
+        id: entryId,
+        title: String(card.payload.question || "Model answer").slice(0, 80),
+        text: card.payload.text,
+        source: card.payload.providerName || "a connected model",
+        question: card.payload.question,
+        tags: ["model"]
+      })));
+      return { ok: true, text: "Saved on this phone as learned from the model, unverified. It is not part of the trusted notes. This does not retrain a model.", undo: { type: "model-note", id: entryId } };
+    }
+    return { ok: false, text: "That action is not available.", undo: null };
+  }
+
+  function onApprove(id) {
+    const decision = approveAction(gateRef.current, id, applyCard);
+    rememberGate(decision.gate);
+    const undoId = decision.result?.undo ? id : null;
+    pushMessage({ role: "yehsa", text: decision.result?.text || "Nothing ran.", undoId });
+  }
+
+  function onDecline(id) {
+    const decision = declineAction(gateRef.current, id);
+    rememberGate(decision.gate);
+    pushMessage({ role: "yehsa", text: "Declined. I did not do it." });
+  }
+
+  function onUndo(id) {
+    const decision = undoApproved(gateRef.current, id);
+    rememberGate(decision.gate);
+    if (decision.undo?.type === "waypoint") {
+      setWaypoints((current) => current.filter((item) => item.name !== decision.undo.name));
+    }
+    if (decision.undo?.type === "field-note") {
+      setNotes((current) => current.filter((item) => item.id !== decision.undo.id));
+    }
+    if (decision.undo?.type === "model-note") {
+      setModels({ ...models, unverified: deleteModelEntry(models?.unverified, decision.undo.id) });
+    }
+    pushMessage({ role: "yehsa", text: decision.undo ? "Undone on this phone." : "That one cannot be undone." });
+  }
+
   function runAsk(raw, { speak } = {}) {
-    const text = String(raw ?? "").trim();
-    if (!text) {
+    const typed = String(raw ?? "").trim();
+    if (!typed) {
       setPhase("empty");
-      setAnswer(null);
-      setCue(null);
-      setNotice("Type a question first.");
+      setNotice("Type a message first.");
       return;
     }
+    if (/\b(nearest water|show water|where is water)\b/i.test(typed) || /\belevation here\b/i.test(typed)) {
+      const kind = /\belevation\b/i.test(typed) ? "elevation" : "water";
+      pushMessage({ role: "you", text: typed });
+      const proposed = proposeAction(gateRef.current, {
+        type: "map-query",
+        id: `act-${Date.now()}`,
+        label: kind === "water"
+          ? "Look for water in the map packs on this phone. Nothing is downloaded."
+          : "Read elevation from the map packs on this phone. No elevation service is called.",
+        payload: { kind }
+      });
+      rememberGate(proposed.gate);
+      setPhase("ready");
+      pushMessage({
+        role: "yehsa",
+        text: proposed.card
+          ? "I will only use a pack that is already on this phone. Nothing is downloaded until you approve a pack, and I will not invent a place."
+          : "That map question is switched off.",
+        card: proposed.card
+      });
+      return;
+    }
+    if (correction) {
+      const proposal = proposeLearned({
+        title: String(correction.question || "Correction").slice(0, 80),
+        text: typed,
+        source: "your correction",
+        question: correction.question || typed
+      });
+      setCorrection(null);
+      pushMessage({ role: "you", text: typed });
+      const proposed = proposeAction(gateRef.current, {
+        type: "save-learned",
+        id: `act-${Date.now()}`,
+        label: "Save your correction as an unverified note on this phone",
+        payload: proposal
+      });
+      rememberGate(proposed.gate);
+      setPhase("ready");
+      pushMessage({
+        role: "yehsa",
+        text: proposed.card
+          ? "I understood a correction. Nothing is saved until you tap Approve. This is memory on this phone, not retraining."
+          : "Saving a correction is switched off, so I did not keep it.",
+        card: proposed.card
+      });
+      return;
+    }
+    const text = continueUtterance(typed, priorRef.current);
+    const held = position?.consent === true && position.status === "locked" ? position.fix : null;
+    const origin = held || { latitude: 0, longitude: 0 };
+    let here = mapTap || null;
+    let hereLabel = mapTap ? "the last place you tapped" : "";
+    if (!here && held) {
+      here = held;
+      hereLabel = "the place you are holding";
+    }
+    if (!here && screen === "land") {
+      here = origin;
+      hereLabel = "the center of this blank canvas, not a city";
+    }
+    const intent = readAssistant(typed, { here, hereLabel, held, waypoints });
     stopProse();
-    setQuestion(text);
-    setPhase("loading");
+    setQuestion("");
     setNotice(null);
+    pushMessage({ role: "you", text: typed });
+    if (intent.kind !== "talk" && intent.type !== "ask-model") {
+      let card = null;
+      if (intent.kind === "action") {
+        const proposed = proposeAction(gateRef.current, {
+          type: intent.type,
+          label: intent.label,
+          payload: intent.payload,
+          id: `act-${Date.now()}`
+        });
+        rememberGate(proposed.gate);
+        card = proposed.card;
+      }
+      const reply = intent.kind === "clarify"
+        ? `${intent.understood} ${intent.question}`
+        : intent.kind === "cannot"
+          ? `${intent.understood} ${intent.reply}`
+          : card
+            ? `${intent.understood} Nothing runs until you tap Approve.`
+            : `${intent.understood} That action is switched off, so I did not propose it.`;
+      priorRef.current = { utterance: typed };
+      setPhase("ready");
+      pushMessage({ role: "yehsa", text: reply, card });
+      return;
+    }
+    setPhase("loading");
     const generation = ++askGen.current;
     setTimeout(() => {
       if (askGen.current !== generation) return;
       const run = async () => {
+        if (isCapabilityQuestion(text)) {
+          return { answered: true, text: capabilitySummary(phoneCorpusMeta), kind: "about", symbol: "capabilities" };
+        }
         const spiritualIndex = routesToSpiritual(text, parseQuestion(expandParaphrase(text)))
           ? await loadScriptureIndex()
           : null;
-        return askField(text, books.passages, { session, spiritualIndex });
+        return askField(text, books.passages, { session, spiritualIndex, learned });
       };
       run().then((result) => {
-      if (askGen.current !== generation) return;
-      try {
-        if (result.empty) {
-          setPhase("empty");
-          setAnswer(null);
-          setCue(null);
-          setNotice("Type a question first.");
+        if (askGen.current !== generation) return;
+        const provider = selectedProvider(models);
+        const askedModel = intent.type === "ask-model";
+        const questionForModel = askedModel ? intent.payload.question : text;
+        const standing = result?.answered && /contradicts that premise|last resort|do not rub|not drinking water/i.test(result.text || "")
+          ? result.text
+          : null;
+        const wantsModel = askedModel || (!result?.answered && provider);
+        if (wantsModel && provider) {
+          const outbound = buildOutbound({
+            question: questionForModel,
+            include: models?.include,
+            position: held,
+            deviceId: ownerId,
+            contacts: [],
+            notes: models?.unverified
+          });
+          let offer = !result?.answered && !askedModel
+            ? missModelOffer(provider, outbound)
+            : previewModelSend(provider, outbound);
+          if (models?.include?.contacts === true) {
+            offer = `${offer} Contacts were ticked, but this phone has no contact list, so none are sent.`;
+          }
+          if (standing) {
+            offer = `${standing} The offline note stands. The model will not replace it. ${offer}`;
+          } else if (result?.answered) {
+            offer = `${result.text} ${offer}`;
+          }
+          const proposed = proposeAction(gateRef.current, {
+            type: "ask-model",
+            id: `act-${Date.now()}`,
+            label: offer,
+            payload: { question: questionForModel, outbound, providerId: provider.id, offlineNote: standing }
+          });
+          rememberGate(proposed.gate);
+          priorRef.current = { utterance: text };
+          setPhase("ready");
+          pushMessage({
+            role: "yehsa",
+            text: proposed.card ? offer : "That action is switched off, so I did not send anything.",
+            chips: sourceChips(result),
+            pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
+              id: image.id,
+              href: imageHref(image.file),
+              attribution: image.attribution,
+              warning: image.warning
+            })),
+            card: proposed.card,
+            question: text,
+            symbol: result?.symbol || null,
+            learnedId: result?.learnedId || null
+          });
           return;
         }
-        if (!result.answered) {
-          setPhase("miss");
-          setAnswer(null);
-          setCue(null);
-          setNotice(result.miss || "No offline note answered that.");
+        if (askedModel && !provider) {
+          const reply = result?.text || "No model is connected, so nothing was sent. Add one under Me, Models. It stays off until you turn it on.";
+          priorRef.current = { utterance: text };
+          setPhase(result?.answered ? "ready" : "miss");
+          pushMessage({ role: "yehsa", text: result?.text ? `${reply} No model is connected, so nothing was sent.` : reply, chips: sourceChips(result), question: text, symbol: result?.symbol || null, learnedId: result?.learnedId || null });
           return;
         }
-        setPhase("ready");
-        setAnswer(result.text);
-        setCue(result.cue);
-        setNotice(null);
-        if (speak) {
-          setVoiceNote("Speaking the answer.");
+        const reply = result?.text || result?.miss || "I don't have an installed note for that.";
+        if (result?.kind === "learned") setLearned(recordLearnedAnswer(learned));
+        priorRef.current = { utterance: text };
+        setPhase(result?.answered ? "ready" : "miss");
+        pushMessage({
+          role: "yehsa",
+          text: reply,
+          chips: sourceChips(result),
+          pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
+            id: image.id,
+            href: imageHref(image.file),
+            attribution: image.attribution,
+            warning: image.warning
+          })),
+          question: text,
+          symbol: result?.symbol || null,
+          learnedId: result?.learnedId || null
+        });
+        if (speak && result?.text) {
           speakProse(result.text, {
-            onDone: () => setVoiceNote((current) => (current === "Speaking the answer." ? null : current)),
+            onDone: () => setVoiceNote(null),
             onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
           });
         }
-      } catch (err) {
-        setPhase("error");
-        setAnswer(null);
-        setCue(null);
-        setNotice(err?.message || "That question could not be read offline.");
-      }
       }).catch((err) => {
         if (askGen.current !== generation) return;
         setPhase("error");
-        setAnswer(null);
-        setCue(null);
-        setNotice(err?.message || "That question could not be read offline.");
+        pushMessage({ role: "yehsa", text: err?.message || "That question could not be read offline." });
       });
     }, 40);
   }
@@ -453,79 +1001,157 @@ function AskPane({ session, owner, active }) {
   });
   const listening = gesture.phase === "arming" || gesture.phase === "listening" || gesture.phase === "locked";
 
+  function onHelpful(item) {
+    let next = item.learnedId ? markHelpful(learned, item.learnedId) : learned;
+    const pair = phraseFromFeedback(item.question, item.symbol);
+    if (pair) next = rememberPhrase(next, pair.from, pair.to);
+    setLearned(next);
+    pushMessage({ role: "yehsa", text: "Marked helpful. I'll remember that phrasing on this phone. This is retrieval memory, not retraining." });
+  }
+
+  function onNotRight(item) {
+    if (item.learnedId) setLearned(markNotRight(learned, item.learnedId));
+    setCorrection({ question: item.question || "" });
+    pushMessage({ role: "yehsa", text: item.learnedId
+      ? "Hidden on this phone. Trusted notes are unchanged. Type a correction if you want one taught. Nothing is saved until you approve."
+      : "That trusted note stays. Type a correction if you want a learned one. Nothing is saved until you approve." });
+  }
+
+  useEffect(() => {
+    if (!onActions) return;
+    onActions({
+      settings: gate.settings,
+      log: gate.log,
+      toggle(type) {
+        rememberGate(setActionEnabled(gateRef.current, type, gateRef.current.settings?.[type] !== true));
+      },
+      undo(id) {
+        onUndo(id);
+      }
+    });
+  }, [gate, onActions]);
+
+  const latest = messages.length ? messages[messages.length - 1] : null;
+  if (hidden) return null;
+
   return (
-    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader
-        title="Ask"
-        lead="A field companion for one phone. Notes, courses, and a position you choose to hold. Offline. No city map."
-      />
-      <Field
-        label="Question"
-        value={question}
-        onChangeText={setQuestion}
-        placeholder="How do I carry drinking water?"
-        multiline
-      />
-      <HoldTalk
-        label={micLabel}
-        hint="Hold to talk, or tap once to keep listening and tap again to ask. Yehsa fills the question and uses the same notes as typing."
-        onPressIn={onMicIn}
-        onPressOut={onMicOut}
-        onPress={onMicPress}
-        disabled={!canListen || phase === "loading"}
-        live={listening}
-      />
-      <Text style={styles.speech}>
-        {voicePlan ? `${voicePlan.notice} ${speakHint(voicePlan.speakRoute)}` : "Checking the microphone…"}
-      </Text>
-      {voiceNote ? <Text accessibilityLiveRegion="polite" style={styles.liveNote}>{voiceNote}</Text> : null}
-      <Action
-        label={phase === "loading" ? "Reading notes…" : "Ask"}
-        tone={canListen ? "quiet" : "brass"}
-        onPress={ask}
-        disabled={phase === "loading"}
-      />
-      {phase === "idle" ? (
-        <View style={styles.idle}>
-          <Quiet>
-            Ask in plain language, or hold the button and speak. Yehsa answers from the field notes and a packaged dictionary on this device. A feeling in the wording is a small cue beside the answer. The note still comes back when that feeling is unclear.
-          </Quiet>
-        </View>
-      ) : null}
-      {phase === "loading" ? (
-        <View style={styles.idle}>
-          <Quiet>Reading field notes…</Quiet>
-        </View>
-      ) : null}
-      {answer ? (
-        <View style={styles.answer}>
-          <Prose live>{answer}</Prose>
-          {cue ? <Text style={styles.cue}>{cue}</Text> : null}
-          {voicePlan?.speakRoute && voicePlan.speakRoute !== "none" ? (
-            <Action
-              label="Hear the answer"
-              tone="quiet"
-              style={styles.hear}
-              onPress={() => {
-                setVoiceNote("Speaking the answer.");
-                speakProse(answer, {
-                  onDone: () => setVoiceNote((current) => (current === "Speaking the answer." ? null : current)),
-                  onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
-                });
-              }}
-            />
+    <View style={docked ? styles.dock : styles.chatWrap}>
+      {docked && latest?.role === "yehsa" ? (
+        <View style={styles.bubbleYehsa}>
+          <Text numberOfLines={4} style={styles.bubbleText}>{latest.text}</Text>
+          {latest.card && gate.pending?.id === latest.card.id ? (
+            <View style={styles.card}>
+              <Text style={styles.bubbleText}>{latest.card.label}</Text>
+              <View style={styles.cardRow}>
+                <Action label="Approve" onPress={() => onApprove(latest.card.id)} />
+                <Action label="Edit" tone="quiet" onPress={() => setQuestion(latest.card.label)} />
+                <Action label="Decline" tone="clay" onPress={() => onDecline(latest.card.id)} />
+              </View>
+            </View>
           ) : null}
         </View>
       ) : null}
-      {notice ? (
-        <View style={[styles.notice, phase === "error" && styles.noticeWarn]} accessibilityLiveRegion="polite">
-          {phase === "error" ? <Prose tone="warn">{notice}</Prose> : <Quiet>{notice}</Quiet>}
+      {docked ? null : (
+      <ScrollView ref={threadRef} contentContainerStyle={styles.thread} keyboardShouldPersistTaps="handled">
+        {messages.length === 0 ? (
+          <View style={styles.bubbleYehsa}>
+            <Text style={styles.bubbleText}>Ask me anything on this phone. I wait for Approve before I change anything.</Text>
+          </View>
+        ) : null}
+        {messages.map((item) => (
+          <View key={item.id} style={item.role === "you" ? styles.bubbleYou : styles.bubbleYehsa}>
+            <Text style={styles.bubbleText}>{item.text}</Text>
+            {item.pictures?.length ? (
+              <View style={styles.cardRow}>
+                {item.pictures.map((picture) => (
+                  <View key={picture.id}>
+                    <Image accessibilityLabel={friendlySource(picture.id)} source={{ uri: picture.href }} style={styles.thumb} />
+                    <Pressable accessibilityRole="button" accessibilityLabel="Picture credits" onPress={() => setCredits(picture)} style={styles.info}>
+                      <Ionicons name="information-circle" size={18} color={colors.brass} />
+                    </Pressable>
+                  </View>
+                ))}
+              </View>
+            ) : null}
+            {item.chips?.length ? (
+              <View style={styles.chips}>
+                {item.chips.map((chip) => (
+                  <Text key={chip} style={styles.sourceChip}>{friendlySource(chip)}</Text>
+                ))}
+              </View>
+            ) : null}
+            {item.role === "yehsa" ? (
+              <View style={styles.cardRow}>
+                <Action label="Helpful" tone="quiet" onPress={() => onHelpful(item)} />
+                <Action label="Not right" tone="clay" onPress={() => onNotRight(item)} />
+              </View>
+            ) : null}
+            {item.card && gate.pending?.id === item.card.id ? (
+              <View style={styles.card}>
+                <Text style={styles.bubbleText}>{item.card.label}</Text>
+                <View style={styles.cardRow}>
+                  <Action label="Approve" onPress={() => onApprove(item.card.id)} />
+                  <Action label="Edit" tone="quiet" onPress={() => setQuestion(item.card.label)} />
+                  <Action label="Decline" tone="clay" onPress={() => onDecline(item.card.id)} />
+                </View>
+              </View>
+            ) : null}
+            {item.undoId ? (
+              <Pressable accessibilityRole="button" accessibilityLabel="Undo" onPress={() => onUndo(item.undoId)}>
+                <Text style={styles.undoLink}>Undo</Text>
+              </Pressable>
+            ) : null}
+          </View>
+        ))}
+        {phase === "loading" ? <Text style={styles.typing}>Yehsa is reading the notes…</Text> : null}
+        {notice ? <Quiet>{notice}</Quiet> : null}
+        {voiceNote ? <Quiet>{voiceNote}</Quiet> : null}
+      </ScrollView>
+      )}
+      {docked ? null : notes.length ? <Quiet>{`${notes.length} note${notes.length === 1 ? "" : "s"} saved on this phone.`}</Quiet> : null}
+      <View style={styles.composer}>
+        <TextInput
+          accessibilityLabel="Message"
+          value={question}
+          onChangeText={setQuestion}
+          placeholder="Message Yehsa"
+          placeholderTextColor="#8f9a8c"
+          style={styles.composerInput}
+        />
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={canListen ? "Mic" : micLabel}
+          accessibilityHint="Hold to talk, or tap once to keep listening and tap again to ask."
+          onPressIn={onMicIn}
+          onPressOut={onMicOut}
+          onPress={onMicPress}
+          disabled={!canListen || phase === "loading"}
+          style={styles.iconButton}
+        >
+          <Ionicons name="mic" size={22} color={listening ? colors.clay : colors.brassInk} />
+        </Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel="Send" onPress={ask} disabled={phase === "loading"} style={styles.iconButton}>
+          <Ionicons name="send" size={20} color={colors.brassInk} />
+        </Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel="Hear the answer" onPress={() => {
+          const last = [...messages].reverse().find((item) => item.role === "yehsa" && item.text);
+          if (!last) return;
+          speakProse(last.text, {
+            onDone: () => setVoiceNote(null),
+            onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
+          });
+        }} style={styles.iconButtonQuiet}>
+          <Ionicons name="volume-high" size={20} color={colors.ink} />
+        </Pressable>
+      </View>
+      {credits ? (
+        <View style={styles.credits}>
+          <Text style={styles.bubbleText}>{credits.attribution}</Text>
+          <Quiet>{credits.warning || "Picture credits"}</Quiet>
+          <Action label="Close" tone="quiet" onPress={() => setCredits(null)} />
         </View>
       ) : null}
-      <Text style={styles.foot}>
-        {`Packaged dictionary: ${phoneCorpusMeta.headwords} headwords and ${phoneCorpusMeta.medicalNames} medical names. ${phoneCorpusMeta.honest} ${phoneCorpusMeta.fieldNoteHonest} ${phoneCorpusMeta.medicalHonest} Nothing you ask is saved as a profile. ${owner?.recognized ? `This install is bound to this device (${owner.source}). Exterior access is denied.` : (owner?.reason || "Binding this install to this device.")}`}
-      </Text>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -535,175 +1161,345 @@ function ResultText({ result }) {
   return <Prose live tone={result.tone === "warn" ? "warn" : undefined}>{result.text}</Prose>;
 }
 
-function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
-  const [section, setSection] = useState("course");
-  const [fromText, setFromText] = useState("");
-  const [toText, setToText] = useState("");
-  const [magnetic, setMagnetic] = useState("");
-  const [declination, setDeclination] = useState("");
-  const [name, setName] = useState("");
-  const [pointText, setPointText] = useState("");
-  const [altitude, setAltitude] = useState("");
-  const [gotoName, setGotoName] = useState("");
-  const [gotoFrom, setGotoFrom] = useState("");
-  const [trackPoint, setTrackPoint] = useState("");
-  const [trackAlt, setTrackAlt] = useState("");
-  const [trackTime, setTrackTime] = useState("");
-  const [sunPoint, setSunPoint] = useState("");
-  const [sunDate, setSunDate] = useState(todayUtc);
-  const [result, setResult] = useState({
-    text: "Type coordinates. There is no city search and no downloaded map.",
-    tone: "quiet"
-  });
-
-  function showReport(report) {
-    const empty = report.ok !== false && /^No track points yet/.test(report.text || "");
-    setResult({
-      text: report.text,
-      tone: report.ok === false ? "warn" : empty ? "quiet" : "ink"
-    });
+class MapBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
   }
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch() {
+    this.props.onFail?.();
+  }
+  render() {
+    if (this.state.failed) return null;
+    return this.props.children;
+  }
+}
 
-  function useLocked(setter) {
-    const filled = lockedFill(position);
-    if (!filled.ok) {
-      showReport(filled);
+function pngDataUrl(bytes) {
+  let binary = "";
+  const step = 0x8000;
+  for (let i = 0; i < bytes.length; i += step) binary += String.fromCharCode(...bytes.subarray(i, i + step));
+  return `data:image/png;base64,${globalThis.btoa(binary)}`;
+}
+
+function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks }) {
+  const [declination, setDeclination] = useState("0");
+  const [importNote, setImportNote] = useState("No terrain file is loaded. This is a blank landscape canvas.");
+  const [packOffer, setPackOffer] = useState(null);
+  const [demOffer, setDemOffer] = useState(false);
+  const [demTiles, setDemTiles] = useState([]);
+  const [contours, setContours] = useState({ type: "FeatureCollection", features: [] });
+  const [mapFailed, setMapFailed] = useState(false);
+  const [tilePort, setTilePort] = useState(null);
+  const [elevNote, setElevNote] = useState("");
+  const demRef = useRef([]);
+  const downloadAbort = useRef(null);
+  const [gps, setGps] = useState(initialGpsMap);
+  const [gpsWanted, setGpsWanted] = useState(false);
+  const [backgroundGps, setBackgroundGps] = useState(false);
+  const consented = position?.consent === true;
+  const origin = gps.follow && gps.fix
+    ? gps.fix
+    : (gps.fix || (consented && position.status === "locked" && position.fix ? position.fix : { latitude: 0, longitude: 0 }));
+  const held = gps.fix || (consented && position.status === "locked" ? position.fix : null);
+  const crumbs = gps.track.length ? gps.track : track;
+  const tiledPack = (mapPacks?.packs || []).find((pack) => pack.archive);
+  const metersHere = held ? demRef.current.reduce((found, tile) => {
+    if (found != null) return found;
+    return elevationAt(tile.elev, tile.width, tile.height, tile.bounds, held.longitude, held.latitude);
+  }, null) : null;
+
+  useEffect(() => {
+    let live = true;
+    if (Platform.OS === "web") return undefined;
+    startTileServer().then((next) => {
+      if (live && next) setTilePort(next);
+    }).catch(() => {
+      if (live) setMapFailed(true);
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    publishArchive(tiledPack || null);
+  }, [tiledPack]);
+
+  useEffect(() => {
+    if (!consented || !gpsWanted) {
+      if (!consented) setGps(revokeGpsConsent());
+      return undefined;
+    }
+    let live = true;
+    let stop = () => {};
+    setGps((current) => grantGpsConsent(current.consent ? current : initialGpsMap()));
+    watchPlatformGps({
+      consent: true,
+      background: backgroundGps,
+      onUpdate(coords) {
+        if (!live) return;
+        setGps((current) => {
+          const base = current.consent ? current : grantGpsConsent(current);
+          const next = applyGpsSample(base, coords);
+          if (next.status === "locked") {
+            setPosition((place) => place.consent === true
+              ? applySatelliteReading(place, { route: "expo-location", fix: coords })
+              : place);
+          }
+          return next;
+        });
+      }
+    }).then((handle) => {
+      if (!live) {
+        handle.stop();
+        return;
+      }
+      stop = handle.stop;
+      if (!handle.started && handle.reason) setImportNote(handle.reason);
+    });
+    const timer = setInterval(() => setGps((current) => markSignalLost(current, Date.now())), 5000);
+    return () => {
+      live = false;
+      clearInterval(timer);
+      stop();
+    };
+  }, [consented, gpsWanted, backgroundGps, setPosition]);
+
+  async function approvePackDownload(id) {
+    const planned = beginDownload(mapPacks, id, { approved: true });
+    if (!planned.fetch) {
+      setImportNote(planned.reason);
       return;
     }
-    setter(filled.text);
-    setResult({
-      text: "Filled from the position you chose to hold. It is not a city lookup.",
-      tone: "quiet"
-    });
+    const controller = new AbortController();
+    downloadAbort.current = controller;
+    setMapPacks(planned.store);
+    try {
+      const response = await fetch(planned.item.url, { signal: controller.signal });
+      if (!response.ok) throw new Error("status");
+      const text = await response.text();
+      const pack = validateImport(`${planned.item.id}.geojson`, text);
+      if (pack.ok) {
+        pack.catalogId = planned.item.id;
+        pack.name = planned.item.name;
+        pack.source = planned.item.source;
+        pack.license = planned.item.license;
+        pack.attribution = planned.item.attribution;
+        pack.built = pack.built || new Date().toISOString().slice(0, 10);
+      }
+      const saved = addPack(planned.store, pack);
+      setMapPacks(saved.added ? saved.store : planned.store);
+      setImportNote(saved.added
+        ? `${pack.name} is on this phone. ${pack.attribution} May be out of date.`
+        : (pack.reason || saved.reason));
+    } catch (err) {
+      if (err?.name === "AbortError") {
+        setImportNote("Download paused. Nothing new was stored.");
+        return;
+      }
+      setMapPacks(pauseDownload(planned.store, id));
+      setImportNote("The download did not finish. Nothing new was stored. OSM public tile servers were not used.");
+    }
   }
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
-        title="Landscape"
-        lead="Distance, bearing, waypoints, a track, and a rough sunrise. A sphere of 6371 km. No streets and no places of interest."
+        title="Map"
+        lead="Your map, after you turn GPS on."
       />
-      <View style={styles.chips}>
-        {LANDS.map((item) => {
-          const selected = section === item.id;
-          return (
-            <Pressable
-              key={item.id}
-              accessibilityRole="button"
-              accessibilityState={{ selected }}
-              onPress={() => setSection(item.id)}
-              style={[styles.chip, webPointer, selected && styles.chipOn]}
-            >
-              <Text style={[styles.chipText, selected && styles.chipTextOn]}>{item.label}</Text>
-            </Pressable>
-          );
-        })}
-      </View>
-
-      {section === "course" ? (
-        <View>
-          <Field label="From (latitude, longitude)" value={fromText} onChangeText={setFromText} placeholder="0, 0" />
-          <Action label="Use locked position as From" tone="quiet" onPress={() => useLocked(setFromText)} />
-          <Field label="To (latitude, longitude)" value={toText} onChangeText={setToText} placeholder="0, 1" />
-          <Action
-            label="Distance and bearing"
-            onPress={() => showReport(courseText(fromText, toText))}
-          />
-          <View style={[styles.readout, result.tone === "warn" && styles.readoutWarn]}>
-            <ResultText result={result} />
-          </View>
-          <Field label="Magnetic bearing (degrees)" value={magnetic} onChangeText={setMagnetic} placeholder="90" />
-          <Field label="Declination from your map (east positive)" value={declination} onChangeText={setDeclination} placeholder="12" />
-          <Action
-            label="Apply declination"
-            tone="quiet"
-            onPress={() => showReport(declinationText(magnetic, declination))}
-          />
+      <StatusPill label={gpsStatusLabel(gps)} tone={gps.status === "locked" ? "good" : gps.status === "lost" ? "warn" : undefined} />
+      {!consented || !gpsWanted ? (
+        <View style={styles.card}>
+          <Text style={styles.bubbleText}>Turn on GPS</Text>
+          <Quiet>GPS stays off until you turn it on.</Quiet>
+          <Action label="Turn on GPS" onPress={() => { onConsent(true); setGpsWanted(true); }} />
         </View>
-      ) : null}
-
-      {section === "points" ? (
-        <View>
-          <Field label="Name" value={name} onChangeText={setName} placeholder="camp" />
-          <Field label="At (latitude, longitude)" value={pointText} onChangeText={setPointText} placeholder="45.1, -69.2" />
-          <Action label="Use locked position" tone="quiet" onPress={() => useLocked(setPointText)} />
-          <Field label="Altitude in meters (optional)" value={altitude} onChangeText={setAltitude} placeholder="" />
-          <Action
-            label="Save waypoint"
-            onPress={() => {
-              const saved = saveSessionWaypoint(waypoints, {
-                consent: position.consent,
-                name,
-                pointText,
-                altitudeText: altitude
-              });
-              setWaypoints(saved.list);
-              showReport(saved);
+      ) : (
+        <Action label={backgroundGps ? "Background GPS on" : "Foreground GPS only"} tone="quiet" onPress={() => setBackgroundGps((value) => !value)} />
+      )}
+      {(tiledPack || demTiles.length > 0) && !mapFailed ? (
+        <MapBoundary onFail={() => setMapFailed(true)}>
+          <OfflineMap
+            archive={tiledPack.archive}
+            format={tiledPack.format}
+            tileTemplate={tilePort ? `http://127.0.0.1:${tilePort}/pack/{z}/{x}/{y}` : null}
+            demTemplate={tilePort && demTiles.length ? `http://127.0.0.1:${tilePort}/dem/{z}/{x}/{y}.png` : null}
+            demTiles={demTiles}
+            contours={contours}
+            shapes={packShapes(mapPacks || emptyPackStore())}
+            fix={held}
+            follow={gps.follow}
+            headingDeg={gps.headingDeg}
+            attribution={attributionLine(mapPacks)}
+            onFail={() => setMapFailed(true)}
+            onPress={(point) => {
+              if (onMapTap) onMapTap(point);
+              const meters = demRef.current.reduce((found, tile) => found != null ? found : elevationAt(tile.elev, tile.width, tile.height, tile.bounds, point.longitude, point.latitude), null);
+              setElevNote(meters == null ? "No elevation tile covers that point." : `About ${Math.round(meters)} m at the tapped point. ${DEM_ATTRIBUTION}`);
             }}
           />
-          <Field label="Go to name" value={gotoName} onChangeText={setGotoName} placeholder="camp" />
-          <Field label="Start from (latitude, longitude)" value={gotoFrom} onChangeText={setGotoFrom} placeholder="leave blank to use the lock" />
-          <Action label="Use locked position as start" tone="quiet" onPress={() => useLocked(setGotoFrom)} />
-          <Action
-            label="Go to waypoint"
-            onPress={() => showReport(gotoSessionWaypoint(waypoints, {
-              consent: position.consent,
-              name: gotoName,
-              fromText: gotoFrom,
-              locked: position.status === "locked" ? position.fix : null
-            }))}
-          />
-          <View style={styles.group}>
-            <Text style={styles.sectionLabel}>Waypoints on this screen</Text>
-            {waypoints.length === 0 ? (
-              <Quiet>None yet. Saving needs consent on the Position screen. Turning consent off clears this list.</Quiet>
-            ) : waypoints.map((item) => (
-              <Text key={item.name} style={styles.row}>
-                {item.name} — {item.latitude.toFixed(5)}, {item.longitude.toFixed(5)}
-                {item.altitude != null ? `, ${item.altitude} m` : ""}
-              </Text>
-            ))}
-          </View>
+        </MapBoundary>
+      ) : (
+      <LandscapeMap
+        origin={origin}
+        held={held}
+        waypoints={waypoints}
+        track={crumbs}
+        features={packShapes(mapPacks || emptyPackStore())}
+        declination={declination}
+        follow={gps.follow}
+        headingDeg={gps.headingDeg}
+        accuracyM={gps.accuracyM}
+        nav={gps.nav ? { ...gps.nav, name: gps.target?.name } : null}
+        navTarget={gps.target}
+        onRecenter={() => setGps((current) => recenterOnMe(current))}
+        onUserPan={() => setGps((current) => noteUserPan(current))}
+        onWaypoint={(point) => {
+          if (onMapTap) onMapTap(point);
+          const meters = demRef.current.reduce((found, tile) => found != null ? found : elevationAt(tile.elev, tile.width, tile.height, tile.bounds, point.longitude, point.latitude), null);
+          setElevNote(meters == null ? "" : `About ${Math.round(meters)} m at the tapped point. ${DEM_ATTRIBUTION}`);
+          setImportNote(`Proposed ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Approve it in Chat.`);
+        }}
+      />
+      )}
+      {waypoints.map((point) => (
+        <Action
+          key={point.name}
+          label={`Navigate to ${point.name}`}
+          tone="quiet"
+          onPress={() => setGps((current) => startNavigation(current, point))}
+        />
+      ))}
+      <Field label="Declination from your map, east positive" value={declination} onChangeText={setDeclination} placeholder="0" />
+      <Quiet>{attributionLine(mapPacks || emptyPackStore())}</Quiet>
+      <Quiet>{metersHere == null ? elevationNear(mapPacks || emptyPackStore(), held).text : `About ${Math.round(metersHere)} m here. ${DEM_ATTRIBUTION}`}</Quiet>
+      {elevNote ? <Quiet>{elevNote}</Quiet> : null}
+      <Quiet>{importNote}</Quiet>
+      <Action label="Review elevation" tone="quiet" onPress={() => setDemOffer(true)} />
+      {demOffer ? (
+        <View style={styles.card}>
+          <Quiet>{planDemRegion({ approved: false, around: { latitude: held?.latitude || 45, longitude: held?.longitude || -69, radiusKm: 40 } }).reason}</Quiet>
+          <Action label="Approve elevation" onPress={async () => {
+            const plan = planDemRegion({ approved: true, around: { latitude: held?.latitude || 45, longitude: held?.longitude || -69, radiusKm: 40 } });
+            if (!plan.fetch || plan.tiles.length < 2) return;
+            try {
+              const stored = [];
+              const lines = [];
+              for (let index = 0; index < plan.tiles.length; index += 1) {
+                const response = await fetch(plan.urls[index]);
+                if (!response.ok) continue;
+                const bytes = new Uint8Array(await response.arrayBuffer());
+                const png = decodePng(bytes);
+                const channels = png.channels || Math.round(png.data.length / (png.width * png.height));
+                const rgba = channels === 4 ? png.data : new Uint8Array(png.width * png.height * 4);
+                if (channels !== 4) {
+                  for (let pixel = 0; pixel < png.width * png.height; pixel += 1) {
+                    rgba[pixel * 4] = png.data[pixel * channels];
+                    rgba[pixel * 4 + 1] = png.data[pixel * channels + 1];
+                    rgba[pixel * 4 + 2] = png.data[pixel * channels + 2];
+                    rgba[pixel * 4 + 3] = 255;
+                  }
+                }
+                const elev = terrariumGrid(rgba, png.width, png.height);
+                const shade = hillshadeRgba(elev, png.width, png.height);
+                const encoded = encodePng({ width: png.width, height: png.height, data: shade, channels: 4 });
+                const tile = plan.tiles[index];
+                const bounds = tileBounds(tile.z, tile.x, tile.y);
+                const drawn = contourGeoJSON(elev, png.width, png.height, bounds, 100);
+                lines.push(...drawn.features);
+                stored.push({
+                  z: tile.z,
+                  x: tile.x,
+                  y: tile.y,
+                  bounds,
+                  elev,
+                  width: png.width,
+                  height: png.height,
+                  url: pngDataUrl(encoded),
+                  png: encoded
+                });
+              }
+              if (stored.length < 2) throw new Error("empty");
+              demRef.current = stored;
+              setDemTiles(stored.map((tile) => ({ url: tile.url, bounds: tile.bounds, z: tile.z, x: tile.x, y: tile.y })));
+              setContours({ type: "FeatureCollection", features: lines.slice(0, 400) });
+              publishDem(stored);
+              setImportNote(`${stored.length} elevation tiles, hillshade and contours. ${plan.attribution} May be out of date.`);
+              setDemOffer(false);
+            } catch {
+              setImportNote("The elevation tiles did not download. Nothing was stored.");
+            }
+          }} />
+          <Action label="Decline" tone="clay" onPress={() => setDemOffer(false)} />
         </View>
       ) : null}
-
-      {section === "track" ? (
-        <View>
-          <Field label="Point (latitude, longitude)" value={trackPoint} onChangeText={setTrackPoint} placeholder="0, 0" />
-          <Action label="Use locked position" tone="quiet" onPress={() => useLocked(setTrackPoint)} />
-          <Field label="Altitude in meters (optional)" value={trackAlt} onChangeText={setTrackAlt} placeholder="" />
-          <Field label="Time (optional, ISO)" value={trackTime} onChangeText={setTrackTime} placeholder="2026-01-01T00:00:00Z" />
-          <Action
-            label="Add track point"
-            onPress={() => {
-              const added = addSessionTrack(track, {
-                consent: position.consent,
-                pointText: trackPoint,
-                altitudeText: trackAlt,
-                timeText: trackTime
-              });
-              setTrack(added.points);
-              showReport(added.ok ? trackText(added.points) : added);
-            }}
-          />
-          <Action label="Track summary" tone="quiet" onPress={() => showReport(trackText(track))} />
+      <Text style={styles.sectionLabel}>Map packs</Text>
+      <Quiet>{`Storage ${formatBytes((mapPacks || emptyPackStore()).usedBytes)} of ${formatBytes((mapPacks || emptyPackStore()).budgetBytes)}. The whole world is not offered.`}</Quiet>
+      {(mapPacks?.packs || []).map((pack) => (
+        <View key={pack.id} style={styles.card}>
+          <Text style={styles.bubbleText}>{`${pack.name}. ${formatBytes(pack.bytes)}. May be out of date.`}</Text>
+          <Quiet>{`${pack.attribution} ${pack.license}. ${pack.built || pack.importedAt || "Build date not in the file."} ${pack.note || ""}`}</Quiet>
+          <Action label="Update" tone="quiet" onPress={() => {
+            if (pack.catalogId) setPackOffer(pack.catalogId);
+            else setImportNote("This file has no source URL. Import a newer copy. Nothing was downloaded.");
+          }} />
+          <Action label="Delete pack" tone="clay" onPress={() => setMapPacks(deletePack(mapPacks, pack.id))} />
+        </View>
+      ))}
+      {PACK_CATALOG.map((item) => (
+        <Action key={item.id} label={`Review ${item.name}`} tone="quiet" onPress={() => setPackOffer(item.id)} />
+      ))}
+      {packOffer ? (
+        <View style={styles.card}>
+          <Quiet>{beginDownload(mapPacks, packOffer, { approved: false }).reason}</Quiet>
+          <Action label="Approve download" onPress={() => approvePackDownload(packOffer)} />
+          <Action label="Pause" tone="quiet" onPress={() => {
+            downloadAbort.current?.abort?.();
+            setMapPacks(pauseDownload(mapPacks, packOffer));
+          }} />
+          <Action label="Resume" tone="quiet" onPress={() => {
+            const next = resumeDownload(mapPacks, packOffer);
+            setMapPacks(next.store);
+            if (next.fetch) approvePackDownload(packOffer);
+          }} />
+          <Action label="Decline" tone="clay" onPress={() => setPackOffer(null)} />
         </View>
       ) : null}
-
-      {section === "sun" ? (
-        <View>
-          <Field label="At (latitude, longitude)" value={sunPoint} onChangeText={setSunPoint} placeholder="45.1, -69.2" />
-          <Action label="Use locked position" tone="quiet" onPress={() => useLocked(setSunPoint)} />
-          <Field label="Date (YYYY-MM-DD)" value={sunDate} onChangeText={setSunDate} placeholder="2026-06-21" />
-          <Action label="Rough sunrise and sunset" onPress={() => showReport(sunText(sunPoint, sunDate))} />
-        </View>
-      ) : null}
-
-      {section !== "course" ? (
-        <View style={[styles.readout, result.tone === "warn" && styles.readoutWarn]}>
-          <ResultText result={result} />
-        </View>
-      ) : null}
+      <Action
+        label="Import a map file"
+        tone="quiet"
+        onPress={() => {
+          if (Platform.OS !== "web" || typeof document === "undefined") {
+            setImportNote("Choosing a map file needs the web screen or a phone file picker. Nothing was added.");
+            return;
+          }
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = ".geojson,.json,.gpx,.kml,.mbtiles,.pmtiles";
+          input.onchange = () => {
+            const file = input.files && input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+              const bytes = new Uint8Array(reader.result);
+              const pack = validateImport(file.name, bytes);
+              if (pack.ok && (pack.format === "pmtiles" || pack.format === "mbtiles")) pack.archive = bytes;
+              const saved = addPack(mapPacks, pack);
+              if (saved.added) setMapPacks(saved.store);
+              setImportNote(saved.added
+                ? `${pack.name}. ${formatBytes(pack.bytes)}. ${pack.attribution} May be out of date. ${pack.note}`
+                : (pack.reason || saved.reason));
+            };
+            reader.readAsArrayBuffer(file);
+          };
+          input.click();
+        }}
+      />
     </ScrollView>
   );
 }
@@ -715,7 +1511,7 @@ function heldPhrase(source) {
   return "a fix";
 }
 
-function PositionPane({ position, setPosition, onConsent }) {
+function PositionPane({ position, setPosition, onConsent, onOpenModels, onOpenLearned, onOpenSettings, onOpenAbout }) {
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
   const [altitude, setAltitude] = useState("");
@@ -746,11 +1542,15 @@ function PositionPane({ position, setPosition, onConsent }) {
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
-        title="Position"
-        lead="Off until you consent. Yehsa does not lock a position by itself, and it does not share one unless you use the separate share action."
+        title="Me"
+        lead="Your place stays off until you turn it on."
       />
+      <Action label="Models" tone="quiet" onPress={onOpenModels} accessibilityHint="Connect a language model. It stays off until you turn one on." />
+      <Action label="Settings" tone="quiet" onPress={onOpenSettings} />
+      <Action label="About" tone="quiet" onPress={onOpenAbout} />
+      <Action label="What Yehsa has learned" tone="quiet" onPress={onOpenLearned} accessibilityHint="Notes Yehsa has learned on this phone. Nothing is uploaded." />
       <View style={styles.statusBlock}>
-        <StatusPill label={label} tone={tone} />
+        <StatusPill label={position.status === "degraded" ? "Couldn't get a fix" : position.status === "locked" ? "Holding a place" : consented ? "Ready when you ask" : "Place is off"} tone={tone} />
         <Text style={styles.note}>{position.note}</Text>
         {position.status === "locked" && position.fix ? (
           <Text style={styles.fixLine}>
@@ -816,9 +1616,7 @@ function PositionPane({ position, setPosition, onConsent }) {
           }}
         />
       </View>
-      <Text style={styles.foot}>
-        {`Consent stays off until you turn it on. This button does not run by itself. termux-location is used when that command is bridged in; otherwise Expo Location at high accuracy. A reading coarser than ${EXPO_LOCK_ACCURACY_M} m, a missing permission, or a missing radio stays Degraded. Share still does not transmit from this screen.`}
-      </Text>
+      <Text style={styles.foot}>Turn this on yourself. Nothing is shared from this screen.</Text>
     </ScrollView>
   );
 }
@@ -829,13 +1627,14 @@ function peerLabel(peer) {
   return `${peer.name} — ${id}${rssi}`;
 }
 
-function MeshPane({ mesh, setMesh, owner, position }) {
+function MeshPane({ mesh, setMesh, owner, position, onPeople }) {
   const status = meshScreenStatus(mesh);
   const tone = status.readiness === "linked" ? "good" : status.readiness === "degraded" ? "warn" : undefined;
   const [scanning, setScanning] = useState(false);
   const [chooser, setChooser] = useState(false);
   const [note, setNote] = useState("");
   const [serviceNote, setServiceNote] = useState("The offline phone service does not wait for a position lock.");
+  const [people, setPeople] = useState(false);
   const bound = owner?.recognized === true;
   const positionOff = position?.status !== "locked";
 
@@ -901,20 +1700,32 @@ function MeshPane({ mesh, setMesh, owner, position }) {
     setServiceNote("Held on this phone. Not transmitted. A position lock is not required.");
   }
 
-  const pill = status.readiness === "degraded"
-    ? "Degraded"
-    : status.readiness === "linked"
-      ? "Link held"
-      : status.readiness === "heard"
-        ? "Peers heard"
-        : "No peers";
+  const pill = !mesh.scanned
+    ? "Not scanned yet"
+    : status.readiness === "degraded"
+      ? "No radio from here"
+      : status.readiness === "linked"
+        ? "Link held"
+        : status.readiness === "heard"
+          ? "Peers heard"
+          : "No peers";
+
+  if (people) {
+    return (
+      <View style={{ flex: 1 }}>
+        <PeerChat includeLocation={position?.consent === true && position.status === "locked"} />
+        <Action label="Back to mesh" tone="quiet" onPress={() => { setPeople(false); onPeople?.(false); }} />
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
         title="Mesh"
-        lead="Scan when you ask. A missing radio stays degraded. Peers are other installs and cannot run symbols here."
+        lead="Look for other Yehsa phones when you ask."
       />
+      <Action label="People" onPress={() => { setPeople(true); onPeople?.(true); }} />
       <View style={styles.statusBlock}>
         <Text style={styles.sectionLabel}>{status.title}</Text>
         <StatusPill label={pill} tone={tone} />
@@ -937,6 +1748,9 @@ function MeshPane({ mesh, setMesh, owner, position }) {
         disabled={scanning || !bound}
         accessibilityHint="Passive scan when the radio can do it. Does not disconnect a link already held."
       />
+      {pill === "No radio from here" ? (
+        <Action label="Fix it" tone="quiet" onPress={scan} disabled={scanning || !bound} accessibilityHint="Try the scan again. A missing radio stays unavailable." />
+      ) : null}
       {chooser ? (
         <Action
           label="Choose a Yehsa device"
@@ -1012,7 +1826,22 @@ const styles = StyleSheet.create({
     maxWidth: 480
   },
   body: {
-    flex: 1
+    flex: 1,
+    position: "relative"
+  },
+  dockHost: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 5
+  },
+  dock: {
+    backgroundColor: colors.bg,
+    borderTopWidth: 1,
+    borderTopColor: colors.lineStrong,
+    padding: 12,
+    gap: 8
   },
   pane: {
     flex: 1
@@ -1023,7 +1852,7 @@ const styles = StyleSheet.create({
   scroll: {
     paddingTop: Platform.OS === "ios" ? 52 : 22,
     paddingHorizontal: 22,
-    paddingBottom: 36
+    paddingBottom: 168
   },
   answer: {
     marginTop: 8,
@@ -1222,19 +2051,36 @@ const styles = StyleSheet.create({
   },
   tab: {
     flex: 1,
-    minHeight: 52,
+    minHeight: 64,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    paddingVertical: 8
   },
   tabOn: {},
   tabMark: {
-    position: "absolute",
-    top: 0,
-    width: 28,
-    height: 2,
-    borderRadius: 1,
-    backgroundColor: "transparent"
+    color: colors.muted,
+    fontSize: 16,
+    marginBottom: 2
   },
+  chatWrap: { flex: 1, padding: 12 },
+  thread: { paddingBottom: 12, gap: 10 },
+  bubbleYou: { alignSelf: "flex-end", maxWidth: "86%", backgroundColor: "#2a352e", borderRadius: 16, padding: 12 },
+  bubbleYehsa: { alignSelf: "flex-start", maxWidth: "86%", backgroundColor: "#1b2420", borderRadius: 16, padding: 12 },
+  bubbleText: { color: colors.ink, fontSize: 16, lineHeight: 22 },
+  typing: { color: colors.brass, marginTop: 8 },
+  thumb: { width: 88, height: 66, borderRadius: 10, backgroundColor: colors.field },
+  info: { position: "absolute", right: 4, bottom: 4 },
+  sourceChip: { color: colors.muted, fontSize: 12, marginRight: 8 },
+  undoLink: { color: colors.brass, fontSize: 15, marginTop: 6 },
+  iconButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.brass, alignItems: "center", justifyContent: "center" },
+  iconButtonQuiet: { width: 48, height: 48, borderRadius: 24, alignItems: "center", justifyContent: "center" },
+  credits: { backgroundColor: colors.surface, borderRadius: 16, padding: 12, gap: 8, marginTop: 8 },
+  switchRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", minHeight: 48 },
+  switchLabel: { color: colors.ink, fontSize: 16, flex: 1 },
+  composer: { flexDirection: "row", alignItems: "center", gap: 8, marginTop: 8 },
+  composerInput: { flex: 1, minHeight: 48, color: colors.ink, backgroundColor: colors.surface, borderRadius: 12, paddingHorizontal: 12 },
+  card: { marginTop: 8, gap: 8 },
+  cardRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   tabMarkOn: {
     backgroundColor: colors.brass
   },

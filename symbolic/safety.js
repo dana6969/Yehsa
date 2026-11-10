@@ -52,6 +52,10 @@ export function safetyAnswer(question, search) {
     return quoted(note);
   }
 
+  if (/\b(boil|boiling)\b/i.test(asked) && /\b(seawater|sea water|salt water)\b/i.test(asked)) {
+    return { text: "The claim is not safe. Boiling seawater does not make it drinkable. The salt stays in the water.", symbol: "myth_correction", kind: "medical" };
+  }
+
   const badDrink = /\b(urine|seawater|sea water|salt water)\b/i.test(asked) && /\b(drink|drinking|thirsty|thirst)\b/i.test(asked);
   const urges = /\b(safe|right|fine|good|correct|how)\b/i.test(asked);
   if (badDrink && urges) {
@@ -59,6 +63,27 @@ export function safetyAnswer(question, search) {
     const note = findNote(search, query, /not drinking water/i);
     if (!note) return { abstain: true };
     return quoted(note);
+  }
+
+  const myths = [
+    [/\bbutter\b/i, /\bburn/i, "Do not use butter on a burn. Cool it with cool water and call emergency services if it is large or on the face."],
+    [/\btilt(?:ing)? (?:the |your |my )?head back\b/i, /\b(nosebleed|nose bleed)\b/i, "Do not tilt the head back for a nosebleed. Lean forward and pinch the soft part of the nose, and call emergency services if it will not stop."],
+    [/\b(put|stick).{0,20}(mouth|tongue)\b/i, /\bseizure\b/i, "Do not put anything in the mouth during a seizure. Protect the person from injury and call emergency services."],
+    [/\b(drink|drinking).{0,24}(raw|untreated|creek|river) water\b/i, /\b(safe|fine|ok)\b/i, "Untreated surface water is not safe to drink as it is. Boil it. This is not a claim about today's river level."],
+    [/\balcohol\b/i, /\b(hypotherm|to warm|warm (?:a |the |someone)|freezing)\b/i, "Do not give alcohol to warm a cold person. Get them dry, shelter them, and call emergency services if they are confused or shivering hard."],
+    [/\b(boil|boiling)\b/i, /\b(seawater|sea water|salt water)\b/i, "Boiling seawater does not make it drinkable. The salt stays in the water."],
+    [/\burine\b/i, /\b(wound|cut|steril)/i, "Urine is not a wound cleaner. Rinse with clean water if you have it and get medical care for a deep cut."],
+    [/\b(move|walk)\b/i, /\b(neck|spine|spinal)\b/i, "Do not walk off or move a possible spinal injury. Keep the person still and call emergency services."],
+    [/\b(white berries|berries are safe|mushrooms? (?:that |which )?peel|all mushrooms)\b/i, /\b(eat|edible|safe|true)\b/i, "Color and peeling are not rules for what is safe to eat. Water hemlock, poison hemlock, and death camas can be deadly. Do not taste a plant you have not identified."]
+  ];
+  for (const [act, topic, correction] of myths) {
+    if (act.test(asked) && topic.test(asked)) {
+      return { text: `The claim is not safe. ${correction}`, symbol: "myth_correction", kind: "medical" };
+    }
+  }
+
+  if (/\b(is it true|should i|is it safe)\b/i.test(asked) && /\b(eat|drink|rub|cut|suck|taste)\b/i.test(asked) && /\b(unknown plant|mushroom|hemlock|camas)\b/i.test(asked)) {
+    return { text: "That claim is dangerous. Do not eat or taste a plant you have not identified. Water hemlock, poison hemlock, and death camas can be deadly. Call emergency services if any was eaten.", symbol: "myth_correction", kind: "herbology" };
   }
 
   return null;

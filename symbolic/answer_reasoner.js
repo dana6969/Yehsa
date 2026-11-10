@@ -185,6 +185,7 @@ function bestField(parsed, field) {
 }
 
 function orderSentences(sentences, parsed) {
+  if (sentences.length <= 8 && sentences.join(" ").length <= 700) return sentences;
   const { specific } = specificTokens(parsed);
   const tagged = sentences.map((sentence, index) => ({
     sentence,
@@ -252,11 +253,14 @@ function otherContentMissed(parsed, gloss, subject) {
 
 function dehydrationNote(parsed, field) {
   if (!/\bdehydr/.test(`${parsed?.topic || ""} ${parsed?.text || ""}`)) return null;
+  const asked = `${parsed?.topic || ""} ${parsed?.text || ""}`;
+  const oral = /\b(diarrhea|oral|sugar|teaspoon)\b/i.test(asked);
   const useful = /\b(rehydrat|drink|drinking|sweating|dizzy|boil|boiling|known-safe)\b/i;
   let best = null;
   let bestScore = 0;
   for (const hit of field) {
     if (!useful.test(hit.text || "")) continue;
+    if (!oral && hit.symbol === "oral_rehydration") continue;
     let score = hit.score || 0;
     if (/\b(sweating|dizzy|rehydrat)\b/i.test(hit.text || "")) score += 30;
     if (score > bestScore) {
@@ -298,7 +302,13 @@ export function reasonAnswer(parsed, hits) {
     const pieces = selectPieces(parsed, field);
     if (pieces.length) return { text: connect(parsed, pieces), used: uniqueHits(pieces) };
   }
-  const best = dehydrationNote(parsed, field) || bestField(parsed, field);
+  const overview = field.find((hit) => hit.symbol === "toxic_plant_facts");
+  const identify = field.find((hit) => hit.symbol === "unknown_plant");
+  const asked = `${parsed.topic || ""} ${parsed.text || ""}`;
+  const namedPlant = /\b(carrot|onion|hemlock|camas|willow|yarrow|plantain)\b/i.test(asked);
+  const toxicOverview = overview && !namedPlant && /\b(deadly|poisonous plants|which plants)\b/i.test(asked) ? overview : null;
+  const identifyFirst = identify && /\b(taste|identif|lookalike|look-alike)\b/i.test(asked) ? identify : null;
+  const best = dehydrationNote(parsed, field) || identifyFirst || toxicOverview || bestField(parsed, field);
   if (best) {
     const sentences = orderSentences(splitSentences(best.text), parsed);
     let text = frame(parsed, sentences.join(" "));

@@ -1,6 +1,6 @@
 // One fresh process. Prints nothing but writes a JSON result file.
 import fs from "fs";
-import { buildQuestions } from "./questions.mjs";
+import { loadRegressionV1 } from "./regression/v1/load.mjs";
 import { judge } from "./score.mjs";
 import { ask } from "../symbolic/ask.js";
 
@@ -10,7 +10,7 @@ const ids = new Set(String(args.get("--ids") || "").split(",").filter(Boolean));
 const out = args.get("--out");
 if (!out || ids.size === 0) throw new Error("usage: node eval/worker.mjs --ids a,b --out file.json");
 
-const questions = buildQuestions().filter((question) => ids.has(question.id));
+const questions = loadRegressionV1().questions.filter((question) => ids.has(question.id));
 if (questions.length !== ids.size) {
   throw new Error(`worker missing questions: wanted ${ids.size}, found ${questions.length}`);
 }
