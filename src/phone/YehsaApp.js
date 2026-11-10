@@ -84,6 +84,21 @@ import {
 import { capabilitySummary, continueUtterance, isCapabilityQuestion, sourceChips } from "../../symbolic/chat_turn.js";
 import LandscapeMap from "./LandscapeMap.js";
 import {
+  PACK_CATALOG,
+  addPack,
+  attributionLine,
+  beginDownload,
+  deletePack,
+  elevationNear,
+  emptyPackStore,
+  formatBytes,
+  nearestWater,
+  packShapes,
+  pauseDownload,
+  resumeDownload,
+  validateImport
+} from "../../symbolic/map_packs.js";
+import {
   applyGpsSample,
   gpsStatusLabel,
   grantGpsConsent,
@@ -110,6 +125,7 @@ export default function YehsaApp() {
   const [waypoints, setWaypoints] = useState([]);
   const [track, setTrack] = useState([]);
   const [mapTap, setMapTap] = useState(null);
+  const [mapPacks, setMapPacks] = useState(emptyPackStore);
   const [models, setModels] = useState(emptyModelSettings);
   const [learned, setLearned] = useState(emptyLearned);
   const [owner, setOwner] = useState(null);
@@ -212,6 +228,7 @@ export default function YehsaApp() {
             setWaypoints={setWaypoints}
             setMesh={setMesh}
             mapTap={mapTap}
+            mapPacks={mapPacks}
             models={models}
             setModels={storeModels}
             ownerId={owner?.installId || null}
@@ -231,6 +248,8 @@ export default function YehsaApp() {
             waypoints={waypoints}
             track={track}
             onMapTap={setMapTap}
+            mapPacks={mapPacks}
+            setMapPacks={setMapPacks}
           />
         </View>
         <View
@@ -332,7 +351,7 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ session, owner, active, docked, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned }) {
+function AskPane({ session, owner, active, docked, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [messages, setMessages] = useState([]);
@@ -528,6 +547,11 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
       });
       return { ok: true, text: "Sending only the text shown on the card.", undo: null };
     }
+    if (card.type === "map-query") {
+      const from = position?.consent === true && position.status === "locked" ? position.fix : null;
+      const answer = card.payload?.kind === "elevation" ? elevationNear(mapPacks, from) : nearestWater(mapPacks, from);
+      return { ok: true, text: answer.text, undo: null };
+    }
     if (card.type === "save-learned") {
       setLearned(approveLearned(learned, card.payload));
       return { ok: true, text: "Learned on this device from your correction. It is unverified until you confirm it or mark it helpful twice.", undo: { type: "learned", id: card.payload?.note?.id } };
@@ -583,6 +607,28 @@ function AskPane({ session, owner, active, docked, screen, position, setPosition
     if (!typed) {
       setPhase("empty");
       setNotice("Type a message first.");
+      return;
+    }
+    if (/\b(nearest water|show water|where is water)\b/i.test(typed) || /\belevation here\b/i.test(typed)) {
+      const kind = /\belevation\b/i.test(typed) ? "elevation" : "water";
+      pushMessage({ role: "you", text: typed });
+      const proposed = proposeAction(gateRef.current, {
+        type: "map-query",
+        id: `act-${Date.now()}`,
+        label: kind === "water"
+          ? "Look for water in the map packs on this phone. Nothing is downloaded."
+          : "Read elevation from the map packs on this phone. No elevation service is called.",
+        payload: { kind }
+      });
+      rememberGate(proposed.gate);
+      setPhase("ready");
+      pushMessage({
+        role: "yehsa",
+        text: proposed.card
+          ? "I will only use a pack that is already on this phone. Nothing is downloaded until you approve a pack, and I will not invent a place."
+          : "That map question is switched off.",
+        card: proposed.card
+      });
       return;
     }
     if (correction) {
@@ -1017,10 +1063,11 @@ function ResultText({ result }) {
   return <Prose live tone={result.tone === "warn" ? "warn" : undefined}>{result.text}</Prose>;
 }
 
-function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap }) {
+function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks }) {
   const [declination, setDeclination] = useState("0");
   const [importNote, setImportNote] = useState("No terrain file is loaded. This is a blank landscape canvas.");
-  const [features, setFeatures] = useState([]);
+  const [packOffer, setPackOffer] = useState(null);
+  const downloadAbort = useRef(null);
   const [gps, setGps] = useState(initialGpsMap);
   const [gpsWanted, setGpsWanted] = useState(false);
   const [backgroundGps, setBackgroundGps] = useState(false);
@@ -1071,6 +1118,43 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
     };
   }, [consented, gpsWanted, backgroundGps, setPosition]);
 
+  async function approvePackDownload(id) {
+    const planned = beginDownload(mapPacks, id, { approved: true });
+    if (!planned.fetch) {
+      setImportNote(planned.reason);
+      return;
+    }
+    const controller = new AbortController();
+    downloadAbort.current = controller;
+    setMapPacks(planned.store);
+    try {
+      const response = await fetch(planned.item.url, { signal: controller.signal });
+      if (!response.ok) throw new Error("status");
+      const text = await response.text();
+      const pack = validateImport(`${planned.item.id}.geojson`, text);
+      if (pack.ok) {
+        pack.catalogId = planned.item.id;
+        pack.name = planned.item.name;
+        pack.source = planned.item.source;
+        pack.license = planned.item.license;
+        pack.attribution = planned.item.attribution;
+        pack.built = pack.built || new Date().toISOString().slice(0, 10);
+      }
+      const saved = addPack(planned.store, pack);
+      setMapPacks(saved.added ? saved.store : planned.store);
+      setImportNote(saved.added
+        ? `${pack.name} is on this phone. ${pack.attribution} May be out of date.`
+        : (pack.reason || saved.reason));
+    } catch (err) {
+      if (err?.name === "AbortError") {
+        setImportNote("Download paused. Nothing new was stored.");
+        return;
+      }
+      setMapPacks(pauseDownload(planned.store, id));
+      setImportNote("The download did not finish. Nothing new was stored. OSM public tile servers were not used.");
+    }
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
@@ -1092,7 +1176,7 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
         held={held}
         waypoints={waypoints}
         track={crumbs}
-        features={features}
+        features={packShapes(mapPacks || emptyPackStore())}
         declination={declination}
         follow={gps.follow}
         headingDeg={gps.headingDeg}
@@ -1115,53 +1199,65 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
         />
       ))}
       <Field label="Declination from your map, east positive" value={declination} onChangeText={setDeclination} placeholder="0" />
+      <Quiet>{attributionLine(mapPacks || emptyPackStore())}</Quiet>
+      <Quiet>{elevationNear(mapPacks || emptyPackStore(), held).text}</Quiet>
       <Quiet>{importNote}</Quiet>
+      <Text style={styles.sectionLabel}>Map packs</Text>
+      <Quiet>{`Storage ${formatBytes((mapPacks || emptyPackStore()).usedBytes)} of ${formatBytes((mapPacks || emptyPackStore()).budgetBytes)}. Packs stay in app storage, not in the install file. The whole world is not offered.`}</Quiet>
+      {(mapPacks?.packs || []).map((pack) => (
+        <View key={pack.id} style={styles.card}>
+          <Text style={styles.bubbleText}>{`${pack.name}. ${formatBytes(pack.bytes)}. May be out of date.`}</Text>
+          <Quiet>{`${pack.attribution} ${pack.license}. ${pack.built || pack.importedAt || "Build date not in the file."} ${pack.note || ""}`}</Quiet>
+          <Action label="Update" tone="quiet" onPress={() => {
+            if (pack.catalogId) setPackOffer(pack.catalogId);
+            else setImportNote("This file has no source URL. Import a newer copy. Nothing was downloaded.");
+          }} />
+          <Action label="Delete pack" tone="clay" onPress={() => setMapPacks(deletePack(mapPacks, pack.id))} />
+        </View>
+      ))}
+      {PACK_CATALOG.map((item) => (
+        <Action key={item.id} label={`Review ${item.name}`} tone="quiet" onPress={() => setPackOffer(item.id)} />
+      ))}
+      {packOffer ? (
+        <View style={styles.card}>
+          <Quiet>{beginDownload(mapPacks, packOffer, { approved: false }).reason}</Quiet>
+          <Action label="Approve download" onPress={() => approvePackDownload(packOffer)} />
+          <Action label="Pause" tone="quiet" onPress={() => {
+            downloadAbort.current?.abort?.();
+            setMapPacks(pauseDownload(mapPacks, packOffer));
+          }} />
+          <Action label="Resume" tone="quiet" onPress={() => {
+            const next = resumeDownload(mapPacks, packOffer);
+            setMapPacks(next.store);
+            if (next.fetch) approvePackDownload(packOffer);
+          }} />
+          <Action label="Decline" tone="clay" onPress={() => setPackOffer(null)} />
+        </View>
+      ) : null}
       <Action
-        label="Choose a GeoJSON or MBTiles file"
+        label="Import a map file"
         tone="quiet"
         onPress={() => {
           if (Platform.OS !== "web" || typeof document === "undefined") {
-            setImportNote("Choosing a map file is a later step on this install. No tiles were added.");
+            setImportNote("Choosing a map file needs the web screen or a phone file picker. Nothing was added.");
             return;
           }
           const input = document.createElement("input");
           input.type = "file";
-          input.accept = ".geojson,.json,.mbtiles";
+          input.accept = ".geojson,.json,.gpx,.kml,.mbtiles,.pmtiles";
           input.onchange = () => {
             const file = input.files && input.files[0];
             if (!file) return;
-            if (/\.mbtiles$/i.test(file.name)) {
-              setImportNote("MBTiles is not read in this install. The file was not applied.");
-              return;
-            }
             const reader = new FileReader();
             reader.onload = () => {
-              try {
-                const json = JSON.parse(String(reader.result || ""));
-                const list = json.type === "FeatureCollection" ? json.features : json.type === "Feature" ? [json] : [];
-                const points = [];
-                for (const feature of list || []) {
-                  const coordinates = feature?.geometry?.type === "Point"
-                    ? [feature.geometry.coordinates]
-                    : feature?.geometry?.type === "LineString"
-                      ? feature.geometry.coordinates
-                      : [];
-                  for (const pair of coordinates) {
-                    if (points.length >= 80) break;
-                    const longitude = Number(pair?.[0]);
-                    const latitude = Number(pair?.[1]);
-                    if (Number.isFinite(latitude) && Number.isFinite(longitude)) points.push({ latitude, longitude });
-                  }
-                }
-                setFeatures(points);
-                setImportNote(points.length
-                  ? `Drew ${points.length} points from your file under the GPS dot. Nothing was downloaded, and this is not a street map.`
-                  : "That file had no points to draw. The canvas stays blank.");
-              } catch {
-                setImportNote("That file was not usable GeoJSON. Nothing was added.");
-              }
+              const pack = validateImport(file.name, new Uint8Array(reader.result));
+              const saved = addPack(mapPacks, pack);
+              if (saved.added) setMapPacks(saved.store);
+              setImportNote(saved.added
+                ? `${pack.name}. ${formatBytes(pack.bytes)}. ${pack.attribution} May be out of date. ${pack.note}`
+                : (pack.reason || saved.reason));
             };
-            reader.readAsText(file);
+            reader.readAsArrayBuffer(file);
           };
           input.click();
         }}

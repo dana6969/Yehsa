@@ -172,8 +172,14 @@ export default function LandscapeMap({
           <Text style={{ color: "#e2b15a", fontSize: 12 }}>N</Text>
           <View style={{ width: 2, height: 18, backgroundColor: "#b7d0a4", transform: [{ rotate: magTurn }] }} />
         </View>
-        {(features || []).map((point, index) => {
-          const xy = project(point);
+        {(features || []).map((feature, index) => {
+          if (Array.isArray(feature?.points)) {
+            const drawn = feature.points.map(project).filter(Boolean).slice(0, 80);
+            return drawn.slice(1).map((point, step) => (
+              <MeasureLine key={`s${index}-${step}`} from={drawn[step]} to={point} />
+            ));
+          }
+          const xy = project(feature);
           return xy ? <Dot key={`f${index}`} x={xy.x} y={xy.y} color="#6f8f78" /> : null;
         })}
         {measure.map((point, index) => {

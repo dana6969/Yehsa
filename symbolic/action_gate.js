@@ -11,7 +11,8 @@ export const ACTION_TYPES = [
   "field-note",
   "ask-model",
   "save-model-note",
-  "save-learned"
+  "save-learned",
+  "map-query"
 ];
 
 export function defaultActionSettings() {
