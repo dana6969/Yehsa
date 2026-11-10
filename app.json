@@ -65,6 +65,7 @@
       ],
       "./plugins/withYehsaVoice.js",
       "expo-secure-store",
+      "./plugins/withPeerKeyBackup.js",
       "@maplibre/maplibre-react-native",
       "expo-sqlite"
     ],
