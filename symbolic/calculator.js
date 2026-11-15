@@ -141,7 +141,135 @@ function extraMath(text) {
   return null;
 }
 
+const SMALL_WORDS = {
+  zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+  ten: 10, eleven: 11, twelve: 12
+};
+
+function stripFillers(text) {
+  return text
+    .replace(/\b(?:roughly|about|around|approximately|approx|please|just)\b/g, " ")
+    .replace(/%/g, " percent ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function expandFractions(text) {
+  let out = text;
+  out = out.replace(/\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+and\s+a\s+half\b/g, (_, word) => String(SMALL_WORDS[word] + 0.5));
+  out = out.replace(/\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\s+and\s+(?:a|one)\s+quarter\b/g, (_, word) => String(SMALL_WORDS[word] + 0.25));
+  out = out.replace(/\b(\d+)\s+and\s+a\s+half\b/g, (_, whole) => String(Number(whole) + 0.5));
+  out = out.replace(/\b(\d+)\s+and\s+(?:a|one)\s+quarter\b/g, (_, whole) => String(Number(whole) + 0.25));
+  out = out.replace(/\b(\d+)\s+(\d+)\s*\/\s*(\d+)\b/g, (_, whole, num, den) => {
+    const bottom = Number(den);
+    if (!bottom) return `${whole} ${num}/${den}`;
+    return String(Number(whole) + Number(num) / bottom);
+  });
+  out = out.replace(/\b(\d+)\s*\/\s*(\d+)\b/g, (_, num, den) => {
+    const bottom = Number(den);
+    if (!bottom) return `${num}/${den}`;
+    return String(Number(num) / bottom);
+  });
+  if (/\b(plus|minus|times|divided|percent|average|per hour|cups?|tablespoons?|teaspoons?|meters?|kilograms?)\b/.test(out)) {
+    out = out.replace(/\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b/g, (word) => String(SMALL_WORDS[word]));
+  }
+  return out.replace(/\s+/g, " ").trim();
+}
+
+function valuesOf(found) {
+  return found.filter((item) => item && Number.isFinite(item.value)).map((item) => item.value);
+}
+
+function sameValue(left, right) {
+  return Math.abs(left - right) <= 1e-6 * Math.max(1, Math.abs(left), Math.abs(right));
+}
+
+const AMBIGUOUS = "That wording can be read more than one way, so I will not give a confident number.";
+
+function averageOf(text) {
+  const match = text.match(/\baverage(?:\s+of)?\s+((?:-?\d+(?:\.\d+)?\s*(?:,|and|&)?\s*){2,})/);
+  if (!match) return null;
+  const nums = match[1].match(/-?\d+(?:\.\d+)?/g);
+  if (!nums || nums.length < 2) return null;
+  const values = nums.map(Number);
+  const value = values.reduce((sum, item) => sum + item, 0) / values.length;
+  return { value, text: `The average of ${values.map((item) => formatNumber(item)).join(", ")} is ${formatNumber(value)}.` };
+}
+
+function discountOf(text) {
+  const match = text.match(/(-?\d+(?:\.\d+)?)\s+percent\s+(?:off|discount)(?:\s+(?:of|on|from))?\s+(-?\d+(?:\.\d+)?)/);
+  if (!match) return null;
+  const pct = Number(match[1]);
+  const base = Number(match[2]);
+  const value = base * (1 - pct / 100);
+  return { value, text: `${formatNumber(pct)} percent off ${formatNumber(base)} is ${formatNumber(value)}.` };
+}
+
+function percentChange(text) {
+  if (!/\bpercent\b/.test(text)) return null;
+  const fromTo = text.match(/\bfrom\s+(-?\d+(?:\.\d+)?)\s+to\s+(-?\d+(?:\.\d+)?)/);
+  if (fromTo) {
+    const start = Number(fromTo[1]);
+    const end = Number(fromTo[2]);
+    if (start === 0) return { value: NaN, ambiguous: true, text: AMBIGUOUS };
+    const value = ((end - start) / Math.abs(start)) * 100;
+    const word = value >= 0 ? "increase" : "decrease";
+    return { value, text: `From ${formatNumber(start)} to ${formatNumber(end)} is a ${formatNumber(Math.abs(value))} percent ${word}.` };
+  }
+  const shifted = text.match(/\b(?:increased|decreased|rose|fell|up|down)\s+(?:by\s+)?(-?\d+(?:\.\d+)?)\s+percent\s+from\s+(-?\d+(?:\.\d+)?)/);
+  if (!shifted) return null;
+  const pct = Number(shifted[1]);
+  const start = Number(shifted[2]);
+  const sign = /\b(decreased|fell|down)\b/.test(text) ? -1 : 1;
+  const value = start * (1 + sign * pct / 100);
+  return { value, text: `${formatNumber(start)} ${sign < 0 ? "decreased" : "increased"} by ${formatNumber(pct)} percent is ${formatNumber(value)}.` };
+}
+
+function perHour(text) {
+  const match = text.match(/(-?\d+(?:\.\d+)?)\s+(miles|kilometers|km|meters|feet)\s+(?:in|over)\s+(-?\d+(?:\.\d+)?)\s+(hours|hour|minutes|minute)/);
+  if (!match) return null;
+  const distance = Number(match[1]);
+  let hours = Number(match[3]);
+  if (match[4].startsWith("minute")) hours /= 60;
+  if (hours === 0) return { value: NaN, ambiguous: true, text: AMBIGUOUS };
+  const value = distance / hours;
+  return { value, text: `${formatNumber(distance)} ${match[2]} in ${formatNumber(Number(match[3]))} ${match[4]} is ${formatNumber(value)} ${match[2]} per hour.` };
+}
+
+function halfOf(text) {
+  const match = text.match(/\bhalf of\s+(-?\d+(?:\.\d+)?)/);
+  if (!match) return null;
+  const value = Number(match[1]) / 2;
+  return { value, text: `Half of ${formatNumber(Number(match[1]))} is ${formatNumber(value)}.` };
+}
+
+function looseMath(text) {
+  const found = [averageOf(text), discountOf(text), percentChange(text), perHour(text), halfOf(text)].filter(Boolean);
+  if (found.some((item) => item.ambiguous)) return { text: AMBIGUOUS };
+  const values = valuesOf(found);
+  if (values.length > 1 && values.some((value) => !sameValue(value, values[0]))) return { text: AMBIGUOUS };
+  return found[0] || null;
+}
+
+function resultValue(item) {
+  if (!item) return null;
+  if (item.ambiguous) return null;
+  if (Number.isFinite(item.value)) return item.value;
+  const nums = String(item.text || "").match(/-?\d+(?:\.\d+)?/g);
+  if (!nums) return null;
+  return Number(nums[nums.length - 1]);
+}
+
 export function calculate(input) {
   const text = normalizeUnits(clean(input));
-  return arithmetic(text) || extraMath(text) || precedence(text) || convert(text);
+  const exact = arithmetic(text) || extraMath(text) || precedence(text) || convert(text);
+  const prepared = expandFractions(normalizeUnits(stripFillers(text)));
+  const loose = looseMath(prepared) || (prepared !== text ? (arithmetic(prepared) || extraMath(prepared) || precedence(prepared) || convert(prepared)) : null);
+  if (exact?.text && loose?.text) {
+    const left = resultValue(exact);
+    const right = resultValue(loose);
+    if (loose.ambiguous || (left != null && right != null && !sameValue(left, right))) return { text: AMBIGUOUS };
+  }
+  if (loose?.ambiguous) return { text: AMBIGUOUS };
+  return exact || loose || null;
 }
