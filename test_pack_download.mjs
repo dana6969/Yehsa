@@ -198,8 +198,8 @@ test("the manifest lists every New England state and no road or parcel layer", (
   for (const need of ["me-southern", "me-western-mountains", "me-downeast", "me-north-woods", "ri", "nh", "vt", "ma", "ct", "ny", "pa"]) {
     assert.ok(ids.has(need), `${need} is in the manifest`);
   }
-  const text = JSON.stringify(PACK_MANIFEST).toLowerCase();
-  assert.doesNotMatch(text, /parcel|owner|street layer|road layer: on/);
+  const text = JSON.stringify(PACK_MANIFEST.packs).toLowerCase().replace(/openstreetmap/g, "");
+  assert.doesNotMatch(text, /parcel|owner|street|\broads?\b/);
   for (const pack of PACK_MANIFEST.packs) {
     assert.match(pack.license, /ODbL|public domain|Public domain/i);
     assert.match(pack.md5, /^[0-9a-f]{32}$/);
