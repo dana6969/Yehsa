@@ -71,6 +71,7 @@ import LearnedPane from "./LearnedPane.js";
 import PictureGuide from "./PictureGuide.js";
 import pictureManifest from "../../assets/pictures/manifest.json";
 import { friendlySource, imageHref, picturesFor } from "../../symbolic/picture_guide.js";
+import { pictureSource } from "../../symbolic/picture_assets.js";
 import { Ionicons } from "@expo/vector-icons";
 import {
   approveLearned,
@@ -1065,7 +1066,7 @@ function AskPane({ session, owner, active, docked, hidden, screen, position, set
               <View style={styles.cardRow}>
                 {item.pictures.map((picture) => (
                   <View key={picture.id}>
-                    <Image accessibilityLabel={friendlySource(picture.id)} source={{ uri: picture.href }} style={styles.thumb} />
+                    {pictureSource(picture.href.split("/").pop()) ? <Image accessibilityLabel={friendlySource(picture.id)} source={pictureSource(picture.href.split("/").pop())} style={styles.thumb} /> : <Text style={styles.bubbleText}>Picture not included</Text>}
                     <Pressable accessibilityRole="button" accessibilityLabel="Picture credits" onPress={() => setCredits(picture)} style={styles.info}>
                       <Ionicons name="information-circle" size={18} color={colors.brass} />
                     </Pressable>

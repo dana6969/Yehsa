@@ -71,3 +71,24 @@ test("pictures stay under the size budget and are not pulled into the ask hot pa
   const hot = fs.readFileSync("symbolic/symbolic_dictionary.js", "utf8");
   assert.doesNotMatch(hot, /picture_guide|pictures\/files/);
 });
+
+test("every picture ships inside the app bundle, and a missing one is labeled", () => {
+  const bundled = fs.readFileSync("symbolic/picture_assets.native.js", "utf8");
+  const web = fs.readFileSync("symbolic/picture_assets.web.js", "utf8");
+  let total = 0;
+  for (const image of manifest.images) {
+    const file = path.join("assets/pictures", image.file);
+    assert.ok(fs.existsSync(file), `${image.file} is missing from assets/pictures`);
+    assert.equal(fs.readFileSync(file).subarray(8, 12).toString("ascii"), "WEBP");
+    total += fs.statSync(file).size;
+    const line = `require("../assets/pictures/${image.file}")`;
+    assert.ok(bundled.includes(line), `${image.file} is not required in picture_assets.native.js`);
+    assert.ok(web.includes(line), `${image.file} is not required in picture_assets.web.js`);
+  }
+  assert.ok(total < 15 * 1024 * 1024);
+  const screen = fs.readFileSync("src/phone/PictureGuide.js", "utf8");
+  assert.doesNotMatch(screen, /uri:\s*imageHref/);
+  assert.match(screen, /Picture not included/);
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.doesNotMatch(home, /source=\{\{ uri: picture\.href \}\}/);
+});
