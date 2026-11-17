@@ -1,6 +1,5 @@
 // Drop a note that only shares a loose word with the question.
-import fs from "fs";
-import path from "path";
+import { loadFieldNotes } from "./field_vocab_source.js";
 import { textHasToken } from "./book_search.js";
 
 const LOOSE = new Set([
@@ -59,21 +58,10 @@ let fieldVocab = null;
 function fieldHas(token) {
   if (!fieldVocab) {
     fieldVocab = new Set();
-    const files = [
-      "symbolic_books/medical/reference.json",
-      "symbolic_books/herbology/notes.json",
-      "symbolic_books/landscape/notes.json",
-      "symbolic_books/survival/camp.json"
-    ];
-    for (const rel of files) {
-      try {
-        const data = JSON.parse(fs.readFileSync(path.join(process.cwd(), rel), "utf8"));
-        const blob = JSON.stringify(data).toLowerCase();
-        for (const word of blob.split(/[^a-z0-9+]+/)) {
-          if (word.length >= 4) fieldVocab.add(word);
-        }
-      } catch {
-        // A missing note file just leaves the vocab smaller.
+    for (const data of loadFieldNotes()) {
+      const blob = JSON.stringify(data).toLowerCase();
+      for (const word of blob.split(/[^a-z0-9+]+/)) {
+        if (word.length >= 4) fieldVocab.add(word);
       }
     }
   }
