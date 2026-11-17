@@ -15,25 +15,33 @@ export const TABS = [
 
 // Screens that open on top of the tabs from the header gear.
 export const MORE_ITEMS = [
-  { id: "location", label: "Location and consent", hint: "Off until you turn it on." },
-  { id: "actions", label: "What I may do", hint: "Actions Yehsa may ask to take." },
-  { id: "models", label: "Models", hint: "Optional. Off by default." },
-  { id: "learned", label: "Learned notes", hint: "Kept on this phone." },
-  { id: "library", label: "Library", hint: "Books and texts on this phone." },
-  { id: "keys", label: "Chat keys", hint: "Your key fingerprint and resets." },
-  { id: "display", label: "Display", hint: "Larger type and higher contrast." },
-  { id: "about", label: "About", hint: "What stays on this phone." }
+  { id: "display", label: "Display", hint: "Field, Sunlight, Night · Red or Amber" },
+  { id: "privacy", label: "Privacy", hint: "Nothing leaves the phone unless you approve" },
+  { id: "helpers", label: "Helpers", hint: "Each helper has a visible off-switch" },
+  { id: "actions", label: "What I may do", hint: "Permission toggles" },
+  { id: "did", label: "What Yehsa did", hint: "Action log and undo" },
+  { id: "family", label: "Family card", hint: "Later. Also linked from Kit" },
+  { id: "location", label: "Location and consent", hint: "Off until you turn it on" },
+  { id: "models", label: "Models", hint: "Optional. Off by default" },
+  { id: "learned", label: "Learned notes", hint: "Kept on this phone" },
+  { id: "library", label: "Library", hint: "Books and texts on this phone" },
+  { id: "keys", label: "Chat keys", hint: "Your key fingerprint and resets" },
+  { id: "about", label: "About", hint: "Trust pledge and 411-question test" }
 ];
 
 export const SCREEN_TITLES = {
   more: "More",
-  location: "Location",
+  display: "Display",
+  privacy: "Privacy",
+  helpers: "Helpers",
   actions: "What I may do",
+  did: "What Yehsa did",
+  family: "Family card",
+  location: "Location",
   models: "Models",
   learned: "Learned notes",
   library: "Library",
   keys: "Chat keys",
-  display: "Display",
   about: "About"
 };
 
@@ -127,20 +135,32 @@ export function createBackLayers() {
 export const DESTINATIONS = [
   { id: "ask", label: "Ask", kind: "tab", words: "ask chat question yehsa talk" },
   { id: "map", label: "Map", kind: "tab", words: "map gps waypoint track land terrain" },
-  { id: "layers", label: "Map layers and packs", kind: "tab", target: "map", words: "layers packs elevation import declination download" },
-  { id: "field", label: "Field tools", kind: "tab", words: "field tools sun course bearing compass" },
-  { id: "pictures", label: "Pictures", kind: "tab", target: "field", words: "pictures picture guide plants knots photos images" },
-  { id: "people", label: "People", kind: "tab", words: "people contacts chat friends message" },
+  { id: "layers", label: "Map layers and packs", kind: "tab", target: "map", words: "layers packs elevation import declination download offline" },
+  { id: "hunt", label: "Hunt view on the map", kind: "tab", target: "map", words: "hunt hunting hud legal light wind deer" },
+  { id: "field", label: "Field tools", kind: "tab", words: "field tools" },
+  { id: "pictures", label: "Pictures", kind: "tab", target: "field", tile: "pictures", words: "pictures picture guide plants knots photos images" },
+  { id: "compass", label: "Compass", kind: "tab", target: "field", tile: "compass", words: "compass bearing course distance declination" },
+  { id: "sun", label: "Sun times", kind: "tab", target: "field", tile: "sun", words: "sun sunrise sunset daylight" },
+  { id: "morse", label: "Morse", kind: "tab", target: "field", tile: "morse", words: "morse code signal" },
+  { id: "timers", label: "Timers", kind: "tab", target: "field", tile: "timers", words: "timer countdown clock" },
+  { id: "calculator", label: "Calculator", kind: "tab", target: "field", tile: "calculator", words: "calculator math units convert" },
+  { id: "before", label: "Before you go", kind: "tab", target: "field", tile: "before", words: "before trip plan checklist" },
+  { id: "first-aid", label: "First-aid pictures", kind: "tab", target: "field", tile: "first-aid", words: "first aid splint burn" },
+  { id: "people", label: "People", kind: "tab", words: "people contacts chat friends message party" },
   { id: "scan", label: "Scan and radio", kind: "tab", target: "people", words: "scan radio mesh bluetooth peers pair" },
-  { id: "sos", label: "Emergency", kind: "sos", words: "sos emergency help 911 112 cpr bleeding" },
+  { id: "sos", label: "Emergency", kind: "sos", words: "sos emergency help 911 112 cpr bleeding satellite" },
+  { id: "display", label: "Display", kind: "screen", words: "display night sunlight red amber text size contrast dark mode" },
+  { id: "privacy", label: "Privacy", kind: "screen", words: "privacy data share upload" },
+  { id: "helpers", label: "Helpers", kind: "screen", words: "helpers voice microphone radio off switch" },
   { id: "location", label: "Location and consent", kind: "screen", words: "location position consent gps lock share coordinates" },
   { id: "actions", label: "What I may do", kind: "screen", words: "actions settings permissions allow" },
+  { id: "did", label: "What Yehsa did", kind: "screen", words: "log undo history did" },
   { id: "models", label: "Models", kind: "screen", words: "models model ai provider key" },
   { id: "learned", label: "Learned notes", kind: "screen", words: "learned notes memory" },
   { id: "library", label: "Library", kind: "screen", words: "library books scripture bible texts" },
   { id: "keys", label: "Chat keys", kind: "screen", words: "keys chat keys fingerprint security" },
-  { id: "display", label: "Display", kind: "screen", words: "display text size contrast large" },
-  { id: "about", label: "About", kind: "screen", words: "about privacy offline" }
+  { id: "family", label: "Family card", kind: "screen", words: "family card contacts medical" },
+  { id: "about", label: "About", kind: "screen", words: "about trust pledge test" }
 ];
 
 export function filterDestinations(query, limit = 6) {

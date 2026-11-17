@@ -51,7 +51,7 @@ import {
   submitHeard,
   voiceButtonLabel
 } from "../../symbolic/voice_adapter.js";
-import { Action, Field, HoldTalk, Prose, Quiet, ScreenHeader, ShellContext, StatusPill, colors } from "./ui.js";
+import { Action, DisplayContext, Field, HoldTalk, ModeChip, Prose, Quiet, ScreenHeader, ShellContext, StatusPill, applyTheme, colors, themedStyles } from "./ui.js";
 import { approveAction, declineAction, proposeAction, setActionEnabled, undoApproved } from "../../symbolic/action_gate.js";
 import { readAssistant } from "../../symbolic/assistant_intent.js";
 import {
@@ -112,9 +112,13 @@ import PeerChat from "./PeerChat.js";
 import PeerSecurity from "./PeerSecurity.js";
 import EmergencyScreen from "./EmergencyScreen.js";
 import { BackLayers, useBackLayer } from "./back_layers.js";
-import { MORE_ITEMS, TABS, backAction, backLabel, createBackLayers, initialNav, navReduce, topScreen } from "./nav_model.js";
+import { MORE_ITEMS, TABS, destinationActions, backAction, backLabel, createBackLayers, initialNav, navReduce, topScreen } from "./nav_model.js";
 import FieldPane from "./FieldPane.js";
 import MorePane from "./MorePane.js";
+import CommandSheet from "./CommandSheet.js";
+import Onboarding, { ONBOARDED_KEY } from "./Onboarding.js";
+import { TRUST_EVAL, TRUST_LINES } from "./trust_copy.js";
+import { DISPLAY_KEY, DISPLAY_MODES, NIGHT_TINTS, defaultDisplay, modeLabel, nextMode, openDisplay, packDisplay, setMode, themeKeyFor } from "./display_model.js";
 import {
   applyGpsSample,
   gpsStatusLabel,
@@ -133,6 +137,14 @@ const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
 export default function YehsaApp() {
   const [nav, setNav] = useState(initialNav);
+  const [display, setDisplay] = useState(defaultDisplay);
+  const [onboarding, setOnboarding] = useState(false);
+  const [huntRequest, setHuntRequest] = useState(0);
+  const [partyRequest, setPartyRequest] = useState(0);
+  // The theme is applied before any child renders, so colors.* and
+  // themedStyles() lookups all follow the saved display mode.
+  const themeKey = themeKeyFor(display);
+  applyTheme(themeKey);
   const navRef = useRef(nav);
   navRef.current = nav;
   const layers = useMemo(() => createBackLayers(), []);
@@ -260,9 +272,64 @@ export default function YehsaApp() {
 
   const stackOpen = (id) => (nav.stack.includes(id) ? true : false);
   const chipVisible = !screen && tab !== "ask" && !(tab === "people" && peopleChat);
+  useEffect(() => {
+    let live = true;
+    AsyncStorage.getItem(DISPLAY_KEY).then((raw) => {
+      if (live && raw) setDisplay(openDisplay(raw));
+    }).catch(() => {});
+    AsyncStorage.getItem(ONBOARDED_KEY).then((raw) => {
+      if (live && raw !== "done") setOnboarding(true);
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  function storeDisplay(next) {
+    const opened = openDisplay(next);
+    setDisplay(opened);
+    AsyncStorage.setItem(DISPLAY_KEY, packDisplay(opened)).catch(() => {});
+  }
+
+  function finishOnboarding() {
+    setOnboarding(false);
+    AsyncStorage.setItem(ONBOARDED_KEY, "done").catch(() => {});
+  }
+
+  function goDestination(destination) {
+    go({ type: "closeCommand" });
+    for (const action of destinationActions(destination)) go(action);
+    if (destination.id === "layers") setLayersRequest(Date.now());
+    if (destination.id === "hunt") setHuntRequest(Date.now());
+    if (destination.id === "scan") setScanRequest(Date.now());
+    if (destination.tile) setFieldRequest({ id: Date.now(), tile: destination.tile });
+  }
+
+  function askFromAnywhere(text) {
+    go({ type: "closeCommand" });
+    setTab("ask");
+    setPendingAsk({ id: Date.now(), text });
+  }
+
+  function sendMeshSos(message) {
+    const queued = queueServiceText(mesh, message.text);
+    setMesh(queued.session);
+    if (!queued.ok) return queued.reason || "The SOS was not kept.";
+    if (queued.session.link?.primary?.radio === true) {
+      transmitNote(queued.item.text, queued.session.link.primary).catch(() => {});
+      return "Sent to the held link where the peer accepts notes, and kept on this phone.";
+    }
+    return "No link is held, so the SOS is kept on this phone and goes out when a link is up.";
+  }
+
+  const currentMode = DISPLAY_MODES.find((item) => item.id === display.mode) || DISPLAY_MODES[0];
   const shell = useMemo(() => ({
-    openMore: () => go({ type: "push", screen: "more" })
-  }), []);
+    openMore: () => go({ type: "push", screen: "more" }),
+    openSearch: () => go({ type: "openCommand" }),
+    cycleMode: () => storeDisplay(nextMode(display)),
+    modeLabel: modeLabel(display),
+    modeIcon: currentMode.icon
+  }), [display]);
 
   function pane(id) {
     const on = visible === id;
@@ -276,9 +343,10 @@ export default function YehsaApp() {
 
   return (
     <BackLayers.Provider value={layers}>
+    <DisplayContext.Provider value={display}>
     <ShellContext.Provider value={shell}>
     <View style={styles.root}>
-      <StatusBar style="light" />
+      <StatusBar style={themeKey === "sunlight" ? "dark" : "light"} />
       <View style={styles.column}>
       <View style={styles.body}>
         <View {...pane("ask")}>
@@ -315,10 +383,21 @@ export default function YehsaApp() {
             mapPacks={mapPacks}
             setMapPacks={setMapPacks}
             layersRequest={layersRequest}
+            huntRequest={huntRequest}
+            display={display}
+            onDisplay={storeDisplay}
+            onParty={() => { setTab("people"); setPartyRequest(Date.now()); }}
+            onBefore={() => { setTab("field"); setFieldRequest({ id: Date.now(), tile: "before" }); }}
           />
         </View>
         <View {...pane("field")}>
-          <FieldPane position={position} onEmergency={() => go({ type: "openSos" })} openRequest={fieldRequest} />
+          <FieldPane
+            position={position}
+            onEmergency={() => go({ type: "openSos" })}
+            openRequest={fieldRequest}
+            onOpenLayers={() => { setTab("map"); setLayersRequest(Date.now()); }}
+            onOpenScreen={openScreen}
+          />
         </View>
         <View {...pane("people")}>
           <PeoplePane
@@ -328,11 +407,12 @@ export default function YehsaApp() {
             position={position}
             onChatView={setPeopleChat}
             scanRequest={scanRequest}
+            partyRequest={partyRequest}
           />
         </View>
         {stackOpen("more") ? (
           <View {...pane("more")}>
-            <MorePane onOpen={openScreen} onBack={popScreen} backLabel={back} items={MORE_ITEMS.filter((item) => item.id !== "display")} />
+            <MorePane onOpen={openScreen} onBack={popScreen} backLabel={back} items={MORE_ITEMS} />
           </View>
         ) : null}
         {stackOpen("location") ? (
@@ -354,7 +434,14 @@ export default function YehsaApp() {
                 />
               </View>
             ))}
-            <Text style={styles.sectionLabel}>Approved</Text>
+          </ScrollView>
+          </View>
+        ) : null}
+        {stackOpen("did") ? (
+          <View {...pane("did")}>
+            <ScrollView contentContainerStyle={styles.scroll}>
+              <ScreenHeader title="What Yehsa did" lead="Actions you approved, newest last, with Undo where it can." onBack={popScreen} backLabel={back} />
+            {(actions?.log || []).filter((item) => item.status === "approved").length === 0 ? <Quiet>Nothing approved yet. Approved actions show here with Undo.</Quiet> : null}
             {(actions?.log || []).filter((item) => item.status === "approved").map((item) => (
               <View key={`${item.id}-${item.at || item.status}`} style={styles.card}>
                 <Text style={styles.bubbleText}>{friendlySource(item.type)}</Text>
@@ -365,7 +452,45 @@ export default function YehsaApp() {
                 ) : null}
               </View>
             ))}
-          </ScrollView>
+            </ScrollView>
+          </View>
+        ) : null}
+        {stackOpen("display") ? (
+          <View {...pane("display")}>
+            <DisplayPane display={display} onChange={storeDisplay} onBack={popScreen} backLabel={back} />
+          </View>
+        ) : null}
+        {stackOpen("privacy") ? (
+          <View {...pane("privacy")}>
+            <ScrollView contentContainerStyle={styles.scroll}>
+              <ScreenHeader title="Privacy" lead="Nothing leaves the phone unless you approve it." onBack={popScreen} backLabel={back} />
+              <Prose>Questions, answers, learned notes, waypoints, and chats are kept on this phone.</Prose>
+              <Quiet>Location stays off until you turn it on, and sharing it is a separate step each time.</Quiet>
+              <Quiet>The radio scans only when you tap Scan. People chats are encrypted between paired phones.</Quiet>
+              <Quiet>A model is off by default. If you connect one, Yehsa shows what would be sent and waits for Approve.</Quiet>
+              <Quiet>Map packs and elevation download only after you approve them.</Quiet>
+              <Quiet>No account, no ads, and no analytics.</Quiet>
+            </ScrollView>
+          </View>
+        ) : null}
+        {stackOpen("helpers") ? (
+          <View {...pane("helpers")}>
+            <HelpersPane
+              position={position}
+              onConsent={changeConsent}
+              models={models}
+              onOpen={openScreen}
+              onBack={popScreen}
+              backLabel={back}
+            />
+          </View>
+        ) : null}
+        {stackOpen("family") ? (
+          <View {...pane("family")}>
+            <ScrollView contentContainerStyle={styles.scroll}>
+              <ScreenHeader title="Family card" lead="Coming in a later update." onBack={popScreen} backLabel={back} />
+              <Quiet>A private card with the people to call, medical notes, and meeting places, kept on this phone and linked from Kit in Field.</Quiet>
+            </ScrollView>
           </View>
         ) : null}
         {stackOpen("keys") ? (
@@ -391,6 +516,13 @@ export default function YehsaApp() {
           <View {...pane("about")}>
             <ScrollView contentContainerStyle={styles.scroll}>
               <ScreenHeader title="About" lead="What stays on this phone." onBack={popScreen} backLabel={back} />
+              <View style={styles.trust} accessibilityLabel="Trust">
+                <Text style={styles.trustKicker}>TRUST</Text>
+                <Text style={styles.trustBadge}>{TRUST_EVAL.badge}</Text>
+                <Text style={styles.trustTitle}>A pledge, not a login</Text>
+                {TRUST_LINES.map((line) => <Text key={line} style={styles.trustLine}>{`•  ${line}`}</Text>)}
+                <Quiet>{TRUST_EVAL.summary}</Quiet>
+              </View>
               <Quiet>Yehsa answers from the notes on this phone. A model, a map pack, and GPS each stay off until you ask. A picture is not a safe identification. Nothing is shared unless you use a separate share action. Packaged dictionary: {phoneCorpusMeta.headwords} headwords and {phoneCorpusMeta.medicalNames} medical names. {phoneCorpusMeta.honest} This install is bound to this device. Exterior access is denied.</Quiet>
             </ScrollView>
           </View>
@@ -452,9 +584,10 @@ export default function YehsaApp() {
             }}
           />
         </View>
+        {onboarding ? <Onboarding onDone={finishOnboarding} /> : null}
       </View>
-      {chipVisible ? (
-        <AskChip summary={askSummary} onPress={() => setTab("ask")} />
+      {chipVisible && !onboarding ? (
+        <AskChip summary={askSummary} onPress={() => (askSummary?.pending ? setTab("ask") : go({ type: "openCommand" }))} />
       ) : null}
       <View style={styles.tabs} accessibilityRole="tablist">
         <Pressable
@@ -464,7 +597,7 @@ export default function YehsaApp() {
           onPress={() => go({ type: "openSos" })}
           style={({ pressed }) => [styles.sos, webPointer, pressed && styles.sosPressed]}
         >
-          <Ionicons name="alert-circle" size={22} color={colors.clay} />
+          <View style={styles.sosCap} />
           <Text style={styles.sosText}>SOS</Text>
         </Pressable>
         {TABS.map((item) => {
@@ -478,21 +611,22 @@ export default function YehsaApp() {
               onPress={() => setTab(item.id)}
               style={[styles.tab, webPointer, selected && styles.tabOn]}
             >
-              <Ionicons name={item.icon} size={22} color={selected ? colors.brass : colors.muted} />
+              <View style={[styles.tabMark, selected && styles.tabMarkOn]} />
+              <Ionicons name={selected ? item.icon : `${item.icon}-outline`} size={22} color={selected ? colors.brassText : colors.muted} />
               <Text style={[styles.tabText, selected && styles.tabTextOn]}>{item.label}</Text>
             </Pressable>
           );
         })}
       </View>
       </View>
+      {nav.command && !nav.sos ? (
+        <CommandSheet onGo={goDestination} onAsk={askFromAnywhere} onClose={() => go({ type: "closeCommand" })} />
+      ) : null}
       {nav.sos ? (
         <EmergencyScreen
           position={position}
           onClose={() => go({ type: "closeSos" })}
-          onMeshSos={() => {
-            go({ type: "closeSos" });
-            setTab("people");
-          }}
+          onSendMeshSos={sendMeshSos}
           onFirstAid={() => {
             go({ type: "closeSos" });
             setTab("ask");
@@ -502,6 +636,7 @@ export default function YehsaApp() {
       ) : null}
     </View>
     </ShellContext.Provider>
+    </DisplayContext.Provider>
     </BackLayers.Provider>
   );
 }
@@ -1212,7 +1347,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
           value={question}
           onChangeText={setQuestion}
           placeholder="Message Yehsa"
-          placeholderTextColor="#8f9a8c"
+          placeholderTextColor={colors.muted}
           style={styles.composerInput}
         />
         <Pressable
@@ -1282,9 +1417,14 @@ function pngDataUrl(bytes) {
   return `data:image/png;base64,${globalThis.btoa(binary)}`;
 }
 
-function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest }) {
+function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, display, onDisplay, onParty, onBefore }) {
   const [layersOpen, setLayersOpen] = useState(false);
+  const [hunt, setHunt] = useState(false);
+  useBackLayer(hunt, () => setHunt(false));
   useBackLayer(layersOpen, () => setLayersOpen(false));
+  useEffect(() => {
+    if (huntRequest) setHunt(true);
+  }, [huntRequest]);
   useEffect(() => {
     if (layersRequest) setLayersOpen(true);
   }, [layersRequest]);
@@ -1410,13 +1550,24 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
 
   return (
     <View style={styles.mapPane}>
-      <ScreenHeader compact title="Map" />
+      <ScreenHeader compact title={hunt ? "Hunt" : "Map"} />
       <View style={styles.mapStatus}>
         <StatusPill label={gpsStatusLabel(gps)} tone={gps.status === "locked" ? "good" : gps.status === "lost" ? "warn" : undefined} />
         {!consented || !gpsWanted ? (
           <Action label="Turn on GPS" style={styles.mapGps} onPress={() => { onConsent(true); setGpsWanted(true); }} accessibilityHint="GPS stays off until you turn it on. This also turns on location consent." />
         ) : null}
       </View>
+      {hunt ? (
+        <View style={styles.hud} accessibilityLabel="Hunt view">
+          <View style={styles.hudRow}>
+            <HudCard label="Legal light" value="Later" sub="Check state regs" />
+            <HudCard label="Wind" value="Later" sub="Entry in Field" />
+            <HudCard label="Deer" value="Later" sub="Low, Med, High" />
+          </View>
+          <Text style={styles.hudNote}>Moon: context only, never counted. Hunting tools arrive in a later update.</Text>
+          {display && onDisplay ? <ModeButtons display={display} onChange={onDisplay} compact /> : null}
+        </View>
+      ) : null}
       <View style={styles.mapFill}>
         {(tiledPack || demTiles.length > 0) && !mapFailed ? (
           <MapBoundary onFail={() => setMapFailed(true)}>
@@ -1468,7 +1619,14 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
       </View>
       <View style={styles.mapTools}>
         <Action label="Layers and packs" tone="quiet" style={styles.mapToolButton} onPress={() => setLayersOpen(true)} accessibilityHint="Map packs, elevation, declination, waypoints, and import." />
+        <Action label={hunt ? "Hunt on" : "Hunt"} tone={hunt ? "brass" : "quiet"} style={styles.mapToolSmall} onPress={() => setHunt((value) => !value)} accessibilityHint="Shows the hunt view on the map. Nothing is shared." />
       </View>
+      {hunt ? (
+        <View style={styles.mapTools}>
+          <Action label="Party" tone="quiet" style={styles.mapToolButton} onPress={onParty} />
+          <Action label="Before you go" tone="quiet" style={styles.mapToolButton} onPress={onBefore} />
+        </View>
+      ) : null}
       {layersOpen ? (
         <View style={styles.sheet} accessibilityViewIsModal>
           <View style={styles.sheetHead}>
@@ -1476,6 +1634,7 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
             <Action label="Close" tone="quiet" style={styles.sheetClose} onPress={() => setLayersOpen(false)} />
           </View>
           <ScrollView contentContainerStyle={styles.sheetScroll} keyboardShouldPersistTaps="handled">
+            <Action label="Before you go" tone="quiet" onPress={() => { setLayersOpen(false); onBefore?.(); }} />
             {consented && gpsWanted ? (
               <Action label={backgroundGps ? "Background GPS on" : "Foreground GPS only"} tone="quiet" onPress={() => setBackgroundGps((value) => !value)} />
             ) : null}
@@ -1619,22 +1778,127 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
   );
 }
 
+function HudCard({ label, value, sub }) {
+  return (
+    <View style={styles.hudCard} accessibilityLabel={`${label}: ${value}. ${sub}`}>
+      <Text style={styles.hudLabel}>{label.toUpperCase()}</Text>
+      <Text style={styles.hudValue}>{value}</Text>
+      <Text style={styles.hudSub}>{sub}</Text>
+    </View>
+  );
+}
+
+function DisplayPane({ display, onChange, onBack, backLabel }) {
+  return (
+    <ScrollView contentContainerStyle={styles.scroll}>
+      <ScreenHeader title="Display" lead="Saved on this phone. The header chip changes it in one tap too." onBack={onBack} backLabel={backLabel} />
+      <Text style={styles.sectionLabel}>Mode</Text>
+      <ModeButtons display={display} onChange={onChange} />
+      <Text style={[styles.sectionLabel, { marginTop: 16 }]}>Night color</Text>
+      <View style={styles.modeRow}>
+        {NIGHT_TINTS.map((tint) => {
+          const on = display.night === tint.id;
+          return (
+            <Pressable
+              key={tint.id}
+              accessibilityRole="radio"
+              accessibilityState={{ checked: on }}
+              accessibilityLabel={`Night ${tint.label}`}
+              onPress={() => onChange({ ...display, night: tint.id })}
+              style={[styles.modeButton, webPointer, on && styles.modeButtonOn]}
+            >
+              <Ionicons name={on ? "radio-button-on" : "radio-button-off"} size={18} color={on ? colors.brassInk : colors.ink} />
+              <Text style={[styles.modeText, on && styles.modeTextOn]}>{tint.label}</Text>
+            </Pressable>
+          );
+        })}
+      </View>
+      <Quiet>Red keeps night vision best. Amber is easier to read for some color vision.</Quiet>
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: display.largeText }}
+        accessibilityLabel="Larger text"
+        onPress={() => onChange({ ...display, largeText: !display.largeText })}
+        style={[styles.switchRow, webPointer, { marginTop: 12 }]}
+      >
+        <Text style={styles.switchLabel}>Larger text</Text>
+        <Ionicons name={display.largeText ? "checkbox" : "square-outline"} size={24} color={colors.ink} />
+        <Text style={styles.switchState}>{display.largeText ? "On" : "Off"}</Text>
+      </Pressable>
+    </ScrollView>
+  );
+}
+
+// Field, Sunlight, Night: each one tap. Word and icon, never color alone.
+function ModeButtons({ display, onChange, compact }) {
+  return (
+    <View style={styles.modeRow}>
+      {DISPLAY_MODES.map((mode) => {
+        const on = display.mode === mode.id;
+        return (
+          <Pressable
+            key={mode.id}
+            accessibilityRole="radio"
+            accessibilityState={{ checked: on }}
+            accessibilityLabel={`${mode.label} mode`}
+            onPress={() => onChange(setMode(display, mode.id))}
+            style={[styles.modeButton, compact && styles.modeButtonCompact, webPointer, on && styles.modeButtonOn]}
+          >
+            <Ionicons name={mode.icon} size={18} color={on ? colors.brassInk : colors.ink} />
+            <Text style={[styles.modeText, on && styles.modeTextOn]}>{mode.label}</Text>
+            {on ? <Ionicons name="checkmark" size={16} color={colors.brassInk} /> : null}
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
+function HelpersPane({ position, onConsent, models, onOpen, onBack, backLabel }) {
+  const consented = position?.consent === true;
+  const modelOn = Boolean(models?.selectedId);
+  const rows = [
+    { id: "location", label: "Location", state: consented ? "On" : "Off", toggle: () => onConsent(!consented) },
+    { id: "models", label: "Model", state: modelOn ? "On" : "Off", open: "models" },
+    { id: "radio", label: "Radio scan", state: "Off until you tap Scan", open: null },
+    { id: "voice", label: "Microphone", state: "Only while you hold Mic", open: null }
+  ];
+  return (
+    <ScrollView contentContainerStyle={styles.scroll}>
+      <ScreenHeader title="Helpers" lead="Each helper shows whether it is on, and how to turn it off." onBack={onBack} backLabel={backLabel} />
+      {rows.map((row) => (
+        <View key={row.id} style={styles.helperRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.switchLabel}>{row.label}</Text>
+            <Text style={styles.note}>{row.state}</Text>
+          </View>
+          {row.toggle ? (
+            <Action label={consented ? "Turn off" : "Turn on"} tone="quiet" style={styles.helperAction} onPress={row.toggle} />
+          ) : row.open ? (
+            <Action label="Open" tone="quiet" style={styles.helperAction} onPress={() => onOpen(row.open)} />
+          ) : null}
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
+
 function AskChip({ summary, onPress }) {
   const line = summary?.pending
     ? "An action is waiting for Approve in Ask"
     : summary?.busy
       ? "Yehsa is reading the notes…"
-      : summary?.text || "Ask Yehsa";
+      : "Ask or go";
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={summary?.pending ? "Open Ask. An action is waiting for Approve." : "Open Ask"}
+      accessibilityLabel={summary?.pending ? "Open Ask. An action is waiting for Approve." : "Ask or go"}
       onPress={onPress}
       style={({ pressed }) => [styles.askChip, webPointer, summary?.pending && styles.askChipPending, pressed && styles.sosPressed]}
     >
       <Ionicons name={summary?.pending ? "alert-circle-outline" : "chatbubble-ellipses-outline"} size={18} color={colors.brass} />
       <Text numberOfLines={1} style={styles.askChipText}>{line}</Text>
-      <Ionicons name="chevron-up" size={18} color={colors.muted} />
+      <Text style={styles.askChipGo}>{summary?.pending ? "Open" : "Go"}</Text>
     </Pressable>
   );
 }
@@ -1712,8 +1976,8 @@ function PositionPane({ position, setPosition, onConsent, onBack, backLabel }) {
           importantForAccessibility="no"
           accessibilityElementsHidden
           value={consented}
-          trackColor={{ false: "#2c3830", true: "#6d8a62" }}
-          thumbColor={consented ? "#f4f0e6" : "#d7ddd2"}
+          trackColor={{ false: colors.line, true: colors.moss }}
+          thumbColor={consented ? colors.ink : "#d7ddd2"}
         />
       </Pressable>
       <Action
@@ -1938,8 +2202,13 @@ function MeshPane({ mesh, setMesh, owner, position, onBack }) {
   );
 }
 
-function PeoplePane({ mesh, setMesh, owner, position, onChatView, scanRequest }) {
+function PeoplePane({ mesh, setMesh, owner, position, onChatView, scanRequest, partyRequest }) {
   const [scan, setScan] = useState(false);
+  const [party, setParty] = useState(false);
+  useBackLayer(party, () => setParty(false));
+  useEffect(() => {
+    if (partyRequest) setParty(true);
+  }, [partyRequest]);
   const [chatView, setChatView] = useState("list");
   useBackLayer(scan, () => setScan(false));
   useEffect(() => {
@@ -1955,15 +2224,30 @@ function PeoplePane({ mesh, setMesh, owner, position, onChatView, scanRequest })
           includeLocation={position?.consent === true && position.status === "locked"}
           header={<ScreenHeader compact title="People" lead="Private chat with phones you trust." />}
           onView={setChatView}
-          toolbar={<Action label="Scan and radio" tone="quiet" onPress={() => setScan(true)} accessibilityHint="Look for Yehsa phones nearby. The radio stays off until you scan." />}
+          toolbar={(
+            <>
+              <Action label="Scan and radio" tone="quiet" onPress={() => setScan(true)} accessibilityHint="Look for Yehsa phones nearby. The radio stays off until you scan." />
+              <Action label="Hunt party" tone="quiet" onPress={() => setParty(true)} />
+            </>
+          )}
         />
       </View>
+      {party ? (
+        <View style={[styles.pane, { position: "absolute", left: 0, right: 0, top: 0, bottom: 0, backgroundColor: colors.bg }]}>
+          <ScrollView contentContainerStyle={styles.scroll}>
+            <ScreenHeader title="Hunt party" lead="Coming with hunting mode." onBack={() => setParty(false)} backLabel="People" />
+            <Quiet>Party members will be paired contacts only, each with a verified safety number.</Quiet>
+            <Quiet>Live location will be opt-in for a session you start, with the end time on screen, and it stops on its own.</Quiet>
+            <Quiet>Nothing is shared from here today.</Quiet>
+          </ScrollView>
+        </View>
+      ) : null}
       {scan ? <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} onBack={() => setScan(false)} /> : null}
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   root: {
     flex: 1,
     backgroundColor: colors.bg,
@@ -2018,7 +2302,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8
   },
   mapFill: {
-    flex: 1
+    flex: 1,
+    overflow: "hidden"
   },
   mapTools: {
     flexDirection: "row",
@@ -2029,6 +2314,27 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 0
   },
+  mapToolSmall: {
+    marginBottom: 0,
+    minWidth: 96
+  },
+  hud: {
+    marginBottom: 8,
+    gap: 6
+  },
+  hudRow: { flexDirection: "row", gap: 6 },
+  hudCard: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: colors.lineStrong,
+    borderRadius: 12,
+    backgroundColor: colors.surface,
+    padding: 8
+  },
+  hudLabel: { color: colors.muted, fontSize: 11, fontWeight: "700", letterSpacing: 0.8 },
+  hudValue: { color: colors.ink, fontSize: 18, fontWeight: "700", marginTop: 2 },
+  hudSub: { color: colors.muted, fontSize: 12, marginTop: 2 },
+  hudNote: { color: colors.muted, fontSize: 12 },
   sheet: {
     position: "absolute",
     left: 0,
@@ -2207,8 +2513,8 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
   consentOn: {
-    borderColor: "#5f7d56",
-    backgroundColor: "#161e18"
+    borderColor: colors.moss,
+    backgroundColor: colors.surface
   },
   consentCopy: { flex: 1 },
   consentTitle: {
@@ -2269,23 +2575,82 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     paddingBottom: Platform.OS === "ios" ? 18 : 6
   },
+  // Capped safety-red plate with an ink outline. The word SOS is required:
+  // under protanopia the red shifts toward gold, so color is not enough.
   sos: {
-    width: 64,
+    width: 72,
     minHeight: 64,
+    margin: 4,
+    marginRight: 2,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#2a1c18",
-    borderRightWidth: 1,
-    borderRightColor: "#8d675c",
-    paddingVertical: 8
+    backgroundColor: colors.sos,
+    borderWidth: 2,
+    borderColor: colors.ink,
+    borderRadius: 10,
+    paddingVertical: 6
+  },
+  sosCap: {
+    width: 26,
+    height: 6,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    borderWidth: 2,
+    borderBottomWidth: 0,
+    borderColor: colors.sosInk,
+    marginBottom: 4
   },
   sosPressed: { opacity: 0.82 },
   sosText: {
-    color: colors.clay,
-    fontSize: 13,
-    fontWeight: "700",
-    letterSpacing: 0.6
+    color: colors.sosInk,
+    fontSize: 15,
+    fontWeight: "800",
+    letterSpacing: 1
   },
+  onboardHost: {},
+  trust: {
+    borderWidth: 1,
+    borderColor: colors.lineStrong,
+    borderRadius: 16,
+    padding: 16,
+    gap: 8,
+    marginBottom: 16
+  },
+  trustKicker: { color: colors.muted, fontSize: 12, fontWeight: "700", letterSpacing: 1.2 },
+  trustBadge: {
+    alignSelf: "flex-start",
+    color: colors.brassInk,
+    backgroundColor: colors.brass,
+    borderWidth: 1,
+    borderColor: colors.ink,
+    borderRadius: 999,
+    overflow: "hidden",
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    fontSize: 12,
+    fontWeight: "700"
+  },
+  trustTitle: { color: colors.ink, fontSize: 18, fontWeight: "600" },
+  trustLine: { color: colors.ink, fontSize: 16, lineHeight: 23 },
+  modeRow: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 8 },
+  modeButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    minHeight: 48,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.lineStrong
+  },
+  modeButtonCompact: { minHeight: 40, paddingHorizontal: 10 },
+  modeButtonOn: { backgroundColor: colors.brass, borderColor: colors.ink, borderWidth: 2 },
+  modeText: { color: colors.ink, fontSize: 15, fontWeight: "600" },
+  modeTextOn: { color: colors.brassInk },
+  switchState: { color: colors.muted, fontSize: 14, marginLeft: 8, minWidth: 28 },
+  helperRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.line },
+  helperAction: { marginBottom: 0, minHeight: 44, paddingVertical: 8 },
+  askChipGo: { color: colors.brassText, fontSize: 15, fontWeight: "700" },
   tab: {
     flex: 1,
     minHeight: 64,
@@ -2295,14 +2660,16 @@ const styles = StyleSheet.create({
   },
   tabOn: {},
   tabMark: {
-    color: colors.muted,
-    fontSize: 16,
-    marginBottom: 2
+    width: 28,
+    height: 3,
+    borderRadius: 2,
+    marginBottom: 6,
+    backgroundColor: "transparent"
   },
   chatWrap: { flex: 1, paddingHorizontal: 14, paddingTop: Platform.OS === "ios" ? 52 : 22, paddingBottom: 12 },
   thread: { paddingBottom: 12, gap: 10 },
-  bubbleYou: { alignSelf: "flex-end", maxWidth: "86%", backgroundColor: "#2a352e", borderRadius: 16, padding: 12 },
-  bubbleYehsa: { alignSelf: "flex-start", maxWidth: "86%", backgroundColor: "#1b2420", borderRadius: 16, padding: 12 },
+  bubbleYou: { alignSelf: "flex-end", maxWidth: "86%", backgroundColor: colors.youBubble, borderRadius: 16, padding: 12 },
+  bubbleYehsa: { alignSelf: "flex-start", maxWidth: "86%", backgroundColor: colors.yehsaBubble, borderRadius: 16, padding: 12 },
   bubbleText: { color: colors.ink, fontSize: 16, lineHeight: 22 },
   typing: { color: colors.brass, marginTop: 8 },
   thumb: { width: 88, height: 66, borderRadius: 10, backgroundColor: colors.field },
@@ -2328,6 +2695,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2
   },
   tabTextOn: {
-    color: colors.brass
+    color: colors.brassText
   }
-});
+}));

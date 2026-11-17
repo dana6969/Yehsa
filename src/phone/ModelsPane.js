@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from "react-native";
 import { MODEL_PRESETS, previewModelSend, buildOutbound } from "../../symbolic/model_link.js";
-import { Action, Quiet, ScreenHeader, colors } from "./ui.js";
+import { Action, Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
 
 export default function ModelsPane({ settings, onChange, onSaveKey, onDeleteProvider, onTest, testNote, onBack, backLabel }) {
   const [presetId, setPresetId] = useState("ollama");
@@ -62,7 +62,7 @@ export default function ModelsPane({ settings, onChange, onSaveKey, onDeleteProv
         lead="Off until you connect one."
       />
       <Pressable accessibilityRole="button" accessibilityLabel="About models" onPress={() => setAbout((value) => !value)}>
-        <Text style={{ color: "#d7c4a3" }}>i</Text>
+        <Text style={{ color: colors.info }}>i</Text>
       </Pressable>
       {about ? <Quiet>A key stays in the device secure store. It is never shown again and never written into the app. Yehsa is not retrained.</Quiet> : null}
       <Text style={styles.section}>Add a provider</Text>
@@ -146,7 +146,7 @@ function Labeled({ label, value, onChangeText, placeholder, secure }) {
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor="#8f9a8c"
+        placeholderTextColor={colors.muted}
         secureTextEntry={secure === true}
         autoCapitalize="none"
         autoCorrect={false}
@@ -165,7 +165,7 @@ function Tick({ label, value, onChange }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   scroll: { paddingTop: 22, paddingHorizontal: 22, paddingBottom: 180, gap: 10 },
   section: { color: colors.brass, fontSize: 13, fontWeight: "700", marginTop: 12, letterSpacing: 0.4 },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
@@ -179,4 +179,4 @@ const styles = StyleSheet.create({
   cardTitle: { color: colors.ink, fontSize: 16, fontWeight: "600" },
   switchRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12, minHeight: 48 },
   switchLabel: { color: colors.ink, flex: 1, fontSize: 15 }
-});
+}));

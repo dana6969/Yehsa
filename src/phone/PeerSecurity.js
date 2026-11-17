@@ -71,7 +71,7 @@ export default function PeerSecurity() {
       ) : null}
       {exportOffer ? (
         <View style={{ gap: 8 }}>
-          <TextInput accessibilityLabel="Backup passphrase" value={passphrase} onChangeText={setPassphrase} placeholder="Passphrase" placeholderTextColor="#8f9a8c" secureTextEntry style={field} />
+          <TextInput accessibilityLabel="Backup passphrase" value={passphrase} onChangeText={setPassphrase} placeholder="Passphrase" placeholderTextColor={colors.muted} secureTextEntry style={fieldStyle()} />
           <Action label="Approve export" onPress={async () => {
             const result = await exportPeerBackup(passphrase);
             if (!result?.ok) {
@@ -96,8 +96,8 @@ export default function PeerSecurity() {
       ) : null}
       {importOffer ? (
         <View style={{ gap: 8 }}>
-          <TextInput accessibilityLabel="Backup file" value={backupText} onChangeText={setBackupText} placeholder="Paste the backup" placeholderTextColor="#8f9a8c" style={field} />
-          <TextInput accessibilityLabel="Import passphrase" value={passphrase} onChangeText={setPassphrase} placeholder="Passphrase" placeholderTextColor="#8f9a8c" secureTextEntry style={field} />
+          <TextInput accessibilityLabel="Backup file" value={backupText} onChangeText={setBackupText} placeholder="Paste the backup" placeholderTextColor={colors.muted} style={fieldStyle()} />
+          <TextInput accessibilityLabel="Import passphrase" value={passphrase} onChangeText={setPassphrase} placeholder="Passphrase" placeholderTextColor={colors.muted} secureTextEntry style={fieldStyle()} />
           <Action label="Approve import" onPress={async () => {
             let file;
             try { file = JSON.parse(backupText); } catch { setNote("That file is not a Yehsa key backup."); return; }
@@ -118,4 +118,4 @@ export default function PeerSecurity() {
   );
 }
 
-const field = { minHeight: 48, color: "#f4f0e6", backgroundColor: "#0e1411", borderRadius: 12, paddingHorizontal: 12 };
+const fieldStyle = () => ({ minHeight: 48, color: colors.ink, backgroundColor: colors.field, borderRadius: 12, paddingHorizontal: 12 });

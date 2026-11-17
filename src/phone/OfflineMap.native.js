@@ -42,7 +42,7 @@ export default function OfflineMap({
   return (
     <View style={fill ? { flex: 1 } : null}>
       <MapView
-        style={fill ? { flex: 1, minHeight: 240 } : { height: 380 }}
+        style={fill ? { flex: 1, minHeight: 150 } : { height: 380 }}
         mapStyle={BLANK}
         logoEnabled={false}
         attributionEnabled

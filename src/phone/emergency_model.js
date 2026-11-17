@@ -4,7 +4,8 @@
 // Kept off the knowledge path: getMappedAction never loads this file.
 
 export const EMERGENCY_NUMBERS = ["911", "112"];
-export const ARM_WINDOW_MS = 15000;
+export const HOLD_MS = 1500;
+export const COUNTDOWN_SEC = 3;
 export const CPR_BPM = 110;
 
 export function beatIntervalMs(bpm = CPR_BPM) {
@@ -12,30 +13,53 @@ export function beatIntervalMs(bpm = CPR_BPM) {
   return Math.round(60000 / rate);
 }
 
-export function initialCall() {
-  return { armed: null, at: 0 };
+// Hold-to-confirm, used for calling and for sending an SOS.
+// Press and hold 1.5 s, then a visible 3 s countdown that can be canceled.
+// A single tap never fires. Phases: idle, holding, countdown, fire.
+export function idleHold() {
+  return { phase: "idle", target: null, startedAt: 0, endsAt: 0 };
 }
 
-// Step one: choose a number. Nothing is dialed.
-export function armCall(state, number, now = Date.now()) {
-  if (!EMERGENCY_NUMBERS.includes(String(number))) return initialCall();
-  return { armed: String(number), at: now };
+export function pressHold(state, target, now = Date.now()) {
+  if (state?.phase === "countdown") return state;
+  return { phase: "holding", target, startedAt: now, endsAt: 0 };
 }
 
-export function cancelCall() {
-  return initialCall();
+export function holdProgress(state, now = Date.now()) {
+  if (!state || state.phase !== "holding") return state?.phase === "countdown" ? 1 : 0;
+  return Math.max(0, Math.min(1, (now - state.startedAt) / HOLD_MS));
 }
 
-// Step two: a separate confirm on the same number, within the window.
-export function confirmCall(state, number, now = Date.now()) {
-  const current = state || initialCall();
-  if (!current.armed || current.armed !== String(number)) {
-    return { state: initialCall(), dial: null, reason: "Choose the number first, then confirm." };
+// Called on a timer while the finger is down, and on release.
+export function stepHold(state, now = Date.now(), { released = false } = {}) {
+  const current = state || idleHold();
+  if (current.phase === "holding") {
+    if (now - current.startedAt >= HOLD_MS) {
+      return { phase: "countdown", target: current.target, startedAt: current.startedAt, endsAt: now + COUNTDOWN_SEC * 1000 };
+    }
+    return released ? idleHold() : current;
   }
-  if (now - current.at > ARM_WINDOW_MS) {
-    return { state: initialCall(), dial: null, reason: "That confirm timed out. Choose the number again." };
+  if (current.phase === "countdown" && now >= current.endsAt) {
+    return { phase: "fire", target: current.target, startedAt: current.startedAt, endsAt: current.endsAt };
   }
-  return { state: initialCall(), dial: `tel:${current.armed}`, reason: null };
+  return current;
+}
+
+export function secondsLeft(state, now = Date.now()) {
+  if (state?.phase !== "countdown") return 0;
+  return Math.max(0, Math.ceil((state.endsAt - now) / 1000));
+}
+
+export function cancelHold() {
+  return idleHold();
+}
+
+// Only a finished countdown for an emergency number yields a dialer link.
+// The phone dialer opens with the number; the person still presses call.
+export function dialFor(state) {
+  if (state?.phase !== "fire") return null;
+  const number = String(state.target || "").replace(/^call:/, "");
+  return EMERGENCY_NUMBERS.includes(number) ? `tel:${number}` : null;
 }
 
 function fixOf(position) {
@@ -108,6 +132,14 @@ export const BLEEDING_STEPS = [
   "For heavy bleeding from an arm or leg that pressure does not stop, put a tourniquet five to eight centimeters, two to three inches, above the wound, not on a joint.",
   "Tighten it until the bleeding stops, and note the time it went on.",
   "Keep the person warm and lying down until help arrives."
+];
+
+export const SATELLITE_GUIDE = [
+  "Yehsa does not send a satellite signal itself. These steps are for a device you already carry.",
+  "Personal locator beacon: get to open sky, extend the antenna, and press SOS. Leave it on and pointed up.",
+  "Satellite messenger: press and hold its SOS button until it confirms, then answer the rescue center's messages if it can.",
+  "Phone with satellite SOS: call emergency services first. If there is no signal, the phone may offer satellite. Hold it toward open sky and follow the prompts.",
+  "Stay where you are if you can, and keep the device on until help reaches you."
 ];
 
 export const FIRST_AID_CAVEAT = "Steps follow common first-aid guidance. They do not replace trained help.";

@@ -2,7 +2,7 @@ import React from "react";
 import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MORE_ITEMS } from "./nav_model.js";
-import { Quiet, ScreenHeader, colors, tokens, useDisplay } from "./ui.js";
+import { Quiet, ScreenHeader, colors, tokens, useDisplay, themedStyles } from "./ui.js";
 
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
@@ -36,7 +36,7 @@ export default function MorePane({ onOpen, onBack, backLabel, items = MORE_ITEMS
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   scroll: {
     paddingTop: Platform.OS === "ios" ? 52 : 22,
     paddingHorizontal: tokens.space.xl,
@@ -60,4 +60,4 @@ const styles = StyleSheet.create({
   label: { color: colors.ink, fontWeight: "600" },
   hint: { marginTop: 2, lineHeight: 18 },
   pressed: { opacity: 0.82 }
-});
+}));

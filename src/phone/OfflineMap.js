@@ -148,7 +148,7 @@ export default function OfflineMap({
 
   return (
     <View style={fill ? { flex: 1 } : null}>
-      <View ref={host} accessibilityLabel="Offline map" style={{ ...(fill ? { flex: 1, minHeight: 240 } : { height: 380 }), borderRadius: 16, overflow: "hidden", backgroundColor: "#101611" }} />
+      <View ref={host} accessibilityLabel="Offline map" style={{ ...(fill ? { flex: 1, minHeight: 150 } : { height: 380 }), borderRadius: 16, overflow: "hidden", backgroundColor: "#101611" }} />
       <Text style={{ color: "#b7bfb2", marginTop: 8 }}>{label}</Text>
     </View>
   );

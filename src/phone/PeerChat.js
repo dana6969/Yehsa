@@ -15,7 +15,7 @@ import {
 } from "../../symbolic/peer_chat.js";
 import { CLONE_MESSAGE, KEY_CHANGE_WARNING, notePeerKey } from "../../symbolic/peer_vault.js";
 import { approveFreshIdentity, loadOrCreateIdentity, loadPeerHistory, savePeerHistory } from "./mesh_keys.js";
-import { Action, Quiet, colors } from "./ui.js";
+import { Action, Quiet, colors, themedStyles } from "./ui.js";
 
 function qrCells(text) {
   const code = QRCode.create(text, { errorCorrectionLevel: "L" });
@@ -151,7 +151,7 @@ export default function PeerChat({ includeLocation = false, header = null, onVie
               </View>
             ))}
           </View>
-          <TextInput accessibilityLabel="Their safety number" value={typedNumber} onChangeText={setTypedNumber} placeholder="Their safety number" placeholderTextColor="#8f9a8c" style={styles.input} />
+          <TextInput accessibilityLabel="Their safety number" value={typedNumber} onChangeText={setTypedNumber} placeholder="Their safety number" placeholderTextColor={colors.muted} style={styles.input} />
           <Action label="Trust this number" onPress={() => setTrusted(typedNumber.replace(/\s+/g, "") === number.replace(/\s+/g, ""))} />
           <Quiet>{trusted ? "Trusted on this phone." : "Unverified until the numbers match."}</Quiet>
         </ScrollView>
@@ -178,9 +178,9 @@ export default function PeerChat({ includeLocation = false, header = null, onVie
             ))}
           </ScrollView>
           <View style={styles.composer}>
-            <TextInput accessibilityLabel="Peer message" value={draft} onChangeText={setDraft} placeholder="Message" placeholderTextColor="#8f9a8c" style={styles.input} />
+            <TextInput accessibilityLabel="Peer message" value={draft} onChangeText={setDraft} placeholder="Message" placeholderTextColor={colors.muted} style={styles.input} />
             <Pressable accessibilityRole="button" accessibilityLabel="Send" onPress={() => draft && send(draft)} style={styles.send}>
-              <Ionicons name="send" size={18} color="#141a16" />
+              <Ionicons name="send" size={18} color={colors.bg} />
             </Pressable>
           </View>
           <View style={styles.row}>
@@ -197,7 +197,7 @@ export default function PeerChat({ includeLocation = false, header = null, onVie
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   screen: { flex: 1, paddingTop: 12, paddingHorizontal: 16, gap: 8 },
   top: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   title: { color: colors.ink, fontSize: 28, fontWeight: "600" },
@@ -209,16 +209,16 @@ const styles = StyleSheet.create({
   personName: { color: colors.ink, fontSize: 16, fontWeight: "600" },
   badge: { color: colors.clay, fontSize: 13 },
   thread: { gap: 8, paddingVertical: 8 },
-  bubble: { alignSelf: "flex-start", maxWidth: "80%", backgroundColor: "#243029", borderRadius: 16, paddingHorizontal: 12, paddingVertical: 8 },
-  mine: { alignSelf: "flex-end", backgroundColor: "#3c4a34" },
+  bubble: { alignSelf: "flex-start", maxWidth: "80%", backgroundColor: colors.yehsaBubble, borderRadius: 16, paddingHorizontal: 12, paddingVertical: 8 },
+  mine: { alignSelf: "flex-end", backgroundColor: colors.youBubble },
   body: { color: colors.ink, fontSize: 16 },
-  meta: { color: "#8f9a8c", fontSize: 12, marginTop: 2 },
+  meta: { color: colors.muted, fontSize: 12, marginTop: 2 },
   composer: { flexDirection: "row", alignItems: "center", gap: 8 },
   input: { flex: 1, minHeight: 48, color: colors.ink, backgroundColor: colors.field, borderRadius: 22, paddingHorizontal: 14 },
   send: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.brass, alignItems: "center", justifyContent: "center" },
   number: { color: colors.brass, fontSize: 20, letterSpacing: 1, lineHeight: 28 },
-  qr: { alignSelf: "flex-start", backgroundColor: "#f4f0e6", padding: 6 },
+  qr: { alignSelf: "flex-start", backgroundColor: colors.ink, padding: 6 },
   qrRow: { flexDirection: "row" },
-  cell: { width: 5, height: 5, backgroundColor: "#f4f0e6" },
-  cellOn: { backgroundColor: "#141a16" }
-});
+  cell: { width: 5, height: 5, backgroundColor: colors.ink },
+  cellOn: { backgroundColor: colors.bg }
+}));

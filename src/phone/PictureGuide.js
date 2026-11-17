@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import manifest from "../../assets/pictures/manifest.json";
 import { guideView, imageHref, packDecision, pictureHealth, PICTURE_BUDGET_BYTES } from "../../symbolic/picture_guide.js";
-import { Quiet, ScreenHeader, colors } from "./ui.js";
+import { Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
 
 const DOMAINS = ["", "herbology", "first-aid", "knots", "fire", "shelter", "water", "sky", "landscape", "signaling"];
 
@@ -24,7 +24,7 @@ export default function PictureGuide({ onBack, backLabel, initialDomain = "" }) 
         lead="Real pictures, with credits when you ask."
       />
       <Quiet>{decision.text} Budget {Math.round(PICTURE_BUDGET_BYTES / (1024 * 1024))} MB.</Quiet>
-      <TextInput accessibilityLabel="Search pictures" value={query} onChangeText={setQuery} placeholder="Search" placeholderTextColor="#8f9a8c" style={styles.input} />
+      <TextInput accessibilityLabel="Search pictures" value={query} onChangeText={setQuery} placeholder="Search" placeholderTextColor={colors.muted} style={styles.input} />
       <View style={styles.row}>
         {DOMAINS.map((item) => (
           <Pressable key={item || "all"} accessibilityRole="button" accessibilityLabel={item || "All pictures"} onPress={() => setDomain(item)} style={[styles.chip, domain === item && styles.chipOn]}>
@@ -62,7 +62,7 @@ export default function PictureGuide({ onBack, backLabel, initialDomain = "" }) 
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   scroll: { paddingTop: 22, paddingHorizontal: 22, paddingBottom: 180, gap: 10 },
   input: { minHeight: 48, color: colors.ink, backgroundColor: colors.surface, borderRadius: 12, paddingHorizontal: 12 },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
@@ -74,6 +74,6 @@ const styles = StyleSheet.create({
   title: { color: colors.ink, fontSize: 18, fontWeight: "600" },
   placeholder: { color: colors.muted, fontSize: 16 },
   warn: { color: colors.clay, fontSize: 15, lineHeight: 21 },
-  thumb: { width: 72, height: 72, borderRadius: 8, backgroundColor: "#0e1411" },
-  zoom: { width: "100%", height: 280, borderRadius: 12, backgroundColor: "#0e1411" }
-});
+  thumb: { width: 72, height: 72, borderRadius: 8, backgroundColor: colors.field },
+  zoom: { width: "100%", height: 280, borderRadius: 12, backgroundColor: colors.field }
+}));

@@ -12,7 +12,7 @@ import {
   reviewLearned,
   searchLearned
 } from "../../symbolic/learned_notes.js";
-import { Action, Quiet, ScreenHeader, colors } from "./ui.js";
+import { Action, Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
 
 export default function LearnedPane({ store, deviceId, onChange, onShare, onBack, backLabel }) {
   const [query, setQuery] = useState("");
@@ -73,7 +73,7 @@ export default function LearnedPane({ store, deviceId, onChange, onShare, onBack
       />
       <Quiet>{learnedSummary(store)} Notes stay bound to this device. They are not shared over the mesh unless you approve a share.</Quiet>
       {store?.rejected ? <Quiet>Notes from another device were not opened.</Quiet> : null}
-      <TextInput accessibilityLabel="Search learned notes" value={query} onChangeText={setQuery} placeholder="Search" placeholderTextColor="#8f9a8c" style={styles.input} />
+      <TextInput accessibilityLabel="Search learned notes" value={query} onChangeText={setQuery} placeholder="Search" placeholderTextColor={colors.muted} style={styles.input} />
       <View style={styles.row}>
         <Action label="Export file" tone="quiet" onPress={exportFile} />
         <Action label="Import file" tone="quiet" onPress={importFile} />
@@ -121,7 +121,7 @@ export default function LearnedPane({ store, deviceId, onChange, onShare, onBack
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   scroll: { paddingTop: 22, paddingHorizontal: 22, paddingBottom: 180, gap: 10 },
   input: { minHeight: 48, color: colors.ink, backgroundColor: colors.surface, borderRadius: 12, paddingHorizontal: 12 },
   multi: { minHeight: 90, paddingVertical: 8 },
@@ -129,4 +129,4 @@ const styles = StyleSheet.create({
   card: { backgroundColor: colors.surface, borderRadius: 16, padding: 12, gap: 8 },
   title: { color: colors.ink, fontSize: 16, fontWeight: "600" },
   body: { color: colors.ink, fontSize: 15, lineHeight: 22 }
-});
+}));

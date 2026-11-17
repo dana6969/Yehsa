@@ -133,7 +133,7 @@ export default function LandscapeMap({
         onResponderMove={onMove}
         onResponderRelease={onRelease}
         style={{
-          ...(fill ? { flex: 1, minHeight: 240 } : { height: 380 }),
+          ...(fill ? { flex: 1, minHeight: 150 } : { height: 380 }),
           backgroundColor: "#101611",
           borderColor: "#3d4c43",
           borderWidth: 1,
