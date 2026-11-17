@@ -3,9 +3,37 @@
 // OSM's public tile servers are not used.
 
 import { haversineKm } from "./landscape_math.js";
+import { addGeometry, createGeoJsonReader, createGpxReader, createKmlReader, createLineSink } from "./geo_stream.js";
+import { PACK_MANIFEST } from "./pack_manifest.js";
 
-export const STORAGE_BUDGET_BYTES = 256 * 1024 * 1024;
-const DRAW_CAP = 400;
+// Pack files live on the phone's disk, not in memory, so the budget is a disk budget.
+export const STORAGE_BUDGET_BYTES = 2 * 1024 * 1024 * 1024;
+
+// Pack descriptions, one place so cards and the About text agree.
+function manifestItem(pack) {
+  return {
+    id: pack.id,
+    name: pack.name,
+    source: "Yehsa map pack: AWS Terrain Tiles, NLCD 2021, OpenStreetMap",
+    license: pack.license,
+    attribution: pack.attribution,
+    url: `${PACK_MANIFEST.baseUrl}${pack.file}`,
+    md5: pack.md5,
+    exactBytes: true,
+    bytesEstimate: pack.bytes,
+    kind: "mbtiles",
+    downloadable: true,
+    offered: true,
+    description: `Land, water, trails, place names and terrain for ${pack.name}, for offline use. No roads.`,
+    region: pack.region,
+    group: pack.group,
+    built: pack.built,
+    bounds: pack.bounds,
+    minZoom: pack.minZoom,
+    maxZoom: pack.maxZoom,
+    note: "Terrain, land cover, water, trails and place names. No road layer. No parcel or owner layer."
+  };
+}
 
 export const PACK_CATALOG = [
   {
@@ -21,23 +49,10 @@ export const PACK_CATALOG = [
     offered: true,
     description: "Country outlines you can see offline. Not streets or a live city map.",
     region: "World",
+    group: "World",
     note: "Country outlines only. Not streets and not a live city map."
   },
-  {
-    id: "geofabrik-rhode-island",
-    name: "Rhode Island extract",
-    source: "Geofabrik, OpenStreetMap",
-    license: "ODbL 1.0",
-    attribution: "© OpenStreetMap contributors. ODbL.",
-    url: "https://download.geofabrik.de/north-america/us/rhode-island-latest.osm.pbf",
-    bytesEstimate: 20000000,
-    kind: "osm-pbf",
-    downloadable: false,
-    offered: true,
-    description: "A detailed map of Rhode Island, for offline use. Not available in this version yet.",
-    region: "Rhode Island",
-    note: "Geofabrik permits this download. This build does not paint OSM protocol-buffer extracts, so it is not fetched. OSM public tile servers are not used."
-  },
+  ...PACK_MANIFEST.packs.map(manifestItem),
   {
     id: "planet",
     name: "Whole world",
@@ -104,51 +119,7 @@ function boundsOf(points) {
   return { west, south, east, north };
 }
 
-function pushPoint(points, longitude, latitude, ele) {
-  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return;
-  if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) return;
-  if (points.length >= DRAW_CAP) return;
-  const point = { latitude, longitude };
-  if (Number.isFinite(ele)) point.ele = ele;
-  points.push(point);
-}
-
-function walkCoords(coords, points, ele) {
-  if (!Array.isArray(coords) || points.length >= DRAW_CAP) return;
-  if (typeof coords[0] === "number") {
-    pushPoint(points, Number(coords[0]), Number(coords[1]), ele);
-    return;
-  }
-  for (const child of coords) walkCoords(child, points, ele);
-}
-
-function geometryOf(geo) {
-  const lines = [];
-  const features = geo?.type === "FeatureCollection"
-    ? geo.features
-    : geo?.type === "Feature"
-      ? [geo]
-      : geo?.type
-        ? [{ type: "Feature", geometry: geo, properties: {} }]
-        : [];
-  for (const feature of features || []) {
-    if (lines.length >= 80) break;
-    const props = feature?.properties || {};
-    const ele = Number(props.ele ?? props.elevation);
-    const points = [];
-    walkCoords(feature?.geometry?.coordinates, points, ele);
-    if (points.length) {
-      lines.push({
-        points,
-        water: /water|river|lake|spring|creek/i.test(`${props.natural || ""} ${props.waterway || ""} ${props.name || ""}`),
-        name: String(props.name || props.natural || "shape").slice(0, 80)
-      });
-    }
-  }
-  return lines;
-}
-
-function finish(partial) {
+export function buildPack(partial) {
   const lines = partial.lines || [];
   const points = lines.flatMap((line) => line.points);
   return {
@@ -157,7 +128,7 @@ function finish(partial) {
     name: partial.name,
     format: partial.format,
     bytes: partial.bytes,
-    bounds: boundsOf(points.length ? points : partial.boundPoints || []),
+    bounds: partial.bounds || boundsOf(points.length ? points : partial.boundPoints || []),
     minZoom: partial.minZoom ?? null,
     maxZoom: partial.maxZoom ?? null,
     built: partial.built || null,
@@ -171,49 +142,69 @@ function finish(partial) {
   };
 }
 
+const finish = buildPack;
+
+function linesFromSink(sink) {
+  return sink.lines;
+}
+
+function boundPointsOf(lines) {
+  return lines.flatMap((line) => line.points);
+}
+
 function parseGeoJson(name, text, bytes) {
-  let geo;
-  try {
-    geo = JSON.parse(text);
-  } catch {
-    return { ok: false, reason: "That file is not valid GeoJSON. Nothing was added." };
+  const sink = createLineSink();
+  const reader = createGeoJsonReader({ onFeature: (feature) => addGeometry(sink, feature?.geometry || feature, feature?.properties) });
+  reader.push(text);
+  const done = reader.end();
+  if (!done.ok) return { ok: false, reason: done.reason };
+  // A file that is one Feature or one bare geometry.
+  if (!done.features) {
+    let doc = null;
+    try {
+      doc = JSON.parse(text);
+    } catch {
+      return { ok: false, reason: "That file is not valid GeoJSON. Nothing was added." };
+    }
+    if (Array.isArray(doc)) for (const item of doc) addGeometry(sink, item?.geometry || item, item?.properties);
+    else if (doc?.type === "Feature") addGeometry(sink, doc.geometry, doc.properties);
+    else if (doc?.type) addGeometry(sink, doc, doc.properties);
   }
-  const lines = geometryOf(geo);
-  if (!lines.length) return { ok: false, reason: "That GeoJSON has no coordinates. Nothing was added." };
-  const props = geo.properties || geo.features?.[0]?.properties || {};
+  const lines = linesFromSink(sink);
+  if (!lines.length) {
+    const valid = (() => { try { JSON.parse(text); return true; } catch { return false; } })();
+    return { ok: false, reason: valid ? "That GeoJSON has no coordinates. Nothing was added." : "That file is not valid GeoJSON. Nothing was added." };
+  }
+  const props = done.meta.properties || {};
   return finish({
-    id: `import-${Date.now()}`,
-    name: String(props.name || name || "GeoJSON"),
+    id: `import-${Date.now()}-${Math.floor(Math.random() * 1e6)}`,
+    name: String(props.name || done.meta.name || name || "GeoJSON"),
     format: "geojson",
     bytes,
     lines,
-    built: props.date || props.built || null,
-    source: props.source || "Imported GeoJSON",
-    license: props.license || "Not stated in the file",
-    attribution: props.attribution || "Attribution was not in the file.",
+    built: props.date || props.built || done.meta.date || done.meta.built || null,
+    source: props.source || done.meta.source || "Imported GeoJSON",
+    license: props.license || done.meta.license || "Not stated in the file",
+    attribution: props.attribution || done.meta.attribution || "Attribution was not in the file.",
     paintsTiles: true,
-    note: "Drawn from the file. May be out of date."
+    note: sink.state.truncated ? "Drawn from the file, thinned to keep the map smooth. May be out of date." : "Drawn from the file. May be out of date."
   });
 }
 
 function parseGpx(name, text, bytes) {
   if (!/<gpx[\s>]/i.test(text)) return { ok: false, reason: "That file is not GPX. Nothing was added." };
-  const points = [];
-  const pattern = /<(?:trkpt|wpt|rtept)\b([^>]*)>([\s\S]*?)<\/(?:trkpt|wpt|rtept)>/gi;
-  let match;
-  while ((match = pattern.exec(text)) && points.length < DRAW_CAP) {
-    const lat = Number((match[1].match(/\blat="([^"]+)"/i) || [])[1]);
-    const lon = Number((match[1].match(/\blon="([^"]+)"/i) || [])[1]);
-    const ele = Number((match[2].match(/<ele>([^<]+)<\/ele>/i) || [])[1]);
-    pushPoint(points, lon, lat, ele);
-  }
-  if (!points.length) return { ok: false, reason: "That GPX has no points. Nothing was added." };
+  const sink = createLineSink();
+  const reader = createGpxReader({ sink });
+  reader.push(text);
+  const done = reader.end();
+  if (!done.ok) return { ok: false, reason: done.reason };
+  if (!sink.lines.length) return { ok: false, reason: "That GPX has no points. Nothing was added." };
   return finish({
-    id: `import-${Date.now()}`,
+    id: `import-${Date.now()}-${Math.floor(Math.random() * 1e6)}`,
     name: name || "GPX track",
     format: "gpx",
     bytes,
-    lines: [{ points, water: false, name: "track" }],
+    lines: sink.lines,
     source: "Imported GPX",
     paintsTiles: true,
     note: "Track from the file. May be out of date."
@@ -221,23 +212,30 @@ function parseGpx(name, text, bytes) {
 }
 
 function parseKml(name, text, bytes) {
-  if (!/<kml[\s>]|<coordinates>/i.test(text)) return { ok: false, reason: "That file is not KML. Nothing was added." };
-  const points = [];
-  const blocks = text.match(/<coordinates>[\s\S]*?<\/coordinates>/gi) || [];
-  for (const block of blocks) {
-    for (const token of block.replace(/<\/?coordinates>/gi, "").trim().split(/\s+/)) {
-      const [lon, lat, ele] = token.split(",").map(Number);
-      pushPoint(points, lon, lat, ele);
-      if (points.length >= DRAW_CAP) break;
+  if (!/<kml[\s>]|<coordinates/i.test(text)) return { ok: false, reason: "That file is not KML. Nothing was added." };
+  const sink = createLineSink();
+  const reader = createKmlReader({ sink });
+  reader.push(text);
+  const done = reader.end();
+  if (!done.ok) return { ok: false, reason: done.reason };
+  // Coordinates outside any Placemark (bare KML fragments).
+  if (!sink.lines.length) {
+    for (const block of text.match(/<coordinates[^>]*>[\s\S]*?<\/coordinates>/gi) || []) {
+      const points = [];
+      for (const token of block.replace(/<[^>]+>/g, " ").trim().split(/\s+/)) {
+        const [lon, lat, ele] = token.split(",").map(Number);
+        if (Number.isFinite(lat) && Number.isFinite(lon) && Math.abs(lat) <= 90 && Math.abs(lon) <= 180) points.push(Number.isFinite(ele) && ele !== 0 ? { latitude: lat, longitude: lon, ele } : { latitude: lat, longitude: lon });
+      }
+      sink.add(points, "kml", false);
     }
   }
-  if (!points.length) return { ok: false, reason: "That KML has no coordinates. Nothing was added." };
+  if (!sink.lines.length) return { ok: false, reason: "That KML has no coordinates. Nothing was added." };
   return finish({
-    id: `import-${Date.now()}`,
+    id: `import-${Date.now()}-${Math.floor(Math.random() * 1e6)}`,
     name: name || "KML",
     format: "kml",
     bytes,
-    lines: [{ points, water: false, name: "kml" }],
+    lines: sink.lines,
     source: "Imported KML",
     paintsTiles: true,
     note: "Shapes from the file. May be out of date."
@@ -430,53 +428,89 @@ export function aboutPackData(pack) {
   return `${source} · ${license}${built ? ` · built ${built}` : ""}. May be dated.`;
 }
 
-export function storageLine(store) {
+// Everything on the phone in one number: packs, saved areas, and imported files.
+export function totalUsedBytes(store, areaBytes = 0) {
   const current = store || emptyPackStore();
-  return `Using ${formatBytes(current.usedBytes)} of ${formatBytes(current.budgetBytes)} on this phone.`;
+  return (Number(current.usedBytes) || 0) + (Number(areaBytes) || 0);
+}
+
+export function storageLine(store, areaBytes = 0) {
+  const current = store || emptyPackStore();
+  if (totalUsedBytes(current, areaBytes) <= 0) return `Nothing stored yet. Room for ${formatBytes(current.budgetBytes)} of maps.`;
+  return `Using ${formatBytes(totalUsedBytes(current, areaBytes))} of ${formatBytes(current.budgetBytes)} on this phone.`;
+}
+
+// "412 KB of 819 KB · 52%". Total unknown: just what has arrived.
+export function progressText(job) {
+  if (!job) return "";
+  const received = Number(job.received) || 0;
+  const total = Number(job.total) || 0;
+  if (total > 0) {
+    const pct = Math.min(100, Math.round((received / total) * 100));
+    return `${formatBytes(received)} of ${formatBytes(total)} · ${pct}%`;
+  }
+  return `${formatBytes(received)} so far`;
 }
 
 /**
  * One plain card per pack: what is on the phone first, then what can be downloaded.
  * Whole world is never a card. A catalog entry already on the phone is not listed twice.
- * jobs: { [catalogId]: { state: "downloading" | "error", received?, total? } } from the screen.
+ * Every card shown can be downloaded: an entry that is not downloadable is not listed.
+ * jobs: { [catalogId]: { state: "downloading" | "paused" | "error" | "verifying", received?, total?, reason? } }
+ * opts.native: false on the web preview, where tile archives cannot be stored.
  */
-export function packCards(store, jobs = {}, { online = true } = {}) {
+export function packCards(store, jobs = {}, { online = true, native = true } = {}) {
   const current = dedupePacks(store);
   const cards = [];
   const have = new Set();
+  const stateOf = (job, ready) => {
+    if (job?.state === "downloading") return "Downloading";
+    if (job?.state === "verifying") return "Checking";
+    if (job?.state === "paused") return "Paused";
+    if (job?.state === "error") return "Error";
+    return ready ? "Ready" : "Not downloaded";
+  };
   for (const pack of current.packs || []) {
     const item = PACK_CATALOG.find((entry) => entry.id === pack.catalogId);
     if (pack.catalogId) have.add(pack.catalogId);
     const job = pack.catalogId ? jobs[pack.catalogId] : null;
+    const zoom = pack.format === "mbtiles" && Number.isFinite(pack.minZoom) && Number.isFinite(pack.maxZoom) ? ` · zoom ${pack.minZoom}–${pack.maxZoom}` : "";
     cards.push({
       key: pack.id,
       packId: pack.id,
       catalogId: pack.catalogId || null,
       name: item?.name || pack.name || "Map file",
-      state: job?.state === "downloading" ? "Downloading" : job?.state === "error" ? "Error" : "Ready",
+      group: "On this phone",
+      state: stateOf(job, true),
       description: item?.description || "A map file you added. It works without a signal.",
-      meta: `${formatBytes(pack.bytes)} · ${item?.region || "Your file"}`,
+      meta: `${formatBytes(pack.bytes)} · ${item?.region || "Your file"}${zoom}`,
       about: aboutPackData(pack),
-      canUpdate: Boolean(item?.downloadable),
-      job: job || null
+      canUpdate: Boolean(item?.downloadable) && (job ? job.state !== "downloading" : true),
+      updateAvailable: Boolean(item?.built && pack.built && String(item.built) > String(pack.built)),
+      focus: pack.bounds || null,
+      job: job || null,
+      progress: job ? progressText(job) : null
     });
   }
   for (const item of PACK_CATALOG) {
-    if (item.offered === false || have.has(item.id)) continue;
+    if (item.offered === false || item.downloadable !== true || have.has(item.id)) continue;
+    if (item.kind === "mbtiles" && !native) continue;
     const job = jobs[item.id] || null;
-    const state = job?.state === "downloading" ? "Downloading" : job?.state === "error" ? "Error" : "Not downloaded";
     cards.push({
       key: item.id,
       packId: null,
       catalogId: item.id,
       name: item.name.replace(/ extract$/i, ""),
-      state,
+      group: item.group || "More",
+      state: stateOf(job, false),
       description: item.description,
-      meta: `About ${formatBytes(item.bytesEstimate)} · ${item.region}`,
+      meta: `About ${formatBytes(item.bytesEstimate)} · ${item.region}${item.kind === "mbtiles" ? ` · zoom ${item.minZoom}–${item.maxZoom}` : ""}`,
       about: aboutPackData(item),
-      canDownload: item.downloadable === true,
-      waitingForSignal: item.downloadable === true && online === false,
-      job
+      canDownload: true,
+      waitingForSignal: online === false,
+      focus: item.bounds || null,
+      job,
+      progress: job ? progressText(job) : null
     });
   }
   return cards;
@@ -499,8 +533,9 @@ export function beginDownload(store, catalogId, { approved } = {}) {
   if (item.downloadable !== true) {
     return { store: current, fetch: false, reason: `${item.note} ${sizeWarning(item.bytesEstimate, current.budgetBytes - current.usedBytes)}` };
   }
-  if (item.bytesEstimate > current.budgetBytes - current.usedBytes) {
-    return { store: current, fetch: false, reason: sizeWarning(item.bytesEstimate, current.budgetBytes - current.usedBytes) };
+  const reclaim = current.packs.filter((pack) => pack.catalogId === item.id).reduce((sum, pack) => sum + (Number(pack.bytes) || 0), 0);
+  if (item.bytesEstimate > current.budgetBytes - current.usedBytes + reclaim) {
+    return { store: current, fetch: false, reason: sizeWarning(item.bytesEstimate, current.budgetBytes - current.usedBytes + reclaim) };
   }
   const job = {
     id: item.id,
@@ -508,7 +543,9 @@ export function beginDownload(store, catalogId, { approved } = {}) {
     received: 0,
     total: item.bytesEstimate,
     approved: true,
-    url: item.url
+    url: item.url,
+    kind: item.kind,
+    md5: item.md5 || null
   };
   return {
     store: { ...current, jobs: [...current.jobs.filter((entry) => entry.id !== item.id), job] },

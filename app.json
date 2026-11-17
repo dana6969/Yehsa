@@ -89,7 +89,8 @@
           "microphonePermission": false
         }
       ],
-      "./plugins/withArm64Only.js"
+      "./plugins/withArm64Only.js",
+      "./plugins/withLoopbackCleartext.js"
     ],
     "extra": {
       "eas": {

@@ -56,10 +56,12 @@ test("Update replaces the same pack instead of stacking a second copy", () => {
   assert.equal(elevationNear(emptyPackStore(), { latitude: 1, longitude: 1 }).text, "Elevation and terrain isn't on this phone yet.");
 });
 
-test("Map packs screen does not run heavy work inside a press handler without yielding", () => {
+test("Map packs screen does no heavy work inside a press handler", () => {
   const app = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
-  assert.match(app, /function yieldFrame\(\)/);
-  const elevation = app.slice(app.indexOf("function startElevation()"), app.indexOf("function cancelElevation()"));
-  assert.ok((elevation.match(/await yieldFrame\(\)/g) || []).length >= 4, "elevation loop yields between steps");
+  // Pack files are downloaded by the system straight to disk, never read whole into JS.
+  assert.doesNotMatch(app, /response\.text\(\)|PACK_TEXT_LIMIT|function startElevation|function PackCard/);
+  assert.match(app, /usePackDownloads/);
   assert.doesNotMatch(app, /Review \$\{item\.name\}|The whole world is not offered|SRTM|Copernicus/);
+  const downloads = fs.readFileSync("src/phone/usePackDownloads.js", "utf8");
+  assert.doesNotMatch(downloads, /response\.text\(\)|arrayBuffer\(\)/);
 });

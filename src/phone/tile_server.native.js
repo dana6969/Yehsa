@@ -1,70 +1,72 @@
 // Loopback-only tile server. It binds 127.0.0.1 and refuses any other peer.
 // MapLibre on the phone asks this process for tiles. Nothing is published off the device.
+//   /pack/{z}/{x}/{y}  raster tiles from the MBTiles packs on this phone (merged)
+//   /area/{z}/{x}/{y}  drawn terrain tiles of the areas saved with "Download this area"
+// Tiles are read from disk one at a time. No pack is ever loaded whole into memory.
 
-import * as FileSystem from "expo-file-system";
-import * as SQLite from "expo-sqlite";
 import { createServer } from "react-native-tcp-socket";
-import { readPmTile } from "../../symbolic/archive_tiles.js";
-import { mbtilesQuery } from "../../symbolic/dem_tiles.js";
+import { handleRequest, isLoopback } from "../../symbolic/tile_http.js";
+import { createPackTiles, tileTouches } from "../../symbolic/pack_tiles.js";
+import { openMbtiles } from "./pack_files";
+import { readRender } from "./area_store";
 
-const demTiles = new Map();
-let archive = null;
+const packTiles = createPackTiles();
+const open = new Map(); // pack id -> Promise<reader>
+let areaList = [];
 let server = null;
 let port = null;
-let dbPromise = null;
 
-function base64(bytes) {
-  let binary = "";
-  const step = 0x8000;
-  for (let i = 0; i < bytes.length; i += step) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + step));
+function latin1(chunk) {
+  let text = "";
+  for (let i = 0; i < chunk.length; i += 1) text += String.fromCharCode(chunk[i] & 0xff);
+  return text;
+}
+
+// Opens the MBTiles of every pack on the phone and closes the ones that were removed.
+export async function publishPacks(packs) {
+  const wanted = (packs || []).filter((pack) => pack.kind === "mbtiles" || (pack.format === "mbtiles" && pack.file));
+  const ids = new Set(wanted.map((pack) => pack.id));
+  for (const [id, pending] of [...open.entries()]) {
+    if (!ids.has(id)) {
+      open.delete(id);
+      pending.then((reader) => reader?.close?.()).catch(() => {});
+    }
   }
-  return globalThis.btoa(binary);
+  const list = [];
+  for (const pack of wanted) {
+    if (!open.has(pack.id)) {
+      open.set(pack.id, openMbtiles(pack.id).catch(() => null));
+    }
+    const reader = await open.get(pack.id);
+    if (!reader) {
+      open.delete(pack.id);
+      continue;
+    }
+    list.push({ id: pack.id, bounds: pack.bounds || null, minZoom: pack.minZoom, maxZoom: pack.maxZoom, getTile: reader.getTile });
+  }
+  packTiles.set(list);
+  return list.length;
 }
 
-async function mbtilesDb(bytes) {
-  if (dbPromise) return dbPromise;
-  dbPromise = (async () => {
-    const directory = FileSystem.documentDirectory;
-    const name = "yehsa-pack.mbtiles";
-    await FileSystem.writeAsStringAsync(`${directory}${name}`, base64(bytes), { encoding: "base64" });
-    return SQLite.openDatabaseAsync(name, {}, directory);
-  })();
-  return dbPromise;
+export function publishAreas(areas) {
+  areaList = (areas || []).filter((area) => area && area.rendered && area.box);
 }
 
-async function tileBytes(z, x, y) {
-  if (!archive?.bytes) return null;
-  if (archive.format === "pmtiles") return readPmTile(archive.bytes, z, x, y);
-  if (archive.format === "mbtiles") {
-    const db = await mbtilesDb(archive.bytes);
-    const query = mbtilesQuery(z, x, y);
-    const row = await db.getFirstAsync(query.sql, ...query.args);
-    const blob = row?.tile_data;
-    if (!blob) return null;
-    return blob instanceof Uint8Array ? blob : new Uint8Array(blob);
+async function areaTile(z, x, y) {
+  for (const area of areaList) {
+    const zooms = area.zooms || [];
+    if (!zooms.includes(z)) continue;
+    if (!tileTouches({ west: area.box.west, south: area.box.south, east: area.box.east, north: area.box.north }, z, x, y)) continue;
+    const bytes = await readRender(area.id, z, x, y);
+    if (bytes) return bytes;
   }
   return null;
 }
 
-function writeHttp(socket, status, body, type) {
-  const header = `HTTP/1.1 ${status}\r\nContent-Type: ${type}\r\nContent-Length: ${body ? body.length : 0}\r\nConnection: close\r\nCache-Control: no-store\r\n\r\n`;
-  socket.write(header);
-  if (body) socket.write(body);
-  socket.destroy();
-}
-
-export function publishArchive(next) {
-  archive = next?.bytes ? { bytes: next.bytes, format: next.format } : null;
-  dbPromise = null;
-}
-
-export function publishDem(tiles) {
-  demTiles.clear();
-  for (const tile of tiles || []) {
-    if (tile.png) demTiles.set(`${tile.z}/${tile.x}/${tile.y}`, tile.png);
-  }
-}
+const providers = {
+  pack: (z, x, y) => packTiles.get(z, x, y),
+  area: areaTile
+};
 
 export function startTileServer() {
   if (port) return Promise.resolve(port);
@@ -80,38 +82,27 @@ export function startTileServer() {
   }
   return new Promise((resolve, reject) => {
     server = createServer((socket) => {
-      const peer = socket.remoteAddress || "";
-      if (peer && peer !== "127.0.0.1" && peer !== "::ffff:127.0.0.1" && peer !== "::1") {
+      if (!isLoopback(socket.remoteAddress)) {
         socket.destroy();
         return;
       }
-      let buf = Buffer.alloc(0);
+      let head = "";
+      let handled = false;
+      socket.on("error", () => {});
       socket.on("data", async (chunk) => {
-        buf = Buffer.concat([buf, Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)]);
-        const headerEnd = buf.indexOf("\r\n\r\n");
-        if (headerEnd < 0) return;
-        const line = buf.slice(0, buf.indexOf("\r\n")).toString("latin1");
-        const path = (line.split(" ")[1] || "/").split("?")[0];
-        const parts = path.split("/").filter(Boolean);
-        try {
-          if (parts[0] === "dem") {
-            const key = `${parts[1]}/${parts[2]}/${String(parts[3] || "").replace(".png", "")}`;
-            const body = demTiles.get(key);
-            if (!body) writeHttp(socket, "404 Not Found", null, "text/plain");
-            else writeHttp(socket, "200 OK", body, "image/png");
-            return;
-          }
-          if (parts[0] === "pack") {
-            const body = await tileBytes(Number(parts[1]), Number(parts[2]), Number(String(parts[3] || "").replace(/\..*$/, "")));
-            if (!body) writeHttp(socket, "404 Not Found", null, "text/plain");
-            else writeHttp(socket, "200 OK", body, "image/png");
-            return;
-          }
-        } catch {
-          writeHttp(socket, "404 Not Found", null, "text/plain");
+        if (handled) return;
+        head += latin1(chunk);
+        if (head.indexOf("\r\n\r\n") < 0) {
+          if (head.length > 16384) socket.destroy();
           return;
         }
-        writeHttp(socket, "404 Not Found", null, "text/plain");
+        handled = true;
+        const reply = await handleRequest(head, providers);
+        try {
+          socket.write(reply, undefined, () => socket.end());
+        } catch {
+          socket.destroy();
+        }
       });
     });
     server.on("error", (err) => reject(err));

@@ -58,8 +58,42 @@ export async function readTile(areaId, key) {
   }
 }
 
+function renderPath(areaId, z, x, y) {
+  return `${ROOT}${safe(areaId)}/r-${z}-${x}-${y}.png`;
+}
+
+// The drawn (hillshade, color, contours) copy of a tile. Reading it is one file read.
+export async function saveRender(areaId, z, x, y, bytes) {
+  const dir = `${ROOT}${safe(areaId)}/`;
+  await FileSystem.makeDirectoryAsync(dir, { intermediates: true }).catch(() => {});
+  await FileSystem.writeAsStringAsync(renderPath(areaId, z, x, y), base64(bytes), { encoding: FileSystem.EncodingType.Base64 });
+}
+
+export async function readRender(areaId, z, x, y) {
+  try {
+    const text = await FileSystem.readAsStringAsync(renderPath(areaId, z, x, y), { encoding: FileSystem.EncodingType.Base64 });
+    return unbase64(text);
+  } catch {
+    return null;
+  }
+}
+
 export async function removeArea(areaId) {
   await FileSystem.deleteAsync(`${ROOT}${safe(areaId)}/`, { idempotent: true });
+}
+
+// Removes folders no saved area points to (left over after a delete whose Undo window closed
+// while the app was shut). Never touches a folder that is in the list.
+export async function sweepAreas(keepIds) {
+  try {
+    const keep = new Set((keepIds || []).map(safe));
+    const names = await FileSystem.readDirectoryAsync(ROOT);
+    for (const name of names) {
+      if (!keep.has(name)) await FileSystem.deleteAsync(`${ROOT}${name}/`, { idempotent: true });
+    }
+  } catch {
+    // no folder yet
+  }
 }
 
 export async function freeBytes() {
