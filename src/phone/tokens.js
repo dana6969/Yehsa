@@ -1,10 +1,24 @@
-// Yehsa visual tokens for new standalone screens (Trust, satellite SOS, hotspot).
-// Copied from the approved design tokens. This file does not replace src/phone/ui.js;
-// another worker is applying the system across the rest of the app.
+// Copied from /workspace/yehsa-design/tokens-ui.js (Lucky's approved visual system).
+// New screens import from here so ui.js can adopt the same tokens without a merge clash.
+
+// Yehsa visual tokens — drop-in for src/phone/ui.js
+// Refined 17 Nov 2026 from the current forest / ivory / brass system
+// in /workspace/yehsa-build @ 2c68307 (read-only), reconciled with
+// Dana's gold tree-of-life logo (/workspace/yehsa-logo.png) and the
+// #0D0A07 splash field. This is a refinement, not a replacement.
 //
-// `sos` / `sosText` are reserved for Emergency and irreversible emergency
-// actions only. Decline, "Not right", and Share stay on `clay`. Never encode
-// meaning by hue alone: every state also has a word or icon.
+// How to apply:
+// 1. Keep the existing brandMark require and ScreenHeader mark
+//    (added in 00049cb).
+// 2. Replace `export const colors = { ... }` with this `colors` object.
+// 3. Paste `themes`, `space`, `radius`, `hit`, `type`, `motion`, and
+//    `displayModes` immediately after it.
+// 4. Leave app.json splash / adaptiveIcon backgroundColor at #0D0A07
+//    (logo stage). Keep the in-app Field chrome at colors.bg (#141a16).
+// 5. `sos` / `sosText` are reserved for Emergency and irreversible
+//    emergency actions only (ANSI Z535 / ISO 3864). Decline, "Not right",
+//    and Share stay on `clay`. Never encode meaning by hue alone: every
+//    state also has a word or icon. No red/green traffic lights.
 //
 // `colors` is the Field (dark, default) theme so existing lookups
 // (colors.bg, colors.brass, colors.moss, colors.clay, ...) keep working.

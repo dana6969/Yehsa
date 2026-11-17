@@ -20,6 +20,8 @@ import { formatAnswerSource } from "./answer_source.js";
 import { detectEmergency, meaningReply, meaningRoutesScripture } from "./meaning/meaning_layer.js";
 import { scriptureByMeaning } from "./meaning/scripture_meaning.js";
 import { treatmentGuard } from "./meaning/treatment_guard.js";
+import { formatImported, isCareQuestion, retrieveImported } from "./book_import.js";
+import { currentImportIndex, currentImported } from "./imported_registry.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -261,6 +263,26 @@ export function askField(input, passages, options = {}) {
         title: routed.title || null
       });
     }
+  }
+  // Your imported books: last, lowest trust, never ahead of a checked note or a safety rule.
+  const importedStore = options.imported === undefined ? currentImported() : options.imported;
+  const importedHit = !text && importedStore?.notes?.length
+    ? retrieveImported(expanded, importedStore, options.importedIndex ?? currentImportIndex())
+    : null;
+  if (!text && importedHit) {
+    return {
+      answered: true,
+      empty: false,
+      text: formatImported(importedHit, { care: isCareQuestion(raw) }),
+      cue: null,
+      emotion: { understood: emotion.understood, emotion: emotion.emotion },
+      miss: null,
+      corpus: phoneCorpusMeta,
+      kind: "imported",
+      symbol: importedHit.symbol,
+      importedBookId: importedHit.bookId,
+      trust: "imported"
+    };
   }
   if (!text) {
     return fieldResult({
