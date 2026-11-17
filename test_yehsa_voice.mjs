@@ -134,3 +134,13 @@ test("layout fixes from the handoff: chip gap 16, tab labels 14, explicit mode c
   assert.match(ui, /function ModeChips/);
   assert.doesNotMatch(ui, /nextMode/);
 });
+
+test("bleeding offers the tourniquet note, and the tourniquet note offers a way back to direct pressure", () => {
+  const bleed = speak("How do I stop heavy bleeding?");
+  assert.equal(ask("How do I stop heavy bleeding?").symbol, "bleeding_pressure");
+  assert.match(bleed.offer.label, /tourniquet is the last resort/);
+  const next = speak(bleed.offer.ask, bleed.thread);
+  assert.equal(ask(bleed.offer.ask).symbol, "tourniquet_last_resort");
+  assert.match(next.offer.label, /direct pressure/);
+  assert.equal(ask(next.offer.ask).symbol, "bleeding_pressure");
+});

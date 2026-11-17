@@ -65,7 +65,14 @@ const OFFERS = {
   trip: { label: "Want me to walk you through a packing list for the trip?", go: "kit" }
 };
 
-export function offerFor(domain) {
+// A note can name its own follow-up. Bleeding leads to the tourniquet note, and back.
+const SYMBOL_OFFERS = {
+  bleeding_pressure: { label: "Want me to go over when a tourniquet is the last resort?", ask: "When do I use a tourniquet for bleeding?" },
+  tourniquet_last_resort: { label: "Want to go back over direct pressure first?", ask: "How do I stop heavy bleeding?" }
+};
+
+export function offerFor(domain, symbol = null) {
+  if (symbol && SYMBOL_OFFERS[symbol]) return SYMBOL_OFFERS[symbol];
   return OFFERS[domain] || null;
 }
 
@@ -271,7 +278,7 @@ export function voiceReply(result, question, thread = newThread()) {
   }
   const offer = result.kind === "spiritual"
     ? { label: "Want another passage on this, or a different theme?", ask: null }
-    : offerFor(domain);
+    : offerFor(domain, result.symbol);
   // Never offer the same follow-up twice in a row.
   const repeat = offer && state.offer && state.offer.label === offer.label;
   const chosen = repeat ? null : offer;

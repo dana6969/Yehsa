@@ -108,6 +108,7 @@ export default function FieldPane({ position, mapPacks, onEmergency, openRequest
         onBack={close}
         onOpenLayers={onOpenLayers}
         onOpenScreen={onOpenScreen}
+        onOpenKit={() => setOpen("kit")}
       />
     );
   }

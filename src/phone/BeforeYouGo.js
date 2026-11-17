@@ -13,11 +13,14 @@ import { currentImported } from "../../symbolic/imported_registry.js";
 import StatusRow from "./parts/StatusRow.js";
 import DownloadArea from "./DownloadArea.js";
 import { Action, Field, Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
+import { Chips } from "./hunt_ui.js";
+import { useHunt } from "./hunt_state.js";
 import { radius, space, type } from "./tokens.js";
 
 const CONTACTS_KEY = "yehsa.contacts.v1";
 const PLAN_KEY = "yehsa.tripplan.v1";
 const TICK_KEY = "yehsa.beforeyougo.ticks.v1";
+const PACK_KEY = "yehsa.beforeyougo.packlist.v1";
 
 async function readJson(key, fallback) {
   try {
@@ -30,7 +33,9 @@ async function readJson(key, fallback) {
 
 // Drop-in for the checklist shell in FieldPane.js (PR #16): same onBack / onOpenLayers /
 // onOpenScreen props, plus optional live inputs. Every prop is optional.
-export default function BeforeYouGo({ target, position, packs, mesh, fieldNotes, onBack, onClose, onOpenLayers, onOpenScreen }) {
+export default function BeforeYouGo({ target, position, packs, mesh, fieldNotes, onBack, onClose, onOpenLayers, onOpenScreen, onOpenKit }) {
+  const hunt = useHunt();
+  const [packList, setPackList] = useState("");
   const [areas, setAreas] = useState([]);
   const [battery, setBattery] = useState(null);
   const [gps, setGps] = useState(null);
@@ -44,6 +49,7 @@ export default function BeforeYouGo({ target, position, packs, mesh, fieldNotes,
   const here = target || (position && Number.isFinite(Number(position.latitude)) ? { latitude: Number(position.latitude), longitude: Number(position.longitude) } : null);
 
   const refresh = useCallback(async () => {
+    AsyncStorage.getItem(PACK_KEY).then((id) => { if (id) setPackList(id); }).catch(() => {});
     const [list, level, perm, saved, trip, ticks] = await Promise.all([
       loadAreas(),
       probeBattery(),
@@ -75,7 +81,9 @@ export default function BeforeYouGo({ target, position, packs, mesh, fieldNotes,
     mesh: mesh || probeMesh(),
     knowledge: { fieldNotes: fieldNotes ?? phoneCorpusMeta.fieldNotes ?? 0, importedBooks: imported?.books?.length || 0 },
     contacts,
-    plan
+    plan,
+    kit: hunt.loaded ? hunt.kit : null,
+    kitListId: packList || hunt.kit?.lists?.[0]?.id
   });
 
   async function saveContacts(next) {
@@ -114,6 +122,14 @@ export default function BeforeYouGo({ target, position, packs, mesh, fieldNotes,
         <View style={styles.row}>
           {onOpenScreen ? <Action label="Open Display" tone="quiet" onPress={() => onOpenScreen("display")} /> : null}
           <Action label={ticked.display ? "Mark not done" : "Done"} tone="quiet" onPress={() => toggle("display")} />
+        </View>
+      );
+    }
+    if (id === "pack") {
+      return (
+        <View>
+          <Chips label="Pack list" value={packList || hunt.kit?.lists?.[0]?.id} onChange={(next) => { setPackList(next); AsyncStorage.setItem(PACK_KEY, next).catch(() => {}); }} options={(hunt.kit?.lists || []).map((list) => ({ id: list.id, label: list.name }))} />
+          {onOpenKit ? <Action label="Open the pack list" tone="quiet" onPress={onOpenKit} /> : null}
         </View>
       );
     }

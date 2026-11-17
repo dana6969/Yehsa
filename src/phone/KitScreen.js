@@ -4,6 +4,9 @@ import { Image, Pressable, ScrollView, Share, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import { bytesToBase64, familyCardPdf } from "../../symbolic/hunt/card_pdf.js";
 import { Action, Field, Quiet, ScreenHeader, themedStyles, colors } from "./ui.js";
 import { Card, Line, screenStyles } from "./hunt_ui.js";
 import { setHunt, useHunt } from "./hunt_state.js";
@@ -111,6 +114,25 @@ export function FamilyCardScreen({ onBack, backLabel = "More" }) {
     }
   }
 
+  // Makes the PDF on the phone, hands it to the share sheet, then removes the temporary file a few minutes later (the next share also replaces it).
+  async function sharePdf() {
+    const made = familyCardPdf(card);
+    if (!made) return;
+    const uri = `${FileSystem.cacheDirectory}Yehsa-family-card.pdf`;
+    try {
+      if (!(await Sharing.isAvailableAsync())) {
+        setNote("This phone has no share sheet for files. Use Share as text.");
+        return;
+      }
+      await FileSystem.writeAsStringAsync(uri, bytesToBase64(made.bytes), { encoding: FileSystem.EncodingType.Base64 });
+      await Sharing.shareAsync(uri, { mimeType: "application/pdf", dialogTitle: "Family card", UTI: "com.adobe.pdf" });
+    } catch {
+      setNote("I couldn't make the PDF. Use Share as text.");
+    }
+    // On Android the share sheet returns before the other app has read the file, so it goes a few minutes later.
+    setTimeout(() => FileSystem.deleteAsync(uri, { idempotent: true }).catch(() => {}), 5 * 60 * 1000);
+  }
+
   return (
     <ScrollView contentContainerStyle={screenStyles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader title="Family card" lead="ICE contacts and medicines, also in Kit." onBack={onBack} backLabel={backLabel} />
@@ -134,6 +156,7 @@ export function FamilyCardScreen({ onBack, backLabel = "More" }) {
           ))}
           {photos.length ? <View style={styles.photos}>{photos.map((uri, index) => <Image key={index} source={{ uri }} style={styles.photo} accessibilityIgnoresInvertColors accessibilityLabel="Family photo" />)}</View> : null}
           <Action label="Edit the card" tone="quiet" onPress={() => setEditing(true)} />
+          {!familyIsEmpty(card) ? <Action label="Share or print as PDF" tone="quiet" onPress={sharePdf} accessibilityHint="Makes a one-page card on this phone and opens the share sheet. You choose who gets it, or print it." /> : null}
           {!familyIsEmpty(card) ? <Action label="Share as text" tone="quiet" onPress={share} accessibilityHint="Opens the share sheet. You choose who gets it." /> : null}
         </>
       )}

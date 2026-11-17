@@ -23,7 +23,7 @@ export const DEFAULTS = {
   wxNotes: [],
   wind: { fromPoint: "", speedClass: "light", swirling: false, source: "manual" },
   manual: { tempF: "", precip: "", windMph: "" },
-  ballistics: { preset: "308", grains: "150", bc: "0.415", fps: "2820", sightIn: "1.5", zeroYd: "100", windMph: "10", windClock: "3", tempF: "", altitudeFt: "" },
+  ballistics: { preset: "308", grains: "150", bc: "0.294", fps: "2820", sightIn: "1.5", zeroYd: "100", windMph: "10", windClock: "3", tempF: "", altitudeFt: "" },
   legal: { state: "", species: "deer" },
   huntPressure: "normal",
   kit: emptyKit(),

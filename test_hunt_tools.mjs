@@ -95,6 +95,25 @@ test("ballistics: sane drop, wind drift that grows with range, presets present, 
   assert.equal(solve({ grains: 2 }).ok, false);
 });
 
+test("every ballistics preset is a named factory load with a cited maker page", () => {
+  assert.equal(PRESETS.length, 13);
+  for (const preset of PRESETS) {
+    assert.match(preset.source.url, /^https:\/\/(winchester\.com|www\.hornady\.com|www\.federalpremium\.com)\//, preset.id);
+    assert.equal(preset.source.read, "2026-11-17");
+    assert.ok(["full", "bc-listing"].includes(preset.source.level), preset.id);
+    assert.ok(preset.source.product.length > 8);
+    assert.equal(checkInputs({ grains: preset.grains, bc: preset.bc, fps: preset.fps }).ok, true, preset.id);
+  }
+  const by = Object.fromEntries(PRESETS.map((preset) => [preset.id, preset]));
+  // Spot checks against the figures read from the makers' pages.
+  assert.deepEqual([by["308"].grains, by["308"].bc, by["308"].fps], [150, 0.294, 2820]);
+  assert.deepEqual([by["350l"].grains, by["350l"].bc, by["350l"].fps], [180, 0.221, 2100]);
+  assert.deepEqual([by["12ga"].grains, by["12ga"].bc, by["12ga"].fps], [438, 0.11, 1610]);
+  assert.deepEqual([by["50ml"].bc, by["50ml"].fps], [0.21, 2250]);
+  assert.equal(by["3030"].source.maker, "Hornady");
+  assert.equal(by["12ga"].source.maker, "Federal");
+});
+
 test("legal light matches Maine's official chart for deer", () => {
   const maine = (m, d, y = 2026) => legalLight({ state: "ME", species: "deer", date: `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`, offsetMinutes: -300 });
   const near = (text, expected) => {
@@ -120,11 +139,35 @@ test("legal light matches Maine's official chart for deer", () => {
   assert.equal(sunday.summary, "No hunting today");
 });
 
-test("an unverified state shows the common rule with a warning, never a made-up rule", () => {
-  const ri = legalLight({ state: "RI", species: "deer", date: "2026-11-17", offsetMinutes: -300 });
-  assert.equal(ri.verified, false);
-  assert.match(ri.label, /Common rule, check your state regulations/);
-  assert.ok(ri.warning.length > 20);
+test("every New England state, NY and PA has a cited deer rule, and CT closes at sunset", () => {
+  const day = "2026-11-17";
+  for (const code of ["NH", "VT", "MA", "RI", "CT", "NY", "PA", "ME"]) {
+    const r = legalLight({ state: code, species: "deer", date: day, offsetMinutes: -300 });
+    assert.equal(r.verified, true, code);
+    assert.match(r.source.url, /^https:\/\//, code);
+    assert.match(r.source.read, /^2026-11-17$/, code);
+    assert.equal(r.warning, "", code);
+    assert.match(r.label, /^Verified rule/, code);
+  }
+  const ct = legalLight({ state: "CT", species: "deer", date: day, offsetMinutes: -300 });
+  const ny = legalLight({ state: "NY", species: "deer", date: day, offsetMinutes: -300 });
+  assert.match(ct.basis, /to sunset\./);
+  assert.match(ny.basis, /30 min after sunset/);
+  assert.ok(ct.notes.some((note) => /sunset, not half an hour after/.test(note)));
+  const maSunday = legalLight({ state: "MA", species: "deer", date: "2026-11-22", offsetMinutes: -300 });
+  assert.equal(maSunday.status, "no-hunting-today");
+  assert.match(maSunday.next, /Massachusetts/);
+  assert.notEqual(legalLight({ state: "NY", species: "deer", date: "2026-11-22", offsetMinutes: -300 }).status, "no-hunting-today");
+});
+
+test("an unverified state or species shows the common rule with a warning, never a made-up rule", () => {
+  const ohio = legalLight({ state: "OH", place: { lat: 40.0, lon: -83.0 }, species: "deer", date: "2026-11-17", offsetMinutes: -300 });
+  assert.equal(ohio.verified, false);
+  assert.match(ohio.label, /Common rule, check your state regulations/);
+  assert.ok(ohio.warning.length > 20);
+  const nyBirds = legalLight({ state: "NY", species: "migratory-birds", date: "2026-11-17", offsetMinutes: -300 });
+  assert.equal(nyBirds.verified, false);
+  assert.ok(nyBirds.warning.length > 20);
   assert.equal(legalLight({ date: "2026-11-17" }).ok, false);
 });
 
@@ -197,4 +240,61 @@ test("family card: only what was filled in is shown, and it stays text", () => {
   card = setFamilyField(card, "allergies", "Penicillin");
   assert.match(familyCardText(card), /Penicillin/);
   assert.equal(setFamilyField(card, "not_a_field", "x"), card);
+});
+
+test("family card PDF: a valid one-page letter file with the fields, photos embedded, nothing for an empty card", async () => {
+  const { familyCardPdf, jpegInfo, base64ToBytes, bytesToBase64, wrapLine, textWidth, pdfSafe } = await import("./symbolic/hunt/card_pdf.js");
+  assert.equal(familyCardPdf({ fields: {}, photos: [] }), null);
+  // A tiny real JPEG (1x1).
+  const jpeg = "/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=";
+  const info = jpegInfo(base64ToBytes(jpeg));
+  assert.deepEqual([info.width, info.height, info.components], [1, 1, 1]);
+  assert.equal(bytesToBase64(base64ToBytes(jpeg)), jpeg);
+  const made = familyCardPdf({
+    fields: { names: "Dana and Sam \u2013 \u201cthe crew\u201d (two) \\ back", allergies: "Bee stings\nPenicillin" },
+    photos: [`data:image/jpeg;base64,${jpeg}`, "data:image/png;base64,AAAA", "not a photo"]
+  }, { when: new Date("2026-11-17T12:00:00Z") });
+  assert.equal(made.pages, 1);
+  assert.equal(made.photos, 1);
+  const text = Buffer.from(made.bytes).toString("latin1");
+  assert.ok(text.startsWith("%PDF-1.4"));
+  assert.ok(text.trimEnd().endsWith("%%EOF"));
+  assert.match(text, /Family emergency card/);
+  assert.match(text, /NAMES/);
+  assert.match(text, /2026-11-17/);
+  assert.match(text, /\/DCTDecode/);
+  assert.match(text, /\\\(two\\\)/);
+  assert.doesNotMatch(text, /Phone|contacts/i);
+  // The cross-reference table points at real objects.
+  const startxref = Number(/startxref\n(\d+)/.exec(text)[1]);
+  assert.equal(text.slice(startxref, startxref + 4), "xref");
+  const offsets = [...text.slice(startxref).matchAll(/(\d{10}) 00000 n/g)].map((m) => Number(m[1]));
+  offsets.forEach((offset, i) => assert.equal(text.slice(offset, offset + `${i + 1} 0 obj`.length), `${i + 1} 0 obj`));
+  // Long text wraps inside the margins and flows to more pages.
+  assert.ok(wrapLine("word ".repeat(80), 11, 400).every((line) => textWidth(line, 11) <= 400));
+  const long = familyCardPdf({ fields: { names: Array.from({ length: 120 }, (_, i) => `Person ${i}`).join("\n") }, photos: [] });
+  assert.ok(long.pages >= 3);
+  assert.equal(pdfSafe("caf\u00e9 \u2013 \u2603"), "caf? - ?");
+});
+
+test("before you go: the pack row reads the chosen list, says what is missing, and is absent without a kit", async () => {
+  const { beforeYouGo, packItem } = await import("./symbolic/before_you_go.js");
+  const { emptyKit } = await import("./symbolic/hunt/kit.js");
+  const kit = emptyKit();
+  const list = kit.lists[0];
+  assert.ok(list.items.length > 4);
+  const none = packItem(kit, list.id);
+  assert.equal(none.state, "missing");
+  assert.match(none.detail, new RegExp(`0 of ${list.items.length} packed`));
+  const half = { ...kit, lists: kit.lists.map((entry) => entry.id === list.id ? { ...entry, items: entry.items.map((it, i) => i < 2 ? { ...it, done: true } : it) } : entry) };
+  const partial = packItem(half, list.id);
+  assert.equal(partial.state, "check");
+  assert.match(partial.detail, /2 of \d+ packed\. Still to pack: .+, and \d+ more\./);
+  const all = { ...kit, lists: kit.lists.map((entry) => entry.id === list.id ? { ...entry, items: entry.items.map((it) => ({ ...it, done: true })) } : entry) };
+  assert.equal(packItem(all, list.id).state, "ready");
+  const withKit = beforeYouGo({ kit, kitListId: list.id });
+  const ids = withKit.items.map((entry) => entry.id);
+  assert.ok(ids.includes("pack"));
+  assert.ok(ids.indexOf("pack") < ids.indexOf("contacts"));
+  assert.ok(!beforeYouGo({}).items.some((entry) => entry.id === "pack"));
 });

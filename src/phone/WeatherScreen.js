@@ -121,7 +121,7 @@ export default function WeatherScreen({ position, onBack }) {
         <Quiet>This sends your position to the National Weather Service only when you tap it. Nothing else leaves the phone.</Quiet>
       </Card>
       <Card title="Weather notes">
-        {(hunt.wxNotes || []).length === 0 ? <Quiet>No alerts saved. Add a note if a warning reaches you another way.</Quiet> : (hunt.wxNotes || []).map((entry) => (
+        {(hunt.wxNotes || []).length === 0 ? <Quiet>No notes yet.</Quiet> : (hunt.wxNotes || []).map((entry) => (
           <View key={entry.t} style={styles.alert}>
             <Text style={styles.age}>{entry.text}</Text>
             <Quiet>{new Date(entry.t).toLocaleString([], { weekday: "short", hour: "numeric", minute: "2-digit" })}</Quiet>

@@ -22,8 +22,21 @@ export const STATES = [
   { code: "PA", name: "Pennsylvania", lat: 40.88, lon: -77.8 }
 ];
 
-// Verified overrides only. Order of work: Maine, then RI, NH, VT, MA, CT, NY, PA, each added
-// only after the current official regulation is read and cited here.
+// Verified overrides only. Each entry was read from an official source on the date shown and
+// carries its link. Deer only. Any other species, or any state not listed, shows the common rule with a warning.
+// Deer rule shared by every state below: half an hour either side of the sun, unless the entry says otherwise.
+// A state without a sunAt uses the sun where the person is, or the state's middle when no position is held.
+function officialDeer(list) {
+  return list.map((item) => ({
+    species: "deer",
+    season: "2026-27",
+    beforeSunriseMin: 30,
+    afterSunsetMin: 30,
+    noSunday: false,
+    ...item
+  }));
+}
+
 export const OVERRIDES = [
   {
     state: "ME",
@@ -34,6 +47,7 @@ export const OVERRIDES = [
     // Maine's chart is built from Bangor sunrise and sunset and used statewide.
     sunAt: { lat: 44.8012, lon: -68.7778, label: "Bangor" },
     noSunday: true,
+    sundayText: "Sunday hunting is illegal in Maine.",
     notes: [
       "Maine uses Bangor sunrise and sunset for the whole state.",
       "Sunday hunting is illegal in Maine.",
@@ -59,7 +73,47 @@ export const OVERRIDES = [
       url: "https://www1.maine.gov/ifw/hunting-trapping/hunting/laws-rules/legal-hunting-hours.html",
       read: "2026-11-17"
     }
-  }
+  },
+  ...officialDeer([
+    {
+      state: "NH",
+      source: { title: "New Hampshire RSA 207:3, I, Lawful Methods of Taking (wildlife is taken between 1/2 hour before sunrise and 1/2 hour after sunset)", url: "https://gc.nh.gov/RSA/html/XVIII/207/207-3.htm", read: "2026-11-17" },
+      notes: ["New Hampshire Fish and Game publishes a sunrise and sunset table. Use it when the minute matters."]
+    },
+    {
+      state: "VT",
+      source: { title: "Vermont 10 V.S.A. 4745, Taking big game out of season prohibited; time (between one-half hour before sunrise and one-half hour after sunset)", url: "https://legislature.vermont.gov/statutes/section/10/113/04745", read: "2026-11-17" },
+      notes: ["Vermont Fish and Wildlife publishes shooting hours tables. Use them when the minute matters."]
+    },
+    {
+      state: "MA",
+      noSunday: true,
+      sundayText: "Hunting is prohibited on Sundays in Massachusetts.",
+      source: { title: "MassWildlife, Deer hunting regulations (Hunting hours begin 1/2 hour before sunrise and end 1/2 hour after sunset; hunting is prohibited on Sundays)", url: "https://www.mass.gov/info-details/deer-hunting-regulations", read: "2026-11-17" },
+      notes: ["Hunting is prohibited on Sundays in Massachusetts.", "MassWildlife links a sunrise and sunset table from the same page."]
+    },
+    {
+      state: "RI",
+      source: { title: "Rhode Island 250-RICR-60-00-9, section 9.7 Deer, F (legal shooting hours for hunting deer are one half hour before sunrise to one half hour after sunset)", url: "https://rules.sos.ri.gov/Regulations/part/250-60-00-9?reg_id=13477", read: "2026-11-17" },
+      notes: ["Sunday hunting rules in Rhode Island depend on the town and the land. Check with DEM Fish and Wildlife."]
+    },
+    {
+      state: "CT",
+      afterSunsetMin: 0,
+      source: { title: "Connecticut DEEP, 2026 Connecticut Hunting and Trapping Guide, Deer Hunting (hunting hours: 1/2 hour before sunrise until sunset)", url: "https://portal.ct.gov/deep/hunting/2026-connecticut-hunting-and-trapping-guide/deer-hunting", read: "2026-11-17" },
+      notes: ["Connecticut deer hours end at sunset, not half an hour after.", "Sunday deer hunting is private land only, and not within 40 yards of blazed public trails."]
+    },
+    {
+      state: "NY",
+      source: { title: "NYSDEC, 2026-27 New York Hunting and Trapping Guide (big game hunting hours are 1/2-hour before sunrise to 1/2-hour after sunset)", url: "https://dec.ny.gov/sites/default/files/2024-07/htgbiggame.pdf", read: "2026-11-17" },
+      notes: ["NYSDEC publishes a sunrise and sunset table for the minute. Sunday hunting is allowed in all areas of New York."]
+    },
+    {
+      state: "PA",
+      source: { title: "Pennsylvania Game Commission, 2026-27 Pocket Guide (legal hunting hours for all small and big game are one-half hour before sunrise to one-half hour after sunset)", url: "https://www.pa.gov/content/dam/copapwp-pagov/en/pgc/documents/hunttrap/law/26-27%20pocket%20guide.pdf", read: "2026-11-17" },
+      notes: ["Pennsylvania seasons include Sundays, except migratory game birds. The Game Commission digest has the hours tables and the meridian map."]
+    }
+  ])
 ];
 
 export const SPECIES = [
@@ -128,7 +182,7 @@ export function legalLight({ place = null, state = "", species = "deer", date, o
   let next = "";
   if (sunday) {
     status = "no-hunting-today";
-    next = "Sunday hunting is illegal in Maine.";
+    next = override.sundayText || "Hunting is not allowed on Sundays here.";
   } else if (nowMinutes != null) {
     if (nowMinutes < opens) { status = "before"; next = `Opens ${formatClock(opens)}.`; }
     else if (nowMinutes > closes) { status = "after"; next = `Closed since ${formatClock(closes)}.`; }

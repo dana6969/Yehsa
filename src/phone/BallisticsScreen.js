@@ -37,9 +37,12 @@ export default function BallisticsScreen({ onBack }) {
           ))}
           {preset && String(preset.grains) === String(form.grains) && String(preset.bc) === String(form.bc) && String(preset.fps) === String(form.fps) ? (
             <Quiet>{preset.name}: {preset.bullet}. {PRESET_LABEL}.</Quiet>
+            ) : null}
+          {preset && String(preset.grains) === String(form.grains) && String(preset.bc) === String(form.bc) && String(preset.fps) === String(form.fps) ? (
+            <Quiet>{`Source: ${preset.source.maker} ${preset.source.product}, read ${preset.source.read}.${preset.source.note ? ` ${preset.source.note}` : ""}${preset.source.level === "bc-listing" ? " The ballistic coefficient is the maker\u2019s listed figure." : ""}`}</Quiet>
           ) : <Quiet>Custom numbers.</Quiet>}
           <Field label="Bullet weight (grains)" value={form.grains} onChangeText={(value) => set({ grains: value, preset: "" })} placeholder="150" />
-          <Field label="G1 ballistic coefficient" value={form.bc} onChangeText={(value) => set({ bc: value, preset: "" })} placeholder="0.415" />
+          <Field label="G1 ballistic coefficient" value={form.bc} onChangeText={(value) => set({ bc: value, preset: "" })} placeholder="0.294" />
           <Field label="Muzzle velocity (fps)" value={form.fps} onChangeText={(value) => set({ fps: value, preset: "" })} placeholder="2820" />
           <Field label="Sight height (inches)" value={form.sightIn} onChangeText={(value) => set({ sightIn: value })} placeholder="1.5" />
           <Field label="Zero distance (yards)" value={form.zeroYd} onChangeText={(value) => set({ zeroYd: value })} placeholder="100" />

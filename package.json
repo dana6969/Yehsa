@@ -76,7 +76,8 @@
     "tweetnacl": "^1.0.3",
     "expo-clipboard": "~7.1.5",
     "expo-camera": "~16.1.11",
-    "expo-audio": "~0.4.9"
+    "expo-audio": "~0.4.9",
+    "expo-sharing": "~13.1.5"
   },
   "devDependencies": {
     "@expo/cli": "^0.18.0",

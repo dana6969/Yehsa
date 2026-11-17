@@ -22,7 +22,7 @@ export const G1_TABLE = [
 
 export const RANGES_YD = [50, 100, 150, 200, 250, 300, 400];
 export const FOOTER = "Estimate. Confirm at the range before hunting.";
-export const PRESET_LABEL = "From box data, check your ammo";
+export const PRESET_LABEL = "From the maker\u2019s published box data. Check your own ammo";
 
 const FPS_TO_MS = 0.3048;
 const YD_TO_M = 0.9144;
@@ -58,20 +58,26 @@ export function atmosphere(tempF = 59, altitudeFt = 0) {
 
 // Presets prefill the numbers only. They are typical published factory loads and every one is
 // labelled "From box data, check your ammo". Your own box or chronograph wins.
+// Every preset is a named factory load, with the maker's own figures and where they were read.
+// "full": muzzle velocity and G1 BC both read from the maker's page. "bc-listing": the maker's
+// page gives the velocity table, and the G1 BC is the maker's spec as listed by retailers
+// (the maker's page does not print it as text). Read 2026-11-17. Check your own ammo box.
+const WIN_URL = "https://winchester.com/Products/Ammunition/Rifle/Power-Point";
+const read = "2026-11-17";
 export const PRESETS = [
-  { id: "243", name: ".243 Win", group: "Deer rifles", grains: 100, bc: 0.405, fps: 2960, bullet: "100 gr soft point" },
-  { id: "65cm", name: "6.5 Creedmoor", group: "Deer rifles", grains: 143, bc: 0.625, fps: 2700, bullet: "143 gr ELD-X" },
-  { id: "270", name: ".270 Win", group: "Deer rifles", grains: 130, bc: 0.409, fps: 3060, bullet: "130 gr soft point" },
-  { id: "7mm08", name: "7mm-08", group: "Deer rifles", grains: 139, bc: 0.486, fps: 3000, bullet: "139 gr soft point" },
-  { id: "308", name: ".308 Win", group: "Deer rifles", grains: 150, bc: 0.415, fps: 2820, bullet: "150 gr soft point" },
-  { id: "3006", name: ".30-06", group: "Deer rifles", grains: 150, bc: 0.415, fps: 2910, bullet: "150 gr soft point" },
-  { id: "7rm", name: "7mm Rem Mag", group: "Deer rifles", grains: 150, bc: 0.496, fps: 3110, bullet: "150 gr soft point" },
-  { id: "300wm", name: ".300 Win Mag", group: "Deer rifles", grains: 180, bc: 0.507, fps: 2960, bullet: "180 gr soft point" },
-  { id: "350l", name: ".350 Legend", group: "Straight-wall and brush guns", grains: 150, bc: 0.221, fps: 2325, bullet: "150 gr soft point" },
-  { id: "450b", name: ".450 Bushmaster", group: "Straight-wall and brush guns", grains: 250, bc: 0.19, fps: 2200, bullet: "250 gr polymer tip" },
-  { id: "3030", name: ".30-30 Win", group: "Straight-wall and brush guns", grains: 160, bc: 0.33, fps: 2400, bullet: "160 gr polymer tip" },
-  { id: "12ga", name: "12 ga rifled slug", group: "Slug and muzzleloader", grains: 437.5, bc: 0.1, fps: 1600, bullet: "1 oz Foster slug" },
-  { id: "50ml", name: ".50 cal muzzleloader", group: "Slug and muzzleloader", grains: 250, bc: 0.25, fps: 2150, bullet: "250 gr sabot" }
+  { id: "243", name: ".243 Win", group: "Deer rifles", grains: 100, bc: 0.356, fps: 2960, bullet: "100 gr Power-Point", source: { maker: "Winchester", product: "Super-X 100 gr Power-Point (X2432)", url: WIN_URL, read, level: "full" } },
+  { id: "65cm", name: "6.5 Creedmoor", group: "Deer rifles", grains: 143, bc: 0.625, fps: 2700, bullet: "143 gr ELD-X", source: { maker: "Hornady", product: "Precision Hunter 143 gr ELD-X (81499)", url: "https://www.hornady.com/ammunition/rifle/6-5-creedmoor-143-gr-eld-x-precision-hunter", read, level: "bc-listing" } },
+  { id: "270", name: ".270 Win", group: "Deer rifles", grains: 130, bc: 0.372, fps: 3060, bullet: "130 gr Power-Point", source: { maker: "Winchester", product: "Super-X 130 gr Power-Point", url: WIN_URL, read, level: "full", note: "The page lists 3060 fps and 2702 ft-lb, which is 130 gr." } },
+  { id: "7mm08", name: "7mm-08", group: "Deer rifles", grains: 140, bc: 0.36, fps: 2800, bullet: "140 gr Power-Point", source: { maker: "Winchester", product: "Super-X 140 gr Power-Point (X708)", url: WIN_URL, read, level: "full" } },
+  { id: "308", name: ".308 Win", group: "Deer rifles", grains: 150, bc: 0.294, fps: 2820, bullet: "150 gr Power-Point", source: { maker: "Winchester", product: "Super-X 150 gr Power-Point (X3085)", url: WIN_URL, read, level: "full" } },
+  { id: "3006", name: ".30-06", group: "Deer rifles", grains: 150, bc: 0.294, fps: 2920, bullet: "150 gr Power-Point", source: { maker: "Winchester", product: "Super-X 150 gr Power-Point", url: WIN_URL, read, level: "full" } },
+  { id: "7rm", name: "7mm Rem Mag", group: "Deer rifles", grains: 150, bc: 0.373, fps: 3090, bullet: "150 gr Power-Point", source: { maker: "Winchester", product: "Super-X 150 gr Power-Point (X7MMR1)", url: WIN_URL, read, level: "full" } },
+  { id: "300wm", name: ".300 Win Mag", group: "Deer rifles", grains: 180, bc: 0.438, fps: 2960, bullet: "180 gr Power-Point", source: { maker: "Winchester", product: "Super-X 180 gr Power-Point", url: WIN_URL, read, level: "full" } },
+  { id: "350l", name: ".350 Legend", group: "Straight-wall and brush guns", grains: 180, bc: 0.221, fps: 2100, bullet: "180 gr Power-Point", source: { maker: "Winchester", product: "Super-X 180 gr Power-Point (X3501)", url: WIN_URL, read, level: "full" } },
+  { id: "450b", name: ".450 Bushmaster", group: "Straight-wall and brush guns", grains: 260, bc: 0.191, fps: 2110, bullet: "260 gr Power-Point", source: { maker: "Winchester", product: "Super-X 260 gr Power-Point (X4501)", url: WIN_URL, read, level: "full" } },
+  { id: "3030", name: ".30-30 Win", group: "Straight-wall and brush guns", grains: 160, bc: 0.33, fps: 2400, bullet: "160 gr FTX", source: { maker: "Hornady", product: "LEVERevolution 160 gr FTX (82730)", url: "https://www.hornady.com/ammunition/rifle/30-30-win-160-gr-ftx-leverevolution", read, level: "bc-listing" } },
+  { id: "12ga", name: "12 ga rifled slug", group: "Slug and muzzleloader", grains: 438, bc: 0.11, fps: 1610, bullet: "1 oz rifled slug", source: { maker: "Federal", product: "Power-Shok Rifled Slug, 2-3/4 in, 1 oz (F127 RS)", url: "https://www.federalpremium.com/shotshell/power-shok-rifled-slug/11-F127+RS.html", read, level: "full", note: "Federal tested in a 30 in barrel with sights 0.5 in above the bore." } },
+  { id: "50ml", name: ".50 cal muzzleloader", group: "Slug and muzzleloader", grains: 250, bc: 0.21, fps: 2250, bullet: "250 gr SST-ML sabot", source: { maker: "Hornady", product: "50 Cal SST-ML Speed Sabot 250 gr (67270)", url: "https://www.hornady.com/muzzleloading/browse/50-cal-lock-n-load-low-drag-with-45-cal-250-gr-sst-bullet", read, level: "full", note: "Hornady's velocity is from a T/C Omega with 150 gr charges. Yours depends on your charge." } }
 ];
 
 export function presetById(id) {
