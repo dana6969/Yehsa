@@ -14,6 +14,7 @@ import { safetyAnswer } from "./safety.js";
 import { compoundParts, dictionaryLookup, isEmergency, reassurance, shouldAbstain } from "./answer_gate.js";
 import { searchBooks } from "./book_index.js";
 import { proposeAgents } from "./agents/host.js";
+import { formatAnswerSource } from "./answer_source.js";
 
 function premiseFromKnowledge(question, knowledge) {
   const texts = [knowledge?.text, ...(knowledge?.hits || []).map((hit) => hit?.text)];
@@ -40,7 +41,7 @@ function finish(question, emotion, knowledge, extra, options) {
     answer: { answered: Boolean(text), text, confidence: extra.confidence || "ok" },
     files: options.corpusFiles
   }, options.agentSettings);
-  return {
+  const result = {
     question: knowledge?.question || question,
     emotion,
     answered: Boolean(text),
@@ -48,9 +49,12 @@ function finish(question, emotion, knowledge, extra, options) {
     hits: extra.hits || knowledge?.hits || [],
     kind: extra.kind || knowledge?.kind || null,
     symbol: extra.symbol || knowledge?.symbol || null,
+    title: extra.title || knowledge?.title || null,
     learning: { learned: turn.learned, turns: turn.profile?.turns || 0 },
     proposals
   };
+  result.source = formatAnswerSource({ ...result, source: extra.source || knowledge?.source || null });
+  return result;
 }
 
 export function ask(input, options = {}) {
@@ -94,7 +98,15 @@ export function ask(input, options = {}) {
       text: safety.text,
       kind: safety.kind,
       symbol: safety.symbol,
-      hits: []
+      title: safety.title || null,
+      source: safety.source || null,
+      hits: safety.source ? [{
+        kind: safety.kind,
+        symbol: safety.symbol,
+        title: safety.title || "",
+        source: safety.source,
+        text: safety.text
+      }] : []
     }, options);
   }
   const defined = dictionaryLookup(original);

@@ -812,6 +812,7 @@ function AskPane({ session, owner, active, docked, hidden, screen, position, set
             role: "yehsa",
             text: proposed.card ? offer : "That action is switched off, so I did not send anything.",
             chips: sourceChips(result),
+            source: result?.source || null,
             pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
               id: image.id,
               href: imageHref(image.file),
@@ -829,7 +830,7 @@ function AskPane({ session, owner, active, docked, hidden, screen, position, set
           const reply = result?.text || "No model is connected, so nothing was sent. Add one under Me, Models. It stays off until you turn it on.";
           priorRef.current = { utterance: text };
           setPhase(result?.answered ? "ready" : "miss");
-          pushMessage({ role: "yehsa", text: result?.text ? `${reply} No model is connected, so nothing was sent.` : reply, chips: sourceChips(result), question: text, symbol: result?.symbol || null, learnedId: result?.learnedId || null });
+          pushMessage({ role: "yehsa", text: result?.text ? `${reply} No model is connected, so nothing was sent.` : reply, chips: sourceChips(result), source: result?.source || null, question: text, symbol: result?.symbol || null, learnedId: result?.learnedId || null });
           return;
         }
         const reply = result?.text || result?.miss || "I don't have an installed note for that.";
@@ -840,6 +841,7 @@ function AskPane({ session, owner, active, docked, hidden, screen, position, set
           role: "yehsa",
           text: reply,
           chips: sourceChips(result),
+          source: result?.source || null,
           pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
             id: image.id,
             href: imageHref(image.file),
@@ -1039,6 +1041,7 @@ function AskPane({ session, owner, active, docked, hidden, screen, position, set
       {docked && latest?.role === "yehsa" ? (
         <View style={styles.bubbleYehsa}>
           <Text numberOfLines={4} style={styles.bubbleText}>{latest.text}</Text>
+          {latest.source ? <Text numberOfLines={2} style={styles.sourceLine}>{`Source: ${latest.source}`}</Text> : null}
           {latest.card && gate.pending?.id === latest.card.id ? (
             <View style={styles.card}>
               <Text style={styles.bubbleText}>{latest.card.label}</Text>
@@ -1061,6 +1064,9 @@ function AskPane({ session, owner, active, docked, hidden, screen, position, set
         {messages.map((item) => (
           <View key={item.id} style={item.role === "you" ? styles.bubbleYou : styles.bubbleYehsa}>
             <Text style={styles.bubbleText}>{item.text}</Text>
+            {item.role === "yehsa" && item.source ? (
+              <Text accessibilityRole="text" style={styles.sourceLine}>{`Source: ${item.source}`}</Text>
+            ) : null}
             {item.pictures?.length ? (
               <View style={styles.cardRow}>
                 {item.pictures.map((picture) => (
@@ -2071,6 +2077,7 @@ const styles = StyleSheet.create({
   thumb: { width: 88, height: 66, borderRadius: 10, backgroundColor: colors.field },
   info: { position: "absolute", right: 4, bottom: 4 },
   sourceChip: { color: colors.muted, fontSize: 12, marginRight: 8 },
+  sourceLine: { color: colors.muted, fontSize: 13, lineHeight: 18, marginTop: 6 },
   undoLink: { color: colors.brass, fontSize: 15, marginTop: 6 },
   iconButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.brass, alignItems: "center", justifyContent: "center" },
   iconButtonQuiet: { width: 48, height: 48, borderRadius: 24, alignItems: "center", justifyContent: "center" },
