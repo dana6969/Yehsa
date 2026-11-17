@@ -29,7 +29,8 @@ function arithmetic(text) {
     const match = text.match(pattern);
     if (!match) continue;
     const rest = text.slice(match.index + match[0].length);
-    if (/\b(?:plus|minus|times|divided by)\b/.test(rest)) continue;
+    if (/\b(?:plus|minus|times|multiplied by|divided by|over)\b/.test(rest)) continue;
+    if (/^\s*[-+*/x×÷^)(]/.test(rest)) continue;
     const value = op(Number(match[1]), Number(match[2]));
     const shown = formatNumber(value);
     if (shown == null) return { text: "Division by zero is undefined." };
@@ -119,6 +120,142 @@ function precedence(text) {
   let total = 0;
   for (const [sign, part] of addends) total += sign === "minus" ? -part : part;
   return { text: `That comes to ${formatNumber(total)}.` };
+}
+
+// Full arithmetic expressions: + - * / ^ and parentheses, with normal
+// precedence (powers right to left, then * and /, then + and -, each left to
+// right). Hand-written parser, never eval. Implied multiplication next to a
+// parenthesis ("6/2(1+2)") and a minus sign right before a power ("-2^2") are
+// read different ways by different people, so those get refused instead of
+// guessed. Unbalanced parentheses are refused too.
+const EXPR_PREFIX = /^(?:what is|what's|whats|how much is|calculate|compute|evaluate|solve|work out)\s+/;
+
+function exprTokens(text) {
+  let body = text.replace(EXPR_PREFIX, "").replace(/^(?:the value of\s+)/, "");
+  body = body.replace(/\s*(?:=|equals?|is equal to)?\s*\.?\s*$/, "");
+  body = body
+    .replace(/\bmultiplied by\b/g, " * ")
+    .replace(/\btimes\b/g, " * ")
+    .replace(/\bdivided by\b/g, " / ")
+    .replace(/\bplus\b/g, " + ")
+    .replace(/\bminus\b/g, " - ")
+    .replace(/\bto the power of\b/g, " ^ ")
+    .replace(/\*\*/g, " ^ ")
+    .replace(/×/g, " * ")
+    .replace(/÷/g, " / ")
+    .replace(/[−–]/g, " - ");
+  // "x" means multiply only when it sits between a number or ")" and a number or "(".
+  body = body.replace(/(\d|\))\s*x\s*(?=[\d(.])/g, "$1 * ");
+  if (!body || /[^0-9.+\-*/^()\s]/.test(body)) return null;
+  const tokens = [];
+  const re = /\s*(\d+(?:\.\d+)?|\.\d+|[-+*/^()])/y;
+  let pos = 0;
+  while (pos < body.length) {
+    if (/^\s+$/.test(body.slice(pos))) break;
+    re.lastIndex = pos;
+    const m = re.exec(body);
+    if (!m) return null;
+    tokens.push(m[1]);
+    pos = re.lastIndex;
+  }
+  return tokens;
+}
+
+class ExprRefusal extends Error {}
+
+function parseExpression(tokens) {
+  let i = 0;
+  const peek = () => tokens[i];
+  const isNum = (t) => t != null && /^[\d.]/.test(t);
+  function primary() {
+    const t = tokens[i];
+    if (t === "(") {
+      i += 1;
+      const v = sum();
+      if (tokens[i] !== ")") throw new ExprRefusal("paren");
+      i += 1;
+      if (tokens[i] === "(" || isNum(tokens[i])) throw new ExprRefusal("implied");
+      return v;
+    }
+    if (isNum(t)) {
+      i += 1;
+      if (tokens[i] === "(") throw new ExprRefusal("implied");
+      if (isNum(tokens[i])) throw new ExprRefusal("adjacent");
+      return Number(t);
+    }
+    throw new ExprRefusal("syntax");
+  }
+  function power() {
+    const base = primary();
+    if (peek() === "^") {
+      i += 1;
+      const exp = unary(true);
+      const v = base ** exp;
+      if (!Number.isFinite(v)) throw new ExprRefusal("range");
+      return v;
+    }
+    return base;
+  }
+  function unary(inExponent = false) {
+    if (peek() === "-" || peek() === "+") {
+      const sign = tokens[i] === "-" ? -1 : 1;
+      i += 1;
+      const start = i;
+      const v = unary(inExponent);
+      // "-2^2": some read (-2)^2, some -(2^2). Refuse rather than pick.
+      if (sign < 0 && !inExponent && tokens.slice(start, i).includes("^") && tokens[start] !== "(") throw new ExprRefusal("unary-power");
+      return sign * v;
+    }
+    return power();
+  }
+  function product() {
+    let v = unary();
+    while (peek() === "*" || peek() === "/") {
+      const op = tokens[i];
+      i += 1;
+      const r = unary();
+      if (op === "/") {
+        if (r === 0) throw new ExprRefusal("zero");
+        v /= r;
+      } else v *= r;
+    }
+    return v;
+  }
+  function sum() {
+    let v = product();
+    while (peek() === "+" || peek() === "-") {
+      const op = tokens[i];
+      i += 1;
+      const r = product();
+      v = op === "+" ? v + r : v - r;
+    }
+    return v;
+  }
+  const value = sum();
+  if (i !== tokens.length) throw new ExprRefusal(tokens[i] === ")" ? "paren" : "syntax");
+  return value;
+}
+
+function expression(text) {
+  const tokens = exprTokens(text);
+  if (!tokens || !tokens.some((t) => /\d/.test(t))) return null;
+  const binary = tokens.filter((t, k) => /^[+\-*/^]$/.test(t) && k > 0 && tokens[k - 1] !== "(" && !/^[+\-*/^]$/.test(tokens[k - 1])).length;
+  const parens = tokens.includes("(") || tokens.includes(")");
+  // One plain operation stays with the older, worded answers below.
+  const unaryPower = tokens.includes("^") && tokens.some((t, k) => t === "-" && (k === 0 || /^[+\-*/^(]$/.test(tokens[k - 1])));
+  if (binary < 2 && !parens && !unaryPower) return null;
+  try {
+    const value = parseExpression(tokens);
+    const shown = formatNumber(value);
+    if (shown == null) return null;
+    return { value, text: `That comes to ${shown}.` };
+  } catch (err) {
+    if (!(err instanceof ExprRefusal)) throw err;
+    if (err.message === "zero") return { text: "Division by zero is undefined." };
+    if (err.message === "paren") return { ambiguous: true, text: "The parentheses in that do not match up, so I will not guess where they go." };
+    if (err.message === "implied" || err.message === "unary-power") return { ambiguous: true, text: AMBIGUOUS };
+    return null;
+  }
 }
 
 function extraMath(text) {
@@ -262,6 +399,8 @@ function resultValue(item) {
 
 export function calculate(input) {
   const text = normalizeUnits(clean(input));
+  const full = expression(text);
+  if (full) return full.ambiguous ? { text: full.text } : full;
   const exact = arithmetic(text) || extraMath(text) || precedence(text) || convert(text);
   const prepared = expandFractions(normalizeUnits(stripFillers(text)));
   const loose = looseMath(prepared) || (prepared !== text ? (arithmetic(prepared) || extraMath(prepared) || precedence(prepared) || convert(prepared)) : null);
