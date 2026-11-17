@@ -17,6 +17,9 @@ import { searchPassages } from "./book_search.js";
 import { safetyAnswer } from "./safety.js";
 import { formatLearned, retrieveLearned } from "./learned_notes.js";
 import { formatAnswerSource } from "./answer_source.js";
+import { detectEmergency, meaningReply, meaningRoutesScripture } from "./meaning/meaning_layer.js";
+import { scriptureByMeaning } from "./meaning/scripture_meaning.js";
+import { treatmentGuard } from "./meaning/treatment_guard.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -118,6 +121,7 @@ function fieldResult(partial) {
  * passages: the field-note index (books_index.json passages).
  * options.session: { consent, fix, waypoints } for "from here" courses. Never assumed.
  * options.corpora: optional { search, lookupMedical, lexical } when a test supplies the full maps.
+ * options.meaning: optional context from src/phone/meaning_provider (on-device meaning matcher).
  */
 export function askField(input, passages, options = {}) {
   const raw = String(input ?? "");
@@ -169,9 +173,12 @@ export function askField(input, passages, options = {}) {
   }
   const expanded = expandParaphrase(raw, options.learned?.phrases);
   const question = parseQuestion(expanded);
+  const meaning = options.meaning || null;
+  const scriptureList = options.spiritualIndex?.passages || options.spiritualIndex;
   if (routesToSpiritual(raw, question)) {
-    const passages = options.spiritualIndex?.passages || options.spiritualIndex;
-    const spiritual = Array.isArray(passages) ? quoteSpiritual(raw, passages) : null;
+    const passages = scriptureList;
+    let spiritual = Array.isArray(passages) ? quoteSpiritual(raw, passages) : null;
+    if (meaning?.scripture && Array.isArray(passages)) spiritual = scriptureByMeaning(meaning, raw, spiritual, passages);
     if (!spiritual) {
       return fieldResult({
         answered: false,
@@ -203,9 +210,20 @@ export function askField(input, passages, options = {}) {
     consent: options.session?.consent === true,
     ingress: "local"
   }, sessionIo(options.session));
+  let meaningInfo = null;
+  if (meaning && !nav?.sentence) {
+    const reply = meaningReply(meaning, raw, knowledge);
+    meaningInfo = reply.meaning;
+    if (reply.text !== (knowledge?.text || null)) {
+      knowledge = reply.text ? { ...(knowledge || {}), text: reply.text, symbol: reply.symbol, kind: reply.kind, hits: reply.hits } : null;
+    }
+  } else if (knowledge?.symbol && treatmentGuard(raw, knowledge.symbol)) {
+    knowledge = null;
+  }
+  const emergency = meaning ? detectEmergency(meaning, raw).emergency : false;
   const premise = premiseFromKnowledge(raw, knowledge);
   const note = nav?.sentence || [premise, knowledge?.text].filter(Boolean).join(" ");
-  const fromFeeling = !note && emotion.understood ? emotion.deduction : null;
+  const fromFeeling = !note && emotion.understood && meaningInfo?.action !== "abstain" ? emotion.deduction : null;
   const text = note || fromFeeling;
   const learnedHit = options.learned ? retrieveLearned(expanded, options.learned) : null;
   if (!text && learnedHit) {
@@ -228,6 +246,22 @@ export function askField(input, passages, options = {}) {
       }]
     });
   }
+  if (!text && meaning?.scripture && Array.isArray(scriptureList) && meaningRoutesScripture(meaning, raw)) {
+    // The field notes had nothing, and the question reads as a question about the texts.
+    const routed = scriptureByMeaning(meaning, raw, quoteSpiritual(raw, scriptureList), scriptureList);
+    if (routed?.text) {
+      return fieldResult({
+        answered: true,
+        text: routed.text,
+        cue: null,
+        emotion: { understood: false, emotion: "neutral" },
+        miss: null,
+        kind: "spiritual",
+        symbol: routed.symbol || null,
+        title: routed.title || null
+      });
+    }
+  }
   if (!text) {
     return fieldResult({
       answered: false,
@@ -247,6 +281,8 @@ export function askField(input, passages, options = {}) {
     kind,
     symbol: knowledge?.symbol || (nav?.sentence ? "landscape_nav" : (fromFeeling ? emotion.emotion : null)),
     title: knowledge?.title || null,
-    hits: knowledge?.hits || []
+    hits: knowledge?.hits || [],
+    emergency,
+    meaning: meaningInfo
   });
 }

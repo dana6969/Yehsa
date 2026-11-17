@@ -22,7 +22,7 @@ const BOOKS = [
   ["proverbs", /proverbs/i]
 ];
 
-function namedBook(raw) {
+export function namedBook(raw) {
   const text = String(raw || "");
   return BOOKS.find(([word]) => new RegExp(`\\b${word}\\b`, "i").test(text)) || null;
 }
@@ -41,7 +41,7 @@ function toRoman(value) {
   return out;
 }
 
-function exactVerse(raw, passages) {
+export function exactVerse(raw, passages) {
   const text = String(raw || "");
   const chapter = text.match(/\bchapter\s+(\d+|[ivx]+)\b.{0,24}\bstanza\s+(\d+)\b/i);
   if (chapter) {

@@ -7,7 +7,7 @@ import { adaptToUser, rememberUserTurn } from "./user_learning.js";
 import { navigationSentence } from "./landscape_nav.js";
 import { expandParaphrase } from "./paraphrase.js";
 import { calculate } from "./calculator.js";
-import { spiritualAnswer } from "./spiritual_answer.js";
+import { scripturePassages, spiritualAnswer } from "./spiritual_answer.js";
 import { routesToSpiritual } from "./spiritual_route.js";
 import { premiseFlag } from "./premise.js";
 import { safetyAnswer } from "./safety.js";
@@ -15,6 +15,9 @@ import { compoundParts, dictionaryLookup, isEmergency, reassurance, shouldAbstai
 import { searchBooks } from "./book_index.js";
 import { proposeAgents } from "./agents/host.js";
 import { formatAnswerSource } from "./answer_source.js";
+import { detectEmergency, meaningReply, meaningRoutesScripture } from "./meaning/meaning_layer.js";
+import { scriptureByMeaning } from "./meaning/scripture_meaning.js";
+import { treatmentGuard } from "./meaning/treatment_guard.js";
 
 function premiseFromKnowledge(question, knowledge) {
   const texts = [knowledge?.text, ...(knowledge?.hits || []).map((hit) => hit?.text)];
@@ -50,6 +53,8 @@ function finish(question, emotion, knowledge, extra, options) {
     kind: extra.kind || knowledge?.kind || null,
     symbol: extra.symbol || knowledge?.symbol || null,
     title: extra.title || knowledge?.title || null,
+    emergency: Boolean(extra.emergency),
+    meaning: extra.meaning || null,
     learning: { learned: turn.learned, turns: turn.profile?.turns || 0 },
     proposals
   };
@@ -57,8 +62,11 @@ function finish(question, emotion, knowledge, extra, options) {
   return result;
 }
 
+// options.meaning: a context from meaning/meaning_node.js prepareMeaning(). Without it Ask is
+// the lexical path. askWithMeaning() builds the context and then calls this synchronously.
 export function ask(input, options = {}) {
   const original = String(input || "");
+  const meaning = options.meaning || null;
   const expanded = expandParaphrase(original);
   const question = parseQuestion(expanded);
   question.original = original;
@@ -87,7 +95,8 @@ export function ask(input, options = {}) {
     return finish(question, emotion, null, { text: calc.text, kind: "calculator", symbol: "calculate", hits: [] }, options);
   }
   if (routesToSpiritual(original, question)) {
-    const spiritual = spiritualAnswer(original);
+    let spiritual = spiritualAnswer(original);
+    if (meaning?.scripture) spiritual = scriptureByMeaning(meaning, original, spiritual, scripturePassages());
     if (!spiritual) return finish(question, emotion, null, { text: null, confidence: "low" }, options);
     return finish(question, emotion, null, spiritual, options);
   }
@@ -113,19 +122,63 @@ export function ask(input, options = {}) {
   if (defined) {
     return finish(question, emotion, null, defined, options);
   }
-  const knowledge = recallKnowledge(expanded);
+  let knowledge = recallKnowledge(expanded);
   const nav = navigationSentence(original, options);
+  let meaningInfo = null;
+  if (meaning && !nav?.sentence) {
+    const reply = meaningReply(meaning, original, knowledge);
+    meaningInfo = reply.meaning;
+    if (reply.text !== (knowledge?.text || null)) {
+      knowledge = reply.text ? { ...(knowledge || {}), text: reply.text, symbol: reply.symbol, kind: reply.kind, hits: reply.hits } : null;
+    }
+  } else if (knowledge?.symbol && treatmentGuard(original, knowledge.symbol)) {
+    // Hard rule without the model too: a care note is not attached to an unrelated injury.
+    knowledge = null;
+  }
+  const emergency = isEmergency(original) || (meaning ? detectEmergency(meaning, original).emergency : false);
   const premise = premiseFromKnowledge(original, knowledge);
   const note = nav?.sentence || [premise, knowledge?.text].filter(Boolean).join(" ");
-  let base = note || (emotion.understood ? emotion.deduction : null);
-  if (note && base && isEmergency(original) && emotion.understood) base = `${note} ${reassurance()}`;
-  if (!base) return finish(question, emotion, knowledge, { text: null, confidence: "low" }, options);
+  let base = note || (emotion.understood && meaningInfo?.action !== "abstain" ? emotion.deduction : null);
+  if (note && base && emergency && emotion.understood) base = `${note} ${reassurance()}`;
+  if (!base && meaning?.scripture && meaningRoutesScripture(meaning, original)) {
+    // The field notes had nothing, and the question reads as a question about the texts.
+    const spiritual = scriptureByMeaning(meaning, original, spiritualAnswer(original), scripturePassages());
+    if (spiritual?.text) return finish(question, emotion, null, { ...spiritual, adapt: false }, options);
+  }
+  if (!base) return finish(question, emotion, knowledge, { text: null, confidence: "low", emergency, meaning: meaningInfo }, options);
   return finish(question, emotion, knowledge, {
     text: base,
     hits: knowledge?.hits,
     kind: knowledge?.kind || (nav?.sentence ? "landscape" : "emotion"),
-    symbol: knowledge?.symbol || (nav?.sentence ? "landscape_nav" : emotion.emotion)
+    symbol: knowledge?.symbol || (nav?.sentence ? "landscape_nav" : emotion.emotion),
+    emergency,
+    meaning: meaningInfo
   }, options);
+}
+
+/**
+ * Ask with the offline meaning matcher. Loads the embedding model lazily on first use, embeds
+ * the question (and its parts and the lexical candidate reply), then runs the same synchronous
+ * Ask. Falls back to the lexical path when the model or runtime is missing.
+ */
+export async function askWithMeaning(input, options = {}) {
+  const original = String(input || "");
+  const { prepareMeaning } = await import("./meaning/meaning_node.js");
+  const replies = [];
+  const expanded = expandParaphrase(original);
+  const parsed = parseQuestion(expanded);
+  const spiritual = routesToSpiritual(original, parsed);
+  if (!spiritual && parsed.topic) {
+    const lexical = recallKnowledge(expanded);
+    if (lexical?.text) replies.push(lexical.text);
+  }
+  let meaning = await prepareMeaning(original, { replies });
+  if (meaning && (spiritual || meaningRoutesScripture(meaning, original))) {
+    const lexical = spiritualAnswer(original);
+    const quoted = lexical?.hits?.[0]?.text ? [lexical.hits[0].text] : [];
+    meaning = await prepareMeaning(original, { replies: quoted, scripturePassages: scripturePassages() });
+  }
+  return ask(original, { ...options, meaning });
 }
 
 const entry = process.argv[1] ? pathToFileURL(path.resolve(process.argv[1])).href : "";
