@@ -10,7 +10,12 @@ import { classifyOutcome, judge, selfCheck, tallyOutcomes } from "./score.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const EVAL_DIR = path.dirname(fileURLToPath(import.meta.url));
-const { ask } = await import("../symbolic/ask.js");
+const { ask, askWithMeaning } = await import("../symbolic/ask.js");
+const { modelAvailable } = await import("../symbolic/meaning/embed_node.js");
+const { MODEL_INFO } = await import("../symbolic/meaning/embedder.js");
+// The meaning matcher runs when its bundled model is present. YEHSA_MEANING_OFF=1 scores the lexical path.
+const useMeaning = modelAvailable();
+const askOne = (prompt) => (useMeaning ? askWithMeaning(prompt) : ask(prompt));
 
 selfCheck();
 const questions = loadRegressionV1().questions;
@@ -24,7 +29,7 @@ let peak = rssAtImport;
 for (let index = 0; index < questions.length; index += 1) {
   const question = questions[index];
   const started = process.hrtime.bigint();
-  const result = ask(question.prompt);
+  const result = await askOne(question.prompt);
   const ms = Number(process.hrtime.bigint() - started) / 1e6;
   const memory = rss();
   if (memory > peak) peak = memory;
@@ -77,6 +82,7 @@ const report = {
   node: process.version,
   platform: `${os.platform()} ${os.release()}`,
   questionCount: questions.length,
+  meaning: { enabled: useMeaning, model: useMeaning ? MODEL_INFO.name : null },
   long: {
     rssAtImport,
     rssAfterFirst: long[0]?.rss || null,
@@ -180,6 +186,7 @@ function render(data) {
   lines.push(`- Host: ${data.platform}`);
   lines.push(`- Generated: ${data.generatedAt}`);
   lines.push(`- Questions: ${data.questionCount}`);
+  lines.push(`- Meaning matcher: ${data.meaning?.enabled ? `on (${data.meaning.model})` : "off (lexical path)"}`);
   lines.push("");
   lines.push("## Outcome breakdown");
   lines.push("");

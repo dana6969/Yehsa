@@ -1,11 +1,14 @@
 // Score the development set. Not used by the frozen v1 runner or the gate.
-import { ask } from "../symbolic/ask.js";
+import { ask, askWithMeaning } from "../symbolic/ask.js";
+import { modelAvailable } from "../symbolic/meaning/embed_node.js";
 import { classifyOutcome, judge, tallyOutcomes } from "./score.mjs";
 import { DEV_SET } from "./dev_set.mjs";
 
+// Pass --lexical (or set YEHSA_MEANING_OFF=1) to score without the meaning matcher.
+const useMeaning = !process.argv.includes("--lexical") && modelAvailable();
 const long = [];
 for (const question of DEV_SET) {
-  const result = ask(question.prompt, { agents: false });
+  const result = useMeaning ? await askWithMeaning(question.prompt, { agents: false }) : ask(question.prompt, { agents: false });
   const scored = judge(question, result);
   const outcome = classifyOutcome(question, { ...result, ...scored });
   long.push({
@@ -23,7 +26,7 @@ for (const question of DEV_SET) {
 }
 
 const breakdown = tallyOutcomes(long.map((item) => ({ ...item, expectKind: DEV_SET.find((q) => q.id === item.id).expect.kind })));
-console.log(JSON.stringify({ questions: DEV_SET.length, ...breakdown }, null, 2));
+console.log(JSON.stringify({ mode: useMeaning ? "meaning" : "lexical", questions: DEV_SET.length, ...breakdown }, null, 2));
 if (breakdown.incorrectConfident || breakdown.incorrectHedged || breakdown.unnecessaryRefusal || breakdown.total !== DEV_SET.length) {
   process.exitCode = 1;
 }

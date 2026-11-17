@@ -44,3 +44,12 @@ node eval/bm25.mjs /tmp/yehsa-bm25.json
 BM25 is Okapi (k1 = 1.2, b = 0.75) over the field passages and the same dictionary merge Ask reads. It abstains only when no query word matches. No commercial product and no downloaded model is part of this comparison.
 
 `REPORT.md` is the results write-up, including the category table and the wrong-but-confident replies.
+
+## Meaning matcher
+
+`eval/run.mjs`, `eval/worker.mjs`, and `eval/dev_run.mjs` use `askWithMeaning()` when the bundled
+model `assets/meaning/bge-small-en-v1.5-int8.onnx` and `onnxruntime-node` are present, so the gate
+scores what ships. `YEHSA_MEANING_OFF=1` scores the lexical path. `eval/paraphrase_set.mjs` is a
+separate set of 100 reworded questions written from the note topics; `node eval/paraphrase_run.mjs`
+scores it (`--lexical` for the old path). The meaning thresholds were tuned on it, so it is a
+development set, not a holdout.

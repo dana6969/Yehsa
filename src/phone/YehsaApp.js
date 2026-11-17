@@ -18,6 +18,8 @@ import { expandParaphrase } from "../../symbolic/paraphrase.js";
 import { parseQuestion } from "../../symbolic/question_parse.js";
 import { routesToSpiritual } from "../../symbolic/spiritual_route.js";
 import { loadScriptureIndex } from "./scripture_index";
+import { prepareMeaning } from "./meaning_provider";
+import { quoteSpiritual } from "../../symbolic/spiritual_quote.js";
 import { phoneCorpusMeta } from "../../symbolic/phone_corpus.js";
 import { courseText, saveSessionWaypoint } from "../../symbolic/phone_land.js";
 import {
@@ -765,10 +767,26 @@ function AskPane({ session, owner, active, docked, hidden, screen, position, set
         if (isCapabilityQuestion(text)) {
           return { answered: true, text: capabilitySummary(phoneCorpusMeta), kind: "about", symbol: "capabilities" };
         }
-        const spiritualIndex = routesToSpiritual(text, parseQuestion(expandParaphrase(text)))
-          ? await loadScriptureIndex()
-          : null;
-        return askField(text, books.passages, { session, spiritualIndex, learned });
+        const spiritual = routesToSpiritual(text, parseQuestion(expandParaphrase(text)));
+        let spiritualIndex = spiritual ? await loadScriptureIndex() : null;
+        const lexical = askField(text, books.passages, { session, spiritualIndex, learned });
+        // Offline meaning matcher: loads on the first question, then checks or fills the lexical note.
+        let meaning = null;
+        try {
+          meaning = await prepareMeaning(text, {
+            replies: [
+              lexical?.text,
+              spiritualIndex ? quoteSpiritual(text, spiritualIndex.passages || spiritualIndex)?.hits?.[0]?.text : null
+            ].filter(Boolean),
+            spiritual,
+            loadScripturePassages: loadScriptureIndex
+          });
+        } catch {
+          meaning = null;
+        }
+        if (!meaning) return lexical;
+        if (meaning.scripture && !spiritualIndex) spiritualIndex = await loadScriptureIndex();
+        return askField(text, books.passages, { session, spiritualIndex, learned, meaning });
       };
       run().then((result) => {
         if (askGen.current !== generation) return;

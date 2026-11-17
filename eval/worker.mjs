@@ -2,7 +2,10 @@
 import fs from "fs";
 import { loadRegressionV1 } from "./regression/v1/load.mjs";
 import { judge } from "./score.mjs";
-import { ask } from "../symbolic/ask.js";
+import { ask, askWithMeaning } from "../symbolic/ask.js";
+import { modelAvailable } from "../symbolic/meaning/embed_node.js";
+
+const useMeaning = modelAvailable();
 
 const args = new Map();
 for (let i = 2; i < process.argv.length; i += 2) args.set(process.argv[i], process.argv[i + 1]);
@@ -19,7 +22,7 @@ let peak = rssStart;
 const items = [];
 for (const question of questions) {
   const started = process.hrtime.bigint();
-  const result = ask(question.prompt);
+  const result = useMeaning ? await askWithMeaning(question.prompt) : ask(question.prompt);
   const ms = Number(process.hrtime.bigint() - started) / 1e6;
   const memory = rss();
   if (memory > peak) peak = memory;
