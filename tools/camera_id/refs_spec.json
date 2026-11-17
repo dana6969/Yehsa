@@ -1,0 +1,79 @@
+{
+ "positives": {
+  "yarrow": [
+   "Achillea millefolium (flowers)",
+   "Achillea millefolium",
+   "Achillea millefolium (habitus)"
+  ],
+  "plantain": [
+   "Plantago major",
+   "Plantago lanceolata",
+   "Plantago major (leaves)"
+  ],
+  "willow": [
+   "Salix alba",
+   "Salix babylonica",
+   "Salix (leaves)",
+   "Salix fragilis"
+  ],
+  "wild_carrot": [
+   "Daucus carota (flowers)",
+   "Daucus carota subsp. carota",
+   "Daucus carota"
+  ],
+  "poison_hemlock": [
+   "Conium maculatum",
+   "Conium maculatum (flowers)",
+   "Conium maculatum (stems)"
+  ],
+  "water_hemlock": [
+   "Cicuta maculata",
+   "Cicuta virosa",
+   "Cicuta douglasii"
+  ],
+  "wild_onion": [
+   "Allium canadense",
+   "Allium vineale",
+   "Allium ursinum"
+  ],
+  "death_camas": [
+   "Toxicoscordion venenosum",
+   "Toxicoscordion paniculatum",
+   "Toxicoscordion nuttallii",
+   "Anticlea elegans"
+  ]
+ },
+ "negatives": {
+  "dandelion": [
+   "Taraxacum officinale"
+  ],
+  "clover": [
+   "Trifolium pratense"
+  ],
+  "oak": [
+   "Quercus alba leaves",
+   "Quercus robur (leaves)"
+  ],
+  "fern": [
+   "Pteridium aquilinum"
+  ],
+  "lawn": [
+   "Lawns"
+  ],
+  "rock": [
+   "Granite"
+  ],
+  "dog": [
+   "Dogs in the snow"
+  ],
+  "car": [
+   "Ford Mustang (sixth generation)"
+  ],
+  "mushroom": [
+   "Amanita muscaria"
+  ],
+  "sunflower": [
+   "Helianthus annuus (flowers)"
+  ]
+ }
+}

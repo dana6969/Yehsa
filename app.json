@@ -28,7 +28,8 @@
         "BLUETOOTH_ADMIN",
         "BLUETOOTH_CONNECT",
         "BLUETOOTH_SCAN",
-        "RECORD_AUDIO"
+        "RECORD_AUDIO",
+        "CAMERA"
       ]
     },
     "ios": {
@@ -79,7 +80,15 @@
       "expo-sqlite",
       "expo-asset",
       "onnxruntime-react-native",
-      "./plugins/withOrtVersion.js"
+      "./plugins/withOrtVersion.js",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Yehsa uses the camera only when you tap Take photo on Identify. The photo stays on this phone.",
+          "photosPermission": "Yehsa opens a photo only when you choose one on Identify. The photo stays on this phone.",
+          "microphonePermission": false
+        }
+      ]
     ],
     "extra": {
       "eas": {

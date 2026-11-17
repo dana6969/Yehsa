@@ -24,3 +24,5 @@ export { beforeYouGo, tripPlanText } from "../../symbolic/before_you_go.js";
 export { coverageFor, planArea, visibleBox } from "../../symbolic/area_download.js";
 
 bootImportedBooks();
+
+export { default as CameraIdScreen } from "./CameraIdScreen.js";
