@@ -38,7 +38,8 @@ export default function LandscapeMap({
   navTarget,
   onRecenter,
   onUserPan,
-  features
+  features,
+  fill = false
 }) {
   const [size, setSize] = useState({ width: 320, height: 360 });
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -106,7 +107,7 @@ export default function LandscapeMap({
       setReadout(courseSentence(km, bearing, "between the two taps"));
     } else if (onWaypoint) {
       onWaypoint(point);
-      setReadout("Tap proposes a waypoint. It is not saved until you approve it in Chat.");
+      setReadout("Tap proposes a waypoint. It is not saved until you approve it in Ask.");
     }
   }
 
@@ -119,7 +120,7 @@ export default function LandscapeMap({
   const you = held ? project(held) : null;
 
   return (
-    <View>
+    <View style={fill ? { flex: 1 } : null}>
       <View
         accessibilityLabel="Landscape canvas"
         onLayout={(event) => {
@@ -132,7 +133,7 @@ export default function LandscapeMap({
         onResponderMove={onMove}
         onResponderRelease={onRelease}
         style={{
-          height: 380,
+          ...(fill ? { flex: 1, minHeight: 240 } : { height: 380 }),
           backgroundColor: "#101611",
           borderColor: "#3d4c43",
           borderWidth: 1,

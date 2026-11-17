@@ -519,3 +519,29 @@ test("the SOS bumper opens an emergency screen that asks before calling or sendi
   assert.match(held.detail, /about 8 m/);
   assert.match(held.spoken, /69\.20000 degrees west/);
 });
+
+test("four tabs: Ask, Map, Field, People, with settings under More", async () => {
+  const nav = await import("./src/phone/nav_model.js");
+  assert.deepEqual(nav.TABS.map((item) => item.label), ["Ask", "Map", "Field", "People"]);
+  assert.equal(nav.TABS.some((item) => /^(Me|Mesh|Guide|Chat)$/.test(item.label)), false, "the Me tab is gone");
+  for (const id of ["location", "actions", "models", "learned", "keys", "about"]) {
+    assert.ok(nav.MORE_ITEMS.some((item) => item.id === id), `${id} lives under More`);
+  }
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.doesNotMatch(home, /styles\.dock\b|dockHost/, "the docked composer is replaced by the Ask chip");
+  assert.match(home, /function AskChip/);
+  assert.match(home, /<FieldPane/);
+  assert.match(home, /<MorePane/);
+  assert.match(home, /Layers and packs/);
+  assert.match(home, /<LandscapeMap\n\s+fill/);
+  const people = home.slice(home.indexOf("function PeoplePane"), home.indexOf("const styles = StyleSheet.create"));
+  assert.match(people, /<PeerChat/, "People opens on chat");
+  assert.match(people, /Scan and radio/);
+  assert.match(home, /chipVisible = !screen && tab !== "ask" && !\(tab === "people" && peopleChat\)/, "no chip inside an open peer conversation");
+  const field = fs.readFileSync("src/phone/FieldPane.js", "utf8");
+  assert.match(field, /id: "pictures", label: "Pictures"/);
+  assert.ok(field.indexOf('"pictures"') < field.indexOf('"course"'), "Pictures is the first tile");
+  const ui = fs.readFileSync("src/phone/ui.js", "utf8");
+  assert.match(ui, /label="More"/);
+  assert.match(ui, /export const tokens/);
+});

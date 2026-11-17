@@ -28,7 +28,7 @@ function qrCells(text) {
   return cells;
 }
 
-export default function PeerChat({ includeLocation = false }) {
+export default function PeerChat({ includeLocation = false, header = null, onView, toolbar = null }) {
   const [me, setMe] = useState(null);
   const [view, setView] = useState("list");
   const [practice, setPractice] = useState(null);
@@ -103,10 +103,15 @@ export default function PeerChat({ includeLocation = false }) {
     setDraft("");
   }
 
+  useEffect(() => {
+    onView?.(view);
+  }, [view]);
+
   return (
     <View style={styles.screen}>
+      {header}
       <View style={styles.top}>
-        <Text style={styles.title}>People</Text>
+        {header ? <View /> : <Text style={styles.title}>People</Text>}
         <Pressable accessibilityRole="button" accessibilityLabel="About this chat" onPress={() => setAbout((value) => !value)} style={styles.info}>
           <Ionicons name="information-circle-outline" size={22} color={colors.brass} />
         </Pressable>
@@ -132,6 +137,7 @@ export default function PeerChat({ includeLocation = false }) {
       <View style={styles.row}>
         <Action label="Contacts" tone={view === "list" ? "brass" : "quiet"} onPress={() => setView("list")} />
         <Action label="Pair" tone={view === "pair" ? "brass" : "quiet"} onPress={() => setView("pair")} />
+        {toolbar}
       </View>
 
       {view === "pair" ? (

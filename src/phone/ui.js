@@ -94,8 +94,8 @@ export function ScreenHeader({ title, lead, onBack, backLabel, compact, controls
         <Text style={styles.wordmark}>Yehsa</Text>
         {showControls ? (
           <View style={styles.headerTools}>
-            <HeaderIcon icon="search" label="Ask or go" onPress={shell.openSearch} />
-            <HeaderIcon icon="settings-outline" label="More" onPress={shell.openMore} />
+            {shell.openSearch ? <HeaderIcon icon="search" label="Ask or go" onPress={shell.openSearch} /> : null}
+            {shell.openMore ? <HeaderIcon icon="settings-outline" label="More" onPress={shell.openMore} /> : null}
           </View>
         ) : null}
       </View>

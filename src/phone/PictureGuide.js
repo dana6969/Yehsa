@@ -6,9 +6,9 @@ import { Quiet, ScreenHeader, colors } from "./ui.js";
 
 const DOMAINS = ["", "herbology", "first-aid", "knots", "fire", "shelter", "water", "sky", "landscape", "signaling"];
 
-export default function PictureGuide() {
+export default function PictureGuide({ onBack, backLabel, initialDomain = "" }) {
   const [query, setQuery] = useState("");
-  const [domain, setDomain] = useState("");
+  const [domain, setDomain] = useState(initialDomain);
   const [open, setOpen] = useState(null);
   const entries = guideView(manifest, { query, domain });
   const bytes = (manifest.images || []).reduce((sum, image) => sum + (Number(image.bytes) || 0), 0);
@@ -18,6 +18,8 @@ export default function PictureGuide() {
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
+        onBack={onBack}
+        backLabel={backLabel}
         title="Picture guide"
         lead="Real pictures, with credits when you ask."
       />

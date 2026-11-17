@@ -35,13 +35,14 @@ export default function OfflineMap({
   demTemplate,
   attribution,
   onFail,
-  onPress
+  onPress,
+  fill = false
 }) {
   const center = fix ? [fix.longitude, fix.latitude] : [-69, 45];
   return (
-    <View>
+    <View style={fill ? { flex: 1 } : null}>
       <MapView
-        style={{ height: 380 }}
+        style={fill ? { flex: 1, minHeight: 240 } : { height: 380 }}
         mapStyle={BLANK}
         logoEnabled={false}
         attributionEnabled

@@ -24,7 +24,8 @@ export default function OfflineMap({
   shapes,
   fix,
   onFail,
-  onPress
+  onPress,
+  fill = false
 }) {
   const host = useRef(null);
   const pressRef = useRef(onPress);
@@ -146,8 +147,8 @@ export default function OfflineMap({
   }, [archive, format, label, demTiles, contours, shapes, fix]);
 
   return (
-    <View>
-      <View ref={host} accessibilityLabel="Offline map" style={{ height: 380, borderRadius: 16, overflow: "hidden", backgroundColor: "#101611" }} />
+    <View style={fill ? { flex: 1 } : null}>
+      <View ref={host} accessibilityLabel="Offline map" style={{ ...(fill ? { flex: 1, minHeight: 240 } : { height: 380 }), borderRadius: 16, overflow: "hidden", backgroundColor: "#101611" }} />
       <Text style={{ color: "#b7bfb2", marginTop: 8 }}>{label}</Text>
     </View>
   );
