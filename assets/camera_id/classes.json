@@ -1,0 +1,1714 @@
+{
+"yarrow": {
+"title": "Yarrow",
+"latin": "Achillea millefolium",
+"group": "plant",
+"use": "medicinal",
+"look": "Feathery, finely divided leaves in a fern-like pattern; flat clusters of small white flowers. Crushed leaves smell sharp.",
+"lookalikes": [
+"wild_carrot",
+"poison_hemlock",
+"water_hemlock"
+],
+"caution": ""
+},
+"plantain": {
+"title": "Plantain",
+"latin": "Plantago major",
+"group": "plant",
+"use": "medicinal",
+"look": "Rosette of ribbed leaves with parallel veins and a stringy core when torn; a narrow seed spike.",
+"lookalikes": [],
+"caution": ""
+},
+"willow": {
+"title": "Willow",
+"latin": "Salix",
+"group": "tree",
+"use": "medicinal",
+"look": "Narrow leaves, often pale underneath; slim flexible twigs; usually near water.",
+"lookalikes": [],
+"caution": ""
+},
+"wild_carrot": {
+"title": "Wild carrot (Queen Anne's lace)",
+"latin": "Daucus carota",
+"group": "plant",
+"use": "edible",
+"look": "Hairy stem, finely cut leaves, flat white umbrella with one dark floret in the centre, smells of carrot.",
+"lookalikes": [
+"poison_hemlock",
+"water_hemlock",
+"yarrow"
+],
+"caution": "Poison hemlock has a smooth stem with purple blotches. Do not rely on a photo."
+},
+"poison_hemlock": {
+"title": "Poison hemlock",
+"latin": "Conium maculatum",
+"group": "plant",
+"use": "deadly",
+"look": "Smooth hairless stem with purple blotches, finely cut leaves, white umbrella flowers. Smells musty.",
+"lookalikes": [
+"wild_carrot",
+"water_hemlock",
+"yarrow"
+],
+"caution": "Every part is deadly."
+},
+"water_hemlock": {
+"title": "Water hemlock",
+"latin": "Cicuta",
+"group": "plant",
+"use": "deadly",
+"look": "Wet ground; clustered tuberous roots; leaves with sharp toothed leaflets and side veins that run to the notches.",
+"lookalikes": [
+"poison_hemlock",
+"wild_carrot",
+"yarrow"
+],
+"caution": "One of the most toxic plants in North America. Every part is deadly."
+},
+"wild_onion": {
+"title": "Wild onion",
+"latin": "Allium canadense",
+"group": "plant",
+"use": "edible",
+"look": "Round or flat grass-like leaves that smell of onion when crushed; a bulb at the base.",
+"lookalikes": [
+"death_camas"
+],
+"caution": "If it has no onion smell it is not a wild onion. Death camas has no onion smell."
+},
+"death_camas": {
+"title": "Death camas",
+"latin": "Toxicoscordion",
+"group": "plant",
+"use": "deadly",
+"look": "Onion-like grass leaves from a bulb, cream or greenish flower cluster. No onion smell.",
+"lookalikes": [
+"wild_onion"
+],
+"caution": "Every part is deadly."
+},
+"ramps": {
+"title": "Ramps (wild leek)",
+"latin": "Allium tricoccum",
+"group": "plant",
+"use": "edible",
+"look": "Two or three broad smooth leaves per plant in spring, red-purple stalk base, strong onion and garlic smell.",
+"lookalikes": [
+"false_hellebore",
+"lily_of_valley"
+],
+"caution": "Check smell on every leaf. False hellebore and lily of the valley grow in the same woods and are deadly."
+},
+"false_hellebore": {
+"title": "False hellebore (Indian poke)",
+"latin": "Veratrum viride",
+"group": "plant",
+"use": "deadly",
+"look": "Big pleated leaves that wrap the stem in a spiral; wet woods and meadows. No onion smell.",
+"lookalikes": [
+"ramps"
+],
+"caution": "Sometimes mistaken for ramps. Deadly."
+},
+"lily_of_valley": {
+"title": "Lily of the valley",
+"latin": "Convallaria majalis",
+"group": "plant",
+"use": "deadly",
+"look": "Two smooth upright leaves, small white bells on an arching stem, red berries.",
+"lookalikes": [
+"ramps"
+],
+"caution": "Mistaken for ramps. Every part is deadly."
+},
+"dandelion": {
+"title": "Dandelion",
+"latin": "Taraxacum officinale",
+"group": "plant",
+"use": "edible",
+"look": "Rosette of toothed leaves, one yellow flower per hollow stalk, milky sap.",
+"lookalikes": [
+"chicory"
+],
+"caution": ""
+},
+"chicory": {
+"title": "Chicory",
+"latin": "Cichorium intybus",
+"group": "plant",
+"use": "edible",
+"look": "Sky blue flowers on stiff, nearly leafless stems along roadsides; milky sap.",
+"lookalikes": [
+"dandelion"
+],
+"caution": ""
+},
+"red_clover": {
+"title": "Red clover",
+"latin": "Trifolium pratense",
+"group": "plant",
+"use": "edible",
+"look": "Pink-purple round flower heads; three leaflets with a pale V mark.",
+"lookalikes": [
+"white_clover"
+],
+"caution": ""
+},
+"white_clover": {
+"title": "White clover",
+"latin": "Trifolium repens",
+"group": "plant",
+"use": "edible",
+"look": "Low creeping plant, white round flower heads, three leaflets often with a pale band.",
+"lookalikes": [
+"red_clover"
+],
+"caution": ""
+},
+"burdock": {
+"title": "Burdock",
+"latin": "Arctium",
+"group": "plant",
+"use": "edible",
+"look": "Very large heart-shaped leaves, hooked burr heads, purple thistle-like flowers.",
+"lookalikes": [
+"foxglove"
+],
+"caution": "Young leaves can be mistaken for foxglove, which is deadly."
+},
+"foxglove": {
+"title": "Foxglove",
+"latin": "Digitalis purpurea",
+"group": "plant",
+"use": "deadly",
+"look": "Fuzzy leaves in a rosette, tall spike of tubular pink-purple bells.",
+"lookalikes": [
+"burdock",
+"comfrey"
+],
+"caution": "Deadly to the heart. Often confused with comfrey in the first year."
+},
+"comfrey": {
+"title": "Comfrey",
+"latin": "Symphytum officinale",
+"group": "plant",
+"use": "toxic",
+"look": "Rough hairy leaves, bell flowers in curled clusters.",
+"lookalikes": [
+"foxglove"
+],
+"caution": "Contains liver-damaging compounds. Do not eat or brew it."
+},
+"cattail": {
+"title": "Cattail",
+"latin": "Typha",
+"group": "plant",
+"use": "edible",
+"look": "Tall blade leaves, brown sausage-shaped seed head; wet places.",
+"lookalikes": [
+"iris_flag"
+],
+"caution": "Iris leaves look alike before flowering and are toxic."
+},
+"iris_flag": {
+"title": "Wild iris (blue flag, yellow flag)",
+"latin": "Iris versicolor",
+"group": "plant",
+"use": "toxic",
+"look": "Flat sword-shaped leaves in a fan; blue-violet or yellow flowers; wet ground.",
+"lookalikes": [
+"cattail"
+],
+"caution": "Toxic if eaten. Often mistaken for cattail shoots."
+},
+"wild_strawberry": {
+"title": "Wild strawberry",
+"latin": "Fragaria virginiana",
+"group": "plant",
+"use": "edible",
+"look": "Three toothed leaflets, white five-petal flowers, tiny red berries with seeds on the outside.",
+"lookalikes": [],
+"caution": ""
+},
+"brambles": {
+"title": "Blackberry and raspberry (Rubus)",
+"latin": "Rubus",
+"group": "plant",
+"use": "edible",
+"look": "Arching prickly canes, toothed compound leaves, clustered berries made of tiny beads.",
+"lookalikes": [],
+"caution": ""
+},
+"blueberry": {
+"title": "Blueberry",
+"latin": "Vaccinium angustifolium",
+"group": "plant",
+"use": "edible",
+"look": "Low shrub, small oval leaves, blue berries with a five-point crown at the tip.",
+"lookalikes": [],
+"caution": ""
+},
+"cranberry": {
+"title": "Cranberry",
+"latin": "Vaccinium macrocarpon",
+"group": "plant",
+"use": "edible",
+"look": "Trailing evergreen vine in bogs, tiny leaves, red berries.",
+"lookalikes": [],
+"caution": ""
+},
+"elderberry": {
+"title": "Elderberry",
+"latin": "Sambucus canadensis",
+"group": "plant",
+"use": "edible",
+"look": "Opposite compound leaves, flat clusters of white flowers, dark purple (or red) berries, pithy stems.",
+"lookalikes": [
+"water_hemlock",
+"pokeweed"
+],
+"caution": "Raw berries, leaves and stems are toxic. Cook the berries."
+},
+"pokeweed": {
+"title": "Pokeweed",
+"latin": "Phytolacca americana",
+"group": "plant",
+"use": "toxic",
+"look": "Purple-red stems, large leaves, drooping clusters of dark purple berries.",
+"lookalikes": [
+"elderberry"
+],
+"caution": "Berries, roots and mature leaves are toxic."
+},
+"staghorn_sumac": {
+"title": "Staghorn sumac",
+"latin": "Rhus typhina",
+"group": "plant",
+"use": "edible",
+"look": "Fuzzy velvet twigs, long compound leaves, upright red fuzzy berry cones.",
+"lookalikes": [
+"poison_sumac"
+],
+"caution": "Poison sumac has white drooping berries and grows in wet ground."
+},
+"poison_sumac": {
+"title": "Poison sumac",
+"latin": "Toxicodendron vernix",
+"group": "plant",
+"use": "toxic",
+"look": "Wet ground, smooth stems, leaves with a red stalk, drooping white-grey berries.",
+"lookalikes": [
+"staghorn_sumac"
+],
+"caution": "Skin contact causes a severe rash."
+},
+"poison_ivy": {
+"title": "Poison ivy",
+"latin": "Toxicodendron radicans",
+"group": "plant",
+"use": "toxic",
+"look": "Three leaflets, the middle one on a longer stalk; hairy vine on trees; leaves red in autumn.",
+"lookalikes": [
+"virginia_creeper"
+],
+"caution": "Leaves of three. Skin contact causes a rash. Smoke from burning it is dangerous."
+},
+"virginia_creeper": {
+"title": "Virginia creeper",
+"latin": "Parthenocissus quinquefolia",
+"group": "plant",
+"use": "toxic",
+"look": "Five leaflets spread like a hand; climbing vine with tendrils.",
+"lookalikes": [
+"poison_ivy"
+],
+"caution": "Berries are toxic. Sometimes mistaken for poison ivy."
+},
+"stinging_nettle": {
+"title": "Stinging nettle",
+"latin": "Urtica dioica",
+"group": "plant",
+"use": "edible",
+"look": "Opposite toothed leaves with stinging hairs, square stem, small green flower strings.",
+"lookalikes": [],
+"caution": "Stings on touch. Cooking removes the sting."
+},
+"lambsquarters": {
+"title": "Lambsquarters",
+"latin": "Chenopodium album",
+"group": "plant",
+"use": "edible",
+"look": "Diamond-shaped leaves with a white mealy powder underneath.",
+"lookalikes": [],
+"caution": ""
+},
+"wood_sorrel": {
+"title": "Wood sorrel",
+"latin": "Oxalis stricta",
+"group": "plant",
+"use": "edible",
+"look": "Heart-shaped leaflets in threes like a clover, small yellow or pink five-petal flowers; sour taste.",
+"lookalikes": [
+"white_clover"
+],
+"caution": "Eat only small amounts."
+},
+"jewelweed": {
+"title": "Jewelweed",
+"latin": "Impatiens capensis",
+"group": "plant",
+"use": "medicinal",
+"look": "Orange or yellow spotted trumpet flowers, pale watery stems, leaves bead up water; seed pods burst when touched.",
+"lookalikes": [],
+"caution": ""
+},
+"ostrich_fern": {
+"title": "Ostrich fern (fiddleheads)",
+"latin": "Matteuccia struthiopteris",
+"group": "plant",
+"use": "edible",
+"look": "Tightly coiled fiddlehead with a smooth U-shaped groove on the inside of the stem, papery brown scales.",
+"lookalikes": [
+"bracken"
+],
+"caution": "Fiddleheads must be cooked. Bracken is not safe to eat."
+},
+"bracken": {
+"title": "Bracken fern",
+"latin": "Pteridium aquilinum",
+"group": "plant",
+"use": "toxic",
+"look": "Large triangular fronds on a single stalk, fuzzy coiled shoots, open ground.",
+"lookalikes": [
+"ostrich_fern"
+],
+"caution": "Toxic and linked to cancer. Do not eat."
+},
+"common_milkweed": {
+"title": "Common milkweed",
+"latin": "Asclepias syriaca",
+"group": "plant",
+"use": "toxic",
+"look": "Thick stem with milky white sap, big opposite oval leaves, pink ball flower clusters, warty pods.",
+"lookalikes": [
+"dogbane"
+],
+"caution": "Toxic raw. Only a trained forager should use it, and not by photo."
+},
+"dogbane": {
+"title": "Dogbane",
+"latin": "Apocynum cannabinum",
+"group": "plant",
+"use": "toxic",
+"look": "Red-tinged stems with milky sap, pointed opposite leaves, tiny white bells, slim paired pods.",
+"lookalikes": [
+"common_milkweed"
+],
+"caution": "Toxic to the heart. Looks like milkweed."
+},
+"mullein": {
+"title": "Mullein",
+"latin": "Verbascum thapsus",
+"group": "plant",
+"use": "medicinal",
+"look": "Large grey fuzzy leaves in a rosette and a tall yellow flower spike in the second year.",
+"lookalikes": [],
+"caution": ""
+},
+"st_johns_wort": {
+"title": "St. John's wort",
+"latin": "Hypericum perforatum",
+"group": "plant",
+"use": "medicinal",
+"look": "Opposite small leaves with see-through dots when held to light; yellow five-petal flowers that stain purple.",
+"lookalikes": [],
+"caution": "Interacts with many medicines and causes sun sensitivity."
+},
+"self_heal": {
+"title": "Self-heal",
+"latin": "Prunella vulgaris",
+"group": "plant",
+"use": "medicinal",
+"look": "Low plant, square stem, spiky purple flower head with ruffled lips.",
+"lookalikes": [],
+"caution": ""
+},
+"goldenrod": {
+"title": "Goldenrod",
+"latin": "Solidago",
+"group": "plant",
+"use": "medicinal",
+"look": "Tall plume of tiny yellow flowers in late summer, alternate narrow leaves.",
+"lookalikes": [],
+"caution": ""
+},
+"white_snakeroot": {
+"title": "White snakeroot",
+"latin": "Ageratina altissima",
+"group": "plant",
+"use": "toxic",
+"look": "Opposite toothed leaves on a branching stem, fuzzy white flower clusters in autumn.",
+"lookalikes": [],
+"caution": "Poisons livestock and milk. Do not eat."
+},
+"jerusalem_artichoke": {
+"title": "Jerusalem artichoke",
+"latin": "Helianthus tuberosus",
+"group": "plant",
+"use": "edible",
+"look": "Tall rough sunflower-like plant with small yellow flowers and knobby tubers.",
+"lookalikes": [],
+"caution": ""
+},
+"evening_primrose": {
+"title": "Evening primrose",
+"latin": "Oenothera biennis",
+"group": "plant",
+"use": "edible",
+"look": "Tall plant with four-petal yellow flowers that open at dusk, reddish stem.",
+"lookalikes": [],
+"caution": ""
+},
+"pineapple_weed": {
+"title": "Pineapple weed",
+"latin": "Matricaria discoidea",
+"group": "plant",
+"use": "edible",
+"look": "Low plant with feathery leaves, yellow-green cone flowers with no petals; smells like pineapple when crushed.",
+"lookalikes": [],
+"caution": ""
+},
+"wild_bergamot": {
+"title": "Wild bergamot",
+"latin": "Monarda fistulosa",
+"group": "plant",
+"use": "medicinal",
+"look": "Square stem, lavender shaggy flower heads, minty oregano smell.",
+"lookalikes": [],
+"caution": ""
+},
+"mayapple": {
+"title": "Mayapple",
+"latin": "Podophyllum peltatum",
+"group": "plant",
+"use": "toxic",
+"look": "Umbrella-like lobed leaves, a single white flower under the leaves, one green-yellow fruit.",
+"lookalikes": [],
+"caution": "Everything except the ripe fruit is toxic."
+},
+"bloodroot": {
+"title": "Bloodroot",
+"latin": "Sanguinaria canadensis",
+"group": "plant",
+"use": "toxic",
+"look": "One clasped rounded lobed leaf and a white eight-petal flower in early spring; red-orange sap.",
+"lookalikes": [],
+"caution": "Toxic."
+},
+"baneberry": {
+"title": "Baneberry",
+"latin": "Actaea pachypoda",
+"group": "plant",
+"use": "deadly",
+"look": "Compound toothed leaves, a white or red berry cluster on thick red stalks (doll's eyes).",
+"lookalikes": [],
+"caution": "Berries are deadly."
+},
+"jimsonweed": {
+"title": "Jimsonweed",
+"latin": "Datura stramonium",
+"group": "plant",
+"use": "deadly",
+"look": "Large white trumpet flowers, spiny egg-shaped seed pods, strong smell.",
+"lookalikes": [],
+"caution": "Every part is deadly."
+},
+"bittersweet_nightshade": {
+"title": "Bittersweet nightshade",
+"latin": "Solanum dulcamara",
+"group": "plant",
+"use": "toxic",
+"look": "Climbing vine, purple flowers with a yellow cone, red egg-shaped berries.",
+"lookalikes": [],
+"caution": "Berries are toxic."
+},
+"monkshood": {
+"title": "Monkshood",
+"latin": "Aconitum",
+"group": "plant",
+"use": "deadly",
+"look": "Deeply cut leaves and tall spikes of hooded blue-purple flowers.",
+"lookalikes": [],
+"caution": "Deadly. Even skin contact can numb or harm."
+},
+"giant_hogweed": {
+"title": "Giant hogweed",
+"latin": "Heracleum mantegazzianum",
+"group": "plant",
+"use": "toxic",
+"look": "Huge: stem 5-10 cm wide with purple blotches and stiff hairs, umbrella flower head up to 1 m.",
+"lookalikes": [
+"cow_parsnip",
+"poison_hemlock"
+],
+"caution": "Sap plus sunlight causes severe burns. Do not touch."
+},
+"cow_parsnip": {
+"title": "Cow parsnip",
+"latin": "Heracleum maximum",
+"group": "plant",
+"use": "toxic",
+"look": "Big maple-like leaves, white flat umbrella, hairy hollow stem.",
+"lookalikes": [
+"giant_hogweed",
+"poison_hemlock"
+],
+"caution": "Sap can cause burns on sunny skin."
+},
+"wild_parsnip": {
+"title": "Wild parsnip",
+"latin": "Pastinaca sativa",
+"group": "plant",
+"use": "toxic",
+"look": "Yellow umbrella flowers, grooved hollow stem, toothed leaflets.",
+"lookalikes": [
+"poison_hemlock"
+],
+"caution": "Sap plus sunlight causes burns and blisters."
+},
+"skunk_cabbage": {
+"title": "Skunk cabbage",
+"latin": "Symplocarpus foetidus",
+"group": "plant",
+"use": "toxic",
+"look": "Wet ground; mottled purple-maroon hooded flower in late winter; big cabbage-like leaves with a skunky smell.",
+"lookalikes": [
+"false_hellebore"
+],
+"caution": "Toxic raw."
+},
+"japanese_knotweed": {
+"title": "Japanese knotweed",
+"latin": "Reynoutria japonica",
+"group": "plant",
+"use": "edible",
+"look": "Hollow bamboo-like reddish canes, heart-shaped leaves, dense stands.",
+"lookalikes": [],
+"caution": "Invasive. Do not spread it."
+},
+"curly_dock": {
+"title": "Curly dock",
+"latin": "Rumex crispus",
+"group": "plant",
+"use": "edible",
+"look": "Long leaves with wavy ruffled edges, tall rust-red seed stalk.",
+"lookalikes": [],
+"caution": ""
+},
+"wintergreen": {
+"title": "Wintergreen",
+"latin": "Gaultheria procumbens",
+"group": "plant",
+"use": "edible",
+"look": "Low evergreen with glossy leaves that smell of wintergreen when crushed; red berries.",
+"lookalikes": [],
+"caution": ""
+},
+"wild_rose": {
+"title": "Wild rose",
+"latin": "Rosa carolina",
+"group": "plant",
+"use": "edible",
+"look": "Prickly canes, five-petal pink flowers, red rose hips.",
+"lookalikes": [],
+"caution": "Hips have irritating hairs inside. Remove them."
+},
+"hawthorn": {
+"title": "Hawthorn",
+"latin": "Crataegus",
+"group": "plant",
+"use": "edible",
+"look": "Thorny small tree or shrub with lobed leaves and red apple-like haws.",
+"lookalikes": [],
+"caution": ""
+},
+"mountain_laurel": {
+"title": "Mountain laurel",
+"latin": "Kalmia latifolia",
+"group": "plant",
+"use": "toxic",
+"look": "Evergreen glossy leaves, clusters of pink-white cup flowers.",
+"lookalikes": [],
+"caution": "Leaves, flowers and honey from it are toxic."
+},
+"sphagnum": {
+"title": "Sphagnum moss",
+"latin": "Sphagnum",
+"group": "plant",
+"use": "medicinal",
+"look": "Pale green to red spongy moss in bogs that holds a lot of water.",
+"lookalikes": [],
+"caution": "Wild moss can carry germs. Do not put it on an open wound."
+},
+"usnea": {
+"title": "Old man's beard (Usnea)",
+"latin": "Usnea",
+"group": "plant",
+"use": "medicinal",
+"look": "Pale green hair-like lichen on branches; pull it and the core is a white elastic thread.",
+"lookalikes": [],
+"caution": ""
+},
+"cleavers": {
+"title": "Cleavers",
+"latin": "Galium aparine",
+"group": "plant",
+"use": "edible",
+"look": "Sprawling square stem with whorls of narrow leaves that cling by tiny hooks.",
+"lookalikes": [],
+"caution": ""
+},
+"moonseed": {
+"title": "Canada moonseed",
+"latin": "Menispermum canadense",
+"group": "plant",
+"use": "deadly",
+"look": "Climbing vine with big lobed leaves, dark blue-black berries each with a single crescent seed.",
+"lookalikes": [
+"wild_grape"
+],
+"caution": "Looks like wild grape. Grapes have several seeds and tendrils. Moonseed has neither."
+},
+"wild_grape": {
+"title": "Wild grape",
+"latin": "Vitis riparia",
+"group": "plant",
+"use": "edible",
+"look": "Climbing vine with tendrils, toothed lobed leaves, round berries in a bunch.",
+"lookalikes": [
+"moonseed"
+],
+"caution": ""
+},
+"thistle": {
+"title": "Thistle",
+"latin": "Cirsium vulgare",
+"group": "plant",
+"use": "edible",
+"look": "Spiny leaves and stem, round purple flower heads.",
+"lookalikes": [],
+"caution": ""
+},
+"spurge": {
+"title": "Spotted spurge (Euphorbia)",
+"latin": "Euphorbia maculata",
+"group": "plant",
+"use": "toxic",
+"look": "Flat mat of small oval leaves with a dark spot, milky sap.",
+"lookalikes": [
+"purslane"
+],
+"caution": "Sap irritates. Mistaken for purslane."
+},
+"purslane": {
+"title": "Purslane",
+"latin": "Portulaca oleracea",
+"group": "plant",
+"use": "edible",
+"look": "Flat mat of thick succulent paddle leaves with reddish stems; clear sap.",
+"lookalikes": [
+"spurge"
+],
+"caution": "Spurge has milky sap. Check the sap."
+},
+"chickweed": {
+"title": "Chickweed",
+"latin": "Stellaria media",
+"group": "plant",
+"use": "edible",
+"look": "Low plant with small oval leaves and one line of hairs along the stem; tiny white deep-notched petals.",
+"lookalikes": [],
+"caution": ""
+},
+"common_mallow": {
+"title": "Common mallow",
+"latin": "Malva neglecta",
+"group": "plant",
+"use": "edible",
+"look": "Round lobed leaves on long stalks, small pale pink flowers, round cheese-wheel fruits.",
+"lookalikes": [],
+"caution": ""
+},
+"garlic_mustard": {
+"title": "Garlic mustard",
+"latin": "Alliaria petiolata",
+"group": "plant",
+"use": "edible",
+"look": "Heart-shaped toothed leaves smelling of garlic, small white four-petal flowers.",
+"lookalikes": [],
+"caution": "Invasive. Do not spread it."
+},
+"common_juniper": {
+"title": "Common juniper",
+"latin": "Juniperus communis",
+"group": "tree",
+"use": "edible",
+"look": "Low spreading evergreen shrub with sharp needles in threes and blue berry-like cones.",
+"lookalikes": [],
+"caution": "Do not mix it up with yew, which is deadly."
+},
+"yew": {
+"title": "Yew (Canada yew)",
+"latin": "Taxus canadensis",
+"group": "tree",
+"use": "deadly",
+"look": "Flat dark green needles with two pale lines underneath, red fleshy cup berries; low shrub.",
+"lookalikes": [
+"balsam_fir",
+"eastern_hemlock"
+],
+"caution": "Needles, seeds and bark are deadly."
+},
+"balsam_fir": {
+"title": "Balsam fir",
+"latin": "Abies balsamea",
+"group": "tree",
+"use": "tree",
+"look": "Flat blunt needles with two white lines underneath, upright cones, smooth bark with resin blisters, spicy smell.",
+"lookalikes": [
+"red_spruce",
+"eastern_hemlock",
+"yew"
+],
+"caution": ""
+},
+"red_spruce": {
+"title": "Red spruce",
+"latin": "Picea rubens",
+"group": "tree",
+"use": "tree",
+"look": "Square four-sided stiff needles that roll between your fingers, hanging cones, reddish scaly bark.",
+"lookalikes": [
+"balsam_fir",
+"white_spruce"
+],
+"caution": ""
+},
+"white_spruce": {
+"title": "White spruce",
+"latin": "Picea glauca",
+"group": "tree",
+"use": "tree",
+"look": "Four-sided blue-green needles, slim hanging cones; needles smell strongly when crushed.",
+"lookalikes": [
+"red_spruce"
+],
+"caution": ""
+},
+"black_spruce": {
+"title": "Black spruce",
+"latin": "Picea mariana",
+"group": "tree",
+"use": "tree",
+"look": "Bog tree with a thin top, short needles, small round cones that stay on the tree.",
+"lookalikes": [
+"red_spruce"
+],
+"caution": ""
+},
+"white_pine": {
+"title": "Eastern white pine",
+"latin": "Pinus strobus",
+"group": "tree",
+"use": "tree",
+"look": "Soft needles in bundles of five, long slim cones, tiered branches.",
+"lookalikes": [
+"red_pine"
+],
+"caution": ""
+},
+"red_pine": {
+"title": "Red pine",
+"latin": "Pinus resinosa",
+"group": "tree",
+"use": "tree",
+"look": "Long needles in bundles of two that snap cleanly, orange-red flaky bark.",
+"lookalikes": [
+"white_pine"
+],
+"caution": ""
+},
+"eastern_hemlock": {
+"title": "Eastern hemlock (the tree)",
+"latin": "Tsuga canadensis",
+"group": "tree",
+"use": "tree",
+"look": "Flat short needles with two white lines underneath on tiny stalks, tiny cones, drooping top.",
+"lookalikes": [
+"balsam_fir",
+"yew",
+"water_hemlock"
+],
+"caution": "The tree is not the poison hemlock plants. Poison and water hemlock are herbs with umbrella flowers."
+},
+"eastern_red_cedar": {
+"title": "Eastern red cedar",
+"latin": "Juniperus virginiana",
+"group": "tree",
+"use": "tree",
+"look": "Scaly green leaves or sharp awls, blue berry-like cones, shredding reddish bark.",
+"lookalikes": [
+"northern_white_cedar"
+],
+"caution": ""
+},
+"northern_white_cedar": {
+"title": "Northern white cedar",
+"latin": "Thuja occidentalis",
+"group": "tree",
+"use": "tree",
+"look": "Flat fans of scale-like leaves, small cones, stringy bark; wet ground.",
+"lookalikes": [
+"eastern_red_cedar"
+],
+"caution": ""
+},
+"tamarack": {
+"title": "Tamarack (larch)",
+"latin": "Larix laricina",
+"group": "tree",
+"use": "tree",
+"look": "Soft needles in tufts that turn gold and drop in autumn.",
+"lookalikes": [],
+"caution": ""
+},
+"sugar_maple": {
+"title": "Sugar maple",
+"latin": "Acer saccharum",
+"group": "tree",
+"use": "tree",
+"look": "Five-lobed leaf with smooth rounded gaps, opposite branches, grey furrowed bark.",
+"lookalikes": [
+"red_maple"
+],
+"caution": ""
+},
+"red_maple": {
+"title": "Red maple",
+"latin": "Acer rubrum",
+"group": "tree",
+"use": "tree",
+"look": "Three- to five-lobed leaf with toothed edges and sharp gaps, red twigs and buds.",
+"lookalikes": [
+"sugar_maple"
+],
+"caution": ""
+},
+"paper_birch": {
+"title": "Paper birch",
+"latin": "Betula papyrifera",
+"group": "tree",
+"use": "tree",
+"look": "White bark peeling in papery sheets with dark marks; toothed oval leaves.",
+"lookalikes": [
+"yellow_birch"
+],
+"caution": ""
+},
+"yellow_birch": {
+"title": "Yellow birch",
+"latin": "Betula alleghaniensis",
+"group": "tree",
+"use": "tree",
+"look": "Silver-yellow bark that peels in curly strips; twigs smell of wintergreen when scratched.",
+"lookalikes": [
+"paper_birch"
+],
+"caution": ""
+},
+"american_beech": {
+"title": "American beech",
+"latin": "Fagus grandifolia",
+"group": "tree",
+"use": "tree",
+"look": "Smooth blue-grey bark, toothed oval leaves with straight veins, pale leaves that stay in winter.",
+"lookalikes": [],
+"caution": ""
+},
+"white_oak": {
+"title": "White oak",
+"latin": "Quercus alba",
+"group": "tree",
+"use": "tree",
+"look": "Rounded leaf lobes, pale scaly bark.",
+"lookalikes": [
+"red_oak"
+],
+"caution": ""
+},
+"red_oak": {
+"title": "Red oak",
+"latin": "Quercus rubra",
+"group": "tree",
+"use": "tree",
+"look": "Pointed leaf lobes with bristle tips, ridged bark with pale stripes.",
+"lookalikes": [
+"white_oak"
+],
+"caution": ""
+},
+"american_elm": {
+"title": "American elm",
+"latin": "Ulmus americana",
+"group": "tree",
+"use": "tree",
+"look": "Leaves with uneven bases and double teeth, vase shape.",
+"lookalikes": [],
+"caution": ""
+},
+"white_ash": {
+"title": "White ash",
+"latin": "Fraxinus americana",
+"group": "tree",
+"use": "tree",
+"look": "Opposite compound leaves, diamond-pattern bark.",
+"lookalikes": [],
+"caution": ""
+},
+"quaking_aspen": {
+"title": "Quaking aspen",
+"latin": "Populus tremuloides",
+"group": "tree",
+"use": "tree",
+"look": "Round leaves on flat stalks that tremble, smooth pale green-white bark.",
+"lookalikes": [],
+"caution": ""
+},
+"black_cherry": {
+"title": "Black cherry",
+"latin": "Prunus serotina",
+"group": "tree",
+"use": "tree",
+"look": "Dark scaly bark like burnt potato chips, glossy toothed leaves, dark berries.",
+"lookalikes": [],
+"caution": "Leaves, pits and bark contain cyanide compounds. Wilted leaves are dangerous."
+},
+"shagbark_hickory": {
+"title": "Shagbark hickory",
+"latin": "Carya ovata",
+"group": "tree",
+"use": "tree",
+"look": "Long loose plates of bark curling at the ends; compound leaves; hard nuts in husks.",
+"lookalikes": [],
+"caution": ""
+},
+"basswood": {
+"title": "Basswood (linden)",
+"latin": "Tilia americana",
+"group": "tree",
+"use": "tree",
+"look": "Large heart-shaped lopsided leaves, nut-like balls hanging from a leafy strip.",
+"lookalikes": [],
+"caution": ""
+},
+"black_walnut": {
+"title": "Black walnut",
+"latin": "Juglans nigra",
+"group": "tree",
+"use": "tree",
+"look": "Compound leaves of many leaflets, dark ridged bark, round green husked nuts.",
+"lookalikes": [],
+"caution": ""
+},
+"sassafras": {
+"title": "Sassafras",
+"latin": "Sassafras albidum",
+"group": "tree",
+"use": "tree",
+"look": "Leaves of three shapes on one tree (oval, mitten, three-lobed); spicy smell when crushed.",
+"lookalikes": [],
+"caution": ""
+},
+"sycamore": {
+"title": "American sycamore",
+"latin": "Platanus occidentalis",
+"group": "tree",
+"use": "tree",
+"look": "Bark flaking off in patches of white and brown, big lobed leaves, ball fruits.",
+"lookalikes": [],
+"caution": ""
+},
+"witch_hazel": {
+"title": "Witch hazel",
+"latin": "Hamamelis virginiana",
+"group": "tree",
+"use": "medicinal",
+"look": "Wavy-edged uneven leaves, yellow ribbon flowers in late autumn.",
+"lookalikes": [],
+"caution": ""
+},
+"fly_agaric": {
+"title": "Fly agaric",
+"latin": "Amanita muscaria",
+"group": "mushroom",
+"use": "toxic",
+"look": "Red or orange cap with white warts, white gills, a ring on the stem and a bulb at the base.",
+"lookalikes": [
+"death_cap",
+"destroying_angel"
+],
+"caution": "Toxic. Related to the deadly Amanitas."
+},
+"death_cap": {
+"title": "Death cap",
+"latin": "Amanita phalloides",
+"group": "mushroom",
+"use": "deadly",
+"look": "Olive-green to pale cap, white gills, a skirt-like ring and a cup (volva) at the base.",
+"lookalikes": [
+"destroying_angel",
+"giant_puffball"
+],
+"caution": "One cap can kill. Symptoms start many hours later, after which it is already working on the liver."
+},
+"destroying_angel": {
+"title": "Destroying angel",
+"latin": "Amanita bisporigera",
+"group": "mushroom",
+"use": "deadly",
+"look": "Pure white cap, gills, ring and stem, with a cup at the base that may be buried.",
+"lookalikes": [
+"death_cap",
+"giant_puffball"
+],
+"caution": "Deadly. Looks like button mushrooms and young puffballs."
+},
+"deadly_galerina": {
+"title": "Deadly galerina",
+"latin": "Galerina marginata",
+"group": "mushroom",
+"use": "deadly",
+"look": "Small brown mushroom on rotting wood with a thin ring and rusty brown spores.",
+"lookalikes": [
+"honey_mushroom"
+],
+"caution": "Deadly. Grows on the same logs as honey mushrooms."
+},
+"webcaps": {
+"title": "Webcaps (Cortinarius)",
+"latin": "Cortinarius",
+"group": "mushroom",
+"use": "deadly",
+"look": "Rusty-brown spores, a web-like veil on young caps, often on the ground in woods.",
+"lookalikes": [
+"chanterelle"
+],
+"caution": "Some are deadly to the kidneys. Never eat a brown mushroom you cannot identify."
+},
+"chanterelle": {
+"title": "Chanterelle",
+"latin": "Cantharellus",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Golden or orange funnel with blunt forked ridges that run down the stem, not true gills; fruity smell.",
+"lookalikes": [
+"jack_o_lantern",
+"webcaps"
+],
+"caution": "Jack-o'-lantern has true gills, grows in clusters on wood and is toxic."
+},
+"jack_o_lantern": {
+"title": "Jack-o'-lantern",
+"latin": "Omphalotus illudens",
+"group": "mushroom",
+"use": "toxic",
+"look": "Orange clusters on wood or buried roots with true gills that run down the stem; glows faintly in the dark.",
+"lookalikes": [
+"chanterelle"
+],
+"caution": "Toxic. Causes severe vomiting."
+},
+"chicken_of_the_woods": {
+"title": "Chicken of the woods",
+"latin": "Laetiporus sulphureus",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Bright orange and yellow shelves with no gills on trees, soft when young.",
+"lookalikes": [],
+"caution": "Some people react badly, and growths on conifers or eucalyptus can be harmful."
+},
+"hen_of_the_woods": {
+"title": "Hen of the woods (maitake)",
+"latin": "Grifola frondosa",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Big clump of grey-brown overlapping fronds at the base of oaks; pores instead of gills.",
+"lookalikes": [],
+"caution": ""
+},
+"morel": {
+"title": "True morel",
+"latin": "Morchella",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Hollow throughout when cut lengthwise, cap fused to the stem, honeycomb pits.",
+"lookalikes": [
+"false_morel"
+],
+"caution": "False morels are deadly. Cut every one open."
+},
+"false_morel": {
+"title": "False morel",
+"latin": "Gyromitra",
+"group": "mushroom",
+"use": "deadly",
+"look": "Wrinkled brain-like cap that is not hollow-honeycombed; stem cottony inside.",
+"lookalikes": [
+"morel"
+],
+"caution": "Deadly even when cooked."
+},
+"giant_puffball": {
+"title": "Puffball",
+"latin": "Calvatia gigantea",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Round white ball with no stem or gills; solid white inside when cut.",
+"lookalikes": [
+"death_cap",
+"destroying_angel"
+],
+"caution": "A young Amanita looks like a puffball. Cut it open: any outline of a cap and stem means leave it."
+},
+"lions_mane": {
+"title": "Lion's mane",
+"latin": "Hericium",
+"group": "mushroom",
+"use": "mushroom",
+"look": "White hanging icicle-like spines on trees.",
+"lookalikes": [],
+"caution": ""
+},
+"oyster_mushroom": {
+"title": "Oyster mushroom",
+"latin": "Pleurotus ostreatus",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Shelf-shaped grey-tan caps with gills running down to a short side stem, on wood.",
+"lookalikes": [
+"jack_o_lantern"
+],
+"caution": "Do not confuse it with other shelf fungi that have gills."
+},
+"turkey_tail": {
+"title": "Turkey tail",
+"latin": "Trametes versicolor",
+"group": "mushroom",
+"use": "medicinal",
+"look": "Thin tough shelves with colored concentric bands and a white pore underside.",
+"lookalikes": [],
+"caution": ""
+},
+"birch_polypore": {
+"title": "Birch polypore (razor strop)",
+"latin": "Fomitopsis betulina",
+"group": "mushroom",
+"use": "medicinal",
+"look": "Rounded grey-white shelf on dead birch; the pore side is white; used as a strop.",
+"lookalikes": [],
+"caution": "Survival history only. Do not eat it."
+},
+"reishi": {
+"title": "Reishi (hemlock varnish shelf)",
+"latin": "Ganoderma tsugae",
+"group": "mushroom",
+"use": "medicinal",
+"look": "Glossy varnished red-brown shelf on a stalk or the side of a tree.",
+"lookalikes": [],
+"caution": ""
+},
+"honey_mushroom": {
+"title": "Honey mushroom",
+"latin": "Armillaria",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Clusters of honey-coloured caps on wood with a ring; white spores.",
+"lookalikes": [
+"deadly_galerina"
+],
+"caution": "The deadly galerina looks like it."
+},
+"shaggy_mane": {
+"title": "Shaggy mane",
+"latin": "Coprinus comatus",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Tall white cylinder cap with shaggy scales that melts into ink.",
+"lookalikes": [],
+"caution": ""
+},
+"bolete": {
+"title": "Bolete",
+"latin": "Boletus",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Fat stem with a sponge of pores instead of gills under the cap.",
+"lookalikes": [],
+"caution": "Red-pored and bitter ones are toxic. Do not eat on a photo."
+},
+"green_spored_parasol": {
+"title": "Green-spored parasol",
+"latin": "Chlorophyllum molybdites",
+"group": "mushroom",
+"use": "toxic",
+"look": "Big scaly cap with a ring; gills turn green with age; lawns.",
+"lookalikes": [],
+"caution": "The most common mushroom poisoning in North America."
+},
+"hedgehog_mushroom": {
+"title": "Hedgehog mushroom",
+"latin": "Hydnum repandum",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Pale orange cap with soft spines instead of gills.",
+"lookalikes": [],
+"caution": ""
+},
+"tinder_fungus": {
+"title": "Tinder fungus",
+"latin": "Fomes fomentarius",
+"group": "mushroom",
+"use": "mushroom",
+"look": "Hoof-shaped grey woody shelf on birch and beech; used for tinder.",
+"lookalikes": [],
+"caution": "Survival use for fire only."
+},
+"chaga": {
+"title": "Chaga",
+"latin": "Inonotus obliquus",
+"group": "mushroom",
+"use": "medicinal",
+"look": "Black charcoal-like crust on birch with an orange inside.",
+"lookalikes": [],
+"caution": ""
+},
+"white_tailed_deer": {
+"title": "White-tailed deer",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Brown coat, white underside, tail raised like a white flag.",
+"lookalikes": [],
+"caution": ""
+},
+"moose": {
+"title": "Moose",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Huge with a long face, dewlap, and broad flat antlers on bulls.",
+"lookalikes": [],
+"caution": "Do not approach. Cows with calves and bulls in rut charge."
+},
+"elk": {
+"title": "Elk",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Large with a pale rump and branching antlers.",
+"lookalikes": [],
+"caution": ""
+},
+"black_bear": {
+"title": "Black bear",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Black or brown with a straight muzzle and no shoulder hump.",
+"lookalikes": [],
+"caution": "Keep distance, never run, store food away from camp."
+},
+"coyote": {
+"title": "Coyote",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Slim dog-like with a bushy low tail and pointed ears.",
+"lookalikes": [
+"red_fox"
+],
+"caution": ""
+},
+"red_fox": {
+"title": "Red fox",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Red coat, black legs, white tail tip.",
+"lookalikes": [
+"coyote"
+],
+"caution": ""
+},
+"bobcat": {
+"title": "Bobcat",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Short tail with a black tip, tufted ears, spotted coat.",
+"lookalikes": [],
+"caution": ""
+},
+"porcupine": {
+"title": "Porcupine",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Round quill-covered body, slow waddle.",
+"lookalikes": [],
+"caution": "Quills cannot be thrown. Keep dogs away."
+},
+"raccoon": {
+"title": "Raccoon",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Black mask and ringed tail.",
+"lookalikes": [],
+"caution": ""
+},
+"striped_skunk": {
+"title": "Striped skunk",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Black with white stripes down the back.",
+"lookalikes": [],
+"caution": ""
+},
+"beaver": {
+"title": "Beaver",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Flat paddle tail, dam and cut sapling stumps.",
+"lookalikes": [],
+"caution": ""
+},
+"snowshoe_hare": {
+"title": "Snowshoe hare",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Large back feet, coat white in winter and brown in summer.",
+"lookalikes": [],
+"caution": ""
+},
+"wild_turkey": {
+"title": "Wild turkey",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Large dark bird with a bare head and fanned tail.",
+"lookalikes": [],
+"caution": ""
+},
+"ruffed_grouse": {
+"title": "Ruffed grouse",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Brown barred bird with a fan tail and dark neck ruff.",
+"lookalikes": [],
+"caution": ""
+},
+"bald_eagle": {
+"title": "Bald eagle",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Large dark bird with a white head and tail on adults.",
+"lookalikes": [],
+"caution": ""
+},
+"great_horned_owl": {
+"title": "Great horned owl",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Large owl with ear tufts and yellow eyes.",
+"lookalikes": [],
+"caution": ""
+},
+"canada_goose": {
+"title": "Canada goose",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Black neck and head with a white chin strap.",
+"lookalikes": [],
+"caution": ""
+},
+"rattlesnake": {
+"title": "Rattlesnake",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Thick body, triangular head, a rattle on the tail.",
+"lookalikes": [
+"eastern_garter_snake",
+"northern_water_snake"
+],
+"caution": "Venomous. Back away slowly. Call emergency services after a bite."
+},
+"copperhead": {
+"title": "Copperhead",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Copper head, tan body with hourglass bands.",
+"lookalikes": [
+"northern_water_snake"
+],
+"caution": "Venomous. Back away slowly. Call emergency services after a bite."
+},
+"cottonmouth": {
+"title": "Cottonmouth",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Heavy dark water snake with a white mouth when it gapes.",
+"lookalikes": [
+"northern_water_snake"
+],
+"caution": "Venomous. Back away slowly. Call emergency services after a bite."
+},
+"eastern_garter_snake": {
+"title": "Garter snake",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Slim, three pale stripes along the body.",
+"lookalikes": [
+"rattlesnake"
+],
+"caution": ""
+},
+"northern_water_snake": {
+"title": "Northern water snake",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Banded brown snake near water.",
+"lookalikes": [
+"copperhead",
+"cottonmouth"
+],
+"caution": "Not venomous but it bites hard. Often mistaken for a copperhead."
+},
+"blacklegged_tick": {
+"title": "Blacklegged (deer) tick",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Tiny dark tick; adult females have an orange-red body and black plate.",
+"lookalikes": [
+"american_dog_tick"
+],
+"caution": "Carries Lyme and other diseases. Remove with tweezers close to the skin and keep the date."
+},
+"american_dog_tick": {
+"title": "American dog tick",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Larger brown tick with white-cream markings on the back.",
+"lookalikes": [
+"blacklegged_tick"
+],
+"caution": "Can carry spotted fever. Remove with tweezers close to the skin."
+},
+"lone_star_tick": {
+"title": "Lone star tick",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Reddish-brown tick with one white dot on the back of females.",
+"lookalikes": [],
+"caution": "Bites can cause meat allergy. Remove with tweezers close to the skin."
+},
+"black_widow": {
+"title": "Black widow",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Shiny black spider with a red hourglass underneath.",
+"lookalikes": [],
+"caution": "Venomous. Seek care after a bite."
+},
+"bald_faced_hornet": {
+"title": "Bald-faced hornet",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Black and white wasp with a grey paper nest the size of a football.",
+"lookalikes": [],
+"caution": "Stings hurt and are dangerous if allergic."
+},
+"yellowjacket": {
+"title": "Yellowjacket",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Black and yellow wasp that nests underground.",
+"lookalikes": [],
+"caution": "Stings hurt and are dangerous if allergic."
+},
+"wild_boar": {
+"title": "Wild boar (feral hog)",
+"latin": "",
+"group": "animal",
+"use": "animal",
+"look": "Dark bristly pig with a long snout.",
+"lookalikes": [],
+"caution": "Can be aggressive. Cook the meat fully."
+},
+"deer_track": {
+"title": "Deer track",
+"latin": "",
+"group": "track",
+"use": "sign",
+"look": "Two teardrop toes forming a heart shape, pointed forward, sometimes with two small dewclaw dots.",
+"lookalikes": [],
+"caution": ""
+},
+"bear_track": {
+"title": "Bear track",
+"latin": "",
+"group": "track",
+"use": "sign",
+"look": "Wide five-toed print with claw dots and a broad heel pad.",
+"lookalikes": [],
+"caution": ""
+},
+"canine_track": {
+"title": "Coyote, fox or dog track",
+"latin": "",
+"group": "track",
+"use": "sign",
+"look": "Four toes with claw marks and an X shape between the toes and the pad.",
+"lookalikes": [],
+"caution": ""
+},
+"raccoon_track": {
+"title": "Raccoon track",
+"latin": "",
+"group": "track",
+"use": "sign",
+"look": "Five long finger-like toes like a tiny human hand.",
+"lookalikes": [],
+"caution": ""
+},
+"moose_track": {
+"title": "Moose track",
+"latin": "",
+"group": "track",
+"use": "sign",
+"look": "Large pointed split hoof print, over 10 cm long.",
+"lookalikes": [
+"deer_track"
+],
+"caution": ""
+},
+"turkey_track": {
+"title": "Turkey track",
+"latin": "",
+"group": "track",
+"use": "sign",
+"look": "Three forward toes and a short back toe, in a long stride.",
+"lookalikes": [],
+"caution": ""
+},
+"bobcat_track": {
+"title": "Bobcat track",
+"latin": "",
+"group": "track",
+"use": "sign",
+"look": "Four toes with no claw marks and a three-lobed heel pad.",
+"lookalikes": [],
+"caution": ""
+},
+"rabbit_track": {
+"title": "Rabbit or hare track",
+"latin": "",
+"group": "track",
+"use": "sign",
+"look": "Two large hind feet side by side ahead of two smaller front prints.",
+"lookalikes": [],
+"caution": ""
+},
+"deer_scat": {
+"title": "Deer scat",
+"latin": "",
+"group": "scat",
+"use": "sign",
+"look": "Small dark oval pellets in a pile.",
+"lookalikes": [
+"rabbit_scat"
+],
+"caution": ""
+},
+"bear_scat": {
+"title": "Bear scat",
+"latin": "",
+"group": "scat",
+"use": "sign",
+"look": "Large tubular scat with berries, seeds or hair in it.",
+"lookalikes": [],
+"caution": "Fresh bear sign means a bear is near. Be bear aware."
+},
+"coyote_scat": {
+"title": "Coyote or fox scat",
+"latin": "",
+"group": "scat",
+"use": "sign",
+"look": "Twisted tubular scat with hair and bone and a tapered end.",
+"lookalikes": [],
+"caution": ""
+},
+"moose_scat": {
+"title": "Moose scat",
+"latin": "",
+"group": "scat",
+"use": "sign",
+"look": "Large oval wood-fibre pellets, or a clump in summer.",
+"lookalikes": [
+"deer_scat"
+],
+"caution": ""
+},
+"raccoon_scat": {
+"title": "Raccoon scat",
+"latin": "",
+"group": "scat",
+"use": "sign",
+"look": "Blunt-ended tubes with berry seeds and bits of shell, often at a latrine.",
+"lookalikes": [],
+"caution": "Raccoon latrines can carry roundworm. Do not touch them."
+},
+"rabbit_scat": {
+"title": "Rabbit scat",
+"latin": "",
+"group": "scat",
+"use": "sign",
+"look": "Round pea-sized pellets that are flat on the sides.",
+"lookalikes": [
+"deer_scat"
+],
+"caution": ""
+}
+}

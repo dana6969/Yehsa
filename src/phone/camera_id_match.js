@@ -1,133 +1,61 @@
 // Offline camera ID: pure matching logic, no native code and no image bytes.
-// A photo embedding is compared with precomputed embeddings of Yehsa's own
-// reference photos, so a suggestion can only ever be something Yehsa has a
-// note for. This file is never imported by the knowledge path (ask.js,
-// getMappedAction); only the Identify screen and its tests load it.
+// A photo embedding from the on-device model goes through a small classifier head that was
+// trained on openly licensed reference photos of the things Yehsa has notes for. The result
+// can only be one of those classes, and when nothing is close enough, or the photo looks like
+// something outside the set (a spruce is not water hemlock), it says "I'm not sure".
+// This file is never imported by the knowledge path (ask.js, getMappedAction); only the
+// Identify screen and its tests load it.
 //
-// Nothing here is an identification. Every plant result carries the photo
-// warning, every result links its look-alikes, and a result whose deadly
-// look-alike scores close is capped at "Possible match".
+// Nothing here is an identification. Every plant result carries the photo warning, every result
+// lists its look-alikes, and no result uses a word stronger than "Possible match".
 
 export const PHOTO_WARNING =
   "Never eat, taste, or use a plant as medicine based on a photo ID alone. A photo match is a hint, not an identification. Deadly look-alikes exist.";
 
-export const DECLINE_TEXT =
-  "Nothing in Yehsa's reference photos is close to this picture, so I will not guess. Try a sharper, closer photo of one plant in daylight, or check the picture guide.";
+export const MUSHROOM_WARNING =
+  "Never eat a wild mushroom because of a photo. Deadly mushrooms look like edible ones, and cooking does not make them safe.";
 
-export const EMERGENCY_TEXT = "If anyone already ate part of a plant they could not identify, call emergency services now.";
+export const UNSURE_TITLE = "I'm not sure";
+export const UNSURE_TEXT =
+  "Nothing in the reference photos is close enough to this picture, so I will not guess. That includes trees that are not in the set.";
+export const UNSURE_QUIET = "This is a photo hint, not an identification.";
+// Kept for older callers.
+export const DECLINE_TEXT = UNSURE_TEXT;
 
-// Score cut-offs on cosine similarity (MobileNetV3-Small embeddings, see
-// eval/camera_id/REPORT.md). Chosen once from the leave-one-out score spread
-// and kept fixed; they are not tuned per photo. There is deliberately no
-// "close" or "confident" band: in the leave-one-out check even the highest
-// scores were wrong often enough that a stronger word would overstate it.
-export const BANDS = {
-  possible: 0.5,
-  weak: 0.42
+export const EMERGENCY_TEXT = "If anyone already ate part of a plant or mushroom they could not identify, call emergency services now.";
+
+// Probability above which a deadly class in the top three is called out even when it is not first.
+export const DEADLY_FLAG = 0.08;
+// ... and the lower bar for adding a one-line warning to an "I'm not sure" result.
+export const DEADLY_HINT = 0.15;
+
+// Notes and picture-guide entries that already exist in Yehsa for the first eight classes.
+const LINKS = {
+  yarrow: { note: "yarrow_achillea", guide: "yarrow_achillea" },
+  plantain: { note: "plantain_plantago", guide: "plantain_plantago" },
+  willow: { note: "willow_bark", guide: "willow_bark" },
+  wild_carrot: { note: "hemlock_carrot_lookalike", guide: "" },
+  poison_hemlock: { note: "hemlock_carrot_lookalike", guide: "" },
+  water_hemlock: { note: "hemlock_carrot_lookalike", guide: "" },
+  wild_onion: { note: "camas_onion_lookalike", guide: "" },
+  death_camas: { note: "camas_onion_lookalike", guide: "" }
 };
 
-// Deadly look-alike notes: a plant with a deadly look-alike (yarrow, wild
-// carrot, wild onion) always says so, and any non-deadly match says so too
-// whenever a deadly plant is anywhere in the top 3. In the leave-one-out check
-// a held-out poison hemlock photo scored closest to willow, so this does not
-// depend on how far behind the deadly plant is.
-
-export const CAMERA_CLASSES = {
-  yarrow: {
-    title: "Yarrow",
-    latin: "Achillea millefolium",
-    note: "yarrow_achillea",
-    guide: "yarrow_achillea",
-    use: "medicinal",
-    lookalikes: ["wild_carrot", "poison_hemlock", "water_hemlock"],
-    lookalikeNote: "hemlock_carrot_lookalike"
-  },
-  plantain: {
-    title: "Plantain",
-    latin: "Plantago",
-    note: "plantain_plantago",
-    guide: "plantain_plantago",
-    use: "medicinal",
-    lookalikes: [],
-    lookalikeNote: "toxic_vs_edible"
-  },
-  willow: {
-    title: "Willow",
-    latin: "Salix",
-    note: "willow_bark",
-    guide: "willow_bark",
-    use: "medicinal",
-    lookalikes: [],
-    lookalikeNote: "toxic_vs_edible"
-  },
-  wild_carrot: {
-    title: "Wild carrot (Queen Anne's lace)",
-    latin: "Daucus carota",
-    note: "hemlock_carrot_lookalike",
-    guide: "",
-    use: "edible",
-    lookalikes: ["poison_hemlock", "water_hemlock", "yarrow"],
-    lookalikeNote: "hemlock_carrot_lookalike"
-  },
-  poison_hemlock: {
-    title: "Poison hemlock",
-    latin: "Conium maculatum",
-    note: "hemlock_carrot_lookalike",
-    guide: "",
-    use: "deadly",
-    lookalikes: ["wild_carrot", "water_hemlock", "yarrow"],
-    lookalikeNote: "hemlock_carrot_lookalike"
-  },
-  water_hemlock: {
-    title: "Water hemlock",
-    latin: "Cicuta",
-    note: "hemlock_carrot_lookalike",
-    guide: "",
-    use: "deadly",
-    lookalikes: ["poison_hemlock", "wild_carrot", "yarrow"],
-    lookalikeNote: "hemlock_carrot_lookalike"
-  },
-  wild_onion: {
-    title: "Wild onion",
-    latin: "Allium",
-    note: "camas_onion_lookalike",
-    guide: "",
-    use: "edible",
-    lookalikes: ["death_camas"],
-    lookalikeNote: "camas_onion_lookalike"
-  },
-  death_camas: {
-    title: "Death camas",
-    latin: "Toxicoscordion",
-    note: "camas_onion_lookalike",
-    guide: "",
-    use: "deadly",
-    lookalikes: ["wild_onion"],
-    lookalikeNote: "camas_onion_lookalike"
-  }
-};
-
-const BAND_WORDS = {
-  possible: "Possible match",
-  weak: "Weak match",
-  unlikely: "Unlikely"
-};
-
+const BAND_WORDS = { possible: "Possible match", weak: "Weak match" };
 const BAND_HINT = {
-  possible: "Shares features with the reference photos. Check every feature in the note.",
-  weak: "Only a loose resemblance. Do not rely on it.",
-  unlikely: "Listed only so you can compare."
+  possible: "Shares features with the reference photos. Check every feature listed.",
+  weak: "Only a loose resemblance. Do not rely on it."
 };
 
-function base64Bytes(text) {
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const B64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+export function base64Bytes(text) {
   const clean = String(text || "").replace(/[^A-Za-z0-9+/]/g, "");
   const out = new Uint8Array(Math.floor((clean.length * 3) / 4));
   let buffer = 0;
   let bits = 0;
   let o = 0;
   for (let i = 0; i < clean.length; i += 1) {
-    buffer = (buffer << 6) | alphabet.indexOf(clean[i]);
+    buffer = (buffer << 6) | B64.indexOf(clean[i]);
     bits += 6;
     if (bits >= 8) {
       bits -= 8;
@@ -135,14 +63,6 @@ function base64Bytes(text) {
     }
   }
   return out;
-}
-
-export function decodeVector(entry, dim) {
-  const bytes = base64Bytes(entry.q);
-  const ints = new Int8Array(bytes.buffer, bytes.byteOffset, bytes.length);
-  const vec = new Float32Array(dim);
-  for (let i = 0; i < dim; i += 1) vec[i] = ints[i] * entry.s;
-  return normalize(vec);
 }
 
 export function normalize(vec) {
@@ -154,109 +74,150 @@ export function normalize(vec) {
   return out;
 }
 
-export function decodeIndex(raw) {
+// raw: assets/camera_id/index.json, meta: assets/camera_id/classes.json
+export function decodeIndex(raw, meta) {
   const dim = raw.model.dim;
-  const refs = raw.refs.map((entry) => ({ c: entry.c, src: entry.src, vec: decodeVector(entry, dim) }));
-  return { dim, classes: raw.classes, refs, sources: raw.sources, model: raw.model };
-}
-
-function dot(a, b) {
-  let sum = 0;
-  for (let i = 0; i < a.length; i += 1) sum += a[i] * b[i];
-  return sum;
-}
-
-// Best cosine similarity per class. excludeSrc drops every view of one source
-// photo, which is how leave-one-out evaluation holds an image out.
-export function classScores(index, query, { excludeSrc = -1 } = {}) {
-  const q = normalize(query);
-  const best = new Array(index.classes.length).fill(-1);
-  for (const ref of index.refs) {
-    if (ref.src === excludeSrc) continue;
-    const score = dot(q, ref.vec);
-    if (score > best[ref.c]) best[ref.c] = score;
+  const rows = raw.classes.length + 1; // the last row is "something else"
+  const bytes = base64Bytes(raw.head.w);
+  if (bytes.length !== rows * dim) throw new Error("Camera index is damaged.");
+  const ints = new Int8Array(bytes.buffer, bytes.byteOffset, bytes.length);
+  const weights = new Float32Array(rows * dim);
+  for (let r = 0; r < rows; r += 1) {
+    for (let c = 0; c < dim; c += 1) weights[r * dim + c] = ints[r * dim + c] * raw.head.scale[r];
   }
-  return index.classes.map((id, k) => ({ id, score: best[k] })).sort((a, b) => b.score - a.score);
+  return { dim, rows, classes: raw.classes, weights, bias: Float32Array.from(raw.head.b), thresholds: raw.thresholds, model: raw.model, meta };
 }
 
-function bandFor(score) {
-  if (score >= BANDS.possible) return "possible";
-  if (score >= BANDS.weak) return "weak";
-  return "unlikely";
+// Probability for each class plus "something else" (last entry).
+export function classProbabilities(index, query) {
+  const q = normalize(query);
+  const logits = new Float32Array(index.rows);
+  let max = -Infinity;
+  for (let r = 0; r < index.rows; r += 1) {
+    let sum = index.bias[r];
+    const base = r * index.dim;
+    for (let c = 0; c < index.dim; c += 1) sum += index.weights[base + c] * q[c];
+    logits[r] = sum;
+    if (sum > max) max = sum;
+  }
+  let total = 0;
+  for (let r = 0; r < index.rows; r += 1) {
+    logits[r] = Math.exp(logits[r] - max);
+    total += logits[r];
+  }
+  for (let r = 0; r < index.rows; r += 1) logits[r] /= total;
+  return logits;
 }
 
-function lookalikesFor(id) {
-  const meta = CAMERA_CLASSES[id];
-  return meta.lookalikes.map((other) => ({
+export function rankClasses(index, query) {
+  const p = classProbabilities(index, query);
+  const ranked = index.classes.map((id, k) => ({ id, score: p[k] })).sort((a, b) => b.score - a.score);
+  return { ranked, other: p[index.rows - 1], probabilities: p };
+}
+
+function bandFor(score, thresholds) {
+  if (score >= thresholds.possible) return "possible";
+  if (score >= thresholds.weak) return "weak";
+  return "unsure";
+}
+
+const isDeadly = (meta) => meta?.use === "deadly";
+
+function lookalikesFor(index, id) {
+  return (index.meta[id].lookalikes || []).filter((other) => index.meta[other]).map((other) => ({
     id: other,
-    title: CAMERA_CLASSES[other].title,
-    deadly: CAMERA_CLASSES[other].use === "deadly",
-    note: CAMERA_CLASSES[other].note
+    title: index.meta[other].title,
+    deadly: isDeadly(index.meta[other]),
+    note: LINKS[other]?.note || ""
   }));
 }
 
-export function identify(index, query, options = {}) {
-  const ranked = classScores(index, query, options);
+function warningFor(meta) {
+  if (meta.group === "mushroom") return MUSHROOM_WARNING;
+  if (meta.use === "edible" || meta.use === "medicinal") return meta.group === "plant" || meta.group === "tree" ? PHOTO_WARNING : "";
+  return "";
+}
+
+export function identify(index, query) {
+  const { ranked, other, probabilities } = rankClasses(index, query);
   const top = ranked[0];
-  if (!top || top.score < BANDS.weak) {
-    return { status: "declined", text: DECLINE_TEXT, warning: PHOTO_WARNING, emergency: EMERGENCY_TEXT, suggestions: [], ranked };
+  const th = index.thresholds;
+  const strongestOther = other > top.score;
+  const deadlyHints = ranked.slice(0, 3).filter((item) => isDeadly(index.meta[item.id]) && item.score >= DEADLY_HINT);
+  if (!top || strongestOther || top.score < th.weak) {
+    return {
+      status: "unsure",
+      title: UNSURE_TITLE,
+      text: UNSURE_TEXT,
+      quiet: UNSURE_QUIET,
+      // A look-alike scoring close to a deadly plant still gets one line, but no blanket paragraph.
+      deadlyNearby: deadlyHints.map((d) => d.id),
+      deadlyLine: deadlyHints.length ? `Part of this picture resembles a deadly plant or mushroom (${deadlyHints.map((d) => index.meta[d.id].title).join(", ")}). Do not eat or handle it.` : "",
+      emergency: deadlyHints.length ? EMERGENCY_TEXT : "",
+      suggestions: [],
+      ranked,
+      other
+    };
   }
-  const top3 = ranked.slice(0, 3);
-  const deadlyClose = top3.filter((item) => CAMERA_CLASSES[item.id].use === "deadly");
-  const suggestions = top3.map((item, k) => {
-    const meta = CAMERA_CLASSES[item.id];
-    const band = bandFor(item.score);
-    const hasDeadlyLookalike = meta.lookalikes.some((other) => CAMERA_CLASSES[other].use === "deadly");
+  const top3 = ranked.slice(0, 3).filter((item, k) => k === 0 || item.score >= th.weak * 0.5);
+  const deadlyClose = top3.filter((item) => isDeadly(index.meta[item.id]) && item.score >= DEADLY_FLAG);
+  const suggestions = top3.map((item) => {
+    const meta = index.meta[item.id];
+    const band = bandFor(item.score, th);
+    const lookalikes = lookalikesFor(index, item.id);
     const notes = [];
-    if (meta.use === "deadly") notes.push(`${meta.title} is deadly. Treat any plant like this as deadly until an expert confirms it in person. Do not touch your mouth after handling it.`);
-    if (meta.use !== "deadly" && deadlyClose.length) notes.push(`A deadly plant (${deadlyClose.map((d) => CAMERA_CLASSES[d.id].title).join(", ")}) is also in the top three. Check every feature in the look-alike note before you touch it again.`);
-    else if (hasDeadlyLookalike) notes.push("This plant has deadly look-alikes. A photo cannot tell them apart safely.");
-    if (meta.use === "edible" || meta.use === "medicinal") notes.push(PHOTO_WARNING);
+    if (isDeadly(meta)) notes.push(`${meta.title} is deadly. Treat anything like this as deadly until an expert confirms it in person. Do not touch your mouth after handling it.`);
+    else if (deadlyClose.length) notes.push(`A deadly look-alike (${deadlyClose.map((d) => index.meta[d.id].title).join(", ")}) also scored in the top three. Check every feature in the look-alike note.`);
+    else if (lookalikes.some((l) => l.deadly)) notes.push(`This has deadly look-alikes (${lookalikes.filter((l) => l.deadly).map((l) => l.title).join(", ")}). A photo cannot tell them apart safely.`);
+    const warn = warningFor(meta);
+    if (warn) notes.push(warn);
     return {
       id: item.id,
       title: meta.title,
       latin: meta.latin,
+      group: meta.group,
       use: meta.use,
       band,
-      bandText: BAND_WORDS[band],
-      bandHint: BAND_HINT[band],
+      bandText: BAND_WORDS[band] || "Unlikely",
+      bandHint: BAND_HINT[band] || "Listed only so you can compare.",
       score: Math.round(item.score * 1000) / 1000,
-      note: meta.note,
-      guide: meta.guide,
-      lookalikes: lookalikesFor(item.id),
-      lookalikeNote: meta.lookalikeNote,
+      look: meta.look,
+      caution: meta.caution,
+      note: LINKS[item.id]?.note || "",
+      guide: LINKS[item.id]?.guide || "",
+      lookalikes,
       notes
     };
   });
   return {
     status: "match",
     text: `Top match: ${suggestions[0].title} (${suggestions[0].bandText.toLowerCase()}). This is a photo hint, not an identification.`,
-    warning: PHOTO_WARNING,
+    warning: suggestions.some((s) => s.group === "mushroom") ? MUSHROOM_WARNING : PHOTO_WARNING,
     emergency: EMERGENCY_TEXT,
     deadlyNearby: deadlyClose.map((item) => item.id),
     suggestions,
-    ranked
+    ranked,
+    other
   };
 }
 
-// Same preprocessing as tools/camera_id/embed_refs.py: center square crop,
-// 224 x 224, RGB scaled to 0..1. The query is the mean of the photo and its mirror.
-export function pixelsToInputs(png) {
+// Same preprocessing as tools/camera_id/embed_inat.py: centre square crop (done before this),
+// 224 x 224 RGB, scaled to 0..1, then ImageNet mean/std, channels first. Returns the photo and its mirror.
+export function pixelsToInputs(png, model) {
   const { data, channels, width, height, depth } = png;
-  const SIZE = 224;
+  const SIZE = model.input[2];
   if (width !== SIZE || height !== SIZE) throw new Error("Unexpected photo size after resize.");
   const max = depth === 16 ? 65535 : 255;
-  const plain = new Float32Array(SIZE * SIZE * 3);
-  const mirror = new Float32Array(SIZE * SIZE * 3);
+  const plane = SIZE * SIZE;
+  const plain = new Float32Array(3 * plane);
+  const mirror = new Float32Array(3 * plane);
   for (let y = 0; y < SIZE; y += 1) {
     for (let x = 0; x < SIZE; x += 1) {
       const src = (y * SIZE + x) * channels;
-      const dst = (y * SIZE + x) * 3;
-      const mdst = (y * SIZE + (SIZE - 1 - x)) * 3;
       for (let c = 0; c < 3; c += 1) {
-        const value = (channels >= 3 ? data[src + c] : data[src]) / max;
-        plain[dst + c] = value;
-        mirror[mdst + c] = value;
+        const value = ((channels >= 3 ? data[src + c] : data[src]) / max - model.mean[c]) / model.std[c];
+        plain[c * plane + y * SIZE + x] = value;
+        mirror[c * plane + y * SIZE + (SIZE - 1 - x)] = value;
       }
     }
   }

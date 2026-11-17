@@ -1,123 +1,127 @@
+// Camera ID v2: DINOv2-small embeddings + a linear head with an "I'm not sure" outcome.
+// Checks the shipped assets, the not-sure rules, the conifer regression (spruce called Water
+// hemlock), hot-path isolation, and (when onnxruntime-node is present) the shipped model end to end.
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
+import { decode as decodePng } from "fast-png";
+import credits from "./assets/camera_id/credits.json" with { type: "json" };
+import meta from "./assets/camera_id/classes.json" with { type: "json" };
 import raw from "./assets/camera_id/index.json" with { type: "json" };
-import queries from "./eval/camera_id/queries.json" with { type: "json" };
-import notes from "./symbolic_books/herbology/notes.json" with { type: "json" };
-import {
-  BANDS,
-  CAMERA_CLASSES,
-  DECLINE_TEXT,
-  PHOTO_WARNING,
-  decodeIndex,
-  decodeVector,
-  identify,
-  pixelsToInputs
-} from "./src/phone/camera_id_match.js";
-import { licenseAllowed } from "./symbolic/picture_guide.js";
-import { cameraIdAvailable, embedPhoto } from "./src/phone/camera_id_native.js";
+import fixture from "./eval/camera_id/fixtures/shot8_conifer.json" with { type: "json" };
+import { UNSURE_TITLE, decodeIndex, identify, normalize, pixelsToInputs, rankClasses } from "./src/phone/camera_id_match.js";
 
-const index = decodeIndex(raw);
-const noteSymbols = new Set(notes.map((n) => n.symbol));
+const index = decodeIndex(raw, meta);
+const unit = (row) => normalize(index.weights.slice(row * index.dim, (row + 1) * index.dim));
+const CONIFERS = new Set(Object.entries(meta).filter(([, m]) => m.group === "tree" && /conifer|pine|spruce|fir|cedar|hemlock|larch|juniper|yew/i.test(m.title + " " + (m.look || ""))).map(([id]) => id));
 
-test("every camera class is something Yehsa has a note for, with look-alike links", () => {
-  assert.deepEqual([...index.classes].sort(), Object.keys(CAMERA_CLASSES).sort());
-  for (const [id, meta] of Object.entries(CAMERA_CLASSES)) {
-    assert.ok(noteSymbols.has(meta.note), `${id} note ${meta.note}`);
-    assert.ok(noteSymbols.has(meta.lookalikeNote), `${id} look-alike note`);
-    for (const other of meta.lookalikes) assert.ok(CAMERA_CLASSES[other], `${id} -> ${other}`);
+test("every class has a name, a use, a look, a caution, and look-alike links that exist", () => {
+  assert.equal(index.classes.length, Object.keys(meta).length);
+  assert.ok(index.classes.length >= 150, `${index.classes.length} classes`);
+  for (const id of index.classes) {
+    const m = meta[id];
+    assert.ok(m, id);
+    assert.ok(m.title && m.group && m.use && m.look && typeof m.caution === "string", id);
+    if (m.use === "deadly") assert.ok(m.caution, `${id} needs a caution`);
+    for (const other of m.lookalikes || []) assert.ok(meta[other], `${id} -> ${other}`);
   }
+  const groups = new Set(Object.values(meta).map((m) => m.group));
+  for (const g of ["plant", "tree", "mushroom", "animal", "track", "scat"]) assert.ok(groups.has(g), `group ${g}`);
 });
 
-test("index, model, and credits are complete and permissively licensed", () => {
-  assert.equal(raw.model.license, "Apache-2.0");
-  assert.equal(raw.model.dim, 1024);
+test("mushrooms and deadly plants point at their deadly look-alikes", () => {
+  for (const [id, m] of Object.entries(meta)) {
+    if (m.use === "edible" && m.group === "mushroom") assert.ok((m.lookalikes || []).some((o) => meta[o]?.use === "deadly"), `${id} edible mushroom needs a deadly look-alike`);
+  }
+  for (const id of ["water_hemlock", "poison_hemlock", "death_camas", "death_cap", "destroying_angel"]) assert.equal(meta[id]?.use, "deadly", id);
+});
+
+test("shipped assets are small, licensed, and complete", () => {
   const model = fs.statSync(`assets/camera_id/${raw.model.file}`);
-  assert.ok(model.size > 3e6 && model.size < 6e6);
-  assert.ok(index.refs.length >= index.sources.length);
-  for (const src of index.sources) {
-    assert.ok(src.sourceUrl.startsWith("https://commons.wikimedia.org/"), src.title);
-    assert.ok(src.author && src.title);
-    assert.equal(licenseAllowed(src.license), true, src.license);
+  assert.ok(model.size < 26e6, `model ${model.size}`);
+  assert.equal(raw.model.dim, 384);
+  assert.ok(fs.statSync("assets/camera_id/index.json").size < 400e3);
+  assert.ok(raw.thresholds.possible > raw.thresholds.weak && raw.thresholds.weak > 0.1);
+  assert.ok(Object.keys(credits.classes).length === index.classes.length);
+  const sample = Object.values(credits.classes)[0];
+  assert.ok(Array.isArray(sample) && sample.length > 3);
+});
+
+test("a photo that looks like a class gets that class, with the photo-hint framing", () => {
+  const checked = ["yarrow", "red_maple", "balsam_fir"].filter((id) => index.classes.includes(id));
+  assert.ok(checked.length >= 2);
+  for (const id of checked) {
+    const q = unit(index.classes.indexOf(id));
+    const r = identify(index, q);
+    assert.equal(r.status, "match", id);
+    assert.equal(r.suggestions[0].id, id);
+    assert.match(r.text, /photo hint, not an identification/);
+    assert.ok(r.warning && r.emergency);
   }
-  for (const ref of index.refs) assert.equal(ref.vec.length, 1024);
 });
 
-test("a held-out reference photo gets top-3 suggestions with words, warnings, and look-alikes", () => {
-  const item = queries.positives.find((p) => index.classes[p.c] === "wild_carrot");
-  const result = identify(index, decodeVector(item, index.dim), { excludeSrc: item.src });
-  assert.equal(result.status, "match");
-  assert.equal(result.suggestions.length, 3);
-  assert.equal(result.warning, PHOTO_WARNING);
-  for (const s of result.suggestions) {
-    assert.match(s.bandText, /^(Possible match|Weak match|Unlikely)$/);
-    assert.ok(s.lookalikeNote);
-    if (s.use === "edible" || s.use === "medicinal") assert.ok(s.notes.includes(PHOTO_WARNING));
-    if (s.use === "deadly") assert.ok(s.notes.some((n) => /deadly/.test(n)));
+test("a photo that looks like nothing in the set says 'I'm not sure'", () => {
+  const q = unit(index.classes.length); // the "something else" row
+  const r = identify(index, q);
+  assert.equal(r.status, "unsure");
+  assert.equal(r.title, UNSURE_TITLE);
+  assert.deepEqual(r.suggestions, []);
+  // A flat, featureless vector must not produce a confident match either.
+  const flat = identify(index, new Float32Array(index.dim).fill(1));
+  assert.ok(flat.status === "unsure" || flat.suggestions[0].band !== "possible");
+});
+
+test("a deadly plant is flagged when it is in the top three", () => {
+  const id = "water_hemlock";
+  const r = identify(index, unit(index.classes.indexOf(id)));
+  assert.equal(r.status, "match");
+  assert.ok(r.suggestions[0].notes.some((n) => /deadly/i.test(n)));
+});
+
+test("regression: a balsam-fir / spruce shot is never called Water hemlock", () => {
+  const q = normalize(Float32Array.from(fixture.embedding));
+  const r = identify(index, q);
+  const { ranked } = rankClasses(index, q);
+  const deadlyUmbels = new Set(["water_hemlock", "poison_hemlock", "death_camas"]);
+  if (r.status === "match") {
+    assert.ok(!deadlyUmbels.has(r.suggestions[0].id), `top was ${r.suggestions[0].id}`);
+    assert.ok(CONIFERS.has(r.suggestions[0].id), `top was ${r.suggestions[0].id}`);
   }
-  const carrot = result.suggestions.find((s) => s.id === "wild_carrot");
-  if (carrot) assert.ok(carrot.lookalikes.some((l) => l.deadly));
-  assert.doesNotMatch(JSON.stringify(result.suggestions), /safe to eat|edible: yes|confirmed/i);
+  assert.ok(!deadlyUmbels.has(ranked[0].id));
 });
 
-test("nothing close means a decline, not a guess", () => {
-  const flat = new Float32Array(1024).fill(0);
-  flat[7] = 1;
-  const result = identify(index, flat);
-  assert.equal(result.status, "declined");
-  assert.equal(result.text, DECLINE_TEXT);
-  assert.equal(result.suggestions.length, 0);
-  assert.equal(result.warning, PHOTO_WARNING);
-});
-
-test("leave-one-out floors stay where they were measured", () => {
-  let top3 = 0;
-  let deadlyShown = 0;
-  let deadlyMatched = 0;
-  for (const item of queries.positives) {
-    const result = identify(index, decodeVector(item, index.dim), { excludeSrc: item.src });
-    if (result.ranked.slice(0, 3).some((r) => r.id === index.classes[item.c])) top3 += 1;
-    if (result.status === "match" && CAMERA_CLASSES[index.classes[item.c]].use === "deadly") {
-      deadlyMatched += 1;
-      if (result.suggestions.some((s) => s.use === "deadly")) deadlyShown += 1;
-    }
-  }
-  assert.ok(top3 / queries.positives.length >= 0.85, `top3 ${top3}`);
-  assert.equal(deadlyShown, deadlyMatched, "a held-out deadly photo must keep a deadly plant in its top 3");
-  let declined = 0;
-  for (const item of queries.negatives) if (identify(index, decodeVector(item, index.dim)).status === "declined") declined += 1;
-  assert.ok(declined / queries.negatives.length >= 0.6, `declined ${declined}`);
-  assert.ok(BANDS.weak < BANDS.possible);
-});
-
-test("pixel layout matches the reference preprocessing and mirrors", () => {
-  const data = new Uint8Array(224 * 224 * 4);
-  data[0] = 255; data[1] = 0; data[2] = 51; data[3] = 255;
-  const [plain, mirror] = pixelsToInputs({ data, channels: 4, width: 224, height: 224, depth: 8 });
-  assert.equal(plain[0], 1);
-  assert.ok(Math.abs(plain[2] - 0.2) < 1e-6);
-  const m = 223 * 3;
-  assert.equal(mirror[m], 1);
-  assert.ok(Math.abs(mirror[m + 2] - 0.2) < 1e-6);
-  assert.throws(() => pixelsToInputs({ data, channels: 4, width: 10, height: 10, depth: 8 }));
-});
-
-test("web and Node never pretend to run the model", async () => {
-  assert.equal(cameraIdAvailable(), false);
-  await assert.rejects(() => embedPhoto({ uri: "x" }));
-});
-
-test("camera ID stays off the knowledge hot path and is exported as a screen", () => {
-  const hot = ["symbolic/ask.js", "symbolic/knowledge_index.js", "symbolic/phone_field.js", "src/phone/YehsaApp.js"];
-  for (const file of hot) {
+test("camera, compass and radio modules are not reachable from the Ask hot path", () => {
+  for (const file of ["symbolic/ask.js", "symbolic/knowledge_index.js", "symbolic/knowledge_rank.js", "symbolic/field_guide.js"]) {
     if (!fs.existsSync(file)) continue;
-    assert.doesNotMatch(fs.readFileSync(file, "utf8"), /camera_id|CameraIdScreen|fast-tflite/, file);
+    const imports = fs.readFileSync(file, "utf8").split("\n").filter((line) => /^\s*(import|export)\b.*\bfrom\b|\brequire\(|\bimport\(/.test(line)).join("\n");
+    assert.ok(!/camera_id|compass|radio|wmm|onnxruntime/.test(imports), file);
   }
-  const screens = fs.readFileSync("src/phone/screens_index.js", "utf8");
-  assert.match(screens, /CameraIdScreen/);
-  const screen = fs.readFileSync("src/phone/CameraIdScreen.js", "utf8");
-  assert.match(screen, /expo-image-picker/);
-  assert.match(screen, /PHOTO_WARNING/);
-  const native = fs.readFileSync("src/phone/camera_id_native.native.js", "utf8");
-  assert.match(native, /function loadModel\(\)[\s\S]*require\("react-native-fast-tflite"\)/, "model loads lazily");
+});
+
+let ort = null;
+try {
+  ort = await import("onnxruntime-node");
+} catch {
+  ort = null;
+}
+
+test("the shipped ONNX model reproduces the stored embedding of the conifer photo", { skip: ort ? false : "onnxruntime-node not installed" }, async () => {
+  const png = decodePng(fs.readFileSync("eval/camera_id/fixtures/shot8_conifer_224.png"));
+  const [plain, mirror] = pixelsToInputs(png, raw.model);
+  const session = await ort.InferenceSession.create(`assets/camera_id/${raw.model.file}`);
+  const run = async (data) => {
+    const out = await session.run({ pixel_values: new ort.Tensor("float32", data, [1, 3, 224, 224]) });
+    return normalize(out.last_hidden_state.data.slice(0, raw.model.dim));
+  };
+  const a = await run(plain);
+  const b = await run(mirror);
+  const mean = new Float32Array(a.length);
+  for (let i = 0; i < a.length; i += 1) mean[i] = (a[i] + b[i]) / 2;
+  const q = normalize(mean);
+  const ref = normalize(Float32Array.from(fixture.embedding));
+  let dot = 0;
+  for (let i = 0; i < q.length; i += 1) dot += q[i] * ref[i];
+  assert.ok(dot > 0.995, `cosine to the Python embedding was ${dot}`);
+  const r = identify(index, q);
+  assert.ok(r.status === "unsure" || CONIFERS.has(r.suggestions[0].id), r.status === "match" ? r.suggestions[0].id : "");
 });

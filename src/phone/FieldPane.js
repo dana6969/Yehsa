@@ -9,6 +9,8 @@ import BallisticsScreen from "./BallisticsScreen.js";
 import SightingsScreen from "./SightingsScreen.js";
 import WindScreen from "./WindScreen.js";
 import KitScreen from "./KitScreen.js";
+import CompassScreen from "./CompassScreen.js";
+import RadioScreen from "./RadioScreen.js";
 import { Action, Field, Quiet, ScreenHeader, colors, tokens, useDisplay, themedStyles } from "./ui.js";
 import { useBackLayer } from "./back_layers.js";
 import { courseText, declinationText, sunText } from "../../symbolic/phone_land.js";
@@ -28,10 +30,11 @@ export const FIELD_GROUPS = [
     label: "Everyday",
     tiles: [
       { id: "pictures", label: "Pictures", sub: "Guide and look-alikes", icon: "images-outline" },
-      { id: "compass", label: "Compass", sub: "Bearing and declination", icon: "compass-outline" },
+      { id: "compass", label: "Compass", sub: "Live heading, or a bearing", icon: "compass-outline" },
       { id: "sun", label: "Sun times", sub: "Sunrise and sunset", icon: "sunny-outline" },
       { id: "weather", label: "Weather", sub: "Pressure on this phone", icon: "cloud-outline" },
-      { id: "morse", label: "Morse", sub: "Text to code", icon: "radio-outline" },
+      { id: "radio", label: "Radio", sub: "Weather and emergency radio", icon: "radio-outline" },
+      { id: "morse", label: "Morse", sub: "Text to code", icon: "megaphone-outline" },
       { id: "timers", label: "Timers", sub: "Countdown", icon: "timer-outline" },
       { id: "calculator", label: "Calculator", sub: "Units and field math", icon: "calculator-outline" }
     ]
@@ -70,7 +73,7 @@ function heldPair(position) {
   return `${position.fix.latitude.toFixed(5)}, ${position.fix.longitude.toFixed(5)}`;
 }
 
-export default function FieldPane({ position, mapPacks, onEmergency, openRequest, onOpenLayers, onOpenScreen, onAsk }) {
+export default function FieldPane({ position, mapPacks, waypoints, onEmergency, openRequest, onOpenLayers, onOpenScreen, onAsk }) {
   const [open, setOpen] = useState(null);
   const [guideSymbol, setGuideSymbol] = useState("");
   useEffect(() => {
@@ -93,9 +96,10 @@ export default function FieldPane({ position, mapPacks, onEmergency, openRequest
       />
     );
   }
-  if (open === "compass" || open === "course") return <CompassTool position={position} onBack={close} />;
+  if (open === "compass" || open === "course" || open === "declination") return <CompassScreen position={position} waypoints={waypoints || []} onBack={close} onOpenBearing={() => setOpen("bearing")}><ManualBearing position={position} /></CompassScreen>;
+  if (open === "bearing") return <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled"><ScreenHeader title="Bearing between two points" lead="Straight-line bearing and distance. Not a road route." onBack={() => setOpen("compass")} backLabel="Compass" /><ManualBearing position={position} /></ScrollView>;
   if (open === "sun") return <SunTool position={position} onBack={close} />;
-  if (open === "declination") return <CompassTool position={position} onBack={close} />;
+  if (open === "radio") return <RadioScreen position={position} onBack={close} onOpenMorse={() => setOpen("morse")} />;
   if (open === "morse") return <MorseTool onBack={close} />;
   if (open === "timers") return <TimerTool onBack={close} />;
   if (open === "calculator") return <CalculatorTool onBack={close} />;
@@ -116,6 +120,7 @@ export default function FieldPane({ position, mapPacks, onEmergency, openRequest
     return (
       <CameraIdScreen
         onBack={close}
+        onOpenGuide={() => { setGuideSymbol(""); setOpen("pictures"); }}
         onOpenNote={(symbol) => {
           if (!symbol) return;
           // A picture-guide entry opens here. A plant note with no pictures opens in Ask.
@@ -176,7 +181,9 @@ function Tile({ tile, onPress }) {
   );
 }
 
-function CompassTool({ position, onBack }) {
+// Typed-coordinate tools from before the live compass: bearing between two points and a
+// magnetic-to-true converter that takes the angle printed on a paper map.
+function ManualBearing({ position }) {
   const [from, setFrom] = useState(heldPair(position));
   const [to, setTo] = useState("");
   const [result, setResult] = useState(null);
@@ -184,18 +191,18 @@ function CompassTool({ position, onBack }) {
   const [decl, setDecl] = useState("");
   const [declResult, setDeclResult] = useState(null);
   return (
-    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader title="Compass" lead="Straight-line bearing and distance. Not a road route." onBack={onBack} backLabel="Field" />
+    <View>
+      <Text style={styles.groupLabel}>BEARING BETWEEN TWO POINTS</Text>
       <Field label="From (latitude, longitude)" value={from} onChangeText={setFrom} placeholder="45.1, -69.2" />
       <Field label="To (latitude, longitude)" value={to} onChangeText={setTo} placeholder="45.2, -69.1" />
       <Action label="Work out bearing and distance" onPress={() => setResult(courseText(from, to))} />
       {result ? <Quiet live>{result.text}</Quiet> : null}
-      <Text style={styles.groupLabel}>DECLINATION</Text>
+      <Text style={styles.groupLabel}>CONVERT USING A MAP'S DECLINATION</Text>
       <Field label="Magnetic bearing in degrees" value={bearing} onChangeText={setBearing} placeholder="90" />
       <Field label="Declination from your map, east positive" value={decl} onChangeText={setDecl} placeholder="-15" />
       <Action label="Convert to true" tone="quiet" onPress={() => setDeclResult(declinationText(bearing, decl))} />
       {declResult ? <Quiet live>{declResult.text}</Quiet> : null}
-    </ScrollView>
+    </View>
   );
 }
 

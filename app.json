@@ -89,6 +89,7 @@
           "microphonePermission": false
         }
       ],
+      "./plugins/withFmAppQueries.js",
       "./plugins/withArm64Only.js",
       [
         "expo-audio",

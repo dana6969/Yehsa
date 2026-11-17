@@ -407,6 +407,7 @@ export default function YehsaApp() {
           <FieldPane
             position={position}
             mapPacks={mapPacks}
+            waypoints={waypoints}
             onEmergency={() => go({ type: "openSos" })}
             openRequest={fieldRequest}
             onOpenLayers={() => { setTab("map"); setLayersRequest(Date.now()); }}
