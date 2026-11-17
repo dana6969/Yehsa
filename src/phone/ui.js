@@ -1,5 +1,7 @@
 import React from "react";
-import { Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+
+const brandMark = require("../../assets/brand/yehsa-mark-256.png");
 
 export const colors = {
   bg: "#141a16",
@@ -20,7 +22,10 @@ const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 export function ScreenHeader({ title, lead }) {
   return (
     <View style={styles.header}>
-      <Text style={styles.wordmark}>Yehsa</Text>
+      <View style={styles.brandRow}>
+        <Image source={brandMark} style={styles.brandMark} accessibilityIgnoresInvertColors accessible={false} />
+        <Text style={styles.wordmark}>Yehsa</Text>
+      </View>
       <Text accessibilityRole="header" style={styles.title}>{title}</Text>
       {lead ? <Text style={styles.lead}>{lead}</Text> : null}
     </View>
@@ -150,8 +155,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
     letterSpacing: 2.2,
-    textTransform: "uppercase",
+    textTransform: "uppercase"
+  },
+  brandRow: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 8
+  },
+  brandMark: {
+    width: 26,
+    height: 26,
+    marginRight: 8
   },
   title: {
     color: colors.ink,

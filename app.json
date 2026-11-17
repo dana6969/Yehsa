@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#141a16"
+      "backgroundColor": "#0d0a07"
     },
     "android": {
       "package": "com.dana6969.axi0net",
@@ -19,7 +19,7 @@
       "edgeToEdgeEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#141a16"
+        "backgroundColor": "#0d0a07"
       },
       "permissions": [
         "ACCESS_COARSE_LOCATION",
@@ -42,6 +42,15 @@
       }
     },
     "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 240,
+          "resizeMode": "contain",
+          "backgroundColor": "#0d0a07"
+        }
+      ],
       [
         "expo-location",
         {
