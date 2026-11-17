@@ -16,6 +16,7 @@ import { quoteSpiritual } from "./spiritual_quote.js";
 import { searchPassages } from "./book_search.js";
 import { safetyAnswer } from "./safety.js";
 import { formatLearned, retrieveLearned } from "./learned_notes.js";
+import { formatAnswerSource } from "./answer_source.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -97,6 +98,21 @@ function corporaFor(passages, override) {
   };
 }
 
+function fieldResult(partial) {
+  const result = {
+    answered: false,
+    empty: false,
+    text: null,
+    cue: null,
+    emotion: null,
+    miss: null,
+    corpus: phoneCorpusMeta,
+    ...partial
+  };
+  result.source = formatAnswerSource(result);
+  return result;
+}
+
 /**
  * One short answer for the phone screen.
  * passages: the field-note index (books_index.json passages).
@@ -106,15 +122,14 @@ function corporaFor(passages, override) {
 export function askField(input, passages, options = {}) {
   const raw = String(input ?? "");
   if (!raw.trim()) {
-    return {
+    return fieldResult({
       answered: false,
       empty: true,
       text: null,
       cue: null,
       emotion: null,
-      miss: null,
-      corpus: phoneCorpusMeta
-    };
+      miss: null
+    });
   }
   if (!Array.isArray(passages)) {
     const error = new Error("Field notes could not be read offline.");
@@ -123,29 +138,34 @@ export function askField(input, passages, options = {}) {
   }
   const safety = safetyAnswer(raw, (query, limit) => searchPassages(passages, query, limit));
   if (safety?.abstain || safety?.text) {
-    return {
+    return fieldResult({
       answered: Boolean(safety.text),
-      empty: false,
       text: safety.text || null,
       cue: null,
       emotion: { understood: false, emotion: "neutral" },
       miss: safety.text ? null : "No offline note answered that.",
-      corpus: phoneCorpusMeta,
-      kind: safety.kind || null
-    };
+      kind: safety.kind || null,
+      symbol: safety.symbol || null,
+      title: safety.title || null,
+      hits: safety.source ? [{
+        kind: safety.kind,
+        symbol: safety.symbol,
+        title: safety.title || "",
+        source: safety.source,
+        text: safety.text
+      }] : []
+    });
   }
   const calc = calculate(raw);
   if (calc) {
-    return {
+    return fieldResult({
       answered: true,
-      empty: false,
       text: calc.text,
       cue: null,
       emotion: { understood: false, emotion: "neutral" },
       miss: null,
-      corpus: phoneCorpusMeta,
       kind: "calculator"
-    };
+    });
   }
   const expanded = expandParaphrase(raw, options.learned?.phrases);
   const question = parseQuestion(expanded);
@@ -153,27 +173,26 @@ export function askField(input, passages, options = {}) {
     const passages = options.spiritualIndex?.passages || options.spiritualIndex;
     const spiritual = Array.isArray(passages) ? quoteSpiritual(raw, passages) : null;
     if (!spiritual) {
-      return {
+      return fieldResult({
         answered: false,
-        empty: false,
         text: null,
         cue: null,
         emotion: { understood: false, emotion: "neutral" },
         miss: "The scripture index is not loaded yet, so there is no quoted passage for that.",
-        corpus: phoneCorpusMeta,
         kind: "spiritual"
-      };
+      });
     }
-    return {
+    return fieldResult({
       answered: true,
-      empty: false,
       text: spiritual.text,
       cue: null,
       emotion: { understood: false, emotion: "neutral" },
       miss: null,
-      corpus: phoneCorpusMeta,
-      kind: "spiritual"
-    };
+      kind: "spiritual",
+      symbol: spiritual.symbol || null,
+      title: spiritual.title || spiritual.hits?.[0]?.title || null,
+      hits: spiritual.hits || []
+    });
   }
   const emotion = readEmotion(question.raw);
   let knowledge = null;
@@ -190,39 +209,44 @@ export function askField(input, passages, options = {}) {
   const text = note || fromFeeling;
   const learnedHit = options.learned ? retrieveLearned(expanded, options.learned) : null;
   if (!text && learnedHit) {
-    return {
+    return fieldResult({
       answered: true,
-      empty: false,
       text: formatLearned(learnedHit),
       cue: null,
       emotion: { understood: emotion.understood, emotion: emotion.emotion },
       miss: null,
-      corpus: phoneCorpusMeta,
       kind: "learned",
       symbol: learnedHit.id,
-      learnedId: learnedHit.id
-    };
+      title: learnedHit.title || "Learned note",
+      learnedId: learnedHit.id,
+      hits: [{
+        kind: "learned",
+        symbol: learnedHit.id,
+        title: learnedHit.title || "Learned note",
+        source: learnedHit.source || "this phone",
+        text: learnedHit.text
+      }]
+    });
   }
   if (!text) {
-    return {
+    return fieldResult({
       answered: false,
-      empty: false,
       text: null,
       cue: null,
       emotion: { understood: false, emotion: "neutral" },
-      miss: "No offline note answered that.",
-      corpus: phoneCorpusMeta
-    };
+      miss: "No offline note answered that."
+    });
   }
-  return {
+  const kind = knowledge?.kind || (nav?.sentence ? "landscape" : (fromFeeling ? "emotion" : null));
+  return fieldResult({
     answered: true,
-    empty: false,
     text,
     cue: cueFor(emotion, Boolean(note)),
     emotion: { understood: emotion.understood, emotion: emotion.emotion },
     miss: null,
-    corpus: phoneCorpusMeta,
-    kind: knowledge?.kind || null,
-    symbol: knowledge?.symbol || null
-  };
+    kind,
+    symbol: knowledge?.symbol || (nav?.sentence ? "landscape_nav" : (fromFeeling ? emotion.emotion : null)),
+    title: knowledge?.title || null,
+    hits: knowledge?.hits || []
+  });
 }
