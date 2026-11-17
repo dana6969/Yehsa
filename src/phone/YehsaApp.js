@@ -53,7 +53,11 @@ import {
   submitHeard,
   voiceButtonLabel
 } from "../../symbolic/voice_adapter.js";
-import { Action, DisplayContext, Field, HoldTalk, ModeChip, Prose, Quiet, ScreenHeader, ShellContext, StatusPill, applyTheme, colors, themedStyles } from "./ui.js";
+import HuntHud from "./HuntHud.js";
+import PartyScreen, { usePartyTicker } from "./PartyScreen.js";
+import { FamilyCardScreen } from "./KitScreen.js";
+import { loadHunt } from "./hunt_state.js";
+import { Action, DisplayContext, Field, HoldTalk, Prose, Quiet, ScreenHeader, ShellContext, StatusPill, applyTheme, colors, themedStyles } from "./ui.js";
 import { approveAction, declineAction, proposeAction, setActionEnabled, undoApproved } from "../../symbolic/action_gate.js";
 import { readAssistant } from "../../symbolic/assistant_intent.js";
 import {
@@ -71,9 +75,9 @@ import { sendToModel } from "./model_client.js";
 import { deleteModelKey, readModelKey, saveModelKey } from "./model_secrets.js";
 import ModelsPane from "./ModelsPane.js";
 import LearnedPane from "./LearnedPane.js";
-import PictureGuide from "./PictureGuide.js";
+import PictureGuide, { CorpusHealth } from "./PictureGuide.js";
 import pictureManifest from "../../assets/pictures/manifest.json";
-import { friendlySource, imageHref, picturesFor } from "../../symbolic/picture_guide.js";
+import { creditLine, friendlySource, imageHref, picturesFor } from "../../symbolic/picture_guide.js";
 import { pictureSource } from "../../symbolic/picture_assets.js";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -92,6 +96,7 @@ import {
   rememberPhrase,
   saveHelpfulAnswer
 } from "../../symbolic/learned_notes.js";
+import { domainOf, mergeCompound, newThread, socialTurn, splitCompound, tripResult, voiceReply } from "../../symbolic/yehsa_voice.js";
 import { capabilitySummary, continueUtterance, isCapabilityQuestion, isFeedbackEligible, sourceChips } from "../../symbolic/chat_turn.js";
 import LandscapeMap from "./LandscapeMap.js";
 import {
@@ -123,7 +128,7 @@ import { BooksPane, DownloadArea, HotspotGuide, SatSosGuide, TrustScreen, areaDe
 import CommandSheet from "./CommandSheet.js";
 import Onboarding, { ONBOARDED_KEY } from "./Onboarding.js";
 import { TRUST_EVAL, TRUST_LINES } from "./trust_copy.js";
-import { DISPLAY_KEY, DISPLAY_MODES, NIGHT_TINTS, defaultDisplay, modeLabel, nextMode, openDisplay, packDisplay, setMode, themeKeyFor } from "./display_model.js";
+import { DISPLAY_KEY, DISPLAY_MODES, NIGHT_TINTS, defaultDisplay, openDisplay, packDisplay, setMode, themeKeyFor } from "./display_model.js";
 import {
   applyGpsSample,
   gpsStatusLabel,
@@ -198,6 +203,8 @@ export default function YehsaApp() {
   const [learned, setLearned] = useState(emptyLearned);
   const [owner, setOwner] = useState(null);
   const [mesh, setMesh] = useState(initialMeshSession);
+  useEffect(() => { loadHunt(); }, []);
+  usePartyTicker({ position, mesh, setMesh });
   const [modelTestNote, setModelTestNote] = useState("A connection test sends only the word ready, and only after Approve test.");
 
   useEffect(() => {
@@ -327,13 +334,12 @@ export default function YehsaApp() {
     return "No link is held, so the SOS is kept on this phone and goes out when a link is up.";
   }
 
-  const currentMode = DISPLAY_MODES.find((item) => item.id === display.mode) || DISPLAY_MODES[0];
   const shell = useMemo(() => ({
     openMore: () => go({ type: "push", screen: "more" }),
     openSearch: () => go({ type: "openCommand" }),
-    cycleMode: () => storeDisplay(nextMode(display)),
-    modeLabel: modeLabel(display),
-    modeIcon: currentMode.icon
+    modes: DISPLAY_MODES,
+    mode: display.mode,
+    setMode: (id) => storeDisplay(setMode(display, id))
   }), [display]);
 
   function pane(id) {
@@ -356,6 +362,7 @@ export default function YehsaApp() {
       <View style={styles.body}>
         <View {...pane("ask")}>
           <AskPane
+            onGo={(tile) => { setTab("field"); setFieldRequest({ id: Date.now(), tile }); }}
             session={session}
             owner={owner}
             active
@@ -393,6 +400,7 @@ export default function YehsaApp() {
             onDisplay={storeDisplay}
             onParty={() => { setTab("people"); setPartyRequest(Date.now()); }}
             onBefore={() => { setTab("field"); setFieldRequest({ id: Date.now(), tile: "before" }); }}
+            onOpenTool={(tile) => { setTab("field"); setFieldRequest({ id: Date.now(), tile }); }}
           />
         </View>
         <View {...pane("field")}>
@@ -494,10 +502,7 @@ export default function YehsaApp() {
         ) : null}
         {stackOpen("family") ? (
           <View {...pane("family")}>
-            <ScrollView contentContainerStyle={styles.scroll}>
-              <ScreenHeader title="Family card" lead="Coming in a later update." onBack={popScreen} backLabel={back} />
-              <Quiet>A private card with the people to call, medical notes, and meeting places, kept on this phone and linked from Kit in Field.</Quiet>
-            </ScrollView>
+            <FamilyCardScreen onBack={popScreen} backLabel={back} />
           </View>
         ) : null}
         {stackOpen("keys") ? (
@@ -544,6 +549,7 @@ export default function YehsaApp() {
                 <Quiet>{TRUST_EVAL.summary}</Quiet>
               </View>
               <Quiet>Yehsa answers from the notes on this phone. A model, a map pack, and GPS each stay off until you ask. A picture is not a safe identification. Nothing is shared unless you use a separate share action. Packaged dictionary: {phoneCorpusMeta.headwords} headwords and {phoneCorpusMeta.medicalNames} medical names. {phoneCorpusMeta.honest} This install is bound to this device. Exterior access is denied.</Quiet>
+              <DeveloperRow />
             </ScrollView>
           </View>
         ) : null}
@@ -662,13 +668,14 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ pendingAsk, onSummary, session, owner, active, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
+function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [messages, setMessages] = useState([]);
   const [gate, setGate] = useState({ settings: { waypoint: true, measure: true, "position-hold": true, "position-unlock": true, "mesh-scan": true, calculate: true, speak: true, "field-note": true }, log: [], pending: null });
   const [notes, setNotes] = useState([]);
   const priorRef = useRef(null);
+  const threadMem = useRef(newThread());
   const [correction, setCorrection] = useState(null);
   const [credits, setCredits] = useState(null);
   const gateRef = useRef(gate);
@@ -905,7 +912,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
   function onDecline(id) {
     const decision = declineAction(gateRef.current, id);
     rememberGate(decision.gate);
-    pushMessage({ role: "yehsa", text: "Declined. I did not do it." });
+    pushMessage({ role: "yehsa", text: "All right. I left that alone." });
   }
 
   function onUndo(id) {
@@ -978,7 +985,21 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
       });
       return;
     }
-    const text = continueUtterance(typed, priorRef.current);
+    // A hello, a thanks, or a yes to my last offer. Anything else goes to the notes.
+    const social = socialTurn(typed, threadMem.current);
+    if (social && social.kind !== "ask") {
+      stopProse();
+      setQuestion("");
+      setNotice(null);
+      pushMessage({ role: "you", text: typed });
+      if (social.kind === "go") onGo?.(social.go);
+      threadMem.current = { ...threadMem.current, turns: threadMem.current.turns + 1, offer: null };
+      setPhase("ready");
+      pushMessage({ role: "yehsa", text: social.text });
+      return;
+    }
+    const effective = social?.kind === "ask" ? social.ask : typed;
+    const text = continueUtterance(effective, priorRef.current);
     const held = position?.consent === true && position.status === "locked" ? position.fix : null;
     const origin = held || { latitude: 0, longitude: 0 };
     let here = mapTap || null;
@@ -991,7 +1012,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
       here = origin;
       hereLabel = "the center of this blank canvas, not a city";
     }
-    const intent = readAssistant(typed, { here, hereLabel, held, waypoints });
+    const intent = readAssistant(effective, { here, hereLabel, held, waypoints });
     stopProse();
     setQuestion("");
     setNotice(null);
@@ -1024,7 +1045,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
     const generation = ++askGen.current;
     setTimeout(() => {
       if (askGen.current !== generation) return;
-      const run = async () => {
+      const answerOne = async (text) => {
         if (isCapabilityQuestion(text)) {
           return { answered: true, text: capabilitySummary(phoneCorpusMeta), kind: "about", symbol: "capabilities" };
         }
@@ -1048,6 +1069,17 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
         if (!meaning) return lexical;
         if (meaning.scripture && !spiritualIndex) spiritualIndex = await loadScriptureIndex();
         return askField(text, books.passages, { session, spiritualIndex, learned, meaning });
+      };
+      // Two jobs in one question ("a shelter and planning a trip") get both answered.
+      const run = async () => {
+        const parts = splitCompound(text);
+        if (parts) {
+          const answers = [];
+          for (const part of parts) answers.push({ part, result: part.domain === "trip" ? null : await answerOne(part.text) });
+          return mergeCompound(parts, answers, threadMem.current);
+        }
+        if (domainOf(text) === "trip") return tripResult();
+        return answerOne(text);
       };
       run().then((result) => {
         if (askGen.current !== generation) return;
@@ -1096,7 +1128,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
             pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
               id: image.id,
               href: imageHref(image.file),
-              attribution: image.attribution,
+              attribution: creditLine(image),
               warning: image.warning
             })),
             card: proposed.card,
@@ -1113,13 +1145,16 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
           pushMessage({ role: "yehsa", text: result?.text ? `${reply} No model is connected, so nothing was sent.` : reply, feedbackEligible: isFeedbackEligible(result), chips: sourceChips(result), source: result?.source || null, question: text, symbol: result?.symbol || null, learnedId: result?.learnedId || null });
           return;
         }
-        const reply = result?.text || result?.miss || "I don't have an installed note for that.";
         if (result?.kind === "learned") setLearned(recordLearnedAnswer(learned));
         priorRef.current = { utterance: text };
+        const voiced = voiceReply(result, text, threadMem.current);
+        threadMem.current = voiced.thread;
         setPhase(result?.answered ? "ready" : "miss");
         pushMessage({
           role: "yehsa",
-          text: reply,
+          text: voiced.text,
+          parts: result?.kind === "about" || result?.kind === "calculator" ? null : voiced.parts,
+          suggestions: voiced.suggestions,
           // Yes / Not quite shows only under a real answer to the user's own question.
           feedbackEligible: isFeedbackEligible(result),
           chips: sourceChips(result),
@@ -1127,7 +1162,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
           pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
             id: image.id,
             href: imageHref(image.file),
-            attribution: image.attribution,
+            attribution: creditLine(image),
             warning: image.warning
           })),
           question: text,
@@ -1135,7 +1170,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
           learnedId: result?.learnedId || null
         });
         if (speak && result?.text) {
-          speakProse(result.text, {
+          speakProse(voiced.spoken || result.text, {
             onDone: () => setVoiceNote(null),
             onError: () => setVoiceNote("Reading aloud isn't available here. The answer stays on screen.")
           });
@@ -1352,12 +1387,19 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
       <ScrollView ref={threadRef} contentContainerStyle={styles.thread} keyboardShouldPersistTaps="handled">
         {messages.length === 0 ? (
           <View style={styles.bubbleYehsa}>
-            <Text style={styles.bubbleText}>Ask me anything. I work offline, and I check with you before I change anything.</Text>
+            <Text style={styles.bubbleText}>I'm Yehsa. I work on this phone, offline. Ask me something, and I'll check with you before I change a thing.</Text>
+            <View style={styles.chips}>
+              {["I need shelter", "Stop heavy bleeding", "What's the weather trend?"].map((starter) => (
+                <Pressable key={starter} accessibilityRole="button" accessibilityLabel={starter} onPress={() => runAsk(starter)} style={styles.suggestChip}>
+                  <Text style={styles.suggestText}>{starter}</Text>
+                </Pressable>
+              ))}
+            </View>
           </View>
         ) : null}
         {messages.map((item) => (
           <View key={item.id} style={item.role === "you" ? styles.bubbleYou : styles.bubbleYehsa}>
-            <Text style={styles.bubbleText}>{item.text}</Text>
+            {item.role === "yehsa" && item.parts ? <AnswerBody parts={item.parts} /> : <Text style={styles.bubbleText}>{item.text}</Text>}
             {item.role === "yehsa" && item.source ? (
               <Text accessibilityRole="text" style={styles.sourceLine}>{`Source: ${item.source}`}</Text>
             ) : null}
@@ -1377,6 +1419,15 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
               <View style={styles.chips}>
                 {item.chips.map((chip) => (
                   <Text key={chip} style={styles.sourceChip}>{friendlySource(chip)}</Text>
+                ))}
+              </View>
+            ) : null}
+            {item.role === "yehsa" && item.suggestions?.length ? (
+              <View style={styles.chips}>
+                {item.suggestions.map((chip) => (
+                  <Pressable key={chip.label} accessibilityRole="button" accessibilityLabel={chip.label} onPress={() => (chip.go ? onGo?.(chip.go) : runAsk(chip.ask))} style={styles.suggestChip}>
+                    <Text style={styles.suggestText}>{chip.label}</Text>
+                  </Pressable>
                 ))}
               </View>
             ) : null}
@@ -1408,7 +1459,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
             ) : null}
           </View>
         ))}
-        {phase === "loading" ? <Text style={styles.typing}>Yehsa is reading the notes…</Text> : null}
+        {phase === "loading" ? <Text style={styles.typing}>Looking through the notes…</Text> : null}
         {notice ? <Quiet>{notice}</Quiet> : null}
         {voiceNote ? <Quiet>{voiceNote}</Quiet> : null}
       </ScrollView>
@@ -1451,7 +1502,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
       {credits ? (
         <View style={styles.credits}>
           <Text style={styles.bubbleText}>{credits.attribution}</Text>
-          <Quiet>{credits.warning || "Picture credits"}</Quiet>
+          <Quiet>{credits.warning || "Picture credit. Source: Wikimedia Commons."}</Quiet>
           <Action label="Close" tone="quiet" onPress={() => setCredits(null)} />
         </View>
       ) : null}
@@ -1544,7 +1595,7 @@ function pngDataUrl(bytes) {
   return `data:image/png;base64,${globalThis.btoa(binary)}`;
 }
 
-function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, display, onDisplay, onParty, onBefore }) {
+function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, display, onDisplay, onParty, onBefore, onOpenTool }) {
   const [layersOpen, setLayersOpen] = useState(false);
   const [hunt, setHunt] = useState(false);
   useBackLayer(hunt, () => setHunt(false));
@@ -1824,17 +1875,7 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
           <Action label="Turn on GPS" style={styles.mapGps} onPress={() => { onConsent(true); setGpsWanted(true); }} accessibilityHint="GPS stays off until you turn it on. This also turns on location consent." />
         ) : null}
       </View>
-      {hunt ? (
-        <View style={styles.hud} accessibilityLabel="Hunt view">
-          <View style={styles.hudRow}>
-            <HudCard label="Legal light" value="Later" sub="Check state regs" />
-            <HudCard label="Wind" value="Later" sub="Entry in Field" />
-            <HudCard label="Deer" value="Later" sub="Low, Med, High" />
-          </View>
-          <Text style={styles.hudNote}>Moon: context only, never counted. Hunting tools arrive in a later update.</Text>
-          {display && onDisplay ? <ModeButtons display={display} onChange={onDisplay} compact /> : null}
-        </View>
-      ) : null}
+      {hunt ? <HuntHud position={position} onOpenTool={onOpenTool} /> : null}
       <View style={styles.mapFill}>
         {(tiledPack || demTiles.length > 0) && !mapFailed ? (
           <MapBoundary onFail={() => setMapFailed(true)}>
@@ -2041,10 +2082,24 @@ function HudCard({ label, value, sub }) {
   );
 }
 
+// Maintenance checks stay out of the field screens. Off until someone turns it on here.
+function DeveloperRow() {
+  const [on, setOn] = useState(false);
+  return (
+    <View style={{ gap: 8, marginTop: 12 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", minHeight: 48 }}>
+        <Text style={styles.bubbleText} accessibilityRole="header">Developer</Text>
+        <Switch accessibilityLabel="Show developer checks" value={on} onValueChange={setOn} />
+      </View>
+      {on ? <CorpusHealth /> : <Quiet>Checks for the people who build Yehsa. Off by default.</Quiet>}
+    </View>
+  );
+}
+
 function DisplayPane({ display, onChange, onBack, backLabel }) {
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
-      <ScreenHeader title="Display" lead="Saved on this phone. The header chip changes it in one tap too." onBack={onBack} backLabel={backLabel} />
+      <ScreenHeader title="Display" lead="Saved on this phone. The chips at the top of each tab change it in one tap too." onBack={onBack} backLabel={backLabel} />
       <Text style={styles.sectionLabel}>Mode</Text>
       <ModeButtons display={display} onChange={onChange} />
       <Text style={[styles.sectionLabel, { marginTop: 16 }]}>Night color</Text>
@@ -2136,11 +2191,51 @@ function HelpersPane({ position, onConsent, models, onOpen, onBack, backLabel })
   );
 }
 
+// A scannable answer: a short opener, a bold summary, numbered steps, folded detail, then one offer.
+function AnswerBody({ parts }) {
+  const [open, setOpen] = useState({});
+  return (
+    <View style={{ gap: 8 }}>
+      {parts.opener ? <Text style={styles.bubbleText}>{parts.opener}</Text> : null}
+      {parts.sections.map((section, index) => {
+        const shape = section.shape;
+        return (
+          <View key={index} style={{ gap: 6 }}>
+            {section.title ? <Text accessibilityRole="header" style={styles.answerTitle}>{section.title}</Text> : null}
+            {shape.summary ? <Text style={[styles.bubbleText, styles.answerSummary]}>{shape.summary}</Text> : null}
+            {shape.steps.map((step, number) => (
+              <View key={number} style={styles.stepRow}>
+                <Text style={[styles.bubbleText, styles.stepNum]}>{number + 1}.</Text>
+                <Text style={[styles.bubbleText, { flex: 1 }]}>{step}</Text>
+              </View>
+            ))}
+            {shape.notes.map((note, n) => <Text key={n} style={styles.bubbleText}>{note}</Text>)}
+            {shape.folded.map((fold) => {
+              const key = `${index}-${fold.label}`;
+              const on = open[key] === true;
+              return (
+                <View key={key}>
+                  <Pressable accessibilityRole="button" accessibilityState={{ expanded: on }} accessibilityLabel={fold.label} onPress={() => setOpen((current) => ({ ...current, [key]: !on }))} style={styles.foldRow}>
+                    <Text style={styles.foldText}>{fold.label}</Text>
+                    <Ionicons name={on ? "chevron-up" : "chevron-down"} size={18} color={colors.brassText} />
+                  </Pressable>
+                  {on ? <Text style={[styles.bubbleText, { marginTop: 4 }]}>{fold.text}</Text> : null}
+                </View>
+              );
+            })}
+          </View>
+        );
+      })}
+      {parts.offer ? <Text style={styles.bubbleText}>{parts.offer}</Text> : null}
+    </View>
+  );
+}
+
 function AskChip({ summary, onPress }) {
   const line = summary?.pending
     ? "An action is waiting for Approve in Ask"
     : summary?.busy
-      ? "Yehsa is reading the notes…"
+      ? "Looking through the notes…"
       : "Ask or go";
   return (
     <Pressable
@@ -2487,12 +2582,7 @@ function PeoplePane({ mesh, setMesh, owner, position, onChatView, scanRequest, p
       </View>
       {party ? (
         <View style={[styles.pane, { position: "absolute", left: 0, right: 0, top: 0, bottom: 0, backgroundColor: colors.bg }]}>
-          <ScrollView contentContainerStyle={styles.scroll}>
-            <ScreenHeader title="Hunt party" lead="Coming with hunting mode." onBack={() => setParty(false)} backLabel="People" />
-            <Quiet>Party members will be paired contacts only, each with a verified safety number.</Quiet>
-            <Quiet>Live location will be opt-in for a session you start, with the end time on screen, and it stops on its own.</Quiet>
-            <Quiet>Nothing is shared from here today.</Quiet>
-          </ScrollView>
+          <PartyScreen position={position} mesh={mesh} onBack={() => setParty(false)} />
         </View>
       ) : null}
       {scan ? <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} onBack={() => setScan(false)} /> : null}
@@ -2521,7 +2611,7 @@ const styles = themedStyles((colors) => ({
     gap: 10,
     minHeight: 48,
     marginHorizontal: 12,
-    marginBottom: 8,
+    marginBottom: 16,
     paddingHorizontal: 14,
     borderRadius: 999,
     borderWidth: 1,
@@ -2925,6 +3015,14 @@ const styles = themedStyles((colors) => ({
   bubbleYehsa: { alignSelf: "flex-start", maxWidth: "86%", backgroundColor: colors.yehsaBubble, borderRadius: 16, padding: 12 },
   bubbleText: { color: colors.ink, fontSize: 16, lineHeight: 22 },
   typing: { color: colors.brass, marginTop: 8 },
+  answerTitle: { color: colors.ink, fontSize: 15, fontWeight: "700", marginTop: 4 },
+  answerSummary: { fontWeight: "700" },
+  stepRow: { flexDirection: "row", gap: 8 },
+  stepNum: { width: 24, color: colors.brassText, fontWeight: "700" },
+  foldRow: { flexDirection: "row", alignItems: "center", gap: 6, minHeight: 44 },
+  foldText: { color: colors.brassText, fontSize: 15, fontWeight: "600" },
+  suggestChip: { minHeight: 44, justifyContent: "center", paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, borderColor: colors.lineStrong, backgroundColor: colors.surface, marginTop: 6, marginRight: 8 },
+  suggestText: { color: colors.ink, fontSize: 14, fontWeight: "600" },
   thumb: { width: 88, height: 66, borderRadius: 10, backgroundColor: colors.field },
   info: { position: "absolute", right: 4, bottom: 4 },
   sourceChip: { color: colors.muted, fontSize: 12, marginRight: 8 },
@@ -2967,7 +3065,7 @@ const styles = themedStyles((colors) => ({
   },
   tabText: {
     color: colors.muted,
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: "600",
     letterSpacing: 0.2
   },

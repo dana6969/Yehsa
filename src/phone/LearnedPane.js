@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Platform, Pressable, ScrollView, Share, Text, TextInput, View } from "react-native";
+import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system";
 import {
   confirmLearned,
   deleteLearned,
@@ -35,12 +37,27 @@ export default function LearnedPane({ store, deviceId, onChange, onShare, onBack
       setFileNote("Saved yehsa-learned-notes.json. It stays with you; nothing was uploaded.");
       return;
     }
-    setFileNote("Saving to a file isn't available on this phone yet.");
+    // On the phone, the share sheet is the save dialog. The person picks Files, Drive, or a chat; Yehsa sends nothing itself.
+    Share.share({ title: "Yehsa learned notes", message: body })
+      .then((result) => setFileNote(result?.action === Share.dismissedAction ? "Not saved." : "Shared from this phone. Only where you chose."))
+      .catch(() => setFileNote("I couldn't open the share sheet on this phone."));
   }
 
   function importFile() {
     if (Platform.OS !== "web" || typeof document === "undefined") {
-      setFileNote("Opening a file isn't available on this phone yet.");
+      DocumentPicker.getDocumentAsync({ type: ["application/json", "text/plain"], copyToCacheDirectory: true })
+        .then(async (picked) => {
+          const asset = picked?.assets?.[0];
+          if (picked?.canceled || !asset?.uri) return;
+          try {
+            const parsed = JSON.parse(await FileSystem.readAsStringAsync(asset.uri));
+            onChange(importLearned(parsed, deviceId));
+            setFileNote("Notes added to this phone.");
+          } catch {
+            setFileNote("That file isn't a Yehsa notes file. Nothing changed.");
+          }
+        })
+        .catch(() => setFileNote("I couldn't open the file picker on this phone."));
       return;
     }
     const input = document.createElement("input");

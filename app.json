@@ -89,7 +89,21 @@
           "microphonePermission": false
         }
       ],
-      "./plugins/withArm64Only.js"
+      "./plugins/withArm64Only.js",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Yehsa uses the camera only when you ask it to flash a signal or identify what you photograph.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ]
     ],
     "extra": {
       "eas": {

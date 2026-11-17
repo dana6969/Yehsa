@@ -20,7 +20,7 @@ export const MORE_ITEMS = [
   { id: "helpers", label: "Helpers", hint: "Each helper has a visible off-switch" },
   { id: "actions", label: "What I may do", hint: "Permission toggles" },
   { id: "did", label: "What Yehsa did", hint: "Action log and undo" },
-  { id: "family", label: "Family card", hint: "Later. Also linked from Kit" },
+  { id: "family", label: "Family card", hint: "ICE contacts and medicines, also in Kit" },
   { id: "location", label: "Location and consent", hint: "Off until you turn it on" },
   { id: "models", label: "Models", hint: "Optional. Off by default" },
   { id: "learned", label: "Learned notes", hint: "Kept on this phone" },
