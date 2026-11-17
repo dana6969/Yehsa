@@ -14,7 +14,7 @@ import {
 } from "../../symbolic/learned_notes.js";
 import { Action, Quiet, ScreenHeader, colors } from "./ui.js";
 
-export default function LearnedPane({ store, deviceId, onChange, onShare }) {
+export default function LearnedPane({ store, deviceId, onChange, onShare, onBack, backLabel }) {
   const [query, setQuery] = useState("");
   const [editing, setEditing] = useState(null);
   const [draft, setDraft] = useState("");
@@ -66,6 +66,8 @@ export default function LearnedPane({ store, deviceId, onChange, onShare }) {
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
+        onBack={onBack}
+        backLabel={backLabel}
         title="What Yehsa has learned"
         lead="Notes this phone has learned. Not a retrained model."
       />

@@ -455,3 +455,67 @@ test("native ble is real on android and ios and a scan does not cancel a held li
   assert.equal(eas.build.preview.distribution, "internal");
   assert.equal(eas.build.preview.android.buildType, "apk");
 });
+
+test("the shell has a back stack, a hardware back key, and Back on stacked screens", async () => {
+  const nav = await import("./src/phone/nav_model.js");
+  let state = nav.initialNav();
+  state = nav.navReduce(state, { type: "tab", tab: "map" });
+  state = nav.navReduce(state, { type: "push", screen: "more" });
+  state = nav.navReduce(state, { type: "push", screen: "models" });
+  assert.deepEqual(state.stack, ["more", "models"]);
+  assert.equal(nav.topScreen(state), "models");
+  assert.equal(nav.backLabel(state), "More");
+  let step = nav.backAction(state);
+  assert.equal(step.handled, true);
+  assert.deepEqual(step.state.stack, ["more"]);
+  step = nav.backAction(step.state);
+  assert.deepEqual(step.state.stack, []);
+  assert.equal(step.state.tab, "map");
+  step = nav.backAction(step.state);
+  assert.equal(step.state.tab, "ask");
+  step = nav.backAction(step.state);
+  assert.equal(step.handled, false);
+
+  const sos = nav.navReduce({ ...state }, { type: "openSos" });
+  const closed = nav.backAction(sos);
+  assert.equal(closed.state.sos, false);
+  assert.deepEqual(closed.state.stack, ["more", "models"], "closing SOS returns to the same screen");
+
+  const layers = nav.createBackLayers();
+  let closedSheet = false;
+  const drop = layers.push(() => { closedSheet = true; return true; });
+  assert.equal(layers.run(), true);
+  assert.equal(closedSheet, true);
+  drop();
+  assert.equal(layers.run(), false);
+
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.match(home, /BackHandler\.addEventListener\("hardwareBackPress"/);
+  assert.doesNotMatch(home, /expo-router|@react-navigation/);
+  assert.match(fs.readFileSync("src/phone/ModelsPane.js", "utf8"), /onBack=\{onBack\}/);
+  assert.match(fs.readFileSync("src/phone/LearnedPane.js", "utf8"), /onBack=\{onBack\}/);
+  const ui = fs.readFileSync("src/phone/ui.js", "utf8");
+  assert.match(ui, /export function BackBar/);
+  assert.match(ui, /brandMark/, "the logo mark stays in the shared header");
+});
+
+test("the SOS bumper opens an emergency screen that asks before calling or sending", async () => {
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.match(home, /accessibilityLabel="SOS emergency"/);
+  assert.match(home, /<EmergencyScreen/);
+  const sosStyle = home.slice(home.indexOf("  sos: {"), home.indexOf("  sosPressed"));
+  assert.match(sosStyle, /minHeight: 64/);
+  const screen = fs.readFileSync("src/phone/EmergencyScreen.js", "utf8");
+  assert.match(screen, /Speak coordinates/);
+  assert.match(screen, /speakProse/);
+  assert.doesNotMatch(screen, /askField|getMappedAction|sendToModel/, "no model prompts and no knowledge path in the panic view");
+  assert.doesNotMatch(screen, /military|unbreakable|guarantee/i);
+
+  const em = await import("./src/phone/emergency_model.js");
+  const none = em.coordinateText({ consent: false, status: "unlocked", fix: null });
+  assert.equal(none.held, false);
+  const held = em.coordinateText({ consent: true, status: "locked", fix: { latitude: 45.1, longitude: -69.2, accuracy: 8.4 } });
+  assert.equal(held.big, "45.10000, -69.20000");
+  assert.match(held.detail, /about 8 m/);
+  assert.match(held.spoken, /69\.20000 degrees west/);
+});

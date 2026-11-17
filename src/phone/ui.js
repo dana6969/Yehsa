@@ -1,5 +1,6 @@
-import React from "react";
+import React, { createContext, useContext } from "react";
 import { Image, Platform, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 const brandMark = require("../../assets/brand/yehsa-mark-256.png");
 
@@ -17,17 +18,89 @@ export const colors = {
   field: "#0e1411"
 };
 
+// Design tokens. Lucky's color and visual-style system will replace these
+// values; screens should read tokens from here instead of hard-coding them.
+export const tokens = {
+  colors,
+  sos: { bg: "#2a1c18", ink: colors.clay, border: "#8d675c", screen: "#1a1210" },
+  highContrast: { muted: "#e4e8df", line: "#6f8577", lineStrong: "#8fa597" },
+  space: { xs: 4, sm: 8, md: 12, lg: 16, xl: 22 },
+  radius: { sm: 10, md: 12, lg: 16, pill: 999 },
+  touch: { min: 48, bumper: 64, tabBar: 64 },
+  type: { small: 13, body: 15, prose: 17, title: 26, coords: 34 },
+  largeTextScale: 1.2
+};
+
+// Display settings from More, Display. Applied by the shared parts below.
+export const DisplayContext = createContext({ largeText: false, highContrast: false });
+
+export function useDisplay() {
+  const display = useContext(DisplayContext) || {};
+  const scale = display.largeText ? tokens.largeTextScale : 1;
+  return {
+    largeText: display.largeText === true,
+    highContrast: display.highContrast === true,
+    scale,
+    size: (value) => Math.round(value * scale),
+    muted: display.highContrast ? tokens.highContrast.muted : colors.muted,
+    line: display.highContrast ? tokens.highContrast.lineStrong : colors.lineStrong
+  };
+}
+
+// The shell fills this in so every ScreenHeader can open Search and More.
+export const ShellContext = createContext(null);
+
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
-export function ScreenHeader({ title, lead }) {
+export function BackBar({ label, onPress }) {
+  const display = useDisplay();
   return (
-    <View style={styles.header}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`Back to ${label || "previous screen"}`}
+      onPress={onPress}
+      hitSlop={8}
+      style={({ pressed }) => [styles.back, webPointer, pressed && styles.pressed]}
+    >
+      <Ionicons name="chevron-back" size={22} color={colors.brass} />
+      <Text style={[styles.backText, { fontSize: display.size(16) }]}>{label ? `Back to ${label}` : "Back"}</Text>
+    </Pressable>
+  );
+}
+
+function HeaderIcon({ icon, label, onPress }) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      onPress={onPress}
+      hitSlop={6}
+      style={({ pressed }) => [styles.headerIcon, webPointer, pressed && styles.pressed]}
+    >
+      <Ionicons name={icon} size={22} color={colors.ink} />
+    </Pressable>
+  );
+}
+
+export function ScreenHeader({ title, lead, onBack, backLabel, compact, controls = true }) {
+  const shell = useContext(ShellContext);
+  const display = useDisplay();
+  const showControls = controls && shell && !onBack;
+  return (
+    <View style={[styles.header, compact && styles.headerCompact]}>
+      {onBack ? <BackBar label={backLabel} onPress={onBack} /> : null}
       <View style={styles.brandRow}>
         <Image source={brandMark} style={styles.brandMark} accessibilityIgnoresInvertColors accessible={false} />
         <Text style={styles.wordmark}>Yehsa</Text>
+        {showControls ? (
+          <View style={styles.headerTools}>
+            <HeaderIcon icon="search" label="Ask or go" onPress={shell.openSearch} />
+            <HeaderIcon icon="settings-outline" label="More" onPress={shell.openMore} />
+          </View>
+        ) : null}
       </View>
-      <Text accessibilityRole="header" style={styles.title}>{title}</Text>
-      {lead ? <Text style={styles.lead}>{lead}</Text> : null}
+      <Text accessibilityRole="header" style={[styles.title, compact && styles.titleCompact, { fontSize: display.size(compact ? 22 : 26), lineHeight: display.size(compact ? 28 : 32) }]}>{title}</Text>
+      {lead ? <Text style={[styles.lead, { color: display.muted, fontSize: display.size(16), lineHeight: display.size(24) }]}>{lead}</Text> : null}
     </View>
   );
 }
@@ -51,6 +124,7 @@ export function StatusPill({ label, tone }) {
 }
 
 export function Action({ label, onPress, disabled, tone = "brass", accessibilityHint, style }) {
+  const display = useDisplay();
   const palette = tone === "quiet"
     ? { bg: "transparent", ink: colors.ink, border: colors.lineStrong }
     : tone === "clay"
@@ -73,7 +147,7 @@ export function Action({ label, onPress, disabled, tone = "brass", accessibility
         style
       ]}
     >
-      <Text style={[styles.actionText, { color: palette.ink }]}>{label}</Text>
+      <Text style={[styles.actionText, { color: palette.ink, fontSize: display.size(16), lineHeight: display.size(22) }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -130,17 +204,19 @@ export function Panel({ children }) {
 }
 
 export function Prose({ children, tone, live }) {
+  const display = useDisplay();
   const color = tone === "warn" ? colors.clay : tone === "good" ? colors.moss : colors.ink;
   return (
-    <Text accessibilityLiveRegion={live ? "polite" : undefined} style={[styles.prose, { color }]}>
+    <Text accessibilityLiveRegion={live ? "polite" : undefined} style={[styles.prose, { color, fontSize: display.size(17), lineHeight: display.size(26) }]}>
       {children}
     </Text>
   );
 }
 
 export function Quiet({ children, live }) {
+  const display = useDisplay();
   return (
-    <Text accessibilityLiveRegion={live ? "polite" : undefined} style={styles.quiet}>
+    <Text accessibilityLiveRegion={live ? "polite" : undefined} style={[styles.quiet, { color: display.muted, fontSize: display.size(15), lineHeight: display.size(22) }]}>
       {children}
     </Text>
   );
@@ -149,6 +225,38 @@ export function Quiet({ children, live }) {
 const styles = StyleSheet.create({
   header: {
     marginBottom: 22
+  },
+  headerCompact: {
+    marginBottom: 10
+  },
+  titleCompact: {
+    letterSpacing: -0.3
+  },
+  headerTools: {
+    marginLeft: "auto",
+    flexDirection: "row",
+    gap: 4
+  },
+  headerIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  back: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
+    minHeight: 48,
+    paddingRight: 12,
+    marginLeft: -6,
+    marginBottom: 6
+  },
+  backText: {
+    color: colors.brass,
+    fontWeight: "600",
+    marginLeft: 2
   },
   wordmark: {
     color: colors.brass,

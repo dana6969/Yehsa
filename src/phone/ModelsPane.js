@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from
 import { MODEL_PRESETS, previewModelSend, buildOutbound } from "../../symbolic/model_link.js";
 import { Action, Quiet, ScreenHeader, colors } from "./ui.js";
 
-export default function ModelsPane({ settings, onChange, onSaveKey, onDeleteProvider, onTest, testNote }) {
+export default function ModelsPane({ settings, onChange, onSaveKey, onDeleteProvider, onTest, testNote, onBack, backLabel }) {
   const [presetId, setPresetId] = useState("ollama");
   const [name, setName] = useState("Ollama on this network");
   const [baseUrl, setBaseUrl] = useState("http://127.0.0.1:11434");
@@ -56,6 +56,8 @@ export default function ModelsPane({ settings, onChange, onSaveKey, onDeleteProv
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
+        onBack={onBack}
+        backLabel={backLabel}
         title="Models"
         lead="Off until you connect one."
       />

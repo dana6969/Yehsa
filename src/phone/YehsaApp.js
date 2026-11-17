@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
+  BackHandler,
   Platform,
   Pressable,
   ScrollView,
@@ -109,6 +110,8 @@ import OfflineMap from "./OfflineMap";
 import { publishArchive, publishDem, startTileServer } from "./tile_server";
 import PeerChat from "./PeerChat.js";
 import PeerSecurity from "./PeerSecurity.js";
+import EmergencyScreen from "./EmergencyScreen.js";
+import { backAction, backLabel, createBackLayers, initialNav, navReduce, topScreen } from "./nav_model.js";
 import {
   applyGpsSample,
   gpsStatusLabel,
@@ -131,8 +134,57 @@ const TABS = [
   { id: "mesh", label: "Mesh", icon: "bluetooth" }
 ];
 
+// Open sheets and subviews register here so the back key closes them first.
+const BackLayers = React.createContext(null);
+
+function useBackLayer(open, onBack) {
+  const layers = React.useContext(BackLayers);
+  const handler = useRef(onBack);
+  handler.current = onBack;
+  useEffect(() => {
+    if (!open || !layers) return undefined;
+    return layers.push(() => {
+      handler.current?.();
+      return true;
+    });
+  }, [open, layers]);
+}
+
 export default function YehsaApp() {
-  const [tab, setTab] = useState("ask");
+  const [nav, setNav] = useState(initialNav);
+  const navRef = useRef(nav);
+  navRef.current = nav;
+  const layers = useMemo(() => createBackLayers(), []);
+  const [pendingAsk, setPendingAsk] = useState(null);
+  const tab = nav.tab;
+  const screen = topScreen(nav);
+  const visible = screen || tab;
+  function go(action) {
+    setNav((current) => navReduce(current, action));
+  }
+  function setTab(id) {
+    go({ type: "tab", tab: id });
+  }
+  function openScreen(id) {
+    go({ type: "push", screen: id });
+  }
+  function popScreen() {
+    go({ type: "pop" });
+  }
+  const back = backLabel(nav, TABS);
+
+  useEffect(() => {
+    // Android back: the emergency overlay closes first, then an open sheet or
+    // subview, then the screen stack, then a non-home tab returns to Ask.
+    const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
+      const current = navRef.current;
+      if (!current.sos && !current.command && current.stack.length === 0 && layers.run()) return true;
+      const next = backAction(current);
+      if (next.handled) setNav(next.state);
+      return next.handled;
+    });
+    return () => subscription?.remove?.();
+  }, [layers]);
   const [position, setPosition] = useState(initialPosition);
   const [waypoints, setWaypoints] = useState([]);
   const [track, setTrack] = useState([]);
@@ -222,21 +274,23 @@ export default function YehsaApp() {
   }
 
   return (
+    <BackLayers.Provider value={layers}>
     <View style={styles.root}>
       <StatusBar style="light" />
       <View style={styles.column}>
       <View style={styles.body}>
         <View
-          style={tab === "ask" ? styles.pane : styles.dockHost}
+          style={visible === "ask" ? styles.pane : styles.dockHost}
           pointerEvents="box-none"
         >
           <AskPane
             session={session}
             owner={owner}
             active
-            hidden={tab === "mesh" && peopleOpen}
-            docked={tab !== "ask"}
-            screen={tab}
+            hidden={visible === "mesh" && peopleOpen}
+            docked={visible !== "ask"}
+            screen={visible}
+            pendingAsk={pendingAsk}
             position={position}
             setPosition={setPosition}
             waypoints={waypoints}
@@ -253,9 +307,9 @@ export default function YehsaApp() {
           />
         </View>
         <View
-          style={[styles.pane, tab !== "land" && styles.hidden]}
-          pointerEvents={tab === "land" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "land"}
+          style={[styles.pane, visible !== "land" && styles.hidden]}
+          pointerEvents={visible === "land" ? "auto" : "none"}
+          accessibilityElementsHidden={visible !== "land"}
         >
           <LandPane
             position={position}
@@ -269,15 +323,15 @@ export default function YehsaApp() {
           />
         </View>
         <View
-          style={[styles.pane, tab !== "guide" && styles.hidden]}
-          pointerEvents={tab === "guide" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "guide"}
+          style={[styles.pane, visible !== "guide" && styles.hidden]}
+          pointerEvents={visible === "guide" ? "auto" : "none"}
+          accessibilityElementsHidden={visible !== "guide"}
         >
           <PictureGuide />
         </View>
-        <View style={[styles.pane, tab !== "settings" && styles.hidden]} pointerEvents={tab === "settings" ? "auto" : "none"}>
+        <View style={[styles.pane, visible !== "actions" && styles.hidden]} pointerEvents={visible === "actions" ? "auto" : "none"}>
           <ScrollView contentContainerStyle={styles.scroll}>
-            <ScreenHeader title="Actions" lead="Choose what I may ask to do." />
+            <ScreenHeader title="What I may do" lead="Choose what I may ask to do." onBack={popScreen} backLabel={back} />
             {(actions?.settings ? Object.keys(actions.settings) : []).map((type) => (
               <View key={type} style={styles.switchRow}>
                 <Text style={styles.switchLabel}>{friendlySource(type)}</Text>
@@ -302,32 +356,34 @@ export default function YehsaApp() {
             ))}
           </ScrollView>
         </View>
-        <View style={[styles.pane, tab !== "about" && styles.hidden]} pointerEvents={tab === "about" ? "auto" : "none"}>
+        <View style={[styles.pane, visible !== "about" && styles.hidden]} pointerEvents={visible === "about" ? "auto" : "none"}>
           <ScrollView contentContainerStyle={styles.scroll}>
-            <ScreenHeader title="About" lead="What stays on this phone." />
+            <ScreenHeader title="About" lead="What stays on this phone." onBack={popScreen} backLabel={back} />
             <Quiet>Yehsa answers from the notes on this phone. A model, a map pack, and GPS each stay off until you ask. A picture is not a safe identification. Nothing is shared unless you use a separate share action. Packaged dictionary: {phoneCorpusMeta.headwords} headwords and {phoneCorpusMeta.medicalNames} medical names. {phoneCorpusMeta.honest} This install is bound to this device. Exterior access is denied.</Quiet>
           </ScrollView>
         </View>
         <View
-          style={[styles.pane, tab !== "position" && styles.hidden]}
-          pointerEvents={tab === "position" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "position"}
+          style={[styles.pane, visible !== "position" && styles.hidden]}
+          pointerEvents={visible === "position" ? "auto" : "none"}
+          accessibilityElementsHidden={visible !== "position"}
         >
-          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} onOpenModels={() => setTab("models")} onOpenLearned={() => setTab("learned")} onOpenSettings={() => setTab("settings")} onOpenAbout={() => setTab("about")} />
+          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} onOpenModels={() => openScreen("models")} onOpenLearned={() => openScreen("learned")} onOpenSettings={() => openScreen("actions")} onOpenAbout={() => openScreen("about")} />
         </View>
         <View
-          style={[styles.pane, tab !== "mesh" && styles.hidden]}
-          pointerEvents={tab === "mesh" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "mesh"}
+          style={[styles.pane, visible !== "mesh" && styles.hidden]}
+          pointerEvents={visible === "mesh" ? "auto" : "none"}
+          accessibilityElementsHidden={visible !== "mesh"}
         >
           <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} onPeople={setPeopleOpen} />
         </View>
         <View
-          style={[styles.pane, tab !== "models" && styles.hidden]}
-          pointerEvents={tab === "models" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "models"}
+          style={[styles.pane, visible !== "models" && styles.hidden]}
+          pointerEvents={visible === "models" ? "auto" : "none"}
+          accessibilityElementsHidden={visible !== "models"}
         >
           <ModelsPane
+            onBack={popScreen}
+            backLabel={back}
             settings={models}
             onChange={storeModels}
             testNote={modelTestNote}
@@ -366,11 +422,13 @@ export default function YehsaApp() {
           />
         </View>
         <View
-          style={[styles.pane, tab !== "learned" && styles.hidden]}
-          pointerEvents={tab === "learned" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "learned"}
+          style={[styles.pane, visible !== "learned" && styles.hidden]}
+          pointerEvents={visible === "learned" ? "auto" : "none"}
+          accessibilityElementsHidden={visible !== "learned"}
         >
           <LearnedPane
+            onBack={popScreen}
+            backLabel={back}
             store={learned}
             deviceId={owner?.installId || null}
             onChange={storeLearned}
@@ -385,6 +443,16 @@ export default function YehsaApp() {
         </View>
       </View>
       <View style={styles.tabs} accessibilityRole="tablist">
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="SOS emergency"
+          accessibilityHint="Opens the emergency screen. Nothing is called or sent until you confirm."
+          onPress={() => go({ type: "openSos" })}
+          style={({ pressed }) => [styles.sos, webPointer, pressed && styles.sosPressed]}
+        >
+          <Ionicons name="alert-circle" size={22} color={colors.clay} />
+          <Text style={styles.sosText}>SOS</Text>
+        </Pressable>
         {TABS.map((item) => {
           const selected = tab === item.id;
           return (
@@ -403,11 +471,27 @@ export default function YehsaApp() {
         })}
       </View>
       </View>
+      {nav.sos ? (
+        <EmergencyScreen
+          position={position}
+          onClose={() => go({ type: "closeSos" })}
+          onMeshSos={() => {
+            go({ type: "closeSos" });
+            setTab("mesh");
+          }}
+          onFirstAid={() => {
+            go({ type: "closeSos" });
+            setTab("ask");
+            setPendingAsk({ id: Date.now(), text: "How do I stop heavy bleeding?" });
+          }}
+        />
+      ) : null}
     </View>
+    </BackLayers.Provider>
   );
 }
 
-function AskPane({ session, owner, active, docked, hidden, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
+function AskPane({ pendingAsk, session, owner, active, docked, hidden, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [messages, setMessages] = useState([]);
@@ -490,6 +574,14 @@ function AskPane({ session, owner, active, docked, hidden, screen, position, set
     }
     return undefined;
   }, [mapTap]);
+
+  useEffect(() => {
+    // Emergency first-aid and "Ask or go" hand a question to this thread.
+    if (!pendingAsk?.text) return undefined;
+    setVoiceNote(null);
+    runAsk(pendingAsk.text);
+    return undefined;
+  }, [pendingAsk?.id]);
 
   useEffect(() => {
     if (active) return undefined;
@@ -1637,6 +1729,7 @@ function MeshPane({ mesh, setMesh, owner, position, onPeople }) {
   const [people, setPeople] = useState(false);
   const bound = owner?.recognized === true;
   const positionOff = position?.status !== "locked";
+  useBackLayer(people, () => { setPeople(false); onPeople?.(false); });
 
   async function scan() {
     if (scanning) return;
@@ -2048,6 +2141,23 @@ const styles = StyleSheet.create({
     borderTopColor: colors.lineStrong,
     backgroundColor: colors.bg,
     paddingBottom: Platform.OS === "ios" ? 18 : 6
+  },
+  sos: {
+    width: 64,
+    minHeight: 64,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#2a1c18",
+    borderRightWidth: 1,
+    borderRightColor: "#8d675c",
+    paddingVertical: 8
+  },
+  sosPressed: { opacity: 0.82 },
+  sosText: {
+    color: colors.clay,
+    fontSize: 13,
+    fontWeight: "700",
+    letterSpacing: 0.6
   },
   tab: {
     flex: 1,
