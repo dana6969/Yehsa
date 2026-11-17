@@ -1,8 +1,28 @@
 import React, { useState } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import manifest from "../../assets/pictures/manifest.json";
+import { pictureSource } from "../../symbolic/picture_assets.js";
 import { guideView, imageHref, packDecision, pictureHealth, PICTURE_BUDGET_BYTES } from "../../symbolic/picture_guide.js";
 import { Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
+
+// A picture that is not in the app shows a labeled box, never a silent empty one.
+function GuideImage({ image, style, fit = "cover" }) {
+  const [failed, setFailed] = useState(false);
+  const source = pictureSource(image.file);
+  if (!source || failed) {
+    return (
+      <View accessibilityLabel="Picture not included" style={[style, missingStyles.box]}>
+        <Text style={missingStyles.text}>Picture not included</Text>
+      </View>
+    );
+  }
+  return <Image accessibilityLabel={image.attribution} source={source} onError={() => setFailed(true)} resizeMode={fit} style={style} />;
+}
+
+const missingStyles = StyleSheet.create({
+  box: { alignItems: "center", justifyContent: "center", padding: 4, borderWidth: 1, borderStyle: "dashed", borderColor: colors.lineStrong },
+  text: { color: colors.muted, fontSize: 12, textAlign: "center" }
+});
 
 const DOMAINS = ["", "herbology", "first-aid", "knots", "fire", "shelter", "water", "sky", "landscape", "signaling"];
 
@@ -40,14 +60,14 @@ export default function PictureGuide({ onBack, backLabel, initialDomain = "" }) 
           {entry.caution ? <Text style={styles.warn}>{entry.caution}</Text> : null}
           <View style={styles.row}>
             {entry.images.map((image) => (
-              <Image key={image.id} accessibilityLabel={image.attribution} source={{ uri: imageHref(image.file) }} style={styles.thumb} />
+              <GuideImage key={image.id} image={image} style={styles.thumb} />
             ))}
           </View>
           {open === entry.symbol ? entry.images.map((image) => (
             <View key={`${image.id}-full`}>
               {image.warning ? <Text style={styles.warn}>{image.warning}</Text> : null}
               {image.role === "lookalike" ? <Text style={styles.warn}>Look-alike warning. This is not the plant in the note.</Text> : null}
-              <Image accessibilityLabel={image.attribution} source={{ uri: imageHref(image.file) }} style={styles.zoom} />
+              <GuideImage image={image} style={styles.zoom} fit="contain" />
               <Quiet>{`${image.author}. ${image.license}. ${image.attribution}`}</Quiet>
               <Quiet>{image.sourceUrl}</Quiet>
             </View>
