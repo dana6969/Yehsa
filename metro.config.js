@@ -8,8 +8,6 @@ const { getDefaultConfig } = require("expo/metro-config");
 const config = getDefaultConfig(__dirname);
 // The offline meaning matcher ships its model (.onnx) and int8 scripture rows (.i8) as assets.
 config.resolver.assetExts = [...new Set([...config.resolver.assetExts, "onnx", "i8"])];
-// The camera-ID model ships as a bundled asset and is opened only on the Identify screen.
-if (!config.resolver.assetExts.includes("tflite")) config.resolver.assetExts.push("tflite");
 const upstream = config.resolver.resolveRequest;
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {

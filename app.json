@@ -89,7 +89,14 @@
           "microphonePermission": false
         }
       ],
-      "./plugins/withArm64Only.js"
+      "./plugins/withFmAppQueries.js",
+      "./plugins/withArm64Only.js",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false
+        }
+      ]
     ],
     "extra": {
       "eas": {

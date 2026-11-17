@@ -1,40 +1,41 @@
-# Camera ID reference build
+# Camera ID build (v2)
 
-Offline camera ID (plan step 6) compares a photo's embedding with precomputed
-embeddings of reference photos of plants Yehsa has notes for. The photos
-themselves are **not** shipped, only int8 embeddings plus credits
-(`assets/camera_id/index.json`, about 0.5 MB).
+Offline camera ID compares a photo with 170 classes (plants, trees, mushrooms, animals, tracks, scat)
+using **DINOv2-small** image embeddings and a **linear head** that also has a "something else" class.
+No photos ship; only the 384-d head (about 95 KB), class notes and photo credits.
 
-## Model
+## Pieces
 
-- MediaPipe Image Embedder, MobileNetV3-Small, float32
-  (`https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_small/float32/latest/mobilenet_v3_small.tflite`)
-- License: Apache-2.0 (stated in the model metadata)
-- 4,117,670 bytes, sha256 `bbbb4c51a55a53905af1daec995ca1aae355046f8839bb8c9f5ce9271394bc40`
-- Input 1x224x224x3 float in [0, 1]; output a 1024-d feature vector
-- Runs on the phone through `react-native-fast-tflite` 2.0.0 (MIT, LiteRT 1.4.0)
-
-## Classes
-
-yarrow, plantain, willow (the picture-guide plants) and wild carrot, poison
-hemlock, water hemlock, wild onion, death camas (the look-alike notes in
-`symbolic_books/herbology/notes.json`). Nothing outside these can be suggested.
+| File | What |
+|---|---|
+| `classes_spec.py` | The 170 classes: iNaturalist taxa, group, use (edible / medicinal / toxic / deadly / ...), look, caution, look-alikes. |
+| `fetch_inat.py` | Research-grade iNaturalist photos, licence CC0 / CC BY / CC BY-SA only, North America, one photo per observer. Tracks and scat use the "Evidence of Presence" annotation. Also builds the `_other` pool of species not in the set. |
+| `fetch_hard.py` | Hard negatives: other conifers (Pinaceae, Cupressaceae), other umbels, other mushrooms, other snakes, etc. |
+| `quantize_weights.py` | Weight-only int8 of the DINOv2-small ONNX export (`onnx-community/dinov2-small`, Apache-2.0). Activations stay float so every runtime gives the same embedding. |
+| `embed_inat.py` | Embeds every photo (and with `--flip` its mirror). Centre square crop, 224 px bilinear, ImageNet mean/std. |
+| `build_index2.py` | Trains the head, picks the "not sure" thresholds on a calibration split, prints held-out numbers, and with `--write` writes `assets/camera_id/{index,classes,credits}.json`. |
+| `make_conifer_fixture.py` | Builds the spruce/fir regression fixture. |
+| `eval_split.py` | Earlier experiments used to choose the model and head (kNN vs linear, feature choice). |
 
 ## Rebuild
 
 ```sh
-python3 -m venv venv && . venv/bin/activate && pip install ai-edge-litert pillow numpy
-# 1. Fetch Commons photos (CC0 / public domain / CC BY / CC BY-SA only, JPEG >= 600 px,
-#    titles that look like drawings, plates, herbarium sheets or maps skipped,
-#    order fixed by an md5 of the file title so the pick is not hand-chosen).
-python tools/camera_id/fetch_refs.py <(python -c "import json;print(json.dumps(json.load(open('tools/camera_id/refs_spec.json'))['positives']))") refs 14
-python tools/camera_id/fetch_refs.py <(python -c "import json;print(json.dumps(json.load(open('tools/camera_id/refs_spec.json'))['negatives']))") negs 6
-# 2. Remove the photos listed in excluded.json (micrographs, illustrations, plant not visible).
-# 3. Copy picture-guide plant photos (not the look-alike one) to guide/, other guide images to guide_neg/.
-python tools/camera_id/embed_refs.py mobilenet_v3_small.tflite aug.json "ref=refs/*.jpg" "guide=guide/*.webp" "neg=negs/*.jpg" "gneg=guide_neg/*.webp"
-python tools/camera_id/build_index.py aug.json refs/sources.json
-node eval/camera_id/loo.mjs --write
+python tools/camera_id/fetch_inat.py <data>/full
+python tools/camera_id/fetch_hard.py <data>/full
+python tools/camera_id/quantize_weights.py dino_s_fp32.onnx dino_w8.onnx   # copy to assets/camera_id/dinov2_small_w8.onnx
+python tools/camera_id/embed_inat.py <data>/full dino_w8 && python tools/camera_id/embed_inat.py <data>/full dino_w8 --flip
+python tools/camera_id/build_index2.py <data>/full <emb_dir> assets/camera_id            # report only
+python tools/camera_id/build_index2.py <data>/full <emb_dir> assets/camera_id --write    # write assets
 ```
 
-Commons category contents change over time, so a rebuild can pick different
-photos; `index.json` keeps the credits for the photos actually used.
+iNaturalist contents change over time, so a rebuild picks different photos. `credits.json` lists the
+observation id, observer and licence of every photo used.
+
+## Held-out numbers
+
+`eval/camera_id/REPORT.md` and `eval/camera_id/report.json`. The split is by a hash of the photo id:
+about 64% reference, 18% calibration (thresholds only), 18% test. The test split is never used for
+training or for choosing a threshold. The shipped head is retrained on all photos, so the report is a
+slightly conservative estimate.
+
+The earlier MobileNetV3 build is kept in `v1_mobilenet/` for history.

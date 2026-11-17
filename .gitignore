@@ -49,3 +49,4 @@ symbolic_memory/track_log.json
 /android/
 /ios/
 /dist/
+__pycache__/
