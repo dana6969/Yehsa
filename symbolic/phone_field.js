@@ -16,6 +16,8 @@ import { quoteSpiritual } from "./spiritual_quote.js";
 import { searchPassages } from "./book_search.js";
 import { safetyAnswer } from "./safety.js";
 import { formatLearned, retrieveLearned } from "./learned_notes.js";
+import { formatImported, isCareQuestion, retrieveImported } from "./book_import.js";
+import { currentImportIndex, currentImported } from "./imported_registry.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -201,6 +203,26 @@ export function askField(input, passages, options = {}) {
       kind: "learned",
       symbol: learnedHit.id,
       learnedId: learnedHit.id
+    };
+  }
+  // Your imported books: last, lowest trust, never ahead of a checked note or a safety rule.
+  const importedStore = options.imported === undefined ? currentImported() : options.imported;
+  const importedHit = !text && importedStore?.notes?.length
+    ? retrieveImported(expanded, importedStore, options.importedIndex ?? currentImportIndex())
+    : null;
+  if (!text && importedHit) {
+    return {
+      answered: true,
+      empty: false,
+      text: formatImported(importedHit, { care: isCareQuestion(raw) }),
+      cue: null,
+      emotion: { understood: emotion.understood, emotion: emotion.emotion },
+      miss: null,
+      corpus: phoneCorpusMeta,
+      kind: "imported",
+      symbol: importedHit.symbol,
+      importedBookId: importedHit.bookId,
+      trust: "imported"
     };
   }
   if (!text) {
