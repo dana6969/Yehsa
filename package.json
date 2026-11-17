@@ -20,7 +20,7 @@
     "test:mesh": "node --test --test-concurrency=1 test_ble_mesh_discover.mjs test_device_owner.mjs test_mesh_service.mjs",
     "ask": "node symbolic/ask.js",
     "geo": "node symbolic/geo_cli.js",
-    "test:knowledge": "node --test --test-concurrency=1 test_knowledge_answer.mjs test_emotion_wording.mjs test_user_learning.mjs test_landscape_nav.mjs test_phone_shell.mjs test_voice_adapter.mjs test_restore.mjs test_chat_actions.mjs test_model_link.mjs test_learned_notes.mjs test_gps_map.mjs test_map_packs.mjs test_picture_guide.mjs test_dem_tiles.mjs test_peer_chat.mjs test_peer_keys.mjs test_calculator_loose.mjs test_trust_sos.mjs test_area_download.mjs test_book_import.mjs test_calculator_expr.mjs test_camera_id.mjs test_phone_fixes.mjs test_map_freeze.mjs",
+    "test:knowledge": "node --test --test-concurrency=1 test_yehsa_voice.mjs test_hunt_tools.mjs test_hunt_party.mjs test_knowledge_answer.mjs test_emotion_wording.mjs test_user_learning.mjs test_landscape_nav.mjs test_phone_shell.mjs test_voice_adapter.mjs test_restore.mjs test_chat_actions.mjs test_model_link.mjs test_learned_notes.mjs test_gps_map.mjs test_map_packs.mjs test_picture_guide.mjs test_dem_tiles.mjs test_peer_chat.mjs test_peer_keys.mjs test_calculator_loose.mjs test_trust_sos.mjs test_area_download.mjs test_book_import.mjs test_calculator_expr.mjs test_camera_id.mjs test_phone_fixes.mjs test_map_freeze.mjs",
     "autonomy": "node symbolic/symbolic_autonomy_loop.js",
     "books:ingest": "node symbolic/book_index.js",
     "books:spiritual": "node symbolic/tools/build_spiritual_index.js",
@@ -42,6 +42,7 @@
     "@react-native-async-storage/async-storage": "2.1.2",
     "expo": "^53.0.17",
     "expo-application": "~6.1.5",
+    "expo-asset": "~11.1.7",
     "expo-battery": "~9.1.4",
     "expo-crypto": "~14.1.5",
     "expo-document-picker": "~13.1.6",
@@ -50,6 +51,7 @@
     "expo-image-picker": "~16.1.4",
     "expo-location": "~18.1.6",
     "expo-secure-store": "~14.2.4",
+    "expo-sensors": "~14.1.4",
     "expo-speech": "~13.1.7",
     "expo-speech-recognition": "^2.1.5",
     "expo-splash-screen": "~0.30.10",
@@ -72,7 +74,10 @@
     "react-native-tcp-socket": "^6.4.3",
     "react-native-web": "^0.20.0",
     "tweetnacl": "^1.0.3",
-    "expo-asset": "~11.1.7"
+    "expo-clipboard": "~7.1.5",
+    "expo-camera": "~16.1.11",
+    "expo-audio": "~0.4.9",
+    "expo-sharing": "~13.1.5"
   },
   "devDependencies": {
     "@expo/cli": "^0.18.0",

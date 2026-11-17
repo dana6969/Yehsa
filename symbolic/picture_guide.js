@@ -13,7 +13,7 @@ export const GUIDE_ENTRIES = [
   { symbol: "willow_bark", title: "Willow", domain: "herbology", plant: true },
   { symbol: "plantain_plantago", title: "Plantain", domain: "herbology", plant: true },
   { symbol: "unknown_plant", title: "Unknown plant", domain: "herbology", plant: true },
-  { symbol: "toxic_vs_edible", title: "Plant look of a toxin", domain: "herbology", plant: true },
+  { symbol: "toxic_vs_edible", title: "Toxic look-alikes", domain: "herbology", plant: true },
   { symbol: "splint_immobilize", title: "Splint", domain: "first-aid", plant: false },
   { symbol: "tourniquet_last_resort", title: "Tourniquet", domain: "first-aid", plant: false },
   { symbol: "bleeding_pressure", title: "Pressure on bleeding", domain: "first-aid", plant: false },
@@ -121,6 +121,16 @@ export function friendlySource(chip) {
   const key = String(chip || "");
   if (FRIENDLY_SOURCES[key]) return FRIENDLY_SOURCES[key];
   return key.replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+// One short credit line: "Author, License". The file name and the source link are not repeated.
+export function creditLine(image) {
+  const author = String(image?.author || "").replace(/&amp;/g, "&").trim().replace(/[.\s]+$/, "").slice(0, 70);
+  const license = String(image?.license || "").trim();
+  if (!author && !license) return "Credit not recorded";
+  if (!license || author.toLowerCase().includes(license.toLowerCase())) return author || license;
+  if (!author) return license;
+  return `${author}, ${license}`;
 }
 
 export function imageHref(file) {

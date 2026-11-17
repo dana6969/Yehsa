@@ -4,18 +4,24 @@ import { Ionicons } from "@expo/vector-icons";
 import PictureGuide from "./PictureGuide.js";
 import BeforeYouGoScreen from "./BeforeYouGo.js";
 import CameraIdScreen from "./CameraIdScreen.js";
+import WeatherScreen from "./WeatherScreen.js";
+import BallisticsScreen from "./BallisticsScreen.js";
+import SightingsScreen from "./SightingsScreen.js";
+import WindScreen from "./WindScreen.js";
+import KitScreen from "./KitScreen.js";
 import { Action, Field, Quiet, ScreenHeader, colors, tokens, useDisplay, themedStyles } from "./ui.js";
 import { useBackLayer } from "./back_layers.js";
 import { courseText, declinationText, sunText } from "../../symbolic/phone_land.js";
 import { calculate } from "../../symbolic/calculator.js";
 import { GUIDE_ENTRIES } from "../../symbolic/picture_guide.js";
+import { toMorse } from "../../symbolic/morse_signal.js";
+import MorseSignal from "./MorseSignal.js";
 
 const GUIDE_SYMBOLS = new Set(GUIDE_ENTRIES.map((entry) => entry.symbol));
 
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
-// Grouped as in the design: Everyday, Hunt, More tools. Tiles marked
-// later are placeholders that say so; hunting features come in a later pass.
+// Grouped as in the design: Everyday, Hunt, More tools. Every tile opens a working tool.
 export const FIELD_GROUPS = [
   {
     id: "everyday",
@@ -24,7 +30,7 @@ export const FIELD_GROUPS = [
       { id: "pictures", label: "Pictures", sub: "Guide and look-alikes", icon: "images-outline" },
       { id: "compass", label: "Compass", sub: "Bearing and declination", icon: "compass-outline" },
       { id: "sun", label: "Sun times", sub: "Sunrise and sunset", icon: "sunny-outline" },
-      { id: "weather", label: "Weather", sub: "Later", icon: "cloud-outline", later: true },
+      { id: "weather", label: "Weather", sub: "Pressure on this phone", icon: "cloud-outline" },
       { id: "morse", label: "Morse", sub: "Text to code", icon: "radio-outline" },
       { id: "timers", label: "Timers", sub: "Countdown", icon: "timer-outline" },
       { id: "calculator", label: "Calculator", sub: "Units and field math", icon: "calculator-outline" }
@@ -35,9 +41,9 @@ export const FIELD_GROUPS = [
     label: "Hunt",
     tiles: [
       { id: "before", label: "Before you go", sub: "Plan, packs, check", icon: "checkbox-outline" },
-      { id: "ballistics", label: "Ballistics", sub: "Later", icon: "analytics-outline", later: true },
-      { id: "sightings", label: "Sightings", sub: "Later. Private log", icon: "eye-outline", later: true },
-      { id: "wind", label: "Wind", sub: "Later. Scent cone entry", icon: "flag-outline", later: true }
+      { id: "ballistics", label: "Ballistics", sub: "Drop and wind you enter", icon: "analytics-outline" },
+      { id: "sightings", label: "Sightings", sub: "Private log", icon: "eye-outline" },
+      { id: "wind", label: "Wind", sub: "Scent cone for your stand", icon: "flag-outline" }
     ]
   },
   {
@@ -45,27 +51,13 @@ export const FIELD_GROUPS = [
     label: "More tools",
     tiles: [
       { id: "first-aid", label: "First aid", sub: "Pictures and steps", icon: "medkit-outline" },
-      { id: "kit", label: "Kit", sub: "Later. Pack list, family card", icon: "bag-outline", later: true },
+      { id: "kit", label: "Kit", sub: "Pack list and expiry", icon: "bag-outline" },
       { id: "identify", label: "Identify", sub: "Photo hints, never a verdict", icon: "camera-outline" }
     ]
   }
 ];
 
-const LATER_COPY = {
-  weather: "Saved weather alerts and a barometer trend come in a later update. Yehsa will not promise live weather without signal.",
-  ballistics: "A drop and wind calculator from numbers you enter comes with hunting mode.",
-  sightings: "A private sightings log, kept on this phone, comes with hunting mode. It will compare the deer estimate with what you actually saw.",
-  wind: "Wind entry for the scent cone on the Map comes with hunting mode.",
-  kit: "A kit list with expiry dates, linked to the family card in More, comes in a later update."
-};
-
-const MORSE = { a: ".-", b: "-...", c: "-.-.", d: "-..", e: ".", f: "..-.", g: "--.", h: "....", i: "..", j: ".---", k: "-.-", l: ".-..", m: "--", n: "-.", o: "---", p: ".--.", q: "--.-", r: ".-.", s: "...", t: "-", u: "..-", v: "...-", w: ".--", x: "-..-", y: "-.--", z: "--..", 0: "-----", 1: ".----", 2: "..---", 3: "...--", 4: "....-", 5: ".....", 6: "-....", 7: "--...", 8: "---..", 9: "----." };
-
-export function toMorse(text) {
-  return String(text || "").toLowerCase().split(/\s+/).filter(Boolean)
-    .map((word) => [...word].map((ch) => MORSE[ch]).filter(Boolean).join(" "))
-    .filter(Boolean).join("  /  ");
-}
+export { toMorse };
 
 function todayText() {
   const now = new Date();
@@ -116,6 +108,7 @@ export default function FieldPane({ position, mapPacks, onEmergency, openRequest
         onBack={close}
         onOpenLayers={onOpenLayers}
         onOpenScreen={onOpenScreen}
+        onOpenKit={() => setOpen("kit")}
       />
     );
   }
@@ -139,16 +132,11 @@ export default function FieldPane({ position, mapPacks, onEmergency, openRequest
       />
     );
   }
-  if (LATER_COPY[open]) {
-    const tile = FIELD_GROUPS.flatMap((group) => group.tiles).find((item) => item.id === open);
-    return (
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <ScreenHeader title={tile.label} lead="Coming in a later update." onBack={close} backLabel="Field" />
-        <Quiet>{LATER_COPY[open]}</Quiet>
-        {open === "kit" ? <Action label="Family card in More" tone="quiet" onPress={() => onOpenScreen?.("family")} /> : null}
-      </ScrollView>
-    );
-  }
+  if (open === "weather") return <WeatherScreen position={position} onBack={close} />;
+  if (open === "ballistics") return <BallisticsScreen onBack={close} />;
+  if (open === "sightings") return <SightingsScreen position={position} onBack={close} />;
+  if (open === "wind") return <WindScreen position={position} onBack={close} />;
+  if (open === "kit") return <KitScreen onBack={close} onOpenFamily={() => onOpenScreen?.("family")} />;
 
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
@@ -174,14 +162,13 @@ function Tile({ tile, onPress }) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={tile.later ? `${tile.label}, coming later` : tile.label}
+      accessibilityLabel={tile.label}
       accessibilityHint={tile.sub}
       onPress={onPress}
       style={({ pressed }) => [styles.tile, webPointer, { borderColor: display.line }, pressed && styles.pressed]}
     >
       <View style={styles.tileTop}>
-        <Ionicons name={tile.icon} size={22} color={tile.later ? colors.muted : colors.brassText} />
-        {tile.later ? <Text style={styles.laterTag}>Later</Text> : null}
+        <Ionicons name={tile.icon} size={22} color={colors.brassText} />
       </View>
       <Text style={[styles.tileLabel, { fontSize: display.size(16) }]}>{tile.label}</Text>
       <Text style={[styles.tileSub, { color: display.muted, fontSize: display.size(13) }]}>{tile.sub}</Text>
@@ -214,12 +201,22 @@ function CompassTool({ position, onBack }) {
 
 function MorseTool({ onBack }) {
   const [text, setText] = useState("SOS");
+  const code = toMorse(text);
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader title="Morse" lead="Letters to dots and dashes, for a light or a whistle." onBack={onBack} backLabel="Field" />
-      <Field label="Words" value={text} onChangeText={setText} placeholder="SOS" />
-      <Text selectable accessibilityLabel={`Morse code ${toMorse(text)}`} style={styles.morse}>{toMorse(text) || " "}</Text>
-      <Quiet>Short is one unit, long is three. One unit between marks, three between letters, seven between words. SOS is three short, three long, three short.</Quiet>
+      <ScreenHeader title="Morse" lead="Text to code, for a light or a tone." onBack={onBack} backLabel="Field" />
+      <View style={styles.morseCard}>
+        <Field label="Words" value={text} onChangeText={setText} placeholder="SOS" />
+      </View>
+      <View style={styles.morseCard}>
+        <Text style={styles.groupLabel}>CODE</Text>
+        <Text selectable accessibilityLabel={`Morse code ${code}`} style={styles.morse}>{code || " "}</Text>
+        <MorseSignal text={text} />
+      </View>
+      <View style={styles.morseExplain}>
+        <Text style={styles.groupLabel}>HOW THE TIMING WORKS</Text>
+        <Quiet>Short is one unit, long is three. One unit between marks, three between letters, seven between words. SOS is three short, three long, three short.</Quiet>
+      </View>
     </ScrollView>
   );
 }
@@ -292,7 +289,8 @@ const styles = themedStyles((colors) => ({
   group: { marginBottom: 6 },
   groupLabel: { color: colors.muted, fontSize: 12, fontWeight: "700", letterSpacing: 1.2, marginBottom: 8, marginTop: 8 },
   tileTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-  laterTag: { color: colors.muted, fontSize: 11, fontWeight: "700", borderWidth: 1, borderColor: colors.lineStrong, borderRadius: 999, paddingHorizontal: 6, paddingVertical: 1 },
+  morseCard: { backgroundColor: colors.surface, borderWidth: 2, borderColor: colors.lineStrong, borderRadius: 16, padding: 14, gap: 6 },
+  morseExplain: { borderTopWidth: 1, borderTopColor: colors.line, paddingTop: 12, marginTop: 8 },
   morse: { color: colors.ink, fontSize: 26, letterSpacing: 2, marginVertical: 16, fontVariant: ["tabular-nums"] },
   clock: { color: colors.ink, fontSize: 48, fontWeight: "700", textAlign: "center", marginVertical: 16, fontVariant: ["tabular-nums"] },
   checkRow: { borderBottomWidth: 1, borderBottomColor: colors.line, paddingVertical: 6 },

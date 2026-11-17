@@ -110,7 +110,7 @@ export default function EmergencyScreen({ position, onClose, onFirstAid, onSendM
           <Pressable
             accessibilityRole="switch"
             accessibilityState={{ checked: includePlace && placeAllowed, disabled: !placeAllowed }}
-            accessibilityLabel="Include my place in the SOS"
+            accessibilityLabel={includePlace && placeAllowed ? "Don't include my location" : "Include my location in the SOS"}
             disabled={!placeAllowed}
             onPress={() => setIncludePlace((value) => !value)}
             style={[styles.toggle, webPointer, !placeAllowed && { opacity: 0.6 }]}
@@ -118,8 +118,8 @@ export default function EmergencyScreen({ position, onClose, onFirstAid, onSendM
             <Ionicons name={includePlace && placeAllowed ? "checkbox" : "square-outline"} size={22} color={colors.ink} />
             <Text style={styles.toggleText}>
               {placeAllowed
-                ? (includePlace ? "Place included" : "Place left out")
-                : "Place left out. Location is off or no fix is held."}
+                ? (includePlace ? "Location included" : "Location left out")
+                : "Location left out. Location is off, or there is no fix yet."}
             </Text>
           </Pressable>
           <HoldButton label="Hold to send mesh SOS" countdownLabel="Sending SOS" target="mesh-sos" onFire={sendSos} />

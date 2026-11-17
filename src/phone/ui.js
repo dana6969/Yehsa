@@ -267,19 +267,30 @@ function HeaderIcon({ icon, label, onPress }) {
   );
 }
 
-// The display mode chip: one tap moves Field, Sunlight, Night. Word + icon.
-export function ModeChip({ label, icon, onPress }) {
+// Field, Sunlight, Night as three explicit chips. One tap picks one. Word and icon, and a check on
+// the chosen one, so the state is never color alone. There is no cycling control.
+export function ModeChips({ modes, mode, onPick }) {
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={`Display mode ${label}. Tap to change.`}
-      onPress={onPress}
-      hitSlop={6}
-      style={({ pressed }) => [styles.modeChip, webPointer, pressed && styles.pressed]}
-    >
-      {icon ? <Ionicons name={icon} size={14} color={colors.ink} /> : null}
-      <Text style={styles.modeChipText}>{label}</Text>
-    </Pressable>
+    <View accessibilityRole="radiogroup" accessibilityLabel="Display mode" style={styles.modeChips}>
+      {modes.map((item) => {
+        const on = item.id === mode;
+        return (
+          <Pressable
+            key={item.id}
+            accessibilityRole="radio"
+            accessibilityState={{ checked: on }}
+            accessibilityLabel={`${item.label} mode`}
+            onPress={() => onPick(item.id)}
+            hitSlop={4}
+            style={({ pressed }) => [styles.modeChip, webPointer, on && styles.modeChipOn, pressed && styles.pressed]}
+          >
+            <Ionicons name={item.icon} size={14} color={on ? colors.brassInk : colors.ink} />
+            <Text style={[styles.modeChipText, on && styles.modeChipTextOn]}>{item.label}</Text>
+            {on ? <Ionicons name="checkmark" size={14} color={colors.brassInk} /> : null}
+          </Pressable>
+        );
+      })}
+    </View>
   );
 }
 
@@ -295,12 +306,12 @@ export function ScreenHeader({ title, lead, onBack, backLabel, compact, controls
         <Text style={styles.wordmark}>Yehsa</Text>
         {showControls ? (
           <View style={styles.headerTools}>
-            {shell.cycleMode ? <ModeChip label={shell.modeLabel} icon={shell.modeIcon} onPress={shell.cycleMode} /> : null}
             {shell.openSearch ? <HeaderIcon icon="search" label="Ask or go" onPress={shell.openSearch} /> : null}
             {shell.openMore ? <HeaderIcon icon="settings-outline" label="More" onPress={shell.openMore} /> : null}
           </View>
         ) : null}
       </View>
+      {showControls && shell.modes ? <ModeChips modes={shell.modes} mode={shell.mode} onPick={shell.setMode} /> : null}
       <Text accessibilityRole="header" style={[styles.title, compact && styles.titleCompact, { fontSize: display.size(compact ? 22 : 26), lineHeight: display.size(compact ? 28 : 32) }]}>{title}</Text>
       {lead ? <Text style={[styles.lead, { color: display.muted, fontSize: display.size(16), lineHeight: display.size(24) }]}>{lead}</Text> : null}
     </View>
@@ -522,17 +533,29 @@ const styles = themedStyles((colors) => ({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    minHeight: 32,
-    paddingHorizontal: 10,
+    minHeight: 36,
+    paddingHorizontal: 12,
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: colors.lineStrong,
-    marginRight: 2
+    borderColor: colors.lineStrong
+  },
+  modeChipOn: {
+    backgroundColor: colors.brass,
+    borderColor: colors.brass
+  },
+  modeChips: {
+    flexDirection: "row",
+    gap: 8,
+    marginTop: 8,
+    marginBottom: 4
   },
   modeChipText: {
     color: colors.ink,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "600"
+  },
+  modeChipTextOn: {
+    color: colors.brassInk
   },
   headerTools: {
     marginLeft: "auto",

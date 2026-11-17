@@ -6,13 +6,13 @@ import { Quiet, ScreenHeader, colors, tokens, useDisplay, themedStyles } from ".
 
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
-// Settings live here, out of the tab bar. Every child screen has a Back
+// Display, privacy and the tools that do not need a tab. Every child screen has a Back
 // control and the hardware back key does the same.
 export default function MorePane({ onOpen, onBack, backLabel, items = MORE_ITEMS }) {
   const display = useDisplay();
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
-      <ScreenHeader title="More" lead="Settings stay out of the tab bar." onBack={onBack} backLabel={backLabel} />
+      <ScreenHeader title="More" lead="Display, privacy, and the rest of the tools that don't need a tab." onBack={onBack} backLabel={backLabel} />
       <View style={[styles.list, { borderColor: display.line }]}>
         {items.map((item, index) => (
           <Pressable

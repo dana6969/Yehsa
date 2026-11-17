@@ -3,8 +3,9 @@
 // so nothing is shown by colour alone. Nothing here is uploaded or sent.
 
 import { coverageFor } from "./area_download.js";
+import { pretripFrom } from "./hunt/kit.js";
 
-export const CHECK_ORDER = ["maps", "battery", "gps", "mesh", "knowledge", "contacts", "plan", "regs", "display"];
+export const CHECK_ORDER = ["maps", "battery", "gps", "mesh", "knowledge", "pack", "contacts", "plan", "regs", "display"];
 
 // Things the phone cannot check for you. You tick them yourself.
 export const MANUAL_ITEMS = [
@@ -18,6 +19,7 @@ const ICONS = {
   gps: "navigate-outline",
   mesh: "radio-outline",
   knowledge: "book-outline",
+  pack: "briefcase-outline",
   contacts: "call-outline",
   plan: "chatbubble-ellipses-outline",
   regs: "document-text-outline",
@@ -67,6 +69,18 @@ export function knowledgeItem(knowledge) {
   return item("knowledge", "Knowledge packs", "missing", "The field notes did not load. Reinstall Yehsa before you go.");
 }
 
+// The pack-list row. It reads the list the person picked in Kit and says what is still missing.
+export function packItem(kit, listId) {
+  const trip = pretripFrom(kit, listId);
+  if (!trip) return item("pack", "Pack list", "check", "Pick a pack list in Kit, then tick items off as you pack.");
+  const packed = trip.total - trip.missing.length;
+  if (trip.total === 0) return item("pack", `Pack list: ${trip.name}`, "check", "This list is empty. Add what you take in Kit.");
+  if (trip.ready) return item("pack", `Pack list: ${trip.name}`, "ready", `All ${trip.total} packed.`);
+  const shown = trip.missing.slice(0, 4).join(", ");
+  const more = trip.missing.length > 4 ? `, and ${trip.missing.length - 4} more` : "";
+  return item("pack", `Pack list: ${trip.name}`, packed === 0 ? "missing" : "check", `${packed} of ${trip.total} packed. Still to pack: ${shown}${more}.`);
+}
+
 export function contactsItem(contacts) {
   const list = (Array.isArray(contacts) ? contacts : []).filter((entry) => String(entry?.phone || "").replace(/\D/g, "").length >= 3);
   if (list.length) return item("contacts", "Emergency contacts", "ready", `${list.length} saved: ${list.map((entry) => entry.name || entry.phone).join(", ")}. Stored only on this phone.`);
@@ -105,6 +119,7 @@ export function beforeYouGo(input = {}, now = Date.now()) {
     gpsItem(input.gps),
     meshItem(input.mesh),
     knowledgeItem(input.knowledge),
+    ...(input.kit ? [packItem(input.kit, input.kitListId)] : []),
     contactsItem(input.contacts),
     planItem(input.plan, now),
     ...MANUAL_ITEMS.map((entry) => item(entry.id, entry.label, input.ticked?.[entry.id] ? "ready" : "check", input.ticked?.[entry.id] ? `Done. ${entry.detail}` : entry.detail))

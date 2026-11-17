@@ -641,8 +641,8 @@ test("Ask or go, onboarding, Trust, Hunt view, grouped Field, and the revised Mo
   assert.match(home, /\{onboarding \? <Onboarding onDone=\{finishOnboarding\} \/> : null\}\n      <\/View>/, "onboarding sits above the body so the SOS bumper stays live");
   assert.match(home, /<CommandSheet/);
   assert.match(home, /title=\{hunt \? "Hunt" : "Map"\}/);
-  assert.match(home, /Moon: context only, never counted/);
-  assert.match(home, /<ModeButtons display=\{display\} onChange=\{onDisplay\} compact \/>/, "modes are one tap from Hunt");
+  assert.match(fs.readFileSync("src/phone/HuntHud.js", "utf8"), /Moon: context only, never counted/);
+  assert.match(fs.readFileSync("src/phone/ui.js", "utf8"), /<ModeChips/, "modes are one tap on every tab header, as three explicit chips");
   assert.match(home, /title="What Yehsa did"/);
   assert.match(home, /TRUST_LINES\.map/);
 

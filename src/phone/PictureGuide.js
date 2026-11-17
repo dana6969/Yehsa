@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import manifest from "../../assets/pictures/manifest.json";
 import { pictureSource } from "../../symbolic/picture_assets.js";
-import { guideView, imageHref, packDecision, pictureHealth, PICTURE_BUDGET_BYTES } from "../../symbolic/picture_guide.js";
+import { creditLine, guideView, imageHref, packDecision, pictureHealth, PICTURE_BUDGET_BYTES } from "../../symbolic/picture_guide.js";
 import { Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
 
 // A picture that is not in the app shows a labeled box, never a silent empty one.
@@ -16,7 +16,7 @@ function GuideImage({ image, style, fit = "cover" }) {
       </View>
     );
   }
-  return <Image accessibilityLabel={image.attribution} source={source} onError={() => setFailed(true)} resizeMode={fit} style={style} />;
+  return <Image accessibilityLabel={creditLine(image)} source={source} onError={() => setFailed(true)} resizeMode={fit} style={style} />;
 }
 
 const missingStyles = themedStyles((colors) => ({
@@ -34,7 +34,6 @@ export default function PictureGuide({ onBack, backLabel, initialDomain = "", in
   const entries = guideView(manifest, { query, domain });
   const bytes = (manifest.images || []).reduce((sum, image) => sum + (Number(image.bytes) || 0), 0);
   const decision = packDecision(bytes || 391744);
-  const flags = pictureHealth(manifest, (manifest.images || []).map((image) => image.file));
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
@@ -69,15 +68,10 @@ export default function PictureGuide({ onBack, backLabel, initialDomain = "", in
               {image.warning ? <Text style={styles.warn}>{image.warning}</Text> : null}
               {image.role === "lookalike" ? <Text style={styles.warn}>Look-alike warning. This is not the plant in the note.</Text> : null}
               <GuideImage image={image} style={styles.zoom} fit="contain" />
-              <Quiet>{`${image.author}. ${image.license}. ${image.attribution}`}</Quiet>
-              <Quiet>{image.sourceUrl}</Quiet>
+              <Quiet>{`${creditLine(image)}. Source: Wikimedia Commons.`}</Quiet>
             </View>
           )) : null}
         </Pressable>
-      ))}
-      <Text style={styles.title}>Corpus health</Text>
-      {flags.length === 0 ? <Quiet>No missing or unlicensed pictures in this check.</Quiet> : flags.map((flag) => (
-        <Quiet key={`${flag.problem}-${flag.id}`}>{flag.text}</Quiet>
       ))}
     </ScrollView>
   );
@@ -98,3 +92,16 @@ const styles = themedStyles((colors) => ({
   thumb: { width: 72, height: 72, borderRadius: 8, backgroundColor: colors.field },
   zoom: { width: "100%", height: 280, borderRadius: 12, backgroundColor: colors.field }
 }));
+
+// Shown only from More > About > Developer. It is a maintenance check, not something to read in the field.
+export function CorpusHealth() {
+  const flags = pictureHealth(manifest, (manifest.images || []).map((image) => image.file));
+  return (
+    <View style={{ gap: 6 }}>
+      <Text style={styles.title}>Corpus health</Text>
+      {flags.length === 0 ? <Quiet>No missing or unlicensed pictures in this check.</Quiet> : flags.map((flag) => (
+        <Quiet key={`${flag.problem}-${flag.id}`}>{flag.text}</Quiet>
+      ))}
+    </View>
+  );
+}
