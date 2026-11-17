@@ -6,6 +6,8 @@ const path = require("path");
 const { getDefaultConfig } = require("expo/metro-config");
 
 const config = getDefaultConfig(__dirname);
+// The camera-ID model ships as a bundled asset and is opened only on the Identify screen.
+if (!config.resolver.assetExts.includes("tflite")) config.resolver.assetExts.push("tflite");
 const upstream = config.resolver.resolveRequest;
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
