@@ -258,10 +258,47 @@ export function loadBookIndex() {
   return cached;
 }
 
+let fieldNoteCache = null;
+
+function liveFieldNotes() {
+  if (fieldNoteCache) return fieldNoteCache;
+  const passages = [];
+  const seen = new Set();
+  const files = [
+    ["symbolic_books/medical/reference.json", "reference"],
+    ["symbolic_books/herbology/notes.json", "notes"],
+    ["symbolic_books/landscape/notes.json", "notes"],
+    ["symbolic_books/survival/camp.json", "camp"]
+  ];
+  for (const [rel, title] of files) {
+    const full = path.join(ROOT, rel);
+    if (!fs.existsSync(full)) continue;
+    let data;
+    try {
+      data = JSON.parse(readText(full));
+    } catch {
+      continue;
+    }
+    if (!Array.isArray(data)) continue;
+    for (const entry of data) {
+      pushPassage(passages, seen, {
+        symbol: entry?.symbol,
+        context: entry?.context,
+        title,
+        source: rel
+      });
+    }
+  }
+  fieldNoteCache = passages;
+  return passages;
+}
+
 export function searchBooks(query, limit = 8) {
   const index = loadBookIndex();
-  const passages = Array.isArray(index.passages) ? index.passages : [];
-  return searchPassages(passages, query, limit);
+  const indexed = Array.isArray(index.passages) ? index.passages : [];
+  const have = new Set(indexed.map((passage) => passage.symbol));
+  const extra = liveFieldNotes().filter((passage) => !have.has(passage.symbol));
+  return searchPassages([...indexed, ...extra], query, limit);
 }
 
 export function lookupBook(query) {

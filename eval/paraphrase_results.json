@@ -1,0 +1,533 @@
+{
+  "note": "Paraphrase dev set (100). Thresholds were tuned on this set, so it is not a blind measure. lexicalOriginal is the pre-matcher code at 2c68307.",
+  "lexicalOriginal": {
+    "correct": 24,
+    "incorrectConfident": 14,
+    "incorrectHedged": 0,
+    "appropriateAbstention": 10,
+    "unnecessaryRefusal": 52,
+    "total": 100
+  },
+  "lexical": {
+    "correct": 24,
+    "incorrectConfident": 13,
+    "incorrectHedged": 0,
+    "appropriateAbstention": 10,
+    "unnecessaryRefusal": 53,
+    "incorrect": 13,
+    "refusals": 63,
+    "total": 100
+  },
+  "meaning": {
+    "correct": 68,
+    "incorrectConfident": 7,
+    "incorrectHedged": 0,
+    "appropriateAbstention": 10,
+    "unnecessaryRefusal": 15,
+    "incorrect": 7,
+    "refusals": 25,
+    "total": 100
+  },
+  "items": [
+    {
+      "id": "pp-nose-1",
+      "outcome": "correct",
+      "symbol": "nosebleed_forward"
+    },
+    {
+      "id": "pp-nose-2",
+      "outcome": "correct",
+      "symbol": "nosebleed_forward"
+    },
+    {
+      "id": "pp-choke-1",
+      "outcome": "correct",
+      "symbol": "choking_thrusts"
+    },
+    {
+      "id": "pp-choke-2",
+      "outcome": "correct",
+      "symbol": "choking_thrusts"
+    },
+    {
+      "id": "pp-cpr-1",
+      "outcome": "correct",
+      "symbol": "cpr_rate_depth"
+    },
+    {
+      "id": "pp-cpr-2",
+      "outcome": "correct",
+      "symbol": "cpr_rate_depth"
+    },
+    {
+      "id": "pp-epi-1",
+      "outcome": "correct",
+      "symbol": "epinephrine_auto"
+    },
+    {
+      "id": "pp-epi-2",
+      "outcome": "correct",
+      "symbol": "epinephrine_auto"
+    },
+    {
+      "id": "pp-shock-1",
+      "outcome": "correct",
+      "symbol": "shock_position"
+    },
+    {
+      "id": "pp-seize-1",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-seize-2",
+      "outcome": "correct",
+      "symbol": "seizure_protect"
+    },
+    {
+      "id": "pp-eye-1",
+      "outcome": "correct",
+      "symbol": "chemical_eye_flush"
+    },
+    {
+      "id": "pp-alt-1",
+      "outcome": "correct",
+      "symbol": "altitude_descend"
+    },
+    {
+      "id": "pp-heart-1",
+      "outcome": "correct",
+      "symbol": "heart_attack_signs"
+    },
+    {
+      "id": "pp-burn-1",
+      "outcome": "correct",
+      "symbol": "burn_cool_water"
+    },
+    {
+      "id": "pp-burn-2",
+      "outcome": "correct",
+      "symbol": "burn_cool_water"
+    },
+    {
+      "id": "pp-tick-1",
+      "outcome": "correct",
+      "symbol": "tick_removal"
+    },
+    {
+      "id": "pp-ors-1",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-sprain-1",
+      "outcome": "correct",
+      "symbol": "sprain_rice"
+    },
+    {
+      "id": "pp-spine-1",
+      "outcome": "correct",
+      "symbol": "spinal_still"
+    },
+    {
+      "id": "pp-cut-1",
+      "outcome": "correct",
+      "symbol": "cut_needs_stitches"
+    },
+    {
+      "id": "pp-tq-1",
+      "outcome": "incorrect-confident",
+      "symbol": "bleeding_pressure"
+    },
+    {
+      "id": "pp-frost-1",
+      "outcome": "correct",
+      "symbol": "frostbite_warming"
+    },
+    {
+      "id": "pp-splint-1",
+      "outcome": "correct",
+      "symbol": "splint_immobilize"
+    },
+    {
+      "id": "pp-bleed-1",
+      "outcome": "correct",
+      "symbol": "tourniquet_last_resort"
+    },
+    {
+      "id": "pp-bite-1",
+      "outcome": "correct",
+      "symbol": "insect_bite_skin"
+    },
+    {
+      "id": "pp-plant-1",
+      "outcome": "correct",
+      "symbol": "food_4"
+    },
+    {
+      "id": "pp-plant-2",
+      "outcome": "correct",
+      "symbol": "toxic_plant_facts"
+    },
+    {
+      "id": "pp-plant-3",
+      "outcome": "correct",
+      "symbol": "insect_bite_skin"
+    },
+    {
+      "id": "pp-plant-4",
+      "outcome": "correct",
+      "symbol": "willow_bark"
+    },
+    {
+      "id": "pp-plant-5",
+      "outcome": "correct",
+      "symbol": "yarrow_achillea"
+    },
+    {
+      "id": "pp-water-1",
+      "outcome": "correct",
+      "symbol": "water_3"
+    },
+    {
+      "id": "pp-water-2",
+      "outcome": "correct",
+      "symbol": "water_3"
+    },
+    {
+      "id": "pp-water-3",
+      "outcome": "correct",
+      "symbol": "water_4"
+    },
+    {
+      "id": "pp-water-4",
+      "outcome": "correct",
+      "symbol": "water_2"
+    },
+    {
+      "id": "pp-water-5",
+      "outcome": "correct",
+      "symbol": "water_5"
+    },
+    {
+      "id": "pp-wx-1",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-wx-2",
+      "outcome": "correct",
+      "symbol": "weather_3"
+    },
+    {
+      "id": "pp-wx-3",
+      "outcome": "correct",
+      "symbol": "weather_4"
+    },
+    {
+      "id": "pp-wx-4",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-wx-5",
+      "outcome": "correct",
+      "symbol": "weather_2"
+    },
+    {
+      "id": "pp-fire-1",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-fire-2",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-fire-3",
+      "outcome": "correct",
+      "symbol": "shelter_fire_4"
+    },
+    {
+      "id": "pp-fire-4",
+      "outcome": "correct",
+      "symbol": "shelter_fire_1"
+    },
+    {
+      "id": "pp-sig-1",
+      "outcome": "correct",
+      "symbol": "signaling_1"
+    },
+    {
+      "id": "pp-sig-2",
+      "outcome": "correct",
+      "symbol": "signaling_2"
+    },
+    {
+      "id": "pp-sig-3",
+      "outcome": "correct",
+      "symbol": "signaling_3"
+    },
+    {
+      "id": "pp-sig-4",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-nav-1",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-nav-2",
+      "outcome": "incorrect-confident",
+      "symbol": "track_log_note"
+    },
+    {
+      "id": "pp-nav-3",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-nav-4",
+      "outcome": "incorrect-confident",
+      "symbol": "true_north"
+    },
+    {
+      "id": "pp-nav-5",
+      "outcome": "incorrect-confident",
+      "symbol": "orienteering_map_compass"
+    },
+    {
+      "id": "pp-nav-6",
+      "outcome": "correct",
+      "symbol": "contour_reading"
+    },
+    {
+      "id": "pp-nav-7",
+      "outcome": "correct",
+      "symbol": "orienteering_map_compass"
+    },
+    {
+      "id": "pp-nav-8",
+      "outcome": "correct",
+      "symbol": "watershed"
+    },
+    {
+      "id": "pp-nav-9",
+      "outcome": "correct",
+      "symbol": "river_travel"
+    },
+    {
+      "id": "pp-nav-10",
+      "outcome": "correct",
+      "symbol": "natural_landmarks"
+    },
+    {
+      "id": "pp-nav-11",
+      "outcome": "correct",
+      "symbol": "navigation_1"
+    },
+    {
+      "id": "pp-land-1",
+      "outcome": "correct",
+      "symbol": "coasts"
+    },
+    {
+      "id": "pp-land-2",
+      "outcome": "correct",
+      "symbol": "deserts"
+    },
+    {
+      "id": "pp-land-3",
+      "outcome": "correct",
+      "symbol": "mountains"
+    },
+    {
+      "id": "pp-land-4",
+      "outcome": "correct",
+      "symbol": "arctic_tundra"
+    },
+    {
+      "id": "pp-land-5",
+      "outcome": "correct",
+      "symbol": "biome_bands"
+    },
+    {
+      "id": "pp-land-6",
+      "outcome": "correct",
+      "symbol": "no_city_maps"
+    },
+    {
+      "id": "pp-camp-1",
+      "outcome": "correct",
+      "symbol": "camp_site"
+    },
+    {
+      "id": "pp-camp-2",
+      "outcome": "incorrect-confident",
+      "symbol": "landscape_nav"
+    },
+    {
+      "id": "pp-camp-3",
+      "outcome": "correct",
+      "symbol": "camp_sleep"
+    },
+    {
+      "id": "pp-camp-4",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-camp-5",
+      "outcome": "correct",
+      "symbol": "camp_leave"
+    },
+    {
+      "id": "pp-camp-6",
+      "outcome": "incorrect-confident",
+      "symbol": "camp_kitchen"
+    },
+    {
+      "id": "pp-food-1",
+      "outcome": "correct",
+      "symbol": "food_1"
+    },
+    {
+      "id": "pp-food-2",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-food-3",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-tool-1",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-tool-2",
+      "outcome": "correct",
+      "symbol": "tools_cordage_3"
+    },
+    {
+      "id": "pp-tool-3",
+      "outcome": "incorrect-confident",
+      "symbol": "tools_cordage_3"
+    },
+    {
+      "id": "pp-math-1",
+      "outcome": "correct",
+      "symbol": "pythagorean_relation"
+    },
+    {
+      "id": "pp-math-2",
+      "outcome": "correct",
+      "symbol": "derivative"
+    },
+    {
+      "id": "pp-math-3",
+      "outcome": "correct",
+      "symbol": "division"
+    },
+    {
+      "id": "pp-math-4",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-math-5",
+      "outcome": "correct",
+      "symbol": "triangle"
+    },
+    {
+      "id": "pp-math-6",
+      "outcome": "correct",
+      "symbol": "integral"
+    },
+    {
+      "id": "pp-guard-1",
+      "outcome": "correct",
+      "symbol": "sprain_rice"
+    },
+    {
+      "id": "pp-guard-2",
+      "outcome": "unnecessary-refusal",
+      "symbol": null
+    },
+    {
+      "id": "pp-guard-3",
+      "outcome": "correct",
+      "symbol": "nosebleed_forward"
+    },
+    {
+      "id": "pp-guard-4",
+      "outcome": "correct",
+      "symbol": "burn_cool_water"
+    },
+    {
+      "id": "pp-multi-1",
+      "outcome": "correct",
+      "symbol": "water_1"
+    },
+    {
+      "id": "pp-multi-2",
+      "outcome": "correct",
+      "symbol": "tick_removal"
+    },
+    {
+      "id": "pp-off-1",
+      "outcome": "appropriate-abstention",
+      "symbol": null
+    },
+    {
+      "id": "pp-off-2",
+      "outcome": "appropriate-abstention",
+      "symbol": null
+    },
+    {
+      "id": "pp-off-3",
+      "outcome": "appropriate-abstention",
+      "symbol": null
+    },
+    {
+      "id": "pp-off-4",
+      "outcome": "appropriate-abstention",
+      "symbol": null
+    },
+    {
+      "id": "pp-off-5",
+      "outcome": "appropriate-abstention",
+      "symbol": null
+    },
+    {
+      "id": "pp-off-6",
+      "outcome": "appropriate-abstention",
+      "symbol": null
+    },
+    {
+      "id": "pp-off-7",
+      "outcome": "appropriate-abstention",
+      "symbol": null
+    },
+    {
+      "id": "pp-off-8",
+      "outcome": "appropriate-abstention",
+      "symbol": null
+    },
+    {
+      "id": "pp-off-9",
+      "outcome": "appropriate-abstention",
+      "symbol": null
+    },
+    {
+      "id": "pp-off-10",
+      "outcome": "appropriate-abstention",
+      "symbol": null
+    }
+  ]
+}

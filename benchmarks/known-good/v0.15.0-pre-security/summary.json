@@ -1,0 +1,58 @@
+{
+  "commit": "caa053578aaefd7d9136e3432e937532d59c9cc9",
+  "tests": {
+    "knowledge": {
+      "tests": 81,
+      "pass": 81,
+      "fail": 0
+    },
+    "mesh": {
+      "tests": 30,
+      "pass": 30,
+      "fail": 0
+    },
+    "safetyHoldout": {
+      "count": 9,
+      "passed": 9,
+      "failed": []
+    },
+    "peerChat": {
+      "tests": 3,
+      "pass": 3,
+      "fail": 0
+    }
+  },
+  "breakdown": {
+    "commit": "caa053578aaefd7d9136e3432e937532d59c9cc9",
+    "correct": 349,
+    "incorrectConfident": 0,
+    "incorrectHedged": 0,
+    "appropriateAbstention": 62,
+    "unnecessaryRefusal": 0,
+    "incorrect": 0,
+    "refusals": 62,
+    "total": 411
+  },
+  "hotPath": {
+    "lookups": 1000,
+    "hits": 1000,
+    "lookupMs": 0.168435,
+    "perLookupMs": 0.000168435,
+    "missMs": 0.433404,
+    "perMissMs": 0.000433404,
+    "rss": 117870592,
+    "rssStart": 117653504
+  },
+  "latency": {
+    "firstCallMs": 1903.09,
+    "firstCallId": "willow-1",
+    "medianAfterFirstMs": 1.62,
+    "p95AfterFirstMs": 45.25
+  },
+  "memory": {
+    "rssAtImport": 59420672,
+    "rssAfterFirst": 177156096,
+    "rssAtEnd": 187043840,
+    "peak": 187043840
+  }
+}

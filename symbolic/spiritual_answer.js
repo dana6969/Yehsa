@@ -19,3 +19,7 @@ function load() {
 export function spiritualAnswer(raw) {
   return quoteSpiritual(raw, load().passages);
 }
+
+export function scripturePassages() {
+  return load().passages;
+}

@@ -5,6 +5,9 @@
       "distribution": "internal",
       "android": {
         "gradleCommand": ":app:assembleDebug"
+      },
+      "env": {
+        "ONNXRUNTIME_NODE_INSTALL": "skip"
       }
     },
     "preview": {
@@ -14,12 +17,18 @@
       },
       "ios": {
         "simulator": false
+      },
+      "env": {
+        "ONNXRUNTIME_NODE_INSTALL": "skip"
       }
     },
     "production": {
       "android": {
         "gradleCommand": ":app:assembleRelease",
         "buildType": "apk"
+      },
+      "env": {
+        "ONNXRUNTIME_NODE_INSTALL": "skip"
       }
     }
   },

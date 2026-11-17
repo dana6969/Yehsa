@@ -1,11 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
+  BackHandler,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Switch,
+  Image,
   Text,
+  TextInput,
   View
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
@@ -15,17 +19,10 @@ import { expandParaphrase } from "../../symbolic/paraphrase.js";
 import { parseQuestion } from "../../symbolic/question_parse.js";
 import { routesToSpiritual } from "../../symbolic/spiritual_route.js";
 import { loadScriptureIndex } from "./scripture_index";
+import { prepareMeaning } from "./meaning_provider";
+import { quoteSpiritual } from "../../symbolic/spiritual_quote.js";
 import { phoneCorpusMeta } from "../../symbolic/phone_corpus.js";
-import {
-  addSessionTrack,
-  courseText,
-  declinationText,
-  gotoSessionWaypoint,
-  lockedFill,
-  saveSessionWaypoint,
-  sunText,
-  trackText
-} from "../../symbolic/phone_land.js";
+import { courseText, saveSessionWaypoint } from "../../symbolic/phone_land.js";
 import {
   applyConnect,
   applyScan,
@@ -47,7 +44,7 @@ import {
 import { EXPO_LOCK_ACCURACY_M } from "../../symbolic/position_fix.js";
 import { chooseYehsaDevice, connectRemembered, scanWithPlatform, transmitNote } from "./ble_provider.js";
 import { bindThisInstall } from "./install_owner.js";
-import { readPlatformFix } from "./location_provider.js";
+import { readPlatformFix, watchPlatformGps } from "./location_provider.js";
 import { openMic, probeVoice, silenceSpeakers, speakProse, stopProse } from "./speech_provider.js";
 import {
   recognitionErrorNotice,
@@ -56,38 +53,199 @@ import {
   submitHeard,
   voiceButtonLabel
 } from "../../symbolic/voice_adapter.js";
-import { Action, Field, HoldTalk, Prose, Quiet, ScreenHeader, StatusPill, colors } from "./ui.js";
+import HuntHud from "./HuntHud.js";
+import PartyScreen, { usePartyTicker } from "./PartyScreen.js";
+import { FamilyCardScreen } from "./KitScreen.js";
+import { loadHunt } from "./hunt_state.js";
+import { Action, DisplayContext, Field, HoldTalk, Prose, Quiet, ScreenHeader, ShellContext, StatusPill, applyTheme, colors, themedStyles } from "./ui.js";
+import { approveAction, declineAction, proposeAction, setActionEnabled, undoApproved } from "../../symbolic/action_gate.js";
+import { readAssistant } from "../../symbolic/assistant_intent.js";
+import {
+  buildOutbound,
+  deleteModelEntry,
+  emptyModelSettings,
+  labelModelAnswer,
+  missModelOffer,
+  packModelSettings,
+  previewModelSend,
+  rememberModelEntry,
+  selectedProvider
+} from "../../symbolic/model_link.js";
+import { sendToModel } from "./model_client.js";
+import { deleteModelKey, readModelKey, saveModelKey } from "./model_secrets.js";
+import ModelsPane from "./ModelsPane.js";
+import LearnedPane from "./LearnedPane.js";
+import PictureGuide, { CorpusHealth } from "./PictureGuide.js";
+import pictureManifest from "../../assets/pictures/manifest.json";
+import { creditLine, friendlySource, imageHref, picturesFor } from "../../symbolic/picture_guide.js";
+import { pictureSource } from "../../symbolic/picture_assets.js";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  approveLearned,
+  emptyLearned,
+  exportLearned,
+  learnedShareText,
+  markHelpful,
+  markNotRight,
+  openLearned,
+  phraseFromFeedback,
+  proposeLearned,
+  recordLearnedAnswer,
+  recordFeedback,
+  recordModelAsk,
+  rememberPhrase,
+  saveHelpfulAnswer
+} from "../../symbolic/learned_notes.js";
+import { domainOf, mergeCompound, newThread, socialTurn, splitCompound, tripResult, voiceReply } from "../../symbolic/yehsa_voice.js";
+import { capabilitySummary, continueUtterance, isCapabilityQuestion, isFeedbackEligible, sourceChips } from "../../symbolic/chat_turn.js";
+import LandscapeMap from "./LandscapeMap.js";
+import {
+  elevationNear,
+  emptyPackStore,
+  nearestWater,
+  packShapes
+} from "../../symbolic/map_packs.js";
+import OfflineMap from "./OfflineMap";
+import { startTileServer } from "./tile_server";
+import MapPacksSheet from "./MapPacksSheet";
+import useAreas from "./useAreas";
+import usePackDownloads from "./usePackDownloads";
+import { usePersistedPackStore } from "./map_pack_manager";
+import { elevationFromAreas } from "./area_elevation";
+import { mapLayers } from "../../symbolic/map_layers.js";
+import { initialHost, mapViewKey, nextHost, rememberCamera, shouldMountMap } from "../../symbolic/map_host.js";
+import PeerChat from "./PeerChat.js";
+import PeerSecurity from "./PeerSecurity.js";
+import EmergencyScreen from "./EmergencyScreen.js";
+import { BackLayers, useBackLayer } from "./back_layers.js";
+import { MORE_ITEMS, TABS, destinationActions, backAction, backLabel, createBackLayers, initialNav, navReduce, topScreen } from "./nav_model.js";
+import FieldPane from "./FieldPane.js";
+import MorePane from "./MorePane.js";
+import { BooksPane, DownloadArea, HotspotGuide, SatSosGuide, TrustScreen } from "./screens_index.js";
+import CommandSheet from "./CommandSheet.js";
+import Onboarding, { ONBOARDED_KEY } from "./Onboarding.js";
+import { TRUST_EVAL, TRUST_LINES } from "./trust_copy.js";
+import { DISPLAY_KEY, DISPLAY_MODES, NIGHT_TINTS, defaultDisplay, openDisplay, packDisplay, setMode, themeKeyFor } from "./display_model.js";
+import {
+  applyGpsSample,
+  gpsStatusLabel,
+  grantGpsConsent,
+  initialGpsMap,
+  markSignalLost,
+  noteUserPan,
+  recenterOnMe,
+  revokeGpsConsent,
+  startNavigation
+} from "../../symbolic/gps_map.js";
 
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
-const TABS = [
-  { id: "ask", label: "Ask" },
-  { id: "land", label: "Land" },
-  { id: "position", label: "Position" },
-  { id: "mesh", label: "Mesh" }
-];
 
-const LANDS = [
-  { id: "course", label: "Course" },
-  { id: "points", label: "Points" },
-  { id: "track", label: "Track" },
-  { id: "sun", label: "Sun" }
-];
-
-function todayUtc() {
-  const now = new Date();
-  const month = String(now.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(now.getUTCDate()).padStart(2, "0");
-  return `${now.getUTCFullYear()}-${month}-${day}`;
-}
 
 export default function YehsaApp() {
-  const [tab, setTab] = useState("ask");
+  const [nav, setNav] = useState(initialNav);
+  const [display, setDisplay] = useState(defaultDisplay);
+  const [onboarding, setOnboarding] = useState(false);
+  const [huntRequest, setHuntRequest] = useState(0);
+  const [partyRequest, setPartyRequest] = useState(0);
+  // The theme is applied before any child renders, so colors.* and
+  // themedStyles() lookups all follow the saved display mode.
+  const themeKey = themeKeyFor(display);
+  applyTheme(themeKey);
+  const navRef = useRef(nav);
+  navRef.current = nav;
+  const layers = useMemo(() => createBackLayers(), []);
+  const [pendingAsk, setPendingAsk] = useState(null);
+  const tab = nav.tab;
+  const screen = topScreen(nav);
+  const visible = screen || tab;
+  function go(action) {
+    setNav((current) => navReduce(current, action));
+  }
+  function setTab(id) {
+    go({ type: "tab", tab: id });
+  }
+  function openScreen(id) {
+    go({ type: "push", screen: id });
+  }
+  function popScreen() {
+    go({ type: "pop" });
+  }
+  const back = backLabel(nav, TABS);
+
+  useEffect(() => {
+    // Android back: the emergency overlay closes first, then an open sheet or
+    // subview, then the screen stack, then a non-home tab returns to Ask.
+    const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
+      const current = navRef.current;
+      if (!current.sos && !current.command && current.stack.length === 0 && layers.run()) return true;
+      const next = backAction(current);
+      if (next.handled) setNav(next.state);
+      return next.handled;
+    });
+    return () => subscription?.remove?.();
+  }, [layers]);
   const [position, setPosition] = useState(initialPosition);
   const [waypoints, setWaypoints] = useState([]);
   const [track, setTrack] = useState([]);
+  const [mapTap, setMapTap] = useState(null);
+  const [peopleChat, setPeopleChat] = useState(false);
+  const [askSummary, setAskSummary] = useState(null);
+  const [layersRequest, setLayersRequest] = useState(0);
+  const [fieldRequest, setFieldRequest] = useState(null);
+  const [scanRequest, setScanRequest] = useState(0);
+  const [mapPacks, setMapPacks] = usePersistedPackStore();
+  const [actions, setActions] = useState(null);
+  const [models, setModels] = useState(emptyModelSettings);
+  const [learned, setLearned] = useState(emptyLearned);
   const [owner, setOwner] = useState(null);
   const [mesh, setMesh] = useState(initialMeshSession);
+  useEffect(() => { loadHunt(); }, []);
+  usePartyTicker({ position, mesh, setMesh });
+  const [modelTestNote, setModelTestNote] = useState("A connection test sends only the word ready, and only after Approve test.");
+
+  useEffect(() => {
+    let live = true;
+    AsyncStorage.getItem("yehsa.model.public.v1").then((raw) => {
+      if (!live || !raw) return;
+      const packed = packModelSettings(JSON.parse(raw));
+      setModels(packed);
+      return Promise.all(packed.providers.map(async (provider) => {
+        if (provider.needsKey === false) return provider;
+        const saved = await readModelKey(provider.id);
+        return { ...provider, keySaved: Boolean(saved) };
+      })).then((providers) => {
+        if (live) setModels({ ...packed, providers });
+      });
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  function storeLearned(next) {
+    const stamped = { ...next, deviceId: owner?.installId || next?.deviceId || null };
+    setLearned(stamped);
+    AsyncStorage.setItem("yehsa.learned.v1", exportLearned(stamped)).catch(() => {});
+  }
+
+  useEffect(() => {
+    let live = true;
+    AsyncStorage.getItem("yehsa.learned.v1").then((raw) => {
+      if (!live || !raw) return;
+      const opened = openLearned(JSON.parse(raw), owner?.installId || null);
+      setLearned(opened);
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [owner?.installId]);
+
+  function storeModels(next) {
+    const packed = packModelSettings(next);
+    setModels(packed);
+    AsyncStorage.setItem("yehsa.model.public.v1", JSON.stringify(packed)).catch(() => {});
+  }
 
   useEffect(() => {
     let live = true;
@@ -121,47 +279,353 @@ export default function YehsaApp() {
     }
   }
 
+  const stackOpen = (id) => (nav.stack.includes(id) ? true : false);
+  const chipVisible = !screen && tab !== "ask" && !(tab === "people" && peopleChat);
+  useEffect(() => {
+    let live = true;
+    AsyncStorage.getItem(DISPLAY_KEY).then((raw) => {
+      if (live && raw) setDisplay(openDisplay(raw));
+    }).catch(() => {});
+    AsyncStorage.getItem(ONBOARDED_KEY).then((raw) => {
+      if (live && raw !== "done") setOnboarding(true);
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  function storeDisplay(next) {
+    const opened = openDisplay(next);
+    setDisplay(opened);
+    AsyncStorage.setItem(DISPLAY_KEY, packDisplay(opened)).catch(() => {});
+  }
+
+  function finishOnboarding() {
+    setOnboarding(false);
+    AsyncStorage.setItem(ONBOARDED_KEY, "done").catch(() => {});
+  }
+
+  function goDestination(destination) {
+    go({ type: "closeCommand" });
+    for (const action of destinationActions(destination)) go(action);
+    if (destination.id === "layers") setLayersRequest(Date.now());
+    if (destination.id === "hunt") setHuntRequest(Date.now());
+    if (destination.id === "scan") setScanRequest(Date.now());
+    if (destination.tile) setFieldRequest({ id: Date.now(), tile: destination.tile });
+  }
+
+  function askFromAnywhere(text) {
+    go({ type: "closeCommand" });
+    setTab("ask");
+    setPendingAsk({ id: Date.now(), text });
+  }
+
+  function sendMeshSos(message) {
+    const queued = queueServiceText(mesh, message.text);
+    setMesh(queued.session);
+    if (!queued.ok) return queued.reason || "The SOS was not kept.";
+    if (queued.session.link?.primary?.radio === true) {
+      transmitNote(queued.item.text, queued.session.link.primary).catch(() => {});
+      return "Sent to the held link where the peer accepts notes, and kept on this phone.";
+    }
+    return "No link is held, so the SOS is kept on this phone and goes out when a link is up.";
+  }
+
+  const shell = useMemo(() => ({
+    openMore: () => go({ type: "push", screen: "more" }),
+    openSearch: () => go({ type: "openCommand" }),
+    modes: DISPLAY_MODES,
+    mode: display.mode,
+    setMode: (id) => storeDisplay(setMode(display, id))
+  }), [display]);
+
+  function pane(id) {
+    const on = visible === id;
+    return {
+      style: [styles.pane, !on && styles.hidden],
+      pointerEvents: on ? "auto" : "none",
+      accessibilityElementsHidden: !on,
+      importantForAccessibility: on ? "auto" : "no-hide-descendants"
+    };
+  }
+
   return (
+    <BackLayers.Provider value={layers}>
+    <DisplayContext.Provider value={display}>
+    <ShellContext.Provider value={shell}>
     <View style={styles.root}>
-      <StatusBar style="light" />
+      <StatusBar style={themeKey === "sunlight" ? "dark" : "light"} />
       <View style={styles.column}>
       <View style={styles.body}>
-        <View
-          style={[styles.pane, tab !== "ask" && styles.hidden]}
-          pointerEvents={tab === "ask" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "ask"}
-        >
-          <AskPane session={session} owner={owner} active={tab === "ask"} />
-        </View>
-        <View
-          style={[styles.pane, tab !== "land" && styles.hidden]}
-          pointerEvents={tab === "land" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "land"}
-        >
-          <LandPane
+        <View {...pane("ask")}>
+          <AskPane
+            onGo={(tile) => { setTab("field"); setFieldRequest({ id: Date.now(), tile }); }}
+            session={session}
+            owner={owner}
+            active
+            screen={visible}
+            pendingAsk={pendingAsk}
             position={position}
+            setPosition={setPosition}
             waypoints={waypoints}
             setWaypoints={setWaypoints}
-            track={track}
-            setTrack={setTrack}
+            setMesh={setMesh}
+            mapTap={mapTap}
+            mapPacks={mapPacks}
+            models={models}
+            setModels={storeModels}
+            ownerId={owner?.installId || null}
+            learned={learned}
+            setLearned={storeLearned}
+            onActions={setActions}
+            onSummary={setAskSummary}
           />
         </View>
-        <View
-          style={[styles.pane, tab !== "position" && styles.hidden]}
-          pointerEvents={tab === "position" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "position"}
-        >
-          <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} />
+        <View {...pane("map")}>
+          <LandPane
+            active={visible === "map"}
+            position={position}
+            setPosition={setPosition}
+            onConsent={changeConsent}
+            waypoints={waypoints}
+            track={track}
+            onMapTap={setMapTap}
+            mapPacks={mapPacks}
+            setMapPacks={setMapPacks}
+            layersRequest={layersRequest}
+            huntRequest={huntRequest}
+            display={display}
+            onDisplay={storeDisplay}
+            onParty={() => { setTab("people"); setPartyRequest(Date.now()); }}
+            onBefore={() => { setTab("field"); setFieldRequest({ id: Date.now(), tile: "before" }); }}
+            onOpenTool={(tile) => { setTab("field"); setFieldRequest({ id: Date.now(), tile }); }}
+          />
         </View>
-        <View
-          style={[styles.pane, tab !== "mesh" && styles.hidden]}
-          pointerEvents={tab === "mesh" ? "auto" : "none"}
-          accessibilityElementsHidden={tab !== "mesh"}
-        >
-          <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} />
+        <View {...pane("field")}>
+          <FieldPane
+            position={position}
+            mapPacks={mapPacks}
+            waypoints={waypoints}
+            onEmergency={() => go({ type: "openSos" })}
+            openRequest={fieldRequest}
+            onOpenLayers={() => { setTab("map"); setLayersRequest(Date.now()); }}
+            onOpenScreen={(id) => (id === "people" ? setTab("people") : openScreen(id))}
+            onAsk={askFromAnywhere}
+          />
         </View>
+        <View {...pane("people")}>
+          <PeoplePane
+            mesh={mesh}
+            setMesh={setMesh}
+            owner={owner}
+            position={position}
+            onChatView={setPeopleChat}
+            scanRequest={scanRequest}
+            partyRequest={partyRequest}
+          />
+        </View>
+        {stackOpen("more") ? (
+          <View {...pane("more")}>
+            <MorePane onOpen={openScreen} onBack={popScreen} backLabel={back} items={MORE_ITEMS} />
+          </View>
+        ) : null}
+        {stackOpen("location") ? (
+          <View {...pane("location")}>
+            <PositionPane position={position} setPosition={setPosition} onConsent={changeConsent} onBack={popScreen} backLabel={back} />
+          </View>
+        ) : null}
+        {stackOpen("actions") ? (
+          <View {...pane("actions")}>
+            <ScrollView contentContainerStyle={styles.scroll}>
+              <ScreenHeader title="What I may do" lead="Choose what I may ask to do. I still wait for Approve." onBack={popScreen} backLabel={back} />
+            {(actions?.settings ? Object.keys(actions.settings) : []).map((type) => (
+              <View key={type} style={styles.switchRow}>
+                <Text style={styles.switchLabel}>{friendlySource(type)}</Text>
+                <Switch
+                  accessibilityLabel={`${type} ${actions.settings[type] ? "on" : "off"}`}
+                  value={actions.settings[type] === true}
+                  onValueChange={() => actions.toggle(type)}
+                />
+              </View>
+            ))}
+          </ScrollView>
+          </View>
+        ) : null}
+        {stackOpen("did") ? (
+          <View {...pane("did")}>
+            <ScrollView contentContainerStyle={styles.scroll}>
+              <ScreenHeader title="What Yehsa did" lead="Actions you approved, newest last, with Undo where it can." onBack={popScreen} backLabel={back} />
+            {(actions?.log || []).filter((item) => item.status === "approved").length === 0 ? <Quiet>Nothing approved yet. Approved actions show here with Undo.</Quiet> : null}
+            {(actions?.log || []).filter((item) => item.status === "approved").map((item) => (
+              <View key={`${item.id}-${item.at || item.status}`} style={styles.card}>
+                <Text style={styles.bubbleText}>{friendlySource(item.type)}</Text>
+                {item.undo && item.undone !== true ? (
+                  <Pressable accessibilityRole="button" accessibilityLabel="Undo" onPress={() => actions.undo(item.id)}>
+                    <Text style={styles.undoLink}>Undo</Text>
+                  </Pressable>
+                ) : null}
+              </View>
+            ))}
+            </ScrollView>
+          </View>
+        ) : null}
+        {stackOpen("display") ? (
+          <View {...pane("display")}>
+            <DisplayPane display={display} onChange={storeDisplay} onBack={popScreen} backLabel={back} />
+          </View>
+        ) : null}
+        {stackOpen("privacy") ? (
+          <View {...pane("privacy")}>
+            <ScrollView contentContainerStyle={styles.scroll}>
+              <ScreenHeader title="Privacy" lead="Nothing leaves the phone unless you approve it." onBack={popScreen} backLabel={back} />
+              <Prose>Questions, answers, learned notes, waypoints, and chats are kept on this phone.</Prose>
+              <Quiet>Location stays off until you turn it on, and sharing it is a separate step each time.</Quiet>
+              <Quiet>The radio scans only when you tap Scan. People chats are encrypted between paired phones.</Quiet>
+              <Quiet>A model is off by default. If you connect one, Yehsa shows what would be sent and waits for Approve.</Quiet>
+              <Quiet>Map packs and elevation download only after you approve them.</Quiet>
+              <Quiet>No account, no ads, and no analytics.</Quiet>
+            </ScrollView>
+          </View>
+        ) : null}
+        {stackOpen("helpers") ? (
+          <View {...pane("helpers")}>
+            <HelpersPane
+              position={position}
+              onConsent={changeConsent}
+              models={models}
+              onOpen={openScreen}
+              onBack={popScreen}
+              backLabel={back}
+            />
+          </View>
+        ) : null}
+        {stackOpen("family") ? (
+          <View {...pane("family")}>
+            <FamilyCardScreen onBack={popScreen} backLabel={back} />
+          </View>
+        ) : null}
+        {stackOpen("keys") ? (
+          <View {...pane("keys")}>
+            <ScrollView contentContainerStyle={styles.scroll}>
+              <ScreenHeader title="Chat keys" lead="The keys that keep People chats private." onBack={popScreen} backLabel={back} />
+              <PeerSecurity />
+            </ScrollView>
+          </View>
+        ) : null}
+        {stackOpen("library") ? (
+          <View {...pane("library")}>
+            <BooksPane title="Library" lead="What Yehsa reads from on this phone." onBack={popScreen} backLabel={back}>
+              <Prose>{`${books.passages.length} field passages from ${(books.sources || []).length || "several"} packaged sources.`}</Prose>
+              <Quiet>{`Dictionary: ${phoneCorpusMeta.headwords} headwords and ${phoneCorpusMeta.medicalNames} medical names.`}</Quiet>
+              <Quiet>Spiritual texts open only when you ask a spiritual question in Ask. They are kept separate from field notes.</Quiet>
+            </BooksPane>
+          </View>
+        ) : null}
+        {stackOpen("trust") ? (
+          <View {...pane("trust")}>
+            <TrustScreen onBack={popScreen} backLabel={back} />
+          </View>
+        ) : null}
+        {stackOpen("satsos") ? (
+          <View {...pane("satsos")}>
+            <SatSosGuide onBack={popScreen} backLabel={back} />
+          </View>
+        ) : null}
+        {stackOpen("hotspot") ? (
+          <View {...pane("hotspot")}>
+            <HotspotGuide onBack={popScreen} backLabel={back} />
+          </View>
+        ) : null}
+        {stackOpen("about") ? (
+          <View {...pane("about")}>
+            <ScrollView contentContainerStyle={styles.scroll}>
+              <ScreenHeader title="About" lead="What stays on this phone." onBack={popScreen} backLabel={back} />
+              <View style={styles.trust} accessibilityLabel="Trust">
+                <Text style={styles.trustKicker}>TRUST</Text>
+                <Text style={styles.trustBadge}>{TRUST_EVAL.badge}</Text>
+                <Text style={styles.trustTitle}>A pledge, not a login</Text>
+                {TRUST_LINES.map((line) => <Text key={line} style={styles.trustLine}>{`•  ${line}`}</Text>)}
+                <Quiet>{TRUST_EVAL.summary}</Quiet>
+              </View>
+              <Quiet>Yehsa answers from the notes on this phone. A model, a map pack, and GPS each stay off until you ask. A picture is not a safe identification. Nothing is shared unless you use a separate share action. Packaged dictionary: {phoneCorpusMeta.headwords} headwords and {phoneCorpusMeta.medicalNames} medical names. {phoneCorpusMeta.honest} This install is bound to this device. Exterior access is denied.</Quiet>
+              <DeveloperRow />
+            </ScrollView>
+          </View>
+        ) : null}
+        <View {...pane("models")}>
+          <ModelsPane
+            onBack={popScreen}
+            backLabel={back}
+            settings={models}
+            onChange={storeModels}
+            testNote={modelTestNote}
+            onSaveKey={async (id, key) => {
+              const saved = await saveModelKey(id, key);
+              if (saved.ok) {
+                storeModels({
+                  ...models,
+                  providers: models.providers.map((item) => item.id === id ? { ...item, keySaved: true } : item)
+                });
+              }
+              return saved;
+            }}
+            onDeleteProvider={async (id) => {
+              await deleteModelKey(id);
+              storeModels({
+                ...models,
+                selectedId: models.selectedId === id ? null : models.selectedId,
+                providers: models.providers.filter((item) => item.id !== id)
+              });
+            }}
+            onTest={async (provider) => {
+              const outbound = buildOutbound({ question: "Reply with the word ready." });
+              const apiKey = provider.needsKey === false ? "" : await readModelKey(provider.id);
+              const result = await sendToModel({
+                provider,
+                apiKey,
+                outbound,
+                approved: true,
+                fetchImpl: globalThis.fetch
+              });
+              setModelTestNote(result.ok
+                ? `${provider.name} answered the test, so the connection works.`
+                : result.reason);
+            }}
+          />
+        </View>
+        <View {...pane("learned")}>
+          <LearnedPane
+            onBack={popScreen}
+            backLabel={back}
+            onOpenDid={() => openScreen("did")}
+            store={learned}
+            deviceId={owner?.installId || null}
+            onChange={storeLearned}
+            onShare={(note) => {
+              const queued = queueServiceText(mesh, learnedShareText(note));
+              setMesh(queued.session);
+              return queued.ok
+                ? "Held on this phone for the mesh. It was not uploaded, and position was not included."
+                : (queued.reason || "The note was not queued.");
+            }}
+          />
+        </View>
+        {onboarding ? <Onboarding onDone={finishOnboarding} /> : null}
       </View>
+      {chipVisible && !onboarding ? (
+        <AskChip summary={askSummary} onPress={() => (askSummary?.pending ? setTab("ask") : go({ type: "openCommand" }))} />
+      ) : null}
       <View style={styles.tabs} accessibilityRole="tablist">
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="SOS emergency"
+          accessibilityHint="Opens the emergency screen. Nothing is called or sent until you confirm."
+          onPress={() => go({ type: "openSos" })}
+          style={({ pressed }) => [styles.sos, webPointer, pressed && styles.sosPressed]}
+        >
+          <View style={styles.sosCap} />
+          <Text style={styles.sosText}>SOS</Text>
+        </Pressable>
         {TABS.map((item) => {
           const selected = tab === item.id;
           return (
@@ -174,21 +638,50 @@ export default function YehsaApp() {
               style={[styles.tab, webPointer, selected && styles.tabOn]}
             >
               <View style={[styles.tabMark, selected && styles.tabMarkOn]} />
+              <Ionicons name={selected ? item.icon : `${item.icon}-outline`} size={22} color={selected ? colors.brassText : colors.muted} />
               <Text style={[styles.tabText, selected && styles.tabTextOn]}>{item.label}</Text>
             </Pressable>
           );
         })}
       </View>
       </View>
+      {nav.command && !nav.sos ? (
+        <CommandSheet onGo={goDestination} onAsk={askFromAnywhere} onClose={() => go({ type: "closeCommand" })} />
+      ) : null}
+      {nav.sos ? (
+        <EmergencyScreen
+          position={position}
+          onClose={() => go({ type: "closeSos" })}
+          onSendMeshSos={sendMeshSos}
+          onFirstAid={() => {
+            go({ type: "closeSos" });
+            setTab("ask");
+            setPendingAsk({ id: Date.now(), text: "How do I stop heavy bleeding?" });
+          }}
+        />
+      ) : null}
     </View>
+    </ShellContext.Provider>
+    </DisplayContext.Provider>
+    </BackLayers.Provider>
   );
 }
 
-function AskPane({ session, owner, active }) {
+function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
-  const [answer, setAnswer] = useState(null);
-  const [cue, setCue] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [gate, setGate] = useState({ settings: { waypoint: true, measure: true, "position-hold": true, "position-unlock": true, "mesh-scan": true, calculate: true, speak: true, "field-note": true }, log: [], pending: null });
+  const [notes, setNotes] = useState([]);
+  const priorRef = useRef(null);
+  const threadMem = useRef(newThread());
+  const [correction, setCorrection] = useState(null);
+  const [credits, setCredits] = useState(null);
+  const gateRef = useRef(gate);
+  function rememberGate(next) {
+    gateRef.current = next;
+    setGate(next);
+  }
   const [notice, setNotice] = useState(null);
   const [voicePlan, setVoicePlan] = useState(null);
   const [gesture, setGesture] = useState({ phase: "idle", pressedAt: null, action: "none" });
@@ -204,6 +697,7 @@ function AskPane({ session, owner, active }) {
   const pointerUsed = useRef(false);
   const liveRef = useRef(true);
   const askGen = useRef(0);
+  const threadRef = useRef(null);
   const activeRef = useRef(active);
   phaseRef.current = phase;
   activeRef.current = active;
@@ -244,74 +738,446 @@ function AskPane({ session, owner, active }) {
   }, []);
 
   useEffect(() => {
+    if (!mapTap) return undefined;
+    const proposed = proposeAction(gateRef.current, {
+      type: "waypoint",
+      id: `act-${Date.now()}`,
+      label: `Save waypoint at ${mapTap.latitude.toFixed(4)}, ${mapTap.longitude.toFixed(4)}`,
+      payload: { name: "point", point: mapTap }
+    });
+    rememberGate(proposed.gate);
+    if (proposed.card) {
+      pushMessage({ role: "yehsa", text: "Want to save that spot as a waypoint? Tap Approve. Location needs to be on in More.", card: proposed.card });
+    }
+    return undefined;
+  }, [mapTap]);
+
+  useEffect(() => {
+    // Emergency first-aid and "Ask or go" hand a question to this thread.
+    if (!pendingAsk?.text) return undefined;
+    setVoiceNote(null);
+    runAsk(pendingAsk.text);
+    return undefined;
+  }, [pendingAsk?.id]);
+
+  useEffect(() => {
     if (active) return undefined;
     abortRef.current();
     stopProse();
     return undefined;
   }, [active]);
 
+  function pushMessage(message) {
+    setMessages((current) => [...current, { id: `m-${Date.now()}-${current.length}`, ...message }]);
+    setTimeout(() => threadRef.current?.scrollToEnd?.({ animated: false }), 50);
+  }
+
+  function applyCard(card) {
+    if (card.type === "waypoint") {
+      if (position?.consent !== true) {
+        return { ok: false, text: "Consent is still off, so I did not save a waypoint.", undo: null };
+      }
+      const point = card.payload.point;
+      const pointText = point ? `${point.latitude}, ${point.longitude}` : "";
+      const saved = saveSessionWaypoint(waypoints, {
+        consent: true,
+        name: card.payload.name || "point",
+        pointText,
+        altitudeText: ""
+      });
+      if (saved.ok) setWaypoints(saved.list);
+      return { ok: saved.ok === true, text: saved.text, undo: saved.ok ? { type: "waypoint", name: card.payload.name || "point" } : null };
+    }
+    if (card.type === "position-unlock") {
+      setPosition(unlockPosition(position));
+      return { ok: true, text: "Unlocked. Consent stays on until you turn it off.", undo: null };
+    }
+    if (card.type === "position-hold") {
+      if (position?.consent !== true) {
+        return { ok: false, text: "Consent is still off. Approve does not turn that on.", undo: null };
+      }
+      return { ok: false, text: "There is no new satellite reading on this card. Use Try satellite lock in More, Location.", undo: null };
+    }
+    if (card.type === "mesh-scan") {
+      scanWithPlatform().then((report) => {
+        setMesh((current) => applyScan(current, report));
+      }).catch(() => {});
+      return { ok: true, text: "Scan started. A peer is shown only if the radio hears one. Nothing is invented.", undo: null };
+    }
+    if (card.type === "speak") {
+      const last = [...messages].reverse().find((item) => item.role === "yehsa" && item.text);
+      if (!last) return { ok: false, text: "There is no answer to speak yet.", undo: null };
+      speakProse(last.text, {});
+      return { ok: true, text: "Speaking the last answer on this phone.", undo: null };
+    }
+    if (card.type === "field-note") {
+      const note = { id: `note-${Date.now()}`, text: card.payload.text };
+      setNotes((current) => [...current, note]);
+      setLearned(approveLearned(learned, proposeLearned({
+        id: note.id,
+        title: "Field note",
+        text: note.text,
+        source: "your field log",
+        question: note.text,
+        tags: ["field"]
+      })));
+      return { ok: true, text: "Saved on this phone only. It was not sent. It can be retrieved later as a learned note.", undo: { type: "field-note", id: note.id } };
+    }
+    if (card.type === "measure") {
+      const from = card.payload.from;
+      const to = card.payload.to;
+      if (!from || !to) {
+        return { ok: false, text: "I still need two places before I can measure.", undo: null };
+      }
+      const report = courseText(`${from.latitude}, ${from.longitude}`, `${to.latitude}, ${to.longitude}`);
+      return { ok: report.ok === true, text: report.text, undo: null };
+    }
+    if (card.type === "calculate") {
+      return { ok: true, text: card.payload.text || "I had no calculation to keep.", undo: null };
+    }
+    if (card.type === "ask-model") {
+      const provider = (models?.providers || []).find((item) => item.id === card.payload.providerId) || selectedProvider(models);
+      const apiKeyPromise = provider?.needsKey === false ? Promise.resolve("") : readModelKey(provider?.id);
+      apiKeyPromise.then((apiKey) => sendToModel({
+        provider,
+        apiKey,
+        outbound: card.payload.outbound,
+        approved: true,
+        fetchImpl: globalThis.fetch
+      })).then((result) => {
+        if (!/Nothing was sent/.test(result.reason || "")) setLearned(recordModelAsk(learned));
+        if (!result.ok) {
+          pushMessage({ role: "yehsa", text: result.reason || "Nothing was sent." });
+          return;
+        }
+        const labeled = labelModelAnswer({
+          providerName: provider?.name,
+          text: result.text,
+          offlineNote: card.payload.offlineNote || null
+        });
+        const entryId = `model-note-${Date.now()}`;
+        const proposed = proposeAction(gateRef.current, {
+          type: "save-model-note",
+          id: `act-${Date.now()}`,
+          label: `Save this as unverified from ${provider?.name || "the model"}`,
+          payload: { id: entryId, question: card.payload.question, text: result.text, providerName: provider?.name }
+        });
+        rememberGate(proposed.gate);
+        pushMessage({
+          role: "yehsa",
+          text: `${labeled.text} This came from ${provider?.name || "the model"}, not from Yehsa's notes. Save it if you want to keep it on this phone.`,
+          card: proposed.card
+        });
+      }).catch(() => {
+        pushMessage({ role: "yehsa", text: "No network, or the endpoint could not be reached. Nothing else was sent." });
+      });
+      return { ok: true, text: "Sending only the text shown on the card.", undo: null };
+    }
+    if (card.type === "map-query") {
+      const from = position?.consent === true && position.status === "locked" ? position.fix : null;
+      const answer = card.payload?.kind === "elevation" ? elevationNear(mapPacks, from) : nearestWater(mapPacks, from);
+      return { ok: true, text: answer.text, undo: null };
+    }
+    if (card.type === "save-learned") {
+      setLearned(approveLearned(learned, card.payload));
+      return { ok: true, text: "Saved your correction on this phone. You can keep, edit, or forget it in What Yehsa has learned.", undo: { type: "learned", id: card.payload?.note?.id } };
+    }
+    if (card.type === "save-model-note") {
+      const entryId = card.payload.id;
+      setModels({
+        ...models,
+        unverified: rememberModelEntry(models?.unverified, { ...card.payload, id: entryId })
+      });
+      setLearned(approveLearned(learned, proposeLearned({
+        id: entryId,
+        title: String(card.payload.question || "Model answer").slice(0, 80),
+        text: card.payload.text,
+        source: card.payload.providerName || "a connected model",
+        question: card.payload.question,
+        tags: ["model"]
+      })));
+      return { ok: true, text: "Saved on this phone. It's marked as coming from the model, so it stays separate from Yehsa's own notes.", undo: { type: "model-note", id: entryId } };
+    }
+    return { ok: false, text: "That action is not available.", undo: null };
+  }
+
+  function onApprove(id) {
+    const decision = approveAction(gateRef.current, id, applyCard);
+    rememberGate(decision.gate);
+    const undoId = decision.result?.undo ? id : null;
+    pushMessage({ role: "yehsa", text: decision.result?.text || "Nothing ran.", undoId });
+  }
+
+  function onDecline(id) {
+    const decision = declineAction(gateRef.current, id);
+    rememberGate(decision.gate);
+    pushMessage({ role: "yehsa", text: "All right. I left that alone." });
+  }
+
+  function onUndo(id) {
+    const decision = undoApproved(gateRef.current, id);
+    rememberGate(decision.gate);
+    if (decision.undo?.type === "waypoint") {
+      setWaypoints((current) => current.filter((item) => item.name !== decision.undo.name));
+    }
+    if (decision.undo?.type === "field-note") {
+      setNotes((current) => current.filter((item) => item.id !== decision.undo.id));
+    }
+    if (decision.undo?.type === "model-note") {
+      setModels({ ...models, unverified: deleteModelEntry(models?.unverified, decision.undo.id) });
+    }
+    pushMessage({ role: "yehsa", text: decision.undo ? "Undone on this phone." : "That one cannot be undone." });
+  }
+
   function runAsk(raw, { speak } = {}) {
-    const text = String(raw ?? "").trim();
-    if (!text) {
+    const typed = String(raw ?? "").trim();
+    if (!typed) {
       setPhase("empty");
-      setAnswer(null);
-      setCue(null);
-      setNotice("Type a question first.");
+      setNotice("Type a message first.");
       return;
     }
+    if (/\b(nearest water|show water|where is water)\b/i.test(typed) || /\belevation here\b/i.test(typed)) {
+      const kind = /\belevation\b/i.test(typed) ? "elevation" : "water";
+      pushMessage({ role: "you", text: typed });
+      const proposed = proposeAction(gateRef.current, {
+        type: "map-query",
+        id: `act-${Date.now()}`,
+        label: kind === "water"
+          ? "Look for water in the map packs on this phone. Nothing is downloaded."
+          : "Read elevation from the map packs on this phone. No elevation service is called.",
+        payload: { kind }
+      });
+      rememberGate(proposed.gate);
+      setPhase("ready");
+      pushMessage({
+        role: "yehsa",
+        text: proposed.card
+          ? "I will only use a pack that is already on this phone. Nothing is downloaded until you approve a pack, and I will not invent a place."
+          : "That map question is switched off.",
+        card: proposed.card
+      });
+      return;
+    }
+    if (correction) {
+      const proposal = proposeLearned({
+        title: String(correction.question || "Correction").slice(0, 80),
+        text: typed,
+        source: "your correction",
+        question: correction.question || typed
+      });
+      setCorrection(null);
+      pushMessage({ role: "you", text: typed });
+      const proposed = proposeAction(gateRef.current, {
+        type: "save-learned",
+        id: `act-${Date.now()}`,
+        label: "Save your correction on this phone",
+        payload: proposal
+      });
+      rememberGate(proposed.gate);
+      setPhase("ready");
+      pushMessage({
+        role: "yehsa",
+        text: proposed.card
+          ? "Got it. Tap Approve to save your correction on this phone."
+          : "Saving a correction is switched off, so I did not keep it.",
+        card: proposed.card
+      });
+      return;
+    }
+    // A hello, a thanks, or a yes to my last offer. Anything else goes to the notes.
+    const social = socialTurn(typed, threadMem.current);
+    if (social && social.kind !== "ask") {
+      stopProse();
+      setQuestion("");
+      setNotice(null);
+      pushMessage({ role: "you", text: typed });
+      if (social.kind === "go") onGo?.(social.go);
+      threadMem.current = { ...threadMem.current, turns: threadMem.current.turns + 1, offer: null };
+      setPhase("ready");
+      pushMessage({ role: "yehsa", text: social.text });
+      return;
+    }
+    const effective = social?.kind === "ask" ? social.ask : typed;
+    const text = continueUtterance(effective, priorRef.current);
+    const held = position?.consent === true && position.status === "locked" ? position.fix : null;
+    const origin = held || { latitude: 0, longitude: 0 };
+    let here = mapTap || null;
+    let hereLabel = mapTap ? "the last place you tapped" : "";
+    if (!here && held) {
+      here = held;
+      hereLabel = "the place you are holding";
+    }
+    if (!here && screen === "map") {
+      here = origin;
+      hereLabel = "the center of this blank canvas, not a city";
+    }
+    const intent = readAssistant(effective, { here, hereLabel, held, waypoints });
     stopProse();
-    setQuestion(text);
-    setPhase("loading");
+    setQuestion("");
     setNotice(null);
+    pushMessage({ role: "you", text: typed });
+    if (intent.kind !== "talk" && intent.type !== "ask-model") {
+      let card = null;
+      if (intent.kind === "action") {
+        const proposed = proposeAction(gateRef.current, {
+          type: intent.type,
+          label: intent.label,
+          payload: intent.payload,
+          id: `act-${Date.now()}`
+        });
+        rememberGate(proposed.gate);
+        card = proposed.card;
+      }
+      const reply = intent.kind === "clarify"
+        ? `${intent.understood} ${intent.question}`
+        : intent.kind === "cannot"
+          ? `${intent.understood} ${intent.reply}`
+          : card
+            ? `${intent.understood} Nothing runs until you tap Approve.`
+            : `${intent.understood} That action is switched off, so I did not propose it.`;
+      priorRef.current = { utterance: typed };
+      setPhase("ready");
+      pushMessage({ role: "yehsa", text: reply, card });
+      return;
+    }
+    setPhase("loading");
     const generation = ++askGen.current;
     setTimeout(() => {
       if (askGen.current !== generation) return;
+      const answerOne = async (text) => {
+        if (isCapabilityQuestion(text)) {
+          return { answered: true, text: capabilitySummary(phoneCorpusMeta), kind: "about", symbol: "capabilities" };
+        }
+        const spiritual = routesToSpiritual(text, parseQuestion(expandParaphrase(text)));
+        let spiritualIndex = spiritual ? await loadScriptureIndex() : null;
+        const lexical = askField(text, books.passages, { session, spiritualIndex, learned });
+        // Offline meaning matcher: loads on the first question, then checks or fills the lexical note.
+        let meaning = null;
+        try {
+          meaning = await prepareMeaning(text, {
+            replies: [
+              lexical?.text,
+              spiritualIndex ? quoteSpiritual(text, spiritualIndex.passages || spiritualIndex)?.hits?.[0]?.text : null
+            ].filter(Boolean),
+            spiritual,
+            loadScripturePassages: loadScriptureIndex
+          });
+        } catch {
+          meaning = null;
+        }
+        if (!meaning) return lexical;
+        if (meaning.scripture && !spiritualIndex) spiritualIndex = await loadScriptureIndex();
+        return askField(text, books.passages, { session, spiritualIndex, learned, meaning });
+      };
+      // Two jobs in one question ("a shelter and planning a trip") get both answered.
       const run = async () => {
-        const spiritualIndex = routesToSpiritual(text, parseQuestion(expandParaphrase(text)))
-          ? await loadScriptureIndex()
-          : null;
-        return askField(text, books.passages, { session, spiritualIndex });
+        const parts = splitCompound(text);
+        if (parts) {
+          const answers = [];
+          for (const part of parts) answers.push({ part, result: part.domain === "trip" ? null : await answerOne(part.text) });
+          return mergeCompound(parts, answers, threadMem.current);
+        }
+        if (domainOf(text) === "trip") return tripResult();
+        return answerOne(text);
       };
       run().then((result) => {
-      if (askGen.current !== generation) return;
-      try {
-        if (result.empty) {
-          setPhase("empty");
-          setAnswer(null);
-          setCue(null);
-          setNotice("Type a question first.");
+        if (askGen.current !== generation) return;
+        const provider = selectedProvider(models);
+        const askedModel = intent.type === "ask-model";
+        const questionForModel = askedModel ? intent.payload.question : text;
+        const standing = result?.answered && /contradicts that premise|last resort|do not rub|not drinking water/i.test(result.text || "")
+          ? result.text
+          : null;
+        const wantsModel = askedModel || (!result?.answered && provider);
+        if (wantsModel && provider) {
+          const outbound = buildOutbound({
+            question: questionForModel,
+            include: models?.include,
+            position: held,
+            deviceId: ownerId,
+            contacts: [],
+            notes: models?.unverified
+          });
+          let offer = !result?.answered && !askedModel
+            ? missModelOffer(provider, outbound)
+            : previewModelSend(provider, outbound);
+          if (models?.include?.contacts === true) {
+            offer = `${offer} Contacts were ticked, but this phone has no contact list, so none are sent.`;
+          }
+          if (standing) {
+            offer = `${standing} The offline note stands. The model will not replace it. ${offer}`;
+          } else if (result?.answered) {
+            offer = `${result.text} ${offer}`;
+          }
+          const proposed = proposeAction(gateRef.current, {
+            type: "ask-model",
+            id: `act-${Date.now()}`,
+            label: offer,
+            payload: { question: questionForModel, outbound, providerId: provider.id, offlineNote: standing }
+          });
+          rememberGate(proposed.gate);
+          priorRef.current = { utterance: text };
+          setPhase("ready");
+          pushMessage({
+            role: "yehsa",
+            text: proposed.card ? offer : "That action is switched off, so I did not send anything.",
+            feedbackEligible: false,
+            chips: sourceChips(result),
+            source: result?.source || null,
+            pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
+              id: image.id,
+              href: imageHref(image.file),
+              attribution: creditLine(image),
+              warning: image.warning
+            })),
+            card: proposed.card,
+            question: text,
+            symbol: result?.symbol || null,
+            learnedId: result?.learnedId || null
+          });
           return;
         }
-        if (!result.answered) {
-          setPhase("miss");
-          setAnswer(null);
-          setCue(null);
-          setNotice(result.miss || "No offline note answered that.");
+        if (askedModel && !provider) {
+          const reply = result?.text || "No model is connected, so nothing was sent. Add one under Me, Models. It stays off until you turn it on.";
+          priorRef.current = { utterance: text };
+          setPhase(result?.answered ? "ready" : "miss");
+          pushMessage({ role: "yehsa", text: result?.text ? `${reply} No model is connected, so nothing was sent.` : reply, feedbackEligible: isFeedbackEligible(result), chips: sourceChips(result), source: result?.source || null, question: text, symbol: result?.symbol || null, learnedId: result?.learnedId || null });
           return;
         }
-        setPhase("ready");
-        setAnswer(result.text);
-        setCue(result.cue);
-        setNotice(null);
-        if (speak) {
-          setVoiceNote("Speaking the answer.");
-          speakProse(result.text, {
-            onDone: () => setVoiceNote((current) => (current === "Speaking the answer." ? null : current)),
-            onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
+        if (result?.kind === "learned") setLearned(recordLearnedAnswer(learned));
+        priorRef.current = { utterance: text };
+        const voiced = voiceReply(result, text, threadMem.current);
+        threadMem.current = voiced.thread;
+        setPhase(result?.answered ? "ready" : "miss");
+        pushMessage({
+          role: "yehsa",
+          text: voiced.text,
+          parts: result?.kind === "about" || result?.kind === "calculator" ? null : voiced.parts,
+          suggestions: voiced.suggestions,
+          // Yes / Not quite shows only under a real answer to the user's own question.
+          feedbackEligible: isFeedbackEligible(result),
+          chips: sourceChips(result),
+          source: result?.source || null,
+          pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
+            id: image.id,
+            href: imageHref(image.file),
+            attribution: creditLine(image),
+            warning: image.warning
+          })),
+          question: text,
+          symbol: result?.symbol || null,
+          learnedId: result?.learnedId || null
+        });
+        if (speak && result?.text) {
+          speakProse(voiced.spoken || result.text, {
+            onDone: () => setVoiceNote(null),
+            onError: () => setVoiceNote("Reading aloud isn't available here. The answer stays on screen.")
           });
         }
-      } catch (err) {
-        setPhase("error");
-        setAnswer(null);
-        setCue(null);
-        setNotice(err?.message || "That question could not be read offline.");
-      }
       }).catch((err) => {
         if (askGen.current !== generation) return;
         setPhase("error");
-        setAnswer(null);
-        setCue(null);
-        setNotice(err?.message || "That question could not be read offline.");
+        pushMessage({ role: "yehsa", text: err?.message || "That question could not be read offline." });
       });
     }, 40);
   }
@@ -453,79 +1319,248 @@ function AskPane({ session, owner, active }) {
   });
   const listening = gesture.phase === "arming" || gesture.phase === "listening" || gesture.phase === "locked";
 
+  function patchMessage(id, patch) {
+    setMessages((current) => current.map((item) => item.id === id ? { ...item, ...patch } : item));
+  }
+
+  // Yes: saved quietly as a learned note, thanked in place. No new bubble.
+  function onHelpful(item) {
+    let next = item.learnedId ? markHelpful(learned, item.learnedId) : saveHelpfulAnswer(learned, {
+      question: item.question,
+      text: item.text,
+      title: item.title,
+      symbol: item.symbol
+    });
+    const pair = phraseFromFeedback(item.question, item.symbol);
+    if (pair) next = rememberPhrase(next, pair.from, pair.to);
+    setLearned(next);
+    patchMessage(item.id, { feedback: "thanks" });
+  }
+
+  // Not quite: opens the reason box under that answer. Nothing posts to the thread.
+  function onNotRight(item) {
+    patchMessage(item.id, { feedback: "asking", reason: null, detail: "" });
+  }
+
+  function sendNotRight(item) {
+    let next = item.learnedId ? markNotRight(learned, item.learnedId) : learned;
+    next = recordFeedback(next, { question: item.question, symbol: item.symbol, verdict: "not-quite", reason: item.reason || null });
+    const detail = String(item.detail || "").trim();
+    if (detail) {
+      next = approveLearned(next, proposeLearned({
+        title: String(item.question || "Your correction").slice(0, 80),
+        text: detail,
+        source: "your correction",
+        question: item.question || ""
+      }));
+    }
+    setLearned(next);
+    patchMessage(item.id, { feedback: "thanks" });
+  }
+
+  useEffect(() => {
+    if (!onActions) return;
+    onActions({
+      settings: gate.settings,
+      log: gate.log,
+      toggle(type) {
+        rememberGate(setActionEnabled(gateRef.current, type, gateRef.current.settings?.[type] !== true));
+      },
+      undo(id) {
+        onUndo(id);
+      }
+    });
+  }, [gate, onActions]);
+
+  const latest = messages.length ? messages[messages.length - 1] : null;
+  const pendingCard = gate.pending ? true : false;
+  useEffect(() => {
+    // The compact Ask chip on other tabs shows only this summary. It never
+    // opens a second thread.
+    onSummary?.({ pending: pendingCard, busy: phase === "loading" });
+  }, [messages, pendingCard, phase]);
+
   return (
-    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader
-        title="Ask"
-        lead="A field companion for one phone. Notes, courses, and a position you choose to hold. Offline. No city map."
-      />
-      <Field
-        label="Question"
-        value={question}
-        onChangeText={setQuestion}
-        placeholder="How do I carry drinking water?"
-        multiline
-      />
-      <HoldTalk
-        label={micLabel}
-        hint="Hold to talk, or tap once to keep listening and tap again to ask. Yehsa fills the question and uses the same notes as typing."
-        onPressIn={onMicIn}
-        onPressOut={onMicOut}
-        onPress={onMicPress}
-        disabled={!canListen || phase === "loading"}
-        live={listening}
-      />
-      <Text style={styles.speech}>
-        {voicePlan ? `${voicePlan.notice} ${speakHint(voicePlan.speakRoute)}` : "Checking the microphone…"}
-      </Text>
-      {voiceNote ? <Text accessibilityLiveRegion="polite" style={styles.liveNote}>{voiceNote}</Text> : null}
-      <Action
-        label={phase === "loading" ? "Reading notes…" : "Ask"}
-        tone={canListen ? "quiet" : "brass"}
-        onPress={ask}
-        disabled={phase === "loading"}
-      />
-      {phase === "idle" ? (
-        <View style={styles.idle}>
-          <Quiet>
-            Ask in plain language, or hold the button and speak. Yehsa answers from the field notes and a packaged dictionary on this device. A feeling in the wording is a small cue beside the answer. The note still comes back when that feeling is unclear.
-          </Quiet>
+    <View style={styles.chatWrap}>
+      <ScreenHeader compact title="Ask" />
+      <ScrollView ref={threadRef} contentContainerStyle={styles.thread} keyboardShouldPersistTaps="handled">
+        {messages.length === 0 ? (
+          <View style={styles.bubbleYehsa}>
+            <Text style={styles.bubbleText}>I'm Yehsa. I work on this phone, offline. Ask me something, and I'll check with you before I change a thing.</Text>
+            <View style={styles.chips}>
+              {["I need shelter", "Stop heavy bleeding", "What's the weather trend?"].map((starter) => (
+                <Pressable key={starter} accessibilityRole="button" accessibilityLabel={starter} onPress={() => runAsk(starter)} style={styles.suggestChip}>
+                  <Text style={styles.suggestText}>{starter}</Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+        ) : null}
+        {messages.map((item) => (
+          <View key={item.id} style={item.role === "you" ? styles.bubbleYou : styles.bubbleYehsa}>
+            {item.role === "yehsa" && item.parts ? <AnswerBody parts={item.parts} /> : <Text style={styles.bubbleText}>{item.text}</Text>}
+            {item.role === "yehsa" && item.source ? (
+              <Text accessibilityRole="text" style={styles.sourceLine}>{`Source: ${item.source}`}</Text>
+            ) : null}
+            {item.pictures?.length ? (
+              <View style={styles.cardRow}>
+                {item.pictures.map((picture) => (
+                  <View key={picture.id}>
+                    {pictureSource(picture.href.split("/").pop()) ? <Image accessibilityLabel={friendlySource(picture.id)} source={pictureSource(picture.href.split("/").pop())} style={styles.thumb} /> : <Text style={styles.bubbleText}>Picture not included</Text>}
+                    <Pressable accessibilityRole="button" accessibilityLabel="Picture credits" onPress={() => setCredits(picture)} style={styles.info}>
+                      <Ionicons name="information-circle" size={18} color={colors.brass} />
+                    </Pressable>
+                  </View>
+                ))}
+              </View>
+            ) : null}
+            {item.chips?.length ? (
+              <View style={styles.chips}>
+                {item.chips.map((chip) => (
+                  <Text key={chip} style={styles.sourceChip}>{friendlySource(chip)}</Text>
+                ))}
+              </View>
+            ) : null}
+            {item.role === "yehsa" && item.suggestions?.length ? (
+              <View style={styles.chips}>
+                {item.suggestions.map((chip) => (
+                  <Pressable key={chip.label} accessibilityRole="button" accessibilityLabel={chip.label} onPress={() => (chip.go ? onGo?.(chip.go) : runAsk(chip.ask))} style={styles.suggestChip}>
+                    <Text style={styles.suggestText}>{chip.label}</Text>
+                  </Pressable>
+                ))}
+              </View>
+            ) : null}
+            {item.role === "yehsa" && item.feedbackEligible === true ? (
+              <FeedbackNote
+                item={item}
+                onYes={() => onHelpful(item)}
+                onNotQuite={() => onNotRight(item)}
+                onReason={(reason) => patchMessage(item.id, { reason: item.reason === reason ? null : reason })}
+                onDetail={(detail) => patchMessage(item.id, { detail })}
+                onSend={() => sendNotRight(item)}
+                onCancel={() => patchMessage(item.id, { feedback: null, reason: null, detail: "" })}
+              />
+            ) : null}
+            {item.card && gate.pending?.id === item.card.id ? (
+              <View style={styles.card}>
+                <Text style={styles.bubbleText}>{item.card.label}</Text>
+                <View style={styles.cardRow}>
+                  <Action label="Approve" onPress={() => onApprove(item.card.id)} />
+                  <Action label="Edit" tone="quiet" onPress={() => setQuestion(item.card.label)} />
+                  <Action label="Decline" tone="clay" onPress={() => onDecline(item.card.id)} />
+                </View>
+              </View>
+            ) : null}
+            {item.undoId ? (
+              <Pressable accessibilityRole="button" accessibilityLabel="Undo" onPress={() => onUndo(item.undoId)}>
+                <Text style={styles.undoLink}>Undo</Text>
+              </Pressable>
+            ) : null}
+          </View>
+        ))}
+        {phase === "loading" ? <Text style={styles.typing}>Looking through the notes…</Text> : null}
+        {notice ? <Quiet>{notice}</Quiet> : null}
+        {voiceNote ? <Quiet>{voiceNote}</Quiet> : null}
+      </ScrollView>
+      {notes.length ? <Quiet>{`${notes.length} note${notes.length === 1 ? "" : "s"} saved on this phone.`}</Quiet> : null}
+      <View style={styles.composer}>
+        <TextInput
+          accessibilityLabel="Message"
+          value={question}
+          onChangeText={setQuestion}
+          placeholder="Message Yehsa"
+          placeholderTextColor={colors.muted}
+          style={styles.composerInput}
+        />
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={canListen ? "Mic" : micLabel}
+          accessibilityHint="Hold to talk, or tap once to keep listening and tap again to ask."
+          onPressIn={onMicIn}
+          onPressOut={onMicOut}
+          onPress={onMicPress}
+          disabled={!canListen || phase === "loading"}
+          style={styles.iconButton}
+        >
+          <Ionicons name="mic" size={22} color={listening ? colors.clay : colors.brassInk} />
+        </Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel="Send" onPress={ask} disabled={phase === "loading"} style={styles.iconButton}>
+          <Ionicons name="send" size={20} color={colors.brassInk} />
+        </Pressable>
+        <Pressable accessibilityRole="button" accessibilityLabel="Hear the answer" onPress={() => {
+          const last = [...messages].reverse().find((item) => item.role === "yehsa" && item.text);
+          if (!last) return;
+          speakProse(last.text, {
+            onDone: () => setVoiceNote(null),
+            onError: () => setVoiceNote("Reading aloud isn't available here. The answer stays on screen.")
+          });
+        }} style={styles.iconButtonQuiet}>
+          <Ionicons name="volume-high" size={20} color={colors.ink} />
+        </Pressable>
+      </View>
+      {credits ? (
+        <View style={styles.credits}>
+          <Text style={styles.bubbleText}>{credits.attribution}</Text>
+          <Quiet>{credits.warning || "Picture credit. Source: Wikimedia Commons."}</Quiet>
+          <Action label="Close" tone="quiet" onPress={() => setCredits(null)} />
         </View>
       ) : null}
-      {phase === "loading" ? (
-        <View style={styles.idle}>
-          <Quiet>Reading field notes…</Quiet>
+    </View>
+  );
+}
+
+const FEEDBACK_REASONS = ["Didn't answer my question", "Too vague", "Something was wrong", "Missing a step"];
+
+function FeedbackNote({ item, onYes, onNotQuite, onReason, onDetail, onSend, onCancel }) {
+  if (item.feedback === "thanks") {
+    return <Text accessibilityLiveRegion="polite" style={styles.feedbackThanks}>Thanks. I saved that on this phone.</Text>;
+  }
+  if (item.feedback === "asking") {
+    return (
+      <View style={styles.feedbackBox}>
+        <Text style={styles.feedbackPrompt}>What was off? Optional.</Text>
+        <View style={styles.feedbackReasons}>
+          {FEEDBACK_REASONS.map((reason) => {
+            const on = item.reason === reason;
+            return (
+              <Pressable
+                key={reason}
+                accessibilityRole="button"
+                accessibilityState={{ selected: on }}
+                onPress={() => onReason(reason)}
+                style={[styles.reasonChip, on && styles.reasonChipOn]}
+              >
+                <Text style={[styles.reasonText, on && styles.reasonTextOn]}>{reason}</Text>
+              </Pressable>
+            );
+          })}
         </View>
-      ) : null}
-      {answer ? (
-        <View style={styles.answer}>
-          <Prose live>{answer}</Prose>
-          {cue ? <Text style={styles.cue}>{cue}</Text> : null}
-          {voicePlan?.speakRoute && voicePlan.speakRoute !== "none" ? (
-            <Action
-              label="Hear the answer"
-              tone="quiet"
-              style={styles.hear}
-              onPress={() => {
-                setVoiceNote("Speaking the answer.");
-                speakProse(answer, {
-                  onDone: () => setVoiceNote((current) => (current === "Speaking the answer." ? null : current)),
-                  onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
-                });
-              }}
-            />
-          ) : null}
+        <TextInput
+          accessibilityLabel="Anything else"
+          value={item.detail || ""}
+          onChangeText={onDetail}
+          placeholder="Anything else? (optional)"
+          placeholderTextColor={colors.muted}
+          multiline
+          style={styles.feedbackInput}
+        />
+        <View style={styles.cardRow}>
+          <Action label="Send" onPress={onSend} />
+          <Action label="Cancel" tone="quiet" onPress={onCancel} />
         </View>
-      ) : null}
-      {notice ? (
-        <View style={[styles.notice, phase === "error" && styles.noticeWarn]} accessibilityLiveRegion="polite">
-          {phase === "error" ? <Prose tone="warn">{notice}</Prose> : <Quiet>{notice}</Quiet>}
-        </View>
-      ) : null}
-      <Text style={styles.foot}>
-        {`Packaged dictionary: ${phoneCorpusMeta.headwords} headwords and ${phoneCorpusMeta.medicalNames} medical names. ${phoneCorpusMeta.honest} ${phoneCorpusMeta.fieldNoteHonest} ${phoneCorpusMeta.medicalHonest} Nothing you ask is saved as a profile. ${owner?.recognized ? `This install is bound to this device (${owner.source}). Exterior access is denied.` : (owner?.reason || "Binding this install to this device.")}`}
-      </Text>
-    </ScrollView>
+      </View>
+    );
+  }
+  return (
+    <View style={styles.feedbackRow}>
+      <Text style={styles.feedbackPrompt}>Was this useful?</Text>
+      <Pressable accessibilityRole="button" accessibilityLabel="Yes, this was useful" onPress={onYes} style={styles.feedbackLink}>
+        <Text style={styles.feedbackLinkText}>Yes</Text>
+      </Pressable>
+      <Pressable accessibilityRole="button" accessibilityLabel="Not quite" onPress={onNotQuite} style={styles.feedbackLink}>
+        <Text style={styles.feedbackLinkClay}>Not quite</Text>
+      </Pressable>
+    </View>
   );
 }
 
@@ -535,176 +1570,442 @@ function ResultText({ result }) {
   return <Prose live tone={result.tone === "warn" ? "warn" : undefined}>{result.text}</Prose>;
 }
 
-function LandPane({ position, waypoints, setWaypoints, track, setTrack }) {
-  const [section, setSection] = useState("course");
-  const [fromText, setFromText] = useState("");
-  const [toText, setToText] = useState("");
-  const [magnetic, setMagnetic] = useState("");
-  const [declination, setDeclination] = useState("");
-  const [name, setName] = useState("");
-  const [pointText, setPointText] = useState("");
-  const [altitude, setAltitude] = useState("");
-  const [gotoName, setGotoName] = useState("");
-  const [gotoFrom, setGotoFrom] = useState("");
-  const [trackPoint, setTrackPoint] = useState("");
-  const [trackAlt, setTrackAlt] = useState("");
-  const [trackTime, setTrackTime] = useState("");
-  const [sunPoint, setSunPoint] = useState("");
-  const [sunDate, setSunDate] = useState(todayUtc);
-  const [result, setResult] = useState({
-    text: "Type coordinates. There is no city search and no downloaded map.",
-    tone: "quiet"
-  });
-
-  function showReport(report) {
-    const empty = report.ok !== false && /^No track points yet/.test(report.text || "");
-    setResult({
-      text: report.text,
-      tone: report.ok === false ? "warn" : empty ? "quiet" : "ink"
-    });
+class MapBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
   }
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch() {
+    this.props.onFail?.();
+  }
+  render() {
+    if (this.state.failed) return null;
+    return this.props.children;
+  }
+}
 
-  function useLocked(setter) {
-    const filled = lockedFill(position);
-    if (!filled.ok) {
-      showReport(filled);
-      return;
+function LandPane({ active, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, display, onDisplay, onParty, onBefore, onOpenTool }) {
+  const [layersOpen, setLayersOpen] = useState(false);
+  const [hunt, setHunt] = useState(false);
+  useBackLayer(hunt, () => setHunt(false));
+  useBackLayer(layersOpen, () => setLayersOpen(false));
+  useEffect(() => {
+    if (huntRequest) setHunt(true);
+  }, [huntRequest]);
+  useEffect(() => {
+    if (layersRequest) setLayersOpen(true);
+  }, [layersRequest]);
+  const [declination, setDeclination] = useState("0");
+  const [importNote, setImportNote] = useState("");
+  const [mapFailed, setMapFailed] = useState(false);
+  const [tilePort, setTilePort] = useState(null);
+  const [elevNote, setElevNote] = useState("");
+  const [mapStyle, setMapStyle] = useState("standard");
+  const [focus, setFocus] = useState(null);
+  const [focusKey, setFocusKey] = useState(0);
+  const [host, setHost] = useState(initialHost);
+  const camera = useRef(null);
+  const areaState = useAreas();
+  const downloads = usePackDownloads({ store: mapPacks, setStore: setMapPacks });
+  const [gps, setGps] = useState(initialGpsMap);
+  const [gpsWanted, setGpsWanted] = useState(false);
+  const [backgroundGps, setBackgroundGps] = useState(false);
+  const consented = position?.consent === true;
+  const origin = gps.follow && gps.fix
+    ? gps.fix
+    : (gps.fix || (consented && position.status === "locked" && position.fix ? position.fix : { latitude: 0, longitude: 0 }));
+  const held = gps.fix || (consented && position.status === "locked" ? position.fix : null);
+  const crumbs = gps.track.length ? gps.track : track;
+  // The native map view is built only while this screen shows, and fresh each time it shows again.
+  useEffect(() => {
+    setHost((current) => nextHost(current, Boolean(active)));
+  }, [active]);
+  const layers = useMemo(() => mapLayers({
+    store: mapPacks,
+    areas: areaState.areas,
+    port: tilePort,
+    style: mapStyle,
+    mode: display?.mode || "field",
+    night: display?.night || "red"
+  }), [mapPacks, areaState.areas, tilePort, mapStyle, display?.mode, display?.night]);
+  const [metersHere, setMetersHere] = useState(null);
+  useEffect(() => {
+    let live = true;
+    if (!held || !areaState.areas.length) {
+      setMetersHere(null);
+      return undefined;
     }
-    setter(filled.text);
-    setResult({
-      text: "Filled from the position you chose to hold. It is not a city lookup.",
-      tone: "quiet"
+    elevationFromAreas(areaState.areas.filter((area) => area.rendered), held.longitude, held.latitude)
+      .then((meters) => live && setMetersHere(meters)).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [held?.latitude, held?.longitude, areaState.areas]);
+
+  useEffect(() => {
+    let live = true;
+    if (Platform.OS === "web") return undefined;
+    startTileServer().then((next) => {
+      if (live && next) setTilePort(next);
+    }).catch(() => {
+      if (live) setMapFailed(true);
     });
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  function showBox(box) {
+    if (!box) return;
+    setFocus(box);
+    setFocusKey((key) => key + 1);
+    setLayersOpen(false);
   }
+
+  useEffect(() => {
+    if (!consented || !gpsWanted) {
+      if (!consented) setGps(revokeGpsConsent());
+      return undefined;
+    }
+    let live = true;
+    let stop = () => {};
+    setGps((current) => grantGpsConsent(current.consent ? current : initialGpsMap()));
+    watchPlatformGps({
+      consent: true,
+      background: backgroundGps,
+      onUpdate(coords) {
+        if (!live) return;
+        setGps((current) => {
+          const base = current.consent ? current : grantGpsConsent(current);
+          const next = applyGpsSample(base, coords);
+          if (next.status === "locked") {
+            setPosition((place) => place.consent === true
+              ? applySatelliteReading(place, { route: "expo-location", fix: coords })
+              : place);
+          }
+          return next;
+        });
+      }
+    }).then((handle) => {
+      if (!live) {
+        handle.stop();
+        return;
+      }
+      stop = handle.stop;
+      if (!handle.started && handle.reason) setImportNote(handle.reason);
+    });
+    const timer = setInterval(() => setGps((current) => markSignalLost(current, Date.now())), 5000);
+    return () => {
+      live = false;
+      clearInterval(timer);
+      stop();
+    };
+  }, [consented, gpsWanted, backgroundGps, setPosition]);
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader
-        title="Landscape"
-        lead="Distance, bearing, waypoints, a track, and a rough sunrise. A sphere of 6371 km. No streets and no places of interest."
-      />
-      <View style={styles.chips}>
-        {LANDS.map((item) => {
-          const selected = section === item.id;
+    <View style={styles.mapPane}>
+      <ScreenHeader compact title={hunt ? "Hunt" : "Map"} />
+      <View style={styles.mapStatus}>
+        <StatusPill label={gpsStatusLabel(gps)} tone={gps.status === "locked" ? "good" : gps.status === "lost" ? "warn" : undefined} />
+        {!consented || !gpsWanted ? (
+          <Action label="Turn on GPS" style={styles.mapGps} onPress={() => { onConsent(true); setGpsWanted(true); }} accessibilityHint="GPS stays off until you turn it on. This also turns on location consent." />
+        ) : null}
+      </View>
+      {hunt ? <HuntHud position={position} onOpenTool={onOpenTool} /> : null}
+      <View style={styles.mapFill}>
+        {shouldMountMap(host, layers) && !mapFailed ? (
+          <MapBoundary onFail={() => setMapFailed(true)}>
+            <OfflineMap
+              key={mapViewKey(host)}
+              fill
+              layers={layers}
+              fix={held}
+              follow={gps.follow}
+              headingDeg={gps.headingDeg}
+              focus={focus}
+              focusKey={focusKey}
+              initialCamera={camera.current}
+              onCamera={(event) => { camera.current = rememberCamera(camera.current, event); }}
+              attribution={layers.attribution}
+              onFail={() => setMapFailed(true)}
+              onPress={(point) => {
+                if (onMapTap) onMapTap(point);
+                elevationFromAreas(areaState.areas.filter((area) => area.rendered), point.longitude, point.latitude)
+                  .then((meters) => setElevNote(meters == null ? "No elevation for that spot yet." : `About ${Math.round(meters)} m at that spot.`))
+                  .catch(() => {});
+              }}
+            />
+          </MapBoundary>
+        ) : layers.empty ? (
+          <View style={styles.emptyMap} accessibilityLabel="No map pack yet">
+            <Text accessibilityRole="header" style={styles.emptyTitle}>No map pack yet</Text>
+            <Text style={styles.emptyBody}>Download a region to see land, water, and terrain. The map stays quiet until a pack is on this phone.</Text>
+            <Action label="Layers and packs" onPress={() => setLayersOpen(true)} />
+          </View>
+        ) : (
+        <LandscapeMap
+          fill
+          origin={origin}
+          held={held}
+          waypoints={waypoints}
+          track={crumbs}
+          features={packShapes(mapPacks || emptyPackStore())}
+          declination={declination}
+          follow={gps.follow}
+          headingDeg={gps.headingDeg}
+          accuracyM={gps.accuracyM}
+          nav={gps.nav ? { ...gps.nav, name: gps.target?.name } : null}
+          navTarget={gps.target}
+          onRecenter={() => setGps((current) => recenterOnMe(current))}
+          onUserPan={() => setGps((current) => noteUserPan(current))}
+          onWaypoint={(point) => {
+            if (onMapTap) onMapTap(point);
+            setImportNote(`Point ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Open Ask and tap Approve to save it.`);
+          }}
+        />
+        )}
+      </View>
+      <View style={styles.mapTools}>
+        <Action label="Layers and packs" tone="quiet" style={styles.mapToolButton} onPress={() => setLayersOpen(true)} accessibilityHint="Map packs, elevation, declination, waypoints, and import." />
+        <Action label={hunt ? "Hunt on" : "Hunt"} tone={hunt ? "brass" : "quiet"} style={styles.mapToolSmall} onPress={() => setHunt((value) => !value)} accessibilityHint="Shows the hunt view on the map. Nothing is shared." />
+      </View>
+      {hunt ? (
+        <View style={styles.mapTools}>
+          <Action label="Party" tone="quiet" style={styles.mapToolButton} onPress={onParty} />
+          <Action label="Before you go" tone="quiet" style={styles.mapToolButton} onPress={onBefore} />
+        </View>
+      ) : null}
+      {layersOpen ? (
+        <View style={styles.sheet} accessibilityViewIsModal>
+          <View style={styles.sheetHead}>
+            <Text accessibilityRole="header" style={styles.sheetTitle}>Layers and packs</Text>
+            <Action label="Close" tone="quiet" style={styles.sheetClose} onPress={() => setLayersOpen(false)} />
+          </View>
+          <ScrollView contentContainerStyle={styles.sheetScroll} keyboardShouldPersistTaps="handled">
+            <Action label="Before you go" tone="quiet" onPress={() => { setLayersOpen(false); onBefore?.(); }} />
+            <Text style={styles.sectionLabel}>Download this area</Text>
+            <DownloadArea
+              center={held || null}
+              areas={areaState.areas}
+              listRef={areaState.listRef}
+              onCommit={areaState.commit}
+              drawing={areaState.drawing}
+              pending={areaState.pending}
+              onRemove={areaState.remove}
+              onUndo={areaState.undo}
+              onShow={showBox}
+            />
+            {consented && gpsWanted ? (
+              <Action label={backgroundGps ? "Background GPS on" : "Foreground GPS only"} tone="quiet" onPress={() => setBackgroundGps((value) => !value)} />
+            ) : null}
+            {waypoints.map((point) => (
+              <Action
+                key={point.name}
+                label={`Navigate to ${point.name}`}
+                tone="quiet"
+                onPress={() => setGps((current) => startNavigation(current, point))}
+              />
+            ))}
+            <Field label="Declination from your map, east positive" value={declination} onChangeText={setDeclination} placeholder="0" />
+            <Quiet>{metersHere == null ? elevationNear(mapPacks || emptyPackStore(), held).text : `About ${Math.round(metersHere)} m here.`}</Quiet>
+            {elevNote ? <Quiet>{elevNote}</Quiet> : null}
+            {importNote ? <Quiet>{importNote}</Quiet> : null}
+            <MapPacksSheet
+              store={mapPacks}
+              setStore={setMapPacks}
+              areas={areaState.areas}
+              downloads={downloads}
+              style={mapStyle}
+              onStyle={setMapStyle}
+              onShowPack={showBox}
+              onClose={() => setLayersOpen(false)}
+            />
+          </ScrollView>
+        </View>
+      ) : null}
+    </View>
+  );
+}
+
+function HudCard({ label, value, sub }) {
+  return (
+    <View style={styles.hudCard} accessibilityLabel={`${label}: ${value}. ${sub}`}>
+      <Text style={styles.hudLabel}>{label.toUpperCase()}</Text>
+      <Text style={styles.hudValue}>{value}</Text>
+      <Text style={styles.hudSub}>{sub}</Text>
+    </View>
+  );
+}
+
+// Maintenance checks stay out of the field screens. Off until someone turns it on here.
+function DeveloperRow() {
+  const [on, setOn] = useState(false);
+  return (
+    <View style={{ gap: 8, marginTop: 12 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", minHeight: 48 }}>
+        <Text style={styles.bubbleText} accessibilityRole="header">Developer</Text>
+        <Switch accessibilityLabel="Show developer checks" value={on} onValueChange={setOn} />
+      </View>
+      {on ? <CorpusHealth /> : <Quiet>Checks for the people who build Yehsa. Off by default.</Quiet>}
+    </View>
+  );
+}
+
+function DisplayPane({ display, onChange, onBack, backLabel }) {
+  return (
+    <ScrollView contentContainerStyle={styles.scroll}>
+      <ScreenHeader title="Display" lead="Saved on this phone. The chips at the top of each tab change it in one tap too." onBack={onBack} backLabel={backLabel} />
+      <Text style={styles.sectionLabel}>Mode</Text>
+      <ModeButtons display={display} onChange={onChange} />
+      <Text style={[styles.sectionLabel, { marginTop: 16 }]}>Night color</Text>
+      <View style={styles.modeRow}>
+        {NIGHT_TINTS.map((tint) => {
+          const on = display.night === tint.id;
           return (
             <Pressable
-              key={item.id}
-              accessibilityRole="button"
-              accessibilityState={{ selected }}
-              onPress={() => setSection(item.id)}
-              style={[styles.chip, webPointer, selected && styles.chipOn]}
+              key={tint.id}
+              accessibilityRole="radio"
+              accessibilityState={{ checked: on }}
+              accessibilityLabel={`Night ${tint.label}`}
+              onPress={() => onChange({ ...display, night: tint.id })}
+              style={[styles.modeButton, webPointer, on && styles.modeButtonOn]}
             >
-              <Text style={[styles.chipText, selected && styles.chipTextOn]}>{item.label}</Text>
+              <Ionicons name={on ? "radio-button-on" : "radio-button-off"} size={18} color={on ? colors.brassInk : colors.ink} />
+              <Text style={[styles.modeText, on && styles.modeTextOn]}>{tint.label}</Text>
             </Pressable>
           );
         })}
       </View>
-
-      {section === "course" ? (
-        <View>
-          <Field label="From (latitude, longitude)" value={fromText} onChangeText={setFromText} placeholder="0, 0" />
-          <Action label="Use locked position as From" tone="quiet" onPress={() => useLocked(setFromText)} />
-          <Field label="To (latitude, longitude)" value={toText} onChangeText={setToText} placeholder="0, 1" />
-          <Action
-            label="Distance and bearing"
-            onPress={() => showReport(courseText(fromText, toText))}
-          />
-          <View style={[styles.readout, result.tone === "warn" && styles.readoutWarn]}>
-            <ResultText result={result} />
-          </View>
-          <Field label="Magnetic bearing (degrees)" value={magnetic} onChangeText={setMagnetic} placeholder="90" />
-          <Field label="Declination from your map (east positive)" value={declination} onChangeText={setDeclination} placeholder="12" />
-          <Action
-            label="Apply declination"
-            tone="quiet"
-            onPress={() => showReport(declinationText(magnetic, declination))}
-          />
-        </View>
-      ) : null}
-
-      {section === "points" ? (
-        <View>
-          <Field label="Name" value={name} onChangeText={setName} placeholder="camp" />
-          <Field label="At (latitude, longitude)" value={pointText} onChangeText={setPointText} placeholder="45.1, -69.2" />
-          <Action label="Use locked position" tone="quiet" onPress={() => useLocked(setPointText)} />
-          <Field label="Altitude in meters (optional)" value={altitude} onChangeText={setAltitude} placeholder="" />
-          <Action
-            label="Save waypoint"
-            onPress={() => {
-              const saved = saveSessionWaypoint(waypoints, {
-                consent: position.consent,
-                name,
-                pointText,
-                altitudeText: altitude
-              });
-              setWaypoints(saved.list);
-              showReport(saved);
-            }}
-          />
-          <Field label="Go to name" value={gotoName} onChangeText={setGotoName} placeholder="camp" />
-          <Field label="Start from (latitude, longitude)" value={gotoFrom} onChangeText={setGotoFrom} placeholder="leave blank to use the lock" />
-          <Action label="Use locked position as start" tone="quiet" onPress={() => useLocked(setGotoFrom)} />
-          <Action
-            label="Go to waypoint"
-            onPress={() => showReport(gotoSessionWaypoint(waypoints, {
-              consent: position.consent,
-              name: gotoName,
-              fromText: gotoFrom,
-              locked: position.status === "locked" ? position.fix : null
-            }))}
-          />
-          <View style={styles.group}>
-            <Text style={styles.sectionLabel}>Waypoints on this screen</Text>
-            {waypoints.length === 0 ? (
-              <Quiet>None yet. Saving needs consent on the Position screen. Turning consent off clears this list.</Quiet>
-            ) : waypoints.map((item) => (
-              <Text key={item.name} style={styles.row}>
-                {item.name} — {item.latitude.toFixed(5)}, {item.longitude.toFixed(5)}
-                {item.altitude != null ? `, ${item.altitude} m` : ""}
-              </Text>
-            ))}
-          </View>
-        </View>
-      ) : null}
-
-      {section === "track" ? (
-        <View>
-          <Field label="Point (latitude, longitude)" value={trackPoint} onChangeText={setTrackPoint} placeholder="0, 0" />
-          <Action label="Use locked position" tone="quiet" onPress={() => useLocked(setTrackPoint)} />
-          <Field label="Altitude in meters (optional)" value={trackAlt} onChangeText={setTrackAlt} placeholder="" />
-          <Field label="Time (optional, ISO)" value={trackTime} onChangeText={setTrackTime} placeholder="2026-01-01T00:00:00Z" />
-          <Action
-            label="Add track point"
-            onPress={() => {
-              const added = addSessionTrack(track, {
-                consent: position.consent,
-                pointText: trackPoint,
-                altitudeText: trackAlt,
-                timeText: trackTime
-              });
-              setTrack(added.points);
-              showReport(added.ok ? trackText(added.points) : added);
-            }}
-          />
-          <Action label="Track summary" tone="quiet" onPress={() => showReport(trackText(track))} />
-        </View>
-      ) : null}
-
-      {section === "sun" ? (
-        <View>
-          <Field label="At (latitude, longitude)" value={sunPoint} onChangeText={setSunPoint} placeholder="45.1, -69.2" />
-          <Action label="Use locked position" tone="quiet" onPress={() => useLocked(setSunPoint)} />
-          <Field label="Date (YYYY-MM-DD)" value={sunDate} onChangeText={setSunDate} placeholder="2026-06-21" />
-          <Action label="Rough sunrise and sunset" onPress={() => showReport(sunText(sunPoint, sunDate))} />
-        </View>
-      ) : null}
-
-      {section !== "course" ? (
-        <View style={[styles.readout, result.tone === "warn" && styles.readoutWarn]}>
-          <ResultText result={result} />
-        </View>
-      ) : null}
+      <Quiet>Red keeps night vision best. Amber is easier to read for some color vision.</Quiet>
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: display.largeText }}
+        accessibilityLabel="Larger text"
+        onPress={() => onChange({ ...display, largeText: !display.largeText })}
+        style={[styles.switchRow, webPointer, { marginTop: 12 }]}
+      >
+        <Text style={styles.switchLabel}>Larger text</Text>
+        <Ionicons name={display.largeText ? "checkbox" : "square-outline"} size={24} color={colors.ink} />
+        <Text style={styles.switchState}>{display.largeText ? "On" : "Off"}</Text>
+      </Pressable>
     </ScrollView>
+  );
+}
+
+// Field, Sunlight, Night: each one tap. Word and icon, never color alone.
+function ModeButtons({ display, onChange, compact }) {
+  return (
+    <View style={styles.modeRow}>
+      {DISPLAY_MODES.map((mode) => {
+        const on = display.mode === mode.id;
+        return (
+          <Pressable
+            key={mode.id}
+            accessibilityRole="radio"
+            accessibilityState={{ checked: on }}
+            accessibilityLabel={`${mode.label} mode`}
+            onPress={() => onChange(setMode(display, mode.id))}
+            style={[styles.modeButton, compact && styles.modeButtonCompact, webPointer, on && styles.modeButtonOn]}
+          >
+            <Ionicons name={mode.icon} size={18} color={on ? colors.brassInk : colors.ink} />
+            <Text style={[styles.modeText, on && styles.modeTextOn]}>{mode.label}</Text>
+            {on ? <Ionicons name="checkmark" size={16} color={colors.brassInk} /> : null}
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
+function HelpersPane({ position, onConsent, models, onOpen, onBack, backLabel }) {
+  const consented = position?.consent === true;
+  const modelOn = Boolean(models?.selectedId);
+  const rows = [
+    { id: "location", label: "Location", state: consented ? "On" : "Off", toggle: () => onConsent(!consented) },
+    { id: "models", label: "Model", state: modelOn ? "On" : "Off", open: "models" },
+    { id: "radio", label: "Radio scan", state: "Off until you tap Scan", open: null },
+    { id: "voice", label: "Microphone", state: "Only while you hold Mic", open: null }
+  ];
+  return (
+    <ScrollView contentContainerStyle={styles.scroll}>
+      <ScreenHeader title="Helpers" lead="Each helper shows whether it is on, and how to turn it off." onBack={onBack} backLabel={backLabel} />
+      {rows.map((row) => (
+        <View key={row.id} style={styles.helperRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.switchLabel}>{row.label}</Text>
+            <Text style={styles.note}>{row.state}</Text>
+          </View>
+          {row.toggle ? (
+            <Action label={consented ? "Turn off" : "Turn on"} tone="quiet" style={styles.helperAction} onPress={row.toggle} />
+          ) : row.open ? (
+            <Action label="Open" tone="quiet" style={styles.helperAction} onPress={() => onOpen(row.open)} />
+          ) : null}
+        </View>
+      ))}
+    </ScrollView>
+  );
+}
+
+// A scannable answer: a short opener, a bold summary, numbered steps, folded detail, then one offer.
+function AnswerBody({ parts }) {
+  const [open, setOpen] = useState({});
+  return (
+    <View style={{ gap: 8 }}>
+      {parts.opener ? <Text style={styles.bubbleText}>{parts.opener}</Text> : null}
+      {parts.sections.map((section, index) => {
+        const shape = section.shape;
+        return (
+          <View key={index} style={{ gap: 6 }}>
+            {section.title ? <Text accessibilityRole="header" style={styles.answerTitle}>{section.title}</Text> : null}
+            {shape.summary ? <Text style={[styles.bubbleText, styles.answerSummary]}>{shape.summary}</Text> : null}
+            {shape.steps.map((step, number) => (
+              <View key={number} style={styles.stepRow}>
+                <Text style={[styles.bubbleText, styles.stepNum]}>{number + 1}.</Text>
+                <Text style={[styles.bubbleText, { flex: 1 }]}>{step}</Text>
+              </View>
+            ))}
+            {shape.notes.map((note, n) => <Text key={n} style={styles.bubbleText}>{note}</Text>)}
+            {shape.folded.map((fold) => {
+              const key = `${index}-${fold.label}`;
+              const on = open[key] === true;
+              return (
+                <View key={key}>
+                  <Pressable accessibilityRole="button" accessibilityState={{ expanded: on }} accessibilityLabel={fold.label} onPress={() => setOpen((current) => ({ ...current, [key]: !on }))} style={styles.foldRow}>
+                    <Text style={styles.foldText}>{fold.label}</Text>
+                    <Ionicons name={on ? "chevron-up" : "chevron-down"} size={18} color={colors.brassText} />
+                  </Pressable>
+                  {on ? <Text style={[styles.bubbleText, { marginTop: 4 }]}>{fold.text}</Text> : null}
+                </View>
+              );
+            })}
+          </View>
+        );
+      })}
+      {parts.offer ? <Text style={styles.bubbleText}>{parts.offer}</Text> : null}
+    </View>
+  );
+}
+
+function AskChip({ summary, onPress }) {
+  const line = summary?.pending
+    ? "An action is waiting for Approve in Ask"
+    : summary?.busy
+      ? "Looking through the notes…"
+      : "Ask or go";
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={summary?.pending ? "Open Ask. An action is waiting for Approve." : "Ask or go"}
+      onPress={onPress}
+      style={({ pressed }) => [styles.askChip, webPointer, summary?.pending && styles.askChipPending, pressed && styles.sosPressed]}
+    >
+      <Ionicons name={summary?.pending ? "alert-circle-outline" : "chatbubble-ellipses-outline"} size={18} color={colors.brass} />
+      <Text numberOfLines={1} style={styles.askChipText}>{line}</Text>
+      <Text style={styles.askChipGo}>{summary?.pending ? "Open" : "Go"}</Text>
+    </Pressable>
   );
 }
 
@@ -715,7 +2016,7 @@ function heldPhrase(source) {
   return "a fix";
 }
 
-function PositionPane({ position, setPosition, onConsent }) {
+function PositionPane({ position, setPosition, onConsent, onBack, backLabel }) {
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
   const [altitude, setAltitude] = useState("");
@@ -746,11 +2047,13 @@ function PositionPane({ position, setPosition, onConsent }) {
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
-        title="Position"
-        lead="Off until you consent. Yehsa does not lock a position by itself, and it does not share one unless you use the separate share action."
+        title="Location"
+        lead="Your place stays off until you turn it on."
+        onBack={onBack}
+        backLabel={backLabel}
       />
       <View style={styles.statusBlock}>
-        <StatusPill label={label} tone={tone} />
+        <StatusPill label={position.status === "degraded" ? "Couldn't get a fix" : position.status === "locked" ? "Holding a place" : consented ? "Ready when you ask" : "Place is off"} tone={tone} />
         <Text style={styles.note}>{position.note}</Text>
         {position.status === "locked" && position.fix ? (
           <Text style={styles.fixLine}>
@@ -779,8 +2082,8 @@ function PositionPane({ position, setPosition, onConsent }) {
           importantForAccessibility="no"
           accessibilityElementsHidden
           value={consented}
-          trackColor={{ false: "#2c3830", true: "#6d8a62" }}
-          thumbColor={consented ? "#f4f0e6" : "#d7ddd2"}
+          trackColor={{ false: colors.line, true: colors.moss }}
+          thumbColor={consented ? colors.ink : "#d7ddd2"}
         />
       </Pressable>
       <Action
@@ -816,9 +2119,7 @@ function PositionPane({ position, setPosition, onConsent }) {
           }}
         />
       </View>
-      <Text style={styles.foot}>
-        {`Consent stays off until you turn it on. This button does not run by itself. termux-location is used when that command is bridged in; otherwise Expo Location at high accuracy. A reading coarser than ${EXPO_LOCK_ACCURACY_M} m, a missing permission, or a missing radio stays Degraded. Share still does not transmit from this screen.`}
-      </Text>
+      <Text style={styles.foot}>Turn this on yourself. Nothing is shared from this screen.</Text>
     </ScrollView>
   );
 }
@@ -829,7 +2130,7 @@ function peerLabel(peer) {
   return `${peer.name} — ${id}${rssi}`;
 }
 
-function MeshPane({ mesh, setMesh, owner, position }) {
+function MeshPane({ mesh, setMesh, owner, position, onBack }) {
   const status = meshScreenStatus(mesh);
   const tone = status.readiness === "linked" ? "good" : status.readiness === "degraded" ? "warn" : undefined;
   const [scanning, setScanning] = useState(false);
@@ -901,19 +2202,23 @@ function MeshPane({ mesh, setMesh, owner, position }) {
     setServiceNote("Held on this phone. Not transmitted. A position lock is not required.");
   }
 
-  const pill = status.readiness === "degraded"
-    ? "Degraded"
-    : status.readiness === "linked"
-      ? "Link held"
-      : status.readiness === "heard"
-        ? "Peers heard"
-        : "No peers";
+  const pill = !mesh.scanned
+    ? "Not scanned yet"
+    : status.readiness === "degraded"
+      ? "No radio from here"
+      : status.readiness === "linked"
+        ? "Link held"
+        : status.readiness === "heard"
+          ? "Peers heard"
+          : "No peers";
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader
-        title="Mesh"
-        lead="Scan when you ask. A missing radio stays degraded. Peers are other installs and cannot run symbols here."
+        title="Scan and radio"
+        lead="Look for other Yehsa phones when you ask."
+        onBack={onBack}
+        backLabel="People"
       />
       <View style={styles.statusBlock}>
         <Text style={styles.sectionLabel}>{status.title}</Text>
@@ -937,6 +2242,9 @@ function MeshPane({ mesh, setMesh, owner, position }) {
         disabled={scanning || !bound}
         accessibilityHint="Passive scan when the radio can do it. Does not disconnect a link already held."
       />
+      {pill === "No radio from here" ? (
+        <Action label="Fix it" tone="quiet" onPress={scan} disabled={scanning || !bound} accessibilityHint="Try the scan again. A missing radio stays unavailable." />
+      ) : null}
       {chooser ? (
         <Action
           label="Choose a Yehsa device"
@@ -1000,7 +2308,47 @@ function MeshPane({ mesh, setMesh, owner, position }) {
   );
 }
 
-const styles = StyleSheet.create({
+function PeoplePane({ mesh, setMesh, owner, position, onChatView, scanRequest, partyRequest }) {
+  const [scan, setScan] = useState(false);
+  const [party, setParty] = useState(false);
+  useBackLayer(party, () => setParty(false));
+  useEffect(() => {
+    if (partyRequest) setParty(true);
+  }, [partyRequest]);
+  const [chatView, setChatView] = useState("list");
+  useBackLayer(scan, () => setScan(false));
+  useEffect(() => {
+    if (scanRequest) setScan(true);
+  }, [scanRequest]);
+  useEffect(() => {
+    onChatView?.(!scan && chatView === "chat");
+  }, [scan, chatView]);
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={[styles.pane, scan && styles.hidden]}>
+        <PeerChat
+          includeLocation={position?.consent === true && position.status === "locked"}
+          header={<ScreenHeader compact title="People" lead="Private chat with phones you trust." />}
+          onView={setChatView}
+          toolbar={(
+            <>
+              <Action label="Scan and radio" tone="quiet" onPress={() => setScan(true)} accessibilityHint="Look for Yehsa phones nearby. The radio stays off until you scan." />
+              <Action label="Hunt party" tone="quiet" onPress={() => setParty(true)} />
+            </>
+          )}
+        />
+      </View>
+      {party ? (
+        <View style={[styles.pane, { position: "absolute", left: 0, right: 0, top: 0, bottom: 0, backgroundColor: colors.bg }]}>
+          <PartyScreen position={position} mesh={mesh} onBack={() => setParty(false)} />
+        </View>
+      ) : null}
+      {scan ? <MeshPane mesh={mesh} setMesh={setMesh} owner={owner} position={position} onBack={() => setScan(false)} /> : null}
+    </View>
+  );
+}
+
+const styles = themedStyles((colors) => ({
   root: {
     flex: 1,
     backgroundColor: colors.bg,
@@ -1012,7 +2360,128 @@ const styles = StyleSheet.create({
     maxWidth: 480
   },
   body: {
-    flex: 1
+    flex: 1,
+    position: "relative"
+  },
+  askChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    minHeight: 48,
+    marginHorizontal: 12,
+    marginBottom: 16,
+    paddingHorizontal: 14,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.lineStrong,
+    backgroundColor: colors.surface
+  },
+  askChipPending: {
+    borderColor: colors.brass
+  },
+  askChipText: {
+    flex: 1,
+    color: colors.ink,
+    fontSize: 15
+  },
+  mapPane: {
+    flex: 1,
+    paddingTop: Platform.OS === "ios" ? 52 : 22,
+    paddingHorizontal: 16,
+    paddingBottom: 8
+  },
+  mapStatus: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 10,
+    marginBottom: 10
+  },
+  mapGps: {
+    marginBottom: 0,
+    minHeight: 40,
+    paddingVertical: 8
+  },
+  emptyMap: {
+    flex: 1,
+    margin: 16,
+    padding: 20,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: colors.lineStrong,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12
+  },
+  emptyTitle: { color: colors.ink, fontSize: 20, fontWeight: "700", textAlign: "center" },
+  emptyBody: { color: colors.muted, fontSize: 16, lineHeight: 23, textAlign: "center" },
+  mapFill: {
+    flex: 1,
+    overflow: "hidden"
+  },
+  mapTools: {
+    flexDirection: "row",
+    gap: 8,
+    marginTop: 8
+  },
+  mapToolButton: {
+    flex: 1,
+    marginBottom: 0
+  },
+  mapToolSmall: {
+    marginBottom: 0,
+    minWidth: 96
+  },
+  hud: {
+    marginBottom: 8,
+    gap: 6
+  },
+  hudRow: { flexDirection: "row", gap: 6 },
+  hudCard: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: colors.lineStrong,
+    borderRadius: 12,
+    backgroundColor: colors.surface,
+    padding: 8
+  },
+  hudLabel: { color: colors.muted, fontSize: 11, fontWeight: "700", letterSpacing: 0.8 },
+  hudValue: { color: colors.ink, fontSize: 18, fontWeight: "700", marginTop: 2 },
+  hudSub: { color: colors.muted, fontSize: 12, marginTop: 2 },
+  hudNote: { color: colors.muted, fontSize: 12 },
+  sheet: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    maxHeight: "80%",
+    backgroundColor: colors.bg,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopWidth: 1,
+    borderColor: colors.lineStrong,
+    zIndex: 10,
+    elevation: 10
+  },
+  sheetHead: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 18,
+    paddingTop: 12
+  },
+  sheetTitle: {
+    color: colors.ink,
+    fontSize: 18,
+    fontWeight: "600"
+  },
+  sheetClose: {
+    marginBottom: 0
+  },
+  sheetScroll: {
+    paddingHorizontal: 18,
+    paddingBottom: 32,
+    gap: 4
   },
   pane: {
     flex: 1
@@ -1023,7 +2492,7 @@ const styles = StyleSheet.create({
   scroll: {
     paddingTop: Platform.OS === "ios" ? 52 : 22,
     paddingHorizontal: 22,
-    paddingBottom: 36
+    paddingBottom: 40
   },
   answer: {
     marginTop: 8,
@@ -1158,8 +2627,8 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
   consentOn: {
-    borderColor: "#5f7d56",
-    backgroundColor: "#161e18"
+    borderColor: colors.moss,
+    backgroundColor: colors.surface
   },
   consentCopy: { flex: 1 },
   consentTitle: {
@@ -1220,31 +2689,158 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     paddingBottom: Platform.OS === "ios" ? 18 : 6
   },
+  // Capped safety-red plate with an ink outline. The word SOS is required:
+  // under protanopia the red shifts toward gold, so color is not enough.
+  sos: {
+    width: 72,
+    minHeight: 64,
+    margin: 4,
+    marginRight: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.sos,
+    borderWidth: 2,
+    borderColor: colors.ink,
+    borderRadius: 10,
+    paddingVertical: 6
+  },
+  sosCap: {
+    width: 26,
+    height: 6,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    borderWidth: 2,
+    borderBottomWidth: 0,
+    borderColor: colors.sosInk,
+    marginBottom: 4
+  },
+  sosPressed: { opacity: 0.82 },
+  sosText: {
+    color: colors.sosInk,
+    fontSize: 15,
+    fontWeight: "800",
+    letterSpacing: 1
+  },
+  onboardHost: {},
+  trust: {
+    borderWidth: 1,
+    borderColor: colors.lineStrong,
+    borderRadius: 16,
+    padding: 16,
+    gap: 8,
+    marginBottom: 16
+  },
+  trustKicker: { color: colors.muted, fontSize: 12, fontWeight: "700", letterSpacing: 1.2 },
+  trustBadge: {
+    alignSelf: "flex-start",
+    color: colors.brassInk,
+    backgroundColor: colors.brass,
+    borderWidth: 1,
+    borderColor: colors.ink,
+    borderRadius: 999,
+    overflow: "hidden",
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    fontSize: 12,
+    fontWeight: "700"
+  },
+  trustTitle: { color: colors.ink, fontSize: 18, fontWeight: "600" },
+  trustLine: { color: colors.ink, fontSize: 16, lineHeight: 23 },
+  modeRow: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 8 },
+  modeButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    minHeight: 48,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.lineStrong
+  },
+  modeButtonCompact: { minHeight: 40, paddingHorizontal: 10 },
+  modeButtonOn: { backgroundColor: colors.brass, borderColor: colors.ink, borderWidth: 2 },
+  modeText: { color: colors.ink, fontSize: 15, fontWeight: "600" },
+  modeTextOn: { color: colors.brassInk },
+  switchState: { color: colors.muted, fontSize: 14, marginLeft: 8, minWidth: 28 },
+  helperRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.line },
+  helperAction: { marginBottom: 0, minHeight: 44, paddingVertical: 8 },
+  askChipGo: { color: colors.brassText, fontSize: 15, fontWeight: "700" },
   tab: {
     flex: 1,
-    minHeight: 52,
+    minHeight: 64,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    paddingVertical: 8
   },
   tabOn: {},
   tabMark: {
-    position: "absolute",
-    top: 0,
     width: 28,
-    height: 2,
-    borderRadius: 1,
+    height: 3,
+    borderRadius: 2,
+    marginBottom: 6,
     backgroundColor: "transparent"
   },
+  chatWrap: { flex: 1, paddingHorizontal: 14, paddingTop: Platform.OS === "ios" ? 52 : 22, paddingBottom: 12 },
+  thread: { paddingBottom: 12, gap: 10 },
+  bubbleYou: { alignSelf: "flex-end", maxWidth: "86%", backgroundColor: colors.youBubble, borderRadius: 16, padding: 12 },
+  bubbleYehsa: { alignSelf: "flex-start", maxWidth: "86%", backgroundColor: colors.yehsaBubble, borderRadius: 16, padding: 12 },
+  bubbleText: { color: colors.ink, fontSize: 16, lineHeight: 22 },
+  typing: { color: colors.brass, marginTop: 8 },
+  answerTitle: { color: colors.ink, fontSize: 15, fontWeight: "700", marginTop: 4 },
+  answerSummary: { fontWeight: "700" },
+  stepRow: { flexDirection: "row", gap: 8 },
+  stepNum: { width: 24, color: colors.brassText, fontWeight: "700" },
+  foldRow: { flexDirection: "row", alignItems: "center", gap: 6, minHeight: 44 },
+  foldText: { color: colors.brassText, fontSize: 15, fontWeight: "600" },
+  suggestChip: { minHeight: 44, justifyContent: "center", paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, borderColor: colors.lineStrong, backgroundColor: colors.surface, marginTop: 6, marginRight: 8 },
+  suggestText: { color: colors.ink, fontSize: 14, fontWeight: "600" },
+  thumb: { width: 88, height: 66, borderRadius: 10, backgroundColor: colors.field },
+  info: { position: "absolute", right: 4, bottom: 4 },
+  sourceChip: { color: colors.muted, fontSize: 12, marginRight: 8 },
+  sourceLine: { color: colors.muted, fontSize: 13, lineHeight: 18, marginTop: 6 },
+  undoLink: { color: colors.brass, fontSize: 15, marginTop: 6 },
+  packCard: { backgroundColor: colors.surface, borderRadius: 16, borderWidth: 2, borderColor: colors.lineStrong, padding: 14, gap: 8, marginTop: 10 },
+  packHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 },
+  packName: { color: colors.ink, fontSize: 16, fontWeight: "600", flex: 1 },
+  packState: { color: colors.ink, fontSize: 12, borderWidth: 1, borderColor: colors.lineStrong, borderRadius: 12, paddingHorizontal: 8, paddingVertical: 2 },
+  packText: { color: colors.ink, fontSize: 15, lineHeight: 21 },
+  packMeta: { color: colors.muted, fontSize: 13 },
+  packBar: { height: 6, borderRadius: 3, backgroundColor: colors.line, overflow: "hidden" },
+  packBarFill: { height: 6, backgroundColor: colors.brass },
+  packAbout: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start" },
+  packAboutLink: { color: colors.brassText, fontSize: 14, fontWeight: "600" },
+  feedbackRow: { flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 4, marginTop: 8, paddingTop: 6, borderTopWidth: 1, borderTopColor: colors.line },
+  feedbackPrompt: { color: colors.muted, fontSize: 14, marginRight: 4 },
+  feedbackLink: { minHeight: 44, minWidth: 44, paddingHorizontal: 8, alignItems: "center", justifyContent: "center" },
+  feedbackLinkText: { color: colors.brassText, fontSize: 15, fontWeight: "600" },
+  feedbackLinkClay: { color: colors.clay, fontSize: 15, fontWeight: "600" },
+  feedbackThanks: { color: colors.muted, fontSize: 14, marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderTopColor: colors.line },
+  feedbackBox: { gap: 10, marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderTopColor: colors.line },
+  feedbackReasons: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
+  reasonChip: { minHeight: 44, paddingHorizontal: 14, borderRadius: 22, borderWidth: 1, borderColor: colors.lineStrong, justifyContent: "center" },
+  reasonChipOn: { borderColor: colors.brass },
+  reasonText: { color: colors.ink, fontSize: 14 },
+  reasonTextOn: { color: colors.brassText },
+  feedbackInput: { minHeight: 48, color: colors.ink, borderWidth: 1, borderColor: colors.lineStrong, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 8 },
+  iconButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.brass, alignItems: "center", justifyContent: "center" },
+  iconButtonQuiet: { width: 48, height: 48, borderRadius: 24, alignItems: "center", justifyContent: "center" },
+  credits: { backgroundColor: colors.surface, borderRadius: 16, padding: 12, gap: 8, marginTop: 8 },
+  switchRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", minHeight: 48 },
+  switchLabel: { color: colors.ink, fontSize: 16, flex: 1 },
+  composer: { flexDirection: "row", alignItems: "center", gap: 8, marginTop: 8 },
+  composerInput: { flex: 1, minHeight: 48, color: colors.ink, backgroundColor: colors.surface, borderRadius: 12, paddingHorizontal: 12 },
+  card: { marginTop: 8, gap: 8 },
+  cardRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   tabMarkOn: {
     backgroundColor: colors.brass
   },
   tabText: {
     color: colors.muted,
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: "600",
     letterSpacing: 0.2
   },
   tabTextOn: {
-    color: colors.brass
+    color: colors.brassText
   }
-});
+}));

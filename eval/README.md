@@ -1,6 +1,10 @@
 # Yehsa evaluation harness
 
-This folder scores `ask()` without changing Yehsa. The product code, the field notes, and the dictionaries stay as they are. Expo and EAS are not used.
+`eval/regression/v1/` is the frozen 411-question regression suite: the prompts, the expected-answer rubrics, the gate thresholds, and a SHA-256 manifest. Do not edit v1. New questions go in a new folder, such as `eval/regression/v2/`. CI fails if v1 changes without that new folder, if any v1 question is removed, or if the gate slips below correct 349, above zero incorrect-confident answers, or above zero unnecessary refusals.
+
+This folder scores `ask()` without changing Yehsa. The product code, the field notes, and the dictionaries stay as they are. Expo and EAS are not used. Knowledge is not tuned to these questions.
+
+`eval/dev_set.mjs` is a separate development set. `node eval/dev_run.mjs` scores it. The v1 runner does not load it, and it is not the external holdout.
 
 The question set is built by `questions.mjs` (about 400 to 1000 full-sentence questions). Each item has a rubric: required phrases, a required number, a forbidden claim, or a required abstention (`No offline note answered that.`). Out-of-corpus probes are checked against `symbolic_memory/books_index.json` when the set is built. If a probe is actually in that index, the builder throws.
 
@@ -40,3 +44,12 @@ node eval/bm25.mjs /tmp/yehsa-bm25.json
 BM25 is Okapi (k1 = 1.2, b = 0.75) over the field passages and the same dictionary merge Ask reads. It abstains only when no query word matches. No commercial product and no downloaded model is part of this comparison.
 
 `REPORT.md` is the results write-up, including the category table and the wrong-but-confident replies.
+
+## Meaning matcher
+
+`eval/run.mjs`, `eval/worker.mjs`, and `eval/dev_run.mjs` use `askWithMeaning()` when the bundled
+model `assets/meaning/bge-small-en-v1.5-int8.onnx` and `onnxruntime-node` are present, so the gate
+scores what ships. `YEHSA_MEANING_OFF=1` scores the lexical path. `eval/paraphrase_set.mjs` is a
+separate set of 100 reworded questions written from the note topics; `node eval/paraphrase_run.mjs`
+scores it (`--lexical` for the old path). The meaning thresholds were tuned on it, so it is a
+development set, not a holdout.

@@ -1,0 +1,86 @@
+{
+  "model": "MediaPipe Image Embedder, MobileNetV3-Small (float32)",
+  "classes": 8,
+  "referencePhotos": 117,
+  "positives": 117,
+  "negatives": 81,
+  "top1Pct": 66.7,
+  "top3Pct": 89.7,
+  "positivesDeclinedPct": 12.8,
+  "bandPrecision": {
+    "possible": {
+      "shown": 84,
+      "top1RightPct": 73.8
+    },
+    "weak": {
+      "shown": 18,
+      "top1RightPct": 61.1
+    }
+  },
+  "negativesTopBand": {
+    "declined": 57,
+    "possible": 13,
+    "weak": 11
+  },
+  "negativesDeclinedPct": 70.4,
+  "deadly": {
+    "heldOutDeadlyPhotos": 30,
+    "topWasNonDeadly": 6,
+    "aDeadlyPlantWasInTop3": 30
+  },
+  "edible": {
+    "heldOutEdiblePhotos": 26,
+    "aDeadlyLookalikeWasShownOrLinked": 26
+  },
+  "perClass": {
+    "yarrow": {
+      "n": 18,
+      "top1Pct": 77.8,
+      "top3Pct": 83.3,
+      "declined": 0
+    },
+    "plantain": {
+      "n": 17,
+      "top1Pct": 58.8,
+      "top3Pct": 94.1,
+      "declined": 5
+    },
+    "willow": {
+      "n": 19,
+      "top1Pct": 84.2,
+      "top3Pct": 89.5,
+      "declined": 3
+    },
+    "wild_carrot": {
+      "n": 14,
+      "top1Pct": 78.6,
+      "top3Pct": 92.9,
+      "declined": 1
+    },
+    "poison_hemlock": {
+      "n": 13,
+      "top1Pct": 38.5,
+      "top3Pct": 84.6,
+      "declined": 2
+    },
+    "water_hemlock": {
+      "n": 10,
+      "top1Pct": 60,
+      "top3Pct": 100,
+      "declined": 1
+    },
+    "wild_onion": {
+      "n": 14,
+      "top1Pct": 78.6,
+      "top3Pct": 92.9,
+      "declined": 1
+    },
+    "death_camas": {
+      "n": 12,
+      "top1Pct": 41.7,
+      "top3Pct": 83.3,
+      "declined": 2
+    }
+  },
+  "matchMsMedian": 0.58
+}

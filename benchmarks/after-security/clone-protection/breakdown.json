@@ -1,0 +1,38 @@
+{
+  "evaluatedCommit": "e3ae2a442eef5e833bb8f3608015fadd46b5e021",
+  "baselineCommit": "caa053578aaefd7d9136e3432e937532d59c9cc9",
+  "breakdown": {
+    "correct": 349,
+    "incorrectConfident": 0,
+    "incorrectHedged": 0,
+    "appropriateAbstention": 62,
+    "unnecessaryRefusal": 0,
+    "incorrect": 0,
+    "refusals": 62,
+    "total": 411
+  },
+  "gate": "passed",
+  "tests": {
+    "knowledge": {
+      "tests": 88,
+      "pass": 88,
+      "fail": 0
+    },
+    "mesh": {
+      "tests": 30,
+      "pass": 30,
+      "fail": 0
+    },
+    "safetyHoldout": {
+      "passed": 9,
+      "failed": []
+    },
+    "peerKeys": {
+      "tests": 6,
+      "pass": 6,
+      "fail": 0
+    }
+  },
+  "hotPathMs": 0.173496,
+  "peakRss": 186961920
+}
