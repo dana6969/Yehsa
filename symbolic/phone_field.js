@@ -22,6 +22,8 @@ import { scriptureByMeaning } from "./meaning/scripture_meaning.js";
 import { treatmentGuard } from "./meaning/treatment_guard.js";
 import { formatImported, isCareQuestion, retrieveImported } from "./book_import.js";
 import { currentImportIndex, currentImported } from "./imported_registry.js";
+import { fieldGuideAnswer } from "./field_guide.js";
+import { stripFiller } from "./answer_polish.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -114,6 +116,7 @@ function fieldResult(partial) {
     corpus: phoneCorpusMeta,
     ...partial
   };
+  if (typeof result.text === "string") result.text = stripFiller(result.text);
   result.source = formatAnswerSource(result);
   return result;
 }
@@ -160,6 +163,20 @@ export function askField(input, passages, options = {}) {
         source: safety.source,
         text: safety.text
       }] : []
+    });
+  }
+  const guide = fieldGuideAnswer(raw);
+  if (guide) {
+    return fieldResult({
+      answered: true,
+      text: guide.text,
+      cue: null,
+      emotion: { understood: false, emotion: "neutral" },
+      miss: null,
+      kind: guide.kind,
+      symbol: guide.symbol,
+      title: guide.title,
+      hits: guide.hits
     });
   }
   const calc = calculate(raw);

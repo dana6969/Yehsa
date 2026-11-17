@@ -18,7 +18,7 @@ test("capabilities stay inside what is installed", () => {
   assert.match(text, /scripture/i);
   assert.match(text, /Approve/);
   assert.match(text, /no live city/i);
-  assert.match(text, /cannot reach the internet/i);
+  assert.match(text, /don't go online on my own/i);
   assert.match(text, new RegExp(String(phoneCorpusMeta.headwords)));
   assert.doesNotMatch(text, /\banything\b/i);
   assert.doesNotMatch(text, /NATO|cipher grade|I can control other apps/i);

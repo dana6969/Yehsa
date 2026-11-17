@@ -87,13 +87,14 @@ import {
   phraseFromFeedback,
   proposeLearned,
   recordLearnedAnswer,
+  recordFeedback,
   recordModelAsk,
-  rememberPhrase
+  rememberPhrase,
+  saveHelpfulAnswer
 } from "../../symbolic/learned_notes.js";
-import { capabilitySummary, continueUtterance, isCapabilityQuestion, sourceChips } from "../../symbolic/chat_turn.js";
+import { capabilitySummary, continueUtterance, isCapabilityQuestion, isFeedbackEligible, sourceChips } from "../../symbolic/chat_turn.js";
 import LandscapeMap from "./LandscapeMap.js";
 import {
-  PACK_CATALOG,
   addPack,
   attributionLine,
   beginDownload,
@@ -102,9 +103,9 @@ import {
   emptyPackStore,
   formatBytes,
   nearestWater,
+  packCards,
   packShapes,
-  pauseDownload,
-  resumeDownload,
+  storageLine,
   validateImport
 } from "../../symbolic/map_packs.js";
 import { DEM_ATTRIBUTION, contourGeoJSON, elevationAt, hillshadeRgba, planDemRegion, terrariumGrid, tileBounds } from "../../symbolic/dem_tiles.js";
@@ -582,7 +583,7 @@ export default function YehsaApp() {
                 fetchImpl: globalThis.fetch
               });
               setModelTestNote(result.ok
-                ? `${provider.name} answered the test. That was the model, not a Yehsa note. Connecting a model does not retrain Yehsa.`
+                ? `${provider.name} answered the test, so the connection works.`
                 : result.reason);
             }}
           />
@@ -591,6 +592,7 @@ export default function YehsaApp() {
           <LearnedPane
             onBack={popScreen}
             backLabel={back}
+            onOpenDid={() => openScreen("did")}
             store={learned}
             deviceId={owner?.installId || null}
             onChange={storeLearned}
@@ -739,7 +741,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
     });
     rememberGate(proposed.gate);
     if (proposed.card) {
-      pushMessage({ role: "yehsa", text: "I understood a tap as a waypoint. Nothing is saved until you tap Approve, and location consent in More still has to be on.", card: proposed.card });
+      pushMessage({ role: "yehsa", text: "Want to save that spot as a waypoint? Tap Approve. Location needs to be on in More.", card: proposed.card });
     }
     return undefined;
   }, [mapTap]);
@@ -857,7 +859,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
         rememberGate(proposed.gate);
         pushMessage({
           role: "yehsa",
-          text: `${labeled.text} This does not retrain me. Save it only if you want an unverified note on this phone.`,
+          text: `${labeled.text} This came from ${provider?.name || "the model"}, not from Yehsa's notes. Save it if you want to keep it on this phone.`,
           card: proposed.card
         });
       }).catch(() => {
@@ -872,7 +874,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
     }
     if (card.type === "save-learned") {
       setLearned(approveLearned(learned, card.payload));
-      return { ok: true, text: "Learned on this device from your correction. It is unverified until you confirm it or mark it helpful twice.", undo: { type: "learned", id: card.payload?.note?.id } };
+      return { ok: true, text: "Saved your correction on this phone. You can keep, edit, or forget it in What Yehsa has learned.", undo: { type: "learned", id: card.payload?.note?.id } };
     }
     if (card.type === "save-model-note") {
       const entryId = card.payload.id;
@@ -888,7 +890,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
         question: card.payload.question,
         tags: ["model"]
       })));
-      return { ok: true, text: "Saved on this phone as learned from the model, unverified. It is not part of the trusted notes. This does not retrain a model.", undo: { type: "model-note", id: entryId } };
+      return { ok: true, text: "Saved on this phone. It's marked as coming from the model, so it stays separate from Yehsa's own notes.", undo: { type: "model-note", id: entryId } };
     }
     return { ok: false, text: "That action is not available.", undo: null };
   }
@@ -962,7 +964,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
       const proposed = proposeAction(gateRef.current, {
         type: "save-learned",
         id: `act-${Date.now()}`,
-        label: "Save your correction as an unverified note on this phone",
+        label: "Save your correction on this phone",
         payload: proposal
       });
       rememberGate(proposed.gate);
@@ -970,7 +972,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
       pushMessage({
         role: "yehsa",
         text: proposed.card
-          ? "I understood a correction. Nothing is saved until you tap Approve. This is memory on this phone, not retraining."
+          ? "Got it. Tap Approve to save your correction on this phone."
           : "Saving a correction is switched off, so I did not keep it.",
         card: proposed.card
       });
@@ -1088,6 +1090,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
           pushMessage({
             role: "yehsa",
             text: proposed.card ? offer : "That action is switched off, so I did not send anything.",
+            feedbackEligible: false,
             chips: sourceChips(result),
             source: result?.source || null,
             pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
@@ -1107,7 +1110,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
           const reply = result?.text || "No model is connected, so nothing was sent. Add one under Me, Models. It stays off until you turn it on.";
           priorRef.current = { utterance: text };
           setPhase(result?.answered ? "ready" : "miss");
-          pushMessage({ role: "yehsa", text: result?.text ? `${reply} No model is connected, so nothing was sent.` : reply, chips: sourceChips(result), source: result?.source || null, question: text, symbol: result?.symbol || null, learnedId: result?.learnedId || null });
+          pushMessage({ role: "yehsa", text: result?.text ? `${reply} No model is connected, so nothing was sent.` : reply, feedbackEligible: isFeedbackEligible(result), chips: sourceChips(result), source: result?.source || null, question: text, symbol: result?.symbol || null, learnedId: result?.learnedId || null });
           return;
         }
         const reply = result?.text || result?.miss || "I don't have an installed note for that.";
@@ -1117,6 +1120,8 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
         pushMessage({
           role: "yehsa",
           text: reply,
+          // Yes / Not quite shows only under a real answer to the user's own question.
+          feedbackEligible: isFeedbackEligible(result),
           chips: sourceChips(result),
           source: result?.source || null,
           pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
@@ -1132,7 +1137,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
         if (speak && result?.text) {
           speakProse(result.text, {
             onDone: () => setVoiceNote(null),
-            onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
+            onError: () => setVoiceNote("Reading aloud isn't available here. The answer stays on screen.")
           });
         }
       }).catch((err) => {
@@ -1280,20 +1285,43 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
   });
   const listening = gesture.phase === "arming" || gesture.phase === "listening" || gesture.phase === "locked";
 
+  function patchMessage(id, patch) {
+    setMessages((current) => current.map((item) => item.id === id ? { ...item, ...patch } : item));
+  }
+
+  // Yes: saved quietly as a learned note, thanked in place. No new bubble.
   function onHelpful(item) {
-    let next = item.learnedId ? markHelpful(learned, item.learnedId) : learned;
+    let next = item.learnedId ? markHelpful(learned, item.learnedId) : saveHelpfulAnswer(learned, {
+      question: item.question,
+      text: item.text,
+      title: item.title,
+      symbol: item.symbol
+    });
     const pair = phraseFromFeedback(item.question, item.symbol);
     if (pair) next = rememberPhrase(next, pair.from, pair.to);
     setLearned(next);
-    pushMessage({ role: "yehsa", text: "Marked helpful. I'll remember that phrasing on this phone. This is retrieval memory, not retraining." });
+    patchMessage(item.id, { feedback: "thanks" });
   }
 
+  // Not quite: opens the reason box under that answer. Nothing posts to the thread.
   function onNotRight(item) {
-    if (item.learnedId) setLearned(markNotRight(learned, item.learnedId));
-    setCorrection({ question: item.question || "" });
-    pushMessage({ role: "yehsa", text: item.learnedId
-      ? "Hidden on this phone. Trusted notes are unchanged. Type a correction if you want one taught. Nothing is saved until you approve."
-      : "That trusted note stays. Type a correction if you want a learned one. Nothing is saved until you approve." });
+    patchMessage(item.id, { feedback: "asking", reason: null, detail: "" });
+  }
+
+  function sendNotRight(item) {
+    let next = item.learnedId ? markNotRight(learned, item.learnedId) : learned;
+    next = recordFeedback(next, { question: item.question, symbol: item.symbol, verdict: "not-quite", reason: item.reason || null });
+    const detail = String(item.detail || "").trim();
+    if (detail) {
+      next = approveLearned(next, proposeLearned({
+        title: String(item.question || "Your correction").slice(0, 80),
+        text: detail,
+        source: "your correction",
+        question: item.question || ""
+      }));
+    }
+    setLearned(next);
+    patchMessage(item.id, { feedback: "thanks" });
   }
 
   useEffect(() => {
@@ -1315,8 +1343,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
   useEffect(() => {
     // The compact Ask chip on other tabs shows only this summary. It never
     // opens a second thread.
-    const last = [...messages].reverse().find((item) => item.role === "yehsa" && item.text);
-    onSummary?.({ text: last?.text || null, pending: pendingCard, busy: phase === "loading" });
+    onSummary?.({ pending: pendingCard, busy: phase === "loading" });
   }, [messages, pendingCard, phase]);
 
   return (
@@ -1325,7 +1352,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
       <ScrollView ref={threadRef} contentContainerStyle={styles.thread} keyboardShouldPersistTaps="handled">
         {messages.length === 0 ? (
           <View style={styles.bubbleYehsa}>
-            <Text style={styles.bubbleText}>Ask me anything on this phone. I wait for Approve before I change anything.</Text>
+            <Text style={styles.bubbleText}>Ask me anything. I work offline, and I check with you before I change anything.</Text>
           </View>
         ) : null}
         {messages.map((item) => (
@@ -1353,11 +1380,16 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
                 ))}
               </View>
             ) : null}
-            {item.role === "yehsa" ? (
-              <View style={styles.cardRow}>
-                <Action label="Helpful" tone="quiet" onPress={() => onHelpful(item)} />
-                <Action label="Not right" tone="clay" onPress={() => onNotRight(item)} />
-              </View>
+            {item.role === "yehsa" && item.feedbackEligible === true ? (
+              <FeedbackNote
+                item={item}
+                onYes={() => onHelpful(item)}
+                onNotQuite={() => onNotRight(item)}
+                onReason={(reason) => patchMessage(item.id, { reason: item.reason === reason ? null : reason })}
+                onDetail={(detail) => patchMessage(item.id, { detail })}
+                onSend={() => sendNotRight(item)}
+                onCancel={() => patchMessage(item.id, { feedback: null, reason: null, detail: "" })}
+              />
             ) : null}
             {item.card && gate.pending?.id === item.card.id ? (
               <View style={styles.card}>
@@ -1410,7 +1442,7 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
           if (!last) return;
           speakProse(last.text, {
             onDone: () => setVoiceNote(null),
-            onError: () => setVoiceNote("This screen cannot speak the answer. The note stays on screen.")
+            onError: () => setVoiceNote("Reading aloud isn't available here. The answer stays on screen.")
           });
         }} style={styles.iconButtonQuiet}>
           <Ionicons name="volume-high" size={20} color={colors.ink} />
@@ -1423,6 +1455,61 @@ function AskPane({ pendingAsk, onSummary, session, owner, active, screen, positi
           <Action label="Close" tone="quiet" onPress={() => setCredits(null)} />
         </View>
       ) : null}
+    </View>
+  );
+}
+
+const FEEDBACK_REASONS = ["Didn't answer my question", "Too vague", "Something was wrong", "Missing a step"];
+
+function FeedbackNote({ item, onYes, onNotQuite, onReason, onDetail, onSend, onCancel }) {
+  if (item.feedback === "thanks") {
+    return <Text accessibilityLiveRegion="polite" style={styles.feedbackThanks}>Thanks. I saved that on this phone.</Text>;
+  }
+  if (item.feedback === "asking") {
+    return (
+      <View style={styles.feedbackBox}>
+        <Text style={styles.feedbackPrompt}>What was off? Optional.</Text>
+        <View style={styles.feedbackReasons}>
+          {FEEDBACK_REASONS.map((reason) => {
+            const on = item.reason === reason;
+            return (
+              <Pressable
+                key={reason}
+                accessibilityRole="button"
+                accessibilityState={{ selected: on }}
+                onPress={() => onReason(reason)}
+                style={[styles.reasonChip, on && styles.reasonChipOn]}
+              >
+                <Text style={[styles.reasonText, on && styles.reasonTextOn]}>{reason}</Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        <TextInput
+          accessibilityLabel="Anything else"
+          value={item.detail || ""}
+          onChangeText={onDetail}
+          placeholder="Anything else? (optional)"
+          placeholderTextColor={colors.muted}
+          multiline
+          style={styles.feedbackInput}
+        />
+        <View style={styles.cardRow}>
+          <Action label="Send" onPress={onSend} />
+          <Action label="Cancel" tone="quiet" onPress={onCancel} />
+        </View>
+      </View>
+    );
+  }
+  return (
+    <View style={styles.feedbackRow}>
+      <Text style={styles.feedbackPrompt}>Was this useful?</Text>
+      <Pressable accessibilityRole="button" accessibilityLabel="Yes, this was useful" onPress={onYes} style={styles.feedbackLink}>
+        <Text style={styles.feedbackLinkText}>Yes</Text>
+      </Pressable>
+      <Pressable accessibilityRole="button" accessibilityLabel="Not quite" onPress={onNotQuite} style={styles.feedbackLink}>
+        <Text style={styles.feedbackLinkClay}>Not quite</Text>
+      </Pressable>
     </View>
   );
 }
@@ -1469,9 +1556,7 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
     if (layersRequest) setLayersOpen(true);
   }, [layersRequest]);
   const [declination, setDeclination] = useState("0");
-  const [importNote, setImportNote] = useState("No terrain file is loaded. This is a blank landscape canvas.");
-  const [packOffer, setPackOffer] = useState(null);
-  const [demOffer, setDemOffer] = useState(false);
+  const [importNote, setImportNote] = useState("");
   const [demTiles, setDemTiles] = useState([]);
   const [contours, setContours] = useState({ type: "FeatureCollection", features: [] });
   const [mapFailed, setMapFailed] = useState(false);
@@ -1523,7 +1608,7 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
       setDemTiles(layers.demTiles || layers.stored.map((tile) => ({ url: tile.url, bounds: tile.bounds, z: tile.z, x: tile.x, y: tile.y })));
       setContours(layers.contours || { type: "FeatureCollection", features: [] });
       publishDem(layers.stored);
-      setImportNote(`Showing your saved area: ${area.name || "offline area"}. May be out of date.`);
+      setImportNote(`Showing your saved area: ${area.name || "offline area"}.`);
     } catch {
       // A damaged area stays listed so it can be deleted; the blank canvas stays.
     }
@@ -1579,41 +1664,155 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
     };
   }, [consented, gpsWanted, backgroundGps, setPosition]);
 
-  async function approvePackDownload(id) {
-    const planned = beginDownload(mapPacks, id, { approved: true });
+  const [packJobs, setPackJobs] = useState({});
+  const [demJob, setDemJob] = useState({ state: "idle", done: 0, total: 0 });
+  const demAbort = useRef(null);
+  const packsRef = useRef(mapPacks);
+  packsRef.current = mapPacks;
+  const liveRef = useRef(true);
+  useEffect(() => () => {
+    liveRef.current = false;
+    downloadAbort.current?.abort?.();
+    demAbort.current?.abort?.();
+  }, []);
+
+  function setPackJob(id, job) {
+    if (!liveRef.current) return;
+    setPackJobs((current) => {
+      const next = { ...current };
+      if (job) next[id] = job;
+      else delete next[id];
+      return next;
+    });
+  }
+
+  // The press handler only starts the job and returns. Fetch and parse run after a frame
+  // yield, so the Map packs sheet keeps scrolling. A second tap while busy does nothing.
+  function approvePackDownload(id) {
+    if (!id || packJobs[id]?.state === "downloading") return;
+    const planned = beginDownload(packsRef.current, id, { approved: true });
     if (!planned.fetch) {
-      setImportNote(planned.reason);
+      setPackJob(id, null);
       return;
     }
+    downloadAbort.current?.abort?.();
     const controller = new AbortController();
     downloadAbort.current = controller;
-    setMapPacks(planned.store);
-    try {
-      const response = await fetch(planned.item.url, { signal: controller.signal });
-      if (!response.ok) throw new Error("status");
-      const text = await response.text();
-      const pack = validateImport(`${planned.item.id}.geojson`, text);
-      if (pack.ok) {
-        pack.catalogId = planned.item.id;
-        pack.name = planned.item.name;
-        pack.source = planned.item.source;
-        pack.license = planned.item.license;
-        pack.attribution = planned.item.attribution;
-        pack.built = pack.built || new Date().toISOString().slice(0, 10);
+    setPackJob(id, { state: "downloading" });
+    (async () => {
+      try {
+        await yieldFrame();
+        const response = await fetch(planned.item.url, { signal: controller.signal });
+        if (!response.ok) throw new Error("status");
+        const text = await response.text();
+        if (text.length > PACK_TEXT_LIMIT) throw new Error("too big");
+        await yieldFrame();
+        if (controller.signal.aborted) return;
+        const pack = validateImport(`${planned.item.id}.geojson`, text);
+        if (pack.ok) {
+          pack.catalogId = planned.item.id;
+          pack.name = planned.item.name;
+          pack.source = planned.item.source;
+          pack.license = planned.item.license;
+          pack.attribution = planned.item.attribution;
+          pack.built = pack.built || new Date().toISOString().slice(0, 10);
+        }
+        await yieldFrame();
+        if (controller.signal.aborted || !liveRef.current) return;
+        const saved = addPack(packsRef.current, pack);
+        if (saved.added) setMapPacks(saved.store);
+        setPackJob(id, saved.added ? null : { state: "error" });
+      } catch (err) {
+        if (err?.name === "AbortError" || controller.signal.aborted) {
+          setPackJob(id, null);
+          return;
+        }
+        setPackJob(id, { state: "error" });
       }
-      const saved = addPack(planned.store, pack);
-      setMapPacks(saved.added ? saved.store : planned.store);
-      setImportNote(saved.added
-        ? `${pack.name} is on this phone. ${pack.attribution} May be out of date.`
-        : (pack.reason || saved.reason));
-    } catch (err) {
-      if (err?.name === "AbortError") {
-        setImportNote("Download paused. Nothing new was stored.");
-        return;
-      }
-      setMapPacks(pauseDownload(planned.store, id));
-      setImportNote("The download did not finish. Nothing new was stored. OSM public tile servers were not used.");
+    })();
+  }
+
+  function cancelPackDownload(id) {
+    downloadAbort.current?.abort?.();
+    setPackJob(id, null);
+  }
+
+  // Elevation tiles: one tile per step, with a frame yield between the fetch, the PNG
+  // decode, and the hillshade/contour work. Cancel aborts between steps.
+  function startElevation() {
+    if (demJob.state === "downloading") return;
+    const plan = planDemRegion({ approved: true, around: { latitude: held?.latitude || 45, longitude: held?.longitude || -69, radiusKm: 40 } });
+    if (!plan.fetch || plan.tiles.length < 2) {
+      setDemJob({ state: "error", done: 0, total: 0 });
+      return;
     }
+    demAbort.current?.abort?.();
+    const controller = new AbortController();
+    demAbort.current = controller;
+    setDemJob({ state: "downloading", done: 0, total: plan.tiles.length });
+    (async () => {
+      const stored = [];
+      const lines = [];
+      try {
+        for (let index = 0; index < plan.tiles.length; index += 1) {
+          await yieldFrame();
+          if (controller.signal.aborted) return;
+          const response = await fetch(plan.urls[index], { signal: controller.signal });
+          if (!response.ok) continue;
+          const bytes = new Uint8Array(await response.arrayBuffer());
+          await yieldFrame();
+          const png = decodePng(bytes);
+          const channels = png.channels || Math.round(png.data.length / (png.width * png.height));
+          const rgba = channels === 4 ? png.data : new Uint8Array(png.width * png.height * 4);
+          if (channels !== 4) {
+            for (let pixel = 0; pixel < png.width * png.height; pixel += 1) {
+              rgba[pixel * 4] = png.data[pixel * channels];
+              rgba[pixel * 4 + 1] = png.data[pixel * channels + 1];
+              rgba[pixel * 4 + 2] = png.data[pixel * channels + 2];
+              rgba[pixel * 4 + 3] = 255;
+            }
+          }
+          await yieldFrame();
+          const elev = terrariumGrid(rgba, png.width, png.height);
+          const shade = hillshadeRgba(elev, png.width, png.height);
+          await yieldFrame();
+          const encoded = encodePng({ width: png.width, height: png.height, data: shade, channels: 4 });
+          const tile = plan.tiles[index];
+          const bounds = tileBounds(tile.z, tile.x, tile.y);
+          await yieldFrame();
+          const drawn = contourGeoJSON(elev, png.width, png.height, bounds, 100);
+          lines.push(...drawn.features);
+          stored.push({ z: tile.z, x: tile.x, y: tile.y, bounds, elev, width: png.width, height: png.height, url: pngDataUrl(encoded), png: encoded });
+          if (liveRef.current) setDemJob({ state: "downloading", done: index + 1, total: plan.tiles.length });
+        }
+        if (controller.signal.aborted || !liveRef.current) return;
+        if (stored.length < 2) throw new Error("empty");
+        demRef.current = stored;
+        setDemTiles(stored.map((tile) => ({ url: tile.url, bounds: tile.bounds, z: tile.z, x: tile.x, y: tile.y })));
+        setContours({ type: "FeatureCollection", features: lines.slice(0, 400) });
+        publishDem(stored);
+        setDemJob({ state: "idle", done: 0, total: 0 });
+      } catch (err) {
+        if (!liveRef.current) return;
+        if (err?.name === "AbortError" || controller.signal.aborted) {
+          setDemJob({ state: "idle", done: 0, total: 0 });
+          return;
+        }
+        setDemJob({ state: "error", done: 0, total: 0 });
+      }
+    })();
+  }
+
+  function cancelElevation() {
+    demAbort.current?.abort?.();
+    setDemJob({ state: "idle", done: 0, total: 0 });
+  }
+
+  function removeElevation() {
+    demRef.current = [];
+    setDemTiles([]);
+    setContours({ type: "FeatureCollection", features: [] });
+    publishDem([]);
   }
 
   return (
@@ -1656,7 +1855,7 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
               onPress={(point) => {
                 if (onMapTap) onMapTap(point);
                 const meters = demRef.current.reduce((found, tile) => found != null ? found : elevationAt(tile.elev, tile.width, tile.height, tile.bounds, point.longitude, point.latitude), null);
-                setElevNote(meters == null ? "No elevation tile covers that point." : `About ${Math.round(meters)} m at the tapped point. ${DEM_ATTRIBUTION}`);
+                setElevNote(meters == null ? "No elevation for that spot yet." : `About ${Math.round(meters)} m at that spot.`);
               }}
             />
           </MapBoundary>
@@ -1679,8 +1878,8 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
           onWaypoint={(point) => {
             if (onMapTap) onMapTap(point);
             const meters = demRef.current.reduce((found, tile) => found != null ? found : elevationAt(tile.elev, tile.width, tile.height, tile.bounds, point.longitude, point.latitude), null);
-            setElevNote(meters == null ? "" : `About ${Math.round(meters)} m at the tapped point. ${DEM_ATTRIBUTION}`);
-            setImportNote(`Proposed ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Approve it in Ask.`);
+            setElevNote(meters == null ? "" : `About ${Math.round(meters)} m at that spot.`);
+            setImportNote(`Point ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Open Ask and tap Approve to save it.`);
           }}
         />
         )}
@@ -1717,106 +1916,47 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
               />
             ))}
             <Field label="Declination from your map, east positive" value={declination} onChangeText={setDeclination} placeholder="0" />
-            <Quiet>{attributionLine(mapPacks || emptyPackStore())}</Quiet>
-            <Quiet>{metersHere == null ? elevationNear(mapPacks || emptyPackStore(), held).text : `About ${Math.round(metersHere)} m here. ${DEM_ATTRIBUTION}`}</Quiet>
+            <Quiet>{metersHere == null ? elevationNear(mapPacks || emptyPackStore(), held).text : `About ${Math.round(metersHere)} m here.`}</Quiet>
             {elevNote ? <Quiet>{elevNote}</Quiet> : null}
-            <Quiet>{importNote}</Quiet>
-            <Action label="Review elevation" tone="quiet" onPress={() => setDemOffer(true)} />
-            {demOffer ? (
-              <View style={styles.card}>
-                <Quiet>{planDemRegion({ approved: false, around: { latitude: held?.latitude || 45, longitude: held?.longitude || -69, radiusKm: 40 } }).reason}</Quiet>
-                <Action label="Approve elevation" onPress={async () => {
-                  const plan = planDemRegion({ approved: true, around: { latitude: held?.latitude || 45, longitude: held?.longitude || -69, radiusKm: 40 } });
-                  if (!plan.fetch || plan.tiles.length < 2) return;
-                  try {
-                    const stored = [];
-                    const lines = [];
-                    for (let index = 0; index < plan.tiles.length; index += 1) {
-                      const response = await fetch(plan.urls[index]);
-                      if (!response.ok) continue;
-                      const bytes = new Uint8Array(await response.arrayBuffer());
-                      const png = decodePng(bytes);
-                      const channels = png.channels || Math.round(png.data.length / (png.width * png.height));
-                      const rgba = channels === 4 ? png.data : new Uint8Array(png.width * png.height * 4);
-                      if (channels !== 4) {
-                        for (let pixel = 0; pixel < png.width * png.height; pixel += 1) {
-                          rgba[pixel * 4] = png.data[pixel * channels];
-                          rgba[pixel * 4 + 1] = png.data[pixel * channels + 1];
-                          rgba[pixel * 4 + 2] = png.data[pixel * channels + 2];
-                          rgba[pixel * 4 + 3] = 255;
-                        }
-                      }
-                      const elev = terrariumGrid(rgba, png.width, png.height);
-                      const shade = hillshadeRgba(elev, png.width, png.height);
-                      const encoded = encodePng({ width: png.width, height: png.height, data: shade, channels: 4 });
-                      const tile = plan.tiles[index];
-                      const bounds = tileBounds(tile.z, tile.x, tile.y);
-                      const drawn = contourGeoJSON(elev, png.width, png.height, bounds, 100);
-                      lines.push(...drawn.features);
-                      stored.push({
-                        z: tile.z,
-                        x: tile.x,
-                        y: tile.y,
-                        bounds,
-                        elev,
-                        width: png.width,
-                        height: png.height,
-                        url: pngDataUrl(encoded),
-                        png: encoded
-                      });
-                    }
-                    if (stored.length < 2) throw new Error("empty");
-                    demRef.current = stored;
-                    setDemTiles(stored.map((tile) => ({ url: tile.url, bounds: tile.bounds, z: tile.z, x: tile.x, y: tile.y })));
-                    setContours({ type: "FeatureCollection", features: lines.slice(0, 400) });
-                    publishDem(stored);
-                    setImportNote(`${stored.length} elevation tiles, hillshade and contours. ${plan.attribution} May be out of date.`);
-                    setDemOffer(false);
-                  } catch {
-                    setImportNote("The elevation tiles did not download. Nothing was stored.");
-                  }
-                }} />
-                <Action label="Decline" tone="clay" onPress={() => setDemOffer(false)} />
-              </View>
-            ) : null}
+            {importNote ? <Quiet>{importNote}</Quiet> : null}
             <Text style={styles.sectionLabel}>Map packs</Text>
-            <Quiet>{`Storage ${formatBytes((mapPacks || emptyPackStore()).usedBytes)} of ${formatBytes((mapPacks || emptyPackStore()).budgetBytes)}. The whole world is not offered.`}</Quiet>
-            {(mapPacks?.packs || []).map((pack) => (
-              <View key={pack.id} style={styles.card}>
-                <Text style={styles.bubbleText}>{`${pack.name}. ${formatBytes(pack.bytes)}. May be out of date.`}</Text>
-                <Quiet>{`${pack.attribution} ${pack.license}. ${pack.built || pack.importedAt || "Build date not in the file."} ${pack.note || ""}`}</Quiet>
-                <Action label="Update" tone="quiet" onPress={() => {
-                  if (pack.catalogId) setPackOffer(pack.catalogId);
-                  else setImportNote("This file has no source URL. Import a newer copy. Nothing was downloaded.");
-                }} />
-                <Action label="Delete pack" tone="clay" onPress={() => setMapPacks(deletePack(mapPacks, pack.id))} />
-              </View>
+            <Quiet>Offline maps on this phone.</Quiet>
+            <Quiet>{storageLine(mapPacks || emptyPackStore())}</Quiet>
+            <PackCard
+              card={{
+                key: "elevation",
+                name: "Elevation and terrain",
+                state: demJob.state === "downloading" ? "Downloading" : demJob.state === "error" ? "Error" : demTiles.length ? "Ready" : "Not downloaded",
+                description: "Hills and contours around you, for offline use.",
+                meta: demJob.state === "downloading"
+                  ? `${demJob.done} of ${demJob.total} tiles · Near you`
+                  : demTiles.length ? `${demTiles.length} tiles · Near you` : "About 2 MB · Near you",
+                about: `${DEM_ATTRIBUTION.replace(/^Elevation:\s*/, "")} · public domain. May be dated.`,
+                canDownload: true,
+                job: demJob.state === "downloading" ? { received: demJob.done, total: demJob.total } : null
+              }}
+              onDownload={startElevation}
+              onCancel={cancelElevation}
+              onShow={() => setLayersOpen(false)}
+              onRemove={removeElevation}
+            />
+            {packCards(mapPacks || emptyPackStore(), packJobs).map((card) => (
+              <PackCard
+                key={card.key}
+                card={card}
+                onDownload={() => approvePackDownload(card.catalogId)}
+                onCancel={() => cancelPackDownload(card.catalogId)}
+                onShow={() => setLayersOpen(false)}
+                onRemove={() => card.packId && setMapPacks(deletePack(mapPacks, card.packId))}
+                onUpdate={() => approvePackDownload(card.catalogId)}
+              />
             ))}
-            {PACK_CATALOG.map((item) => (
-              <Action key={item.id} label={`Review ${item.name}`} tone="quiet" onPress={() => setPackOffer(item.id)} />
-            ))}
-            {packOffer ? (
-              <View style={styles.card}>
-                <Quiet>{beginDownload(mapPacks, packOffer, { approved: false }).reason}</Quiet>
-                <Action label="Approve download" onPress={() => approvePackDownload(packOffer)} />
-                <Action label="Pause" tone="quiet" onPress={() => {
-                  downloadAbort.current?.abort?.();
-                  setMapPacks(pauseDownload(mapPacks, packOffer));
-                }} />
-                <Action label="Resume" tone="quiet" onPress={() => {
-                  const next = resumeDownload(mapPacks, packOffer);
-                  setMapPacks(next.store);
-                  if (next.fetch) approvePackDownload(packOffer);
-                }} />
-                <Action label="Decline" tone="clay" onPress={() => setPackOffer(null)} />
-              </View>
-            ) : null}
             <Action
               label="Import a map file"
               tone="quiet"
               onPress={() => {
                 if (Platform.OS !== "web" || typeof document === "undefined") {
-                  setImportNote("Choosing a map file needs the web screen or a phone file picker. Nothing was added.");
+                  setImportNote("Adding a map file isn't available on this phone yet.");
                   return;
                 }
                 const input = document.createElement("input");
@@ -1833,7 +1973,7 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
                     const saved = addPack(mapPacks, pack);
                     if (saved.added) setMapPacks(saved.store);
                     setImportNote(saved.added
-                      ? `${pack.name}. ${formatBytes(pack.bytes)}. ${pack.attribution} May be out of date. ${pack.note}`
+                      ? `Added ${pack.name} (${formatBytes(pack.bytes)}).`
                       : (pack.reason || saved.reason));
                   };
                   reader.readAsArrayBuffer(file);
@@ -1844,6 +1984,49 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
           </ScrollView>
         </View>
       ) : null}
+    </View>
+  );
+}
+
+// Hand control back to the UI between heavy steps so the screen never freezes.
+function yieldFrame() {
+  return new Promise((resolve) => setTimeout(resolve, 0));
+}
+
+const PACK_TEXT_LIMIT = 24 * 1024 * 1024;
+
+function PackCard({ card, onDownload, onCancel, onShow, onRemove, onUpdate }) {
+  const [about, setAbout] = useState(false);
+  const state = card.state;
+  const progress = card.job?.total ? Math.min(1, (card.job.received || 0) / card.job.total) : null;
+  return (
+    <View style={styles.packCard}>
+      <View style={styles.packHead}>
+        <Text style={styles.packName}>{card.name}</Text>
+        <Text style={styles.packState}>{state}</Text>
+      </View>
+      <Text style={styles.packText}>{card.description}</Text>
+      {state === "Downloading" && progress != null ? (
+        <View style={styles.packBar}><View style={[styles.packBarFill, { width: `${Math.round(progress * 100)}%` }]} /></View>
+      ) : null}
+      <Text style={styles.packMeta}>{card.meta}</Text>
+      {state === "Error" ? <Text style={styles.packText}>Couldn't finish this download. Nothing new was saved.</Text> : null}
+      <View style={styles.cardRow}>
+        {state === "Not downloaded" && card.canDownload && !card.waitingForSignal ? <Action label="Download" onPress={onDownload} /> : null}
+        {state === "Not downloaded" && card.waitingForSignal ? <Quiet>Will download when you're back online.</Quiet> : null}
+        {state === "Downloading" ? <Action label="Cancel" tone="quiet" onPress={onCancel} /> : null}
+        {state === "Ready" ? <Action label="Show on map" onPress={onShow} /> : null}
+        {state === "Ready" && onRemove ? <Action label="Remove" tone="clay" onPress={onRemove} /> : null}
+        {state === "Ready" && card.canUpdate && onUpdate ? <Action label="Update" tone="quiet" onPress={onUpdate} /> : null}
+        {state === "Error" ? <Action label="Try again" onPress={onDownload || onUpdate} /> : null}
+        {state === "Error" ? <Action label="Cancel" tone="quiet" onPress={onCancel} /> : null}
+      </View>
+      {card.about ? (
+        <Pressable accessibilityRole="button" accessibilityState={{ expanded: about }} onPress={() => setAbout((value) => !value)} style={styles.packAbout}>
+          <Text style={styles.packAboutLink}>About this data</Text>
+        </Pressable>
+      ) : null}
+      {about ? <Text style={styles.packMeta}>{card.about}</Text> : null}
     </View>
   );
 }
@@ -2747,6 +2930,29 @@ const styles = themedStyles((colors) => ({
   sourceChip: { color: colors.muted, fontSize: 12, marginRight: 8 },
   sourceLine: { color: colors.muted, fontSize: 13, lineHeight: 18, marginTop: 6 },
   undoLink: { color: colors.brass, fontSize: 15, marginTop: 6 },
+  packCard: { backgroundColor: colors.surface, borderRadius: 16, borderWidth: 2, borderColor: colors.lineStrong, padding: 14, gap: 8, marginTop: 10 },
+  packHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 },
+  packName: { color: colors.ink, fontSize: 16, fontWeight: "600", flex: 1 },
+  packState: { color: colors.ink, fontSize: 12, borderWidth: 1, borderColor: colors.lineStrong, borderRadius: 12, paddingHorizontal: 8, paddingVertical: 2 },
+  packText: { color: colors.ink, fontSize: 15, lineHeight: 21 },
+  packMeta: { color: colors.muted, fontSize: 13 },
+  packBar: { height: 6, borderRadius: 3, backgroundColor: colors.line, overflow: "hidden" },
+  packBarFill: { height: 6, backgroundColor: colors.brass },
+  packAbout: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start" },
+  packAboutLink: { color: colors.brassText, fontSize: 14, fontWeight: "600" },
+  feedbackRow: { flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 4, marginTop: 8, paddingTop: 6, borderTopWidth: 1, borderTopColor: colors.line },
+  feedbackPrompt: { color: colors.muted, fontSize: 14, marginRight: 4 },
+  feedbackLink: { minHeight: 44, minWidth: 44, paddingHorizontal: 8, alignItems: "center", justifyContent: "center" },
+  feedbackLinkText: { color: colors.brassText, fontSize: 15, fontWeight: "600" },
+  feedbackLinkClay: { color: colors.clay, fontSize: 15, fontWeight: "600" },
+  feedbackThanks: { color: colors.muted, fontSize: 14, marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderTopColor: colors.line },
+  feedbackBox: { gap: 10, marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderTopColor: colors.line },
+  feedbackReasons: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
+  reasonChip: { minHeight: 44, paddingHorizontal: 14, borderRadius: 22, borderWidth: 1, borderColor: colors.lineStrong, justifyContent: "center" },
+  reasonChipOn: { borderColor: colors.brass },
+  reasonText: { color: colors.ink, fontSize: 14 },
+  reasonTextOn: { color: colors.brassText },
+  feedbackInput: { minHeight: 48, color: colors.ink, borderWidth: 1, borderColor: colors.lineStrong, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 8 },
   iconButton: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.brass, alignItems: "center", justifyContent: "center" },
   iconButtonQuiet: { width: 48, height: 48, borderRadius: 24, alignItems: "center", justifyContent: "center" },
   credits: { backgroundColor: colors.surface, borderRadius: 16, padding: 12, gap: 8, marginTop: 8 },

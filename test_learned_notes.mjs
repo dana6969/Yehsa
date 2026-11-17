@@ -67,7 +67,7 @@ test("Not right hides a learned note, a safety note wins, and reset clears the s
   assert.equal(confirmed.notes[0].confidence, "confirmed");
   const cleared = resetLearned("phone-a");
   assert.equal(cleared.notes.length, 0);
-  assert.match(learnedSummary(cleared), /0 vs\. 0/);
+  assert.match(learnedSummary(cleared), /0 saved notes on this phone/);
   const review = reviewLearned(saved);
   assert.equal(review.some((item) => item.agent === "verifier" || item.agent === "corpus"), true);
   const applied = applyLearnedReview(saved, review.find((item) => item.kind === "remove"), true);

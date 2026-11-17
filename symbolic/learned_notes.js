@@ -1,4 +1,4 @@
-// On-device retrieval memory. This does not retrain a model and does not open a network connection.
+// Notes this phone keeps (saved answers, corrections). Lookup only: no model is retrained, nothing is sent.
 // A note is stored only when the caller approves it. Hidden notes are not retrieved.
 // A trusted safety note wins over a learned one.
 
@@ -89,6 +89,7 @@ export function exportLearned(store) {
     deviceId: current.deviceId || null,
     notes: current.notes || [],
     phrases: current.phrases || [],
+    feedback: current.feedback || [],
     stats: current.stats || emptyLearned().stats
   });
 }
@@ -119,7 +120,9 @@ export function learnedSummary(store) {
   const current = store || emptyLearned();
   const visible = (current.notes || []).filter((note) => !note.hidden);
   const stats = rollWeek(current.stats);
-  return `Answered offline from learned notes this week vs. asked the model: ${stats.learnedAnswers} vs. ${stats.modelAsks}. ${visible.length} learned notes on this phone.`;
+  const count = visible.length === 1 ? "1 saved note" : `${visible.length} saved notes`;
+  const used = stats.learnedAnswers === 1 ? "used once this week" : `used ${stats.learnedAnswers} times this week`;
+  return `${count} on this phone, ${used}.`;
 }
 
 export function markHelpful(store, id) {
@@ -133,6 +136,77 @@ export function markHelpful(store, id) {
     }),
     feedback: [...current.feedback, { id, verdict: "helpful", at: new Date().toISOString() }].slice(-80)
   };
+}
+
+function firstSentence(text) {
+  const flat = String(text || "").replace(/\s+/g, " ").trim();
+  const match = flat.match(/^(.{8,120}?[.!?])(\s|$)/);
+  const line = match ? match[1] : flat.slice(0, 80);
+  return line.replace(/[.!?]$/, "").slice(0, 80) || "Saved answer";
+}
+
+/**
+ * The user tapped Yes under a trusted answer. Keep that answer as a learned note on this
+ * phone so it shows on "What Yehsa has learned". A second Yes on the same question counts
+ * up instead of adding a duplicate. Learned notes are only retrieved when no trusted note
+ * answers, so this never overrides a field note.
+ */
+export function saveHelpfulAnswer(store, answer) {
+  const current = store || emptyLearned();
+  const text = String(answer?.text || "").trim();
+  if (!text) return current;
+  const question = String(answer?.question || "").trim().slice(0, 300);
+  const key = question.toLowerCase();
+  const existing = (current.notes || []).find((note) => !note.hidden && key && note.question.toLowerCase() === key && note.source === "a chat answer");
+  if (existing) return markHelpful(current, existing.id);
+  const note = cleanNote({
+    id: `learned-${Date.now()}-${(current.notes || []).length}`,
+    title: answer?.title && !/^guide_|_\d+$/.test(String(answer.title)) ? answer.title : firstSentence(text),
+    text,
+    source: "a chat answer",
+    question,
+    tags: answer?.symbol ? [String(answer.symbol)] : [],
+    helpful: 1
+  });
+  return {
+    ...current,
+    notes: [...(current.notes || []), note].slice(-200),
+    feedback: [...(current.feedback || []), { id: note.id, verdict: "helpful", at: new Date().toISOString() }].slice(-80)
+  };
+}
+
+export function recordFeedback(store, entry) {
+  const current = store || emptyLearned();
+  const item = {
+    id: String(entry?.symbol || entry?.id || "answer").slice(0, 80),
+    verdict: String(entry?.verdict || "not-quite").slice(0, 20),
+    reason: entry?.reason ? String(entry.reason).slice(0, 60) : null,
+    question: String(entry?.question || "").slice(0, 300),
+    at: new Date().toISOString()
+  };
+  return { ...current, feedback: [...(current.feedback || []), item].slice(-80) };
+}
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+export function shortDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return `${date.getDate()} ${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+}
+
+// "From a chat answer · 17 Nov 2026"
+export function noteOrigin(note) {
+  const source = String(note?.source || "");
+  let from = "From this phone";
+  if (/correction/i.test(source)) from = "From your correction";
+  else if (/chat answer/i.test(source)) from = "From a chat answer";
+  else if (/model/i.test(source)) from = "From a connected model";
+  else if (/field note|you saved|your note/i.test(source)) from = "From a note you saved";
+  else if (/import/i.test(source)) from = "From a file you imported";
+  else if (/mesh|peer/i.test(source)) from = "From a nearby phone";
+  const when = shortDate(note?.date);
+  return when ? `${from} · ${when}` : from;
 }
 
 export function confirmLearned(store, id) {

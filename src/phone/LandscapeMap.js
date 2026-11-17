@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { haversineKm, initialBearingDeg } from "../../symbolic/landscape_math.js";
 import { courseSentence } from "../../symbolic/nav_sentence.js";
 import { colors } from "./ui.js";
+import { visibleSegments } from "./map_segments.js";
 
 const KM_PER_DEG = 111.19;
 
@@ -46,7 +47,7 @@ export default function LandscapeMap({
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(18);
   const [measure, setMeasure] = useState([]);
-  const [readout, setReadout] = useState("Blank landscape canvas. No streets, no cities, and no elevation tiles are installed.");
+  const [readout, setReadout] = useState("Drag to look around. Tap two points to measure.");
   const drag = useRef(null);
 
   function project(point) {
@@ -108,7 +109,7 @@ export default function LandscapeMap({
       setReadout(courseSentence(km, bearing, "between the two taps"));
     } else if (onWaypoint) {
       onWaypoint(point);
-      setReadout("Tap proposes a waypoint. It is not saved until you approve it in Ask.");
+      setReadout("Tap Approve in Ask to save this spot as a waypoint.");
     }
   }
 
@@ -119,6 +120,11 @@ export default function LandscapeMap({
   const rotation = follow === true && Number.isFinite(Number(headingDeg)) ? `${-Number(headingDeg)}deg` : "0deg";
   const accuracyPx = Number.isFinite(Number(accuracyM)) ? (Number(accuracyM) / 1000) * zoom : 0;
   const you = held ? project(held) : null;
+  const segments = useMemo(
+    () => visibleSegments(features, project, size.width, size.height),
+    // project depends on these values only.
+    [features, origin?.latitude, origin?.longitude, pan.x, pan.y, zoom, size.width, size.height]
+  );
 
   return (
     <View style={fill ? { flex: 1 } : null}>
@@ -174,15 +180,14 @@ export default function LandscapeMap({
           <Text style={{ color: colors.brassText, fontSize: 12 }}>N</Text>
           <View style={{ width: 2, height: 18, backgroundColor: colors.moss, transform: [{ rotate: magTurn }] }} />
         </View>
+        {segments.map((segment) => (
+          <MeasureLine key={segment.key} from={segment.from} to={segment.to} />
+        ))}
         {(features || []).map((feature, index) => {
-          if (Array.isArray(feature?.points)) {
-            const drawn = feature.points.map(project).filter(Boolean).slice(0, 80);
-            return drawn.slice(1).map((point, step) => (
-              <MeasureLine key={`s${index}-${step}`} from={drawn[step]} to={point} />
-            ));
-          }
+          if (Array.isArray(feature?.points)) return null;
           const xy = project(feature);
-          return xy ? <Dot key={`f${index}`} x={xy.x} y={xy.y} color={colors.lineStrong} /> : null;
+          if (!xy || xy.x < -8 || xy.y < -8 || xy.x > size.width + 8 || xy.y > size.height + 8) return null;
+          return <Dot key={`f${index}`} x={xy.x} y={xy.y} color={colors.lineStrong} />;
         })}
         {measure.map((point, index) => {
           const xy = project(point);
@@ -231,7 +236,7 @@ export default function LandscapeMap({
         <Pressable accessibilityRole="button" accessibilityLabel="Zoom out" onPress={() => setZoom((value) => Math.max(4, value / 1.4))} style={zoomStyle}>
           <Text style={{ color: colors.brassInk, fontWeight: "700" }}>−</Text>
         </Pressable>
-        <Pressable accessibilityRole="button" accessibilityLabel="Clear the measured line" onPress={() => { setMeasure([]); setReadout("Measured line cleared. The canvas is still blank landscape, not a city map."); }} style={[zoomStyle, { backgroundColor: "transparent", borderColor: colors.lineStrong, paddingHorizontal: 12 }]}>
+        <Pressable accessibilityRole="button" accessibilityLabel="Clear the measured line" onPress={() => { setMeasure([]); setReadout("Measurement cleared."); }} style={[zoomStyle, { backgroundColor: "transparent", borderColor: colors.lineStrong, paddingHorizontal: 12 }]}>
           <Text style={{ color: colors.ink }}>Clear line</Text>
         </Pressable>
         <Pressable accessibilityRole="button" accessibilityLabel="Recenter on me" onPress={() => { setPan({ x: 0, y: 0 }); if (onRecenter) onRecenter(); }} style={[zoomStyle, { backgroundColor: "transparent", borderColor: colors.brass, paddingHorizontal: 12 }]}>

@@ -18,6 +18,8 @@ import { formatAnswerSource } from "./answer_source.js";
 import { detectEmergency, meaningReply, meaningRoutesScripture } from "./meaning/meaning_layer.js";
 import { scriptureByMeaning } from "./meaning/scripture_meaning.js";
 import { treatmentGuard } from "./meaning/treatment_guard.js";
+import { fieldGuideAnswer } from "./field_guide.js";
+import { stripFiller } from "./answer_polish.js";
 
 function premiseFromKnowledge(question, knowledge) {
   const texts = [knowledge?.text, ...(knowledge?.hits || []).map((hit) => hit?.text)];
@@ -35,7 +37,7 @@ function finish(question, emotion, knowledge, extra, options) {
     question: knowledge?.question || question,
     options
   });
-  let text = extra.text || null;
+  let text = stripFiller(extra.text || null) || null;
   if (text && extra.adapt !== false) {
     text = adaptToUser(text, turn.profile, knowledge?.question || question, emotion);
   }
@@ -118,6 +120,8 @@ export function ask(input, options = {}) {
       }] : []
     }, options);
   }
+  const guide = fieldGuideAnswer(original);
+  if (guide) return finish(question, emotion, null, guide, options);
   const defined = dictionaryLookup(original);
   if (defined) {
     return finish(question, emotion, null, defined, options);

@@ -29,10 +29,10 @@ export function capabilitySummary(meta = {}) {
     `I can read ${notes} about field care, plants, water, shelter, and navigation, and I can quote the scripture index with the title and the passage.`,
     "Those quotes are what the texts say, not a verdict from me.",
     "I can do arithmetic and convert length, mass, volume, temperature, speed, and time.",
-    "I can draw a blank landscape canvas, measure two points, and keep waypoints and a track after you consent to hold a place.",
+    "I can show a simple offline map, measure between two points, and keep waypoints and a track once you turn on location.",
     "If you ask me to save a waypoint, measure, hold or unlock a place, scan for peers, speak an answer, or save a note, I show an approval card. Nothing in that list runs until you tap Approve.",
     "Holding a place and sharing a place each need their own consent. Sharing still does not transmit from this screen.",
-    "I cannot reach the internet on my own. A language model stays off until you connect one and approve the exact question. Connecting one does not retrain me. What I learn is retrieval memory on this phone.",
+    "I don't go online on my own. If you connect an AI model, I ask you before I send it a question. What I learn from you stays on this phone.",
     "I have no live city or street map, and I cannot open or control other apps.",
     dictionary,
     "Counts and the longer limits are on the Details screen."
@@ -47,4 +47,12 @@ export function sourceChips(result) {
     if (hit?.symbol) chips.push(String(hit.symbol));
   }
   return [...new Set(chips.filter(Boolean))].slice(0, 4);
+}
+
+// Only a real answer to the user's own question gets "Was this useful? Yes / Not quite".
+// Misses, status lines, approval cards, errors, thank-yous, and capability blurbs never do.
+export function isFeedbackEligible(result) {
+  if (!result || result.answered !== true || !result.text) return false;
+  if (result.kind === "about" || result.kind === "calculator") return false;
+  return true;
 }

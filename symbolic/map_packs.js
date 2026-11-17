@@ -13,11 +13,14 @@ export const PACK_CATALOG = [
     name: "World overview",
     source: "Natural Earth 1:110m",
     license: "Public domain",
-    attribution: "Natural Earth. Public domain.",
+    attribution: "Natural Earth",
     url: "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson",
     bytesEstimate: 800000,
     kind: "geojson",
     downloadable: true,
+    offered: true,
+    description: "Country outlines you can see offline. Not streets or a live city map.",
+    region: "World",
     note: "Country outlines only. Not streets and not a live city map."
   },
   {
@@ -30,6 +33,9 @@ export const PACK_CATALOG = [
     bytesEstimate: 20000000,
     kind: "osm-pbf",
     downloadable: false,
+    offered: true,
+    description: "A detailed map of Rhode Island, for offline use. Not available in this version yet.",
+    region: "Rhode Island",
     note: "Geofabrik permits this download. This build does not paint OSM protocol-buffer extracts, so it is not fetched. OSM public tile servers are not used."
   },
   {
@@ -42,6 +48,9 @@ export const PACK_CATALOG = [
     bytesEstimate: 80 * 1024 * 1024 * 1024,
     kind: "refused",
     downloadable: false,
+    offered: false,
+    description: "A map of the whole world isn't offered — it's too large for this phone. Pick a region.",
+    region: "World",
     note: "The whole world is tens of gigabytes. It is not offered."
   }
 ];
@@ -329,6 +338,26 @@ export function validateImport(name, raw) {
 export function addPack(store, pack) {
   const current = store || emptyPackStore();
   if (!pack?.ok) return { store: current, added: false, reason: pack?.reason || "Nothing was added." };
+  const same = pack.catalogId ? current.packs.filter((item) => item.catalogId === pack.catalogId) : [];
+  if (same.length) {
+    // Update: swap the old copy out so storage and the card list never double up.
+    const freed = same.reduce((sum, item) => sum + (Number(item.bytes) || 0), 0);
+    const base = current.usedBytes - freed;
+    if (base + pack.bytes > current.budgetBytes) {
+      return { store: current, added: false, reason: sizeWarning(pack.bytes, current.budgetBytes - base) };
+    }
+    return {
+      store: {
+        ...current,
+        packs: [...current.packs.filter((item) => item.catalogId !== pack.catalogId), pack],
+        usedBytes: Math.max(0, base + pack.bytes),
+        jobs: (current.jobs || []).filter((job) => job.id !== pack.catalogId)
+      },
+      added: true,
+      replaced: true,
+      reason: null
+    };
+  }
   if (current.usedBytes + pack.bytes > current.budgetBytes) {
     return {
       store: current,
@@ -347,6 +376,19 @@ export function addPack(store, pack) {
   };
 }
 
+// Collapse duplicate copies of the same catalog pack (stores saved before the update fix).
+export function dedupePacks(store) {
+  const current = store || emptyPackStore();
+  const seen = new Map();
+  for (const pack of current.packs || []) {
+    const key = pack.catalogId || pack.id;
+    seen.set(key, pack);
+  }
+  const packs = [...seen.values()];
+  if (packs.length === (current.packs || []).length) return current;
+  return { ...current, packs, usedBytes: packs.reduce((sum, pack) => sum + (Number(pack.bytes) || 0), 0) };
+}
+
 export function deletePack(store, id) {
   const current = store || emptyPackStore();
   const pack = current.packs.find((item) => item.id === id);
@@ -358,13 +400,86 @@ export function deletePack(store, id) {
   };
 }
 
+// Short credit for the map corner: each source once, never "Public domain. Public domain.".
 export function attributionLine(store) {
   const packs = store?.packs || [];
-  if (!packs.length) return "No map pack. Blank landscape. No streets are stored.";
-  return packs.map((pack) => {
-    const when = pack.built || pack.importedAt || "date not in the file";
-    return `${pack.name}. ${pack.attribution} ${pack.license}. Built ${when}. May be out of date.`;
-  }).join(" ");
+  if (!packs.length) return "No map pack yet.";
+  const names = [];
+  for (const pack of packs) {
+    const name = String(pack.attribution || pack.source || pack.name || "").replace(/\.\s*(Public domain|ODbL)\.?$/i, "").replace(/\.$/, "").trim();
+    if (name && !names.includes(name)) names.push(name);
+  }
+  return `${names.join(" · ")}. May be dated.`;
+}
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+function builtLabel(value) {
+  if (!value) return null;
+  const text = String(value);
+  const match = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return text.slice(0, 20);
+  return `${Number(match[3])} ${MONTHS[Number(match[2]) - 1]} ${match[1]}`;
+}
+
+// "About this data": source, license, and date, said once.
+export function aboutPackData(pack) {
+  const source = String(pack?.attribution || pack?.source || "Source not stated").replace(/\.\s*(Public domain|ODbL)\.?$/i, "").replace(/\.$/, "").trim();
+  const license = String(pack?.license || "license not stated").replace(/^Public domain$/i, "public domain");
+  const built = builtLabel(pack?.built || pack?.importedAt);
+  return `${source} · ${license}${built ? ` · built ${built}` : ""}. May be dated.`;
+}
+
+export function storageLine(store) {
+  const current = store || emptyPackStore();
+  return `Using ${formatBytes(current.usedBytes)} of ${formatBytes(current.budgetBytes)} on this phone.`;
+}
+
+/**
+ * One plain card per pack: what is on the phone first, then what can be downloaded.
+ * Whole world is never a card. A catalog entry already on the phone is not listed twice.
+ * jobs: { [catalogId]: { state: "downloading" | "error", received?, total? } } from the screen.
+ */
+export function packCards(store, jobs = {}, { online = true } = {}) {
+  const current = dedupePacks(store);
+  const cards = [];
+  const have = new Set();
+  for (const pack of current.packs || []) {
+    const item = PACK_CATALOG.find((entry) => entry.id === pack.catalogId);
+    if (pack.catalogId) have.add(pack.catalogId);
+    const job = pack.catalogId ? jobs[pack.catalogId] : null;
+    cards.push({
+      key: pack.id,
+      packId: pack.id,
+      catalogId: pack.catalogId || null,
+      name: item?.name || pack.name || "Map file",
+      state: job?.state === "downloading" ? "Downloading" : job?.state === "error" ? "Error" : "Ready",
+      description: item?.description || "A map file you added. It works without a signal.",
+      meta: `${formatBytes(pack.bytes)} · ${item?.region || "Your file"}`,
+      about: aboutPackData(pack),
+      canUpdate: Boolean(item?.downloadable),
+      job: job || null
+    });
+  }
+  for (const item of PACK_CATALOG) {
+    if (item.offered === false || have.has(item.id)) continue;
+    const job = jobs[item.id] || null;
+    const state = job?.state === "downloading" ? "Downloading" : job?.state === "error" ? "Error" : "Not downloaded";
+    cards.push({
+      key: item.id,
+      packId: null,
+      catalogId: item.id,
+      name: item.name.replace(/ extract$/i, ""),
+      state,
+      description: item.description,
+      meta: `About ${formatBytes(item.bytesEstimate)} · ${item.region}`,
+      about: aboutPackData(item),
+      canDownload: item.downloadable === true,
+      waitingForSignal: item.downloadable === true && online === false,
+      job
+    });
+  }
+  return cards;
 }
 
 export function beginDownload(store, catalogId, { approved } = {}) {
@@ -472,7 +587,7 @@ export function nearestWater(store, origin) {
 }
 
 export function elevationNear(store, origin) {
-  if (!origin) return { found: false, text: "GPS is off, so elevation is not looked up." };
+  if (!origin) return { found: false, text: "Turn on GPS to see the elevation where you are." };
   let best = null;
   for (const pack of store?.packs || []) {
     for (const line of pack.lines || []) {
@@ -484,7 +599,7 @@ export function elevationNear(store, origin) {
     }
   }
   if (!best) {
-    return { found: false, text: "No elevation is in the packs. SRTM and Copernicus are not downloaded, and no elevation service was called." };
+    return { found: false, text: "Elevation and terrain isn't on this phone yet." };
   }
   return {
     found: true,

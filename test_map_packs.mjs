@@ -59,7 +59,8 @@ test("a corrupt map file is rejected and a real one keeps attribution", () => {
   const store = addPack(emptyPackStore(), water).store;
   const line = attributionLine(store);
   assert.match(line, /OpenStreetMap/);
-  assert.match(line, /May be out of date/);
+  assert.match(line, /May be dated/);
+  assert.doesNotMatch(line, /Public domain\. Public domain/);
   const hit = nearestWater(store, { latitude: 41.5, longitude: -71.2 });
   assert.equal(hit.found, true);
   assert.match(hit.text, /Cold Creek/);

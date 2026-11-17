@@ -117,9 +117,7 @@ function topicCovered(body, topic) {
 function frame(parsed, text) {
   const body = tidy(text);
   if (!body) return body;
-  if (parsed.intent === "use" && parsed.domain && !new RegExp(`\\b${parsed.domain}\\b`, "i").test(body)) {
-    return `In a ${parsed.domain} setting, ${lowerFirst(body)}`;
-  }
+  // No "In a survival setting," opener: answers lead with the action (copy fixes, 17 Nov).
   if ((parsed.intent === "care" || shouldConnect(parsed)) && parsed.topic) {
     const tokens = String(parsed.topic).split(/\s+/).filter((token) => token.length > 2);
     if (!topicCovered(body, parsed.topic) && tokens.length === 1) {
