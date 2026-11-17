@@ -1,0 +1,6 @@
+numpy
+Pillow
+scipy
+shapely
+osmium
+requests

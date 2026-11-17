@@ -13,7 +13,7 @@ export const AREA_LAYERS = [
     name: "Terrain and elevation",
     kind: "terrarium-png",
     urlTemplate: "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
-    bytesPerTile: 110 * 1024,
+    bytesPerTile: 150 * 1024, // download plus the drawn copy kept beside it
     attribution: DEM_ATTRIBUTION,
     source: DEM_SOURCE,
     license: "Public domain / open data"
@@ -54,14 +54,13 @@ export function areaBox({ box, around } = {}) {
   return validBox(regionBox({ ...around, radiusKm: Number(around.radiusKm) || 10 }));
 }
 
-// Pick zooms so the area is sharp but bounded: a wide overview zoom plus detail zooms.
+// Pick zooms so the area is sharp where you stand: always down to zoom 12 (about 20 m a pixel
+// in New England), with four wider levels above it so the map is never empty when zoomed out.
 export function zoomsForBox(box) {
   const widthKm = haversineKm({ latitude: box.south, longitude: box.west }, { latitude: box.south, longitude: box.east });
-  const span = Math.max(1, widthKm);
-  // About 6 detail tiles across the area at the top zoom.
-  const top = clampZoom(Math.log2((40075 * Math.cos(((box.north + box.south) / 2) * Math.PI / 180)) / (span / 6)));
-  const max = Math.min(12, Math.max(6, top));
-  const min = Math.max(4, max - 4);
+  // A very wide box gets fewer detail levels so it stays under the tile cap.
+  const max = widthKm > 160 ? 10 : widthKm > 80 ? 11 : 12;
+  const min = Math.max(6, max - 4);
   const zooms = [];
   for (let z = min; z <= max; z += 1) zooms.push(z);
   return zooms;
@@ -154,6 +153,8 @@ export function startJob(plan, { approved } = {}) {
       done: [],
       failed: [],
       receivedBytes: 0,
+      renderBytes: 0,
+      rendered: false,
       status: "downloading",
       approved: true,
       startedAt: new Date().toISOString(),
@@ -191,8 +192,22 @@ export function finishJob(job) {
   return { ...job, status: complete ? "complete" : "partial", finishedAt: new Date().toISOString() };
 }
 
+// Everything an area keeps on the phone: the elevation tiles and the drawn copy.
+export function areaBytes(area) {
+  return (Number(area?.receivedBytes) || 0) + (Number(area?.renderBytes) || 0);
+}
+
+export function areasTotalBytes(list) {
+  return (list || []).reduce((sum, area) => sum + areaBytes(area), 0);
+}
+
 export function jobProgress(job) {
   if (!job) return { fraction: 0, text: "No download." };
+  if (job.status === "rendering") {
+    const total = job.renderTotal || job.done.length || 1;
+    const done = job.renderDone || 0;
+    return { fraction: Math.min(1, done / total), text: `Drawing terrain: ${done} of ${total} tiles. This can take a minute.` };
+  }
   const fraction = job.total ? job.done.length / job.total : 0;
   const words = {
     downloading: "Downloading",
@@ -203,7 +218,7 @@ export function jobProgress(job) {
   const fail = job.failed.length ? ` ${job.failed.length} tiles failed and can be retried with Resume.` : "";
   return {
     fraction,
-    text: `${words}: ${job.done.length} of ${job.total} tiles, ${formatBytes(job.receivedBytes)}.${fail}`
+    text: `${words}: ${job.done.length} of ${job.total} tiles, ${formatBytes(areaBytes(job))}.${fail}`
   };
 }
 

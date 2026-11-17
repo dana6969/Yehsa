@@ -4,6 +4,8 @@ export function startTileServer() {
   return Promise.resolve(null);
 }
 
-export function publishArchive() {}
+export async function publishPacks() {
+  return 0;
+}
 
-export function publishDem() {}
+export function publishAreas() {}

@@ -8,6 +8,8 @@ import { Ionicons } from "@expo/vector-icons";
 import {
   RADIUS_CHOICES_KM,
   checkRoom,
+  areaBytes,
+  areasTotalBytes,
   jobProgress,
   pauseJob,
   planArea,
@@ -16,7 +18,7 @@ import {
   startJob
 } from "../../symbolic/area_download.js";
 import { formatBytes } from "../../symbolic/map_packs.js";
-import { freeBytes, loadAreas, removeArea, saveAreas, saveTile, storageNote } from "./area_store";
+import { freeBytes, saveAreas, saveTile, storageNote } from "./area_store";
 import { Action, Quiet, colors, themedStyles } from "./ui.js";
 import { hit, radius, space, type } from "./tokens.js";
 
@@ -26,37 +28,28 @@ function planFor(choice, center, box) {
   return planArea({ around: { ...(center || {}), radiusKm: km }, name: `${km} km around ${center ? `${center.latitude.toFixed(3)}, ${center.longitude.toFixed(3)}` : "here"}` });
 }
 
-export default function DownloadArea({ center, visibleBox, onAreasChange, fetchImpl }) {
+export default function DownloadArea({ center, visibleBox, areas, listRef, onCommit, drawing, pending, onRemove, onUndo, fetchImpl, onShow }) {
   const [choice, setChoice] = useState(visibleBox ? "visible" : 10);
-  const [areas, setAreas] = useState([]);
   const [active, setActive] = useState(null);
   const [note, setNote] = useState(null);
   const abort = useRef(null);
+  const live = useRef(true);
   const plan = planFor(choice, center, visibleBox);
 
   useEffect(() => {
-    let live = true;
-    loadAreas().then((list) => {
-      if (live) setAreas(list);
-    });
+    live.current = true;
     return () => {
-      live = false;
-      abort.current?.abort();
+      live.current = false;
     };
   }, []);
 
-  async function persist(list) {
-    setAreas(list);
-    await saveAreas(list).catch(() => {});
-    onAreasChange?.(list);
-  }
-
+  // Downloads keep going if the sheet closes, because the Map screen owns the job.
   async function run(job, forPlan) {
     const controller = new AbortController();
     abort.current = controller;
     setActive(job);
-    const upsert = (next) => [...areas.filter((area) => area.id !== next.id), next];
-    await persist(upsert(job));
+    const upsert = (next) => [...listRef.current.filter((area) => area.id !== next.id), next];
+    await onCommit(upsert(job));
     let last = 0;
     const result = await runJob({
       plan: forPlan,
@@ -65,21 +58,22 @@ export default function DownloadArea({ center, visibleBox, onAreasChange, fetchI
       saveTile,
       signal: controller.signal,
       onProgress: (next) => {
-        setActive(next);
+        if (live.current) setActive(next);
         if (Date.now() - last > 1500) {
           last = Date.now();
           saveAreas(upsert(next)).catch(() => {});
         }
       }
     });
-    setActive(result.job);
-    await persist(upsert(result.job));
-    setNote(jobProgress(result.job).text);
+    if (live.current) setActive(result.job);
+    // A fresh set of tiles needs drawing again.
+    await onCommit(upsert({ ...result.job, rendered: false }));
+    if (live.current) setNote(jobProgress(result.job).text);
   }
 
   async function download() {
     const free = await freeBytes();
-    const used = areas.reduce((sum, area) => sum + (area.receivedBytes || 0), 0);
+    const used = areasTotalBytes(listRef.current);
     const room = checkRoom(plan, { usedBytes: used, freeBytes: free });
     if (!room.ok) {
       setNote(room.reason);
@@ -90,8 +84,8 @@ export default function DownloadArea({ center, visibleBox, onAreasChange, fetchI
       setNote(started.reason);
       return;
     }
-    const existing = areas.find((area) => area.id === started.job.id);
-    await run(existing ? { ...existing, status: "downloading", failed: [] } : started.job, plan);
+    const existing = listRef.current.find((area) => area.id === started.job.id);
+    await run(existing ? { ...existing, status: "downloading", failed: [], rendered: false } : started.job, plan);
   }
 
   function pause() {
@@ -111,9 +105,8 @@ export default function DownloadArea({ center, visibleBox, onAreasChange, fetchI
 
   async function remove(area) {
     if (active?.id === area.id) abort.current?.abort();
-    await removeArea(area.id).catch(() => {});
-    await persist(areas.filter((item) => item.id !== area.id));
-    setNote(`${area.name} was deleted from this phone.`);
+    setNote(null);
+    await onRemove(area, shortName(area));
   }
 
   const busy = active?.status === "downloading";
@@ -125,7 +118,7 @@ export default function DownloadArea({ center, visibleBox, onAreasChange, fetchI
         <Ionicons name="download-outline" size={22} color={colors.brass} />
         <Text accessibilityRole="header" style={styles.title}>Download this area</Text>
       </View>
-      <Text style={styles.lead}>Terrain and elevation for offline use. No roads or streets.</Text>
+      <Text style={styles.lead}>Terrain, hills and contour lines for offline use. No roads or streets.</Text>
       <View style={styles.chips} accessibilityRole="radiogroup">
         {choices.map((item) => {
           const selected = item === choice;
@@ -159,31 +152,50 @@ export default function DownloadArea({ center, visibleBox, onAreasChange, fetchI
           label={plan.ok ? `Download (${formatBytes(plan.bytes)})` : "Download"}
           disabled={!plan.ok}
           onPress={download}
-          accessibilityHint="Downloads terrain and elevation tiles for this area and keeps them on this phone"
+          accessibilityHint="Downloads terrain tiles for this area and keeps them on this phone"
         />
       )}
       {note ? <Quiet live>{note}</Quiet> : null}
       <Quiet>{storageNote}</Quiet>
       {areas.length ? <Text style={styles.sub}>Saved areas</Text> : null}
       {areas.map((area) => {
-        const progress = jobProgress(active?.id === area.id ? active : area);
-        const done = area.status === "complete";
+        const isActive = active?.id === area.id && busy;
+        const drawn = drawing?.id === area.id;
+        const progress = drawn
+          ? jobProgress({ ...area, status: "rendering", renderDone: drawing.done, renderTotal: drawing.total })
+          : jobProgress(isActive ? active : area);
+        const done = area.status === "complete" && area.rendered === true;
         return (
           <View key={area.id} style={styles.area}>
             <Ionicons name={done ? "checkmark-circle" : "time-outline"} size={20} color={done ? colors.success : colors.warning} />
             <View style={styles.areaBody}>
               <Text style={styles.areaName}>{area.name}</Text>
-              <Text style={styles.areaMeta}>{done ? "Done. " : ""}{progress.text} {area.attribution}</Text>
+              <Text style={styles.areaMeta}>{done ? `Ready. ${formatBytes(areaBytes(area))}. ` : ""}{done ? "" : `${progress.text} `}{area.attribution}</Text>
               <View style={styles.areaActions}>
-                {!done && !(busy && active?.id === area.id) ? <Action label="Resume" tone="quiet" onPress={() => resume(area)} disabled={busy} /> : null}
+                {done && onShow ? <Action label="Show on map" tone="quiet" onPress={() => onShow(area.box)} /> : null}
+                {area.status !== "complete" && !isActive && !drawn ? <Action label="Resume" tone="quiet" onPress={() => resume(area)} disabled={busy} /> : null}
                 <Action label="Delete" tone="clay" onPress={() => remove(area)} />
               </View>
             </View>
           </View>
         );
       })}
+      {pending ? (
+        <View style={styles.toast} accessibilityLiveRegion="polite">
+          <Text style={styles.toastText}>{pending.text}</Text>
+          <Pressable accessibilityRole="button" accessibilityLabel="Undo remove" onPress={onUndo} style={styles.toastUndo}>
+            <Text style={styles.toastUndoText}>Undo</Text>
+          </Pressable>
+        </View>
+      ) : null}
     </View>
   );
+}
+
+// "50 km area" from "50 km around 44.514, -69.807", so the toast stays short.
+export function shortName(area) {
+  const m = String(area?.name || "").match(/^(\d+ km)/);
+  return m ? `${m[1]} area` : (area?.name || "Area");
 }
 
 const styles = themedStyles((colors) => ({
@@ -220,5 +232,9 @@ const styles = themedStyles((colors) => ({
   areaBody: { flex: 1, marginLeft: space.sm },
   areaName: { ...type.action, color: colors.ink },
   areaMeta: { ...type.label, color: colors.muted, marginTop: 2 },
-  areaActions: { flexDirection: "row", gap: space.sm, marginTop: space.sm }
+  areaActions: { flexDirection: "row", flexWrap: "wrap", gap: space.sm, marginTop: space.sm },
+  toast: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", backgroundColor: colors.surfaceRaised || colors.line, borderColor: colors.lineStrong, borderWidth: 1, borderRadius: radius.lg, paddingLeft: space.lg, marginTop: space.md },
+  toastText: { ...type.label, color: colors.ink, flex: 1, paddingVertical: space.md },
+  toastUndo: { minHeight: hit.min, minWidth: hit.min, paddingHorizontal: space.lg, alignItems: "center", justifyContent: "center" },
+  toastUndoText: { ...type.action, color: colors.brassText }
 }));

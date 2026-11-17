@@ -28,7 +28,22 @@ export async function readTile(areaId, key) {
   return tiles.get(`${areaId}|${key}`) || null;
 }
 
+const renders = new Map();
+
+export async function saveRender(areaId, z, x, y, bytes) {
+  renders.set(`${areaId}|${z}/${x}/${y}`, bytes);
+}
+
+export async function readRender(areaId, z, x, y) {
+  return renders.get(`${areaId}|${z}/${x}/${y}`) || null;
+}
+
+export async function sweepAreas() {}
+
 export async function removeArea(areaId) {
+  for (const key of [...renders.keys()]) {
+    if (key.startsWith(`${areaId}|`)) renders.delete(key);
+  }
   for (const key of [...tiles.keys()]) {
     if (key.startsWith(`${areaId}|`)) tiles.delete(key);
   }

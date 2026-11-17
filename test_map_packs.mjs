@@ -87,9 +87,10 @@ test("a download does not touch the network until you approve, and a huge pack i
   assert.equal(planet.fetch, false);
   assert.match(planet.reason, /tens of gigabytes|Nothing was downloaded/);
 
+  // The old protocol-buffer extract is gone: nothing in the catalog is a file the phone cannot open.
   const pbf = beginDownload(emptyPackStore(), "geofabrik-rhode-island", { approved: true });
   assert.equal(pbf.fetch, false);
-  assert.match(pbf.reason, /not fetched|protocol-buffer/);
+  assert.match(pbf.reason, /not in the catalog/);
   assert.equal(calls, 0);
 
   const paused = pauseDownload({ ...emptyPackStore(), jobs: [{ id: "natural-earth-overview", approved: true, status: "fetching" }] }, "natural-earth-overview");

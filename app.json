@@ -104,7 +104,8 @@
           "microphonePermission": false,
           "recordAudioAndroid": false
         }
-      ]
+      ],
+      "./plugins/withLoopbackCleartext.js"
     ],
     "extra": {
       "eas": {

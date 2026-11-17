@@ -100,23 +100,20 @@ import { domainOf, mergeCompound, newThread, socialTurn, splitCompound, tripResu
 import { capabilitySummary, continueUtterance, isCapabilityQuestion, isFeedbackEligible, sourceChips } from "../../symbolic/chat_turn.js";
 import LandscapeMap from "./LandscapeMap.js";
 import {
-  addPack,
-  attributionLine,
-  beginDownload,
-  deletePack,
   elevationNear,
   emptyPackStore,
-  formatBytes,
   nearestWater,
-  packCards,
-  packShapes,
-  storageLine,
-  validateImport
+  packShapes
 } from "../../symbolic/map_packs.js";
-import { DEM_ATTRIBUTION, contourGeoJSON, elevationAt, hillshadeRgba, planDemRegion, terrariumGrid, tileBounds } from "../../symbolic/dem_tiles.js";
-import { decode as decodePng, encode as encodePng } from "fast-png";
 import OfflineMap from "./OfflineMap";
-import { publishArchive, publishDem, startTileServer } from "./tile_server";
+import { startTileServer } from "./tile_server";
+import MapPacksSheet from "./MapPacksSheet";
+import useAreas from "./useAreas";
+import usePackDownloads from "./usePackDownloads";
+import { usePersistedPackStore } from "./map_pack_manager";
+import { elevationFromAreas } from "./area_elevation";
+import { mapLayers } from "../../symbolic/map_layers.js";
+import { initialHost, mapViewKey, nextHost, rememberCamera, shouldMountMap } from "../../symbolic/map_host.js";
 import PeerChat from "./PeerChat.js";
 import PeerSecurity from "./PeerSecurity.js";
 import EmergencyScreen from "./EmergencyScreen.js";
@@ -124,7 +121,7 @@ import { BackLayers, useBackLayer } from "./back_layers.js";
 import { MORE_ITEMS, TABS, destinationActions, backAction, backLabel, createBackLayers, initialNav, navReduce, topScreen } from "./nav_model.js";
 import FieldPane from "./FieldPane.js";
 import MorePane from "./MorePane.js";
-import { BooksPane, DownloadArea, HotspotGuide, SatSosGuide, TrustScreen, areaDemLayers, loadAreas } from "./screens_index.js";
+import { BooksPane, DownloadArea, HotspotGuide, SatSosGuide, TrustScreen } from "./screens_index.js";
 import CommandSheet from "./CommandSheet.js";
 import Onboarding, { ONBOARDED_KEY } from "./Onboarding.js";
 import { TRUST_EVAL, TRUST_LINES } from "./trust_copy.js";
@@ -197,7 +194,7 @@ export default function YehsaApp() {
   const [layersRequest, setLayersRequest] = useState(0);
   const [fieldRequest, setFieldRequest] = useState(null);
   const [scanRequest, setScanRequest] = useState(0);
-  const [mapPacks, setMapPacks] = useState(emptyPackStore);
+  const [mapPacks, setMapPacks] = usePersistedPackStore();
   const [actions, setActions] = useState(null);
   const [models, setModels] = useState(emptyModelSettings);
   const [learned, setLearned] = useState(emptyLearned);
@@ -386,6 +383,7 @@ export default function YehsaApp() {
         </View>
         <View {...pane("map")}>
           <LandPane
+            active={visible === "map"}
             position={position}
             setPosition={setPosition}
             onConsent={changeConsent}
@@ -1589,14 +1587,7 @@ class MapBoundary extends React.Component {
   }
 }
 
-function pngDataUrl(bytes) {
-  let binary = "";
-  const step = 0x8000;
-  for (let i = 0; i < bytes.length; i += step) binary += String.fromCharCode(...bytes.subarray(i, i + step));
-  return `data:image/png;base64,${globalThis.btoa(binary)}`;
-}
-
-function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, display, onDisplay, onParty, onBefore, onOpenTool }) {
+function LandPane({ active, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, display, onDisplay, onParty, onBefore, onOpenTool }) {
   const [layersOpen, setLayersOpen] = useState(false);
   const [hunt, setHunt] = useState(false);
   useBackLayer(hunt, () => setHunt(false));
@@ -1609,13 +1600,16 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
   }, [layersRequest]);
   const [declination, setDeclination] = useState("0");
   const [importNote, setImportNote] = useState("");
-  const [demTiles, setDemTiles] = useState([]);
-  const [contours, setContours] = useState({ type: "FeatureCollection", features: [] });
   const [mapFailed, setMapFailed] = useState(false);
   const [tilePort, setTilePort] = useState(null);
   const [elevNote, setElevNote] = useState("");
-  const demRef = useRef([]);
-  const downloadAbort = useRef(null);
+  const [mapStyle, setMapStyle] = useState("standard");
+  const [focus, setFocus] = useState(null);
+  const [focusKey, setFocusKey] = useState(0);
+  const [host, setHost] = useState(initialHost);
+  const camera = useRef(null);
+  const areaState = useAreas();
+  const downloads = usePackDownloads({ store: mapPacks, setStore: setMapPacks });
   const [gps, setGps] = useState(initialGpsMap);
   const [gpsWanted, setGpsWanted] = useState(false);
   const [backgroundGps, setBackgroundGps] = useState(false);
@@ -1625,11 +1619,31 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
     : (gps.fix || (consented && position.status === "locked" && position.fix ? position.fix : { latitude: 0, longitude: 0 }));
   const held = gps.fix || (consented && position.status === "locked" ? position.fix : null);
   const crumbs = gps.track.length ? gps.track : track;
-  const tiledPack = (mapPacks?.packs || []).find((pack) => pack.archive);
-  const metersHere = held ? demRef.current.reduce((found, tile) => {
-    if (found != null) return found;
-    return elevationAt(tile.elev, tile.width, tile.height, tile.bounds, held.longitude, held.latitude);
-  }, null) : null;
+  // The native map view is built only while this screen shows, and fresh each time it shows again.
+  useEffect(() => {
+    setHost((current) => nextHost(current, Boolean(active)));
+  }, [active]);
+  const layers = useMemo(() => mapLayers({
+    store: mapPacks,
+    areas: areaState.areas,
+    port: tilePort,
+    style: mapStyle,
+    mode: display?.mode || "field",
+    night: display?.night || "red"
+  }), [mapPacks, areaState.areas, tilePort, mapStyle, display?.mode, display?.night]);
+  const [metersHere, setMetersHere] = useState(null);
+  useEffect(() => {
+    let live = true;
+    if (!held || !areaState.areas.length) {
+      setMetersHere(null);
+      return undefined;
+    }
+    elevationFromAreas(areaState.areas.filter((area) => area.rendered), held.longitude, held.latitude)
+      .then((meters) => live && setMetersHere(meters)).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [held?.latitude, held?.longitude, areaState.areas]);
 
   useEffect(() => {
     let live = true;
@@ -1644,37 +1658,12 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
     };
   }, []);
 
-  useEffect(() => {
-    publishArchive(tiledPack || null);
-  }, [tiledPack]);
-
-  // Offline areas saved with "Download this area" draw as hillshade and contours
-  // when no elevation tiles are loaded yet. Read from this phone only.
-  async function showSavedArea(list) {
-    const area = [...(list || [])].reverse().find((item) => item && item.box && item.done?.length);
-    if (!area || demRef.current.length) return;
-    try {
-      const layers = await areaDemLayers(area);
-      if (!layers.stored.length || demRef.current.length) return;
-      demRef.current = layers.stored;
-      setDemTiles(layers.demTiles || layers.stored.map((tile) => ({ url: tile.url, bounds: tile.bounds, z: tile.z, x: tile.x, y: tile.y })));
-      setContours(layers.contours || { type: "FeatureCollection", features: [] });
-      publishDem(layers.stored);
-      setImportNote(`Showing your saved area: ${area.name || "offline area"}.`);
-    } catch {
-      // A damaged area stays listed so it can be deleted; the blank canvas stays.
-    }
+  function showBox(box) {
+    if (!box) return;
+    setFocus(box);
+    setFocusKey((key) => key + 1);
+    setLayersOpen(false);
   }
-
-  useEffect(() => {
-    let live = true;
-    loadAreas().then((list) => {
-      if (live) showSavedArea(list);
-    }).catch(() => {});
-    return () => {
-      live = false;
-    };
-  }, []);
 
   useEffect(() => {
     if (!consented || !gpsWanted) {
@@ -1716,157 +1705,6 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
     };
   }, [consented, gpsWanted, backgroundGps, setPosition]);
 
-  const [packJobs, setPackJobs] = useState({});
-  const [demJob, setDemJob] = useState({ state: "idle", done: 0, total: 0 });
-  const demAbort = useRef(null);
-  const packsRef = useRef(mapPacks);
-  packsRef.current = mapPacks;
-  const liveRef = useRef(true);
-  useEffect(() => () => {
-    liveRef.current = false;
-    downloadAbort.current?.abort?.();
-    demAbort.current?.abort?.();
-  }, []);
-
-  function setPackJob(id, job) {
-    if (!liveRef.current) return;
-    setPackJobs((current) => {
-      const next = { ...current };
-      if (job) next[id] = job;
-      else delete next[id];
-      return next;
-    });
-  }
-
-  // The press handler only starts the job and returns. Fetch and parse run after a frame
-  // yield, so the Map packs sheet keeps scrolling. A second tap while busy does nothing.
-  function approvePackDownload(id) {
-    if (!id || packJobs[id]?.state === "downloading") return;
-    const planned = beginDownload(packsRef.current, id, { approved: true });
-    if (!planned.fetch) {
-      setPackJob(id, null);
-      return;
-    }
-    downloadAbort.current?.abort?.();
-    const controller = new AbortController();
-    downloadAbort.current = controller;
-    setPackJob(id, { state: "downloading" });
-    (async () => {
-      try {
-        await yieldFrame();
-        const response = await fetch(planned.item.url, { signal: controller.signal });
-        if (!response.ok) throw new Error("status");
-        const text = await response.text();
-        if (text.length > PACK_TEXT_LIMIT) throw new Error("too big");
-        await yieldFrame();
-        if (controller.signal.aborted) return;
-        const pack = validateImport(`${planned.item.id}.geojson`, text);
-        if (pack.ok) {
-          pack.catalogId = planned.item.id;
-          pack.name = planned.item.name;
-          pack.source = planned.item.source;
-          pack.license = planned.item.license;
-          pack.attribution = planned.item.attribution;
-          pack.built = pack.built || new Date().toISOString().slice(0, 10);
-        }
-        await yieldFrame();
-        if (controller.signal.aborted || !liveRef.current) return;
-        const saved = addPack(packsRef.current, pack);
-        if (saved.added) setMapPacks(saved.store);
-        setPackJob(id, saved.added ? null : { state: "error" });
-      } catch (err) {
-        if (err?.name === "AbortError" || controller.signal.aborted) {
-          setPackJob(id, null);
-          return;
-        }
-        setPackJob(id, { state: "error" });
-      }
-    })();
-  }
-
-  function cancelPackDownload(id) {
-    downloadAbort.current?.abort?.();
-    setPackJob(id, null);
-  }
-
-  // Elevation tiles: one tile per step, with a frame yield between the fetch, the PNG
-  // decode, and the hillshade/contour work. Cancel aborts between steps.
-  function startElevation() {
-    if (demJob.state === "downloading") return;
-    const plan = planDemRegion({ approved: true, around: { latitude: held?.latitude || 45, longitude: held?.longitude || -69, radiusKm: 40 } });
-    if (!plan.fetch || plan.tiles.length < 2) {
-      setDemJob({ state: "error", done: 0, total: 0 });
-      return;
-    }
-    demAbort.current?.abort?.();
-    const controller = new AbortController();
-    demAbort.current = controller;
-    setDemJob({ state: "downloading", done: 0, total: plan.tiles.length });
-    (async () => {
-      const stored = [];
-      const lines = [];
-      try {
-        for (let index = 0; index < plan.tiles.length; index += 1) {
-          await yieldFrame();
-          if (controller.signal.aborted) return;
-          const response = await fetch(plan.urls[index], { signal: controller.signal });
-          if (!response.ok) continue;
-          const bytes = new Uint8Array(await response.arrayBuffer());
-          await yieldFrame();
-          const png = decodePng(bytes);
-          const channels = png.channels || Math.round(png.data.length / (png.width * png.height));
-          const rgba = channels === 4 ? png.data : new Uint8Array(png.width * png.height * 4);
-          if (channels !== 4) {
-            for (let pixel = 0; pixel < png.width * png.height; pixel += 1) {
-              rgba[pixel * 4] = png.data[pixel * channels];
-              rgba[pixel * 4 + 1] = png.data[pixel * channels + 1];
-              rgba[pixel * 4 + 2] = png.data[pixel * channels + 2];
-              rgba[pixel * 4 + 3] = 255;
-            }
-          }
-          await yieldFrame();
-          const elev = terrariumGrid(rgba, png.width, png.height);
-          const shade = hillshadeRgba(elev, png.width, png.height);
-          await yieldFrame();
-          const encoded = encodePng({ width: png.width, height: png.height, data: shade, channels: 4 });
-          const tile = plan.tiles[index];
-          const bounds = tileBounds(tile.z, tile.x, tile.y);
-          await yieldFrame();
-          const drawn = contourGeoJSON(elev, png.width, png.height, bounds, 100);
-          lines.push(...drawn.features);
-          stored.push({ z: tile.z, x: tile.x, y: tile.y, bounds, elev, width: png.width, height: png.height, url: pngDataUrl(encoded), png: encoded });
-          if (liveRef.current) setDemJob({ state: "downloading", done: index + 1, total: plan.tiles.length });
-        }
-        if (controller.signal.aborted || !liveRef.current) return;
-        if (stored.length < 2) throw new Error("empty");
-        demRef.current = stored;
-        setDemTiles(stored.map((tile) => ({ url: tile.url, bounds: tile.bounds, z: tile.z, x: tile.x, y: tile.y })));
-        setContours({ type: "FeatureCollection", features: lines.slice(0, 400) });
-        publishDem(stored);
-        setDemJob({ state: "idle", done: 0, total: 0 });
-      } catch (err) {
-        if (!liveRef.current) return;
-        if (err?.name === "AbortError" || controller.signal.aborted) {
-          setDemJob({ state: "idle", done: 0, total: 0 });
-          return;
-        }
-        setDemJob({ state: "error", done: 0, total: 0 });
-      }
-    })();
-  }
-
-  function cancelElevation() {
-    demAbort.current?.abort?.();
-    setDemJob({ state: "idle", done: 0, total: 0 });
-  }
-
-  function removeElevation() {
-    demRef.current = [];
-    setDemTiles([]);
-    setContours({ type: "FeatureCollection", features: [] });
-    publishDem([]);
-  }
-
   return (
     <View style={styles.mapPane}>
       <ScreenHeader compact title={hunt ? "Hunt" : "Map"} />
@@ -1878,29 +1716,35 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
       </View>
       {hunt ? <HuntHud position={position} onOpenTool={onOpenTool} /> : null}
       <View style={styles.mapFill}>
-        {(tiledPack || demTiles.length > 0) && !mapFailed ? (
+        {shouldMountMap(host, layers) && !mapFailed ? (
           <MapBoundary onFail={() => setMapFailed(true)}>
             <OfflineMap
+              key={mapViewKey(host)}
               fill
-              archive={tiledPack?.archive}
-              format={tiledPack?.format}
-              tileTemplate={tilePort ? `http://127.0.0.1:${tilePort}/pack/{z}/{x}/{y}` : null}
-              demTemplate={tilePort && demTiles.length ? `http://127.0.0.1:${tilePort}/dem/{z}/{x}/{y}.png` : null}
-              demTiles={demTiles}
-              contours={contours}
-              shapes={packShapes(mapPacks || emptyPackStore())}
+              layers={layers}
               fix={held}
               follow={gps.follow}
               headingDeg={gps.headingDeg}
-              attribution={attributionLine(mapPacks)}
+              focus={focus}
+              focusKey={focusKey}
+              initialCamera={camera.current}
+              onCamera={(event) => { camera.current = rememberCamera(camera.current, event); }}
+              attribution={layers.attribution}
               onFail={() => setMapFailed(true)}
               onPress={(point) => {
                 if (onMapTap) onMapTap(point);
-                const meters = demRef.current.reduce((found, tile) => found != null ? found : elevationAt(tile.elev, tile.width, tile.height, tile.bounds, point.longitude, point.latitude), null);
-                setElevNote(meters == null ? "No elevation for that spot yet." : `About ${Math.round(meters)} m at that spot.`);
+                elevationFromAreas(areaState.areas.filter((area) => area.rendered), point.longitude, point.latitude)
+                  .then((meters) => setElevNote(meters == null ? "No elevation for that spot yet." : `About ${Math.round(meters)} m at that spot.`))
+                  .catch(() => {});
               }}
             />
           </MapBoundary>
+        ) : layers.empty ? (
+          <View style={styles.emptyMap} accessibilityLabel="No map pack yet">
+            <Text accessibilityRole="header" style={styles.emptyTitle}>No map pack yet</Text>
+            <Text style={styles.emptyBody}>Download a region to see land, water, and terrain. The map stays quiet until a pack is on this phone.</Text>
+            <Action label="Layers and packs" onPress={() => setLayersOpen(true)} />
+          </View>
         ) : (
         <LandscapeMap
           fill
@@ -1919,8 +1763,6 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
           onUserPan={() => setGps((current) => noteUserPan(current))}
           onWaypoint={(point) => {
             if (onMapTap) onMapTap(point);
-            const meters = demRef.current.reduce((found, tile) => found != null ? found : elevationAt(tile.elev, tile.width, tile.height, tile.bounds, point.longitude, point.latitude), null);
-            setElevNote(meters == null ? "" : `About ${Math.round(meters)} m at that spot.`);
             setImportNote(`Point ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Open Ask and tap Approve to save it.`);
           }}
         />
@@ -1945,7 +1787,17 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
           <ScrollView contentContainerStyle={styles.sheetScroll} keyboardShouldPersistTaps="handled">
             <Action label="Before you go" tone="quiet" onPress={() => { setLayersOpen(false); onBefore?.(); }} />
             <Text style={styles.sectionLabel}>Download this area</Text>
-            <DownloadArea center={held || null} onAreasChange={showSavedArea} />
+            <DownloadArea
+              center={held || null}
+              areas={areaState.areas}
+              listRef={areaState.listRef}
+              onCommit={areaState.commit}
+              drawing={areaState.drawing}
+              pending={areaState.pending}
+              onRemove={areaState.remove}
+              onUndo={areaState.undo}
+              onShow={showBox}
+            />
             {consented && gpsWanted ? (
               <Action label={backgroundGps ? "Background GPS on" : "Foreground GPS only"} tone="quiet" onPress={() => setBackgroundGps((value) => !value)} />
             ) : null}
@@ -1961,114 +1813,19 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
             <Quiet>{metersHere == null ? elevationNear(mapPacks || emptyPackStore(), held).text : `About ${Math.round(metersHere)} m here.`}</Quiet>
             {elevNote ? <Quiet>{elevNote}</Quiet> : null}
             {importNote ? <Quiet>{importNote}</Quiet> : null}
-            <Text style={styles.sectionLabel}>Map packs</Text>
-            <Quiet>Offline maps on this phone.</Quiet>
-            <Quiet>{storageLine(mapPacks || emptyPackStore())}</Quiet>
-            <PackCard
-              card={{
-                key: "elevation",
-                name: "Elevation and terrain",
-                state: demJob.state === "downloading" ? "Downloading" : demJob.state === "error" ? "Error" : demTiles.length ? "Ready" : "Not downloaded",
-                description: "Hills and contours around you, for offline use.",
-                meta: demJob.state === "downloading"
-                  ? `${demJob.done} of ${demJob.total} tiles · Near you`
-                  : demTiles.length ? `${demTiles.length} tiles · Near you` : "About 2 MB · Near you",
-                about: `${DEM_ATTRIBUTION.replace(/^Elevation:\s*/, "")} · public domain. May be dated.`,
-                canDownload: true,
-                job: demJob.state === "downloading" ? { received: demJob.done, total: demJob.total } : null
-              }}
-              onDownload={startElevation}
-              onCancel={cancelElevation}
-              onShow={() => setLayersOpen(false)}
-              onRemove={removeElevation}
-            />
-            {packCards(mapPacks || emptyPackStore(), packJobs).map((card) => (
-              <PackCard
-                key={card.key}
-                card={card}
-                onDownload={() => approvePackDownload(card.catalogId)}
-                onCancel={() => cancelPackDownload(card.catalogId)}
-                onShow={() => setLayersOpen(false)}
-                onRemove={() => card.packId && setMapPacks(deletePack(mapPacks, card.packId))}
-                onUpdate={() => approvePackDownload(card.catalogId)}
-              />
-            ))}
-            <Action
-              label="Import a map file"
-              tone="quiet"
-              onPress={() => {
-                if (Platform.OS !== "web" || typeof document === "undefined") {
-                  setImportNote("Adding a map file isn't available on this phone yet.");
-                  return;
-                }
-                const input = document.createElement("input");
-                input.type = "file";
-                input.accept = ".geojson,.json,.gpx,.kml,.mbtiles,.pmtiles";
-                input.onchange = () => {
-                  const file = input.files && input.files[0];
-                  if (!file) return;
-                  const reader = new FileReader();
-                  reader.onload = () => {
-                    const bytes = new Uint8Array(reader.result);
-                    const pack = validateImport(file.name, bytes);
-                    if (pack.ok && (pack.format === "pmtiles" || pack.format === "mbtiles")) pack.archive = bytes;
-                    const saved = addPack(mapPacks, pack);
-                    if (saved.added) setMapPacks(saved.store);
-                    setImportNote(saved.added
-                      ? `Added ${pack.name} (${formatBytes(pack.bytes)}).`
-                      : (pack.reason || saved.reason));
-                  };
-                  reader.readAsArrayBuffer(file);
-                };
-                input.click();
-              }}
+            <MapPacksSheet
+              store={mapPacks}
+              setStore={setMapPacks}
+              areas={areaState.areas}
+              downloads={downloads}
+              style={mapStyle}
+              onStyle={setMapStyle}
+              onShowPack={showBox}
+              onClose={() => setLayersOpen(false)}
             />
           </ScrollView>
         </View>
       ) : null}
-    </View>
-  );
-}
-
-// Hand control back to the UI between heavy steps so the screen never freezes.
-function yieldFrame() {
-  return new Promise((resolve) => setTimeout(resolve, 0));
-}
-
-const PACK_TEXT_LIMIT = 24 * 1024 * 1024;
-
-function PackCard({ card, onDownload, onCancel, onShow, onRemove, onUpdate }) {
-  const [about, setAbout] = useState(false);
-  const state = card.state;
-  const progress = card.job?.total ? Math.min(1, (card.job.received || 0) / card.job.total) : null;
-  return (
-    <View style={styles.packCard}>
-      <View style={styles.packHead}>
-        <Text style={styles.packName}>{card.name}</Text>
-        <Text style={styles.packState}>{state}</Text>
-      </View>
-      <Text style={styles.packText}>{card.description}</Text>
-      {state === "Downloading" && progress != null ? (
-        <View style={styles.packBar}><View style={[styles.packBarFill, { width: `${Math.round(progress * 100)}%` }]} /></View>
-      ) : null}
-      <Text style={styles.packMeta}>{card.meta}</Text>
-      {state === "Error" ? <Text style={styles.packText}>Couldn't finish this download. Nothing new was saved.</Text> : null}
-      <View style={styles.cardRow}>
-        {state === "Not downloaded" && card.canDownload && !card.waitingForSignal ? <Action label="Download" onPress={onDownload} /> : null}
-        {state === "Not downloaded" && card.waitingForSignal ? <Quiet>Will download when you're back online.</Quiet> : null}
-        {state === "Downloading" ? <Action label="Cancel" tone="quiet" onPress={onCancel} /> : null}
-        {state === "Ready" ? <Action label="Show on map" onPress={onShow} /> : null}
-        {state === "Ready" && onRemove ? <Action label="Remove" tone="clay" onPress={onRemove} /> : null}
-        {state === "Ready" && card.canUpdate && onUpdate ? <Action label="Update" tone="quiet" onPress={onUpdate} /> : null}
-        {state === "Error" ? <Action label="Try again" onPress={onDownload || onUpdate} /> : null}
-        {state === "Error" ? <Action label="Cancel" tone="quiet" onPress={onCancel} /> : null}
-      </View>
-      {card.about ? (
-        <Pressable accessibilityRole="button" accessibilityState={{ expanded: about }} onPress={() => setAbout((value) => !value)} style={styles.packAbout}>
-          <Text style={styles.packAboutLink}>About this data</Text>
-        </Pressable>
-      ) : null}
-      {about ? <Text style={styles.packMeta}>{card.about}</Text> : null}
     </View>
   );
 }
@@ -2645,6 +2402,19 @@ const styles = themedStyles((colors) => ({
     minHeight: 40,
     paddingVertical: 8
   },
+  emptyMap: {
+    flex: 1,
+    margin: 16,
+    padding: 20,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: colors.lineStrong,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12
+  },
+  emptyTitle: { color: colors.ink, fontSize: 20, fontWeight: "700", textAlign: "center" },
+  emptyBody: { color: colors.muted, fontSize: 16, lineHeight: 23, textAlign: "center" },
   mapFill: {
     flex: 1,
     overflow: "hidden"

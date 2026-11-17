@@ -15,18 +15,22 @@ function lineCollection(shapes) {
   return { type: "FeatureCollection", features };
 }
 
+const NO_TILES = [];
+const NO_CONTOURS = { type: "FeatureCollection", features: [] };
+
 export default function OfflineMap({
-  archive,
-  format,
+  layers,
   attribution,
-  demTiles,
-  contours,
-  shapes,
   fix,
   onFail,
   onPress,
   fill = false
 }) {
+  const archive = layers?.archivePack?.archive;
+  const format = layers?.archivePack?.format;
+  const shapes = layers?.shapes;
+  const demTiles = NO_TILES;
+  const contours = NO_CONTOURS;
   const host = useRef(null);
   const pressRef = useRef(onPress);
   const failRef = useRef(onFail);
