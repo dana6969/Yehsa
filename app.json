@@ -88,7 +88,8 @@
           "photosPermission": "Yehsa opens a photo only when you choose one on Identify. The photo stays on this phone.",
           "microphonePermission": false
         }
-      ]
+      ],
+      "./plugins/withArm64Only.js"
     ],
     "extra": {
       "eas": {

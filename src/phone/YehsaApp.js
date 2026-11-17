@@ -118,6 +118,7 @@ import { BackLayers, useBackLayer } from "./back_layers.js";
 import { MORE_ITEMS, TABS, destinationActions, backAction, backLabel, createBackLayers, initialNav, navReduce, topScreen } from "./nav_model.js";
 import FieldPane from "./FieldPane.js";
 import MorePane from "./MorePane.js";
+import { BooksPane, DownloadArea, HotspotGuide, SatSosGuide, TrustScreen, areaDemLayers, loadAreas } from "./screens_index.js";
 import CommandSheet from "./CommandSheet.js";
 import Onboarding, { ONBOARDED_KEY } from "./Onboarding.js";
 import { TRUST_EVAL, TRUST_LINES } from "./trust_copy.js";
@@ -396,10 +397,12 @@ export default function YehsaApp() {
         <View {...pane("field")}>
           <FieldPane
             position={position}
+            mapPacks={mapPacks}
             onEmergency={() => go({ type: "openSos" })}
             openRequest={fieldRequest}
             onOpenLayers={() => { setTab("map"); setLayersRequest(Date.now()); }}
-            onOpenScreen={openScreen}
+            onOpenScreen={(id) => (id === "people" ? setTab("people") : openScreen(id))}
+            onAsk={askFromAnywhere}
           />
         </View>
         <View {...pane("people")}>
@@ -506,13 +509,26 @@ export default function YehsaApp() {
         ) : null}
         {stackOpen("library") ? (
           <View {...pane("library")}>
-            <ScrollView contentContainerStyle={styles.scroll}>
-              <ScreenHeader title="Library" lead="What Yehsa reads from on this phone." onBack={popScreen} backLabel={back} />
+            <BooksPane title="Library" lead="What Yehsa reads from on this phone." onBack={popScreen} backLabel={back}>
               <Prose>{`${books.passages.length} field passages from ${(books.sources || []).length || "several"} packaged sources.`}</Prose>
               <Quiet>{`Dictionary: ${phoneCorpusMeta.headwords} headwords and ${phoneCorpusMeta.medicalNames} medical names.`}</Quiet>
               <Quiet>Spiritual texts open only when you ask a spiritual question in Ask. They are kept separate from field notes.</Quiet>
-              <Quiet>Adding your own books comes in a later update.</Quiet>
-            </ScrollView>
+            </BooksPane>
+          </View>
+        ) : null}
+        {stackOpen("trust") ? (
+          <View {...pane("trust")}>
+            <TrustScreen onBack={popScreen} backLabel={back} />
+          </View>
+        ) : null}
+        {stackOpen("satsos") ? (
+          <View {...pane("satsos")}>
+            <SatSosGuide onBack={popScreen} backLabel={back} />
+          </View>
+        ) : null}
+        {stackOpen("hotspot") ? (
+          <View {...pane("hotspot")}>
+            <HotspotGuide onBack={popScreen} backLabel={back} />
           </View>
         ) : null}
         {stackOpen("about") ? (
@@ -1495,6 +1511,34 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
     publishArchive(tiledPack || null);
   }, [tiledPack]);
 
+  // Offline areas saved with "Download this area" draw as hillshade and contours
+  // when no elevation tiles are loaded yet. Read from this phone only.
+  async function showSavedArea(list) {
+    const area = [...(list || [])].reverse().find((item) => item && item.box && item.done?.length);
+    if (!area || demRef.current.length) return;
+    try {
+      const layers = await areaDemLayers(area);
+      if (!layers.stored.length || demRef.current.length) return;
+      demRef.current = layers.stored;
+      setDemTiles(layers.demTiles || layers.stored.map((tile) => ({ url: tile.url, bounds: tile.bounds, z: tile.z, x: tile.x, y: tile.y })));
+      setContours(layers.contours || { type: "FeatureCollection", features: [] });
+      publishDem(layers.stored);
+      setImportNote(`Showing your saved area: ${area.name || "offline area"}. May be out of date.`);
+    } catch {
+      // A damaged area stays listed so it can be deleted; the blank canvas stays.
+    }
+  }
+
+  useEffect(() => {
+    let live = true;
+    loadAreas().then((list) => {
+      if (live) showSavedArea(list);
+    }).catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+
   useEffect(() => {
     if (!consented || !gpsWanted) {
       if (!consented) setGps(revokeGpsConsent());
@@ -1659,6 +1703,8 @@ function LandPane({ position, setPosition, onConsent, waypoints, track, onMapTap
           </View>
           <ScrollView contentContainerStyle={styles.sheetScroll} keyboardShouldPersistTaps="handled">
             <Action label="Before you go" tone="quiet" onPress={() => { setLayersOpen(false); onBefore?.(); }} />
+            <Text style={styles.sectionLabel}>Download this area</Text>
+            <DownloadArea center={held || null} onAreasChange={showSavedArea} />
             {consented && gpsWanted ? (
               <Action label={backgroundGps ? "Background GPS on" : "Foreground GPS only"} tone="quiet" onPress={() => setBackgroundGps((value) => !value)} />
             ) : null}

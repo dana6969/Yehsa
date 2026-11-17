@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-10T01:29:15.302Z",
-  "passageCount": 445,
+  "generatedAt": "2026-11-17T15:01:34.839Z",
+  "passageCount": 463,
   "sources": [
     {
       "file": "symbolic_memory/full_book_verses.json",
@@ -24,7 +24,7 @@
       "file": "symbolic_books/herbology/notes.json",
       "status": "indexed",
       "title": "notes",
-      "passages": 5
+      "passages": 8
     },
     {
       "file": "symbolic_books/landscape/notes.json",
@@ -36,7 +36,7 @@
       "file": "symbolic_books/medical/reference.json",
       "status": "indexed",
       "title": "reference",
-      "passages": 7
+      "passages": 22
     },
     {
       "file": "symbolic_books/story_of_the_great_war_vol_v.txt",
@@ -240,6 +240,24 @@
       "source": "symbolic_books/herbology/notes.json"
     },
     {
+      "symbol": "hemlock_carrot_lookalike",
+      "context": "Wild carrot (Queen Anne's lace) can look like poison hemlock and water hemlock, which are deadly. Poison hemlock has smooth purple-spotted stems and a musty smell. Water hemlock grows in wet ground and has chambered roots. Wild carrot often has one dark floret in the center and a hairy stem. Never taste an umbrella-flowered plant. A picture is not an identification. Call emergency services if any was eaten.",
+      "title": "notes",
+      "source": "symbolic_books/herbology/notes.json"
+    },
+    {
+      "symbol": "camas_onion_lookalike",
+      "context": "Death camas is a toxic bulb that can look like a wild onion. A wild onion smells strongly of onion when the bulb or leaf is crushed. Death camas does not smell like onion and its flowers are not an onion umbel. If there is no onion smell, do not eat it. Call emergency services if a bulb was eaten. A picture is not an identification.",
+      "title": "notes",
+      "source": "symbolic_books/herbology/notes.json"
+    },
+    {
+      "symbol": "toxic_plant_facts",
+      "context": "Many toxic plants share milky sap, bulb leaves, or white umbrella flower clusters. Never taste a plant to identify it. A small amount of water hemlock, poison hemlock, or death camas can be deadly. Identify every part, and if anyone eats an unknown plant, call emergency services. This is not a dose.",
+      "title": "notes",
+      "source": "symbolic_books/herbology/notes.json"
+    },
+    {
       "symbol": "biome_bands",
       "context": "Biomes are broad living landscapes: forest, grassland, desert, tundra, and coast, set by climate and water more than by towns. Plants and the ground underfoot tell you which pattern you are in. A biome is not a line you can pace to a city limit. Weather still changes inside it.",
       "title": "notes",
@@ -392,6 +410,96 @@
     {
       "symbol": "splint_immobilize",
       "context": "A splint keeps a suspected broken bone still, such as a broken arm or leg. Pad it, include the joints above and below, and tie it snug enough to stop motion without cutting off circulation. Skin beyond it should stay warm and able to feel. Do not set the bone; this is not surgery or a substitute for emergency care.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "nosebleed_forward",
+      "context": "A nosebleed: sit up, lean forward, and pinch the soft part of the nose for ten minutes or more. Do not tilt the head back. Spit blood instead of swallowing it. Call emergency services if bleeding will not stop, started after a head injury, or the person is dizzy or weak.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "choking_thrusts",
+      "context": "Choking: if an adult or child cannot cough, speak, or breathe, give abdominal thrusts until the object comes out or they become unresponsive, then start CPR and call emergency services. For an infant, use back blows and chest thrusts, not abdominal thrusts. Call emergency services.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "cpr_rate_depth",
+      "context": "Start CPR when a person is unresponsive and not breathing normally. Call emergency services. Compress the center of the chest at 100 to 120 per minute. Adult depth is about 5 cm (2 inches). A child is about 5 cm. An infant is about 4 cm (1.5 inches). If you are trained, give 30 compressions then 2 breaths. This is not a certification.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "epinephrine_auto",
+      "context": "Anaphylaxis can include trouble breathing, swelling of the face or throat, or collapse. Use an epinephrine auto-injector as the label printed on the device says, into the outer thigh, and hold it for the time the label states. Call emergency services. This note gives no other drug dose.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "shock_position",
+      "context": "Shock: pale, cold, fast pulse, or confusion after injury or illness. Have the person lie down, keep them warm, and raise the legs if no injury makes that unsafe. Do not give food or drink. Call emergency services.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "seizure_protect",
+      "context": "During a seizure, keep the person from hitting nearby objects, do not restrain them, and do not put anything in the mouth. Time the seizure. Call emergency services if it lasts more than a few minutes, repeats, or the person is injured, pregnant, or does not wake.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "chemical_eye_flush",
+      "context": "Chemical in an eye: flush with clean running water for many minutes, from the nose outward, and remove contact lenses if that is easy. Do not use drops you have not been told to use. Call emergency services or a poison center.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "altitude_descend",
+      "context": "Altitude sickness: headache, nausea, or unusual tiredness after going higher. Stop climbing, rest, and descend. Confusion, trouble walking, or breathlessness at rest needs emergency services and a descent. This is not a drug dose.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "heart_attack_signs",
+      "context": "Heart attack signs can include chest pressure, pain spreading to the arm, neck, or jaw, shortness of breath, sweat, or nausea. Call emergency services immediately and have the person rest. Do not wait to see if it passes. This is not a diagnosis.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "burn_cool_water",
+      "context": "A burn: cool it with cool running water, not ice. Do not put butter, oil, or ointment on it. Cover it with a clean cloth. Call emergency services for a large burn, a burn on the face, hands, or genitals, or any burn with breathing trouble.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "tick_removal",
+      "context": "Tick removal: use fine tweezers, grasp the tick close to the skin, and pull straight out with steady pressure. Do not twist, burn, or cover the tick with oil. Wash the skin. Watch for a spreading rash or fever and get medical care. This is not a diagnosis.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "oral_rehydration",
+      "context": "Oral rehydration for dehydration from diarrhea, using clean water: one liter of water, six level teaspoons of sugar, and half a level teaspoon of salt. Sip it. Call emergency services if the person is confused, cannot drink, or is a limp infant. This is not a drug dose.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "sprain_rice",
+      "context": "A sprain: rest, ice wrapped in cloth, a snug compression bandage, and elevation (RICE). Do not force the joint. Call emergency services or a clinician if the limb looks deformed, will not bear weight, or the pain is severe.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "spinal_still",
+      "context": "Spinal precautions: if the neck or back may be injured, do not move the person, do not twist the head, and keep them still. Call emergency services. Only move them if the place itself is immediately dangerous, and then keep the head and body in line.",
+      "title": "reference",
+      "source": "symbolic_books/medical/reference.json"
+    },
+    {
+      "symbol": "cut_needs_stitches",
+      "context": "A cut may need stitches when it gapes open, is deep, is on the face, keeps bleeding through pressure, or has something stuck in it. Cover it with clean cloth and call emergency services or a clinician. This note does not teach how to stitch.",
       "title": "reference",
       "source": "symbolic_books/medical/reference.json"
     },

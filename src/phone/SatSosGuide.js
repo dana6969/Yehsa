@@ -1,13 +1,13 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SAT_SOS_TITLE as TITLE, SAT_SOS_LEAD as LEAD, SAT_SOS_SECTIONS as SECTIONS } from "../../data/text/sat_sos_guide.js";
-import { Quiet, ScreenHeader } from "./ui.js";
-import { colors, radius, space, type } from "./tokens.js";
+import { Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
+import { radius, space, type } from "./tokens.js";
 
-export default function SatSosGuide() {
+export default function SatSosGuide({ onBack, backLabel } = {}) {
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader title={TITLE} lead={LEAD} />
+      <ScreenHeader title={TITLE} lead={LEAD} onBack={onBack} backLabel={backLabel} />
       {SECTIONS.map((section) => (
         <View key={section.id} style={styles.card}>
           <Text accessibilityRole="header" style={styles.heading}>{section.title}</Text>
@@ -19,7 +19,7 @@ export default function SatSosGuide() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   scroll: {
     paddingTop: space.xl,
     paddingHorizontal: space.xl,
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
     fontSize: type.prose.fontSize,
     lineHeight: type.prose.lineHeight
   }
-});
+}));

@@ -10,10 +10,10 @@ import { openZim } from "../../symbolic/zim_reader.js";
 import { formatBytes } from "../../symbolic/map_packs.js";
 import { bootImportedBooks, importBookBytes, importParsed, onIndexProgress, removeBook } from "./imported_books.js";
 import { pickFile, readerForUri } from "./book_files";
-import { Action, Field, Quiet, ScreenHeader } from "./ui.js";
-import { colors, radius, space, type } from "./tokens.js";
+import { Action, Field, Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
+import { radius, space, type } from "./tokens.js";
 
-export default function BooksPane({ onClose }) {
+export default function BooksPane({ onClose, onBack, backLabel, title, lead, children }) {
   const [store, setStore] = useState(currentImported());
   const [progress, setProgress] = useState({ done: 0, total: 0, running: false });
   const [note, setNote] = useState("Books stay on this phone. Nothing is uploaded.");
@@ -111,7 +111,15 @@ export default function BooksPane({ onClose }) {
   const books = store?.books || [];
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
-      <ScreenHeader title="Your books" lead="Import EPUB or TXT books to ask about offline. They are marked as yours and rank below Yehsa's checked notes." />
+      <ScreenHeader
+        title={title || "Your books"}
+        lead={lead || "Import EPUB or TXT books to ask about offline. They are marked as yours and rank below Yehsa's checked notes."}
+        onBack={onBack}
+        backLabel={backLabel}
+      />
+      {children}
+      {children ? <Text style={styles.sub}>Your books</Text> : null}
+      {children ? <Quiet>Import EPUB or TXT books to ask about offline. They are marked as yours and rank below Yehsa's checked notes.</Quiet> : null}
       <Action label={busy ? "Working…" : "Import a book (EPUB or TXT)"} disabled={busy} onPress={importBook} />
       <Quiet live>{note}</Quiet>
       {progress.running ? <Quiet live>Indexing in the background: {progress.done} of {progress.total} passages.</Quiet> : null}
@@ -163,7 +171,7 @@ export default function BooksPane({ onClose }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   screen: { flex: 1, backgroundColor: colors.bg },
   content: { padding: space.lg, paddingBottom: space.xxxl },
   sub: { ...type.label, color: colors.muted, marginTop: space.xl, marginBottom: space.sm, textTransform: "uppercase", letterSpacing: 1 },
@@ -174,4 +182,4 @@ const styles = StyleSheet.create({
   row: { flexDirection: "row", gap: space.sm },
   card: { backgroundColor: colors.surface, borderColor: colors.lineStrong, borderWidth: 1, borderRadius: radius.lg, padding: space.lg, marginTop: space.md },
   article: { ...type.quiet, color: colors.ink, marginVertical: space.sm }
-});
+}));

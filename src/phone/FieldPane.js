@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import PictureGuide from "./PictureGuide.js";
+import BeforeYouGoScreen from "./BeforeYouGo.js";
+import CameraIdScreen from "./CameraIdScreen.js";
 import { Action, Field, Quiet, ScreenHeader, colors, tokens, useDisplay, themedStyles } from "./ui.js";
 import { useBackLayer } from "./back_layers.js";
 import { courseText, declinationText, sunText } from "../../symbolic/phone_land.js";
 import { calculate } from "../../symbolic/calculator.js";
+import { GUIDE_ENTRIES } from "../../symbolic/picture_guide.js";
+
+const GUIDE_SYMBOLS = new Set(GUIDE_ENTRIES.map((entry) => entry.symbol));
 
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
@@ -41,7 +46,7 @@ export const FIELD_GROUPS = [
     tiles: [
       { id: "first-aid", label: "First aid", sub: "Pictures and steps", icon: "medkit-outline" },
       { id: "kit", label: "Kit", sub: "Later. Pack list, family card", icon: "bag-outline", later: true },
-      { id: "identify", label: "Identify", sub: "Later. Camera ID", icon: "camera-outline", later: true }
+      { id: "identify", label: "Identify", sub: "Photo hints, never a verdict", icon: "camera-outline" }
     ]
   }
 ];
@@ -51,8 +56,7 @@ const LATER_COPY = {
   ballistics: "A drop and wind calculator from numbers you enter comes with hunting mode.",
   sightings: "A private sightings log, kept on this phone, comes with hunting mode. It will compare the deer estimate with what you actually saw.",
   wind: "Wind entry for the scent cone on the Map comes with hunting mode.",
-  kit: "A kit list with expiry dates, linked to the family card in More, comes in a later update.",
-  identify: "Offline camera ID comes in a later update. It will never give an edibility verdict."
+  kit: "A kit list with expiry dates, linked to the family card in More, comes in a later update."
 };
 
 const MORSE = { a: ".-", b: "-...", c: "-.-.", d: "-..", e: ".", f: "..-.", g: "--.", h: "....", i: "..", j: ".---", k: "-.-", l: ".-..", m: "--", n: "-.", o: "---", p: ".--.", q: "--.-", r: ".-.", s: "...", t: "-", u: "..-", v: "...-", w: ".--", x: "-..-", y: "-.--", z: "--..", 0: "-----", 1: ".----", 2: "..---", 3: "...--", 4: "....-", 5: ".....", 6: "-....", 7: "--...", 8: "---..", 9: "----." };
@@ -74,21 +78,26 @@ function heldPair(position) {
   return `${position.fix.latitude.toFixed(5)}, ${position.fix.longitude.toFixed(5)}`;
 }
 
-export default function FieldPane({ position, onEmergency, openRequest, onOpenLayers, onOpenScreen }) {
+export default function FieldPane({ position, mapPacks, onEmergency, openRequest, onOpenLayers, onOpenScreen, onAsk }) {
   const [open, setOpen] = useState(null);
+  const [guideSymbol, setGuideSymbol] = useState("");
   useEffect(() => {
     if (openRequest?.tile) setOpen(openRequest.tile);
   }, [openRequest?.id]);
   useBackLayer(open != null, () => setOpen(null));
-  const close = () => setOpen(null);
+  const close = () => {
+    setOpen(null);
+    setGuideSymbol("");
+  };
 
   if (open === "pictures" || open === "first-aid") {
     return (
       <PictureGuide
-        key={open}
+        key={`${open}-${guideSymbol}`}
         onBack={close}
         backLabel="Field"
         initialDomain={open === "first-aid" ? "first-aid" : ""}
+        initialSymbol={guideSymbol}
       />
     );
   }
@@ -98,7 +107,38 @@ export default function FieldPane({ position, onEmergency, openRequest, onOpenLa
   if (open === "morse") return <MorseTool onBack={close} />;
   if (open === "timers") return <TimerTool onBack={close} />;
   if (open === "calculator") return <CalculatorTool onBack={close} />;
-  if (open === "before") return <BeforeYouGo onBack={close} onOpenLayers={onOpenLayers} onOpenScreen={onOpenScreen} />;
+  if (open === "before") {
+    const fix = position?.consent === true && position.status === "locked" ? position.fix : null;
+    return (
+      <BeforeYouGoScreen
+        target={fix ? { latitude: fix.latitude, longitude: fix.longitude } : null}
+        packs={mapPacks}
+        onBack={close}
+        onOpenLayers={onOpenLayers}
+        onOpenScreen={onOpenScreen}
+      />
+    );
+  }
+  if (open === "identify") {
+    return (
+      <CameraIdScreen
+        onBack={close}
+        onOpenNote={(symbol) => {
+          if (!symbol) return;
+          // A picture-guide entry opens here. A plant note with no pictures opens in Ask.
+          if (GUIDE_SYMBOLS.has(symbol)) {
+            setGuideSymbol(symbol);
+            setOpen("pictures");
+            return;
+          }
+          if (onAsk) {
+            close();
+            onAsk(`Tell me about ${String(symbol).replace(/_/g, " ")}`);
+          }
+        }}
+      />
+    );
+  }
   if (LATER_COPY[open]) {
     const tile = FIELD_GROUPS.flatMap((group) => group.tiles).find((item) => item.id === open);
     return (
@@ -215,54 +255,15 @@ function CalculatorTool({ onBack }) {
   const [input, setInput] = useState("");
   const [result, setResult] = useState(null);
   function run() {
-    const text = input.trim();
-    const steps = (text.match(/[+*/×÷]|\s-\s|\b(plus|minus|times|divided)\b/gi) || []).length;
-    if (steps > 1) {
-      setResult("One step at a time, for example 12 * 7, then the next step.");
-      return;
-    }
-    const answer = calculate(text);
-    setResult(answer?.text || "That was not read as one step or a unit change. Try 12 * 7 or 2 km in miles.");
+    const answer = calculate(input.trim());
+    setResult(answer?.text || "That was not read as math or a unit change. Try 12 * 7 + 3 or 2 km in miles.");
   }
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader title="Calculator" lead="Units and one-step field math." onBack={onBack} backLabel="Field" />
-      <Field label="Math or a unit change" value={input} onChangeText={setInput} placeholder="2 km in miles" />
+      <ScreenHeader title="Calculator" lead="Units and field math." onBack={onBack} backLabel="Field" />
+      <Field label="Math or a unit change" value={input} onChangeText={setInput} placeholder="12 * 7 + 3 or 2 km in miles" />
       <Action label="Work it out" onPress={run} />
       {result ? <Quiet live>{result}</Quiet> : null}
-    </ScrollView>
-  );
-}
-
-function BeforeYouGo({ onBack, onOpenLayers, onOpenScreen }) {
-  const [done, setDone] = useState({});
-  const items = [
-    { id: "maps", label: "Map pack and elevation for the area", action: "Open Layers", go: () => onOpenLayers?.() },
-    { id: "location", label: "Decide whether Location is on", action: "Open Location", go: () => onOpenScreen?.("location") },
-    { id: "people", label: "Pair with the people you are going with", action: null },
-    { id: "plan", label: "Tell someone your plan and when you will be back", action: null },
-    { id: "regs", label: "Check the season, unit, and shooting hours with the state agency", action: null },
-    { id: "display", label: "Pick a display mode for dawn and dusk", action: "Open Display", go: () => onOpenScreen?.("display") }
-  ];
-  return (
-    <ScrollView contentContainerStyle={styles.scroll}>
-      <ScreenHeader title="Before you go" lead="A short check while you still have signal." onBack={onBack} backLabel="Field" />
-      {items.map((item) => (
-        <View key={item.id} style={styles.checkRow}>
-          <Pressable
-            accessibilityRole="checkbox"
-            accessibilityState={{ checked: done[item.id] === true }}
-            accessibilityLabel={item.label}
-            onPress={() => setDone((current) => ({ ...current, [item.id]: !current[item.id] }))}
-            style={[styles.check, webPointer]}
-          >
-            <Ionicons name={done[item.id] ? "checkbox" : "square-outline"} size={22} color={colors.ink} />
-            <Text style={styles.checkText}>{item.label}</Text>
-          </Pressable>
-          {item.action ? <Action label={item.action} tone="quiet" style={styles.checkAction} onPress={item.go} /> : null}
-        </View>
-      ))}
-      <Quiet>The checklist stays on this screen. Saved trip plans come with hunting mode.</Quiet>
     </ScrollView>
   );
 }

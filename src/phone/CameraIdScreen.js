@@ -9,7 +9,7 @@
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Action, Quiet, ScreenHeader, colors } from "./ui.js";
+import { Action, Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
 import { CAMERA_CLASSES, PHOTO_WARNING, identify } from "./camera_id_match.js";
 import { cameraIdAvailable, CAMERA_ID_UNAVAILABLE, embedPhoto } from "./camera_id_native.js";
 
@@ -178,7 +178,7 @@ function Credits() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   scroll: { padding: 20, paddingBottom: 48, gap: 12 },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" },
   grow: { flexGrow: 1 },
@@ -199,4 +199,4 @@ const styles = StyleSheet.create({
   chip: { borderWidth: 1, borderColor: "#6f8678", borderRadius: 999, paddingHorizontal: 12, paddingVertical: 8, minHeight: 40, justifyContent: "center" },
   chipText: { color: colors.ink, fontSize: 14 },
   link: { color: colors.brass, fontSize: 14, marginTop: 12, paddingVertical: 8 }
-});
+}));

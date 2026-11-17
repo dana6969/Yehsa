@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { haversineKm, initialBearingDeg } from "../../symbolic/landscape_math.js";
 import { courseSentence } from "../../symbolic/nav_sentence.js";
+import { colors } from "./ui.js";
 
 const KM_PER_DEG = 111.19;
 
@@ -134,8 +135,8 @@ export default function LandscapeMap({
         onResponderRelease={onRelease}
         style={{
           ...(fill ? { flex: 1, minHeight: 150 } : { height: 380 }),
-          backgroundColor: "#101611",
-          borderColor: "#3d4c43",
+          backgroundColor: colors.field,
+          borderColor: colors.lineStrong,
           borderWidth: 1,
           borderRadius: 16,
           overflow: "hidden"
@@ -151,7 +152,7 @@ export default function LandscapeMap({
               right: 0,
               top: size.height / 2 + pan.y + index * 48,
               height: 1,
-              backgroundColor: index === 0 ? "#3d4c43" : "#243029"
+              backgroundColor: index === 0 ? colors.lineStrong : colors.line
             }}
           />
         ))}
@@ -164,14 +165,14 @@ export default function LandscapeMap({
               bottom: 0,
               left: size.width / 2 + pan.x + index * 48,
               width: 1,
-              backgroundColor: index === 0 ? "#3d4c43" : "#243029"
+              backgroundColor: index === 0 ? colors.lineStrong : colors.line
             }}
           />
         ))}
         <View style={{ position: "absolute", top: 12, right: 12, alignItems: "center" }}>
-          <View style={{ width: 2, height: 28, backgroundColor: "#e2b15a" }} />
-          <Text style={{ color: "#e2b15a", fontSize: 12 }}>N</Text>
-          <View style={{ width: 2, height: 18, backgroundColor: "#b7d0a4", transform: [{ rotate: magTurn }] }} />
+          <View style={{ width: 2, height: 28, backgroundColor: colors.brass }} />
+          <Text style={{ color: colors.brassText, fontSize: 12 }}>N</Text>
+          <View style={{ width: 2, height: 18, backgroundColor: colors.moss, transform: [{ rotate: magTurn }] }} />
         </View>
         {(features || []).map((feature, index) => {
           if (Array.isArray(feature?.points)) {
@@ -181,22 +182,22 @@ export default function LandscapeMap({
             ));
           }
           const xy = project(feature);
-          return xy ? <Dot key={`f${index}`} x={xy.x} y={xy.y} color="#6f8f78" /> : null;
+          return xy ? <Dot key={`f${index}`} x={xy.x} y={xy.y} color={colors.lineStrong} /> : null;
         })}
         {measure.map((point, index) => {
           const xy = project(point);
-          return xy ? <Dot key={`m${index}`} x={xy.x} y={xy.y} color="#f4f0e6" /> : null;
+          return xy ? <Dot key={`m${index}`} x={xy.x} y={xy.y} color={colors.ink} /> : null;
         })}
         {measure.length === 2 ? <MeasureLine from={project(measure[0])} to={project(measure[1])} /> : null}
         {(track || []).map((point, index) => {
           const xy = project(point);
           if (!xy) return null;
-          return <Dot key={`t${index}`} x={xy.x} y={xy.y} color="#8f9a8c" />;
+          return <Dot key={`t${index}`} x={xy.x} y={xy.y} color={colors.muted} />;
         })}
         {(waypoints || []).map((point) => {
           const xy = project(point);
           if (!xy) return null;
-          return <Dot key={point.name || `${point.latitude}`} x={xy.x} y={xy.y} color="#e2b15a" label={point.name} />;
+          return <Dot key={point.name || `${point.latitude}`} x={xy.x} y={xy.y} color={colors.brass} label={point.name} />;
         })}
         {you && accuracyPx > 2 ? (
           <View
@@ -208,42 +209,42 @@ export default function LandscapeMap({
               height: accuracyPx * 2,
               borderRadius: accuracyPx,
               borderWidth: 1,
-              borderColor: "#b7d0a4"
+              borderColor: colors.moss
             }}
           />
         ) : null}
-        {you ? <Dot x={you.x} y={you.y} color="#b7d0a4" label="You" /> : null}
+        {you ? <Dot x={you.x} y={you.y} color={colors.moss} label="You" /> : null}
         {you && Number.isFinite(Number(headingDeg)) ? (
-          <View style={{ position: "absolute", left: you.x - 1, top: you.y - 18, width: 2, height: 18, backgroundColor: "#f4f0e6", transform: [{ rotate: `${Number(headingDeg)}deg` }] }} />
+          <View style={{ position: "absolute", left: you.x - 1, top: you.y - 18, width: 2, height: 18, backgroundColor: colors.ink, transform: [{ rotate: `${Number(headingDeg)}deg` }] }} />
         ) : null}
         {you && navTarget ? <MeasureLine from={you} to={project(navTarget)} /> : null}
         </View>
         <View style={{ position: "absolute", left: 12, bottom: 12 }}>
-          <View style={{ width: 80, height: 3, backgroundColor: "#f4f0e6" }} />
-          <Text style={{ color: "#f4f0e6", fontSize: 12 }}>{barKm >= 1 ? `${barKm.toFixed(1)} km` : `${Math.round(barKm * 1000)} m`}</Text>
+          <View style={{ width: 80, height: 3, backgroundColor: colors.ink }} />
+          <Text style={{ color: colors.ink, fontSize: 12 }}>{barKm >= 1 ? `${barKm.toFixed(1)} km` : `${Math.round(barKm * 1000)} m`}</Text>
         </View>
       </View>
       <View style={{ flexDirection: "row", gap: 8, marginTop: 10 }}>
         <Pressable accessibilityRole="button" accessibilityLabel="Zoom in" onPress={() => setZoom((value) => Math.min(80, value * 1.4))} style={zoomStyle}>
-          <Text style={{ color: "#1c241e", fontWeight: "700" }}>+</Text>
+          <Text style={{ color: colors.brassInk, fontWeight: "700" }}>+</Text>
         </Pressable>
         <Pressable accessibilityRole="button" accessibilityLabel="Zoom out" onPress={() => setZoom((value) => Math.max(4, value / 1.4))} style={zoomStyle}>
-          <Text style={{ color: "#1c241e", fontWeight: "700" }}>−</Text>
+          <Text style={{ color: colors.brassInk, fontWeight: "700" }}>−</Text>
         </Pressable>
-        <Pressable accessibilityRole="button" accessibilityLabel="Clear the measured line" onPress={() => { setMeasure([]); setReadout("Measured line cleared. The canvas is still blank landscape, not a city map."); }} style={[zoomStyle, { backgroundColor: "transparent", borderColor: "#3d4c43", paddingHorizontal: 12 }]}>
-          <Text style={{ color: "#f4f0e6" }}>Clear line</Text>
+        <Pressable accessibilityRole="button" accessibilityLabel="Clear the measured line" onPress={() => { setMeasure([]); setReadout("Measured line cleared. The canvas is still blank landscape, not a city map."); }} style={[zoomStyle, { backgroundColor: "transparent", borderColor: colors.lineStrong, paddingHorizontal: 12 }]}>
+          <Text style={{ color: colors.ink }}>Clear line</Text>
         </Pressable>
-        <Pressable accessibilityRole="button" accessibilityLabel="Recenter on me" onPress={() => { setPan({ x: 0, y: 0 }); if (onRecenter) onRecenter(); }} style={[zoomStyle, { backgroundColor: "transparent", borderColor: "#e2b15a", paddingHorizontal: 12 }]}>
-          <Text style={{ color: "#e2b15a" }}>Recenter</Text>
+        <Pressable accessibilityRole="button" accessibilityLabel="Recenter on me" onPress={() => { setPan({ x: 0, y: 0 }); if (onRecenter) onRecenter(); }} style={[zoomStyle, { backgroundColor: "transparent", borderColor: colors.brass, paddingHorizontal: 12 }]}>
+          <Text style={{ color: colors.brassText }}>Recenter</Text>
         </Pressable>
       </View>
       {nav ? (
-        <Text style={{ color: "#e2b15a", marginTop: 8 }}>
+        <Text style={{ color: colors.brassText, marginTop: 8 }}>
           {`${nav.name || "Waypoint"} ${nav.distanceM >= 1000 ? `${(nav.distanceM / 1000).toFixed(2)} km` : `${Math.round(nav.distanceM)} m`} at ${Math.round(nav.bearingDeg)}° ${nav.label || ""}. Not a road.`}
         </Text>
       ) : null}
-      <Text style={{ color: "#b7bfb2", marginTop: 8, lineHeight: 20 }}>{readout}</Text>
-      <Text style={{ color: "#8f9a8c", marginTop: 4, fontSize: 13 }}>
+      <Text style={{ color: colors.muted, marginTop: 8, lineHeight: 20 }}>{readout}</Text>
+      <Text style={{ color: colors.muted, marginTop: 4, fontSize: 13 }}>
         {Platform.OS === "web"
           ? "Drag to pan. Tap for a waypoint proposal. Tap a second point for distance and bearing. Long-press for coordinates."
           : "Drag to pan. Tap for a waypoint proposal. Tap a second point for distance and bearing."}
@@ -266,7 +267,7 @@ function MeasureLine({ from, to }) {
         top: from.y,
         width: length,
         height: 2,
-        backgroundColor: "#e2b15a",
+        backgroundColor: colors.brass,
         transform: [{ rotate: angle }]
       }}
     />
@@ -278,7 +279,7 @@ function Dot({ x, y, color, label }) {
   return (
     <View style={{ position: "absolute", left: x - 6, top: y - 6 }}>
       <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: color }} />
-      {label ? <Text style={{ color: "#f4f0e6", fontSize: 11 }}>{label}</Text> : null}
+      {label ? <Text style={{ color: colors.ink, fontSize: 11 }}>{label}</Text> : null}
     </View>
   );
 }

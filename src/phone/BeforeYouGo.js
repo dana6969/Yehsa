@@ -12,8 +12,8 @@ import { probeBattery, probeGps, probeMesh } from "./device_probe.js";
 import { currentImported } from "../../symbolic/imported_registry.js";
 import StatusRow from "./parts/StatusRow.js";
 import DownloadArea from "./DownloadArea.js";
-import { Action, Field, Quiet, ScreenHeader } from "./ui.js";
-import { colors, radius, space, type } from "./tokens.js";
+import { Action, Field, Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
+import { radius, space, type } from "./tokens.js";
 
 const CONTACTS_KEY = "yehsa.contacts.v1";
 const PLAN_KEY = "yehsa.tripplan.v1";
@@ -192,7 +192,7 @@ export default function BeforeYouGo({ target, position, packs, mesh, fieldNotes,
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   screen: { flex: 1, backgroundColor: colors.bg },
   content: { padding: space.lg, paddingBottom: space.xxxl },
   summary: {
@@ -208,4 +208,4 @@ const styles = StyleSheet.create({
   contact: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: space.sm },
   contactText: { ...type.quiet, color: colors.ink, flexShrink: 1, marginRight: space.sm },
   planText: { ...type.quiet, color: colors.muted, backgroundColor: colors.field, padding: space.md, borderRadius: radius.sm, marginVertical: space.sm }
-});
+}));

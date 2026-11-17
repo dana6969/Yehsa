@@ -1,13 +1,13 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { HOTSPOT_TITLE as TITLE, HOTSPOT_LEAD as LEAD, HOTSPOT_SECTIONS as SECTIONS } from "../../data/text/hotspot_guide.js";
-import { Quiet, ScreenHeader } from "./ui.js";
-import { colors, radius, space, type } from "./tokens.js";
+import { Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
+import { radius, space, type } from "./tokens.js";
 
-export default function HotspotGuide() {
+export default function HotspotGuide({ onBack, backLabel } = {}) {
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader title={TITLE} lead={LEAD} />
+      <ScreenHeader title={TITLE} lead={LEAD} onBack={onBack} backLabel={backLabel} />
       {SECTIONS.map((section) => (
         <View key={section.id} style={styles.card}>
           <Text accessibilityRole="header" style={styles.heading}>{section.title}</Text>
@@ -19,7 +19,7 @@ export default function HotspotGuide() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   scroll: {
     paddingTop: space.xl,
     paddingHorizontal: space.xl,
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
     fontSize: type.prose.fontSize,
     lineHeight: type.prose.lineHeight
   }
-});
+}));

@@ -17,8 +17,8 @@ import {
 } from "../../symbolic/area_download.js";
 import { formatBytes } from "../../symbolic/map_packs.js";
 import { freeBytes, loadAreas, removeArea, saveAreas, saveTile, storageNote } from "./area_store";
-import { Action, Quiet } from "./ui.js";
-import { colors, hit, radius, space, type } from "./tokens.js";
+import { Action, Quiet, colors, themedStyles } from "./ui.js";
+import { hit, radius, space, type } from "./tokens.js";
 
 function planFor(choice, center, box) {
   if (choice === "visible" && box) return planArea({ box, name: "Visible map area" });
@@ -186,7 +186,7 @@ export default function DownloadArea({ center, visibleBox, onAreasChange, fetchI
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   card: {
     backgroundColor: colors.surface,
     borderColor: colors.lineStrong,
@@ -221,4 +221,4 @@ const styles = StyleSheet.create({
   areaName: { ...type.action, color: colors.ink },
   areaMeta: { ...type.label, color: colors.muted, marginTop: 2 },
   areaActions: { flexDirection: "row", gap: space.sm, marginTop: space.sm }
-});
+}));

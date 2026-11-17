@@ -2,7 +2,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { colors, hit, radius, space, type } from "../tokens.js";
+import { hit, radius, space, type } from "../tokens.js";
+import { colors, themedStyles } from "../ui.js";
 
 export const STATE_LOOK = {
   ready: { icon: "checkmark-circle", word: "Ready", color: colors.success },
@@ -33,7 +34,7 @@ export default function StatusRow({ state = "info", label, detail, children }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles((colors) => ({
   row: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -56,4 +57,4 @@ const styles = StyleSheet.create({
   },
   label: { ...type.action, color: colors.ink, flexShrink: 1 },
   detail: { ...type.quiet, color: colors.muted, marginTop: space.xs }
-});
+}));

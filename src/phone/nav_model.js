@@ -26,6 +26,9 @@ export const MORE_ITEMS = [
   { id: "learned", label: "Learned notes", hint: "Kept on this phone" },
   { id: "library", label: "Library", hint: "Books and texts on this phone" },
   { id: "keys", label: "Chat keys", hint: "Your key fingerprint and resets" },
+  { id: "satsos", label: "Satellite SOS", hint: "How your phone's own satellite SOS works" },
+  { id: "hotspot", label: "Hotspot and mesh", hint: "Sharing a connection, and what the mesh does offline" },
+  { id: "trust", label: "No-account pledge", hint: "What Yehsa never collects" },
   { id: "about", label: "About", hint: "Trust pledge and 411-question test" }
 ];
 
@@ -42,6 +45,9 @@ export const SCREEN_TITLES = {
   learned: "Learned notes",
   library: "Library",
   keys: "Chat keys",
+  satsos: "Satellite SOS",
+  hotspot: "Hotspot and mesh",
+  trust: "Trust",
   about: "About"
 };
 
@@ -160,6 +166,10 @@ export const DESTINATIONS = [
   { id: "library", label: "Library", kind: "screen", words: "library books scripture bible texts" },
   { id: "keys", label: "Chat keys", kind: "screen", words: "keys chat keys fingerprint security" },
   { id: "family", label: "Family card", kind: "screen", words: "family card contacts medical" },
+  { id: "satsos", label: "Satellite SOS guide", kind: "screen", words: "satellite sos iphone pixel messages no signal" },
+  { id: "hotspot", label: "Hotspot and mesh", kind: "screen", words: "hotspot wifi tether share network" },
+  { id: "trust", label: "No-account pledge", kind: "screen", words: "pledge account privacy data collect trust" },
+  { id: "identify", label: "Identify a plant from a photo", kind: "tab", target: "field", tile: "identify", words: "identify camera photo plant id" },
   { id: "about", label: "About", kind: "screen", words: "about trust pledge test" }
 ];
 

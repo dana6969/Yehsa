@@ -19,17 +19,18 @@ function GuideImage({ image, style, fit = "cover" }) {
   return <Image accessibilityLabel={image.attribution} source={source} onError={() => setFailed(true)} resizeMode={fit} style={style} />;
 }
 
-const missingStyles = StyleSheet.create({
+const missingStyles = themedStyles((colors) => ({
   box: { alignItems: "center", justifyContent: "center", padding: 4, borderWidth: 1, borderStyle: "dashed", borderColor: colors.lineStrong },
   text: { color: colors.muted, fontSize: 12, textAlign: "center" }
-});
+}));
 
 const DOMAINS = ["", "herbology", "first-aid", "knots", "fire", "shelter", "water", "sky", "landscape", "signaling"];
 
-export default function PictureGuide({ onBack, backLabel, initialDomain = "" }) {
-  const [query, setQuery] = useState("");
+export default function PictureGuide({ onBack, backLabel, initialDomain = "", initialSymbol = "" }) {
+  // initialSymbol opens one entry, for example from Identify's "Picture guide" button.
+  const [query, setQuery] = useState(initialSymbol);
   const [domain, setDomain] = useState(initialDomain);
-  const [open, setOpen] = useState(null);
+  const [open, setOpen] = useState(initialSymbol || null);
   const entries = guideView(manifest, { query, domain });
   const bytes = (manifest.images || []).reduce((sum, image) => sum + (Number(image.bytes) || 0), 0);
   const decision = packDecision(bytes || 391744);
