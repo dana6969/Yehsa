@@ -321,3 +321,30 @@ test("the native map drags the moving mark with a draggable PointAnnotation and 
   assert.match(hunt, /undoMove\(list, mark\.id, result\.from\)/);
   assert.match(fs.readFileSync("src/phone/YehsaApp.js", "utf8"), /onMarkDragEnd=\{huntMap\.onMarkDragEnd\}/);
 });
+
+import { LOG_SIGHTING, loggedFromMark, sightingPrefill } from "./symbolic/hunt/marks.js";
+import { addEntry, emptyLog, newEntry } from "./symbolic/hunt/sightings.js";
+
+test("a new sighting mark offers Log in Sightings, prefilled with its spot and time, and is not drawn twice", () => {
+  const tap = { latitude: 44.561, longitude: -69.641 };
+  const made = addMark([], { kind: "sighting", ...tap, now: T });
+  const prefill = sightingPrefill(made.mark);
+  assert.deepEqual(prefill.spot, tap);
+  assert.equal(prefill.t, T);
+  assert.equal(prefill.markId, made.mark.id);
+  assert.equal(sightingPrefill(addMark([], { kind: "stand", ...tap }).mark), null);
+  const entry = newEntry({ species: "Deer", count: "2", spot: prefill.spot, markId: prefill.markId }, prefill.t);
+  assert.equal(entry.t, T);
+  assert.deepEqual(entry.spot, tap);
+  const log = addEntry(emptyLog(), entry);
+  assert.ok(loggedFromMark(log, made.mark.id));
+  assert.equal(sightingMarks(log, [made.mark.id]).length, 0, "the mark is already the pin");
+  assert.equal(sightingMarks(log, []).length, 1, "after the mark is deleted the logged sighting still shows");
+  assert.equal(LOG_SIGHTING, "Log in Sightings");
+  const hunt = fs.readFileSync("src/phone/hunt_map.js", "utf8");
+  assert.match(hunt, /mark\.kind === "sighting" && onLogSighting/);
+  const screen = fs.readFileSync("src/phone/SightingsScreen.js", "utf8");
+  assert.match(screen, /prefill \? "new" : "list"/);
+  assert.match(screen, /markId: from\?\.markId/);
+  assert.match(fs.readFileSync("src/phone/FieldPane.js", "utf8"), /prefill=\{sightingPrefill\}/);
+});
