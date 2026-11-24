@@ -108,6 +108,8 @@ import { capabilitySummary, continueUtterance, isCapabilityQuestion, isFeedbackE
 import { isLibraryQuestion, libraryAnswer } from "../../symbolic/library_answer.js";
 import { loadAtpPack } from "./atp_pack.js";
 import LandscapeMap from "./LandscapeMap.js";
+import MapLayersSection from "./MapLayersSection.js";
+import { useMapExtras } from "./map_extras.js";
 import { useRoute } from "./route/useRoute.js";
 import { routeIntent, routeIntentReply } from "../../symbolic/routing/route_intent.js";
 import { SourcesFold, followUps } from "./parts/AskTidy.js";
@@ -1710,6 +1712,8 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
   const camera = useRef(null);
   const areaState = useAreas();
   const downloads = usePackDownloads({ store: mapPacks, setStore: setMapPacks });
+  // Built-in roads (offline) and property lines for the Hunt map (online, then saved).
+  const extras = useMapExtras({ active: Boolean(active && hunt) });
   const [gps, setGps] = useState(initialGpsMap);
   const [gpsWanted, setGpsWanted] = useState(false);
   const [backgroundGps, setBackgroundGps] = useState(false);
@@ -1750,9 +1754,10 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
     port: tilePort,
     style: mapStyle,
     mode: display?.mode || "field",
-    night: display?.night || "red"
-  }), [mapPacks, areaState.areas, tilePort, mapStyle, display?.mode, display?.night]);
-  const about = useMemo(() => mapAbout({ store: mapPacks, areas: areaState.areas }), [mapPacks, areaState.areas]);
+    night: display?.night || "red",
+    roads: { on: extras.roadsOn, shape: extras.roadLines }
+  }), [mapPacks, areaState.areas, tilePort, mapStyle, display?.mode, display?.night, extras.roadsOn, extras.roadLines]);
+  const about = useMemo(() => mapAbout({ store: mapPacks, areas: areaState.areas, roads: Boolean(layers.roads) }), [mapPacks, areaState.areas, layers.roads]);
   const [metersHere, setMetersHere] = useState(null);
   useEffect(() => {
     let live = true;
@@ -1872,7 +1877,8 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
               focus={focus}
               focusKey={focusKey}
               initialCamera={camera.current}
-              onCamera={(event) => { camera.current = rememberCamera(camera.current, event); }}
+              onCamera={(event) => { camera.current = rememberCamera(camera.current, event); extras.onView(event); }}
+              parcels={hunt && extras.parcelsOn ? extras.parcels : null}
               attribution={layers.attribution}
               onFail={() => setMapFailed(true)}
               overlay={huntMap.overlay}
@@ -1939,6 +1945,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
         <Action label="Layers and packs" tone="quiet" style={styles.mapToolButton} onPress={() => setLayersOpen(true)} accessibilityHint="Map packs, elevation, declination, waypoints, and import." />
         <Action label={hunt ? "Hunt on" : "Hunt"} tone={hunt ? "brass" : "quiet"} style={styles.mapToolSmall} onPress={() => setHunt((value) => !value)} accessibilityHint="Shows the hunt view on the map. Nothing is shared." />
       </View>
+      {hunt && extras.parcelsOn && extras.parcelText ? <Text style={[styles.aboutLine, { fontSize: 12, lineHeight: 16, paddingHorizontal: 12 }]} accessibilityLiveRegion="polite">{extras.parcelText}</Text> : null}
       {hunt ? (
         <View style={styles.mapTools}>
           <Action label={huntMap.marks.length ? `Marks (${huntMap.marks.length})` : "Marks"} tone="quiet" style={styles.mapToolButton} onPress={huntMap.openMarks} accessibilityHint="Your stands, trails, bedding and sightings on the map." />
@@ -1958,7 +1965,8 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
             {about.lines.map((line) => <Text key={line} style={styles.aboutLine}>{line}</Text>)}
             <Quiet>{about.credit}</Quiet>
             <Quiet>Search and routes use a road and place list built into Yehsa for the map-pack states: © OpenStreetMap contributors, ODbL 1.0. Online search and routes are off until you turn them on in the Map search (Photon by Komoot, OSM Nominatim, and OSRM on routing.openstreetmap.de). No traffic data. No owner names.</Quiet>
-          </ScrollView>
+            {extras.parcelsOn ? <Quiet>Property lines (Hunt map): approximate, not a legal survey. From free state parcel services; see Layers and packs for each state's source and license.</Quiet> : null}
+                      </ScrollView>
         </View>
       ) : null}
       {layersOpen ? (
@@ -1969,6 +1977,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
           </View>
           <ScrollView contentContainerStyle={styles.sheetScroll} keyboardShouldPersistTaps="handled">
             <Action label="Before you go" tone="quiet" onPress={() => { setLayersOpen(false); onBefore?.(); }} />
+            <MapLayersSection extras={extras} />
             <Text style={styles.sectionLabel}>Download this area</Text>
             <DownloadArea
               center={held || null}

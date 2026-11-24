@@ -15,7 +15,8 @@ drawn from a road network, and there is no parcel or owner data.
 | Public land outlines: protected areas, national parks, nature reserves | OpenStreetMap via Geofabrik | ODbL 1.0 |
 | State outline, place names, peak names and heights | Natural Earth admin-1; OpenStreetMap | Public domain; ODbL 1.0 |
 
-Roads: **not drawn.** NLCD "developed" pixels trace roads, so a morphological opening removes thin
+Roads: **not drawn in the packs.** The app draws roads from the built-in OpenStreetMap road graphs
+instead (see `docs/map-layers.md`). NLCD "developed" pixels trace roads, so a morphological opening removes thin
 developed lines before the land cover is colored. Hunting units (GMU / WMD) are state agency
 data, not in these sources, so they are not drawn.
 

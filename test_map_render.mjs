@@ -236,11 +236,19 @@ test("styles: Standard, Terrain, Simple, Night; Night follows the display and ke
   assert.notEqual(mapLayers({ ...base, mode: "night", night: "amber" }).tint.color, nightMode.tint.color);
 });
 
-test("there is no road or parcel layer anywhere in the map layers", () => {
+test("roads only come from the built-in OpenStreetMap layer, and parcel lines carry no owner data", () => {
+  // Without the road switch, the packs and areas draw exactly what they drew before.
   const layers = mapLayers({ store: storeWithPack(), areas: [AREA], port: 4000 });
-  assert.doesNotMatch(JSON.stringify(layers).replace(/OpenStreetMap/g, ""), /road|street|parcel|owner/i);
+  assert.equal(layers.roads, null);
+  const { roads, ...rest } = layers;
+  assert.doesNotMatch(JSON.stringify(rest).replace(/OpenStreetMap/g, ""), /road|street|parcel|owner/i);
+  const shape = { type: "FeatureCollection", features: [{ type: "Feature", properties: { c: "minor", n: "Main St" }, geometry: { type: "LineString", coordinates: [[-69, 45], [-69.01, 45.01]] } }] };
+  const withRoads = mapLayers({ store: storeWithPack(), areas: [AREA], port: 4000, roads: { on: true, shape } });
+  assert.equal(withRoads.roads.shape, shape);
+  assert.match(withRoads.attribution, /OpenStreetMap contributors, ODbL/);
   const src = fs.readFileSync("src/phone/OfflineMap.native.js", "utf8");
-  assert.doesNotMatch(src, /road|street|parcel|owner/i);
+  assert.doesNotMatch(src, /owner/i);
+  assert.doesNotMatch(src, /https?:\/\/(?!127\.0\.0\.1)/, "the map view never names an outside server");
 });
 
 test("remount: Map, Ask, Field, Map builds a fresh map view and draws the same layers", () => {
