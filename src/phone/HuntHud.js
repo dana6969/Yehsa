@@ -35,9 +35,9 @@ export default function HuntHud({ position, onOpenTool }) {
             </>
           ) : <Quiet>{light?.text || "Need a location to estimate legal light."}</Quiet>}
           <Text style={styles.group}>STATE</Text>
-          <Chips label="State" value={hunt.legal.state} onChange={(id) => setHunt("legal", (current) => ({ ...current, state: current.state === id ? "" : id }))} options={STATES.map((state) => ({ id: state.code, label: state.code }))} />
+          <Chips scroll label="State" value={hunt.legal.state} onChange={(id) => setHunt("legal", (current) => ({ ...current, state: current.state === id ? "" : id }))} options={STATES.map((state) => ({ id: state.code, label: state.code }))} />
           <Text style={styles.group}>WHAT YOU HUNT</Text>
-          <Chips label="Species" value={hunt.legal.species} onChange={(id) => setHunt("legal", (current) => ({ ...current, species: id }))} options={SPECIES.map((item) => ({ id: item.id, label: item.name }))} />
+          <Chips scroll label="Species" value={hunt.legal.species} onChange={(id) => setHunt("legal", (current) => ({ ...current, species: id }))} options={SPECIES.map((item) => ({ id: item.id, label: item.name }))} />
           {light?.warning ? <Quiet>{light.warning}</Quiet> : null}
           {(light?.notes || []).map((note) => <Quiet key={note}>{note}</Quiet>)}
           {light?.source ? <Quiet>Source: {light.source.title}. Season {light.season}. Read {light.source.read}.</Quiet> : null}
