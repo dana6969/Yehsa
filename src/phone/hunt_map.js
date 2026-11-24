@@ -12,7 +12,7 @@ import { useBackLayer } from "./back_layers.js";
 import { coneView, labelPoint } from "../../symbolic/hunt/cone_view.js";
 import {
   KINDS, TEXT, UNDO_MS, addMark, boxAround, clearMarks, kindInfo, marksOf, moveMark, removeMark, undoMove,
-  restoreAll, restoreMark, sightingMarks, toSpots, updateMark, whereText
+  LOG_SIGHTING, loggedFromMark, restoreAll, restoreMark, sightingMarks, sightingPrefill, toSpots, updateMark, whereText
 } from "../../symbolic/hunt/marks.js";
 import { windLabel } from "../../symbolic/hunt/conditions.js";
 
@@ -27,7 +27,7 @@ function coordText(point) {
   return `${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}`;
 }
 
-export function useHuntMap({ on, held, cameraCenter, onFocusBox }) {
+export function useHuntMap({ on, held, cameraCenter, onFocusBox, onLogSighting }) {
   const hunt = useHunt();
   const [clock, setClock] = useState(() => Date.now());
   const [sheet, setSheet] = useState(null); // null | "wind" | "marks" | "pick" | "edit" | "clear"
@@ -48,7 +48,7 @@ export function useHuntMap({ on, held, cameraCenter, onFocusBox }) {
   }, [on]);
 
   const myMarks = useMemo(() => marksOf(hunt.spots), [hunt.spots]);
-  const logMarks = useMemo(() => sightingMarks(hunt.sightings), [hunt.sightings]);
+  const logMarks = useMemo(() => sightingMarks(hunt.sightings, myMarks.map((mark) => mark.id)), [hunt.sightings, myMarks]);
   const allMarks = useMemo(() => [...myMarks, ...logMarks], [myMarks, logMarks]);
   const fix = held && Number.isFinite(held.latitude) && Number.isFinite(held.longitude) ? { latitude: held.latitude, longitude: held.longitude } : null;
   const view = useMemo(
@@ -84,10 +84,20 @@ export function useHuntMap({ on, held, cameraCenter, onFocusBox }) {
     const mark = result.mark;
     writeMarks(() => result.marks);
     close();
-    say(`${mark.name} added.`, [
+    const actions = [
       { label: "Undo", run: () => writeMarks((list) => removeMark(list, mark.id).marks) },
       { label: "Edit", run: () => { setEditId(mark.id); setSheet("edit"); } }
-    ]);
+    ];
+    // A new sighting mark offers the Sightings log, filled in with this spot and time.
+    if (mark.kind === "sighting" && onLogSighting) actions.unshift({ label: LOG_SIGHTING, run: () => logSighting(mark) });
+    say(`${mark.name} added.`, actions);
+  }
+
+  function logSighting(mark) {
+    const prefill = sightingPrefill(mark);
+    if (!prefill || !onLogSighting) return;
+    close();
+    onLogSighting(prefill);
   }
 
   function change(id, patch) {
@@ -255,6 +265,8 @@ export function useHuntMap({ on, held, cameraCenter, onFocusBox }) {
           onMove={() => { setMoveId(editing.id); close(); onFocusBox?.(boxAround(editing)); setEditId(editing.id); }}
           onDelete={() => remove(editing.id)}
           onConeFrom={(yes) => setConeStandId(yes ? editing.id : null)}
+          logged={Boolean(loggedFromMark(hunt.sightings, editing.id))}
+          onLog={onLogSighting ? () => logSighting(editing) : null}
         />
       ) : null}
       {sheet === "clear" ? (
@@ -328,7 +340,7 @@ function SheetFrame({ title, onClose, closeLabel = "Close", children }) {
   );
 }
 
-function EditSheet({ mark, assessed, apex, coneFromThis, hasFix, onChange, onClose, onMove, onDelete, onConeFrom }) {
+function EditSheet({ mark, assessed, apex, coneFromThis, hasFix, onChange, onClose, onMove, onDelete, onConeFrom, logged, onLog }) {
   const display = useDisplay();
   const [name, setName] = useState(mark.name);
   const commit = () => { if (name.trim() && name.trim() !== mark.name) onChange({ name }); else if (!name.trim()) setName(mark.name); };
@@ -346,6 +358,12 @@ function EditSheet({ mark, assessed, apex, coneFromThis, hasFix, onChange, onClo
         coneFromThis
           ? (hasFix ? <Action label="Show the cone from me" tone="quiet" onPress={() => onConeFrom(false)} accessibilityHint="The scent cone starts from you again." /> : null)
           : <Action label="Show the cone from this stand" tone="quiet" onPress={() => onConeFrom(true)} accessibilityHint="Draws the scent cone from this stand instead of from you." />
+      ) : null}
+      {mark.kind === "sighting" && onLog ? (
+        <>
+          <Action label={LOG_SIGHTING} tone="quiet" onPress={() => { commit(); onLog(); }} accessibilityHint="Opens the Sightings log with this spot and the time you marked it." />
+          {logged ? <Quiet>Already in your Sightings log. Logging again adds another entry.</Quiet> : null}
+        </>
       ) : null}
       <Action label="Move on the map" tone="quiet" onPress={() => { commit(); onMove(); }} />
       <Action label="Delete" tone="clay" onPress={onDelete} />

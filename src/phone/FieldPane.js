@@ -80,8 +80,13 @@ export default function FieldPane({ position, mapPacks, waypoints, onEmergency, 
     setOpenRaw(id);
   };
   const [guideSymbol, setGuideSymbol] = useState("");
+  // A sighting mark on the Hunt map opens Sightings with its spot and time filled in.
+  const [sightingPrefill, setSightingPrefill] = useState(null);
   useEffect(() => {
-    if (openRequest?.tile) setOpen(openRequest.tile);
+    if (openRequest?.tile) {
+      setSightingPrefill(openRequest.tile === "sightings" && openRequest.prefill ? { ...openRequest.prefill, requestId: openRequest.id } : null);
+      setOpen(openRequest.tile);
+    }
   }, [openRequest?.id]);
   useBackLayer(open != null, () => setOpen(null));
   const close = () => {
@@ -143,7 +148,7 @@ export default function FieldPane({ position, mapPacks, waypoints, onEmergency, 
   }
   if (open === "weather") return <WeatherScreen position={position} onBack={close} />;
   if (open === "ballistics") return <BallisticsScreen onBack={close} />;
-  if (open === "sightings") return <SightingsScreen position={position} onBack={close} />;
+  if (open === "sightings") return <SightingsScreen key={sightingPrefill?.requestId || "log"} position={position} prefill={sightingPrefill} onBack={() => { setSightingPrefill(null); close(); }} />;
   if (open === "kit") return <KitScreen onBack={close} onOpenFamily={() => onOpenScreen?.("family")} />;
 
   return (

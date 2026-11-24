@@ -402,6 +402,7 @@ export default function YehsaApp() {
             onParty={() => { setTab("people"); setPartyRequest(Date.now()); }}
             onBefore={() => { setTab("field"); setFieldRequest({ id: Date.now(), tile: "before" }); }}
             onOpenTool={(tile) => { setTab("field"); setFieldRequest({ id: Date.now(), tile }); }}
+            onLogSighting={(prefill) => { setTab("field"); setFieldRequest({ id: Date.now(), tile: "sightings", prefill }); }}
           />
         </View>
         <View {...pane("field")}>
@@ -1591,7 +1592,7 @@ class MapBoundary extends React.Component {
   }
 }
 
-function LandPane({ active, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, windRequest, display, onDisplay, onParty, onBefore, onOpenTool }) {
+function LandPane({ active, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, windRequest, display, onDisplay, onParty, onBefore, onOpenTool, onLogSighting }) {
   const [layersOpen, setLayersOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [hunt, setHunt] = useState(false);
@@ -1677,7 +1678,8 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
     on: hunt,
     held,
     cameraCenter: () => (camera.current?.center ? { longitude: camera.current.center[0], latitude: camera.current.center[1] } : null),
-    onFocusBox: showBox
+    onFocusBox: showBox,
+    onLogSighting
   });
   useEffect(() => {
     if (!windRequest) return;
