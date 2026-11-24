@@ -19,8 +19,32 @@ export const UNSURE_TITLE = "I'm not sure";
 export const UNSURE_TEXT =
   "Nothing in the reference photos is close enough to this picture, so I will not guess. Grocery food and household objects are not in the set.";
 // Shown with "I'm not sure" when the photo looks like food, an object, a hand or a pet.
-export const EVERYDAY_QUIET = "This looks more like an everyday thing than a wild plant, mushroom or animal.";
+export const EVERYDAY_QUIET = "This looks more like an everyday thing than something growing or living in the wild.";
 export const EVERYDAY_GROUP = "everyday";
+// Jeff's domain gate, round 4. Every photo lands in one of these before any species is shown:
+//   wild            a wild organism in habitat: the only domain that can name a species
+//   food_household  grocery food, packaging, kitchen, household things, clothing, tools, streets
+//   person_pet      a hand, a person, a pet or a farm animal
+//   document_screen a phone, screen, gadget, book or paper
+//   unclear         nothing in the set is close enough
+// The four non-wild domains never show a species name, a top three, or toxicity text.
+export const DOMAINS = Object.freeze(["wild", "food_household", "person_pet", "document_screen", "unclear"]);
+const SCENE_OF = Object.freeze({
+  ev_hands_people: "person_pet",
+  ev_dog: "person_pet",
+  ev_cat: "person_pet",
+  ev_pets_farm: "person_pet",
+  ev_electronics: "document_screen"
+});
+export const SCENE_QUIET = Object.freeze({
+  food_household: "This looks like food or a household thing, not something growing wild.",
+  person_pet: "This looks like a person or a pet. Yehsa does not identify people or pets.",
+  document_screen: "This looks like a screen, a gadget or paper. Point the camera at the real thing outdoors."
+});
+// The domain for an everyday class id (food_household unless listed above).
+export function sceneOf(id) {
+  return SCENE_OF[id] || "food_household";
+}
 export const UNSURE_QUIET = "This is a photo hint, not an identification.";
 // Kept for older callers.
 export const DECLINE_TEXT = UNSURE_TEXT;
@@ -170,8 +194,9 @@ export function identify(index, query) {
       status: "unsure",
       title: UNSURE_TITLE,
       text: UNSURE_TEXT,
-      quiet: outOfDomain ? `${EVERYDAY_QUIET} ${UNSURE_QUIET}` : UNSURE_QUIET,
+      quiet: outOfDomain ? `${SCENE_QUIET[sceneOf(everydayTop?.id)] || EVERYDAY_QUIET} ${UNSURE_QUIET}` : UNSURE_QUIET,
       domain: outOfDomain ? EVERYDAY_GROUP : "unclear",
+      scene: outOfDomain ? sceneOf(everydayTop?.id) : "unclear",
       everydayTitle: outOfDomain && everydayTop ? index.meta[everydayTop.id].title : "",
       // A look-alike scoring close to a deadly plant still gets one line, but no blanket paragraph.
       // Never on an everyday photo: there is nothing wild in it to warn about.
@@ -215,6 +240,8 @@ export function identify(index, query) {
   });
   return {
     status: "match",
+    domain: "wild",
+    scene: "wild",
     text: `Top match: ${suggestions[0].title} (${suggestions[0].bandText.toLowerCase()}). This is a photo hint, not an identification.`,
     warning: suggestions.some((s) => s.group === "mushroom") ? MUSHROOM_WARNING : PHOTO_WARNING,
     emergency: EMERGENCY_TEXT,

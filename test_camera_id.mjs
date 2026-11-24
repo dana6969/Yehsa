@@ -146,7 +146,8 @@ test("round 4 regression: a bag of supermarket oranges is 'I'm not sure', never 
   assert.ok(ranked[0].id === "ev_citrus", `top class was ${ranked[0].id}`);
   assert.match(r.text, /Grocery food and household objects are not in the set/);
   // No species name, no toxicity, no emergency line on a grocery photo.
-  const shown = JSON.stringify({ title: r.title, text: r.text, quiet: r.quiet, deadlyLine: r.deadlyLine, emergency: r.emergency });
+  // Values only: the key names ("deadlyLine") are not shown to anyone.
+  const shown = [r.title, r.text, r.quiet, r.deadlyLine, r.emergency].join(" | ");
   assert.ok(!/Jack-o|Omphalotus|toxic|deadly|edible|mushroom/i.test(shown), shown);
   assert.deepEqual(r.deadlyNearby, []);
 });
