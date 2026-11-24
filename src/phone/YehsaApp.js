@@ -1772,7 +1772,10 @@ function LandPane({ active, fullScreen = false, onFullScreen, onSos, position, s
     if (!consented) setImportNote("Turn on location so the route starts where you are.");
   }, [routeRequest?.id]);
   useEffect(() => {
-    if (nav.nav?.on) setGps((current) => recenterOnMe(current));
+    if (!nav.nav?.on) return;
+    setGps((current) => recenterOnMe(current));
+    setCourseUp(true);
+    setRecenterKey((key) => key + 1);
   }, [nav.nav?.on]);
   // The native map view is built only while this screen shows, and fresh each time it shows again.
   useEffect(() => {
@@ -2003,7 +2006,7 @@ function LandPane({ active, fullScreen = false, onFullScreen, onSos, position, s
           onMoreLayers={() => setLayersOpen(true)}
           onSos={onSos}
         />
-        {!hunt ? <NavBanner r={nav} onRecenter={() => setGps((current) => recenterOnMe(current))} /> : null}
+        {!hunt ? <NavBanner r={nav} onRecenter={onLocationButton} /> : null}
         {!hunt ? <RouteResults r={nav} /> : null}
       </View>
       {!hunt && !nav.nav?.on ? (

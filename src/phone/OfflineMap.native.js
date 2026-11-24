@@ -111,8 +111,17 @@ export default function OfflineMap({
 
   // Follow moves the center only (and the heading when following a route's course). It never
   // sets a zoom, so the user's zoom is kept. Follow is dropped by any pan or pinch (onUserPan).
+  // When follow is turned on by a Recenter tap, that tap already made the move (below), so the
+  // first follow step is skipped and the two camera moves do not fight.
+  const following = useRef(false);
   useEffect(() => {
-    if (!follow || !fix || !camera.current) return;
+    if (!follow || !fix || !camera.current) {
+      following.current = false;
+      return;
+    }
+    const first = !following.current;
+    following.current = true;
+    if (first && recenterKey) return;
     const stop = followStop(fix, { headingDeg, course: followCourse });
     if (stop) camera.current.setCamera(stop);
   }, [follow, fix?.latitude, fix?.longitude, followCourse ? headingDeg : null]);
