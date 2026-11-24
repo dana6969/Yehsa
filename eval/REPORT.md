@@ -17,10 +17,10 @@ node eval/hotpath.mjs /tmp/yehsa-hotpath.json
 `node eval/run.mjs` reruns the long process, the fresh processes, and the symbol hot path, then rewrites `eval/REPORT.md` and `eval/results.json`.
 
 - Product base: `6036db10cc25f59426ea40132553cda52d9ad1dd`
-- Harness commit: `cf0bec24c482587904b2e55bd665e7192769cf0a`
+- Harness commit: `a7d076710f9dd4c8584ec3d183323b1da8e4b3b7`
 - Node: v24.22.1
 - Host: linux 6.12.113+
-- Generated: 2026-11-24T12:21:05.564Z
+- Generated: 2026-11-24T12:43:55.472Z
 - Questions: 411
 - Meaning matcher: on (BAAI/bge-small-en-v1.5 (ONNX, int8 dynamic quantization from Xenova/bge-small-en-v1.5))
 
@@ -49,20 +49,20 @@ The rubrics were written from the field notes and from the landscape functions. 
 
 | Category | N | Pass | Pass rate | Wrong-but-confident | Wrong-confident rate | Abstained | Abstain rate | Median ms | P95 ms |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| factual | 70 | 70 | 100.0% | 0 | 0.0% | 0 | 0.0% | 86.3 | 3316.7 |
-| multi | 15 | 15 | 100.0% | 0 | 0.0% | 0 | 0.0% | 141.9 | 3349.3 |
-| math | 244 | 244 | 100.0% | 0 | 0.0% | 0 | 0.0% | 21.5 | 54.2 |
-| contradiction | 18 | 18 | 100.0% | 0 | 0.0% | 1 | 5.6% | 122.7 | 3966.0 |
-| unfamiliar | 64 | 64 | 100.0% | 0 | 0.0% | 61 | 95.3% | 55.9 | 104.3 |
-| all | 411 | 411 | 100.0% | 0 | 0.0% | 62 | 15.1% | 28.6 | 142.0 |
+| factual | 70 | 70 | 100.0% | 0 | 0.0% | 0 | 0.0% | 77.5 | 2663.9 |
+| multi | 15 | 15 | 100.0% | 0 | 0.0% | 0 | 0.0% | 128.6 | 3006.2 |
+| math | 244 | 244 | 100.0% | 0 | 0.0% | 0 | 0.0% | 17.6 | 46.4 |
+| contradiction | 18 | 18 | 100.0% | 0 | 0.0% | 1 | 5.6% | 113.7 | 3200.3 |
+| unfamiliar | 64 | 64 | 100.0% | 0 | 0.0% | 61 | 95.3% | 52.0 | 81.9 |
+| all | 411 | 411 | 100.0% | 0 | 0.0% | 62 | 15.1% | 19.7 | 128.6 |
 
 ### Math, split by what was asked
 
 | Slice | N | Pass | Pass rate | Wrong-but-confident | Wrong-confident rate | Abstained | Median ms | P95 ms |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| arithmetic | 219 | 219 | 100.0% | 0 | 0.0% | 0 | 21.1 | 29.5 |
-| units | 8 | 8 | 100.0% | 0 | 0.0% | 0 | 31.5 | 41.5 |
-| landscape | 17 | 17 | 100.0% | 0 | 0.0% | 0 | 54.2 | 134.2 |
+| arithmetic | 219 | 219 | 100.0% | 0 | 0.0% | 0 | 17.5 | 20.0 |
+| units | 8 | 8 | 100.0% | 0 | 0.0% | 0 | 26.6 | 36.5 |
+| landscape | 17 | 17 | 100.0% | 0 | 0.0% | 0 | 49.4 | 118.8 |
 
 ## Paraphrase robustness
 
@@ -108,12 +108,12 @@ The earlier harness run is `eval/BEFORE_REPORT.md`, on product base `0dad9043117
 
 | Category | Before pass | After pass | Before wrong-confident | After wrong-confident | Before abstain | After abstain | Before median ms | After median ms |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| factual | 88.6% | 100.0% | 11.4% | 0.0% | 0.0% | 0.0% | 46.3 | 86.3 |
-| multi | 86.7% | 100.0% | 13.3% | 0.0% | 0.0% | 0.0% | 54.3 | 141.9 |
-| math | 7.0% | 100.0% | 90.2% | 0.0% | 2.9% | 0.0% | 40.0 | 21.5 |
-| contradiction | 88.9% | 100.0% | 11.1% | 0.0% | 0.0% | 5.6% | 49.9 | 122.7 |
-| unfamiliar | 82.8% | 100.0% | 17.2% | 0.0% | 81.3% | 95.3% | 41.4 | 55.9 |
-| all | 39.2% | 100.0% | 59.1% | 0.0% | 14.4% | 15.1% | 40.8 | 28.6 |
+| factual | 88.6% | 100.0% | 11.4% | 0.0% | 0.0% | 0.0% | 46.3 | 77.5 |
+| multi | 86.7% | 100.0% | 13.3% | 0.0% | 0.0% | 0.0% | 54.3 | 128.6 |
+| math | 7.0% | 100.0% | 90.2% | 0.0% | 2.9% | 0.0% | 40.0 | 17.6 |
+| contradiction | 88.9% | 100.0% | 11.1% | 0.0% | 0.0% | 5.6% | 49.9 | 113.7 |
+| unfamiliar | 82.8% | 100.0% | 17.2% | 0.0% | 81.3% | 95.3% | 41.4 | 52.0 |
+| all | 39.2% | 100.0% | 59.1% | 0.0% | 14.4% | 15.1% | 40.8 | 19.7 |
 
 Before, the long process used 50.8 MB after import, 242.1 MB after question 1, and peaked at 253.8 MB. Symbol hot path then: 1000 known symbols in 0.151 ms.
 
@@ -121,27 +121,27 @@ Before, the long process used 50.8 MB after import, 242.1 MB after question 1, a
 
 Latency is the wall time of one `ask()` call inside a single long process. The first call pays to load the dictionaries. Later calls reuse that process.
 
-- First-call latency: 5008.8 ms (willow-1)
-- Median latency after the first call: 28.3 ms
-- P95 latency after the first call: 141.9 ms
+- First-call latency: 3967.2 ms (willow-1)
+- Median latency after the first call: 19.6 ms
+- P95 latency after the first call: 124.9 ms
 - RSS after import, before the first question: 55.3 MB
-- RSS after question 1: 295.2 MB
-- RSS after the last question: 334.1 MB
-- Peak RSS in the long process: 338.9 MB
-- Growth from question 1 to the end: 38.9 MB
+- RSS after question 1: 295.3 MB
+- RSS after the last question: 331.7 MB
+- Peak RSS in the long process: 336.5 MB
+- Growth from question 1 to the end: 36.4 MB
 
 Fresh processes, one question each (cold start, including corpus load):
 
 | Question | Pass | Wrong-confident | Abstained | ms | RSS start | RSS end |
 | --- | --- | --- | --- | ---: | ---: | ---: |
-| willow-1 | yes | no | no | 4199.1 | 54.8 MB | 296.9 MB |
-| mosquito-plants-1 | yes | no | no | 1128.3 | 54.9 MB | 284.2 MB |
-| math-course-0_0__0_1 | yes | no | no | 1137.0 | 54.8 MB | 283.8 MB |
-| math-add-2-2 | yes | no | no | 1130.7 | 54.9 MB | 281.4 MB |
-| contra-snow | yes | no | no | 1460.2 | 54.9 MB | 282.3 MB |
-| ood-france | yes | no | yes | 1167.9 | 54.8 MB | 281.9 MB |
-| math-sunrise-equator | yes | no | no | 1360.1 | 54.9 MB | 257.5 MB |
-| triangle-1 | yes | no | no | 1325.6 | 54.8 MB | 282.0 MB |
+| willow-1 | yes | no | no | 3463.0 | 54.8 MB | 300.2 MB |
+| mosquito-plants-1 | yes | no | no | 1016.8 | 55.0 MB | 285.7 MB |
+| math-course-0_0__0_1 | yes | no | no | 988.8 | 54.9 MB | 265.0 MB |
+| math-add-2-2 | yes | no | no | 957.1 | 54.9 MB | 282.8 MB |
+| contra-snow | yes | no | no | 1008.6 | 54.9 MB | 281.2 MB |
+| ood-france | yes | no | yes | 957.7 | 54.9 MB | 283.5 MB |
+| math-sunrise-equator | yes | no | no | 1019.1 | 54.9 MB | 276.1 MB |
+| triangle-1 | yes | no | no | 903.4 | 55.0 MB | 281.6 MB |
 
 Fresh processes, 25 questions each:
 
@@ -149,16 +149,16 @@ The change column includes loading the dictionaries. It is not growth across the
 
 | Run | Pass | Wrong-confident | Abstained | RSS start | RSS end | Peak | Change from process start |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| short-0 | 25 | 0 | 0 | 54.9 MB | 330.5 MB | 335.1 MB | 275.6 MB |
-| short-1 | 25 | 0 | 0 | 54.8 MB | 266.7 MB | 266.7 MB | 211.8 MB |
-| short-2 | 25 | 0 | 0 | 54.8 MB | 278.4 MB | 278.4 MB | 223.6 MB |
+| short-0 | 25 | 0 | 0 | 54.9 MB | 329.2 MB | 333.7 MB | 274.3 MB |
+| short-1 | 25 | 0 | 0 | 54.9 MB | 284.9 MB | 284.9 MB | 230.0 MB |
+| short-2 | 25 | 0 | 0 | 54.9 MB | 281.0 MB | 281.0 MB | 226.1 MB |
 
 ## Symbol hot path
 
 `getMappedAction` was timed in its own fresh process. Ask was not called. The benchmark is not wired into the hot path.
 
-- 1000 known symbols: 0.188 ms total, 0.00019 ms each, hits 1000
-- 1000 misses: 0.615 ms total, 0.00062 ms each
+- 1000 known symbols: 0.179 ms total, 0.00018 ms each, hits 1000
+- 1000 misses: 0.603 ms total, 0.00060 ms each
 - RSS in that process: 114.3 MB
 
 ## Wrong-but-confident answers
@@ -173,7 +173,7 @@ The change column includes loading the dictionaries. It is not growth across the
 
 No commercial offline assistant was queried, and no numbers for one are invented here. This machine has no Ollama, llama.cpp, or other local model runtime, and no model weights were downloaded. The baseline that can be run fairly is Okapi BM25 over the same prose Yehsa reads: every passage in `books_index.json`, plus the dictionary merge Ask uses (WordNet stub, then `dictionary_memory.json`, `full_dictionary.json`, and Webster, first gloss kept). Medical name lists are labels rather than passages and are not in this index.
 
-BM25 parameters are k1 = 1.2 and b = 0.75. The query is the question's words with a fixed stop list removed. If the best score is 0, BM25 abstains. Otherwise the top passage is the reply. A second score joins the top three passages and applies the same rubric, which is still BM25, not a second system. Index: 463 field passages and 102220 dictionary entries, built in 1869 ms. RSS after the index: 368.1 MB. Peak RSS: 377.7 MB.
+BM25 parameters are k1 = 1.2 and b = 0.75. The query is the question's words with a fixed stop list removed. If the best score is 0, BM25 abstains. Otherwise the top passage is the reply. A second score joins the top three passages and applies the same rubric, which is still BM25, not a second system. Index: 463 field passages and 102220 dictionary entries, built in 1540 ms. RSS after the index: 368.1 MB. Peak RSS: 377.1 MB.
 
 | Category | Yehsa pass | BM25 top 1 pass | BM25 top 3 pass | Yehsa wrong-confident | BM25 top 1 wrong-confident | Yehsa abstain | BM25 top 1 abstain |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -190,7 +190,7 @@ BM25 parameters are k1 = 1.2 and b = 0.75. The query is the question's words wit
 | units | 100.0% | 0.0% | 0.0% |
 | landscape | 100.0% | 0.0% | 0.0% |
 
-BM25 query time in that process: median 0.1 ms, p95 1.2 ms. Yehsa's warm median is in the latency section above. They are not the same process, so the comparison is the task result, not a shared memory budget.
+BM25 query time in that process: median 0.1 ms, p95 1.1 ms. Yehsa's warm median is in the latency section above. They are not the same process, so the comparison is the task result, not a shared memory budget.
 
 On this set, Yehsa's factual pass rate is 100.0% and BM25 top-1 is 71.4% (top-3 is 80.0%). Landscape calculation is 100.0% for Yehsa and 0.0% for BM25 top-1, which is expected: BM25 can retrieve a note about distance, and it does not run the sphere formula. Unfamiliar-question pass rate is 100.0% for Yehsa and 0.0% for BM25 top-1. Overall wrong-but-confident is 0.0% for Yehsa and 83.0% for BM25 top-1. On this run BM25 top-1 did not beat Yehsa's pass rate in any category. The lead is mostly Yehsa abstaining when a dictionary page still shares a word, plus the landscape calculator. It is not a general reasoning advantage. BM25 does not compute ordinary sums or unit conversions. Yehsa's calculator does, for the arithmetic and unit patterns in this set.
 Top-3 can pass an arithmetic item when a long dictionary page happens to contain the same digits. Top-1 arithmetic did not. That accident is why top-3 is reported separately and not treated as a solved calculator.
