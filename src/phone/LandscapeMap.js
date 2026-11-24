@@ -46,6 +46,7 @@ export default function LandscapeMap({
   overlay,
   onMarkPress,
   onTap,
+  route = null,
   fill = false
 }) {
   const [size, setSize] = useState({ width: 320, height: 360 });
@@ -139,6 +140,13 @@ export default function LandscapeMap({
     [features, origin?.latitude, origin?.longitude, pan.x, pan.y, zoom, size.width, size.height]
   );
 
+  const routeSegments = useMemo(
+    () => (route?.line?.length > 1 ? visibleSegments([{ points: route.line }], project, size.width, size.height) : []),
+    // project depends on these values only.
+    [route?.line, origin?.latitude, origin?.longitude, pan.x, pan.y, zoom, size.width, size.height]
+  );
+  const destXY = route?.destination ? project(route.destination) : null;
+
   return (
     <View style={fill ? { flex: 1 } : null}>
       <View
@@ -196,6 +204,10 @@ export default function LandscapeMap({
         {segments.map((segment) => (
           <MeasureLine key={segment.key} from={segment.from} to={segment.to} />
         ))}
+        {routeSegments.map((segment) => (
+          <EdgeLine key={`r${segment.key}`} from={segment.from} to={segment.to} color={colors.brass} />
+        ))}
+        {destXY ? <Dot x={destXY.x} y={destXY.y} color={colors.brass} label={`⚑ ${route.destination.name}`} /> : null}
         {(features || []).map((feature, index) => {
           if (Array.isArray(feature?.points)) return null;
           const xy = project(feature);

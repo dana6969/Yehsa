@@ -14,6 +14,7 @@ import {
   ShapeSource
 } from "@maplibre/maplibre-react-native";
 import { AboutMapLink, ConePill, DragPin, MarkPin } from "./hunt_map_ui.js";
+import { DestinationPin } from "./route/RoutePins.js";
 
 function blankStyle(color) {
   return {
@@ -65,6 +66,7 @@ export default function OfflineMap({
   onMarkPress,
   onMarkDragEnd,
   onAbout,
+  route = null,
   fill = false
 }) {
   const camera = useRef(null);
@@ -95,6 +97,17 @@ export default function OfflineMap({
     });
   }, [follow, fix?.latitude, fix?.longitude, headingDeg]);
 
+  // The route line and destination pin (regular Map). Built once per route, not per render.
+  const routeShape = useMemo(() => {
+    const line = route?.line;
+    if (!line || line.length < 2) return null;
+    return { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: line.map((p) => [p.longitude, p.latitude]) } };
+  }, [route?.line]);
+  useEffect(() => {
+    const cam = camera.current;
+    if (!cam || !route?.box || !route?.fitKey) return;
+    cam.fitBounds([route.box.east, route.box.north], [route.box.west, route.box.south], 60, 700);
+  }, [route?.fitKey]);
   const center = fix ? [fix.longitude, fix.latitude] : [-69, 45];
   const start = initialCamera ? { centerCoordinate: initialCamera.center, zoomLevel: initialCamera.zoom } : { centerCoordinate: center, zoomLevel: fix ? 11 : 4 };
   const paint = layers?.paint || {};
@@ -158,6 +171,17 @@ export default function OfflineMap({
             <FillLayer id="scent-cone-fill" style={{ fillColor: overlay.color, fillOpacity: 0.3 }} />
             <LineLayer id="scent-cone-line" style={{ lineColor: overlay.color, lineWidth: 2, lineOpacity: 0.95 }} />
           </ShapeSource>
+        ) : null}
+        {routeShape ? (
+          <ShapeSource id="route" shape={routeShape}>
+            <LineLayer id="route-casing" style={{ lineColor: "#141a16", lineWidth: 9, lineOpacity: 0.9, lineCap: "round", lineJoin: "round" }} />
+            <LineLayer id="route-line" style={{ lineColor: "#e2b15a", lineWidth: 5, lineOpacity: 1, lineCap: "round", lineJoin: "round" }} />
+          </ShapeSource>
+        ) : null}
+        {route?.destination ? (
+          <MarkerView coordinate={[route.destination.longitude, route.destination.latitude]} anchor={{ x: 0.5, y: 1 }} allowOverlap>
+            <DestinationPin name={route.destination.name} />
+          </MarkerView>
         ) : null}
         {fix ? (
           // A ring with a clear middle, so a place name under the dot stays readable.

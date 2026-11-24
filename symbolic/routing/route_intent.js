@@ -8,7 +8,8 @@ const PATTERNS = [
   { kind: "route", re: /^(?:start\s+)?(?:navigation|navigating|nav)\s+to\s+(.+)$/i },
   { kind: "route", re: /^how (?:do|can|would|should) (?:i|we) (?:get|drive|walk|hike) (?:from here\s+)?to\s+(.+)$/i },
   { kind: "route", re: /^(?:how to|best way to) get to\s+(.+)$/i },
-  { kind: "distance", re: /^how (?:far|long)(?: away)? (?:is it|would it be|will it take)?\s*(?:(?:to drive|to walk|driving|walking)\s+)?(?:from here\s+)?to\s+(.+)$/i },
+  { kind: "distance", re: /^how far(?: away)?(?: is it| would it be)?\s*(?:(?:to drive|to walk|driving|walking)\s+)?(?:from here\s+)?to\s+(.+)$/i },
+  { kind: "distance", re: /^how long (?:does it take |would it take |will it take )?(?:to (?:drive|walk|get)|driving|walking) to\s+(.+)$/i },
   { kind: "distance", re: /^how far(?: away)? is\s+(.+?)\s+from here$/i },
   { kind: "distance", re: /^(?:what(?:'s| is) the\s+)?(?:distance|drive|drive time|driving time|walk) (?:from here\s+)?to\s+(.+)$/i }
 ];
@@ -27,6 +28,8 @@ export function routeIntent(text) {
     destination = destination.replace(/\s+(?:on foot|by car|walking|driving)$/i, "").trim();
     if (!destination || destination.length < 2) return null;
     if (NOT_A_PLACE.test(destination)) return null;
+    // Coordinates go to the existing waypoint tools; numbers with units are not places.
+    if (/^[-+\d.,\s°NSEWnsew]+$/.test(destination) || /^\d+(?:\.\d+)?\s*(?:km|mi|miles?|m|meters?|feet|ft)\b/i.test(destination)) return null;
     // A how-to question in disguise ("directions to purify water").
     if (/\b(?:water|fire|shelter|knot|wound|bleeding)\b/i.test(destination) && !/\b(?:nearest|closest|lake|pond|river|creek|station|store|hospital)\b/i.test(destination)) return null;
     return { kind, destination, profile };

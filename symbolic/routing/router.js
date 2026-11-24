@@ -38,13 +38,22 @@ function edgeSeconds(graph, k, profile, lengthM = graph.len[k]) {
  * Returns { edge, distM, point, alongM (metres from the edge's from-node), lengthM } or null.
  */
 export function snapToRoad(graph, p, profile = PROFILES.drive, maxM = 3000) {
+  return snapCandidates(graph, p, profile, maxM)[0] || null;
+}
+
+/**
+ * Every usable road within a few metres of the nearest one (so a point at a junction can leave
+ * by any of its roads, not only a one-way ramp that happened to be first).
+ */
+export function snapCandidates(graph, p, profile = PROFILES.drive, maxM = 3000, slackM = 8, max = 6) {
   const { head } = graph;
-  if (p.latitude < head.south - 0.05 || p.latitude > head.north + 0.05 || p.longitude < head.west - 0.05 || p.longitude > head.east + 0.05) return null;
+  if (p.latitude < head.south - 0.05 || p.latitude > head.north + 0.05 || p.longitude < head.west - 0.05 || p.longitude > head.east + 0.05) return [];
   const cx = Math.floor((p.longitude - head.west) / head.cell);
   const cy = Math.floor((p.latitude - head.south) / head.cell);
   const cellM = head.cell * 111320 * Math.cos((p.latitude * Math.PI) / 180);
   const maxRing = Math.max(1, Math.ceil(maxM / cellM) + 1);
   let best = null;
+  const hits = new Map(); // edge -> best hit on it
   const seen = new Set();
   for (let ring = 0; ring <= maxRing; ring++) {
     for (let y = cy - ring; y <= cy + ring; y++) {
@@ -63,12 +72,13 @@ export function snapToRoad(graph, p, profile = PROFILES.drive, maxM = 3000) {
             for (let i = 1; i < pts.length; i++) {
               const seg = distanceM(pts[i - 1], pts[i]);
               const hit = projectOnSegment(p, pts[i - 1], pts[i]);
-              if (!best || hit.distM < best.distM) {
-                best = { edge: k, distM: hit.distM, point: hit.point, alongRaw: along + hit.t * seg, rawLength: 0, pts };
-              }
+              const mine = hits.get(k);
+              if (!mine || hit.distM < mine.distM) hits.set(k, { edge: k, distM: hit.distM, point: hit.point, alongRaw: along + hit.t * seg, rawLength: 0 });
               along += seg;
             }
-            if (best && best.edge === k) best.rawLength = along;
+            const mine = hits.get(k);
+            if (mine) mine.rawLength = along;
+            if (mine && (!best || mine.distM < best.distM)) best = mine;
           }
         }
       }
@@ -76,10 +86,16 @@ export function snapToRoad(graph, p, profile = PROFILES.drive, maxM = 3000) {
     // A hit closer than the ring we have fully searched cannot be beaten by farther rings.
     if (best && best.distM < ring * cellM) break;
   }
-  if (!best || best.distM > maxM) return null;
-  // Scale the along-distance to the stored edge length (shape points are simplified).
-  const scale = best.rawLength > 0 ? graph.len[best.edge] / best.rawLength : 1;
-  return { edge: best.edge, distM: best.distM, point: best.point, alongM: best.alongRaw * scale, lengthM: graph.len[best.edge] };
+  if (!best || best.distM > maxM) return [];
+  return [...hits.values()]
+    .filter((h) => h.distM <= best.distM + slackM)
+    .sort((a, b) => a.distM - b.distM)
+    .slice(0, max)
+    .map((h) => {
+      // Scale the along-distance to the stored edge length (shape points are simplified).
+      const scale = h.rawLength > 0 ? graph.len[h.edge] / h.rawLength : 1;
+      return { edge: h.edge, distM: h.distM, point: h.point, alongM: Math.min(graph.len[h.edge], h.alongRaw * scale), lengthM: graph.len[h.edge] };
+    });
 }
 
 class Heap {
@@ -137,41 +153,60 @@ class Heap {
  */
 export function routeOffline(graph, fromPoint, toPoint, { profile = "drive", maxSettled = 4_000_000 } = {}) {
   const prof = PROFILES[profile] || PROFILES.drive;
-  const start = snapToRoad(graph, fromPoint, prof);
-  if (!start) return { ok: false, reason: "No road near your position in the offline road data." };
-  const end = snapToRoad(graph, toPoint, prof);
-  if (!end) return { ok: false, reason: "No road near the destination in the offline road data." };
+  const starts = snapCandidates(graph, fromPoint, prof);
+  if (!starts.length) return { ok: false, reason: "No road near your position in the offline road data." };
+  const ends = snapCandidates(graph, toPoint, prof);
+  if (!ends.length) return { ok: false, reason: "No road near the destination in the offline road data." };
   const N = graph.N;
   const dist = new Float64Array(N).fill(Infinity);
-  const prevEdge = new Int32Array(N).fill(-1);
+  const prevEdge = new Int32Array(N).fill(-1); // >= 0 edge; -1 none; -(2 + 2i) / -(3 + 2i): start i forward / backward
   const done = new Uint8Array(N);
   const vmax = prof.maxKmh / 3.6;
   const target = { latitude: toPoint.latitude, longitude: toPoint.longitude };
-  const h = (n) => distanceM({ latitude: graph.lat[n], longitude: graph.lon[n] }, end.point) / vmax;
+  const endPoint = ends[0].point;
+  const h = (n) => distanceM({ latitude: graph.lat[n], longitude: graph.lon[n] }, endPoint) / vmax;
   const heap = new Heap();
-  const sk = start.edge;
-  const sLen = graph.len[sk];
-  // Leave the start edge toward either end it allows.
-  const seeds = [];
-  if (canGo(graph, sk, true, prof)) seeds.push([graph.to[sk], edgeSeconds(graph, sk, prof, sLen - start.alongM), -2]);
-  if (canGo(graph, sk, false, prof)) seeds.push([graph.from[sk], edgeSeconds(graph, sk, prof, start.alongM), -3]);
-  for (const [n, s, tag] of seeds) {
-    if (s < dist[n]) {
-      dist[n] = s;
-      prevEdge[n] = tag;
-      heap.push(s + h(n), n);
+  starts.forEach((st, i) => {
+    const k = st.edge;
+    const seeds = [];
+    if (canGo(graph, k, true, prof)) seeds.push([graph.to[k], edgeSeconds(graph, k, prof, graph.len[k] - st.alongM), -(2 + 2 * i)]);
+    if (canGo(graph, k, false, prof)) seeds.push([graph.from[k], edgeSeconds(graph, k, prof, st.alongM), -(3 + 2 * i)]);
+    for (const [n, sec, tag] of seeds) {
+      if (sec < dist[n]) {
+        dist[n] = sec;
+        prevEdge[n] = tag;
+        heap.push(sec + h(n), n);
+      }
     }
-  }
-  // Same edge, reachable directly along it.
-  let direct = Infinity;
-  if (start.edge === end.edge) {
-    const forward = end.alongM >= start.alongM;
-    if (canGo(graph, sk, forward, prof)) direct = edgeSeconds(graph, sk, prof, Math.abs(end.alongM - start.alongM));
-  }
-  const ek = end.edge;
-  const eLen = graph.len[ek];
-  let best = direct;
-  let bestEnd = direct < Infinity ? -1 : -2;
+  });
+  // Arrivals: entering an end edge from one of its nodes.
+  const arrivals = new Map();
+  ends.forEach((en, j) => {
+    const k = en.edge;
+    if (canGo(graph, k, true, prof)) {
+      const list = arrivals.get(graph.from[k]) || [];
+      list.push({ j, forward: true, sec: edgeSeconds(graph, k, prof, en.alongM) });
+      arrivals.set(graph.from[k], list);
+    }
+    if (canGo(graph, k, false, prof)) {
+      const list = arrivals.get(graph.to[k]) || [];
+      list.push({ j, forward: false, sec: edgeSeconds(graph, k, prof, graph.len[k] - en.alongM) });
+      arrivals.set(graph.to[k], list);
+    }
+  });
+  let best = Infinity;
+  let bestEnd = null;
+  // Start and end on the same road piece, reachable directly along it.
+  starts.forEach((st, i) => ends.forEach((en, j) => {
+    if (st.edge !== en.edge) return;
+    const forward = en.alongM >= st.alongM;
+    if (!canGo(graph, st.edge, forward, prof)) return;
+    const sec = edgeSeconds(graph, st.edge, prof, Math.abs(en.alongM - st.alongM));
+    if (sec < best) {
+      best = sec;
+      bestEnd = { direct: true, i, j, forward };
+    }
+  }));
   let settled = 0;
   while (heap.size) {
     const n = heap.pop();
@@ -179,13 +214,12 @@ export function routeOffline(graph, fromPoint, toPoint, { profile = "drive", max
     done[n] = 1;
     if (++settled > maxSettled) break;
     if (dist[n] + h(n) >= best) break;
-    if (n === graph.from[ek] && canGo(graph, ek, true, prof)) {
-      const s = dist[n] + edgeSeconds(graph, ek, prof, end.alongM);
-      if (s < best) { best = s; bestEnd = n; }
-    }
-    if (n === graph.to[ek] && canGo(graph, ek, false, prof)) {
-      const s = dist[n] + edgeSeconds(graph, ek, prof, eLen - end.alongM);
-      if (s < best) { best = s; bestEnd = n; }
+    for (const arr of arrivals.get(n) || []) {
+      const sec = dist[n] + arr.sec;
+      if (sec < best) {
+        best = sec;
+        bestEnd = { node: n, j: arr.j, forward: arr.forward };
+      }
     }
     for (let a = graph.adjStart[n]; a < graph.adjStart[n + 1]; a++) {
       const k = graph.adj[a];
@@ -194,33 +228,39 @@ export function routeOffline(graph, fromPoint, toPoint, { profile = "drive", max
       if (!canGo(graph, k, forward, prof)) continue;
       const m = forward ? graph.to[k] : graph.from[k];
       if (done[m]) continue;
-      const s = dist[n] + edgeSeconds(graph, k, prof);
-      if (s < dist[m]) {
-        dist[m] = s;
+      const sec = dist[n] + edgeSeconds(graph, k, prof);
+      if (sec < dist[m]) {
+        dist[m] = sec;
         prevEdge[m] = k;
-        heap.push(s + h(m), m);
+        heap.push(sec + h(m), m);
       }
     }
   }
-  if (best === Infinity) return { ok: false, reason: "No connected road between here and there in the offline road data." };
+  if (!bestEnd) return { ok: false, reason: "No connected road between here and there in the offline road data." };
 
-  // Rebuild the path as a list of (edge, forward, partial) pieces.
+  // Rebuild the path as a list of (edge, from metres, to metres) pieces.
   const pieces = [];
-  if (bestEnd === -1) {
-    const forward = end.alongM >= start.alongM;
-    pieces.push({ edge: sk, forward, fromM: start.alongM, toM: end.alongM });
+  if (bestEnd.direct) {
+    const st = starts[bestEnd.i];
+    const en = ends[bestEnd.j];
+    pieces.push({ edge: st.edge, fromM: st.alongM, toM: en.alongM });
   } else {
-    const endForward = bestEnd === graph.from[ek];
-    pieces.push({ edge: ek, forward: endForward, fromM: endForward ? 0 : eLen, toM: end.alongM });
-    let n = bestEnd;
-    while (prevEdge[n] >= 0) {
+    const en = ends[bestEnd.j];
+    const ek = en.edge;
+    pieces.push({ edge: ek, fromM: bestEnd.forward ? 0 : graph.len[ek], toM: en.alongM });
+    let n = bestEnd.node;
+    let guard = 0;
+    while (prevEdge[n] >= 0 && guard++ < N) {
       const k = prevEdge[n];
-      const forward = graph.to[k] === n && !(graph.from[k] === n && graph.to[k] === n);
-      pieces.push({ edge: k, forward, fromM: forward ? 0 : graph.len[k], toM: forward ? graph.len[k] : 0 });
+      const forward = graph.to[k] === n && graph.from[k] !== n;
+      pieces.push({ edge: k, fromM: forward ? 0 : graph.len[k], toM: forward ? graph.len[k] : 0 });
       n = forward ? graph.from[k] : graph.to[k];
     }
-    const forward = prevEdge[n] === -2;
-    pieces.push({ edge: sk, forward, fromM: start.alongM, toM: forward ? sLen : 0 });
+    const tag = -prevEdge[n];
+    const i = Math.floor((tag - 2) / 2);
+    const forward = (tag - 2) % 2 === 0;
+    const st = starts[i];
+    pieces.push({ edge: st.edge, fromM: st.alongM, toM: forward ? graph.len[st.edge] : 0 });
     pieces.reverse();
   }
   return { ok: true, route: assemble(graph, pieces, prof, fromPoint, target, best) };
