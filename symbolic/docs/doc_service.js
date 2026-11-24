@@ -186,7 +186,7 @@ export function createDocService(io) {
       if (!sections.length) return { ok: false, reason: "I downloaded it, but there was no readable text to learn from. Nothing was kept." };
       const id = existing?.id || newDocId(now);
       const meta = docMeta({ id, candidate: { ...candidate, url: candidate.url }, read, bytes: got.bytes.length, format: got.format, now, sections });
-      await saveBody(id, { pages: read.pages, sections, vectors: null, model: null });
+      await saveBody(id, { pages: read.pages, sections, outline: Array.isArray(read.outline) ? read.outline : [], vectors: null, model: null });
       await saveCatalog(addDocument(catalog, meta));
       onStep?.({ phase: "saved" });
       // Meaning vectors after the save, in the background. Answers work by words meanwhile.
@@ -213,6 +213,11 @@ export function createDocService(io) {
       const b = await body(id);
       return b?.pages || null;
     },
+    /** The whole sealed body (pages, sections, outline) for the reader and document answers. */
+    async body(id) {
+      await load();
+      return body(id);
+    },
     async rename(id, title) {
       const result = renameDocument(catalog, id, title);
       if (!result.ok) return result;
@@ -237,7 +242,7 @@ export function createDocService(io) {
       indexing.set(id, { phase: "sections", done: 0, total: 0 });
       emit();
       const sections = buildSections(b.pages);
-      await saveBody(id, { pages: b.pages, sections, vectors: null, model: null });
+      await saveBody(id, { pages: b.pages, sections, outline: b.outline || [], vectors: null, model: null });
       await saveCatalog(updateDocument(catalog, id, { sections: sections.length, indexedModel: null }));
       indexing.delete(id);
       emit();

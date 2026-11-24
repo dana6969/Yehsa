@@ -536,9 +536,54 @@ export class PdfDoc {
       const kids = this.resolve(node.Kids);
       if (Array.isArray(kids)) {
         for (const kid of kids) walk(kid, res);
-      } else if (node.Type?.name === "Page" || node.Contents !== undefined) out.push({ node, resources: res });
+      } else if (node.Type?.name === "Page" || node.Contents !== undefined) out.push({ node, resources: res, num: key });
     };
     if (root?.Pages) walk(root.Pages, undefined);
+    return out;
+  }
+
+  // R7: the PDF's own table of contents (bookmarks), as [{ title, page (1-based), depth }].
+  // Only direct destinations ([page /XYZ ...] or a GoTo action) are used; named destinations are skipped.
+  outline(list) {
+    const root = this.resolve(this.trailer.Root);
+    const top = this.resolve(root?.Outlines);
+    if (!top || typeof top !== "object") return [];
+    const pageOf = new Map();
+    list.forEach((item, i) => { if (item.num != null) pageOf.set(item.num, i + 1); });
+    const out = [];
+    const seen = new Set();
+    const walk = (ref, depth) => {
+      let cur = ref;
+      let guard = 0;
+      while (cur && out.length < 400 && guard < 2000) {
+        guard += 1;
+        const key = cur instanceof Ref ? cur.num : null;
+        if (key != null) {
+          if (seen.has(key)) return;
+          seen.add(key);
+        }
+        const node = this.resolve(cur);
+        if (!node || typeof node !== "object") return;
+        const t = this.resolve(node.Title);
+        const title = t?.str != null ? pdfString(t.str).replace(/\s+/g, " ").trim() : "";
+        let dest = this.resolve(node.Dest);
+        if (!dest) {
+          const action = this.resolve(node.A);
+          if (action && this.resolve(action.S)?.name === "GoTo") dest = this.resolve(action.D);
+        }
+        if (dest && !Array.isArray(dest) && dest.D) dest = this.resolve(dest.D);
+        const target = Array.isArray(dest) ? dest[0] : null;
+        const page = target instanceof Ref ? pageOf.get(target.num) : Number.isInteger(target) ? target + 1 : null;
+        if (title) out.push({ title: title.slice(0, 120), page: page || null, depth });
+        if (node.First && depth < 2) walk(node.First, depth + 1);
+        cur = node.Next;
+      }
+    };
+    try {
+      walk(top.First, 0);
+    } catch {
+      return out;
+    }
     return out;
   }
 }
@@ -886,7 +931,13 @@ function finish(doc, list, pages) {
   const title = doc.info().title.trim();
   if (list.length === 0) return { ok: false, pages: [], title, pageCount: 0, reason: "I couldn't find any pages in that PDF." };
   if (chars < 40) return { ok: false, pages, title, pageCount: list.length, scanned: true, reason: "That PDF is pictures of pages (a scan) with no text layer, so there's nothing I can read." };
-  return { ok: true, pages, title, pageCount: list.length };
+  let outline = [];
+  try {
+    outline = doc.outline(list);
+  } catch {
+    outline = [];
+  }
+  return { ok: true, pages, title, pageCount: list.length, outline };
 }
 
 /**
