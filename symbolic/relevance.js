@@ -1,7 +1,7 @@
 // Drop a note that only shares a loose word with the question.
 import { loadFieldNotes } from "./field_vocab_source.js";
 import { textHasToken } from "./book_search.js";
-import { entryFor } from "./entries.js";
+import { entryFor, entryHeadHit } from "./entries.js";
 
 const LOOSE = new Set([
   "light", "life", "repeated", "opening", "times", "time", "city", "plant", "plants",
@@ -75,23 +75,15 @@ function careLink(parsed, symbol) {
   return insect && CARE_SYMBOLS.has(symbol);
 }
 
-// A field entry is long, so one shared word is weak evidence. It must be named in the question:
-// enough specific words of the question are in its title, other names, or id, or in its text.
-function entryNamed(entry, hit, specific) {
-  const head = `${entry.id.replace(/_/g, " ")} ${entry.title} ${(entry.also || []).join(" ")}`;
-  const content = specific.filter((token) => token.length >= 3 && !GLUE.has(token));
-  if (!content.length) return false;
-  // At least a third of what the question is about has to be what the entry is about.
-  const named = content.filter((token) => textHasToken(head, token)).length;
-  if (named && named * 3 >= content.length) return true;
-  const blob = `${hit?.text || ""} ${entry.def || ""}`;
-  const inText = content.filter((token) => textHasToken(blob, token) || textHasToken(head, token)).length;
-  return inText >= 2 && inText * 2 >= content.length;
+// A field entry is long, so one shared word is weak evidence. The question has to say the entry's
+// name, one of its other names, or most of its title (entries.js entryHeadHit).
+function entryNamed(entry, parsed) {
+  return entryHeadHit(entry.id, parsed?.text || parsed?.topic || "") === true;
 }
 
 export function hitIsRelevant(hit, parsed) {
   const entry = entryFor(hit?.symbol);
-  if (entry && !entryNamed(entry, hit, specificTokens(parsed).specific)) return false;
+  if (entry && !entryNamed(entry, parsed)) return false;
   // Entries never give a dose, so a dose question is not answered by one.
   if (entry && /\b(dose|doses|dosage|dosing|mg|milligrams?)\b/i.test(`${parsed?.topic || ""} ${parsed?.text || ""}`)) return false;
   return noteIsRelevant(hit, parsed);

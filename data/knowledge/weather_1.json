@@ -15,7 +15,7 @@
 "flat, spreading anvil at the top",
 "dark, flat base with rain, hail, or lightning below"
 ],
-"use": "Treat it as a lightning and downpour warning. Get off ridges, open ground, and water, move to a building or hard-topped vehicle, and expect sudden strong gusts.",
+"use": "Treat it as a lightning and downpour warning. Get off peaks, ridges, and other high ground, leave open ground and water, move to a building or hard-topped vehicle, and expect sudden strong gusts.",
 "not": "Do not wait for rain to start before moving; lightning can strike miles ahead of the rain. Do not shelter under lone trees.",
 "rel": [
 "lightning",
@@ -1004,7 +1004,11 @@
 "flood watch",
 "rising creek",
 "dry wash flood",
-"slot canyon flood"
+"slot canyon flood",
+"dry gully",
+"arroyo",
+"dry wash",
+"desert wash"
 ],
 "def": "A flash flood is a rapid rise of water, often from storms miles upstream, and it can reach you under a clear sky.",
 "look": [

@@ -163,7 +163,7 @@ test("tourniquet, frostbite, splint, and yarrow answer from field notes", () => 
     {
       q: "How do I use a tourniquet?",
       kind: "medical",
-      symbol: "tourniquet_apply",
+      symbol: "tourniquet_last_resort",
       need: [/last resort/i, /life-threatening/i, /note the time/i, /direct pressure/i],
       gloss: /essentiallyof|istightened/
     },

@@ -151,6 +151,37 @@ const NAME_INDEX = (() => {
   return index;
 })();
 
+// Names that count as the entry's own name: its title (with and without the bracket), the bracket words,
+// and its other names. Used by the meaning matcher's title boost.
+const HEAD_STOP = new Set("and the for with from what when your into how not are can".split(" "));
+function headStem(word) { return word.replace(/(?:ies)$/, "y").replace(/(?:es|s)$/, ""); }
+const ENTRY_HEADS = new Map(ENTRIES.map((entry) => {
+  const names = [entry.title.replace(/\s*\([^)]*\)/g, ""), ...(entry.title.match(/\(([^)]*)\)/g) || []).map((x) => x.slice(1, -1)), ...(entry.also || [])]
+    .map(normName).filter((name) => name.length >= 3);
+  const words = new Set(normName(entry.title.replace(/\s*\([^)]*\)/g, "")).split(/[ -]+/).filter((w) => w.length >= 4 && !HEAD_STOP.has(w)).map(headStem));
+  return [entry.id, { names, words }];
+}));
+
+/**
+ * null when symbol is not a field entry. Otherwise true when the question says one of the entry's names
+ * (title, bracket words, or other names), or at least half of its title's words.
+ */
+export function entryHeadHit(symbol, question) {
+  const head = ENTRY_HEADS.get(symbol);
+  if (!head) return null;
+  const text = ` ${normName(question)} `;
+  const plain = text.replace(/'s\b/g, "");
+  for (const name of head.names) {
+    const pattern = new RegExp(`[ -]${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:s|es)?[ -]`);
+    if (pattern.test(text) || pattern.test(plain)) return true;
+  }
+  if (!head.words.size) return false;
+  const asked = new Set(plain.split(/[ -]+/).filter(Boolean).map(headStem));
+  let hits = 0;
+  for (const word of head.words) if (asked.has(word)) hits += 1;
+  return hits >= Math.max(1, Math.ceil(head.words.size * 2 / 3));
+}
+
 const NAME_QUESTION = [
   /^(?:what(?:'s| is| are)|tell me (?:more )?about|describe|identify|how do i (?:identify|recognize|recognise|spot)|is this|is that|is it|are these|are those|info on|information on)\s+(.+)$/,
   /^what do(?:es)?\s+(.+?)\s+look like$/
