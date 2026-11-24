@@ -17,7 +17,10 @@ export const MUSHROOM_WARNING =
 
 export const UNSURE_TITLE = "I'm not sure";
 export const UNSURE_TEXT =
-  "Nothing in the reference photos is close enough to this picture, so I will not guess. That includes trees that are not in the set.";
+  "Nothing in the reference photos is close enough to this picture, so I will not guess. Grocery food and household objects are not in the set.";
+// Shown with "I'm not sure" when the photo looks like food, an object, a hand or a pet.
+export const EVERYDAY_QUIET = "This looks more like an everyday thing than a wild plant, mushroom or animal.";
+export const EVERYDAY_GROUP = "everyday";
 export const UNSURE_QUIET = "This is a photo hint, not an identification.";
 // Kept for older callers.
 export const DECLINE_TEXT = UNSURE_TEXT;
@@ -112,7 +115,14 @@ export function classProbabilities(index, query) {
 export function rankClasses(index, query) {
   const p = classProbabilities(index, query);
   const ranked = index.classes.map((id, k) => ({ id, score: p[k] })).sort((a, b) => b.score - a.score);
-  return { ranked, other: p[index.rows - 1], probabilities: p };
+  let everyday = 0;
+  let everydayTop = null;
+  index.classes.forEach((id, k) => {
+    if (index.meta[id]?.group !== EVERYDAY_GROUP) return;
+    everyday += p[k];
+    if (!everydayTop || p[k] > everydayTop.score) everydayTop = { id, score: p[k] };
+  });
+  return { ranked, other: p[index.rows - 1], probabilities: p, everyday, everydayTop };
 }
 
 function bandFor(score, thresholds) {
@@ -138,22 +148,36 @@ function warningFor(meta) {
   return "";
 }
 
+// How the phone decides (same rule the held-out numbers in eval/camera_id use):
+//  1. Domain gate. Everyday classes (food, packaging, household objects, hands, pets) are part of the
+//     model. If they together outweigh the best wild class, or "something else" does, the photo is out
+//     of domain: no species name, no top three, no toxicity text. The answer is "I'm not sure".
+//  2. A wild answer needs the best wild class to clear the weak bar. A toxic or deadly class needs a
+//     higher one. A deadly class that scores near but under that bar still gets one line of warning.
+//  3. The top three are wild classes only, and only when the photo passed 1 and 2.
+//  4. Nothing here says a thing is safe to eat. The notes are about the species, not a verdict on the photo.
 export function identify(index, query) {
-  const { ranked, other, probabilities } = rankClasses(index, query);
+  const { ranked: all, other, everyday, everydayTop } = rankClasses(index, query);
+  const ranked = all.filter((item) => index.meta[item.id]?.group !== EVERYDAY_GROUP);
   const top = ranked[0];
   const th = index.thresholds;
   const strongestOther = other > top.score;
+  const outOfDomain = everyday > top.score;
+  const needed = isDeadly(index.meta[top.id]) || index.meta[top.id]?.use === "toxic" ? Math.max(th.toxic ?? th.possible, th.weak) : th.weak;
   const deadlyHints = ranked.slice(0, 3).filter((item) => isDeadly(index.meta[item.id]) && item.score >= DEADLY_HINT);
-  if (!top || strongestOther || top.score < th.weak) {
+  if (!top || strongestOther || outOfDomain || top.score < needed) {
     return {
       status: "unsure",
       title: UNSURE_TITLE,
       text: UNSURE_TEXT,
-      quiet: UNSURE_QUIET,
+      quiet: outOfDomain ? `${EVERYDAY_QUIET} ${UNSURE_QUIET}` : UNSURE_QUIET,
+      domain: outOfDomain ? EVERYDAY_GROUP : "unclear",
+      everydayTitle: outOfDomain && everydayTop ? index.meta[everydayTop.id].title : "",
       // A look-alike scoring close to a deadly plant still gets one line, but no blanket paragraph.
-      deadlyNearby: deadlyHints.map((d) => d.id),
-      deadlyLine: deadlyHints.length ? `Part of this picture resembles a deadly plant or mushroom (${deadlyHints.map((d) => index.meta[d.id].title).join(", ")}). Do not eat or handle it.` : "",
-      emergency: deadlyHints.length ? EMERGENCY_TEXT : "",
+      // Never on an everyday photo: there is nothing wild in it to warn about.
+      deadlyNearby: outOfDomain ? [] : deadlyHints.map((d) => d.id),
+      deadlyLine: !outOfDomain && deadlyHints.length ? `Part of this picture resembles a deadly plant or mushroom (${deadlyHints.map((d) => index.meta[d.id].title).join(", ")}). Do not eat or handle it.` : "",
+      emergency: !outOfDomain && deadlyHints.length ? EMERGENCY_TEXT : "",
       suggestions: [],
       ranked,
       other

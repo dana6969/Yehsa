@@ -9,11 +9,18 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 sys.path.insert(0, os.path.dirname(__file__))
 from classes_spec import rows
+from everyday_spec import rows as everyday_rows
 
 data, embdir, outdir = sys.argv[1:4]
 WRITE = "--write" in sys.argv
 C_REG = 10.0
-spec = rows(); classes = [r["id"] for r in spec]; N = len(classes)
+# Round 4: a wrong species name on a non-wild photo is worse than "I'm not sure". At most 10% of non-wild calibration photos may get an answer (was 20%).
+NEG_TARGET = 0.10
+# Round 4: wild classes first, then the everyday (non-wild) classes, then the "something else" row.
+wild = rows(); NW = len(wild)
+every = [dict(id=r["id"], title=r["title"], taxa=[""], group="everyday", use="none",
+              look="An everyday thing (food, an object, a hand or a pet), not a wild species.", lookalikes=[], caution="") for r in everyday_rows()]
+spec = wild + every; classes = [r["id"] for r in spec]; N = len(classes)
 emb = pickle.load(open(os.path.join(embdir, "dino_w8.pkl"), "rb"))
 embf = pickle.load(open(os.path.join(embdir, "dino_w8_flip.pkl"), "rb"))
 
@@ -53,13 +60,26 @@ def proba(sel):
     full = np.zeros((len(sel), N + 1)); full[:, cl] = P; return full
 
 cal = [i for i in items if i["split"] == "cal"]; test = [i for i in items if i["split"] == "test"]
-def eval_set(sel, t_weak, t_poss):
-    P = proba(sel); yt = np.array([i["cls"] for i in sel]); pos = yt < N
-    top = P[:, :N].argmax(1); topp = P[np.arange(len(sel)), top]
-    answered = (P.argmax(1) != N) & (topp >= t_weak)
-    top3 = np.argsort(-P[:, :N], 1)[:, :3]
+TOXIC_USES = ("toxic", "deadly")
+tox_ids = {i for i, r in enumerate(spec) if r["use"] in TOXIC_USES and i < NW}
+
+def decide(P, t_weak, t_tox):
+    """The phone's rule. A wild answer needs the best wild class to beat 'something else' AND the
+    everyday classes together, to clear the weak bar, and (toxic or deadly look-alikes) a higher bar."""
+    topw = P[:, :NW].argmax(1); topp = P[np.arange(len(P)), topw]
+    ev = P[:, NW:N].sum(1) if N > NW else np.zeros(len(P)); oth = P[:, N]
+    ok = (topp > ev) & (topp > oth) & (topp >= t_weak)
+    tox = np.array([t in tox_ids for t in topw])
+    ok &= ~(tox & (topp < t_tox))
+    return topw, topp, ok, ev
+
+def eval_set(sel, t_weak, t_poss, t_tox):
+    P = proba(sel); yt = np.array([i["cls"] for i in sel]); pos = yt < NW
+    top, topp, answered, ev = decide(P, t_weak, t_tox)
+    top3 = np.argsort(-P[:, :NW], 1)[:, :3]
     res = {}
     res["n_pos"] = int(pos.sum()); res["n_neg"] = int((~pos).sum())
+    res["n_everyday"] = int((yt >= NW).sum() - (yt == N).sum())
     res["top1_all"] = float(np.mean(top[pos] == yt[pos])); res["top3_all"] = float(np.mean([yt[k] in top3[k] for k in np.where(pos)[0]]))
     res["answered_pos"] = float(answered[pos].mean())
     res["top1_answered"] = float(np.mean(top[pos & answered] == yt[pos & answered])) if (pos & answered).any() else 0
@@ -67,54 +87,65 @@ def eval_set(sel, t_weak, t_poss):
     poss = answered & (topp >= t_poss)
     res["possible_share"] = float(poss[pos].mean()); res["top1_possible"] = float(np.mean(top[pos & poss] == yt[pos & poss])) if (pos & poss).any() else 0
     res["neg_declined"] = float(1 - answered[~pos].mean()); res["neg_accept"] = float(answered[~pos].mean())
-    dead = {i for i, r in enumerate(spec) if r["use"] == "deadly"}
+    evm = (yt >= NW) & (yt < N)
+    res["everyday_declined"] = float(1 - answered[evm].mean()) if evm.any() else 0
+    res["everyday_called_toxic"] = float(np.mean([answered[k] and top[k] in tox_ids for k in np.where(evm)[0]])) if evm.any() else 0
+    dead = {i for i, r in enumerate(spec) if r["use"] == "deadly" and i < NW}
     res["neg_deadly_top1_accepted"] = float(np.mean([answered[k] and top[k] in dead for k in np.where(~pos)[0]]))
-    # a deadly look-alike must not be hidden: a held-out deadly photo should have a deadly class in the top 3
     dpos = [k for k in np.where(pos)[0] if yt[k] in dead]
     res["deadly_photos_with_deadly_top3"] = float(np.mean([any(t in dead for t in top3[k]) for k in dpos])) if dpos else 0
     res["deadly_top1_is_nondeadly_answered"] = float(np.mean([answered[k] and top[k] not in dead for k in dpos])) if dpos else 0
     return res, P, top, answered, yt
 
 # thresholds from the calibration split
-Pc = proba(cal); yc = np.array([i["cls"] for i in cal]); posc = yc < N
-topc = Pc[:, :N].argmax(1); toppc = Pc[np.arange(len(cal)), topc]; accc = Pc.argmax(1) != N
+Pc = proba(cal); yc = np.array([i["cls"] for i in cal]); posc = yc < NW
+topc = Pc[:, :NW].argmax(1); toppc = Pc[np.arange(len(cal)), topc]
+evc = Pc[:, NW:N].sum(1); accc = (toppc > evc) & (toppc > Pc[:, N])
 t_weak = 1.0
 for t in np.arange(0.02, 0.99, 0.01):
     neg_accept = float(np.mean((accc & (toppc >= t))[~posc]))
-    if neg_accept <= 0.20: t_weak = float(round(t, 2)); break
+    if neg_accept <= NEG_TARGET: t_weak = float(round(t, 2)); break
 t_poss = t_weak
 for t in np.arange(t_weak, 0.99, 0.01):
     m = accc & (toppc >= t) & posc
     if m.sum() >= 20 and np.mean(topc[m] == yc[m]) >= 0.90: t_poss = float(round(t, 2)); break
 else: t_poss = min(0.9, t_weak + 0.2)
-print("thresholds from calibration: weak", t_weak, "possible", t_poss)
-res, P, top, answered, yt = eval_set(test, t_weak, t_poss)
+# Toxic and deadly look-alikes need a higher bar: the smallest one that keeps at most 1% of the
+# non-wild calibration photos (everyday, other, hard negatives) from being answered with a toxic class.
+tox_c = np.array([t in tox_ids for t in topc])
+t_tox = t_poss
+for t in np.arange(t_weak, 0.995, 0.01):
+    if float(np.mean((accc & (toppc >= t) & tox_c)[~posc])) <= 0.01: t_tox = float(round(max(t, t_poss), 2)); break
+else: t_tox = 0.95
+print("thresholds from calibration: weak", t_weak, "possible", t_poss, "toxic", t_tox)
+res, P, top, answered, yt = eval_set(test, t_weak, t_poss, t_tox)
 print(json.dumps(res, indent=1))
 
 # per-group held-out numbers
 groups = {}
-for r_i, r in enumerate(spec): groups.setdefault(r["group"], []).append(r_i)
+for r_i, r in enumerate(spec):
+    if r_i < NW: groups.setdefault(r["group"], []).append(r_i)
 per_group = {}
 for g, ids in groups.items():
     k = [j for j in range(len(test)) if yt[j] in ids]
-    t3 = np.argsort(-P[:, :N], 1)[:, :3]
+    t3 = np.argsort(-P[:, :NW], 1)[:, :3]
     per_group[g] = dict(n=len(k), top1=float(np.mean([top[j] == yt[j] for j in k])), top3=float(np.mean([yt[j] in t3[j] for j in k])), answered=float(np.mean([answered[j] for j in k])))
 print(json.dumps(per_group))
 per_class = {}
-t3 = np.argsort(-P[:, :N], 1)[:, :3]
-for ci, r in enumerate(spec):
+t3 = np.argsort(-P[:, :NW], 1)[:, :3]
+for ci, r in enumerate(spec[:NW]):
     k = [j for j in range(len(test)) if yt[j] == ci]
     if k: per_class[r["id"]] = dict(n=len(k), top1=round(float(np.mean([top[j] == ci for j in k])), 2), top3=round(float(np.mean([ci in t3[j] for j in k])), 2))
 worst = sorted(per_class.items(), key=lambda kv: kv[1]["top1"])[:12]
 print("weakest classes", worst)
 conf = {}
 for j in range(len(test)):
-    if yt[j] < N and top[j] != yt[j]: conf[(spec[yt[j]]["id"], spec[top[j]]["id"] if top[j] < N else "other")] = conf.get((spec[yt[j]]["id"], spec[top[j]]["id"] if top[j] < N else "other"), 0) + 1
+    if yt[j] < NW and top[j] != yt[j]: conf[(spec[yt[j]]["id"], spec[top[j]]["id"])] = conf.get((spec[yt[j]]["id"], spec[top[j]]["id"]), 0) + 1
 print("top confusions", sorted(conf.items(), key=lambda kv: -kv[1])[:12])
 
 report = dict(date=datetime.date.today().isoformat(), model="DINOv2-small weight-only int8 ONNX, CLS token, 384-d, mean of photo and mirror", head="multinomial logistic regression C=%s" % C_REG,
               classes=N, photos=len(items), split={k: sum(1 for i in items if i["split"] == k) for k in ("ref", "cal", "test")},
-              thresholds=dict(weak=t_weak, possible=t_poss), heldout=res, per_group=per_group, per_class=per_class, weakest=worst,
+              thresholds=dict(weak=t_weak, possible=t_poss, toxic=t_tox), heldout=res, per_group=per_group, per_class=per_class, weakest=worst,
               top_confusions=[[a, b, n] for (a, b), n in sorted(conf.items(), key=lambda kv: -kv[1])[:20]])
 json.dump(report, open(os.path.join(embdir, "report.json"), "w"), indent=1)
 if not WRITE: sys.exit(0)
@@ -133,13 +164,13 @@ l1 = Q @ W.T + b; l2 = Q @ Wd.T + b
 print("quantised head keeps top-1 on", float(np.mean(l1.argmax(1) == l2.argmax(1))))
 os.makedirs(outdir, exist_ok=True)
 index = {
-    "version": 2,
+    "version": 3,
     "model": {"name": "DINOv2-small (weights int8, float compute), CLS token", "file": "dinov2_small_w8.onnx", "sourceUrl": "https://huggingface.co/onnx-community/dinov2-small",
               "license": "Apache-2.0", "input": [1, 3, 224, 224], "mean": [0.485, 0.456, 0.406], "std": [0.229, 0.224, 0.225], "dim": 384,
               "preprocess": "centre square crop, 224x224 bilinear, RGB/255 then ImageNet mean/std; query = mean of the photo and its mirror, L2-normalised"},
     "classes": classes,
     "head": {"scale": [round(float(x), 8) for x in scale], "w": base64.b64encode(Wq.tobytes()).decode(), "b": [round(float(x), 5) for x in b]},
-    "thresholds": {"weak": t_weak, "possible": t_poss},
+    "thresholds": {"weak": t_weak, "possible": t_poss, "toxic": t_tox},
     "stats": {"heldout": res, "per_group": per_group}
 }
 json.dump(index, open(os.path.join(outdir, "index.json"), "w"), separators=(",", ":"))
@@ -149,6 +180,10 @@ for r in spec:
 json.dump(meta, open(os.path.join(outdir, "classes.json"), "w"), indent=0, ensure_ascii=False)
 credits = {}
 for i in items:
-    if i["cls"] < N: credits.setdefault(classes[i["cls"]], []).append([i["obs"], i["user"], i["lic"]])
+    if i["cls"] < NW: credits.setdefault(classes[i["cls"]], []).append([i["obs"], i["user"], i["lic"]])
 json.dump({"source": "iNaturalist research-grade observations, photos licensed CC0, CC BY or CC BY-SA. Photos are not shipped; only numeric embeddings are. Entries: observation id (inaturalist.org/observations/ID), observer, license.", "classes": credits}, open(os.path.join(outdir, "credits.json"), "w"), separators=(",", ":"))
+ev_credits = {}
+for i in items:
+    if NW <= i["cls"] < N: ev_credits.setdefault(classes[i["cls"]], []).append([i["obs"], i["user"], i["lic"]])
+json.dump({"source": "Wikimedia Commons files licensed CC0, public domain, CC BY or CC BY-SA. Photos are not shipped. Entries: file title, author, license.", "classes": ev_credits}, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "everyday_credits.json"), "w"), separators=(",", ":"))
 print("wrote", outdir)

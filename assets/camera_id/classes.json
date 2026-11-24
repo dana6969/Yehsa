@@ -1710,5 +1710,149 @@
 "deer_scat"
 ],
 "caution": ""
+},
+"ev_citrus": {
+"title": "citrus fruit (oranges, lemons, limes)",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_fruit": {
+"title": "fruit from a shop or market",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_vegetables": {
+"title": "vegetables from a shop or kitchen",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_packaged_food": {
+"title": "packaged food",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_drinks": {
+"title": "a drink, bottle or can",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_prepared_food": {
+"title": "cooked or baked food",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_kitchen": {
+"title": "a kitchen item",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_household": {
+"title": "a household item or room",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_electronics": {
+"title": "a phone, screen or gadget",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_clothing": {
+"title": "clothing, shoes or a bag",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_hands_people": {
+"title": "a hand or a person",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_dog": {
+"title": "a pet dog",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_cat": {
+"title": "a pet cat",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_pets_farm": {
+"title": "a pet or farm animal",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_tools_office": {
+"title": "a tool, toy or office item",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
+},
+"ev_street": {
+"title": "a car, street or building",
+"latin": "",
+"group": "everyday",
+"use": "none",
+"look": "An everyday thing (food, an object, a hand or a pet), not a wild species.",
+"lookalikes": [],
+"caution": ""
 }
 }
