@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { Linking, Pressable, Switch, Text, TextInput, View } from "react-native";
 import { citationLines } from "../../symbolic/web/answer_builder.js";
 import { MISS_OFFER } from "../../symbolic/web/lookup_queue.js";
-import { approved, keptUnverified, labelFor, learnedTag, waiting } from "../../symbolic/web/web_notes.js";
+import { adviceWarning, approved, dateWord, keptUnverified, labelFor, learnedTag, waiting } from "../../symbolic/web/web_notes.js";
 import { Action, Quiet, themedStyles } from "./ui.js";
 import { useWebLearn, webLearn } from "./web_learn.js";
 
@@ -48,22 +48,39 @@ export function LookupOffer({ question, done, onSaved, onLookUpNow, live }) {
   );
 }
 
+/** The chat line above a live answer: where it came from and when. The quote and links follow in the card. */
+export function liveAnswerText(note) {
+  const when = dateWord(note?.fetchedAt, { year: true });
+  const advice = note?.locked === "legal" || note?.locked === "medical" ? ` ${adviceWarning(note.locked)}` : "";
+  return `Here is what I found online${when ? `, ${when}` : ""}. These are quotes, word for word, with links to each source. Tap a source to read the whole page.${advice}`;
+}
+
+function disclosureText(sent) {
+  if (!sent) return null;
+  // A full sentence from look_up.js disclosureLine(), or the bare words from an older saved review.
+  return /left this phone|Nothing left/.test(sent)
+    ? sent
+    : `Only the words "${sent}" left this phone, to a web search and Wikipedia's search. Result pages were read by their own address.`;
+}
+
 /** A fetched answer waiting for review. */
 export function AnswerReview({ note, sent, onDone }) {
   const [busy, setBusy] = useState(false);
   if (!note) return null;
   return (
     <View style={styles.card}>
-      <Text style={styles.kicker}>Waiting for your review. Not used until you keep it.</Text>
+      <Text style={styles.kicker}>{`From the internet${note.fetchedAt ? `, ${dateWord(note.fetchedAt, { year: true })}` : ""}. Keep it to use it offline later.`}</Text>
       {note.question ? <Text style={styles.title}>{note.question}</Text> : null}
       <Text style={styles.body}>{note.text}</Text>
       {note.locked ? (
         <Text style={styles.warn}>{note.locked === "dosing"
           ? "This mentions a dose. If you keep it, it stays marked unverified. Do not use it for a dose."
-          : "This makes a claim about eating or poison. If you keep it, it stays marked unverified."}</Text>
+          : note.locked === "legal" || note.locked === "medical"
+            ? `${adviceWarning(note.locked)} If you keep it, it stays marked unverified.`
+            : "This makes a claim about eating or poison. If you keep it, it stays marked unverified."}</Text>
       ) : null}
       <Citations note={note} />
-      {sent ? <Text style={styles.meta}>{`Only the words "${sent}" left this phone, to Wikipedia's search. Government pages were read by their own address. The Army manuals are on this phone.`}</Text> : null}
+      {sent ? <Text style={styles.meta}>{disclosureText(sent)}</Text> : null}
       <View style={styles.row}>
         <Action label="Keep" disabled={busy} onPress={() => {
           setBusy(true);
@@ -133,7 +150,7 @@ export function WebLearnedSection({ homeState = null }) {
     const result = await webLearn.fetchQueued(item, { homeState });
     setBusy(null);
     if (result.ok) {
-      setLastSent((prev) => ({ ...prev, [result.note.id]: result.sent }));
+      setLastSent((prev) => ({ ...prev, [result.note.id]: result.disclosure || result.sent }));
       setMsg(result.offline ? "No internet, so this comes from the Army manuals on this phone only. Review it below." : "Answer ready. Review it below.");
     } else {
       setMsg(result.reason);

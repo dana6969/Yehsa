@@ -32,7 +32,7 @@ export function capabilitySummary(meta = {}) {
     "I can show a simple offline map, measure between two points, and keep waypoints and a track once you turn on location.",
     "If you ask me to save a waypoint, measure, hold or unlock a place, scan for peers, speak an answer, or save a note, I show an approval card. Nothing in that list runs until you tap Approve.",
     "Holding a place and sharing a place each need their own consent. Sharing still does not transmit from this screen.",
-    "I don't go online on my own. If you connect an AI model, I ask you before I send it a question. What I learn from you stays on this phone.",
+    "I don't go online on my own. With Look up live questions turned on, a question my notes miss goes to a web search, and I quote what the pages say with links. If you connect an AI model, I ask you before I send it a question. What I learn from you stays on this phone.",
     "I have no live city or street map, and I cannot open or control other apps.",
     dictionary,
     "Counts and the longer limits are on the Details screen."

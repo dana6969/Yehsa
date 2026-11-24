@@ -6,13 +6,14 @@
 
 import { queryTokens } from "../book_search.js";
 import { sourceById, sourceForUrl } from "./allowlist.js";
-import { buildAnswer } from "./answer_builder.js";
+import { buildAnswer, coverage, questionGroups, splitSentences } from "./answer_builder.js";
 import { searchAtp } from "./atp_lookup.js";
 import { guardedFetch } from "./fetch_guard.js";
 import { pagesFor } from "./gov_directory.js";
 import { cleanFetched } from "./sanitize.js";
 import { GOV_LICENSE, WIKI_LICENSE, outboundQuery, parseSearch, queryAllowed, wikipediaPageUrl, wikipediaSearchUrl } from "./sources.js";
 import { stateWildlifeLink } from "./state_wildlife.js";
+import { ADVICE_LINE, adviceKind, webCandidates, webFirst, webQuery } from "./web_search.js";
 
 const PAGE_LIMITS = { maxBytes: 1048576 };
 const WIKI_LIMITS = { maxBytes: 524288 };
@@ -120,11 +121,57 @@ function offlineReason(reason) {
   return /couldn't reach|No network|took too long/i.test(String(reason || ""));
 }
 
+/** Sentences worth showing the meaning matcher: from network pages, naming at least one topic word. */
+function rerankPool(question, candidates, cap = 40) {
+  const groups = questionGroups(question);
+  const pool = [];
+  for (const candidate of candidates) {
+    if (candidate.kind === "pack") continue;
+    for (const sentence of splitSentences(candidate.text)) {
+      if (coverage(sentence, groups) > 0) pool.push(sentence);
+      if (pool.length >= cap) return pool;
+    }
+  }
+  return pool;
+}
+
+async function meaningScores(rerank, question, candidates) {
+  if (typeof rerank !== "function") return null;
+  const pool = [...new Set(rerankPool(question, candidates))];
+  if (pool.length === 0) return null;
+  try {
+    const scores = await Promise.race([
+      Promise.resolve(rerank(question, pool)),
+      new Promise((resolve) => setTimeout(() => resolve(null), 8000))
+    ]);
+    if (!Array.isArray(scores) || scores.length !== pool.length) return null;
+    return new Map(pool.map((sentence, i) => [sentence, Number(scores[i])]));
+  } catch {
+    return null;
+  }
+}
+
+/** The one line shown under a looked-up answer: exactly what left the phone, and where it went. */
+export function disclosureLine({ sent, sentTo = [], area = null, nearMe = false }) {
+  if (!sent) return "Nothing left this phone. This came from the Army manuals on it.";
+  const where = sentTo.length ? sentTo.join(" and ") : "Wikipedia's search";
+  const place = area
+    ? ` Your approximate area (${area}, state only) was added because location is on.`
+    : nearMe
+      ? " Location is off, so no place was added and this is not local to you."
+      : "";
+  return `Only the words "${sent}" left this phone, to ${where}. Result pages were read by their own address.${place} Nothing else was sent.`;
+}
+
 /**
- * Returns { ok: true, answer, sent, tried } or { ok: false, reason, sent, tried, offline }.
+ * Returns { ok: true, answer, sent, tried, disclosure } or { ok: false, reason, sent, tried, offline }.
  * tried lists each source with ok/reason, for the "where I looked" line.
+ * openWeb: also run a keyless web search and read the top pages when the manuals, the listed
+ * government pages and Wikipedia have nothing (or first, for law, news, local and current questions).
+ * area: a state code, passed only when location is on. rerank: optional on-device meaning matcher,
+ * (question, sentences) => similarity per sentence. Never on the symbol hot path.
  */
-export async function lookUp({ question, fetchImpl = null, atpPack = null, homeState = null, network = true, now = () => Date.now() }) {
+export async function lookUp({ question, fetchImpl = null, atpPack = null, homeState = null, network = true, now = () => Date.now(), openWeb = true, area = null, rerank = null }) {
   const query = outboundQuery(question);
   const allowed = queryAllowed(query);
   if (!allowed.ok) return { ok: false, reason: allowed.reason, sent: "", tried: [], offline: false };
@@ -135,7 +182,22 @@ export async function lookUp({ question, fetchImpl = null, atpPack = null, homeS
   candidates.push(...atp);
   let reached = 0;
   let attempted = 0;
-  if (network && typeof fetchImpl === "function") {
+  const online = network && typeof fetchImpl === "function";
+  const web = openWeb ? webQuery(question, { area }) : null;
+  const first = openWeb && webFirst(question);
+  const sendQuery = web?.query && queryAllowed(web.query).ok ? web.query : query;
+  const sentTo = [];
+  const runWeb = async () => {
+    const found = await webCandidates({ fetchImpl, question, query: sendQuery, now });
+    attempted += 1;
+    if (found.reachedAny) reached += 1;
+    tried.push(...found.tried);
+    if (found.engine) sentTo.unshift(`${found.engine.name} search`);
+    else if (found.reachedAny) sentTo.unshift("a web search");
+    candidates.push(...found.candidates);
+  };
+  if (online) {
+    if (first) await runWeb();
     const pages = pagesFor(question);
     const govResults = await Promise.all(pages.map((page) => govCandidate({ fetchImpl, page, now })));
     govResults.forEach((result, i) => {
@@ -144,26 +206,42 @@ export async function lookUp({ question, fetchImpl = null, atpPack = null, homeS
       tried.push({ source: sourceById(pages[i].source)?.name || pages[i].source, ok: result.ok, reason: result.ok ? null : result.reason });
       if (result.ok) candidates.push(result.candidate);
     });
-    const wiki = await wikipediaCandidates({ fetchImpl, query, now });
+    const wiki = await wikipediaCandidates({ fetchImpl, query: sendQuery, now });
     attempted += 1;
     if (wiki.ok || !offlineReason(wiki.reason)) reached += 1;
     tried.push({ source: "Wikipedia", ok: wiki.candidates.length > 0, reason: wiki.ok ? null : wiki.reason });
     candidates.push(...wiki.candidates);
+    sentTo.push("Wikipedia's search");
   }
-  const offline = !network || typeof fetchImpl !== "function" || (attempted > 0 && reached === 0);
-  const answer = buildAnswer({ question, query, candidates, link: stateWildlifeLink(question, homeState), now: now() });
-  // Only Wikipedia's search gets words. The government pages are fixed addresses.
-  const sent = network && typeof fetchImpl === "function" ? query : "";
+  const link = stateWildlifeLink(question, homeState);
+  let answer = first ? null : buildAnswer({ question, query, candidates, link, now: now() });
+  if (!answer && online && openWeb && !first && reached > 0) await runWeb();
+  if (!answer) {
+    const meaning = await meaningScores(rerank, question, candidates);
+    answer = buildAnswer({ question, query, candidates, link, now: now(), meaning, strict: first });
+  }
+  const offline = !online || (attempted > 0 && reached === 0);
+  // Only the search pages get words. Government pages and result pages are fetched by their address.
+  const sent = online ? sendQuery : "";
+  const disclosure = online ? disclosureLine({ sent, sentTo, area: web?.area || null, nearMe: web?.nearMe === true }) : "";
   if (!answer) {
     return {
       ok: false,
       offline,
       sent,
+      sentTo,
+      disclosure,
       tried,
       reason: offline
         ? "I couldn't reach the internet, and the Army manuals on this phone don't cover it. It stays in Look it up later."
-        : "I looked in the Army manuals, the government pages and Wikipedia, and none of them answers that clearly. Nothing was kept."
+        : `I searched the web${sentTo.length ? ` (${sentTo.join(", ")})` : ""} and read the top pages, and none of them answers that clearly enough to quote. Nothing was kept.`
     };
   }
-  return { ok: true, answer, sent, tried, offline };
+  // Law and health answers from the internet say so, and can only be kept unverified.
+  if (answer.citations.some((c) => c.sourceId !== "atp-3-50.21" && c.sourceId !== "atp-4-02.11" && !/^ATP /.test(c.sourceName))) {
+    const advice = adviceKind(question);
+    if (advice) answer = { ...answer, advice, adviceLine: ADVICE_LINE[advice] };
+  }
+  if (web?.nearMe) answer = { ...answer, area: web.area || null, nearMe: true };
+  return { ok: true, answer, sent, sentTo, disclosure, tried, offline };
 }

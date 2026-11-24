@@ -2,7 +2,9 @@
 // response is size-capped, time-capped, and type-checked before anything reads it.
 // HTTPS only. A short list of hosts. No cookies, no login, no redirect to a host that is not on the list.
 
-export const USER_AGENT = "Yehsa offline survival app (no account; user-approved request)";
+// Names Yehsa honestly. The "Mozilla/5.0 (Linux; Android)" prefix is there because many state sites
+// (maine.gov among them) refuse any request whose agent does not start that way.
+export const USER_AGENT = "Mozilla/5.0 (Linux; Android) Yehsa/1.0 (offline survival app; user-requested lookup, no account)";
 
 // The allowlist. Nothing else is ever fetched. See symbolic/web/allowlist.js for what each one is.
 export const HOST_GROUPS = {
@@ -11,8 +13,15 @@ export const HOST_GROUPS = {
   // CDC, NWS, USDA (USFS is fs.usda.gov), USFWS, NPS. Subdomains of these are allowed.
   page: { exact: [], suffix: ["cdc.gov", "weather.gov", "usda.gov", "fws.gov", "nps.gov"] },
   // The two Army publications are read from the on-phone ATP pack. Their address is a citation only.
-  atp: { exact: ["armypubs.army.mil"], suffix: [] }
+  atp: { exact: ["armypubs.army.mil"], suffix: [] },
+  // General look-up (Dana, Nov 24: "pull whatever I ask it"). Two keyless search pages get only the
+  // cleaned question words. Result pages are any public https site, read as plain text and quoted.
+  search: { exact: ["html.duckduckgo.com", "www.bing.com"], suffix: [] },
+  open: { exact: [], suffix: [], publicHost: true }
 };
+
+// Never fetched on the open web: local names, private networks, and hosts that are not real sites.
+const PRIVATE_HOST = /(?:^|\.)(?:localhost|local|internal|intranet|lan|home|corp|onion|arpa|test|invalid|example)$/i;
 
 // Groups that may be cited but never fetched. State wildlife pages are link-only.
 export const LINK_ONLY = new Set(["atp", "state-wildlife"]);
@@ -27,14 +36,24 @@ export const LIMITS = {
 const TYPES = {
   json: /^application\/(?:[a-z.+-]*\+)?json\b/i,
   html: /^text\/html\b/i,
-  text: /^text\/plain\b/i
+  text: /^text\/plain\b/i,
+  xml: /^(?:application|text)\/(?:rss\+)?xml\b/i
 };
 
 function hostAllowed(host, group) {
   const rule = HOST_GROUPS[group];
   if (!rule) return false;
   if (rule.exact.includes(host)) return true;
+  if (rule.publicHost) return publicHost(host);
   return rule.suffix.some((domain) => host === domain || host.endsWith(`.${domain}`));
+}
+
+/** A real public site name: letters, at least one dot, a letter TLD, not local or private. */
+export function publicHost(host) {
+  if (!host || host.length > 253 || !host.includes(".")) return false;
+  if (!/^[a-z0-9.-]+$/.test(host) || /^[.-]|[.-]$|\.\./.test(host)) return false;
+  if (!/\.[a-z]{2,24}$/.test(host)) return false;
+  return !PRIVATE_HOST.test(host);
 }
 
 /** Returns { ok, url, host } or { ok: false, reason }. */
@@ -126,7 +145,7 @@ export async function guardedFetch({ fetchImpl, url, group, kind = "json", limit
           credentials: "omit",
           cache: "no-store",
           signal: controller?.signal,
-          headers: { Accept: kind === "json" ? "application/json" : "text/html", "User-Agent": USER_AGENT }
+          headers: { Accept: kind === "json" ? "application/json" : kind === "xml" ? "application/rss+xml, text/xml" : "text/html", "User-Agent": USER_AGENT }
         }),
         cap.timeoutMs,
         () => controller?.abort()

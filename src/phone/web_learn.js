@@ -13,6 +13,7 @@ import { attachVectors, noteDocument, notesNeedingVectors, scoreWebNotes } from 
 import { editWebNote, keepAnswer, tossAnswer } from "../../symbolic/web/web_notes.js";
 import { answerCandidate, markTried, removeQueued, saveForLater } from "../../symbolic/web/lookup_queue.js";
 import { lookUp } from "../../symbolic/web/look_up.js";
+import { webQuery } from "../../symbolic/web/web_search.js";
 import { loadAtpPack } from "./atp_pack.js";
 import { embedNotes } from "./meaning_provider";
 import { webNotesVault } from "./sealed_stores.js";
@@ -70,14 +71,41 @@ async function indexApproved() {
   }
 }
 
+function cosine(a, b) {
+  let dot = 0;
+  let na = 0;
+  let nb = 0;
+  for (let i = 0; i < a.length; i += 1) {
+    dot += a[i] * b[i];
+    na += a[i] * a[i];
+    nb += b[i] * b[i];
+  }
+  return na && nb ? dot / Math.sqrt(na * nb) : 0;
+}
+
+/**
+ * The on-device meaning matcher picks the passages that answer the question, after the pages are
+ * fetched. Off the hot path; returns null when the model is not on this phone (words alone then).
+ */
+async function meaningRerank(question, sentences) {
+  try {
+    const result = await embedNotes([question, ...sentences]);
+    if (!result?.vectors?.length) return null;
+    const [q, ...rest] = result.vectors;
+    return rest.map((vector) => cosine(q, vector));
+  } catch {
+    return null;
+  }
+}
+
 export const webLearn = {
   setEnabled(on) {
     if (state.foreign) return Promise.resolve();
     return commit(setEnabled(state.store, on));
   },
-  /** The words that would leave the phone for this question. Shown on the approval card. */
-  query(question) {
-    return outboundQuery(question);
+  /** The words that would leave the phone for this question. homeState: only when location is on. */
+  query(question, { homeState = null } = {}) {
+    return webQuery(question, { area: homeState }).query || outboundQuery(question);
   },
   async fetchWikipedia(query) {
     const found = await lookupWikipedia({ fetchImpl: globalThis.fetch?.bind(globalThis), query });
@@ -143,7 +171,8 @@ export const webLearn = {
    */
   async lookUp(question, { queueId = null, homeState = null } = {}) {
     if (state.foreign) return { ok: false, reason: "Saved web notes from another phone can't be opened here." };
-    const result = await lookUp({ question, fetchImpl: globalThis.fetch?.bind(globalThis), atpPack: await loadAtpPack(), homeState });
+    // homeState comes from a held position (location on), so it doubles as the approximate area for "near me".
+    const result = await lookUp({ question, fetchImpl: globalThis.fetch?.bind(globalThis), atpPack: await loadAtpPack(), homeState, area: homeState, rerank: meaningRerank });
     if (!result.ok) {
       if (queueId) await commit(markTried(state.store, queueId, result.reason));
       return result;
@@ -153,7 +182,7 @@ export const webLearn = {
     // The saved question moves to review: it is answered, waiting for Keep or Toss.
     const next = queueId ? removeQueued(proposed.store, queueId) : proposed.store;
     await commit(next);
-    return { ok: true, note: proposed.note, sent: result.sent, tried: result.tried, offline: result.offline };
+    return { ok: true, note: proposed.note, sent: result.sent, disclosure: result.disclosure, tried: result.tried, offline: result.offline };
   },
   fetchQueued(item, options) {
     return this.lookUp(item.question, { ...options, queueId: item.id });

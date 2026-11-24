@@ -69,6 +69,7 @@ export function answerCandidate(answer, queueId = null) {
     origin: "lookup",
     citations: answer.citations,
     links: answer.links,
+    advice: answer.advice || null,
     queueId
   };
 }

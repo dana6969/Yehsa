@@ -77,7 +77,7 @@ import { sendToModel } from "./model_client.js";
 import { deleteModelKey, readModelKey, saveModelKey } from "./model_secrets.js";
 import ModelsPane from "./ModelsPane.js";
 import LearnedPane from "./LearnedPane.js";
-import { AnswerReview, LookupOffer, MISS_OFFER } from "./WebLearnCards.js";
+import { AnswerReview, LookupOffer, MISS_OFFER, liveAnswerText } from "./WebLearnCards.js";
 import { useWebLearn, webLearn } from "./web_learn.js";
 import { outboundQuery, queryAllowed } from "../../symbolic/web/sources.js";
 import { guessState } from "./radio_data.js";
@@ -105,6 +105,8 @@ import {
 import { domainOf, mergeCompound, newThread, socialTurn, splitCompound, tripResult, voiceReply } from "../../symbolic/yehsa_voice.js";
 import { answerWeatherQuestion, weatherIntent } from "./weather_ask.js";
 import { capabilitySummary, continueUtterance, isCapabilityQuestion, isFeedbackEligible, sourceChips } from "../../symbolic/chat_turn.js";
+import { isLibraryQuestion, libraryAnswer } from "../../symbolic/library_answer.js";
+import { loadAtpPack } from "./atp_pack.js";
 import LandscapeMap from "./LandscapeMap.js";
 import {
   elevationNear,
@@ -802,9 +804,16 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
   function lookUpLive(text, id) {
     webLearn.lookUp(text, { homeState: homeStateNow() }).then((result) => {
       if (result.ok) {
-        patchMessage(id, { reviewNoteId: result.note.id, reviewSent: result.sent });
+        // Online: the answer shows here in the chat, quoted with its sources and date. Keep or Toss decides if it stays.
+        patchMessage(id, { text: liveAnswerText(result.note), reviewNoteId: result.note.id, reviewSent: result.disclosure || result.sent });
+      } else if (result.offline) {
+        // Offline: only then does it wait in Look it up later.
+        webLearn.saveForLater(text).then((saved) => patchMessage(id, {
+          text: saved.ok ? "I couldn't reach the internet, so I saved this to Look it up later. I'll fetch it when you tap Fetch under Me, Learned." : result.reason,
+          lookupDone: saved.ok ? "Saved to Look it up later, on this phone only." : null
+        }));
       } else {
-        patchMessage(id, { text: `${result.reason} ${result.offline ? "" : "Want it saved to try again later?"}`.trim(), lookupOffer: { question: text } });
+        patchMessage(id, { text: `${result.reason} Want it saved to try again later?`, lookupOffer: { question: text } });
       }
     }).catch(() => patchMessage(id, { text: MISS_OFFER, lookupOffer: { question: text } }));
   }
@@ -1093,6 +1102,11 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
         if (isCapabilityQuestion(text)) {
           return { answered: true, text: capabilitySummary(phoneCorpusMeta), kind: "about", symbol: "capabilities" };
         }
+        // "What do you have for army manuals?" lists the library. It is never matched to a field note.
+        if (isLibraryQuestion(text)) {
+          const kept = (web.store?.notes || []).filter((note) => note.status !== "waiting").length;
+          return libraryAnswer(await loadAtpPack(), { books: (books.sources || []).length, learned: kept });
+        }
         const spiritual = routesToSpiritual(text, parseQuestion(expandParaphrase(text)));
         let spiritualIndex = spiritual ? await loadScriptureIndex() : null;
         const lexical = askField(text, books.passages, { session, spiritualIndex, learned });
@@ -1199,7 +1213,7 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
           // A miss offers Look it up. With live look-ups on, it looks right away; the answer still waits for Keep or Toss.
           setPhase("miss");
           if (web.store.enabled) {
-            const id = pushMessage({ role: "yehsa", text: `I don't have that yet. Looking it up now. Only the words "${outboundQuery(text)}" leave this phone.`, question: text });
+            const id = pushMessage({ role: "yehsa", text: `Not in my notes yet. Searching the web now. Only the words "${webLearn.query(text, { homeState: homeStateNow() })}" leave this phone.`, question: text });
             lookUpLive(text, id);
           } else {
             pushMessage({ role: "yehsa", text: MISS_OFFER, lookupOffer: { question: text }, question: text });
