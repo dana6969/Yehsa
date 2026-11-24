@@ -155,6 +155,21 @@ export function updateMark(marks, id, patch, now = Date.now()) {
   return { ok: true, mark: next, marks: out };
 }
 
+// A move (finger drag, tap on the new spot, or Move here). Returns where it was, for Undo.
+export function moveMark(marks, id, point, now = Date.now()) {
+  const current = (marks || []).find((mark) => mark.id === id);
+  if (!current) return { ok: false, reason: "That mark is gone.", marks };
+  const result = updateMark(marks, id, { latitude: point?.latitude, longitude: point?.longitude }, now);
+  if (!result.ok) return result;
+  return { ...result, from: { latitude: current.latitude, longitude: current.longitude } };
+}
+
+export function undoMove(marks, id, from, now = Date.now()) {
+  if (!from) return marks;
+  const result = updateMark(marks, id, { latitude: from.latitude, longitude: from.longitude }, now);
+  return result.ok ? result.marks : marks;
+}
+
 export function removeMark(marks, id) {
   const index = marks.findIndex((mark) => mark.id === id);
   if (index < 0) return { ok: false, marks, removed: null, index: -1 };
