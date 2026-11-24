@@ -1964,7 +1964,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
           <ScrollView contentContainerStyle={styles.sheetScroll}>
             {about.lines.map((line) => <Text key={line} style={styles.aboutLine}>{line}</Text>)}
             <Quiet>{about.credit}</Quiet>
-            <Quiet>Search and routes use a road and place list built into Yehsa for the map-pack states: © OpenStreetMap contributors, ODbL 1.0. Online search and routes are off until you turn them on in the Map search (Photon by Komoot, OSM Nominatim, and OSRM on routing.openstreetmap.de). No traffic data. No owner names.</Quiet>
+            <Quiet>Search and routes use a road and place list built into Yehsa for the map-pack states: © OpenStreetMap contributors, ODbL 1.0. Online search and routes are on by default and can be turned off in the Map search (Photon by Komoot, OSM Nominatim, and OSRM on routing.openstreetmap.de). No traffic data. No owner names.</Quiet>
             {extras.parcelsOn ? <Quiet>Property lines (Hunt map): approximate, not a legal survey. From free state parcel services; see Layers and packs for each state's source and license.</Quiet> : null}
                       </ScrollView>
         </View>

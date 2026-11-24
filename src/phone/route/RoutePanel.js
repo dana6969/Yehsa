@@ -38,18 +38,23 @@ export function RouteSearchBar({ r, onFocus }) {
   );
 }
 
+const LEAVES = "Only your search words go to Photon or Nominatim, and only the route's start and end go to routing.openstreetmap.de.";
+
 function OnlineLine({ r }) {
   return (
     <Pressable
       accessibilityRole="switch"
       accessibilityState={{ checked: r.prefs.online }}
       accessibilityLabel={`Online search and routes, ${r.prefs.online ? "on" : "off"}`}
-      accessibilityHint={r.prefs.online ? "Turns it off. Only the bundled offline data is used." : "Your search words go to Photon or Nominatim, and the route's start and end go to routing.openstreetmap.de."}
-      onPress={() => r.savePrefs({ online: !r.prefs.online })}
+      accessibilityHint={r.prefs.online ? `${LEAVES} Tap to turn it off and use only the bundled offline data.` : `Turns it on. ${LEAVES}`}
+      onPress={() => r.savePrefs({ online: !r.prefs.online, onlineChosen: true })}
       style={styles.onlineRow}
     >
       <Ionicons name={r.prefs.online ? "cloud-done-outline" : "cloud-offline-outline"} size={16} color={r.prefs.online ? colors.moss : colors.muted} />
-      <Text style={styles.onlineText}>{r.prefs.online ? "Online search & routes: On" : "Offline only. Tap to use online search & routes"}</Text>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.onlineText}>{r.prefs.online ? "Online search & routes: On. Tap to turn off" : "Offline only. Tap to use online search & routes"}</Text>
+        {r.prefs.online ? <Text style={styles.credit}>{LEAVES}</Text> : null}
+      </View>
     </Pressable>
   );
 }

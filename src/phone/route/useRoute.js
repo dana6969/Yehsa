@@ -1,7 +1,7 @@
 // State for search, destination, route and Start mode on the regular Map.
-// Offline first: bundled place lists and road graphs. Online search and routes only when the
-// person has turned "Online search & routes" on (saved on this phone); then any online failure
-// falls back to offline. Nothing here runs on the symbol hot path.
+// Online search and routes are on by default (Dana wants it to pull whatever he asks); the
+// "Online search & routes" line says what leaves the phone and turns it off (saved on this phone).
+// Any online failure, or online turned off, falls back to the bundled place lists and road graphs. Nothing here runs on the symbol hot path.
 import { useCallback, useEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createRouteService, ROAD_NOTE } from "../../../symbolic/routing/route_service.js";
@@ -20,7 +20,7 @@ export function routeService() {
 export { ROAD_NOTE };
 
 export function useRoute({ origin, nearFallback }) {
-  const [prefs, setPrefs] = useState({ online: false, profile: "drive", voice: true });
+  const [prefs, setPrefs] = useState({ online: true, profile: "drive", voice: true });
   const [query, setQuery] = useState("");
   const [results, setResults] = useState(null);
   const [searching, setSearching] = useState(false);
@@ -41,6 +41,9 @@ export function useRoute({ origin, nearFallback }) {
       if (!raw) return;
       try {
         const saved = JSON.parse(raw);
+        // Older builds saved online:false as a default with profile or voice changes. Only a choice
+        // made on the Online line itself (onlineChosen) overrides the on default.
+        if (!saved.onlineChosen) delete saved.online;
         setPrefs((p) => ({ ...p, ...saved }));
       } catch {
         // keep defaults

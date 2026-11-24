@@ -8,7 +8,7 @@ Round 5. Dana, 24 Nov 2026: "set destinations and get routes like Waze or Google
 - **Route card** under the map: name, distance, time, **Online route / Offline route**, **Drive / Walk**, **Start**, **Steps (n)**, and always: *Check road conditions and obey all signs. Roads, tracks and trails can be closed, gated, washed out or private. No traffic data is used.*
 - **Start**: follows GPS and recenters, shows the next turn and its distance, speaks turns through the existing voice (Expo Speech), says "Off route. Finding a new way." and reroutes (at most every 15 s), says "You have arrived." Voice mute, Recenter and End are on the banner.
 - **Ask** can drive it: "directions to X", "route to X", "how far to X", "take me to X", "how do I get to X", "navigate to X" open the Map with X searched and the route ready. Coordinates and "last waypoint" questions stay with the existing waypoint tools.
-- GPS stays opt-in. Online search and routes are **off until turned on** in the search results ("Offline only. Tap to use online search & routes"); the hint says exactly what leaves the phone.
+- GPS stays opt-in. Online search and routes are **on by default** (Dana's call: pull whatever he asks); the "Online search & routes: On. Tap to turn off" line shows exactly what leaves the phone and turns it off. With it off, or with no signal, search and routes use only the bundled data.
 
 ## Offline (default)
 
