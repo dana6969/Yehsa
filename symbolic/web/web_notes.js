@@ -38,10 +38,12 @@ export function openWebStore(value) {
 }
 
 const CITE_GROUPS = ["wikipedia", "page", "atp", "weather"];
+const ADVICE = new Set(["legal", "medical"]);
 
-function citedUrl(url) {
+function citedUrl(url, sourceId = "") {
   if (typeof url !== "string") return null;
-  for (const group of CITE_GROUPS) {
+  // Open-web citations (sourceId "web", from a web search) may name any public https site.
+  for (const group of sourceId === "web" ? [...CITE_GROUPS, "open"] : CITE_GROUPS) {
     const checked = checkUrl(url, group);
     if (checked.ok) return checked.url;
   }
@@ -49,7 +51,7 @@ function citedUrl(url) {
 }
 
 function cleanCitation(raw, i) {
-  const url = citedUrl(raw?.url);
+  const url = citedUrl(raw?.url, raw?.sourceId);
   if (!url) return null;
   return {
     n: Number.isInteger(raw.n) ? raw.n : i + 1,
@@ -82,7 +84,9 @@ function cleanNote(raw) {
   const title = cleanFetched(String(raw.title || "Web note"), { maxChars: 100 }).text || "Web note";
   const text = cleanFetched(raw.text, { maxChars: 1200 }).text;
   if (!text) return null;
-  const locked = sensitiveKind(text, title);
+  // Law and health answers from the internet stay unverified, like doses: "check the source".
+  const advice = ADVICE.has(raw.advice) ? raw.advice : null;
+  const locked = sensitiveKind(text, title) || advice;
   return {
     id: String(raw.id || ""),
     title,
@@ -98,6 +102,7 @@ function cleanNote(raw) {
     origin: ["wikipedia", "gov", "ai", "lookup"].includes(raw.origin) ? raw.origin : "wikipedia",
     status: locked && status === "approved" ? "kept" : status,
     locked: locked || null,
+    advice,
     question: raw.question ? cleanFetched(String(raw.question), { maxChars: 200 }).text : "",
     citations: (Array.isArray(raw.citations) ? raw.citations : []).slice(0, 8).map(cleanCitation).filter(Boolean),
     links: (Array.isArray(raw.links) ? raw.links : []).slice(0, 2).map(cleanLink).filter(Boolean),
@@ -143,7 +148,9 @@ export function approveWebNote(store, id, now = new Date()) {
       store,
       reason: note.locked === "dosing"
         ? "Doses from the web stay unverified. I can keep it labeled that way, but I will not approve it."
-        : "Claims about eating or poison from the web stay unverified. I can keep it labeled that way, but I will not approve it."
+        : note.locked === "legal" || note.locked === "medical"
+          ? `Legal and medical answers from the web stay unverified. Check the source; this is not ${note.locked} advice.`
+          : "Claims about eating or poison from the web stay unverified. I can keep it labeled that way, but I will not approve it."
     };
   }
   const notes = store.notes.map((item) => (item.id === id ? { ...item, status: "approved", approvedAt: now.toISOString() } : item));
@@ -182,7 +189,7 @@ export function editWebNote(store, id, { text, title } = {}, now = new Date()) {
   const nextText = text == null ? note.text : cleanFetched(String(text), { maxChars: 1200 }).text;
   if (!nextText) return { ok: false, store, reason: "A note needs some words. Use Delete to remove it." };
   const nextTitle = title == null ? note.title : (cleanFetched(String(title), { maxChars: 100 }).text || note.title);
-  const locked = sensitiveKind(nextText, nextTitle);
+  const locked = sensitiveKind(nextText, nextTitle) || note.advice || null;
   const notes = store.notes.map((item) => (item.id === id
     ? { ...item, text: nextText, title: nextTitle, edited: true, editedAt: now.toISOString(), locked: locked || null, status: locked && item.status === "approved" ? "kept" : item.status }
     : item));
@@ -245,6 +252,12 @@ function firstSentences(text, limit = 520) {
   return end > limit * 0.5 ? cut.slice(0, end + 1) : `${cut.trim()}...`;
 }
 
+export function adviceWarning(kind) {
+  return kind === "legal"
+    ? "Check the source; this is not legal advice. Laws change, so confirm with the state or a lawyer."
+    : "Check the source; this is not medical advice. For your own health, ask a doctor or your state health department.";
+}
+
 /** A quote with its source, never a bare statement. */
 export function quoteNote(note) {
   const body = firstSentences(note.text);
@@ -252,7 +265,9 @@ export function quoteNote(note) {
     ? " Do not use this for a dose. Ask a pharmacist, a doctor or Poison Control."
     : note.locked === "plant-toxicity"
       ? " Do not use this to decide whether to eat or touch a plant or mushroom."
-      : "";
+      : note.locked === "legal" || note.locked === "medical"
+        ? ` ${adviceWarning(note.locked)}`
+        : "";
   if (note.citations?.length) {
     const cites = note.citations.map((c) => `[${c.n}] ${c.sourceName}${c.ref ? `, ${c.ref}` : ""}: ${c.url}`).join(" ");
     const links = (note.links || []).map((l) => `[${l.n}] ${l.sourceName} (link only): ${l.url}`).join(" ");

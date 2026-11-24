@@ -21,7 +21,38 @@ something up only when you ask, and keeps it only when you say Keep.
 Nothing is used before review: a waiting answer is never an answer, and nothing enters review
 unless you tapped Fetch or turned on live look-ups.
 
-## Where it looks (the whole allowlist)
+## Any question (round 5)
+
+Dana, Nov 24: "I need it to be able to pull whatever I ask it." With **Look up live questions when
+I'm online** on, a question the notes miss is answered in the chat right away from the open web:
+
+1. **Search.** The cleaned words (`web_search.js` `webQuery()`: names, phone numbers, emails,
+   addresses and coordinates stripped; "near me" removed) go to one keyless search page:
+   DuckDuckGo's HTML results (`html.duckduckgo.com`), or Bing's RSS feed if DuckDuckGo does not answer.
+   No key, no account, no cookies.
+2. **Near me.** Only when location is on, the state name (guessed on the phone from the held
+   position) is added to the words, and the answer says so. With location off it says the answer is
+   not local.
+3. **Read.** Up to four result pages, state and federal sites first (.gov, state sites such as
+   maine.gov, CDC), then health and law references, .edu, news, Wikipedia, then the rest. Video,
+   social and shopping sites and PDFs are skipped. Two pages per site at most. Each page is fetched
+   by its address through `fetch_guard.js` group `open`: https, public host names only (no IPs,
+   localhost, .local, .onion, look-alike names), 768 KB and 8 s caps, no cookies, redirects re-checked.
+   Scripts, styles, menus and forms are stripped; the rest is plain text, never run or rendered.
+4. **Pick.** Sentences are scored by the question's words, the site's standing, and (on phones with
+   the meaning model) the on-device meaning matcher. Search snippets and page chrome ("for more
+   information, visit...") are never quoted. Up to three sentences, word for word, each with its
+   number; the links open the page; the card shows the date it was read.
+5. **Disclose.** One line under the answer says exactly which words left the phone and to which search.
+6. **Law and health.** Legal and medical answers carry "Check the source; this is not legal/medical
+   advice" and can only be kept as unverified, like doses.
+7. **Offline.** Only then is the question saved to Look it up later.
+
+Law, news, local and current questions (laws, outbreaks, near me, a named state, prices, this week)
+search the web first. Field questions keep the old order (manuals, agency pages, Wikipedia) and go
+to the web only when those have nothing.
+
+## Where it looks (the fixed allowlist, before the open web)
 
 | Source | How | License shown |
 | --- | --- | --- |
@@ -34,8 +65,8 @@ All network reads go through `symbolic/web/fetch_guard.js`: https only, the host
 cookies, size and time caps, no redirect off the list. ATP and state wildlife are link-only groups
 that `guardedFetch` refuses outright.
 
-**What leaves the phone:** only the cleaned words from `outboundQuery()` (personal bits stripped),
-and only to Wikipedia's search. Government pages are fetched by their fixed address. The full
+**What leaves the phone:** only the cleaned words (personal bits stripped), to Wikipedia's search
+and, for the open web, one keyless search page. Government pages are fetched by their fixed address. The full
 question stays in the sealed store.
 
 ## Why ATP is on the phone
@@ -64,8 +95,10 @@ the core pack and from notes you wrote; nothing in `symbolic/web/` touches the f
 ## Files
 
 - `symbolic/web/lookup_queue.js` queue, the miss offer text, answer to note
-- `symbolic/web/look_up.js` the lookup (ATP, gov pages, Wikipedia)
+- `symbolic/web/look_up.js` the lookup (ATP, gov pages, Wikipedia, then the open web)
+- `symbolic/web/web_search.js` keyless search, result ranking, readable page text, legal/medical lines
+- `symbolic/library_answer.js` "what manuals do you have" lists the library
 - `symbolic/web/answer_builder.js`, `atp_lookup.js`, `gov_directory.js`, `state_wildlife.js`, `allowlist.js`, `synonyms.js`
 - `symbolic/web/web_notes.js` review, Keep, Toss, edit, delete, the learned tag, offline answers
 - `src/phone/web_learn.js`, `src/phone/WebLearnCards.js`, `src/phone/atp_pack.js`
-- Tests: `test_look_it_up.mjs`, `test_web_learn.mjs`
+- Tests: `test_look_it_up.mjs`, `test_web_learn.mjs`, `test_web_search.mjs` (mocked network)

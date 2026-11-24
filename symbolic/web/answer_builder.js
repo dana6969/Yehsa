@@ -11,10 +11,17 @@ export const MAX_SENTENCES = 3;
 export const MAX_PER_SOURCE = 2;
 export const MAX_ANSWER_CHARS = 700;
 
-const PRIORITY = { pack: 0, gov: 1, wikipedia: 2 };
+const PRIORITY = { pack: 0, gov: 1, web: 1, wikipedia: 2 };
 // The Army manuals and the agencies come first when they say it; an encyclopedia page gets one line.
 const BONUS = { pack: 0.4, gov: 0.2, wikipedia: 0 };
-const PER_SOURCE = { pack: MAX_PER_SOURCE, gov: MAX_PER_SOURCE, wikipedia: 1 };
+const PER_SOURCE = { pack: MAX_PER_SOURCE, gov: MAX_PER_SOURCE, web: MAX_PER_SOURCE, wikipedia: 1 };
+// Open-web pages earn their bonus from the site: state and federal sites most, unknown sites least.
+function bonusFor(candidate) {
+  if (candidate.kind === "web") return 0.4 * Math.max(0, Math.min(1, Number(candidate.authority) || 0));
+  return BONUS[candidate.kind] ?? 0;
+}
+
+const BOILERPLATE = /\b(?:click|tap here|visit (?:our|the|www|https?)|please visit|for more (?:information|info|details)|learn more|read more|sign up|subscribe|newsletter|cookies?|javascript|your browser|share this|follow us|contact us|privacy policy|terms of (?:use|service)|skip to|log ?in|download|advertis\w+|sponsored|\[link removed\])\b/i;
 
 export function splitSentences(text) {
   return String(text || "")
@@ -43,7 +50,9 @@ const FILLER = new Set(["tell", "know", "info", "information", "anything", "some
 
 /** The question's topic words (lead-ins like "tell me about" dropped), each with its swaps. */
 export function questionGroups(question) {
-  const words = queryTokens(outboundQuery(question) || question).filter((word) => !FILLER.has(word));
+  // "near me" is a place request, not a topic word. The place itself is added to the search, not here.
+  const plainQuestion = String(question || "").replace(/\b(?:near me|nearby|near here|around me|around here|in my area|close to me|where i am)\b/gi, " ");
+  const words = queryTokens(outboundQuery(plainQuestion) || plainQuestion).filter((word) => !FILLER.has(word));
   return expandTokens(words);
 }
 
@@ -58,7 +67,7 @@ function near(a, b) {
  * candidates: [{ sourceId, sourceName, kind: "pack"|"gov"|"wikipedia", ref, title, url, license, licenseUrl, attribution, fetchedAt, text }]
  * link: an optional link-only citation (state wildlife). Returns null when nothing answers the question.
  */
-export function buildAnswer({ question, query = "", candidates = [], link = null, now = Date.now() }) {
+export function buildAnswer({ question, query = "", candidates = [], link = null, now = Date.now(), meaning = null, strict = false }) {
   const groups = questionGroups(question);
   if (groups.length === 0) return null;
   const need = groups.length === 1 ? 1 : 0.5;
@@ -70,15 +79,26 @@ export function buildAnswer({ question, query = "", candidates = [], link = null
     const found = [];
     splitSentences(candidate.text).forEach((sentence, si) => {
       if (looksLikeInstruction(sentence)) return;
-      const score = coverage(sentence, groups);
+      // Page chrome on open-web pages: "For more information, visit ...", cookie and sign-up lines.
+      if ((candidate.kind === "web" || candidate.kind === "gov") && BOILERPLATE.test(sentence)) return;
+      // Headings and list labels from open-web pages ("Influenza outbreaks.") are not answers.
+      if (candidate.kind === "web" && sentence.split(/\s+/).length < 8) return;
+      const words = coverage(sentence, groups);
+      // The on-device meaning matcher (when it ran) can lift a sentence that says it in other words.
+      const sim = meaning?.get?.(sentence);
+      const lift = Number.isFinite(sim) ? Math.max(-0.2, Math.min(0.4, (sim - 0.6) * 1.5)) : 0;
+      if (Number.isFinite(sim) && sim < 0.45 && candidate.kind === "web") return;
+      const score = words + (words > 0 ? lift : 0);
       // An encyclopedia page is long; one of its sentences has to name the whole topic.
-      if (candidate.kind === "wikipedia" && score < 1) return;
-      if (score < need && !(score > 0 && context === 1)) return;
+      if (candidate.kind === "wikipedia" && words < 1) return;
+      // Law, news and local questions: a field manual line must name the whole topic to be quoted.
+      if (strict && candidate.kind === "pack" && words < 1) return;
+      if (score < need && !(words > 0 && context === 1)) return;
       found.push({ sentence, ci, si, score, priority: PRIORITY[candidate.kind] ?? 3 });
     });
     // A passage that keeps talking about the topic beats one stray mention.
     const cluster = Math.min(found.length, 4) * 0.05;
-    for (const item of found) pool.push({ ...item, score: item.score + context * 0.25 + cluster + (BONUS[candidate.kind] ?? 0) + named + (named && item.si === 0 ? 0.2 : 0), cap: PER_SOURCE[candidate.kind] ?? 1 });
+    for (const item of found) pool.push({ ...item, score: item.score + context * 0.25 + cluster + bonusFor(candidate) + named + (named && item.si === 0 ? 0.2 : 0), cap: PER_SOURCE[candidate.kind] ?? 1 });
   });
   pool.sort((a, b) => b.score - a.score || a.priority - b.priority || a.ci - b.ci || a.si - b.si);
   const chosen = [];
@@ -133,7 +153,7 @@ export function buildAnswer({ question, query = "", candidates = [], link = null
 
 /** The citation block shown under a reviewed or kept answer. */
 export function citationLines(answer) {
-  const lines = (answer?.citations || []).map((c) => `[${c.n}] ${c.sourceName}${c.ref ? `, ${c.ref}` : ""}${c.title && c.sourceId === "wikipedia" ? `: "${c.title}"` : ""}. ${c.url}${c.license ? ` (${c.license})` : ""}`);
+  const lines = (answer?.citations || []).map((c) => `[${c.n}] ${c.sourceName}${c.ref ? `, ${c.ref}` : ""}${c.title && (c.sourceId === "wikipedia" || c.sourceId === "web") ? `: "${c.title}"` : ""}. ${c.url}${c.license ? ` (${c.license})` : ""}`);
   for (const link of answer?.links || []) lines.push(`[${link.n}] ${link.sourceName} (${link.state}). Link only, not read: ${link.url}`);
   return lines;
 }

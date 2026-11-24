@@ -89,7 +89,8 @@ const OPENERS = {
   medical: ["Okay, stay steady. Here is what to do.", "I am right here. Take this one step at a time."],
   food: ["Let's look at food, nice and careful.", "Okay, here is what I have on that."],
   plants: ["Let's slow down with this one, plants can fool people.", "Here is what the notes say, and I'd rather you be sure than quick."],
-  navigation: ["Let's get your bearings.", "Okay, take a breath. We can work this out."],
+  // Plain openers: a neutral question gets no "take a breath". Calming words are for serious or upset asks only.
+  navigation: ["Let's get your bearings.", "Here is how to work out where you are headed."],
   weather: ["Good to watch the sky. Here is what I have.", "Let's read the weather together."],
   signal: ["Okay, let's help them find you.", "Staying visible is half of it. Here is how."],
   spiritual: ["Sit with this one for a moment.", "Here is what the text says."],

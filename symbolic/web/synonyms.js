@@ -9,7 +9,10 @@ const GROUPS = [
   ["hypothermia", "hypothermic"],
   ["purify", "disinfect", "purification", "disinfection"],
   ["fire", "firecraft"],
-  ["snare", "snares", "trap", "traps"]
+  ["snare", "snares", "trap", "traps"],
+  ["flu", "influenza"],
+  ["outbreak", "outbreaks", "activity", "epidemic", "epidemics"],
+  ["law", "laws", "statute", "statutes", "legal"]
 ];
 
 /** queryTokens in, one array of interchangeable words per token out. */
