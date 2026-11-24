@@ -32,7 +32,7 @@ export const FIELD_GROUPS = [
       { id: "pictures", label: "Pictures", sub: "Guide and look-alikes", icon: "images-outline" },
       { id: "compass", label: "Compass", sub: "Live heading, or a bearing", icon: "compass-outline" },
       { id: "sun", label: "Sun times", sub: "Sunrise and sunset", icon: "sunny-outline" },
-      { id: "weather", label: "Weather", sub: "Pressure on this phone", icon: "cloud-outline" },
+      { id: "weather", label: "Weather", sub: "Forecast and pressure", icon: "cloud-outline" },
       { id: "radio", label: "Radio", sub: "Weather and emergency radio", icon: "radio-outline" },
       { id: "morse", label: "Morse", sub: "Text to code", icon: "megaphone-outline" },
       { id: "timers", label: "Timers", sub: "Countdown", icon: "timer-outline" },
@@ -291,7 +291,7 @@ const styles = themedStyles((colors) => ({
   scroll: {
     paddingTop: Platform.OS === "ios" ? 52 : 22,
     paddingHorizontal: tokens.space.xl,
-    paddingBottom: 40
+    paddingBottom: 180
   },
   group: { marginBottom: 6 },
   groupLabel: { color: colors.muted, fontSize: 12, fontWeight: "700", letterSpacing: 1.2, marginBottom: 8, marginTop: 8 },

@@ -7,7 +7,9 @@ import { Card, Chips, Line, SourceTag, screenStyles } from "./hunt_ui.js";
 import { setHunt, useHunt } from "./hunt_state.js";
 import { hasBarometer, readPressureOnce } from "./barometer_sensor.js";
 import { addReading, elevationNote, markElevationChange, LOG_EVERY_MS, trendOf, seriesFor } from "../../symbolic/hunt/baro.js";
-import { NWS_HEADERS, alertsUrl, describeSaved, makeSaved, parseAlerts, parseHourly, pointsUrl } from "../../symbolic/hunt/nws.js";
+import { describeSaved } from "../../symbolic/hunt/nws.js";
+import { weatherRecord } from "../../symbolic/weather_service.js";
+import { refreshWeather } from "./weather_ask.js";
 
 export function useBarometerLogger(enabled, position) {
   const hunt = useHunt();
@@ -43,33 +45,27 @@ export default function WeatherScreen({ position, onBack }) {
   const now = Date.now();
   const trend = trendOf(hunt.baro, now, { hasSensor: sensor !== false });
   const saved = describeSaved(hunt.saved, now);
+  const record = weatherRecord(hunt, { now, hasSensor: sensor !== false });
   const fix = position?.consent === true && position.status === "locked" ? position.fix : null;
   const series = seriesFor(hunt.baro, now, 24);
 
   async function download() {
-    if (!fix) {
-      setNote("Turn on your location in Map first, or this cannot pick your area.");
-      return;
-    }
     setBusy(true);
-    setNote("Asking the National Weather Service. This needs signal.");
-    try {
-      const point = await (await fetch(pointsUrl(fix.latitude, fix.longitude), { headers: NWS_HEADERS })).json();
-      const alerts = parseAlerts(await (await fetch(alertsUrl(fix.latitude, fix.longitude), { headers: NWS_HEADERS })).json());
-      const hourlyUrl = point?.properties?.forecastHourly;
-      const hourly = hourlyUrl ? parseHourly(await (await fetch(hourlyUrl, { headers: NWS_HEADERS })).json()) : [];
-      const place = point?.properties?.relativeLocation?.properties;
-      setHunt("saved", makeSaved({ alerts, hourly, savedAt: Date.now(), place: place ? `${place.city}, ${place.state}` : null }));
-      setNote(alerts.length ? `Saved ${alerts.length} alert${alerts.length === 1 ? "" : "s"} and the forecast.` : "Saved the forecast. No active alerts for your area.");
-    } catch {
-      setNote("Could not reach the National Weather Service. The last saved copy stays as it was.");
+    setNote("Asking the weather service. This needs signal.");
+    const got = await refreshWeather({ position });
+    if (got.ok) {
+      const snap = got.snapshot;
+      const name = snap.sourceName || "the weather service";
+      setNote(snap.alerts?.length ? `Updated from ${name}. ${snap.alerts.length} active alert${snap.alerts.length === 1 ? "" : "s"}.` : `Updated from ${name}.${snap.source === "open-meteo" ? " The backup service has no alerts." : " No active alerts for your area."}`);
+    } else {
+      setNote(`${got.note} The last saved copy stays as it was.`);
     }
     setBusy(false);
   }
 
   return (
     <ScrollView contentContainerStyle={screenStyles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader title="Weather" lead="Pressure on this phone, not a live forecast." onBack={onBack} backLabel="Field" />
+      <ScreenHeader title="Weather" lead="One weather copy, shared with Ask, Hunt and the scent cone." onBack={onBack} backLabel="Field" />
       <Card title="Pressure">
         {sensor === false ? (
           <Quiet>This phone has no barometer. You can still save a weather note.</Quiet>
@@ -97,14 +93,22 @@ export default function WeatherScreen({ position, onBack }) {
       <Card title="Saved forecast and alerts">
         {saved.has ? (
           <>
-            <Text style={styles.age}>{saved.age}{hunt.saved?.place ? ` for ${hunt.saved.place}` : ""}</Text>
-            <SourceTag source="saved forecast" />
+            <Text style={styles.age}>{record.freshness}{hunt.saved?.place ? ` · ${hunt.saved.place}` : ""}</Text>
+            <SourceTag source={record.sourceName || "saved forecast"} />
+            {record.current ? <Line label="Now" value={`${Math.round(record.current.tempF)}°F${record.current.summary ? `, ${record.current.summary.toLowerCase()}` : ""}, wind ${record.current.windFrom || "?"} ${record.current.windMph ?? "?"} mph`} /> : null}
             {saved.forecast ? (
               <Line label={saved.forecast.stale ? "Last saved hour" : "This hour"} value={`${saved.forecast.tempF}°F, wind ${saved.forecast.windFrom} ${saved.forecast.windMph ?? "?"} mph${saved.forecast.rainChance != null ? `, rain ${saved.forecast.rainChance}%` : ""}`} />
             ) : (
               <Quiet>The saved forecast hours have passed. Save a new one when you have signal.</Quiet>
             )}
-            {saved.alerts.length === 0 ? <Quiet>No alerts saved. Add a note if a warning reaches you another way.</Quiet> : null}
+            {record.wind.source === "manual" ? (
+              <View style={styles.alert}>
+                <Text style={styles.age}>{record.wind.tag}: {record.wind.point} {Math.round(record.wind.mph)} mph</Text>
+                <Quiet>{record.windAgree === true ? `The saved forecast also says ${record.forecastWind.point} ${Math.round(record.forecastWind.mph)} mph, so they agree.` : record.windAgree === false ? `The saved forecast says ${record.forecastWind.point} ${Math.round(record.forecastWind.mph)} mph. The cone and Hunt cards use the wind you entered.` : "There is no saved forecast wind to compare."}</Quiet>
+                <Action label="Use the saved forecast" tone="quiet" onPress={() => setHunt("wind", (current) => ({ ...current, fromPoint: "", enteredAt: null }))} accessibilityHint="Clears the wind you entered." />
+              </View>
+            ) : null}
+            {saved.alerts.length === 0 ? <Quiet>{hunt.saved?.source === "open-meteo" ? "The backup service has no alerts. Check weather.gov for warnings." : "No active alerts in the saved copy."}</Quiet> : null}
             {saved.alerts.map((alert) => (
               <View key={alert.id + alert.event} style={[styles.alert, alert.expired && styles.expired]}>
                 <Text style={styles.alertTitle}>{alert.event}{alert.expired ? " (expired)" : ""}</Text>
@@ -116,9 +120,9 @@ export default function WeatherScreen({ position, onBack }) {
         ) : (
           <Quiet>{saved.note}</Quiet>
         )}
-        <Action label={busy ? "Saving" : saved.has ? "Update the saved copy" : "Save forecast and alerts"} tone="quiet" disabled={busy} onPress={download} accessibilityHint="Needs signal. It sends your approximate area to weather.gov, once." />
+        <Action label={busy ? "Updating" : saved.has ? "Update the saved copy" : "Save forecast and alerts"} tone="quiet" disabled={busy} onPress={download} accessibilityHint="Needs signal. It sends your approximate area to the National Weather Service, or Open-Meteo if that fails." />
         {note ? <Quiet live>{note}</Quiet> : null}
-        <Quiet>This sends your position to the National Weather Service only when you tap it. Nothing else leaves the phone.</Quiet>
+        <Quiet>This sends your approximate position (about 100 m) to the National Weather Service, or to Open-Meteo if that does not answer, only when you tap Update or ask Yehsa about the weather. Nothing else leaves the phone.</Quiet>
       </Card>
       <Card title="Weather notes">
         {(hunt.wxNotes || []).length === 0 ? <Quiet>No notes yet.</Quiet> : (hunt.wxNotes || []).map((entry) => (

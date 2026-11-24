@@ -5,7 +5,7 @@ import { Action, Field, Quiet, ScreenHeader, themedStyles, colors } from "./ui.j
 import { Card, Chips, Line, SourceTag, screenStyles } from "./hunt_ui.js";
 import { setHunt, useHunt } from "./hunt_state.js";
 import { conditionsFor, windLabel } from "../../symbolic/hunt/conditions.js";
-import { COMPASS_POINTS, DEER_TEXT, NO_SENSOR, SPEED_CLASSES, THERMALS_TIP, bestStands } from "../../symbolic/hunt/scent.js";
+import { COMPASS_POINTS, DEER_TEXT, NO_SENSOR, SPEED_CLASSES, bestStands } from "../../symbolic/hunt/scent.js";
 
 export function ConeDiagram({ cone }) {
   // A plain diagram: you at the center, the wind arrow, and the shaded downwind cone.
@@ -93,7 +93,7 @@ export default function WindScreen({ position, onBack }) {
       <ScreenHeader title="Wind" lead="Scent cone on the map. Wind you enter, or from the saved forecast." onBack={onBack} backLabel="Field" />
       <Card title={windLabel(wind)}>
         <Line label="Wind comes from" value={`${wind.point}, blowing toward ${cone ? Math.round(cone.downwindDeg) : "?"}°`} />
-        <SourceTag source={wind.source === "manual" ? `manual${wind.enteredAt ? `, entered ${new Date(wind.enteredAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}` : ""}` : wind.source} />
+        <SourceTag source={wind.tag || wind.source} />
         <Action label="Update" tone="quiet" onPress={() => setEditing(true)} />
       </Card>
       {cone ? (
@@ -120,7 +120,6 @@ export default function WindScreen({ position, onBack }) {
         </View>
         {!fix ? <Quiet>Turn on your location in Map to save a spot where you stand.</Quiet> : null}
       </Card>
-      <Quiet>{THERMALS_TIP}</Quiet>
     </ScrollView>
   );
 }

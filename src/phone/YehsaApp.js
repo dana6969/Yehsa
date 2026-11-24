@@ -97,6 +97,7 @@ import {
   saveHelpfulAnswer
 } from "../../symbolic/learned_notes.js";
 import { domainOf, mergeCompound, newThread, socialTurn, splitCompound, tripResult, voiceReply } from "../../symbolic/yehsa_voice.js";
+import { answerWeatherQuestion, weatherIntent } from "./weather_ask.js";
 import { capabilitySummary, continueUtterance, isCapabilityQuestion, isFeedbackEligible, sourceChips } from "../../symbolic/chat_turn.js";
 import LandscapeMap from "./LandscapeMap.js";
 import {
@@ -1045,6 +1046,14 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
     setTimeout(() => {
       if (askGen.current !== generation) return;
       const answerOne = async (text) => {
+        // Weather questions go to the one weather service (live or saved copy, plus the barometer), not to the notes.
+        if (weatherIntent(text)) {
+          try {
+            return await answerWeatherQuestion(text, { position });
+          } catch {
+            // fall through to the notes if the weather service itself fails
+          }
+        }
         if (isCapabilityQuestion(text)) {
           return { answered: true, text: capabilitySummary(phoneCorpusMeta), kind: "about", symbol: "capabilities" };
         }
