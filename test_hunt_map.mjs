@@ -289,3 +289,35 @@ test("Hunt state chips are one scrolling row, and the legal card does not crush 
   assert.match(ui, /flexWrap: "nowrap"/);
   assert.match(ui, /export function orderChips/);
 });
+
+// ---- drag to move, and sightings from a mark
+
+import { moveMark, undoMove } from "./symbolic/hunt/marks.js";
+
+test("a finger drag moves a mark to where it was let go, and Undo puts it back", () => {
+  let marks = addMark([], { kind: "stand", ...HERE }).marks;
+  const id = marks[0].id;
+  const drop = { latitude: 44.5512, longitude: -69.6288 };
+  const moved = moveMark(marks, id, drop);
+  assert.equal(moved.ok, true);
+  assert.equal(moved.mark.latitude, drop.latitude);
+  assert.deepEqual(moved.from, { latitude: HERE.latitude, longitude: HERE.longitude });
+  marks = undoMove(moved.marks, id, moved.from);
+  assert.equal(marks[0].latitude, HERE.latitude);
+  assert.equal(moveMark(marks, id, { latitude: NaN, longitude: 0 }).ok, false);
+  assert.equal(moveMark(marks, "gone", drop).ok, false);
+});
+
+test("the native map drags the moving mark with a draggable PointAnnotation and keeps Move here", () => {
+  const native = fs.readFileSync("src/phone/OfflineMap.native.js", "utf8");
+  assert.match(native, /<PointAnnotation[\s\S]*draggable[\s\S]*onDragEnd=/);
+  assert.match(native, /onMarkDragEnd\?\.\(mark\.id/);
+  const web = fs.readFileSync("src/phone/OfflineMap.js", "utf8");
+  assert.match(web, /draggable: dragging/);
+  assert.match(web, /"dragend"/);
+  const hunt = fs.readFileSync("src/phone/hunt_map.js", "utf8");
+  assert.match(hunt, /label="Move here"/);
+  assert.match(hunt, /onMarkDragEnd,/);
+  assert.match(hunt, /undoMove\(list, mark\.id, result\.from\)/);
+  assert.match(fs.readFileSync("src/phone/YehsaApp.js", "utf8"), /onMarkDragEnd=\{huntMap\.onMarkDragEnd\}/);
+});
