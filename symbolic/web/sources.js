@@ -1,7 +1,7 @@
 // What Yehsa may ask for, and how the answers are read. No keys, no accounts.
 //   Wikipedia (en.wikipedia.org REST): a search, then the summary of the top page. CC BY-SA 4.0.
 //   National Weather Service (api.weather.gov): the forecast for a coarse place. US Government work.
-//   A page on cdc.gov, nps.gov, usda.gov, noaa.gov or weather.gov that the person names. US Government work.
+//   A page on cdc.gov, weather.gov, usda.gov, fws.gov or nps.gov (named by the person, or from gov_directory.js). US Government work.
 // Every result carries its source address, fetch time and license. Nothing here stores anything.
 
 import { guardedFetch, checkUrl } from "./fetch_guard.js";

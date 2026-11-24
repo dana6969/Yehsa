@@ -4,12 +4,18 @@
 
 export const USER_AGENT = "Yehsa offline survival app (no account; user-approved request)";
 
+// The allowlist. Nothing else is ever fetched. See symbolic/web/allowlist.js for what each one is.
 export const HOST_GROUPS = {
   wikipedia: { exact: ["en.wikipedia.org"], suffix: [] },
   weather: { exact: ["api.weather.gov"], suffix: [] },
-  // US government pages the person names themselves. Subdomains of these are allowed.
-  page: { exact: [], suffix: ["cdc.gov", "nps.gov", "usda.gov", "noaa.gov", "weather.gov"] }
+  // CDC, NWS, USDA (USFS is fs.usda.gov), USFWS, NPS. Subdomains of these are allowed.
+  page: { exact: [], suffix: ["cdc.gov", "weather.gov", "usda.gov", "fws.gov", "nps.gov"] },
+  // The two Army publications are read from the on-phone ATP pack. Their address is a citation only.
+  atp: { exact: ["armypubs.army.mil"], suffix: [] }
 };
+
+// Groups that may be cited but never fetched. State wildlife pages are link-only.
+export const LINK_ONLY = new Set(["atp", "state-wildlife"]);
 
 export const LIMITS = {
   maxBytes: 262144,
@@ -106,6 +112,7 @@ async function readCapped(response, maxBytes) {
  */
 export async function guardedFetch({ fetchImpl, url, group, kind = "json", limits = {} }) {
   const cap = { ...LIMITS, ...limits };
+  if (LINK_ONLY.has(group)) return { ok: false, reason: "That source is a link only. Yehsa does not fetch it." };
   if (typeof fetchImpl !== "function") return { ok: false, reason: "No network is available here." };
   let current = checkUrl(url, group);
   if (!current.ok) return { ok: false, reason: current.reason };
