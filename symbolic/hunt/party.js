@@ -4,7 +4,8 @@
 // update is sealed for one member with that member's key, so a relay cannot read it. Nothing
 // is sent unless a session is running and a position is held with consent.
 
-import { safetyNumber, sealDirect, publicCard } from "../peer_chat.js";
+import { sealDirect, publicCard } from "../peer_chat.js";
+import { safetyNumber } from "../online/safety.js";
 
 export const MIN_MINUTES = 15;
 export const MAX_MINUTES = 12 * 60;
@@ -46,7 +47,7 @@ export function addMember(roster, { name, card, me }) {
     name: label,
     boxPublic: card.boxPublic,
     signPublic: card.signPublic,
-    safety: safetyNumber(me.boxPublic, card.boxPublic),
+    safety: safetyNumber(publicCard(me), publicCard(card)),
     verified: false
   };
   return { ok: true, roster: { ...roster, members: [...roster.members, member] }, member };
@@ -190,4 +191,20 @@ export function partyNotices({ roster, keyState = "ready", linkUp = false, peers
     else if (peersNearby === 0) out.push({ id: "no-peers", tone: "info", title: "No one in the party is in range right now.", body: "The session keeps running. Updates are held until someone is in range; nothing is marked as sent.", action: null });
   }
   return out;
+}
+
+// Members added before round 4 carry the old box-key-only number. Recompute it with the one shared
+// number (both keys, symbolic/online/safety.js) so People, Hunt party and Online all match. A member
+// already verified stays verified: they checked the same keys.
+export function refreshSafety(roster, me) {
+  if (!me?.boxPublic || !me?.signPublic || !roster?.members?.length) return roster;
+  let changed = false;
+  const members = roster.members.map((member) => {
+    if (!member.boxPublic || !member.signPublic) return member;
+    const safety = safetyNumber(publicCard(me), publicCard(member));
+    if (safety === member.safety) return member;
+    changed = true;
+    return { ...member, safety };
+  });
+  return changed ? { ...roster, members } : roster;
 }

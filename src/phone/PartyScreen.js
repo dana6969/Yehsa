@@ -8,7 +8,7 @@ import { explain, getOrCreateIdentity, replaceIdentity } from "./identity.js";
 import { transmitNote } from "./ble_provider.js";
 import { chunkEnvelope, meshChunkText, qrPayload } from "../../symbolic/peer_chat.js";
 import { queueServiceText } from "../../symbolic/phone_mesh.js";
-import { DEFAULT_MINUTES, PARTY_RULES, VERIFY_FAIL_TEXT, addMember, extendSession, partyNotices, buildUpdates, cardFromText, dueForUpdate, emptyRoster, isSharing, noteSent, removeMember, shareLine, startSession, stopSession, tickSession, timeLeftText, verifiedMembers, verifyMember } from "../../symbolic/hunt/party.js";
+import { DEFAULT_MINUTES, PARTY_RULES, VERIFY_FAIL_TEXT, addMember, extendSession, partyNotices, refreshSafety, buildUpdates, cardFromText, dueForUpdate, emptyRoster, isSharing, noteSent, removeMember, shareLine, startSession, stopSession, tickSession, timeLeftText, verifiedMembers, verifyMember } from "../../symbolic/hunt/party.js";
 
 const LENGTHS = [
   { id: "60", label: "1 hour" },
@@ -75,7 +75,16 @@ export default function PartyScreen({ position, mesh, onBack, onPair }) {
   }, []);
   function openKey() {
     setKeyResult({ state: "loading" });
-    getOrCreateIdentity().then((result) => { setKeyResult(result); setMe(result.identity || null); });
+    getOrCreateIdentity().then((result) => {
+      setKeyResult(result);
+      setMe(result.identity || null);
+      // Older members carry the old box-key-only number; show the one shared number instead.
+      if (result.identity) {
+        const current = getHunt().roster;
+        const next = refreshSafety(current, result.identity);
+        if (next !== current) setHunt("roster", next);
+      }
+    });
   }
   async function newKey() {
     const done = await replaceIdentity({ approved: true });

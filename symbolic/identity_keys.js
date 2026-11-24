@@ -12,7 +12,9 @@
 //         | { state: "foreign", message, identity: null }            copied app data, cannot open the original keys
 //         | { state: "error", reason, message, detail, identity: null }   secure store failed: show a banner and Try again
 //   await keys.publicKey()                  -> { boxPublic, signPublic } (base64) or null
-//   await keys.safetyNumber(theirKey?)      -> "1234 5678 ..." for you + them (their card or boxPublic);
+//   await keys.safetyNumber(theirCard?)     -> "1234 5678 ..." for you + them: covers both keys of both people
+//                                              (symbolic/online/safety.js, v2, order-independent), the one
+//                                              number People, Hunt party and Online all show;
 //                                              no argument gives your own fingerprint
 //   await keys.sign(message)                -> { ok, signature, signPublic }   Ed25519 detached, base64
 //   verifySignature(message, signature, signPublic) -> boolean      (pure, exported)
@@ -24,7 +26,8 @@
 // Nothing here uses Math.random. Keys come from the installed CSPRNG (src/phone/install_prng.js).
 
 import nacl from "tweetnacl";
-import { keyFingerprint, openDirect, safetyNumber as pairSafetyNumber, sealDirect } from "./peer_chat.js";
+import { openDirect, sealDirect } from "./peer_chat.js";
+import { safetyNumber as pairSafetyNumber } from "./online/safety.js";
 import { CLONE_MESSAGE } from "./clone_guard.js";
 
 export const KEY_ERROR_TITLE = "I couldn't open your key.";
@@ -102,10 +105,15 @@ export function createIdentityKeys(vault) {
     async safetyNumber(their) {
       const identity = await ready();
       if (!identity) return null;
-      if (!their) return keyFingerprint(identity.boxPublic);
-      const theirBox = typeof their === "string" ? their : their.boxPublic;
-      if (!theirBox) return null;
-      return pairSafetyNumber(identity.boxPublic, theirBox);
+      const mine = { boxPublic: identity.boxPublic, signPublic: identity.signPublic };
+      if (!their) return pairSafetyNumber(mine, mine);
+      // Both keys are needed: a box key alone cannot give the shared number.
+      if (typeof their !== "object" || !their.boxPublic || !their.signPublic) return null;
+      try {
+        return pairSafetyNumber(mine, their);
+      } catch {
+        return null;
+      }
     },
     async sign(message) {
       const identity = await ready();
