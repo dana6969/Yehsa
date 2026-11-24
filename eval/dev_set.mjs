@@ -3,6 +3,7 @@
 // eval/run.mjs does not load it.
 
 import { CAMERA_DEV_SET } from "./dev_camera_set.mjs";
+import { DOMAIN_DEV_SET } from "./dev_domains_set.mjs";
 
 export const DEV_SET = [
   {
@@ -419,5 +420,6 @@ export const DEV_SET = [
     prompt: "which wild plants are deadly to taste",
     expect: { kind: "facts", all: ["hemlock", "death camas"] }
   },
-  ...CAMERA_DEV_SET
+  ...CAMERA_DEV_SET,
+  ...DOMAIN_DEV_SET
 ];

@@ -155,9 +155,20 @@ const NAME_INDEX = (() => {
 // and its other names. Used by the meaning matcher's title boost.
 const HEAD_STOP = new Set("and the for with from what when your into how not are can".split(" "));
 function headStem(word) { return word.replace(/(?:ies)$/, "y").replace(/(?:es|s)$/, ""); }
+// A one-word name that many entries share ("deer" in "Blacklegged (deer) tick") does not name one entry.
+const WORD_USE = new Map();
+for (const entry of ENTRIES) {
+  const words = new Set(normName(`${entry.title} ${(entry.also || []).join(" ")}`).split(/[ -]+/));
+  for (const word of words) WORD_USE.set(word, (WORD_USE.get(word) || 0) + 1);
+}
+// A name that two entries share ("deer sign" on every deer-sign entry) names neither of them.
+const NAME_USE = new Map();
+const headNames = (entry) => [...new Set([entry.title.replace(/\s*\([^)]*\)/g, ""), ...(entry.title.match(/\(([^)]*)\)/g) || []).map((x) => x.slice(1, -1)), ...(entry.also || [])]
+  .map(normName))];
+for (const entry of ENTRIES) for (const name of headNames(entry)) NAME_USE.set(name, (NAME_USE.get(name) || 0) + 1);
 const ENTRY_HEADS = new Map(ENTRIES.map((entry) => {
-  const names = [entry.title.replace(/\s*\([^)]*\)/g, ""), ...(entry.title.match(/\(([^)]*)\)/g) || []).map((x) => x.slice(1, -1)), ...(entry.also || [])]
-    .map(normName).filter((name) => name.length >= 3);
+  const names = headNames(entry)
+    .filter((name) => name.length >= 3 && NAME_USE.get(name) === 1 && (/[ -]/.test(name) || (WORD_USE.get(name) || 0) < 4));
   const words = new Set(normName(entry.title.replace(/\s*\([^)]*\)/g, "")).split(/[ -]+/).filter((w) => w.length >= 4 && !HEAD_STOP.has(w)).map(headStem));
   return [entry.id, { names, words }];
 }));
