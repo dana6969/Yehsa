@@ -4,11 +4,11 @@ import { ScrollView, Text, View } from "react-native";
 import { Action, Field, Quiet, ScreenHeader, themedStyles } from "./ui.js";
 import { Card, Chips, Line, screenStyles } from "./hunt_ui.js";
 import { getHunt, setHunt, useHunt } from "./hunt_state.js";
-import { loadOrCreateIdentity } from "./mesh_keys.js";
+import { explain, getOrCreateIdentity, replaceIdentity } from "./identity.js";
 import { transmitNote } from "./ble_provider.js";
 import { chunkEnvelope, meshChunkText, qrPayload } from "../../symbolic/peer_chat.js";
 import { queueServiceText } from "../../symbolic/phone_mesh.js";
-import { DEFAULT_MINUTES, PARTY_RULES, addMember, buildUpdates, cardFromText, dueForUpdate, emptyRoster, isSharing, noteSent, removeMember, shareLine, startSession, stopSession, tickSession, timeLeftText, verifiedMembers, verifyMember } from "../../symbolic/hunt/party.js";
+import { DEFAULT_MINUTES, PARTY_RULES, VERIFY_FAIL_TEXT, addMember, extendSession, partyNotices, buildUpdates, cardFromText, dueForUpdate, emptyRoster, isSharing, noteSent, removeMember, shareLine, startSession, stopSession, tickSession, timeLeftText, verifiedMembers, verifyMember } from "../../symbolic/hunt/party.js";
 
 const LENGTHS = [
   { id: "60", label: "1 hour" },
@@ -24,7 +24,7 @@ export function usePartyTicker({ position, mesh, setMesh }) {
   const meshRef = useRef(mesh);
   meshRef.current = mesh;
   useEffect(() => {
-    loadOrCreateIdentity().then((result) => { meRef.current = result.identity || null; }).catch(() => {});
+    getOrCreateIdentity().then((result) => { meRef.current = result.identity || null; });
   }, []);
   useEffect(() => {
     const timer = setInterval(async () => {
@@ -64,17 +64,29 @@ export default function PartyScreen({ position, mesh, onBack, onPair }) {
   const [pick, setPick] = useState([]);
   const [minutes, setMinutes] = useState(String(DEFAULT_MINUTES));
   const [problem, setProblem] = useState("");
+  const [keyResult, setKeyResult] = useState({ state: "loading" });
+  const [badNumber, setBadNumber] = useState({});
   const [busy, setBusy] = useState(false);
   const [, tick] = useState(0);
   useEffect(() => {
-    loadOrCreateIdentity().then((result) => setMe(result.identity || null)).catch(() => setProblem("I couldn't open your key."));
+    openKey();
     const timer = setInterval(() => tick((n) => n + 1), 20000);
     return () => clearInterval(timer);
   }, []);
+  function openKey() {
+    setKeyResult({ state: "loading" });
+    getOrCreateIdentity().then((result) => { setKeyResult(result); setMe(result.identity || null); });
+  }
+  async function newKey() {
+    const done = await replaceIdentity({ approved: true });
+    if (done.ok) openKey();
+    else setKeyResult({ state: "error", detail: done.detail || "", message: "I couldn't open your key." });
+  }
   const save = (next) => setHunt("roster", next);
   const sharing = isSharing(roster);
   const fix = position?.consent === true && position.status === "locked";
   const verified = verifiedMembers(roster);
+  const notices = partyNotices({ roster, keyState: keyResult.state, linkUp: Boolean(mesh?.link?.primary) });
 
   function add() {
     const result = addMember(roster, { name, card: cardFromText(code), me });
@@ -88,7 +100,8 @@ export default function PartyScreen({ position, mesh, onBack, onPair }) {
 
   function verify(member) {
     const result = verifyMember(roster, member.id, typed[member.id]);
-    if (!result.ok) { setProblem(result.reason); return; }
+    if (!result.ok) { setBadNumber((current) => ({ ...current, [member.id]: true })); return; }
+    setBadNumber((current) => ({ ...current, [member.id]: false }));
     setProblem("");
     save(result.roster);
   }
@@ -105,6 +118,15 @@ export default function PartyScreen({ position, mesh, onBack, onPair }) {
   return (
     <ScrollView contentContainerStyle={screenStyles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader title="Hunt party" lead="Only paired contacts with a verified safety number. Location is opt-in, and the session ends on its own." onBack={onBack} backLabel="People" />
+      {notices.map((notice) => (
+        <Card key={notice.id} title={notice.title}>
+          <Quiet live={notice.tone === "problem"}>{notice.body}</Quiet>
+          {notice.id === "key-error" && keyResult.detail ? <Quiet>{`Code: ${keyResult.detail}`}</Quiet> : null}
+          {notice.action === "retry" ? <Action label="Try again" onPress={openKey} /> : null}
+          {notice.action === "replace" ? <Action label="Start a new key here" tone="clay" onPress={newKey} /> : null}
+          {notice.action === "extend" ? <Action label="Add 30 minutes" tone="quiet" onPress={() => { const r = extendSession(roster); if (r.ok) save(r.roster); else setProblem(r.reason); }} /> : null}
+        </Card>
+      ))}
       {sharing ? (
         <Card title="Sharing now">
           <Text style={styles.big}>{timeLeftText(roster)}</Text>
@@ -139,6 +161,7 @@ export default function PartyScreen({ position, mesh, onBack, onPair }) {
               <Quiet>Safety number · unverified · cannot join until verified</Quiet>
               <Quiet>Read the number above to them, and type the number their phone shows.</Quiet>
               <Field label="Their number" value={typed[member.id] || ""} onChangeText={(value) => setTyped((current) => ({ ...current, [member.id]: value }))} placeholder="0000 0000 0000 0000 0000 0000 0000 0000" />
+              {badNumber[member.id] ? <Quiet live>{VERIFY_FAIL_TEXT}</Quiet> : null}
               <Action label="Check the number" onPress={() => verify(member)} />
             </>
           )}
@@ -151,6 +174,7 @@ export default function PartyScreen({ position, mesh, onBack, onPair }) {
           <Field label="Name" value={name} onChangeText={setName} placeholder="Sam" />
           <Field label="Their pairing code" value={code} onChangeText={setCode} multiline />
           <Action label="Add" onPress={add} disabled={!me} />
+          {!me && keyResult.state !== "loading" ? <Quiet>Your key is not ready, so adding is paused. See the notice at the top.</Quiet> : null}
           <Action label="Cancel" tone="quiet" onPress={() => { setAdding(false); setProblem(""); }} />
           {me ? <Quiet>Your own pairing code, to give them:</Quiet> : null}
           {me ? <Text selectable style={styles.code}>{qrPayload(me)}</Text> : null}

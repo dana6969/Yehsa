@@ -153,3 +153,38 @@ export function noteSent(roster, now = Date.now()) {
   if (!roster.session) return roster;
   return { ...roster, session: { ...roster.session, lastSentAt: now, sent: (roster.session.sent || 0) + 1 } };
 }
+
+export const EXTEND_MINUTES = 30;
+export const ENDING_SOON_MS = 10 * 60 * 1000;
+export const VERIFY_FAIL_TEXT = "Those numbers did not match. Read them out loud again, or ask them to show their pairing code again. Do not trust this contact until they match.";
+export const OFFLINE_TEXT = "No mesh or internet link right now. Updates are held on this phone and will not go out until a link is up.";
+
+// Add time to a running session (never past the longest allowed session).
+export function extendSession(roster, minutes = EXTEND_MINUTES, now = Date.now()) {
+  const session = roster.session;
+  if (!session || session.stopped || now >= session.endsAt) return { ok: false, reason: "There is no running session to extend.", roster };
+  const endsAt = Math.min(session.endsAt + minutes * 60000, session.startedAt + MAX_MINUTES * 60000);
+  if (endsAt <= session.endsAt) return { ok: false, reason: "This session is already as long as it can be.", roster };
+  return { ok: true, roster: { ...roster, session: { ...session, endsAt } } };
+}
+
+/**
+ * The separate, honest states for the Hunt party screen. Each one is its own notice, never mixed
+ * into another card. `keyState` is the result of getOrCreateIdentity() ("ready" | "error" | "foreign"
+ * | "loading"). `linkUp` is whether a mesh or internet link is up. Returns notices in display order.
+ */
+export function partyNotices({ roster, keyState = "ready", linkUp = false, now = Date.now() }) {
+  const out = [];
+  if (keyState === "error") out.push({ id: "key-error", tone: "problem", title: "I couldn't open your key.", body: "Pairing and sessions are paused until this is fixed.", action: "retry" });
+  if (keyState === "foreign") out.push({ id: "key-foreign", tone: "problem", title: "This copy can't open the original owner's chats", body: "Keys stay on the original phone. You can start a new key here. Your contacts will have to check you again.", action: "replace" });
+  const sharing = isSharing(roster, now);
+  if (sharing) {
+    const left = roster.session.endsAt - now;
+    if (left <= ENDING_SOON_MS) {
+      const minutes = Math.max(1, Math.ceil(left / 60000));
+      out.push({ id: "ending", tone: "info", title: `The session stops in ${minutes} minute${minutes === 1 ? "" : "s"}.`, body: "Nothing is shared after that unless you start a new one.", action: "extend" });
+    }
+    if (!linkUp) out.push({ id: "offline", tone: "info", title: OFFLINE_TEXT, body: "Nothing left the phone while the link is down.", action: null });
+  }
+  return out;
+}
