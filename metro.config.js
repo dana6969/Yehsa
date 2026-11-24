@@ -7,8 +7,7 @@ const { getDefaultConfig } = require("expo/metro-config");
 
 const config = getDefaultConfig(__dirname);
 // The offline meaning matcher ships its model (.onnx) and int8 scripture rows (.i8) as assets.
-// The built-in road layer ships vector MBTiles shards, a road-name SQLite file and label glyphs (.pbf).
-config.resolver.assetExts = [...new Set([...config.resolver.assetExts, "onnx", "i8", "mbtiles", "db", "pbf"])];
+config.resolver.assetExts = [...new Set([...config.resolver.assetExts, "onnx", "i8"])];
 const upstream = config.resolver.resolveRequest;
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
