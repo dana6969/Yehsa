@@ -130,6 +130,10 @@ import { usePersistedPackStore } from "./map_pack_manager";
 import { elevationFromAreas } from "./area_elevation";
 import { mapAbout, mapLayers } from "../../symbolic/map_layers.js";
 import { initialHost, mapViewKey, nextHost, rememberCamera, shouldMountMap } from "../../symbolic/map_host.js";
+import { pinFix, recenterState } from "../../symbolic/map_camera.js";
+import { mapWatchesGps, requestLocation, turnLocationOff } from "../../symbolic/location_setting.js";
+import { confirmLocation } from "./location_prompt.js";
+import MapRail from "./MapRail.js";
 import PeerChat from "./PeerChat.js";
 import PeerSecurity from "./PeerSecurity.js";
 import EmergencyScreen from "./EmergencyScreen.js";
@@ -177,6 +181,12 @@ export default function YehsaApp() {
   const tab = nav.tab;
   const screen = topScreen(nav);
   const visible = screen || tab;
+  // R6: full-screen map hides the tabs; SOS stays on the map as a small button.
+  const [mapFull, setMapFull] = useState(false);
+  const fullMap = mapFull && visible === "map";
+  useEffect(() => {
+    if (visible !== "map") setMapFull(false);
+  }, [visible]);
   function go(action) {
     setNav((current) => navReduce(current, action));
   }
@@ -403,6 +413,9 @@ export default function YehsaApp() {
         <View {...pane("map")}>
           <LandPane
             active={visible === "map"}
+            fullScreen={fullMap}
+            onFullScreen={setMapFull}
+            onSos={() => go({ type: "openSos" })}
             position={position}
             setPosition={setPosition}
             onConsent={changeConsent}
@@ -635,10 +648,10 @@ export default function YehsaApp() {
         </View>
         {onboarding ? <Onboarding onDone={finishOnboarding} /> : null}
       </View>
-      {chipVisible && !onboarding ? (
+      {chipVisible && !onboarding && !fullMap ? (
         <AskChip summary={askSummary} onPress={() => (askSummary?.pending ? setTab("ask") : go({ type: "openCommand" }))} />
       ) : null}
-      <View style={styles.tabs} accessibilityRole="tablist">
+      <View style={[styles.tabs, fullMap && styles.hidden]} accessibilityRole="tablist" accessibilityElementsHidden={fullMap} importantForAccessibility={fullMap ? "no-hide-descendants" : "auto"}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="SOS emergency"
@@ -1687,7 +1700,7 @@ class MapBoundary extends React.Component {
   }
 }
 
-function LandPane({ active, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, windRequest, routeRequest, display, onDisplay, onParty, onBefore, onOpenTool, onLogSighting }) {
+function LandPane({ active, fullScreen = false, onFullScreen, onSos, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, windRequest, routeRequest, display, onDisplay, onParty, onBefore, onOpenTool, onLogSighting }) {
   const [layersOpen, setLayersOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [hunt, setHunt] = useState(false);
@@ -1715,13 +1728,19 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
   // Built-in roads (offline) and property lines for the Hunt map (online, then saved).
   const extras = useMapExtras({ active: Boolean(active && hunt) });
   const [gps, setGps] = useState(initialGpsMap);
-  const [gpsWanted, setGpsWanted] = useState(false);
+  // R6: one location setting. The map watches GPS only when Settings, Location is on.
+  const [pinned, setPinned] = useState(null);
+  const [recenterKey, setRecenterKey] = useState(0);
+  const [northKey, setNorthKey] = useState(0);
+  const [courseUp, setCourseUp] = useState(true);
+  const [mapHeading, setMapHeading] = useState(0);
+  useBackLayer(fullScreen, () => onFullScreen?.(false));
   const [backgroundGps, setBackgroundGps] = useState(false);
   const consented = position?.consent === true;
   const origin = gps.follow && gps.fix
     ? gps.fix
     : (gps.fix || (consented && position.status === "locked" && position.fix ? position.fix : { latitude: 0, longitude: 0 }));
-  const held = gps.fix || (consented && position.status === "locked" ? position.fix : null);
+  const held = pinned || gps.fix || (consented && position.status === "locked" ? position.fix : null);
   const crumbs = gps.track.length ? gps.track : track;
   // Search, destination, route and Start (regular Map only; the Hunt view keeps its own taps).
   const routeOrigin = useMemo(() => (held ? { latitude: held.latitude, longitude: held.longitude, accuracy: gps.accuracyM } : null), [held?.latitude, held?.longitude, gps.accuracyM]);
@@ -1729,6 +1748,17 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
     origin: routeOrigin,
     nearFallback: () => (camera.current?.center ? { longitude: camera.current.center[0], latitude: camera.current.center[1] } : null)
   });
+  const gpsWanted = mapWatchesGps({ consent: consented, active, navOn: Boolean(nav.nav?.on), background: backgroundGps, pinned: Boolean(pinned) });
+  const turnOnLocation = () => requestLocation({ position, confirm: confirmLocation, onConsent });
+  const locState = recenterState({ consent: consented, fix: held, follow: gps.follow, pinned: Boolean(pinned), navOn: Boolean(nav.nav?.on) });
+  function onLocationButton() {
+    if (!consented) {
+      turnOnLocation();
+      return;
+    }
+    if (!pinned) setGps((current) => recenterOnMe(current));
+    setRecenterKey((key) => key + 1);
+  }
   const [stepsOpen, setStepsOpen] = useState(false);
   useBackLayer(stepsOpen, () => setStepsOpen(false));
   useBackLayer(Boolean(nav.results), () => nav.setResults(null));
@@ -1739,10 +1769,13 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
     setHunt(false);
     setLayersOpen(false);
     nav.runSearch(routeRequest.query, { autoPick: true, profile: routeRequest.profile });
-    if (!consented || !gpsWanted) setImportNote("Turn on GPS so the route starts where you are.");
+    if (!consented) setImportNote("Turn on location so the route starts where you are.");
   }, [routeRequest?.id]);
   useEffect(() => {
-    if (nav.nav?.on) setGps((current) => recenterOnMe(current));
+    if (!nav.nav?.on) return;
+    setGps((current) => recenterOnMe(current));
+    setCourseUp(true);
+    setRecenterKey((key) => key + 1);
   }, [nav.nav?.on]);
   // The native map view is built only while this screen shows, and fresh each time it shows again.
   useEffect(() => {
@@ -1815,12 +1848,17 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
 
   useEffect(() => {
     if (!consented || !gpsWanted) {
-      if (!consented) setGps(revokeGpsConsent());
+      if (!consented) {
+        setGps(revokeGpsConsent());
+        setPinned(null);
+      }
       return undefined;
     }
     let live = true;
     let stop = () => {};
-    setGps((current) => grantGpsConsent(current.consent ? current : initialGpsMap()));
+    // Follow starts once, when location is first turned on. Coming back to the tab, or the watch
+    // restarting, keeps the camera where the user left it.
+    setGps((current) => (current.consent ? current : grantGpsConsent(initialGpsMap())));
     watchPlatformGps({
       consent: true,
       background: backgroundGps,
@@ -1853,17 +1891,27 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
     };
   }, [consented, gpsWanted, backgroundGps, setPosition]);
 
+  const layerRows = [
+    { id: "location", label: "Location", on: consented, hint: "The same switch as Settings, Location. Turning it on asks first.", onToggle: () => (consented ? turnLocationOff({ onConsent }) : turnOnLocation()) },
+    { id: "roads", label: "Roads and street names", on: extras.roadsOn, available: extras.roadsAvailable, onToggle: () => extras.setRoadsOn(!extras.roadsOn) },
+    { id: "parcels", label: "Property lines", on: extras.parcelsOn, available: Boolean(hunt && extras.parcelsAvailable), why: hunt ? "Not on this phone" : "On the Hunt map", onToggle: () => extras.setParcelsOn(!extras.parcelsOn) },
+    { id: "terrain", label: "Terrain shading", on: mapStyle === "terrain", onToggle: () => setMapStyle(mapStyle === "terrain" ? "standard" : "terrain") },
+    { id: "hunt", label: "Hunt view", on: hunt, hint: "Scent cone, marks and property lines. Nothing is shared.", onToggle: () => setHunt((value) => !value) }
+  ];
+
   return (
-    <View style={styles.mapPane}>
-      <ScreenHeader compact title={hunt ? "Hunt" : "Map"} />
+    <View style={[styles.mapPane, fullScreen && { paddingHorizontal: 0, paddingBottom: 0 }]}>
+      {!fullScreen ? <ScreenHeader compact title={hunt ? "Hunt" : "Map"} /> : null}
+      {!fullScreen ? (
       <View style={styles.mapStatus}>
-        <StatusPill label={gpsStatusLabel(gps)} tone={gps.status === "locked" ? "good" : gps.status === "lost" ? "warn" : undefined} />
-        {!consented || !gpsWanted ? (
-          <Action label="Turn on GPS" style={styles.mapGps} onPress={() => { onConsent(true); setGpsWanted(true); }} accessibilityHint="GPS stays off until you turn it on. This also turns on location consent." />
+        <StatusPill label={pinned ? "Position locked" : gpsStatusLabel(gps)} tone={pinned || gps.status === "locked" ? "good" : gps.status === "lost" ? "warn" : undefined} />
+        {!consented ? (
+          <Action label="Turn on location" style={styles.mapGps} onPress={turnOnLocation} accessibilityHint="Asks first. This is the same switch as Settings, Location." />
         ) : null}
       </View>
-      {hunt ? <HuntHud position={position} onOpenTool={onOpenTool} onOpenWind={huntMap.openWind} /> : null}
-      {!hunt && !nav.nav?.on ? <RouteSearchBar r={nav} /> : null}
+      ) : null}
+      {hunt && !fullScreen ? <HuntHud position={position} onOpenTool={onOpenTool} onOpenWind={huntMap.openWind} /> : null}
+      {!hunt && !nav.nav?.on && !fullScreen ? <RouteSearchBar r={nav} /> : null}
       <View style={styles.mapFill}>
         {shouldMountMap(host, layers) && !mapFailed ? (
           <MapBoundary onFail={() => setMapFailed(true)}>
@@ -1874,10 +1922,20 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
               fix={held}
               follow={gps.follow}
               headingDeg={gps.headingDeg}
+              navOn={Boolean(nav.nav?.on)}
+              followCourse={Boolean(nav.nav?.on && courseUp)}
+              recenterKey={recenterKey}
+              northKey={northKey}
+              onUserPan={() => setGps((current) => (current.follow ? noteUserPan(current) : current))}
               focus={focus}
               focusKey={focusKey}
               initialCamera={camera.current}
-              onCamera={(event) => { camera.current = rememberCamera(camera.current, event); extras.onView(event); }}
+              onCamera={(event) => {
+                camera.current = rememberCamera(camera.current, event);
+                extras.onView(event);
+                const turn = Math.round(Number(event?.properties?.heading) || 0);
+                setMapHeading((value) => (value === turn ? value : turn));
+              }}
               parcels={hunt && extras.parcelsOn ? extras.parcels : null}
               attribution={layers.attribution}
               onFail={() => setMapFailed(true)}
@@ -1930,23 +1988,43 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
         />
         )}
         {huntMap.overlays}
-        {!hunt ? <NavBanner r={nav} onRecenter={() => setGps((current) => recenterOnMe(current))} /> : null}
+        <MapRail
+          top={nav.nav?.on && !hunt ? 132 : 10}
+          full={fullScreen}
+          onFull={(value) => onFullScreen?.(value)}
+          loc={{ state: locState, onPress: onLocationButton }}
+          canPin={consented && Boolean(held) && !nav.nav?.on}
+          pinned={Boolean(pinned)}
+          onPin={() => setPinned((current) => (current ? null : pinFix(held)))}
+          heading={mapHeading}
+          onNorth={() => { if (nav.nav?.on) setCourseUp(false); setNorthKey((key) => key + 1); }}
+          hunt={hunt}
+          onWind={huntMap.openWind}
+          onMarks={huntMap.openMarks}
+          marksCount={huntMap.marks.length}
+          layerRows={layerRows}
+          onMoreLayers={() => setLayersOpen(true)}
+          onSos={onSos}
+        />
+        {!hunt ? <NavBanner r={nav} onRecenter={onLocationButton} /> : null}
         {!hunt ? <RouteResults r={nav} /> : null}
       </View>
       {!hunt && !nav.nav?.on ? (
         <RouteCard
           r={nav}
           hasFix={Boolean(held)}
-          onTurnOnGps={() => { onConsent(true); setGpsWanted(true); }}
+          onTurnOnGps={turnOnLocation}
           onShowSteps={() => setStepsOpen(true)}
         />
       ) : null}
+      {!fullScreen ? (
       <View style={styles.mapTools}>
         <Action label="Layers and packs" tone="quiet" style={styles.mapToolButton} onPress={() => setLayersOpen(true)} accessibilityHint="Map packs, elevation, declination, waypoints, and import." />
         <Action label={hunt ? "Hunt on" : "Hunt"} tone={hunt ? "brass" : "quiet"} style={styles.mapToolSmall} onPress={() => setHunt((value) => !value)} accessibilityHint="Shows the hunt view on the map. Nothing is shared." />
       </View>
-      {hunt && extras.parcelsOn && extras.parcelText ? <Text style={[styles.aboutLine, { fontSize: 12, lineHeight: 16, paddingHorizontal: 12 }]} accessibilityLiveRegion="polite">{extras.parcelText}</Text> : null}
-      {hunt ? (
+      ) : null}
+      {hunt && !fullScreen && extras.parcelsOn && extras.parcelText ? <Text style={[styles.aboutLine, { fontSize: 12, lineHeight: 16, paddingHorizontal: 12 }]} accessibilityLiveRegion="polite">{extras.parcelText}</Text> : null}
+      {hunt && !fullScreen ? (
         <View style={styles.mapTools}>
           <Action label={huntMap.marks.length ? `Marks (${huntMap.marks.length})` : "Marks"} tone="quiet" style={styles.mapToolButton} onPress={huntMap.openMarks} accessibilityHint="Your stands, trails, bedding and sightings on the map." />
           <Action label="Party" tone="quiet" style={styles.mapToolButton} onPress={onParty} />
@@ -1990,7 +2068,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
               onUndo={areaState.undo}
               onShow={showBox}
             />
-            {consented && gpsWanted ? (
+            {consented ? (
               <Action label={backgroundGps ? "Background GPS on" : "Foreground GPS only"} tone="quiet" onPress={() => setBackgroundGps((value) => !value)} />
             ) : null}
             {waypoints.map((point) => (
@@ -2116,7 +2194,7 @@ function HelpersPane({ position, onConsent, models, onOpen, onBack, backLabel })
   const consented = position?.consent === true;
   const modelOn = Boolean(models?.selectedId);
   const rows = [
-    { id: "location", label: "Location", state: consented ? "On" : "Off", toggle: () => onConsent(!consented) },
+    { id: "location", label: "Location", state: consented ? "On" : "Off", toggle: () => (consented ? onConsent(false) : requestLocation({ position, confirm: confirmLocation, onConsent })) },
     { id: "models", label: "Model", state: modelOn ? "On" : "Off", open: "models" },
     { id: "radio", label: "Radio scan", state: "Off until you tap Scan", open: null },
     { id: "voice", label: "Microphone", state: "Only while you hold Mic", open: null }
