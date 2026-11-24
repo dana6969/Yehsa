@@ -15,7 +15,7 @@ export const ROUTE_REGIONS = [
     "nodes": 587325,
     "edges": 752423,
     "graphBytes": 12863165,
-    "placeBytes": 2189282
+    "placeBytes": 2232127
   },
   {
     "id": "ct",
@@ -29,7 +29,7 @@ export const ROUTE_REGIONS = [
     "nodes": 195940,
     "edges": 249707,
     "graphBytes": 3742613,
-    "placeBytes": 1242634
+    "placeBytes": 1314966
   },
   {
     "id": "id",
@@ -43,7 +43,7 @@ export const ROUTE_REGIONS = [
     "nodes": 317839,
     "edges": 402150,
     "graphBytes": 9060155,
-    "placeBytes": 810572
+    "placeBytes": 851715
   },
   {
     "id": "ma",
@@ -57,7 +57,7 @@ export const ROUTE_REGIONS = [
     "nodes": 426463,
     "edges": 555646,
     "graphBytes": 7818846,
-    "placeBytes": 2381379
+    "placeBytes": 2539631
   },
   {
     "id": "me",
@@ -71,7 +71,7 @@ export const ROUTE_REGIONS = [
     "nodes": 212982,
     "edges": 248786,
     "graphBytes": 4815302,
-    "placeBytes": 1110208
+    "placeBytes": 1291157
   },
   {
     "id": "mi",
@@ -85,7 +85,7 @@ export const ROUTE_REGIONS = [
     "nodes": 740490,
     "edges": 974959,
     "graphBytes": 14491459,
-    "placeBytes": 3219012
+    "placeBytes": 3472897
   },
   {
     "id": "mn",
@@ -99,7 +99,7 @@ export const ROUTE_REGIONS = [
     "nodes": 461659,
     "edges": 612174,
     "graphBytes": 9216610,
-    "placeBytes": 2143401
+    "placeBytes": 2319613
   },
   {
     "id": "mt",
@@ -113,7 +113,7 @@ export const ROUTE_REGIONS = [
     "nodes": 277763,
     "edges": 343518,
     "graphBytes": 8221489,
-    "placeBytes": 980157
+    "placeBytes": 1030389
   },
   {
     "id": "nh",
@@ -127,7 +127,7 @@ export const ROUTE_REGIONS = [
     "nodes": 140164,
     "edges": 175339,
     "graphBytes": 3020568,
-    "placeBytes": 825069
+    "placeBytes": 888200
   },
   {
     "id": "ny",
@@ -141,7 +141,7 @@ export const ROUTE_REGIONS = [
     "nodes": 727379,
     "edges": 952914,
     "graphBytes": 14182818,
-    "placeBytes": 4873726
+    "placeBytes": 5097904
   },
   {
     "id": "pa",
@@ -155,7 +155,7 @@ export const ROUTE_REGIONS = [
     "nodes": 870576,
     "edges": 1138436,
     "graphBytes": 17048065,
-    "placeBytes": 3652538
+    "placeBytes": 3740046
   },
   {
     "id": "ri",
@@ -169,7 +169,7 @@ export const ROUTE_REGIONS = [
     "nodes": 64423,
     "edges": 85103,
     "graphBytes": 1214327,
-    "placeBytes": 284531
+    "placeBytes": 303016
   },
   {
     "id": "vt",
@@ -183,7 +183,7 @@ export const ROUTE_REGIONS = [
     "nodes": 86877,
     "edges": 103805,
     "graphBytes": 1994012,
-    "placeBytes": 488172
+    "placeBytes": 515701
   },
   {
     "id": "wi",
@@ -197,7 +197,7 @@ export const ROUTE_REGIONS = [
     "nodes": 511329,
     "edges": 669733,
     "graphBytes": 10035888,
-    "placeBytes": 2084360
+    "placeBytes": 2264497
   },
   {
     "id": "wy",
@@ -211,6 +211,6 @@ export const ROUTE_REGIONS = [
     "nodes": 200772,
     "edges": 256008,
     "graphBytes": 5926307,
-    "placeBytes": 525207
+    "placeBytes": 547625
   }
 ];

@@ -239,7 +239,7 @@ test("geocodeOnline: User-Agent, cache, Nominatim fallback, 1 request per second
 });
 
 test("offline place search", () => {
-  const rows = parsePlaceIndex(fs.readFileSync("assets/routing/ri.ypl", "utf8"), { region: "ri" });
+  const rows = parsePlaceIndex(fs.readFileSync("assets/routing/ri_places.ypl", "utf8"), { region: "ri" });
   assert.ok(rows.length > 1000);
   const top = searchPlaces(rows, "Newport")[0];
   assert.equal(top.name, "Newport");
@@ -255,7 +255,7 @@ test("offline place search", () => {
 
 test("route service: search + offline route, online failure falls back offline", async () => {
   const loadAsset = async (id, kind) => {
-    const file = `assets/routing/${id}.${kind === "graph" ? "yrg" : "ypl"}`;
+    const file = (kind === "graph" ? `assets/routing/${id}.yrg` : `assets/routing/${id}_places.ypl`);
     if (!fs.existsSync(file)) return null;
     return kind === "graph" ? new Uint8Array(fs.readFileSync(file)) : fs.readFileSync(file, "utf8");
   };
@@ -286,7 +286,7 @@ test("route service: search + offline route, online failure falls back offline",
 test("route regions cover the map-pack states", () => {
   const ids = ROUTE_REGIONS.map((r) => r.id).sort();
   assert.deepEqual(ids, ["co", "ct", "id", "ma", "me", "mi", "mn", "mt", "nh", "ny", "pa", "ri", "vt", "wi", "wy"]);
-  for (const r of ROUTE_REGIONS) assert.ok(fs.existsSync(`assets/routing/${r.id}.yrg`) && fs.existsSync(`assets/routing/${r.id}.ypl`), r.id);
+  for (const r of ROUTE_REGIONS) assert.ok(fs.existsSync(`assets/routing/${r.id}.yrg`) && fs.existsSync(`assets/routing/${r.id}_places.ypl`), r.id);
 });
 
 test("Ask route intents", () => {
