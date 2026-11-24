@@ -1593,9 +1593,11 @@ class MapBoundary extends React.Component {
 
 function LandPane({ active, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, windRequest, display, onDisplay, onParty, onBefore, onOpenTool }) {
   const [layersOpen, setLayersOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const [hunt, setHunt] = useState(false);
   useBackLayer(hunt, () => setHunt(false));
   useBackLayer(layersOpen, () => setLayersOpen(false));
+  useBackLayer(aboutOpen, () => setAboutOpen(false));
   useEffect(() => {
     if (huntRequest) setHunt(true);
   }, [huntRequest]);
@@ -1752,6 +1754,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
               overlay={huntMap.overlay}
               onMarkPress={huntMap.onMarkPress}
               onLongPress={huntMap.onMapLongPress}
+              onAbout={() => { huntMap.closeSheets(); setLayersOpen(false); setAboutOpen(true); }}
               onPress={(point) => {
                 if (hunt) huntMap.onMapPress(point);
                 if (onMapTap) onMapTap(point);
@@ -1807,6 +1810,19 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
         </View>
       ) : null}
       {huntMap.sheets}
+      {aboutOpen ? (
+        <View style={styles.sheet} accessibilityViewIsModal>
+          <View style={styles.sheetHead}>
+            <Text accessibilityRole="header" style={styles.sheetTitle}>About this map</Text>
+            <Action label="Close" tone="quiet" style={styles.sheetClose} onPress={() => setAboutOpen(false)} />
+          </View>
+          <ScrollView contentContainerStyle={styles.sheetScroll}>
+            {(layers.about?.lines || []).map((line) => <Text key={line} style={styles.aboutLine}>{line}</Text>)}
+            <Quiet>{layers.about?.credit || layers.attribution}</Quiet>
+            <Quiet>No streets, parcels, or owner names are stored on this phone.</Quiet>
+          </ScrollView>
+        </View>
+      ) : null}
       {layersOpen ? (
         <View style={styles.sheet} accessibilityViewIsModal>
           <View style={styles.sheetHead}>
@@ -2512,6 +2528,7 @@ const styles = themedStyles((colors) => ({
   sheetClose: {
     marginBottom: 0
   },
+  aboutLine: { color: colors.ink, fontSize: 16, lineHeight: 23, marginBottom: 4 },
   sheetScroll: {
     paddingHorizontal: 18,
     paddingTop: 12,

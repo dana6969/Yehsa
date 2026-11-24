@@ -5,6 +5,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { PMTiles, Protocol } from "pmtiles";
 import { attributionLine } from "../../symbolic/map_packs.js";
 import { MemorySource } from "../../symbolic/archive_tiles.js";
+import { AboutMapLink } from "./hunt_map_ui.js";
 
 function lineCollection(shapes) {
   const features = [];
@@ -87,6 +88,7 @@ export default function OfflineMap({
   onLongPress,
   overlay,
   onMarkPress,
+  onAbout,
   fill = false
 }) {
   const archive = layers?.archivePack?.archive;
@@ -174,7 +176,7 @@ export default function OfflineMap({
           attributionControl: false
         });
       }
-      map.addControl(new maplibregl.AttributionControl({ customAttribution: label }));
+      map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: label }));
       map.on("load", () => {
         (demTiles || []).forEach((tile, index) => {
           if (!tile.url || !tile.bounds) return;
@@ -244,7 +246,7 @@ export default function OfflineMap({
   return (
     <View style={fill ? { flex: 1 } : null}>
       <View ref={host} accessibilityLabel="Offline map" style={{ ...(fill ? { flex: 1, minHeight: 150 } : { height: 380 }), borderRadius: 16, overflow: "hidden", backgroundColor: "#101611" }} />
-      <Text style={{ color: "#b7bfb2", marginTop: 8 }}>{label}</Text>
+      {onAbout ? <AboutMapLink onPress={onAbout} /> : <Text style={{ color: "#b7bfb2", marginTop: 8 }}>{label}</Text>}
     </View>
   );
 }

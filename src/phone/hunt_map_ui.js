@@ -54,7 +54,19 @@ export function ConePill({ text }) {
   );
 }
 
+// The only credit under the map: a brass link that opens the About this map sheet.
+export function AboutMapLink({ onPress }) {
+  const display = useDisplay();
+  return (
+    <Pressable accessibilityRole="link" accessibilityLabel="About this map. Pack names and map credits." hitSlop={10} onPress={onPress} style={styles.aboutLink}>
+      <Text style={[styles.aboutText, { fontSize: display.size(14) }]}>About this map</Text>
+    </Pressable>
+  );
+}
+
 export const styles = themedStyles((c) => ({
+  aboutLink: { alignSelf: "flex-start", minHeight: 32, justifyContent: "center", marginTop: 4 },
+  aboutText: { color: c.brassText, fontWeight: "700", textDecorationLine: "underline" },
   glyph: { backgroundColor: c.surface, borderWidth: 2, borderColor: c.ink, alignItems: "center", justifyContent: "center" },
   ringWrap: { padding: 2, borderRadius: 20, borderWidth: 2, borderColor: "transparent" },
   ringOn: { borderColor: c.brass },

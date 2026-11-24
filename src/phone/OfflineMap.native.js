@@ -11,7 +11,7 @@ import {
   RasterSource,
   ShapeSource
 } from "@maplibre/maplibre-react-native";
-import { ConePill, MarkPin } from "./hunt_map_ui.js";
+import { AboutMapLink, ConePill, MarkPin } from "./hunt_map_ui.js";
 
 function blankStyle(color) {
   return {
@@ -61,6 +61,7 @@ export default function OfflineMap({
   onLongPress,
   overlay,
   onMarkPress,
+  onAbout,
   fill = false
 }) {
   const camera = useRef(null);
@@ -174,7 +175,8 @@ export default function OfflineMap({
           </MarkerView>
         ) : null}
       </MapView>
-      <Text style={{ color: "#b7bfb2", marginTop: 8 }}>{attribution || layers?.attribution || ""}</Text>
+      {/* One short link under the map; the full credit is in About this map, said once. */}
+      {onAbout ? <AboutMapLink onPress={onAbout} /> : <Text style={{ color: "#b7bfb2", marginTop: 8 }}>{attribution || layers?.attribution || ""}</Text>}
     </View>
   );
 }
