@@ -113,7 +113,7 @@ import useAreas from "./useAreas";
 import usePackDownloads from "./usePackDownloads";
 import { usePersistedPackStore } from "./map_pack_manager";
 import { elevationFromAreas } from "./area_elevation";
-import { mapLayers } from "../../symbolic/map_layers.js";
+import { mapAbout, mapLayers } from "../../symbolic/map_layers.js";
 import { initialHost, mapViewKey, nextHost, rememberCamera, shouldMountMap } from "../../symbolic/map_host.js";
 import PeerChat from "./PeerChat.js";
 import PeerSecurity from "./PeerSecurity.js";
@@ -1637,6 +1637,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
     mode: display?.mode || "field",
     night: display?.night || "red"
   }), [mapPacks, areaState.areas, tilePort, mapStyle, display?.mode, display?.night]);
+  const about = useMemo(() => mapAbout({ store: mapPacks, areas: areaState.areas }), [mapPacks, areaState.areas]);
   const [metersHere, setMetersHere] = useState(null);
   useEffect(() => {
     let live = true;
@@ -1817,8 +1818,8 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
             <Action label="Close" tone="quiet" style={styles.sheetClose} onPress={() => setAboutOpen(false)} />
           </View>
           <ScrollView contentContainerStyle={styles.sheetScroll}>
-            {(layers.about?.lines || []).map((line) => <Text key={line} style={styles.aboutLine}>{line}</Text>)}
-            <Quiet>{layers.about?.credit || layers.attribution}</Quiet>
+            {about.lines.map((line) => <Text key={line} style={styles.aboutLine}>{line}</Text>)}
+            <Quiet>{about.credit}</Quiet>
             <Quiet>No streets, parcels, or owner names are stored on this phone.</Quiet>
           </ScrollView>
         </View>

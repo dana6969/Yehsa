@@ -225,7 +225,7 @@ test("the standalone Wind diagram is gone and Wind opens the Hunt map", () => {
 
 import fs from "node:fs";
 import { coneShape } from "./symbolic/hunt/cone_view.js";
-import { aboutThisMap, mapLayers } from "./symbolic/map_layers.js";
+import { aboutThisMap, mapAbout, mapLayers } from "./symbolic/map_layers.js";
 import { addPack, emptyPackStore } from "./symbolic/map_packs.js";
 
 test("the canvas map (no pack) draws the cone outline and a fill, and nothing off screen", () => {
@@ -258,9 +258,11 @@ const AREA = { id: "a1", name: "50 km area", box: { west: -70.3, south: 44.1, ea
 test("About this map credits the Elevation source once, even with a pack and a downloaded area", () => {
   const layers = mapLayers({ store: packStore(), areas: [AREA], port: 4000 });
   assert.equal((layers.attribution.match(/AWS Terrain Tiles/g) || []).length, 1);
-  assert.equal((layers.about.credit.match(/Elevation:/g) || []).length, 1);
-  assert.equal((layers.about.credit.match(/May be dated/g) || []).length, 1);
-  assert.ok(layers.about.lines.includes("Maine, North Woods. Land, water, trails, place names, and terrain. No roads."));
+  const about = mapAbout({ store: packStore(), areas: [AREA] });
+  assert.equal(about.credit, layers.attribution);
+  assert.equal((about.credit.match(/Elevation:/g) || []).length, 1);
+  assert.equal((about.credit.match(/May be dated/g) || []).length, 1);
+  assert.ok(about.lines.includes("Maine, North Woods. Land, water, trails, place names, and terrain. No roads."));
   const onlyArea = aboutThisMap({ packs: [], drawn: [AREA] });
   assert.match(onlyArea.credit, /^Elevation: AWS Terrain Tiles/);
   assert.equal(aboutThisMap({}).credit, "No map pack yet.");

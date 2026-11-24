@@ -91,7 +91,7 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
   const look = rasterPaintFor({ style, mode, night });
   const sources = [];
   if (tiled.length) sources.push(...packs.filter((pack) => tiled.includes(pack)));
-  const about = aboutThisMap({ packs, drawn });
+  const credit = aboutThisMap({ packs, drawn }).credit;
   return {
     empty,
     // The map component draws whenever there is something to draw, even while the tile server
@@ -106,8 +106,7 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
     paint: look.paint,
     tint: look.tint,
     styleLabel: look.label,
-    attribution: empty ? "No map pack yet." : about.credit,
-    about,
+    attribution: empty ? "No map pack yet." : credit,
     firstFocus: focusOf(tiled, drawn)
   };
 }
@@ -131,6 +130,14 @@ function focusOf(tiled, drawn) {
   if (area?.box) return { west: area.box.west, south: area.box.south, east: area.box.east, north: area.box.north };
   const pack = tiled[tiled.length - 1];
   return pack?.bounds || null;
+}
+
+// The About this map sheet for what is saved on the phone (same packs and areas the map draws).
+// Kept apart from mapLayers(), which only ever describes what is drawn.
+export function mapAbout({ store, areas = [] } = {}) {
+  const packs = store?.packs || [];
+  const drawn = (areas || []).filter((area) => area && area.rendered && area.box);
+  return aboutThisMap({ packs, drawn });
 }
 
 const ELEVATION_CREDIT = "Elevation: AWS Terrain Tiles (USGS 3DEP, SRTM, GMTED, ETOPO1; public domain)";
