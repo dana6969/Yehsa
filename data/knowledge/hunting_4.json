@@ -520,7 +520,9 @@
 "liver spots on game",
 "sick looking game",
 "inspect the liver",
-"spots on a deer liver"
+"spots on a deer liver",
+"what do white spots on a game liver mean",
+"white spots on a game liver"
 ],
 "def": "While you dress game, look at the animal and its organs for signs of disease: a thin, stumbling, or unafraid deer, an animal found dead, or a liver with white spots, and do not eat a suspect animal.",
 "look": [
@@ -549,6 +551,6 @@
 "usda-fsis",
 "state-regs-link"
 ],
-"ask": "What do white spots on a game liver mean?"
+"ask": "Tell me about white spots on the liver"
 }
 ]

@@ -339,7 +339,9 @@
 "wild game cooking",
 "venison cook temperature",
 "bear cooking temperature",
-"wild game internal temperature"
+"wild game internal temperature",
+"what temperature should I cook venison to",
+"cook venison to"
 ],
 "def": "Game meat is safest cooked to a measured temperature: rabbit and venison to 160 °F (71 °C), wild birds to 165 °F (74 °C), fish to 145 °F (63 °C), and bear or wild hog to at least 165 °F (74 °C) because of Trichinella.",
 "look": [
@@ -367,7 +369,7 @@
 "Cook bear and wild hog to at least 165 °F (74 °C); do not rely on freezing.",
 "Keep raw game apart from other food, and wash hands and boards after handling it."
 ],
-"ask": "What temperature should I cook venison to?"
+"ask": "Tell me about venison temperature"
 },
 {
 "id": "tree_stand_safety",

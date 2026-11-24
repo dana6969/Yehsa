@@ -602,6 +602,9 @@ export function routeFieldGuide(input) {
   const raw = String(input ?? "").trim();
   if (raw.length < 4 || raw.length > 220) return null;
   if (QUIZ.test(raw)) return null;
+  // Field-dressing and game-care questions belong to the hunting entries, not a
+  // generic topic card such as bear-country safety ("how do I field dress a black bear").
+  if (/\b(field[- ]dress\w*|gutless( method| quartering| field)?|quarter(ing)? (an? |the )?(elk|moose|deer|pronghorn|antelope|animal|carcass|hog|boar|bear)|(?:gut(?:ting)?|clean(?:ing)?|dress(?:ing)?) (an? |the )?(deer|elk|moose|bear|hog|boar|turkey|pheasant|grouse|quail|duck|goose|rabbit|hare|squirrel|fish|pronghorn|antelope)|cook(?:ing)? (bear|venison|hog|boar|game|rabbit|turkey) meat|trichinella|brucellosis|evidence of sex|white spots on (the |a )?(game )?liver)\b/i.test(raw)) return null;
   // Two questions in one line go to the joined-answer path, not a single guide card.
   if (/\band also\b/i.test(raw) || (raw.match(/\?/g) || []).length > 1) return null;
   if (!PRACTICAL.test(raw) && !/\b(debris hut|lean[- ]?to|quinzh?ee|bowline|ridge ?line|cordage)\b/i.test(raw)) return null;
