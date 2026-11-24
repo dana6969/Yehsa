@@ -13,7 +13,7 @@ function decodeText(bytes) {
     return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
   } catch {
     let out = "";
-    for (let i = 0; i < bytes.length; i += 32768) out += String.fromCharCode.apply(null, bytes.subarray(i, i + 32768));
+    for (let i = 0; i < bytes.length; i += 8192) out += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192));
     return out;
   }
 }

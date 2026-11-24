@@ -16,6 +16,9 @@ import { createDocService } from "./symbolic/docs/doc_service.js";
 import { pickResults, webCandidates } from "./symbolic/web/web_search.js";
 import { buildPdf, samplePdf, scannedPdf } from "./symbolic/tools/make_sample_pdf.mjs";
 import { voiceReply } from "./symbolic/yehsa_voice.js";
+import { DEV_SET } from "./eval/dev_set.mjs";
+import { PARAPHRASE_SET } from "./eval/paraphrase_set.mjs";
+import { buildQuestions } from "./eval/questions.mjs";
 
 const SAMPLE = new Uint8Array(fs.readFileSync("eval/fixtures/docs/sample_field_manual.pdf"));
 const SAMPLE_OBJSTM = new Uint8Array(fs.readFileSync("eval/fixtures/docs/sample_field_manual_objstm.pdf"));
@@ -328,4 +331,14 @@ test("open-web answers read PDF results too, quoting whole sentences", async () 
 test("getMappedAction and the symbol dictionary never import the document code", () => {
   const src = fs.readFileSync("symbolic/symbolic_dictionary.js", "utf8");
   assert.ok(!/docs\/|pdf_text|doc_service|fflate/.test(src));
+});
+
+test("no eval, dev or paraphrase question is taken as a document request", () => {
+  const prompts = [
+    ...buildQuestions().map((q) => q.prompt),
+    ...DEV_SET.map((q) => q.prompt || q.question || q.q || ""),
+    ...PARAPHRASE_SET.map((q) => q.prompt || q.question || q.q || q.text || "")
+  ].filter(Boolean);
+  assert.ok(prompts.length > 400);
+  assert.deepEqual(prompts.filter((p) => documentIntent(p)), []);
 });

@@ -14,7 +14,7 @@ export const PDF_LIMITS = { maxPages: 1500, maxChars: 3000000, maxObjects: 40000
 
 function latin1(bytes, start = 0, end = bytes.length) {
   let out = "";
-  const step = 32768;
+  const step = 8192;
   for (let i = start; i < end; i += step) out += String.fromCharCode.apply(null, bytes.subarray(i, Math.min(end, i + step)));
   return out;
 }
@@ -485,7 +485,7 @@ export class PdfDoc {
     return v;
   }
 
-  streamBytes(obj) {
+  streamBytes(obj, keep = true) {
     if (!obj?.stream) return new Uint8Array(0);
     if (obj.decoded) return obj.decoded;
     let data = this.bytes.subarray(obj.start, Math.min(obj.end, obj.start + this.limits.maxStreamBytes));
@@ -504,7 +504,8 @@ export class PdfDoc {
       const predictor = Number(this.resolve(parm.Predictor)) || 1;
       if (predictor >= 10 && data.length) data = pngPredictor(data, Number(this.resolve(parm.Columns)) || 1, Number(this.resolve(parm.Colors)) || 1, Number(this.resolve(parm.BitsPerComponent)) || 8);
     });
-    obj.decoded = data;
+    // Page content is read once; keeping it would hold a whole manual's drawing commands in memory.
+    if (keep) obj.decoded = data;
     return data;
   }
 
@@ -721,7 +722,7 @@ function pageText(doc, contents, resources, depth = 0, sink = null, ctmIn = [1, 
   };
   let data;
   if (Array.isArray(contents)) {
-    const parts = contents.map((c) => doc.streamBytes(doc.resolve(c)));
+    const parts = contents.map((c) => doc.streamBytes(doc.resolve(c), false));
     const total = parts.reduce((n, p) => n + p.length + 1, 0);
     data = new Uint8Array(total);
     let at = 0;
@@ -731,7 +732,7 @@ function pageText(doc, contents, resources, depth = 0, sink = null, ctmIn = [1, 
       data[at] = 10;
       at += 1;
     }
-  } else data = doc.streamBytes(contents);
+  } else data = doc.streamBytes(contents, false);
   const lex = new Lexer(data);
   const stack = [];
   let ctm = ctmIn.slice();
