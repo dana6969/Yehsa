@@ -231,3 +231,31 @@ test("camera eval: no held-out everyday photo is answered as toxic, wild numbers
   assert.ok(h.answered_pos >= 0.66 && h.top1_answered >= 0.91 && h.top3_answered >= 0.97, JSON.stringify(h));
   assert.ok(h.deadly_photos_with_deadly_top3 >= 0.96);
 });
+
+// ---------- One safety number per pair (People, Hunt party, Online) ----------
+
+test("People, Hunt party and Online show the same safety number for the same two people", async () => {
+  const { createIdentityKeys } = await import("./symbolic/identity_keys.js");
+  const { createPeerVault, memoryAdapter } = await import("./symbolic/peer_vault.js");
+  const { generateIdentity, publicCard } = await import("./symbolic/peer_chat.js");
+  const { safetyNumber: online } = await import("./symbolic/online/safety.js");
+  const { addMember, refreshSafety } = await import("./symbolic/hunt/party.js");
+  const keys = createIdentityKeys(createPeerVault(memoryAdapter()));
+  const mine = await keys.getOrCreateIdentity();
+  assert.equal(mine.state, "ready");
+  const me = mine.identity;
+  const them = generateIdentity();
+  const expected = online(publicCard(me), publicCard(them));
+  assert.equal(expected, online(publicCard(them), publicCard(me)), "order-independent");
+  assert.equal(await keys.safetyNumber(publicCard(them)), expected, "identity module");
+  assert.equal(addMember(emptyRoster(), { name: "Sam", card: publicCard(them), me }).member.safety, expected, "Hunt party");
+  assert.match(fs.readFileSync("src/phone/PeerChat.js", "utf8"), /sharedSafetyNumber\(publicCard\(me\), publicCard\(practice\)\)/, "People");
+  // A box key alone can no longer give a number (it would be a different one).
+  assert.equal(await keys.safetyNumber(them.boxPublic), null);
+  // Old members get the shared number; verified stays verified.
+  const old = { members: [{ id: "m-1", name: "Sam", boxPublic: them.boxPublic, signPublic: them.signPublic, safety: "0000 0000 0000 0000 0000 0000 0000 0000", verified: true }], session: null };
+  const fresh = refreshSafety(old, me);
+  assert.equal(fresh.members[0].safety, expected);
+  assert.equal(fresh.members[0].verified, true);
+  assert.equal(refreshSafety(fresh, me), fresh);
+});
