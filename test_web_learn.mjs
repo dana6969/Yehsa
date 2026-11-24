@@ -55,7 +55,7 @@ test("the address check allows only https, the listed hosts, no logins, no odd p
   ]) {
     assert.equal(checkUrl(url, group).ok, false, url);
   }
-  assert.deepEqual(HOST_GROUPS.page.suffix, ["cdc.gov", "nps.gov", "usda.gov", "noaa.gov", "weather.gov"]);
+  assert.deepEqual(HOST_GROUPS.page.suffix, ["cdc.gov", "weather.gov", "usda.gov", "fws.gov", "nps.gov"]);
 });
 
 test("a fetch sends no cookies and no login, and carries only the request line and fixed headers", async () => {
@@ -305,7 +305,7 @@ test("a fetched note waits, is not used as a confident answer until approved, an
   assert.equal(answer.answered, true);
   assert.equal(answer.confident, true);
   assert.match(answer.text, /^"The moose is the largest species/);
-  assert.match(answer.text, /Learned from the web \(Wikipedia, CC BY-SA 4\.0\)\. Approved Nov 18\./);
+  assert.match(answer.text, /Learned, from Wikipedia, Nov 18, 2026\. CC BY-SA 4\.0\./);
   assert.match(answer.text, /Source: https:\/\/en\.wikipedia\.org\/wiki\/Moose/);
   assert.equal(webAnswer(store, "how do I tie a bowline"), null);
 });
