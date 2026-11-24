@@ -167,7 +167,7 @@ export default function OfflineMap({
           </VectorSource>
         ) : null}
         {parcels?.features?.length ? (
-          // Property lines: outlines only, no names or owner data. Approximate, not a survey.
+          // Property lines: outlines only, nothing else about the land. Approximate, not a survey.
           <ShapeSource id="parcel-lines" shape={parcels}>
             <LineLayer id="parcel-line" minZoomLevel={12} style={{ lineColor: "#f2d04b", lineWidth: ["interpolate", ["linear"], ["zoom"], 13, 0.8, 17, 2.2], lineOpacity: 0.9, lineDasharray: [3, 2] }} />
           </ShapeSource>

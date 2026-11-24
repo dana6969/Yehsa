@@ -240,7 +240,8 @@ test("roads only come from the built-in OpenStreetMap layer, and parcel lines ca
   // Without the road switch, the packs and areas draw exactly what they drew before.
   const layers = mapLayers({ store: storeWithPack(), areas: [AREA], port: 4000 });
   assert.equal(layers.roads, null);
-  assert.doesNotMatch(JSON.stringify(layers).replace(/OpenStreetMap/g, ""), /road|street|parcel|owner/i);
+  const { roads, ...rest } = layers;
+  assert.doesNotMatch(JSON.stringify(rest).replace(/OpenStreetMap/g, ""), /road|street|parcel|owner/i);
   const withRoads = mapLayers({ store: storeWithPack(), areas: [AREA], port: 4000, roads: { on: true, ready: true } });
   assert.equal(withRoads.roads.template, "http://127.0.0.1:4000/roads/{z}/{x}/{y}.pbf");
   assert.match(withRoads.attribution, /OpenStreetMap contributors, ODbL/);
