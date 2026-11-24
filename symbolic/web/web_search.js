@@ -13,11 +13,17 @@ import { guardedFetch } from "./fetch_guard.js";
 import { cleanFetched } from "./sanitize.js";
 import { outboundQuery } from "./sources.js";
 import { STATE_WILDLIFE } from "./state_wildlife.js";
+import { buildSections } from "../docs/doc_sections.js";
+import { cleanDocText } from "../docs/doc_text.js";
+import { extractPdfTextAsync } from "../docs/pdf_text.js";
 
 export const WEB_LICENSE = "Quoted for reference. Rights stay with the site.";
 export const SEARCH_LIMITS = { maxBytes: 524288, timeoutMs: 8000 };
 export const PAGE_LIMITS = { maxBytes: 786432, timeoutMs: 8000 };
 export const MAX_PAGES = 4;
+// A PDF in the results is read too (R6): up to 12 MB and its first 120 pages, text only.
+export const PDF_RESULT_LIMITS = { maxBytes: 12 * 1024 * 1024, timeoutMs: 20000 };
+export const PDF_RESULT_PAGES = 120;
 
 export const ENGINES = [
   { id: "duckduckgo", name: "DuckDuckGo", kind: "html", url: (q) => `https://html.duckduckgo.com/html/?q=${encodeURIComponent(q)}` },
@@ -150,7 +156,7 @@ export function authority(url, { state = null } = {}) {
   return 0.25;
 }
 
-/** Search results in reading order: skip unreadable sites and PDFs, government and state sites first, one page per site. */
+/** Search results in reading order: skip unreadable sites and files (PDFs are read), government and state sites first, two pages per site. */
 export function pickResults(results, question, max = MAX_PAGES) {
   const state = namedState(question);
   const seen = new Map();
@@ -163,7 +169,7 @@ export function pickResults(results, question, max = MAX_PAGES) {
       } catch {
         return false;
       }
-      if (SKIP_HOSTS.test(url.hostname) || /\.(?:pdf|docx?|xlsx?|pptx?|zip|jpe?g|png|gif|mp[34])$/i.test(url.pathname)) return false;
+      if (SKIP_HOSTS.test(url.hostname) || /\.(?:docx?|xlsx?|pptx?|zip|jpe?g|png|gif|mp[34])$/i.test(url.pathname)) return false;
       if (url.hostname === "en.wikipedia.org") return false; // Wikipedia is read through its own API.
       // Two pages per site at most, so one site cannot fill the answer.
       const key = url.hostname.replace(/^www\./, "");
@@ -207,6 +213,28 @@ function hostName(url) {
   return new URL(url).hostname.replace(/^www\./, "");
 }
 
+export function isPdfUrl(url) {
+  try {
+    return /\.pdf$/i.test(new URL(url).pathname);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * A PDF search result, read as text on the phone: { ok, read: { title, text }, finalUrl } or { ok: false, reason }.
+ * PDF lines are joined back into paragraphs, so sentences quote whole. Text is data, as with pages.
+ */
+export async function readPdfResult({ fetchImpl, url }) {
+  const got = await guardedFetch({ fetchImpl, url, group: "open", kind: "pdf", limits: PDF_RESULT_LIMITS });
+  if (!got.ok) return got;
+  const pdf = await extractPdfTextAsync(got.bytes, { limits: { maxPages: PDF_RESULT_PAGES, maxChars: 400000 } });
+  if (!pdf.ok) return { ok: false, reason: pdf.reason };
+  const text = buildSections(pdf.pages.map(cleanDocText)).map((section) => section.text).join("\n").slice(0, 120000);
+  const title = String(pdf.title || "").replace(/^Microsoft Word - /i, "").trim();
+  return { ok: true, read: { title: title.length >= 8 ? title.slice(0, 120) : "", text }, finalUrl: got.finalUrl };
+}
+
 /** One search, on the first engine that answers with results. */
 export async function searchWeb({ fetchImpl, query }) {
   const tried = [];
@@ -234,7 +262,7 @@ export async function webCandidates({ fetchImpl, question, query, now = () => Da
   if (!search.ok) return { ok: false, engine: null, candidates: [], tried, reachedAny, reason: search.reason };
   const state = namedState(question);
   const picked = pickResults(search.results, question, maxPages);
-  const pages = await Promise.all(picked.map((result) => guardedFetch({ fetchImpl, url: result.url, group: "open", kind: "html", limits: PAGE_LIMITS })));
+  const pages = await Promise.all(picked.map((result) => (isPdfUrl(result.url) ? readPdfResult({ fetchImpl, url: result.url }) : guardedFetch({ fetchImpl, url: result.url, group: "open", kind: "html", limits: PAGE_LIMITS }))));
   const candidates = [];
   pages.forEach((got, i) => {
     const result = picked[i];
@@ -243,7 +271,7 @@ export async function webCandidates({ fetchImpl, question, query, now = () => Da
       tried.push({ source: name, ok: false, reason: got.reason });
       return;
     }
-    const read = readablePage(got.text);
+    const read = got.read || readablePage(got.text);
     if (read.text.length < 80) {
       tried.push({ source: name, ok: false, reason: "No readable text." });
       return;

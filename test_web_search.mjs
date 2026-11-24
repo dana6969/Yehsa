@@ -87,7 +87,8 @@ test("search pages are parsed as data: ads skipped, redirects unwrapped, snippet
   assert.deepEqual(bing.map((r) => r.url), ["https://www.cdc.gov/flu/"]);
   const picked = pickResults(parseDuckDuckGo(ddgPage(["https://www.youtube.com/x", "https://blog.example.net/a", MAINE_LAW_URL, MAINE_DHHS_URL, "https://www.maine.gov/x.pdf", "https://www.maine.gov/a", "https://www.maine.gov/b"])), "Maine laws on child support");
   assert.equal(picked[0].url, MAINE_LAW_URL, "the state's own site leads");
-  assert.ok(!picked.some((r) => /youtube|\.pdf$/.test(r.url)));
+  // R6: PDF results are read now (as text, through pdf_text.js); video and social sites still are not.
+  assert.ok(!picked.some((r) => /youtube/.test(r.url)));
   assert.ok(picked.filter((r) => new URL(r.url).hostname === "www.maine.gov").length <= 2, "two pages per site at most");
   assert.ok(authority("https://www.cdc.gov/flu") > authority("https://blog.example.net/"));
   assert.ok(webFirst("I need Maine laws on child support") && webFirst("Flu outbreaks near me"));
@@ -128,7 +129,8 @@ test("Maine child support: searched, read from maine.gov, quoted with links and 
   }
   const search = impl.calls.find((c) => c.url.startsWith("https://html.duckduckgo.com/"));
   assert.equal(new URL(search.url).searchParams.get("q"), "Maine laws on child support", "only the cleaned words go to the search");
-  assert.ok(!impl.calls.some((c) => /youtube|\.pdf/.test(c.url)), "unreadable results are never fetched");
+  // R6: a PDF result may be read as text; video sites are never fetched.
+  assert.ok(!impl.calls.some((c) => /youtube/.test(c.url)), "unreadable results are never fetched");
   const { answer } = result;
   assert.match(answer.text, /child support table/);
   assert.doesNotMatch(answer.text, /Ignore previous|alert|Snippet text|please visit|call now/);
