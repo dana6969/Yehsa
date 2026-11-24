@@ -108,7 +108,7 @@ function readVerseFile(file, title, source, passages, seen) {
     pushPassage(passages, seen, {
       symbol: entry.symbol,
       context: entry.context,
-      title,
+      title: typeof entry.title === "string" && entry.title ? entry.title : title,
       source
     });
     if (passages.length > before) added += 1;

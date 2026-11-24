@@ -20,6 +20,7 @@ import { scriptureByMeaning } from "./meaning/scripture_meaning.js";
 import { treatmentGuard } from "./meaning/treatment_guard.js";
 import { fieldGuideAnswer } from "./field_guide.js";
 import { stripFiller } from "./answer_polish.js";
+import { expandKnowledge } from "./entries.js";
 
 function premiseFromKnowledge(question, knowledge) {
   const texts = [knowledge?.text, ...(knowledge?.hits || []).map((hit) => hit?.text)];
@@ -139,6 +140,7 @@ export function ask(input, options = {}) {
     // Hard rule without the model too: a care note is not attached to an unrelated injury.
     knowledge = null;
   }
+  if (knowledge?.symbol) knowledge = expandKnowledge(knowledge);
   const emergency = isEmergency(original) || (meaning ? detectEmergency(meaning, original).emergency : false);
   const premise = premiseFromKnowledge(original, knowledge);
   const note = nav?.sentence || [premise, knowledge?.text].filter(Boolean).join(" ");

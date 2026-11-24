@@ -24,6 +24,7 @@ import { formatImported, isCareQuestion, retrieveImported } from "./book_import.
 import { currentImportIndex, currentImported } from "./imported_registry.js";
 import { fieldGuideAnswer } from "./field_guide.js";
 import { stripFiller } from "./answer_polish.js";
+import { expandKnowledge } from "./entries.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -239,6 +240,7 @@ export function askField(input, passages, options = {}) {
   } else if (knowledge?.symbol && treatmentGuard(raw, knowledge.symbol)) {
     knowledge = null;
   }
+  if (knowledge?.symbol) knowledge = expandKnowledge(knowledge);
   const emergency = meaning ? detectEmergency(meaning, raw).emergency : false;
   const premise = premiseFromKnowledge(raw, knowledge);
   const note = nav?.sentence || [premise, knowledge?.text].filter(Boolean).join(" ");
