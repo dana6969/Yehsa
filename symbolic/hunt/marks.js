@@ -193,9 +193,12 @@ export function restoreAll(current, removed) {
 }
 
 // Sightings logged in Field > Sightings that have a point show as read-only sighting marks.
-export function sightingMarks(sightings) {
+// An entry logged from one of your own marks is not drawn twice: the mark already is that pin.
+export function sightingMarks(sightings, ownIds = []) {
   const entries = Array.isArray(sightings?.entries) ? sightings.entries : [];
+  const own = new Set(ownIds);
   return entries
+    .filter((entry) => !(entry?.markId && own.has(entry.markId)))
     .filter((entry) => entry?.spot && validPoint(entry.spot.latitude, entry.spot.longitude))
     .map((entry) => ({
       id: `log:${entry.id}`,
@@ -207,6 +210,24 @@ export function sightingMarks(sightings) {
       updatedAt: entry.t,
       fromLog: true
     }));
+}
+
+export const LOG_SIGHTING = "Log in Sightings";
+
+// What the Sightings log is opened with from a sighting mark: its place and the time it was marked.
+export function sightingPrefill(mark) {
+  if (!mark || mark.kind !== "sighting" || !validPoint(mark.latitude, mark.longitude)) return null;
+  return {
+    markId: mark.id,
+    spot: { latitude: mark.latitude, longitude: mark.longitude },
+    t: Number.isFinite(mark.createdAt) ? mark.createdAt : Date.now(),
+    name: mark.name
+  };
+}
+
+export function loggedFromMark(sightings, markId) {
+  const entries = Array.isArray(sightings?.entries) ? sightings.entries : [];
+  return entries.find((entry) => entry?.markId === markId) || null;
 }
 
 const WORDS8 = ["north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"];
