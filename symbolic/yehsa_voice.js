@@ -4,6 +4,7 @@
 // plain "yes" means "yes, that offer". Safety lines are never removed. The frozen test
 // does not load this file, and the answer text under the wrapper is untouched.
 
+import { relatedOffer } from "./entries.js";
 import { warmFiller } from "./answer_polish.js";
 import { readEmotion } from "./emotion_read.js";
 import { shapeAnswer } from "./answer_shape.js";
@@ -68,11 +69,16 @@ const OFFERS = {
 // A note can name its own follow-up. Bleeding leads to the tourniquet note, and back.
 const SYMBOL_OFFERS = {
   bleeding_pressure: { label: "Want me to go over when a tourniquet is the last resort?", ask: "When do I use a tourniquet for bleeding?" },
-  tourniquet_last_resort: { label: "Want to go back over direct pressure first?", ask: "How do I stop heavy bleeding?" }
+  tourniquet_last_resort: { label: "Want to go back over direct pressure first?", ask: "How do I stop heavy bleeding?" },
+  heavy_vs_minor_bleeding: { label: "Want me to go over when a tourniquet is the last resort?", ask: "When do I use a tourniquet for bleeding?" },
+  tourniquet_apply: { label: "Want to go back over direct pressure first?", ask: "How do I stop heavy bleeding?" }
 };
 
 export function offerFor(domain, symbol = null) {
   if (symbol && SYMBOL_OFFERS[symbol]) return SYMBOL_OFFERS[symbol];
+  // A field entry offers the next entry it links to.
+  const related = symbol ? relatedOffer(symbol) : null;
+  if (related) return { label: related.label, ask: related.ask };
   return OFFERS[domain] || null;
 }
 

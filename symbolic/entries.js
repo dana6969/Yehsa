@@ -79,7 +79,15 @@ export function expandKnowledge(knowledge) {
   if (!knowledge?.symbol) return knowledge;
   const entry = BY_ID.get(String(knowledge.symbol));
   if (!entry) return knowledge;
-  const text = formatEntry(entry);
+  let text = formatEntry(entry);
+  // A multi-part answer joined this entry with other notes: keep those parts after the full entry.
+  const others = (Array.isArray(knowledge.hits) ? knowledge.hits : []).filter((hit) => hit?.symbol && hit.symbol !== entry.id && hit.text);
+  if (others.length) {
+    const flat = (value) => String(value || "").replace(/\s+/g, " ").trim();
+    const fromOthers = others.map((hit) => flat(hit.text)).join(" ");
+    const extra = sentencesOf(knowledge.text).filter((sentence) => sentence.length >= 20 && fromOthers.includes(flat(sentence)) && !flat(text).includes(flat(sentence)));
+    if (extra.length) text = `${text}\n\n${extra.join(" ")}`;
+  }
   const hits = Array.isArray(knowledge.hits) ? knowledge.hits.map((hit) => (hit?.symbol === entry.id ? { ...hit, text } : hit)) : knowledge.hits;
   return { ...knowledge, text, hits, entry: entry.id, entryDomain: entry.domain };
 }
