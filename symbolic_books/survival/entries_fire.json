@@ -1,0 +1,67 @@
+[
+ {
+  "symbol": "fire_site_choice",
+  "title": "Choosing a fire site",
+  "context": "A safe fire site is on bare mineral soil, clear of overhanging branches, dry grass, and roots, and downwind from your shelter. Also called where to build a fire, fire ring, keep a fire from spreading, fire pit. Look for bare soil or sand, or an existing ring; a cleared circle about 10 feet (3 m) wide. Scrape away leaves and duff to bare soil, build a ring of rocks, keep water or a shovel at hand, and keep it small. Check local rules first."
+ },
+ {
+  "symbol": "fire_tinder_kindling_fuel",
+  "title": "Tinder, kindling, and fuel",
+  "context": "Tinder is fine dry material that catches a spark, kindling is pencil-sized sticks that carry the flame, and fuel is the larger wood that burns for hours. Also called what is tinder, what burns best, fire materials, birch bark, fatwood. Look for tinder: birch bark, fatwood shavings, dry grass, cattail fluff, cotton with petroleum jelly; kindling: dry twigs from pencil lead to thumb thick."
+ },
+ {
+  "symbol": "fire_build_teepee",
+  "title": "Building and lighting a basic fire (teepee)",
+  "context": "A teepee fire is a cone of kindling leaned over a nest of tinder, lit from the windward side so the flame climbs. Also called how to start a campfire, teepee fire lay, start a fire. Look for tinder bundle in the center; kindling leaning inward like a tent. Place the tinder bundle, lean kindling around it, leave a gap on the windward side, light the tinder, and add small fuel as it catches. Blow gently at the base and add bigger pieces slowly."
+ },
+ {
+  "symbol": "fire_wet_wood",
+  "title": "Starting a fire in rain or with wet wood",
+  "context": "In rain, use dry material from under cover: dead branches still on trees, inner bark, and shaved wood, and protect the flame under a tarp. Also called fire in the rain, wet wood fire, damp tinder, fire in snow. Look for dead lower branches that snap; split wet logs to reach dry centers."
+ },
+ {
+  "symbol": "fire_snow",
+  "title": "Starting a fire in snow",
+  "context": "A fire in snow needs a platform of green logs or stones so it does not sink and go out. Also called fire on snow, build a platform for a fire. Look for a platform of green logs, flat rocks, or a layer of sticks; a windbreak. Stamp down the snow, lay a log platform, and build the fire on top. Keep dry tinder against your body, and feed it slowly."
+ },
+ {
+  "symbol": "fire_out_completely",
+  "title": "Putting a fire out completely",
+  "context": "A fire is out only when the ashes are cold to the touch; drown it, stir it, and drown it again. Also called put out the campfire, drown the fire, cold fire, douse. Look for steam or hissing means it is still hot; no glowing embers. Let the fire burn down, pour water on the embers, stir the ashes and soil with a stick, and add more water until nothing hisses. Feel for heat with the back of your hand."
+ },
+ {
+  "symbol": "stove_vs_open_fire",
+  "title": "Camp stove versus open fire",
+  "context": "A camp stove is more controlled and leaves less trace than an open fire, but any stove, grill, or charcoal burner must never be used indoors, in a tent, or in a garage. Also called cook on a stove, charcoal grill indoors, camping stove safety. Look for stoves burn liquid or gas fuel; charcoal makes carbon monoxide. Cook outdoors on a stable, flat surface, away from tents and dry grass, and have water handy. Let it cool before refueling."
+ },
+ {
+  "symbol": "fire_legal_ban",
+  "title": "Is a fire legal here? Fire bans and permits",
+  "context": "Fire rules vary by state, town, and land, and bans are common in dry or windy weather, so check the official source before you light one. Also called can I build a fire, burn ban, campfire permit. Look for a burn ban or a red flag warning; state, town, or land-manager rules. Check with the local fire department, the state forest service, or the land manager, and follow any ban. If fires are banned, use a stove only if rules allow."
+ },
+ {
+  "symbol": "fire_dont_burn",
+  "title": "What not to burn",
+  "context": "Never burn poison ivy, treated lumber, painted wood, plastic, or trash; the smoke is toxic. Also called toxic smoke, burn poison ivy, treated lumber, trash fire. Look for poison ivy smoke carries irritating oil; treated lumber has chemicals. Burn only clean, dry, untreated wood. Pack out trash."
+ },
+ {
+  "symbol": "fire_smoke_wind",
+  "title": "Smoke, wind, and where to sit",
+  "context": "Smoke drifts downwind, so sit upwind or to the side, and dry wood burns cleaner. Also called smoke in my face, sit upwind of a fire, smoky fire. Look for smoke blowing toward your seat; a smoky fire from wet wood. Move your seat upwind, burn dry wood, and keep the fire small. If it keeps smoking, stir and add dry fuel."
+ },
+ {
+  "symbol": "fire_signal",
+  "title": "Signal fire",
+  "context": "A signal fire is a fire built to be seen from a distance, with green boughs for white smoke by day and bright fuel at night. Also called fire to be found, smoke signal, three fires. Look for three fires in a triangle is a distress signal; green leaves make dense smoke. Build it on an open spot, keep tinder dry and ready, and light it when an aircraft or searchers are close. Add green boughs for smoke by day."
+ },
+ {
+  "symbol": "fire_lighters_ferro",
+  "title": "Ferro rod, matches, and lighters",
+  "context": "A ferrocerium rod throws hot sparks when scraped, and it works wet; matches and lighters are easier but fail when wet or empty. Also called how to use a ferro rod, fire steel, waterproof matches, bic lighter. Look for scrape the rod down with a sharp spine, keeping it close to the tinder; carry two ways to light. Hold the rod near the tinder and pull the striker backward fast. Carry a lighter, matches in a waterproof case, and a ferro rod as a backup."
+ },
+ {
+  "symbol": "fire_bank_ember",
+  "title": "Keeping and moving an ember",
+  "context": "A viable ember is glowing red and spreads when you blow on it; a dead ember is black and cool. Also called viable ember, char cloth, keep a fire overnight. Look for a bright orange glow when blown on; char cloth or punky wood catches a spark. Place the ember in a nest of fine tinder, fold the tinder around it, and blow gently until it flames. Bank a fire at night with large logs and ash."
+ }
+]

@@ -1,0 +1,292 @@
+[
+ {
+  "symbol": "cumulonimbus_cloud",
+  "title": "Cumulonimbus (thunderhead)",
+  "context": "A cumulonimbus is a very tall, dense storm cloud with a flat anvil top that produces thunderstorms, lightning, heavy rain, hail, and sometimes tornadoes. Also called thunderhead, thunderstorm cloud, anvil cloud, towering storm cloud. Look for towering cauliflower shape that reaches very high; flat, spreading anvil at the top."
+ },
+ {
+  "symbol": "cumulus_cloud",
+  "title": "Cumulus clouds",
+  "context": "Cumulus are puffy, flat-bottomed clouds with a cotton-ball look that usually mean fair weather unless they grow tall. Also called fair weather clouds, puffy clouds, cotton ball clouds. Look for distinct, rounded puffs with sharp edges; flat bases. Small, scattered cumulus mean fair weather. If they build taller through the day and darken, watch for afternoon showers or storms."
+ },
+ {
+  "symbol": "stratus_cloud",
+  "title": "Stratus clouds and fog",
+  "context": "Stratus is a flat, gray, featureless layer of low cloud, like fog that has lifted off the ground. Also called low gray clouds, overcast low sky, gray blanket cloud, high fog. Look for uniform gray layer with no shape; very low base, sometimes touching hills. Expect gloomy, damp, cool conditions with little wind and perhaps drizzle. Visibility is poor, so use care navigating."
+ },
+ {
+  "symbol": "nimbostratus_cloud",
+  "title": "Nimbostratus",
+  "context": "Nimbostratus is a thick, dark gray layer that blocks the sun and brings steady rain or snow for hours. Also called rain clouds, steady rain cloud, dark gray rain layer. Look for dark, even gray sky with no visible sun; steady, continuous rain or snow. Plan for long, soaking rain: set up shelter, keep gear dry, and avoid low spots and dry washes that can flood."
+ },
+ {
+  "symbol": "cirrus_cloud",
+  "title": "Cirrus clouds",
+  "context": "Cirrus are thin, wispy, white streaks high in the sky made of ice crystals, and they often come before a change in weather. Also called mares tails, wispy high clouds, feathery clouds, ice crystal clouds. Look for thin white hair-like streaks; very high in a blue sky. A few mean fair weather. If they thicken and lower into a sheet over a day, a warm front and rain may follow in about 24 hours."
+ },
+ {
+  "symbol": "cirrostratus_halo",
+  "title": "Cirrostratus and halo around the sun or moon",
+  "context": "Cirrostratus is a thin, milky veil of high cloud that makes a ring (halo) around the sun or moon, and it often means rain or snow is coming within a day. Also called ring around the moon, halo around the sun, milky sky, sun dog. Look for bright ring around the sun or moon; thin, milky sheet across the sky. Expect weather to turn within roughly 12 to 24 hours. Use the time to prepare shelter and gear."
+ },
+ {
+  "symbol": "altocumulus_cloud",
+  "title": "Altocumulus (mackerel sky)",
+  "context": "Altocumulus are white or gray patches or rolls of cloud at mid-levels, and in a warm humid morning they can mean afternoon thunderstorms. Also called mackerel sky, sheep back clouds, patchy mid-level clouds, castellanus. Look for rows or patches of rounded cloudlets; mid-level, smaller than cumulus. If you see turrets or they appear on a warm, sticky morning, watch for storms by afternoon."
+ },
+ {
+  "symbol": "altostratus_cloud",
+  "title": "Altostratus",
+  "context": "Altostratus is a gray or blue-gray mid-level sheet through which the sun appears dimly, like looking through frosted glass. Also called watery sun, gray veil, sun looks like through ground glass. Look for gray sheet with a dim, watery sun; no halo. It usually thickens ahead of a warm front, so expect steady rain or snow within several hours."
+ },
+ {
+  "symbol": "stratocumulus_cloud",
+  "title": "Stratocumulus",
+  "context": "Stratocumulus are low, lumpy gray and white clouds in rolls or patches that cover much of the sky, often with little rain. Also called low lumpy gray clouds, rolls of low cloud. Look for rounded masses joined in rows; gray with brighter gaps. Usually dry or light drizzle at most. Conditions often clear toward evening."
+ },
+ {
+  "symbol": "lenticular_cloud",
+  "title": "Lenticular cloud",
+  "context": "A lenticular is a smooth, lens-shaped cloud that sits over or downwind of mountains where strong winds flow in waves. Also called UFO cloud, lens shaped cloud, stacked pancake cloud, wave cloud. Look for smooth lens or stacked-plate shape; stays in one place while air streams through. Treat it as a sign of strong winds aloft and possibly rough air and gusty winds at the summit or downwind. Weather may be changing."
+ },
+ {
+  "symbol": "mammatus_cloud",
+  "title": "Mammatus clouds",
+  "context": "Mammatus are pouch-like bulges that hang from the underside of a cloud, usually a thunderstorm anvil. Also called pouch clouds, bubbly cloud underside, udder clouds. Look for lumpy pouches under an anvil; often seen after a storm has passed. They mark a strong storm system. Stay alert for severe weather and move to shelter if a storm is still near."
+ },
+ {
+  "symbol": "shelf_cloud",
+  "title": "Shelf cloud and gust front",
+  "context": "A shelf cloud is a low, wedge-shaped wall of cloud on the leading edge of a thunderstorm's cold outflow, with strong straight-line winds right behind it. Also called arcus cloud, roll cloud, wall of cloud ahead of storm, storm front line. Look for long horizontal band with a smooth leading edge; dark, ragged cloud behind it. Take shelter now. Damaging gusts, heavy rain, and hail arrive within minutes of the shelf cloud."
+ },
+ {
+  "symbol": "wall_cloud",
+  "title": "Wall cloud and funnel cloud",
+  "context": "A wall cloud is a localized lowering of the rain-free base of a thunderstorm, and rotation there can lead to a tornado; a funnel cloud is a rotating condensation funnel that has not reached the ground. Also called rotating cloud base, funnel cloud, lowering under a storm, wall cloud tornado. Look for a lowering that looks like a wall under the storm base; visible rotation or rapid upward motion."
+ },
+ {
+  "symbol": "contrails_persistent",
+  "title": "Contrails as a sign",
+  "context": "Contrails are the trails of cloud behind high aircraft; if they stay long and spread, the high air is moist and weather may change. Also called vapor trails, airplane trails spreading, long contrails. Look for short, quickly vanishing contrails mean dry upper air; long lasting, spreading trails mean moist upper air. Use them as a hint of a coming change, along with other signs like wind shift and falling pressure."
+ },
+ {
+  "symbol": "fog_types",
+  "title": "Fog: radiation, advection, and valley fog",
+  "context": "Fog is a cloud at ground level; it forms when air cools to its dew point, most often on calm, clear nights or when moist air moves over a cold surface. Also called morning fog, mist, fog in valleys, fog on the water, low visibility. Look for radiation or valley fog: calm, clear night, fog in low spots; advection fog: warm moist air moving over cold water or land."
+ },
+ {
+  "symbol": "thunderstorm_stages",
+  "title": "Thunderstorm life cycle",
+  "context": "A thunderstorm grows from rising warm moist air, matures with heavy rain and lightning, and then weakens as downdrafts cut off the updraft. Also called how a thunderstorm forms, towering cumulus, downdraft, storm stages. Look for towering cumulus growing fast; anvil top and rain, hail, and lightning at maturity. Watch for fast-growing towers on warm afternoons and plan to be off ridges early. Storms often last 30 minutes to an hour but can repeat along a line."
+ },
+ {
+  "symbol": "flash_to_bang",
+  "title": "Flash-to-bang: counting the distance to lightning",
+  "context": "Count the seconds from a lightning flash to its thunder; every five seconds is about one mile (three seconds is about one kilometer). Also called how far away is the lightning, count between flash and thunder, 30 30 rule, thunder distance. Look for see the flash, start counting; hear the thunder, stop. If you hear thunder, you are close enough to be struck. Go to safe shelter and wait 30 minutes after the last thunder."
+ },
+ {
+  "symbol": "tornado_signs",
+  "title": "Tornado warning signs",
+  "context": "Tornado signs are a dark, greenish sky, large hail, a rotating wall cloud, a loud roar, and a debris cloud at ground level. Also called how to know a tornado is coming, green sky, debris cloud, roaring sound like a freight train. Look for dark, green-tinged sky and large hail; rotating, lowering cloud base. If a tornado warning is issued or you see these signs, go to shelter now. A tornado watch means conditions are favorable, so stay alert."
+ },
+ {
+  "symbol": "tornado_safety",
+  "title": "Tornado safety",
+  "context": "In a tornado, get to the lowest floor of a sturdy building, in an interior room away from windows, and protect your head and neck. Also called what to do in a tornado, tornado shelter, basement during a tornado, caught outside in a tornado. Look for interior room, closet, or bathroom on the lowest floor; basement or storm shelter is best."
+ },
+ {
+  "symbol": "efscale_tornado",
+  "title": "Enhanced Fujita (EF) scale",
+  "context": "The EF scale rates a tornado from EF0 to EF5 by the damage it causes and the wind speeds estimated from it. Also called tornado rating, EF5, how strong is a tornado. Look for EF0: 65 to 85 mph, light damage; EF2: 111 to 135 mph, considerable damage. Use it to understand reports after a tornado. The rating is assigned after the damage survey, not in advance."
+ },
+ {
+  "symbol": "hurricane_categories",
+  "title": "Hurricane categories (Saffir-Simpson)",
+  "context": "The Saffir-Simpson scale rates hurricanes from category 1 to 5 by sustained wind speed, but flooding and storm surge cause most deaths. Also called category 3 hurricane, how strong is a hurricane, typhoon, cyclone wind speeds. Look for category 1: 74 to 95 mph; category 3: 111 to 129 mph, a major hurricane. Prepare early by category and by the local storm surge and rainfall forecasts. Follow evacuation orders for surge zones."
+ },
+ {
+  "symbol": "storm_surge",
+  "title": "Storm surge",
+  "context": "Storm surge is the rise in sea level pushed ashore by a hurricane's winds, and it is the biggest killer in hurricanes. Also called hurricane flooding from the sea, wall of water, coastal flooding. Look for water rising far above normal high tide; strongest to the right of the storm's track in the north hemisphere. Leave when told to evacuate a surge zone, and go inland or uphill. Plan the route before the storm."
+ },
+ {
+  "symbol": "hurricane_safety",
+  "title": "Hurricane safety",
+  "context": "Hurricane safety means knowing your evacuation zone, leaving early if told to, and sheltering in a safe interior room if you stay. Also called hurricane preparedness, what to do in a hurricane, tropical storm prep. Look for know your zone and route; supplies for several days: water, food, medicine, radio, power bank."
+ },
+ {
+  "symbol": "watch_vs_warning",
+  "title": "Watch, warning, and advisory",
+  "context": "A watch means conditions are favorable for the hazard; a warning means it is happening or about to happen; an advisory means it will be a nuisance. Also called difference between a watch and a warning, tornado watch, flood warning, weather alert meaning. Look for watch: be prepared; warning: take action now. When a warning is issued for your location, act at once. When a watch is issued, review your plan and keep a radio on."
+ },
+ {
+  "symbol": "noaa_weather_radio",
+  "title": "NOAA Weather Radio",
+  "context": "NOAA Weather Radio broadcasts National Weather Service forecasts and alerts around the clock on seven VHF frequencies. Also called weather radio, same alert radio, emergency alert radio. Look for frequencies between 162.400 and 162.550 MHz; a tone alert and SAME code for your county. Keep a weather radio with fresh batteries, set to your county's SAME code, as a way to get warnings when cell service and power are out."
+ },
+ {
+  "symbol": "blizzard_safety",
+  "title": "Blizzard and winter storm safety",
+  "context": "A blizzard is a storm with sustained winds or gusts of 35 mph or more and low visibility from falling or blowing snow for at least three hours. Also called whiteout, heavy snow storm, stuck in a snowstorm, winter storm. Look for falling or blowing snow with very low visibility; strong winds and drifting. Stay inside, stay put in a vehicle if stranded (run the engine only briefly with the tailpipe clear), and keep warm and hydrated. Use layers, a hat, and bright markers."
+ },
+ {
+  "symbol": "ice_storm_freezing_rain",
+  "title": "Freezing rain and ice storms",
+  "context": "Freezing rain falls as liquid and freezes on contact, coating everything with ice; it is far more damaging than sleet. Also called glaze ice, icy roads, sleet versus freezing rain, ice on power lines. Look for glazed trees, wires, and roads; sleet bounces and rattles, freezing rain coats and sticks. Stay off roads, stay clear of trees and power lines, and prepare for outages. Keep warm and do not use generators indoors."
+ },
+ {
+  "symbol": "wind_chill",
+  "title": "Wind chill",
+  "context": "Wind chill is how cold the air feels on bare skin because wind carries away body heat; it affects people and animals, not objects. Also called feels like temperature, cold wind, frostbite time. Look for a stronger wind makes the same temperature feel colder; at around minus 20 F (minus 29 C) wind chill, frostbite can occur in about 30 minutes. Dress for the wind chill: windproof outer layer, covered skin, and warm insulation, and check for frostbite on exposed skin."
+ },
+ {
+  "symbol": "heat_index",
+  "title": "Heat index",
+  "context": "The heat index combines air temperature and humidity to show how hot it really feels, because sweat cannot cool you when the air is humid. Also called feels like in the heat, humid and hot, heat advisory. Look for high humidity makes it feel hotter; heat index above 103 F (39 C) is dangerous. Do hard work in the early morning or evening, rest in the shade, and drink water. Check on older people, children, and pets."
+ },
+ {
+  "symbol": "dew_point",
+  "title": "Dew point and humidity",
+  "context": "The dew point is the temperature at which air becomes saturated and dew or fog forms; a higher dew point means muggier air. Also called dewpoint, why is it sticky, dew on the grass, fog forms when. Look for dew point under 10 C (50 F): dry, comfortable; above 18 C (65 F): sticky. If the night temperature will fall to the dew point, expect dew or fog and condensation on gear. Put gear in a tent or bag to keep it dry."
+ },
+ {
+  "symbol": "barometer_trend",
+  "title": "Reading the barometer trend",
+  "context": "A barometer measures air pressure; how it changes over a few hours tells more than the number itself. Also called falling pressure, rising pressure, barometer, altimeter weather change, pressure drop. Look for falling slowly: clouds and weather deteriorating; falling fast: a storm is near. Note the pressure every few hours. A fast fall, such as 3 hPa or more in three hours, calls for preparing for rough weather. Watch altimeter drift as a pressure change."
+ },
+ {
+  "symbol": "cold_front",
+  "title": "Cold front",
+  "context": "A cold front is the leading edge of a cooler air mass that pushes under warmer air, causing a narrow band of storms, a wind shift, and a drop in temperature. Also called front passing, storm line, temperature drop and wind shift, squall line. Look for a line of towering clouds and showers or storms; wind shifts to the west or northwest in the northern hemisphere."
+ },
+ {
+  "symbol": "warm_front",
+  "title": "Warm front",
+  "context": "A warm front is where warm air slides over cooler air, bringing a long period of thickening clouds and steady rain or snow, then milder weather. Also called slow moving rain, thickening clouds, steady rain ahead of warm air. Look for cirrus, then cirrostratus, then altostratus, then nimbostratus; pressure falls steadily. Expect a day or so of build-up, then hours of steady precipitation and warmer, muggier air after it passes."
+ },
+ {
+  "symbol": "wind_shift_signs",
+  "title": "Wind shifts and Buys Ballot's law",
+  "context": "Wind shifts show a passing front: in the northern hemisphere, stand with your back to the wind and the low pressure is on your left. Also called wind changed direction, wind backing, which way is the low pressure, how to find the storm. Look for wind backing (counterclockwise) with falling pressure ahead of a low; sudden shift to the northwest with a cold front."
+ },
+ {
+  "symbol": "beaufort_scale",
+  "title": "Beaufort wind scale",
+  "context": "The Beaufort scale describes wind force from 0 (calm) to 12 (hurricane) using what you can see. Also called wind force, gale, how strong is the wind, wind speed words. Look for force 4: moderate breeze, dust and small branches move (11-16 knots); force 6: strong breeze, large branches sway, umbrellas hard to use (22-27 knots). Use it to judge conditions and decide to stay off the water, ridgelines, and exposed trails at force 6 and above."
+ },
+ {
+  "symbol": "mountain_weather",
+  "title": "Mountain weather",
+  "context": "Mountain weather changes fast: temperatures fall with height, winds strengthen, and storms often build by early afternoon. Also called weather in the mountains, storms on peaks, summit weather, afternoon thunderstorms. Look for temperature drops about 6.5 C per 1,000 m (3.5 F per 1,000 ft); afternoon cumulus towers in summer. Start early, be off summits and ridges by noon, and turn back when clouds build. Carry rain and warm layers even on fair days."
+ },
+ {
+  "symbol": "microburst",
+  "title": "Microburst and downburst",
+  "context": "A microburst is a small, intense downdraft from a thunderstorm that spreads out at the ground and can knock down trees in one direction. Also called straight-line winds, sudden gust, storm winds knocked trees down. Look for sudden strong wind at the leading edge of a storm; dust or rain streaking down. Move away from trees and into a sturdy shelter at the first sign of a strong, sudden gust ahead of a storm."
+ },
+ {
+  "symbol": "flash_flood_risk",
+  "title": "Flash flood risk",
+  "context": "A flash flood is a rapid rise of water, often from storms miles upstream, and it can reach you under a clear sky. Also called flood watch, rising creek, dry wash flood, slot canyon flood. Look for heavy rain upstream, rising and muddy creeks; a rumbling roar in a canyon, or debris in the water. Move to high ground at once, avoid canyons and washes in storm season, and never drive or walk through floodwater. Turn around, don't drown."
+ },
+ {
+  "symbol": "wildfire_smoke_aqi",
+  "title": "Wildfire smoke and air quality",
+  "context": "Wildfire smoke contains fine particles that can harm the lungs and heart; the air quality index (AQI) shows when to limit time outside. Also called smoky air, air quality index, AQI, fire smoke, N95 for smoke. Look for AQI above 100 is unhealthy for sensitive groups; above 150 is unhealthy for all. Stay indoors with windows closed, run a HEPA filter, and use a well-fitted N95 respirator outside if you must. Limit exertion."
+ },
+ {
+  "symbol": "wildfire_evacuation",
+  "title": "Wildfire evacuation",
+  "context": "For a wildfire, leave early when told to or when smoke and flames are near; waiting is the biggest mistake. Also called fire is coming, wildfire go bag, leave before the fire, fire evacuation zone. Look for official evacuation order or warning; smoke, ember showers, and a wind shift toward you. Take people, pets, medicines, papers, and a go bag, close windows and doors, and follow known evacuation routes. Tell someone where you are going."
+ },
+ {
+  "symbol": "dust_storm_haboob",
+  "title": "Dust storm (haboob)",
+  "context": "A haboob is a wall of dust pushed ahead of a thunderstorm's outflow, dropping visibility to near zero within seconds. Also called dust wall, sandstorm, blowing dust. Look for a towering brown wall approaching; sudden strong gusts and a drop in visibility. Pull off the road as far as you can, turn off lights, set the parking brake, and keep your foot off the brake pedal. Cover your nose and mouth."
+ },
+ {
+  "symbol": "temperature_inversion",
+  "title": "Temperature inversion and cold air pooling",
+  "context": "On calm clear nights, cold air sinks and pools in valleys while the slopes above stay warmer; this is a temperature inversion. Also called cold in the valley at night, frost hollows, smoke lies flat, inversion. Look for smoke or fog layers lie flat; valley floors much colder than the slopes. Camp on the slope or bench, not the valley floor. Frost and fog form in the low spots first."
+ },
+ {
+  "symbol": "weather_folk_signs",
+  "title": "Folk weather signs: what holds up",
+  "context": "Some old sayings work because they match real changes in air pressure and moisture; others are myths. Also called red sky at night, cows lying down, birds flying low, weather sayings, ants before rain. Look for red sky at night, shepherd's delight: often works in mid-latitudes where weather moves west to east; a ring around the moon: thin high cloud ahead of a front."
+ },
+ {
+  "symbol": "lightning_myths",
+  "title": "Lightning myths",
+  "context": "Lightning can strike the same place many times, can reach 10 miles from a storm, and rubber tires do not protect you; a hard-topped metal vehicle does. Also called does lightning strike twice, rubber tires protect, if the sky is clear lightning cannot hit, bolt from the blue. Look for bolts from the blue strike under clear skies near a storm; tall isolated objects are struck repeatedly."
+ },
+ {
+  "symbol": "power_out_safety",
+  "title": "Power outage basics in a storm",
+  "context": "In a storm outage, keep warm, use flashlights, keep fridge and freezer doors closed, and run generators outside, far from the house. Also called lights are out, storm knocked out power, candles safety, fridge during outage. Look for flashlights and battery lantern, not candles; closed fridge keeps food safe about four hours, a full freezer about 48 hours."
+ },
+ {
+  "symbol": "weather_trend_reading",
+  "title": "What is the weather trend?",
+  "context": "The weather trend is the direction air pressure and the sky are moving over the last few hours, read from this phone's barometer together with the saved forecast and how old it is. Also called weather trend, is the weather getting worse, will it rain, pressure trend, barometer says. Look for pressure falling 1 hPa or more per hour: weather is worsening, often rain or wind; pressure steady: no big change soon."
+ },
+ {
+  "symbol": "forecast_staleness",
+  "title": "How old is the saved forecast or alert?",
+  "context": "A saved forecast or alert is a snapshot; it gets less reliable with age, and every NWS alert carries its own expiry time. Also called is the forecast out of date, stale forecast, when was the alert issued, alert expires. Look for the issue time on the forecast; the 'until' or expiry time on an alert."
+ },
+ {
+  "symbol": "hypothermia_mild_weather",
+  "title": "Hypothermia in mild but wet weather",
+  "context": "Hypothermia can happen well above freezing: cool air plus rain, wind, and wet clothes steals body heat fast. Also called cold and wet, hypothermia at 50 degrees, rain and wind chill, cold drizzle. Look for air temperatures from 30 to 50 F (minus 1 to 10 C) with rain or wind; shivering, clumsiness, and mumbling. Put on a waterproof shell and a hat, swap wet layers for dry ones, eat and drink, and get out of the wind. Stop and warm up at the first shivering."
+ },
+ {
+  "symbol": "fog_hunting_visibility",
+  "title": "Fog and low visibility on a hunt or hike",
+  "context": "Fog cuts visibility, hides landmarks, and can make a known place unfamiliar; it also muffles sound. Also called foggy morning hunt, can't see in the fog, low light and mist. Look for valley fog at dawn on calm clear mornings; visibility dropping below a few hundred feet."
+ },
+ {
+  "symbol": "thunderstorm_hunting_water",
+  "title": "A thunderstorm starts while you are hunting or on the water",
+  "context": "If thunder is heard, get to a vehicle, a building, or low ground at once, and get off the water, ridges, and open fields. Also called storm while hunting, lightning in the woods, storm on the boat, lightning on the lake. Look for thunder or a flash within 30 seconds; dark towers and a sudden cool breeze."
+ },
+ {
+  "symbol": "tree_ice_branches",
+  "title": "Ice, branches, and downed lines after a storm",
+  "context": "After ice or wind storms, ice-loaded limbs and downed lines are the main hazards, and any line on the ground should be treated as live. Also called tree limb down, power line on the ground, ice storm cleanup, widowmaker after a storm. Look for ice-coated or cracked limbs overhead; wires on the ground or hanging in trees."
+ },
+ {
+  "symbol": "red_flag_fire_weather",
+  "title": "Red flag warning and fire weather",
+  "context": "A red flag warning means warm temperatures, very low humidity, and strong winds are creating critical fire conditions. Also called red flag warning, fire weather watch, dry windy day, drought and fire risk. Look for low humidity, dry vegetation, and gusty winds; a burn ban or an NWS red flag warning. Do not burn outdoors, keep vehicles off dry grass, and have an escape route ready. Check local burn bans. Put out any fire completely."
+ },
+ {
+  "symbol": "rain_on_snow_flood",
+  "title": "Rain on snow and ice jam flooding",
+  "context": "Rain on deep snow plus warm air can melt it fast and send a surge of water into streams, and ice jams can back up rivers. Also called thaw flooding, ice jam, snowmelt flood, spring flood. Look for warm rain on a deep snowpack; rapidly rising streams and cracking river ice. Stay away from rivers and stream banks, move to higher ground if water rises, and avoid crossing flooded roads. Move vehicles and valuables from low spots early."
+ },
+ {
+  "symbol": "small_craft_marine_forecast",
+  "title": "Marine and small-craft forecast",
+  "context": "A small craft advisory warns that winds or seas are hazardous for small boats, and a marine forecast gives wind, seas, and visibility for coastal waters. Also called small craft advisory, coastal waters forecast, boating weather, choppy seas. Look for winds around 20 to 33 knots and rough seas; fog and reduced visibility."
+ },
+ {
+  "symbol": "dew_frost_overnight",
+  "title": "Dew, frost, and overnight lows",
+  "context": "Dew forms when surfaces cool to the dew point, and frost forms when they cool below freezing on a clear, calm night. Also called will it freeze tonight, frost forecast, ground frost, heavy dew. Look for clear skies and calm winds cool the ground fastest; wet grass or a white coating at dawn. Expect a frost when the forecast low is near 36 F (2 C) on a clear, calm night. Cover gear, bring water filters and batteries inside, and sleep above the cold air in the valley."
+ },
+ {
+  "symbol": "whiteout_snow",
+  "title": "Whiteout",
+  "context": "A whiteout is a loss of depth and horizon in blowing snow or flat light, and it makes it easy to lose direction or walk off an edge. Also called can't see in the snow, blowing snow, snow squall, white out. Look for no visible horizon or shadows; blowing snow and low visibility. Stop moving unless you are on a sure handrail such as a fence or a wall. Put on warm layers, take shelter, and wait for visibility to improve. Use a compass if you must move."
+ },
+ {
+  "symbol": "weather_signals_combined",
+  "title": "Using pressure, wind, and clouds together",
+  "context": "A better local forecast comes from combining pressure trend, wind shift, cloud change, and temperature rather than relying on any one sign. Also called how do I forecast the weather myself, signs of a storm coming, weather clues, predict rain. Look for falling pressure plus thickening high cloud: wet weather in a day; backing wind plus low, dark cloud: worsening."
+ },
+ {
+  "symbol": "tropical_remnants_coastal_flooding",
+  "title": "Tropical storm remnants and coastal flooding",
+  "context": "Remnants of tropical storms and nor'easters bring heavy rain, wind, and high tides that flood coasts and rivers well inland. Also called hurricane remnants, nor'easter, coastal flood, storm tide. Look for tropical storm or nor'easter in the forecast; heavy rain bands and rising rivers. Follow evacuation orders, move to higher ground, secure outside items, and avoid flooded roads. Have supplies for several days."
+ }
+]

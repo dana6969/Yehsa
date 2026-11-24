@@ -1,0 +1,1216 @@
+[
+{
+"id": "cumulonimbus_cloud",
+"title": "Cumulonimbus (thunderhead)",
+"domain": "weather",
+"also": [
+"thunderhead",
+"thunderstorm cloud",
+"anvil cloud",
+"towering storm cloud"
+],
+"def": "A cumulonimbus is a very tall, dense storm cloud with a flat anvil top that produces thunderstorms, lightning, heavy rain, hail, and sometimes tornadoes.",
+"look": [
+"towering cauliflower shape that reaches very high",
+"flat, spreading anvil at the top",
+"dark, flat base with rain, hail, or lightning below"
+],
+"use": "Treat it as a lightning and downpour warning. Get off ridges, open ground, and water, move to a building or hard-topped vehicle, and expect sudden strong gusts.",
+"not": "Do not wait for rain to start before moving; lightning can strike miles ahead of the rain. Do not shelter under lone trees.",
+"rel": [
+"lightning",
+"thunderstorm_stages",
+"shelf_cloud"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "cumulus_cloud",
+"title": "Cumulus clouds",
+"domain": "weather",
+"also": [
+"fair weather clouds",
+"puffy clouds",
+"cotton ball clouds"
+],
+"def": "Cumulus are puffy, flat-bottomed clouds with a cotton-ball look that usually mean fair weather unless they grow tall.",
+"look": [
+"distinct, rounded puffs with sharp edges",
+"flat bases",
+"small ones scattered in a blue sky"
+],
+"use": "Small, scattered cumulus mean fair weather. If they build taller through the day and darken, watch for afternoon showers or storms.",
+"not": "Do not assume fair weather if they are towering upward fast; that is a thunderstorm in the making.",
+"rel": [
+"cumulonimbus_cloud",
+"stratus_cloud"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "stratus_cloud",
+"title": "Stratus clouds and fog",
+"domain": "weather",
+"also": [
+"low gray clouds",
+"overcast low sky",
+"gray blanket cloud",
+"high fog"
+],
+"def": "Stratus is a flat, gray, featureless layer of low cloud, like fog that has lifted off the ground.",
+"look": [
+"uniform gray layer with no shape",
+"very low base, sometimes touching hills",
+"drizzle or mist rather than real rain"
+],
+"use": "Expect gloomy, damp, cool conditions with little wind and perhaps drizzle. Visibility is poor, so use care navigating.",
+"not": "Do not expect real rain or storms from stratus alone; thicker rain comes from nimbostratus.",
+"rel": [
+"nimbostratus_cloud",
+"fog_types"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "nimbostratus_cloud",
+"title": "Nimbostratus",
+"domain": "weather",
+"also": [
+"rain clouds",
+"steady rain cloud",
+"dark gray rain layer"
+],
+"def": "Nimbostratus is a thick, dark gray layer that blocks the sun and brings steady rain or snow for hours.",
+"look": [
+"dark, even gray sky with no visible sun",
+"steady, continuous rain or snow",
+"ragged lower scud clouds under it"
+],
+"use": "Plan for long, soaking rain: set up shelter, keep gear dry, and avoid low spots and dry washes that can flood.",
+"not": "Do not expect a quick clearing; it usually lasts until the front passes.",
+"rel": [
+"warm_front",
+"flash_flood_risk"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "cirrus_cloud",
+"title": "Cirrus clouds",
+"domain": "weather",
+"also": [
+"mares tails",
+"wispy high clouds",
+"feathery clouds",
+"ice crystal clouds"
+],
+"def": "Cirrus are thin, wispy, white streaks high in the sky made of ice crystals, and they often come before a change in weather.",
+"look": [
+"thin white hair-like streaks",
+"very high in a blue sky",
+"hooks or tails, sometimes thickening over hours"
+],
+"use": "A few mean fair weather. If they thicken and lower into a sheet over a day, a warm front and rain may follow in about 24 hours.",
+"not": "Do not treat a few scattered streaks as a storm warning on their own.",
+"rel": [
+"cirrostratus_halo",
+"warm_front"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "cirrostratus_halo",
+"title": "Cirrostratus and halo around the sun or moon",
+"domain": "weather",
+"also": [
+"ring around the moon",
+"halo around the sun",
+"milky sky",
+"sun dog"
+],
+"def": "Cirrostratus is a thin, milky veil of high cloud that makes a ring (halo) around the sun or moon, and it often means rain or snow is coming within a day.",
+"look": [
+"bright ring around the sun or moon",
+"thin, milky sheet across the sky",
+"sun or moon still visible through it"
+],
+"use": "Expect weather to turn within roughly 12 to 24 hours. Use the time to prepare shelter and gear.",
+"not": "Do not treat it as a guarantee; sometimes the front passes by without rain.",
+"rel": [
+"cirrus_cloud",
+"warm_front"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "altocumulus_cloud",
+"title": "Altocumulus (mackerel sky)",
+"domain": "weather",
+"also": [
+"mackerel sky",
+"sheep back clouds",
+"patchy mid-level clouds",
+"castellanus"
+],
+"def": "Altocumulus are white or gray patches or rolls of cloud at mid-levels, and in a warm humid morning they can mean afternoon thunderstorms.",
+"look": [
+"rows or patches of rounded cloudlets",
+"mid-level, smaller than cumulus",
+"turrets rising from the tops (castellanus) mean unstable air"
+],
+"use": "If you see turrets or they appear on a warm, sticky morning, watch for storms by afternoon.",
+"not": "Do not mistake them for harmless cirrocumulus; check the size and height of the puffs.",
+"rel": [
+"cumulonimbus_cloud",
+"altostratus_cloud"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "altostratus_cloud",
+"title": "Altostratus",
+"domain": "weather",
+"also": [
+"watery sun",
+"gray veil",
+"sun looks like through ground glass"
+],
+"def": "Altostratus is a gray or blue-gray mid-level sheet through which the sun appears dimly, like looking through frosted glass.",
+"look": [
+"gray sheet with a dim, watery sun",
+"no halo",
+"lowering and thickening over hours"
+],
+"use": "It usually thickens ahead of a warm front, so expect steady rain or snow within several hours.",
+"not": "Do not expect sharp shadows or a halo; those point to thinner cirrostratus.",
+"rel": [
+"nimbostratus_cloud",
+"warm_front"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "stratocumulus_cloud",
+"title": "Stratocumulus",
+"domain": "weather",
+"also": [
+"low lumpy gray clouds",
+"rolls of low cloud"
+],
+"def": "Stratocumulus are low, lumpy gray and white clouds in rolls or patches that cover much of the sky, often with little rain.",
+"look": [
+"rounded masses joined in rows",
+"gray with brighter gaps",
+"low and common after a front"
+],
+"use": "Usually dry or light drizzle at most. Conditions often clear toward evening.",
+"not": "Do not expect storms or steady rain from them.",
+"rel": [
+"stratus_cloud",
+"cumulus_cloud"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "lenticular_cloud",
+"title": "Lenticular cloud",
+"domain": "weather",
+"also": [
+"UFO cloud",
+"lens shaped cloud",
+"stacked pancake cloud",
+"wave cloud"
+],
+"def": "A lenticular is a smooth, lens-shaped cloud that sits over or downwind of mountains where strong winds flow in waves.",
+"look": [
+"smooth lens or stacked-plate shape",
+"stays in one place while air streams through",
+"near mountains with strong wind aloft"
+],
+"use": "Treat it as a sign of strong winds aloft and possibly rough air and gusty winds at the summit or downwind. Weather may be changing.",
+"not": "Do not mistake it for a normal cloud that will pass; it will stay put as long as the wind blows.",
+"rel": [
+"wind_shift_signs",
+"mountain_weather"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "mammatus_cloud",
+"title": "Mammatus clouds",
+"domain": "weather",
+"also": [
+"pouch clouds",
+"bubbly cloud underside",
+"udder clouds"
+],
+"def": "Mammatus are pouch-like bulges that hang from the underside of a cloud, usually a thunderstorm anvil.",
+"look": [
+"lumpy pouches under an anvil",
+"often seen after a storm has passed",
+"dramatic lighting at sunset"
+],
+"use": "They mark a strong storm system. Stay alert for severe weather and move to shelter if a storm is still near.",
+"not": "Do not take them as a sign that a tornado is coming; they are not a tornado warning.",
+"rel": [
+"cumulonimbus_cloud",
+"tornado_signs"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "shelf_cloud",
+"title": "Shelf cloud and gust front",
+"domain": "weather",
+"also": [
+"arcus cloud",
+"roll cloud",
+"wall of cloud ahead of storm",
+"storm front line"
+],
+"def": "A shelf cloud is a low, wedge-shaped wall of cloud on the leading edge of a thunderstorm's cold outflow, with strong straight-line winds right behind it.",
+"look": [
+"long horizontal band with a smooth leading edge",
+"dark, ragged cloud behind it",
+"sudden cool breeze and a wind shift before the rain"
+],
+"use": "Take shelter now. Damaging gusts, heavy rain, and hail arrive within minutes of the shelf cloud.",
+"not": "Do not confuse it with a wall cloud or tornado; it does not rotate, but its winds can still cause damage.",
+"rel": [
+"thunderstorm_stages",
+"microburst"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "wall_cloud",
+"title": "Wall cloud and funnel cloud",
+"domain": "weather",
+"also": [
+"rotating cloud base",
+"funnel cloud",
+"lowering under a storm",
+"wall cloud tornado"
+],
+"def": "A wall cloud is a localized lowering of the rain-free base of a thunderstorm, and rotation there can lead to a tornado; a funnel cloud is a rotating condensation funnel that has not reached the ground.",
+"look": [
+"a lowering that looks like a wall under the storm base",
+"visible rotation or rapid upward motion",
+"a funnel hanging from the base"
+],
+"use": "Take shelter immediately in a sturdy building, in an interior room at the lowest level, or in a ditch if there is nothing else. Heed the NWS tornado warning.",
+"not": "Do not try to outrun it by driving across open country, and do not shelter under an overpass.",
+"rel": [
+"tornado_signs",
+"tornado_safety"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "contrails_persistent",
+"title": "Contrails as a sign",
+"domain": "weather",
+"also": [
+"vapor trails",
+"airplane trails spreading",
+"long contrails"
+],
+"def": "Contrails are the trails of cloud behind high aircraft; if they stay long and spread, the high air is moist and weather may change.",
+"look": [
+"short, quickly vanishing contrails mean dry upper air",
+"long lasting, spreading trails mean moist upper air",
+"trails that merge into thin cirrus sheets"
+],
+"use": "Use them as a hint of a coming change, along with other signs like wind shift and falling pressure.",
+"not": "Do not use them alone to forecast; they only suggest moisture aloft.",
+"rel": [
+"cirrus_cloud",
+"barometer_trend"
+],
+"src": [
+"nws",
+"noaa",
+"nasa"
+]
+},
+{
+"id": "fog_types",
+"title": "Fog: radiation, advection, and valley fog",
+"domain": "weather",
+"also": [
+"morning fog",
+"mist",
+"fog in valleys",
+"fog on the water",
+"low visibility"
+],
+"def": "Fog is a cloud at ground level; it forms when air cools to its dew point, most often on calm, clear nights or when moist air moves over a cold surface.",
+"look": [
+"radiation or valley fog: calm, clear night, fog in low spots",
+"advection fog: warm moist air moving over cold water or land",
+"fog burns off with morning sun unless it is a thick marine layer"
+],
+"use": "Slow down, stay on a known route, use a compass or GPS, and keep a rope or buddy between you if you must move. Expect clearing midday for valley fog.",
+"not": "Do not travel by sight alone in dense fog near cliffs, rivers, or roads.",
+"rel": [
+"dew_point"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "thunderstorm_stages",
+"title": "Thunderstorm life cycle",
+"domain": "weather",
+"also": [
+"how a thunderstorm forms",
+"towering cumulus",
+"downdraft",
+"storm stages"
+],
+"def": "A thunderstorm grows from rising warm moist air, matures with heavy rain and lightning, and then weakens as downdrafts cut off the updraft.",
+"look": [
+"towering cumulus growing fast",
+"anvil top and rain, hail, and lightning at maturity",
+"cold outflow winds that spread out before the rain"
+],
+"use": "Watch for fast-growing towers on warm afternoons and plan to be off ridges early. Storms often last 30 minutes to an hour but can repeat along a line.",
+"not": "Do not assume the danger ends when the rain stops; lightning can strike up to 10 miles away.",
+"rel": [
+"lightning",
+"cumulonimbus_cloud"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "flash_to_bang",
+"title": "Flash-to-bang: counting the distance to lightning",
+"domain": "weather",
+"also": [
+"how far away is the lightning",
+"count between flash and thunder",
+"30 30 rule",
+"thunder distance"
+],
+"def": "Count the seconds from a lightning flash to its thunder; every five seconds is about one mile (three seconds is about one kilometer).",
+"look": [
+"see the flash, start counting",
+"hear the thunder, stop",
+"divide by five for miles, by three for kilometers"
+],
+"use": "If you hear thunder, you are close enough to be struck. Go to safe shelter and wait 30 minutes after the last thunder.",
+"not": "Do not use a long count as a reason to stay out; lightning can strike 10 miles from the storm. Do not count on the same storm cell moving away.",
+"rel": [
+"lightning",
+"cumulonimbus_cloud"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "tornado_signs",
+"title": "Tornado warning signs",
+"domain": "weather",
+"also": [
+"how to know a tornado is coming",
+"green sky",
+"debris cloud",
+"roaring sound like a freight train"
+],
+"def": "Tornado signs are a dark, greenish sky, large hail, a rotating wall cloud, a loud roar, and a debris cloud at ground level.",
+"look": [
+"dark, green-tinged sky and large hail",
+"rotating, lowering cloud base",
+"loud continuous roar like a freight train",
+"funnel or debris cloud near the ground"
+],
+"use": "If a tornado warning is issued or you see these signs, go to shelter now. A tornado watch means conditions are favorable, so stay alert.",
+"not": "Do not wait to see the funnel, and do not open windows. Rain wrapped tornadoes can be hidden.",
+"rel": [
+"tornado_safety",
+"wall_cloud"
+],
+"src": [
+"nws",
+"fema",
+"noaa"
+]
+},
+{
+"id": "tornado_safety",
+"title": "Tornado safety",
+"domain": "weather",
+"also": [
+"what to do in a tornado",
+"tornado shelter",
+"basement during a tornado",
+"caught outside in a tornado"
+],
+"def": "In a tornado, get to the lowest floor of a sturdy building, in an interior room away from windows, and protect your head and neck.",
+"look": [
+"interior room, closet, or bathroom on the lowest floor",
+"basement or storm shelter is best",
+"mobile homes and vehicles are not safe"
+],
+"use": "Cover yourself with mattresses or blankets and wear a helmet if you have one. If caught outside with no shelter, lie flat in a ditch or low spot and cover your head.",
+"not": "Do not shelter in a mobile home, do not stay in a vehicle if a sturdy building is close, and do not hide under an overpass.",
+"rel": [
+"tornado_signs",
+"efscale_tornado"
+],
+"src": [
+"nws",
+"fema",
+"noaa"
+]
+},
+{
+"id": "efscale_tornado",
+"title": "Enhanced Fujita (EF) scale",
+"domain": "weather",
+"also": [
+"tornado rating",
+"EF5",
+"how strong is a tornado"
+],
+"def": "The EF scale rates a tornado from EF0 to EF5 by the damage it causes and the wind speeds estimated from it.",
+"look": [
+"EF0: 65 to 85 mph, light damage",
+"EF2: 111 to 135 mph, considerable damage",
+"EF4: 166 to 200 mph, devastating damage",
+"EF5: over 200 mph, incredible damage"
+],
+"use": "Use it to understand reports after a tornado. The rating is assigned after the damage survey, not in advance.",
+"not": "Do not read a rating as a measure of the size or width of the tornado alone.",
+"rel": [
+"tornado_safety",
+"tornado_signs"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "hurricane_categories",
+"title": "Hurricane categories (Saffir-Simpson)",
+"domain": "weather",
+"also": [
+"category 3 hurricane",
+"how strong is a hurricane",
+"typhoon",
+"cyclone wind speeds"
+],
+"def": "The Saffir-Simpson scale rates hurricanes from category 1 to 5 by sustained wind speed, but flooding and storm surge cause most deaths.",
+"look": [
+"category 1: 74 to 95 mph",
+"category 3: 111 to 129 mph, a major hurricane",
+"category 5: 157 mph or higher"
+],
+"use": "Prepare early by category and by the local storm surge and rainfall forecasts. Follow evacuation orders for surge zones.",
+"not": "Do not judge your risk from the category alone. A weaker storm can flood a large area.",
+"rel": [
+"storm_surge",
+"hurricane_safety"
+],
+"src": [
+"nws",
+"noaa",
+"fema"
+]
+},
+{
+"id": "storm_surge",
+"title": "Storm surge",
+"domain": "weather",
+"also": [
+"hurricane flooding from the sea",
+"wall of water",
+"coastal flooding"
+],
+"def": "Storm surge is the rise in sea level pushed ashore by a hurricane's winds, and it is the biggest killer in hurricanes.",
+"look": [
+"water rising far above normal high tide",
+"strongest to the right of the storm's track in the north hemisphere",
+"flooding miles inland on low coasts"
+],
+"use": "Leave when told to evacuate a surge zone, and go inland or uphill. Plan the route before the storm.",
+"not": "Do not stay behind in a surge zone, and do not drive into flooded roads.",
+"rel": [
+"hurricane_categories",
+"flash_flood_risk"
+],
+"src": [
+"nws",
+"noaa",
+"fema"
+]
+},
+{
+"id": "hurricane_safety",
+"title": "Hurricane safety",
+"domain": "weather",
+"also": [
+"hurricane preparedness",
+"what to do in a hurricane",
+"tropical storm prep"
+],
+"def": "Hurricane safety means knowing your evacuation zone, leaving early if told to, and sheltering in a safe interior room if you stay.",
+"look": [
+"know your zone and route",
+"supplies for several days: water, food, medicine, radio, power bank",
+"windows covered and outside objects secured"
+],
+"use": "Follow official evacuation orders, fill gas, and keep a battery radio. During the storm stay inside, away from windows, in an interior room on a lower floor, but above any flood or surge level.",
+"not": "Do not go out in the eye, and do not use candles; use flashlights.",
+"rel": [
+"storm_surge",
+"power_out_safety"
+],
+"src": [
+"nws",
+"noaa",
+"fema"
+]
+},
+{
+"id": "watch_vs_warning",
+"title": "Watch, warning, and advisory",
+"domain": "weather",
+"also": [
+"difference between a watch and a warning",
+"tornado watch",
+"flood warning",
+"weather alert meaning"
+],
+"def": "A watch means conditions are favorable for the hazard; a warning means it is happening or about to happen; an advisory means it will be a nuisance.",
+"look": [
+"watch: be prepared",
+"warning: take action now",
+"advisory: be careful"
+],
+"use": "When a warning is issued for your location, act at once. When a watch is issued, review your plan and keep a radio on.",
+"not": "Do not wait for a warning to prepare when a watch is in effect.",
+"rel": [
+"noaa_weather_radio",
+"tornado_safety"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "noaa_weather_radio",
+"title": "NOAA Weather Radio",
+"domain": "weather",
+"also": [
+"weather radio",
+"same alert radio",
+"emergency alert radio"
+],
+"def": "NOAA Weather Radio broadcasts National Weather Service forecasts and alerts around the clock on seven VHF frequencies.",
+"look": [
+"frequencies between 162.400 and 162.550 MHz",
+"a tone alert and SAME code for your county",
+"battery or hand crank radios work in outages"
+],
+"use": "Keep a weather radio with fresh batteries, set to your county's SAME code, as a way to get warnings when cell service and power are out.",
+"not": "Do not rely only on phone alerts; towers and batteries can fail.",
+"rel": [
+"watch_vs_warning",
+"power_out_safety"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "blizzard_safety",
+"title": "Blizzard and winter storm safety",
+"domain": "weather",
+"also": [
+"whiteout",
+"heavy snow storm",
+"stuck in a snowstorm",
+"winter storm"
+],
+"def": "A blizzard is a storm with sustained winds or gusts of 35 mph or more and low visibility from falling or blowing snow for at least three hours.",
+"look": [
+"falling or blowing snow with very low visibility",
+"strong winds and drifting",
+"dangerous wind chills"
+],
+"use": "Stay inside, stay put in a vehicle if stranded (run the engine only briefly with the tailpipe clear), and keep warm and hydrated. Use layers, a hat, and bright markers.",
+"not": "Do not leave a stranded car to walk in a whiteout unless safety is in sight, and do not let the tailpipe get blocked by snow.",
+"rel": [
+"wind_chill",
+"carbon_monoxide_poisoning"
+],
+"src": [
+"nws",
+"fema",
+"cdc"
+]
+},
+{
+"id": "ice_storm_freezing_rain",
+"title": "Freezing rain and ice storms",
+"domain": "weather",
+"also": [
+"glaze ice",
+"icy roads",
+"sleet versus freezing rain",
+"ice on power lines"
+],
+"def": "Freezing rain falls as liquid and freezes on contact, coating everything with ice; it is far more damaging than sleet.",
+"look": [
+"glazed trees, wires, and roads",
+"sleet bounces and rattles, freezing rain coats and sticks",
+"limbs and lines breaking under the weight"
+],
+"use": "Stay off roads, stay clear of trees and power lines, and prepare for outages. Keep warm and do not use generators indoors.",
+"not": "Do not walk or drive on a glazed surface, and do not go near downed lines.",
+"rel": [
+"power_out_safety",
+"carbon_monoxide_poisoning"
+],
+"src": [
+"nws",
+"fema"
+]
+},
+{
+"id": "wind_chill",
+"title": "Wind chill",
+"domain": "weather",
+"also": [
+"feels like temperature",
+"cold wind",
+"frostbite time"
+],
+"def": "Wind chill is how cold the air feels on bare skin because wind carries away body heat; it affects people and animals, not objects.",
+"look": [
+"a stronger wind makes the same temperature feel colder",
+"at around minus 20 F (minus 29 C) wind chill, frostbite can occur in about 30 minutes",
+"at minus 40 and lower it is much faster"
+],
+"use": "Dress for the wind chill: windproof outer layer, covered skin, and warm insulation, and check for frostbite on exposed skin.",
+"not": "Do not think the wind chill lowers the actual air temperature or freezes water faster.",
+"rel": [
+"frostbite_warming",
+"hypothermia_stages"
+],
+"src": [
+"nws",
+"noaa",
+"cdc"
+]
+},
+{
+"id": "heat_index",
+"title": "Heat index",
+"domain": "weather",
+"also": [
+"feels like in the heat",
+"humid and hot",
+"heat advisory"
+],
+"def": "The heat index combines air temperature and humidity to show how hot it really feels, because sweat cannot cool you when the air is humid.",
+"look": [
+"high humidity makes it feel hotter",
+"heat index above 103 F (39 C) is dangerous",
+"full sun can add up to 15 F"
+],
+"use": "Do hard work in the early morning or evening, rest in the shade, and drink water. Check on older people, children, and pets.",
+"not": "Do not rely on the air temperature alone, and do not leave anyone in a parked car.",
+"rel": [
+"heat_stroke_signs",
+"hydration_basics"
+],
+"src": [
+"nws",
+"cdc"
+]
+},
+{
+"id": "dew_point",
+"title": "Dew point and humidity",
+"domain": "weather",
+"also": [
+"dewpoint",
+"why is it sticky",
+"dew on the grass",
+"fog forms when"
+],
+"def": "The dew point is the temperature at which air becomes saturated and dew or fog forms; a higher dew point means muggier air.",
+"look": [
+"dew point under 10 C (50 F): dry, comfortable",
+"above 18 C (65 F): sticky",
+"air temperature falling toward the dew point means dew or fog"
+],
+"use": "If the night temperature will fall to the dew point, expect dew or fog and condensation on gear. Put gear in a tent or bag to keep it dry.",
+"not": "Do not confuse dew point with relative humidity; the dew point tells you how much moisture is in the air.",
+"rel": [
+"fog_types"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "barometer_trend",
+"title": "Reading the barometer trend",
+"domain": "weather",
+"also": [
+"falling pressure",
+"rising pressure",
+"barometer",
+"altimeter weather change",
+"pressure drop"
+],
+"def": "A barometer measures air pressure; how it changes over a few hours tells more than the number itself.",
+"look": [
+"falling slowly: clouds and weather deteriorating",
+"falling fast: a storm is near",
+"rising: clearing and drier air",
+"steady: little change"
+],
+"use": "Note the pressure every few hours. A fast fall, such as 3 hPa or more in three hours, calls for preparing for rough weather. Watch altimeter drift as a pressure change.",
+"not": "Do not trust a single reading; use the trend. Do not mistake pressure change from altitude for weather.",
+"rel": [
+"wind_shift_signs",
+"cold_front"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "cold_front",
+"title": "Cold front",
+"domain": "weather",
+"also": [
+"front passing",
+"storm line",
+"temperature drop and wind shift",
+"squall line"
+],
+"def": "A cold front is the leading edge of a cooler air mass that pushes under warmer air, causing a narrow band of storms, a wind shift, and a drop in temperature.",
+"look": [
+"a line of towering clouds and showers or storms",
+"wind shifts to the west or northwest in the northern hemisphere",
+"pressure falls then rises and temperature drops sharply"
+],
+"use": "Expect a brief, sometimes severe band of weather followed by clearing and cooler, drier air. Secure camp before it arrives.",
+"not": "Do not expect a long soak; the front is usually fast, though it can be fierce.",
+"rel": [
+"warm_front",
+"wind_shift_signs"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "warm_front",
+"title": "Warm front",
+"domain": "weather",
+"also": [
+"slow moving rain",
+"thickening clouds",
+"steady rain ahead of warm air"
+],
+"def": "A warm front is where warm air slides over cooler air, bringing a long period of thickening clouds and steady rain or snow, then milder weather.",
+"look": [
+"cirrus, then cirrostratus, then altostratus, then nimbostratus",
+"pressure falls steadily",
+"winds back to the south or southeast before the front"
+],
+"use": "Expect a day or so of build-up, then hours of steady precipitation and warmer, muggier air after it passes.",
+"not": "Do not expect sharp storms; the weather is usually steady rather than violent.",
+"rel": [
+"cold_front",
+"cirrostratus_halo"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "wind_shift_signs",
+"title": "Wind shifts and Buys Ballot's law",
+"domain": "weather",
+"also": [
+"wind changed direction",
+"wind backing",
+"which way is the low pressure",
+"how to find the storm"
+],
+"def": "Wind shifts show a passing front: in the northern hemisphere, stand with your back to the wind and the low pressure is on your left.",
+"look": [
+"wind backing (counterclockwise) with falling pressure ahead of a low",
+"sudden shift to the northwest with a cold front",
+"calm followed by gusts"
+],
+"use": "Use wind direction with cloud and pressure changes to judge where the weather is coming from, and plan for a front when the wind swings.",
+"not": "Do not use the rule in the southern hemisphere without reversing it, and do not use it for local mountain winds.",
+"rel": [
+"barometer_trend",
+"cold_front"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "beaufort_scale",
+"title": "Beaufort wind scale",
+"domain": "weather",
+"also": [
+"wind force",
+"gale",
+"how strong is the wind",
+"wind speed words"
+],
+"def": "The Beaufort scale describes wind force from 0 (calm) to 12 (hurricane) using what you can see.",
+"look": [
+"force 4: moderate breeze, dust and small branches move (11-16 knots)",
+"force 6: strong breeze, large branches sway, umbrellas hard to use (22-27 knots)",
+"force 8: gale, twigs break off trees, walking is hard (34-40 knots)",
+"force 12: hurricane force, 64 knots or more"
+],
+"use": "Use it to judge conditions and decide to stay off the water, ridgelines, and exposed trails at force 6 and above.",
+"not": "Do not take the word choice as an exact speed; it is an observed estimate.",
+"rel": [
+"wind_shift_signs",
+"mountain_weather"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "mountain_weather",
+"title": "Mountain weather",
+"domain": "weather",
+"also": [
+"weather in the mountains",
+"storms on peaks",
+"summit weather",
+"afternoon thunderstorms"
+],
+"def": "Mountain weather changes fast: temperatures fall with height, winds strengthen, and storms often build by early afternoon.",
+"look": [
+"temperature drops about 6.5 C per 1,000 m (3.5 F per 1,000 ft)",
+"afternoon cumulus towers in summer",
+"strong winds on exposed ridges and cols"
+],
+"use": "Start early, be off summits and ridges by noon, and turn back when clouds build. Carry rain and warm layers even on fair days.",
+"not": "Do not push on to the summit when storms are building, and do not assume the weather in the valley matches the summit.",
+"rel": [
+"cumulonimbus_cloud",
+"lenticular_cloud"
+],
+"src": [
+"nps",
+"nws"
+]
+},
+{
+"id": "microburst",
+"title": "Microburst and downburst",
+"domain": "weather",
+"also": [
+"straight-line winds",
+"sudden gust",
+"storm winds knocked trees down"
+],
+"def": "A microburst is a small, intense downdraft from a thunderstorm that spreads out at the ground and can knock down trees in one direction.",
+"look": [
+"sudden strong wind at the leading edge of a storm",
+"dust or rain streaking down",
+"trees down in a one-directional pattern afterward"
+],
+"use": "Move away from trees and into a sturdy shelter at the first sign of a strong, sudden gust ahead of a storm.",
+"not": "Do not camp under tall dead trees or rely on a tent in a thunderstorm.",
+"rel": [
+"shelf_cloud",
+"thunderstorm_stages"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "flash_flood_risk",
+"title": "Flash flood risk",
+"domain": "weather",
+"also": [
+"flood watch",
+"rising creek",
+"dry wash flood",
+"slot canyon flood"
+],
+"def": "A flash flood is a rapid rise of water, often from storms miles upstream, and it can reach you under a clear sky.",
+"look": [
+"heavy rain upstream, rising and muddy creeks",
+"a rumbling roar in a canyon, or debris in the water",
+"low-water crossings and dry washes"
+],
+"use": "Move to high ground at once, avoid canyons and washes in storm season, and never drive or walk through floodwater. Turn around, don't drown.",
+"not": "Do not cross moving water. As little as 6 inches (15 cm) can knock you down and about a foot (30 cm) can float a car.",
+"rel": [],
+"src": [
+"nws",
+"fema",
+"noaa"
+]
+},
+{
+"id": "wildfire_smoke_aqi",
+"title": "Wildfire smoke and air quality",
+"domain": "weather",
+"also": [
+"smoky air",
+"air quality index",
+"AQI",
+"fire smoke",
+"N95 for smoke"
+],
+"def": "Wildfire smoke contains fine particles that can harm the lungs and heart; the air quality index (AQI) shows when to limit time outside.",
+"look": [
+"AQI above 100 is unhealthy for sensitive groups",
+"above 150 is unhealthy for all",
+"haze, ash, and a smell of smoke"
+],
+"use": "Stay indoors with windows closed, run a HEPA filter, and use a well-fitted N95 respirator outside if you must. Limit exertion.",
+"not": "Do not rely on a cloth or paper mask for smoke, and do not exercise hard outdoors on smoky days.",
+"rel": [
+"wildfire_evacuation",
+"smoke_inhalation"
+],
+"src": [
+"epa",
+"cdc",
+"usfs"
+]
+},
+{
+"id": "wildfire_evacuation",
+"title": "Wildfire evacuation",
+"domain": "weather",
+"also": [
+"fire is coming",
+"wildfire go bag",
+"leave before the fire",
+"fire evacuation zone"
+],
+"def": "For a wildfire, leave early when told to or when smoke and flames are near; waiting is the biggest mistake.",
+"look": [
+"official evacuation order or warning",
+"smoke, ember showers, and a wind shift toward you",
+"roads clogging up"
+],
+"use": "Take people, pets, medicines, papers, and a go bag, close windows and doors, and follow known evacuation routes. Tell someone where you are going.",
+"not": "Do not wait for flames to be in view, and do not try to defend a home against a major fire if told to leave.",
+"rel": [
+"wildfire_smoke_aqi"
+],
+"src": [
+"usfs",
+"fema",
+"nws"
+]
+},
+{
+"id": "dust_storm_haboob",
+"title": "Dust storm (haboob)",
+"domain": "weather",
+"also": [
+"dust wall",
+"sandstorm",
+"blowing dust"
+],
+"def": "A haboob is a wall of dust pushed ahead of a thunderstorm's outflow, dropping visibility to near zero within seconds.",
+"look": [
+"a towering brown wall approaching",
+"sudden strong gusts and a drop in visibility",
+"dry air and dust over deserts"
+],
+"use": "Pull off the road as far as you can, turn off lights, set the parking brake, and keep your foot off the brake pedal. Cover your nose and mouth.",
+"not": "Do not keep driving in a dust storm or leave lights on in a parked vehicle; others may follow them.",
+"rel": [
+"microburst",
+"shelf_cloud"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "temperature_inversion",
+"title": "Temperature inversion and cold air pooling",
+"domain": "weather",
+"also": [
+"cold in the valley at night",
+"frost hollows",
+"smoke lies flat",
+"inversion"
+],
+"def": "On calm clear nights, cold air sinks and pools in valleys while the slopes above stay warmer; this is a temperature inversion.",
+"look": [
+"smoke or fog layers lie flat",
+"valley floors much colder than the slopes",
+"still, clear night"
+],
+"use": "Camp on the slope or bench, not the valley floor. Frost and fog form in the low spots first.",
+"not": "Do not pitch camp in the lowest spot to hide from wind; it will be the coldest.",
+"rel": [
+"fog_types"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "weather_folk_signs",
+"title": "Folk weather signs: what holds up",
+"domain": "weather",
+"also": [
+"red sky at night",
+"cows lying down",
+"birds flying low",
+"weather sayings",
+"ants before rain"
+],
+"def": "Some old sayings work because they match real changes in air pressure and moisture; others are myths.",
+"look": [
+"red sky at night, shepherd's delight: often works in mid-latitudes where weather moves west to east",
+"a ring around the moon: thin high cloud ahead of a front",
+"smoke that hangs low or rises slowly: low pressure and humid air",
+"swallows and bats flying low: insects stay low in humid air"
+],
+"use": "Treat folk signs as clues to combine with cloud types, wind shift, and pressure. If several agree, expect a change.",
+"not": "Do not trust a single saying, and do not rely on animal behavior as the only forecast.",
+"rel": [
+"barometer_trend",
+"cirrostratus_halo"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "lightning_myths",
+"title": "Lightning myths",
+"domain": "weather",
+"also": [
+"does lightning strike twice",
+"rubber tires protect",
+"if the sky is clear lightning cannot hit",
+"bolt from the blue"
+],
+"def": "Lightning can strike the same place many times, can reach 10 miles from a storm, and rubber tires do not protect you; a hard-topped metal vehicle does.",
+"look": [
+"bolts from the blue strike under clear skies near a storm",
+"tall isolated objects are struck repeatedly",
+"a car protects because of its metal body, not its tires"
+],
+"use": "When thunder is heard, go inside a substantial building or a hard-topped vehicle and wait 30 minutes after the last thunder.",
+"not": "Do not shelter under a tree, in a tent, in a shed, or in an open-sided shelter. Do not stay on the water.",
+"rel": [
+"lightning",
+"flash_to_bang"
+],
+"src": [
+"nws",
+"noaa",
+"cdc"
+]
+},
+{
+"id": "power_out_safety",
+"title": "Power outage basics in a storm",
+"domain": "weather",
+"also": [
+"lights are out",
+"storm knocked out power",
+"candles safety",
+"fridge during outage"
+],
+"def": "In a storm outage, keep warm, use flashlights, keep fridge and freezer doors closed, and run generators outside, far from the house.",
+"look": [
+"flashlights and battery lantern, not candles",
+"closed fridge keeps food safe about four hours, a full freezer about 48 hours",
+"a battery radio for alerts"
+],
+"use": "Use dry ice or ice for the fridge, and eat perishables first. Unplug sensitive electronics, and leave one light on to know when power returns.",
+"not": "Do not use a gas oven or grill for heat, and do not run a generator in a garage or near a window.",
+"rel": [
+"carbon_monoxide_poisoning"
+],
+"src": [
+"fema",
+"cdc",
+"usda-fsis"
+]
+}
+]

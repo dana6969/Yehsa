@@ -1,0 +1,87 @@
+[
+ {
+  "symbol": "shelter_site_hazards",
+  "title": "Where not to camp or build a shelter",
+  "context": "Choose a shelter site away from hazards overhead and underfoot: dead branches, rockfall, flood channels, game trails, and low cold pockets. Also called widowmaker, dead tree over camp, flood channel, rockfall, bad campsite. Look for dead limbs or leaning trees overhead (widowmakers); dry washes, gullies, and stream banks that can flood."
+ },
+ {
+  "symbol": "debris_hut_build",
+  "title": "Debris hut (how to build)",
+  "context": "A debris hut is a small, wedge-shaped shelter of a ridgepole, ribs, and a thick layer of dry leaves or other debris, built to trap body heat. Also called leaf hut, insulated stick hut, hut made of leaves and sticks, debris shelter. Look for a long ridgepole on a stump, rock, or tripod; ribs steep enough to shed water."
+ },
+ {
+  "symbol": "lean_to_build",
+  "title": "Lean-to with a fire reflector",
+  "context": "A lean-to is a sloped roof with an open side, built against a crossbar between two trees or posts, often with a fire reflector wall opposite it. Also called lean to shelter, three-sided shelter, lean-to fire reflector, a-frame lean-to. Look for a crossbar between two supports at about chest height; a roof sloping toward the wind with the open side away from it."
+ },
+ {
+  "symbol": "tarp_shelter_rig",
+  "title": "Rigging a tarp or poncho shelter",
+  "context": "A tarp shelter is a sheet of waterproof fabric pitched over a ridgeline and staked down; it is the fastest shelter to set up. Also called tarp A-frame, poncho tent, how to set up a tarp, tarp lean-to. Look for a taut ridgeline between two trees at waist height; tarp draped over it with edges staked low."
+ },
+ {
+  "symbol": "ground_first_insulation",
+  "title": "Ground insulation: why the ground comes first",
+  "context": "The ground pulls heat out of you faster than the air does, so insulation under you matters before the roof. Also called bed of boughs, sleeping pad, insulate from the ground, warm bed. Look for a 6 to 8 inch (15 to 20 cm) pressed layer of dry boughs, leaves, or grass; a pad or pack under your torso and hips. Build the bed first, then the shelter. Pile dry leaves, pine boughs (cut ends down), or grass, add a pad or pack, and refresh each night."
+ },
+ {
+  "symbol": "shelter_door",
+  "title": "What I can use for a shelter door",
+  "context": "A shelter door is anything that closes the entrance against wind and cold, such as a pack, a debris pile, or a tarp. Also called close the entrance, block the opening, door for a debris hut. Look for a gap just big enough to crawl in; a door that can be closed from the inside. Use your pack, a bundle of branches stuffed with leaves, a spare tarp, or a slab of snow. Close it from the inside after you crawl in, and leave a small gap for air."
+ },
+ {
+  "symbol": "wind_vs_insulation",
+  "title": "Stopping wind versus staying insulated",
+  "context": "A windbreak stops moving air from stealing heat, while insulation traps still air around you; a good shelter does both. Also called windbreak, what keeps me warm, wind vs cold shelter. Look for windbreak: a wall, tarp, or log between you and the wind; insulation: dry layers, boughs, and a bed. Block the wind first, then add insulation under and around you. Keep it dry and make the space small to hold heat."
+ },
+ {
+  "symbol": "clothing_layers",
+  "title": "Clothing as shelter: layering",
+  "context": "Layering uses a wicking base, a warm insulating middle, and a windproof, waterproof outer layer that you adjust to stay dry and warm. Also called what to wear, dress in layers, wool or cotton, wet clothes, how to layer. Look for wool or synthetic base layers, not cotton; an insulating mid-layer like fleece or down. Vent before you sweat, add layers when you stop, and swap wet layers for dry ones as soon as you can. Keep a spare dry layer in a waterproof bag."
+ },
+ {
+  "symbol": "fuel_in_closed_shelter",
+  "title": "No fuel burning in a closed shelter",
+  "context": "Burning charcoal, a stove, a lantern, or even a candle in a closed shelter can fill it with carbon monoxide, which has no smell and can kill in your sleep. Also called stove in a tent, charcoal in a shelter, candle in a snow cave, carbon monoxide in a shelter. Look for a closed tent, snow cave, car, or hut; headache and drowsiness."
+ },
+ {
+  "symbol": "stuck_in_car_snow",
+  "title": "Stuck in a car in a snowstorm",
+  "context": "If stranded in a car in a snowstorm, staying with the vehicle is usually safest; keep the tailpipe clear and run the engine only a little. Also called stranded in snow, stay with the car, car in a snowbank, exhaust pipe blocked. Look for blowing or falling snow with low visibility; the exhaust pipe at risk of blocking."
+ },
+ {
+  "symbol": "snow_shelter_ventilation",
+  "title": "Snow shelters: tree-pit and ventilation",
+  "context": "A snow shelter uses snow's insulating quality, and it needs a vent hole and a roof about a foot thick to be safe. Also called tree well shelter, snow trench, snow cave vent, packed snow hut. Look for a tree well with low branches overhead; a trench or cave with a roof at least 12 inches (30 cm) thick. Dig a pit under an evergreen, roof it with branches and snow, line the floor with boughs, and cut a vent. Keep a tool inside and keep the entrance lower than the sleeping area."
+ },
+ {
+  "symbol": "space_blanket_bivy",
+  "title": "Space blanket and bivy: what they will and won't do",
+  "context": "A space blanket is a thin reflective sheet that holds in some body heat; a bivy is a waterproof shell for a sleeping bag. Also called emergency blanket, mylar blanket, bivy sack, survival blanket. Look for a very light sheet that reflects heat back; a bivy keeps wind and rain off a bag. Wrap a space blanket around you under clothes or in a shelter, with a pad or dry layers under you. Use it as a roof or wind block too. Add insulation; it does not warm by itself."
+ },
+ {
+  "symbol": "tent_storm_pitch",
+  "title": "Tent site and storm pitching",
+  "context": "For a storm pitch, set the tent low and tight with the narrow end into the wind, and guy out every line. Also called set up a tent in the wind, tent in a storm, stake out a tent. Look for a flat, drained site away from dead trees; the door facing away from the wind. Choose a protected spot, stake every corner and guy line, and stow the pack inside. Put rocks or logs on the stakes in soft ground. Avoid ridges and open meadows."
+ },
+ {
+  "symbol": "fire_near_shelter",
+  "title": "Fire placement near a shelter",
+  "context": "Place a fire off the opening of a shelter and far enough that sparks cannot reach the roof or bedding. Also called how close should a fire be, fire next to tent, sparks on a tent. Look for a fire 6 to 10 feet (2 to 3 m) from a tarp or tent; a reflector wall behind the fire. Keep the fire small and downwind of the shelter, away from the door and dry fabric. Use a ring of rocks or a pit. Put it out before you sleep."
+ },
+ {
+  "symbol": "shelter_for_conditions",
+  "title": "Shelter for rain, wind, snow, and bugs",
+  "context": "Different weather needs a different shelter: a steep tarp for rain, a low wedge for wind, a snow shelter for deep snow, and netting for insects. Also called bug shelter, rain shelter, mosquito shelter. Look for rain: steep pitch and a drip line; wind: low and streamlined, back to the wind. Pick the shelter that fits what the weather is doing, and use netting or a head net when insects are bad."
+ },
+ {
+  "symbol": "group_vs_solo_shelter",
+  "title": "Group versus solo shelter",
+  "context": "A group shelter shares body heat and takes less material per person; a solo shelter must be smaller and better insulated. Also called share body heat, sleeping together, shelter for two. Look for two people sharing a bag or insulation hold heat better; a smaller space is warmer. Share a larger shelter where possible, huddle with insulation under all, and take turns keeping the vent and fire."
+ },
+ {
+  "symbol": "insulation_how_much",
+  "title": "How much insulation is enough?",
+  "context": "In plain terms, thicker is warmer: about 3 feet of dry debris on a hut and 6 to 8 inches under you, with a small vent. Also called thickness of debris, how thick should the leaves be. Look for 3 feet (1 m) of debris on a hut; 6 to 8 inches (15 to 20 cm) under you. Add more until you can no longer feel the cold coming through, and keep it dry. Leave a vent."
+ }
+]
