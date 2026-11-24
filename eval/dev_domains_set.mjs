@@ -374,5 +374,258 @@ export const DOMAIN_DEV_SET = [
     "hunting alone"
    ]
   }
+ },
+ {
+  "id": "dom-map-orient-compass",
+  "category": "domain-navigation",
+  "prompt": "Tell me about set the map",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "orienting a map with a compass"
+   ]
+  }
+ },
+ {
+  "id": "dom-declination-basics",
+  "category": "domain-navigation",
+  "prompt": "Tell me about compass doesn't match the map",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "declination"
+   ]
+  }
+ },
+ {
+  "id": "dom-north-types",
+  "category": "domain-navigation",
+  "prompt": "Tell me about grid north",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "true north, magnetic north, and grid north"
+   ]
+  }
+ },
+ {
+  "id": "dom-bearing-take-follow",
+  "category": "domain-navigation",
+  "prompt": "Tell me about follow a bearing",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "taking and following a compass bearing"
+   ]
+  }
+ },
+ {
+  "id": "dom-contour-terrain-features",
+  "category": "domain-navigation",
+  "prompt": "Tell me about contour lines",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "contour lines and terrain features"
+   ]
+  }
+ },
+ {
+  "id": "dom-map-distance-pace",
+  "category": "domain-navigation",
+  "prompt": "Tell me about pace count",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "measuring distance and keeping a pace count"
+   ]
+  }
+ },
+ {
+  "id": "dom-gps-vs-map",
+  "category": "domain-navigation",
+  "prompt": "Tell me about GPS not working",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "gps and phone versus map and compass"
+   ]
+  }
+ },
+ {
+  "id": "dom-lost-stop-plan",
+  "category": "domain-navigation",
+  "prompt": "Tell me about I'm lost",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "lost? stop, think, observe, plan"
+   ]
+  }
+ },
+ {
+  "id": "dom-aiming-off-handrails",
+  "category": "domain-navigation",
+  "prompt": "Tell me about handrail navigation",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "handrails, catching features, and aiming off"
+   ]
+  }
+ },
+ {
+  "id": "dom-phone-compass-unreliable",
+  "category": "domain-navigation",
+  "prompt": "Tell me about phone compass wrong",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "when a phone compass is unreliable"
+   ]
+  }
+ },
+ {
+  "id": "dom-stream-crossing-choice",
+  "category": "domain-navigation",
+  "prompt": "Tell me about crossing a river",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "stream crossings"
+   ]
+  }
+ },
+ {
+  "id": "dom-compass-parts",
+  "category": "domain-navigation",
+  "prompt": "Tell me about baseplate compass",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "parts of a baseplate compass"
+   ]
+  }
+ },
+ {
+  "id": "dom-night-navigation",
+  "category": "domain-navigation",
+  "prompt": "Tell me about walking in the dark",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "navigating at night"
+   ]
+  }
+ },
+ {
+  "id": "dom-sun-direction-rough",
+  "category": "domain-navigation",
+  "prompt": "Tell me about sun direction",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "rough direction from the sun"
+   ]
+  }
+ },
+ {
+  "id": "dom-stars-north",
+  "category": "domain-navigation",
+  "prompt": "Tell me about north star",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "stars as a rough north reference"
+   ]
+  }
+ },
+ {
+  "id": "dom-mark-route-self",
+  "category": "domain-navigation",
+  "prompt": "Tell me about mark my trail",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "marking a route for yourself"
+   ]
+  }
+ },
+ {
+  "id": "dom-whiteout-fog-navigation",
+  "category": "domain-navigation",
+  "prompt": "Tell me about lost in fog",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "whiteout or fog"
+   ]
+  }
+ },
+ {
+  "id": "dom-altimeter-navigation",
+  "category": "domain-navigation",
+  "prompt": "Tell me about altimeter navigation",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "altimeter or barometer as a rough navigation aid"
+   ]
+  }
+ },
+ {
+  "id": "dom-map-scale-limits",
+  "category": "domain-navigation",
+  "prompt": "Tell me about map scale",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "map scale and what a map does not show"
+   ]
+  }
+ },
+ {
+  "id": "dom-vehicle-vs-foot-travel",
+  "category": "domain-navigation",
+  "prompt": "Tell me about car stuck on back road",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "driving versus walking when the road is not on the map"
+   ]
+  }
+ },
+ {
+  "id": "dom-resection-intersection",
+  "category": "domain-navigation",
+  "prompt": "Tell me about triangulation",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "resection and intersection"
+   ]
+  }
+ },
+ {
+  "id": "dom-grid-coordinates",
+  "category": "domain-navigation",
+  "prompt": "Tell me about UTM coordinates",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "reading grid coordinates on a map"
+   ]
+  }
+ },
+ {
+  "id": "dom-turnaround-time",
+  "category": "domain-navigation",
+  "prompt": "Tell me about turnaround time",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "turnaround time and trip plans"
+   ]
+  }
  }
 ];

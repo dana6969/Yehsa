@@ -166,9 +166,12 @@ const NAME_USE = new Map();
 const headNames = (entry) => [...new Set([entry.title.replace(/\s*\([^)]*\)/g, ""), ...(entry.title.match(/\(([^)]*)\)/g) || []).map((x) => x.slice(1, -1)), ...(entry.also || [])]
   .map(normName))];
 for (const entry of ENTRIES) for (const name of headNames(entry)) NAME_USE.set(name, (NAME_USE.get(name) || 0) + 1);
+// ...unless it is one entry's own title ("Baneberry"), which keeps it.
+const TITLE_OWNER = new Map(ENTRIES.map((entry) => [normName(entry.title.replace(/\s*\([^)]*\)/g, "")), entry.id]));
+const ownsName = (entry, name) => (TITLE_OWNER.has(name) ? TITLE_OWNER.get(name) === entry.id : NAME_USE.get(name) === 1);
 const ENTRY_HEADS = new Map(ENTRIES.map((entry) => {
   const names = headNames(entry)
-    .filter((name) => name.length >= 3 && NAME_USE.get(name) === 1 && (/[ -]/.test(name) || (WORD_USE.get(name) || 0) < 4));
+    .filter((name) => name.length >= 3 && ownsName(entry, name) && (/[ -]/.test(name) || (WORD_USE.get(name) || 0) < 4));
   const words = new Set(normName(entry.title.replace(/\s*\([^)]*\)/g, "")).split(/[ -]+/).filter((w) => w.length >= 4 && !HEAD_STOP.has(w)).map(headStem));
   return [entry.id, { names, words }];
 }));

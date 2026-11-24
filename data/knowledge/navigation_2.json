@@ -1,0 +1,317 @@
+[
+{
+"id": "compass_parts",
+"title": "Parts of a baseplate compass",
+"domain": "navigation",
+"also": [
+"baseplate compass",
+"orienting arrow",
+"compass housing",
+"direction of travel arrow"
+],
+"def": "A baseplate compass has a clear base with a direction-of-travel arrow, a rotating housing marked in degrees with an orienting arrow and lines, and a magnetic needle whose red end points to magnetic north.",
+"look": [
+"the red end of the needle",
+"the degree ring on the housing",
+"a declination adjustment on better models"
+],
+"use": "Learn which arrow is which at home: you set bearings with the housing and walk where the direction-of-travel arrow points.",
+"not": "Do not store a compass next to magnets or speakers, which can weaken or reverse the needle.",
+"rel": [
+"bearing_take_follow",
+"map_orient_compass"
+],
+"src": [
+"fm3-25-26"
+]
+},
+{
+"id": "night_navigation",
+"title": "Navigating at night",
+"domain": "navigation",
+"also": [
+"walking in the dark",
+"night hike navigation",
+"lost at night"
+],
+"def": "Moving at night is slower and riskier; it works only on a known trail or a sure handrail with a good light and a careful bearing.",
+"look": [
+"a bright headlamp and spare batteries",
+"a trail, road, or stream edge to follow",
+"landmarks you can find by light"
+],
+"use": "Shorten legs between landmarks, count paces, check the compass often, and stop and camp if the ground gets rough.",
+"not": "Do not travel cross-country at night in steep or unknown terrain if you can safely wait for light.",
+"rel": [
+"lost_stop_plan"
+],
+"src": [
+"fm3-25-26",
+"nps"
+]
+},
+{
+"id": "sun_direction_rough",
+"title": "Rough direction from the sun",
+"domain": "navigation",
+"also": [
+"sun direction",
+"find north without compass",
+"shadow stick",
+"which way is east"
+],
+"def": "The sun gives only a rough direction: it rises in the east, sets in the west, and in the northern hemisphere is generally to the south at midday, with big seasonal shifts.",
+"look": [
+"a stick's shadow tip moving from west to east over 15-20 minutes",
+"time of day and season",
+"clear enough sky to see shadows"
+],
+"use": "Mark a shadow tip, wait 15 minutes, mark again; the line from first to second mark runs roughly west to east. Use it as a check, not a precise bearing.",
+"not": "Do not treat sun directions as exact, especially near sunrise, sunset, or in summer when the sun rises well north of east.",
+"rel": [
+"stars_north",
+"phone_compass_unreliable"
+],
+"src": [
+"fm3-25-26",
+"atp3-50-21"
+]
+},
+{
+"id": "stars_north",
+"title": "Stars as a rough north reference",
+"domain": "navigation",
+"also": [
+"north star",
+"Polaris",
+"big dipper north",
+"find north at night"
+],
+"def": "In the northern hemisphere the North Star, Polaris, sits almost due north; the two outer stars of the Big Dipper's cup point to it.",
+"look": [
+"the Big Dipper's pointer stars",
+"a moderately bright star alone in its area",
+"clear sky away from bright lights"
+],
+"use": "Follow the pointer stars about five times their gap to Polaris, then pick a ground landmark below it to hold your direction.",
+"not": "Do not use it as a substitute for a compass on long, precise routes.",
+"rel": [
+"sun_direction_rough",
+"night_navigation"
+],
+"src": [
+"fm3-25-26",
+"nasa"
+]
+},
+{
+"id": "mark_route_self",
+"title": "Marking a route for yourself",
+"domain": "navigation",
+"also": [
+"mark my trail",
+"flagging tape",
+"find my way back",
+"blaze a trail"
+],
+"def": "Marking your own route with removable flagging or noted landmarks makes the return trip easier, especially in thick woods or snow.",
+"look": [
+"bright, removable flagging tape",
+"waypoints saved only if you chose to",
+"landmarks noted at each turn"
+],
+"use": "Tie flagging at eye level where you can see the next one, look back often so you know the return view, and remove the flagging on your way out.",
+"not": "Do not cut blazes into trees or leave flagging behind on land where it is not allowed.",
+"rel": [
+"aiming_off_handrails",
+"lost_stop_plan"
+],
+"src": [
+"fm3-25-26",
+"usfs"
+]
+},
+{
+"id": "whiteout_fog_navigation",
+"title": "Whiteout or fog: stay put or follow a sure handrail",
+"domain": "navigation",
+"also": [
+"lost in fog",
+"whiteout",
+"can't see in snowstorm",
+"fog navigation"
+],
+"def": "In fog or a whiteout you lose landmarks and depth; most often the safest choice is to stop, shelter, and wait unless a sure handrail leads you out.",
+"look": [
+"no visible landmarks beyond a few yards",
+"snow or fog hiding drop-offs",
+"a trail, fence, or stream you can follow by touch or sight"
+],
+"use": "Stop, get warm and sheltered, and wait it out, or follow a known handrail with compass and pace count, staying together.",
+"not": "Do not head cross-country toward ridges, cornices, cliffs, or frozen lakes you cannot see.",
+"rel": [
+"lost_stop_plan",
+"aiming_off_handrails"
+],
+"src": [
+"nws",
+"fm3-25-26"
+]
+},
+{
+"id": "altimeter_navigation",
+"title": "Altimeter or barometer as a rough navigation aid",
+"domain": "navigation",
+"also": [
+"altimeter navigation",
+"barometer altitude",
+"elevation to find location"
+],
+"def": "An altimeter estimates your height from air pressure, and matching that height to a contour on the map helps narrow down where you are along a trail or slope.",
+"look": [
+"a known elevation to calibrate at the trailhead",
+"weather changes shifting the reading",
+"a contour line that matches your height"
+],
+"use": "Calibrate at a known height, recheck at known points, and combine the reading with the trail, stream, or ridge you are on.",
+"not": "Do not trust an altimeter alone during a changing storm; pressure swings change the reading.",
+"rel": [
+"contour_terrain_features"
+],
+"src": [
+"fm3-25-26",
+"nws"
+]
+},
+{
+"id": "map_scale_limits",
+"title": "Map scale and what a map does not show",
+"domain": "navigation",
+"also": [
+"map scale",
+"1:24000",
+"zoom limits",
+"what a map pack shows"
+],
+"def": "A map's scale sets how much detail it can show; a 1:24,000 topographic map shows small streams and contours, while a small-scale map leaves out trails, cliffs, and new roads.",
+"look": [
+"the scale and date in the margin",
+"missing new trails, logging roads, or beaver flooding",
+"contour interval size"
+],
+"use": "Use the largest-scale map you can get for foot travel and expect changes on the ground since the map's date.",
+"not": "Do not assume a map pack shows roads, buildings, or land ownership unless it says so.",
+"rel": [
+"map_distance_pace",
+"gps_vs_map"
+],
+"src": [
+"usgs",
+"fm3-25-26"
+]
+},
+{
+"id": "vehicle_vs_foot_travel",
+"title": "Driving versus walking when the road is not on the map",
+"domain": "navigation",
+"also": [
+"car stuck on back road",
+"leave the car or walk",
+"unmarked forest road"
+],
+"def": "On unmapped back roads the vehicle is shelter, a big visible target, and a supply cache, so staying with it is often safer than walking out.",
+"look": [
+"fuel, weather, and daylight left",
+"distance to the last known road or house",
+"whether anyone knows your route"
+],
+"use": "Stay with the vehicle when stuck unless help is close and the way is sure; walking out is safer by daylight on a known road.",
+"not": "Do not run the engine for warmth with the exhaust blocked by snow.",
+"call": "Call 911 if you have signal; a text may get through when a call will not.",
+"rel": [
+"lost_stop_plan"
+],
+"src": [
+"ready",
+"nws"
+]
+},
+{
+"id": "resection_intersection",
+"title": "Resection and intersection",
+"domain": "navigation",
+"also": [
+"triangulation",
+"resection",
+"find my position with compass",
+"intersection navigation"
+],
+"def": "Resection finds your own position by taking bearings to two or three landmarks you can identify on the map and drawing back-bearings; intersection finds a distant point from two known spots.",
+"look": [
+"two or three distinct, mapped landmarks far apart in direction",
+"back-bearings: add or subtract 180°",
+"lines crossing in a small triangle"
+],
+"use": "Take bearings to the landmarks, convert to back-bearings for the map, draw the lines, and you are near where they cross.",
+"not": "Do not use landmarks that are close together in direction; the lines cross at a shallow angle and mislead.",
+"rel": [
+"bearing_take_follow",
+"north_types"
+],
+"src": [
+"fm3-25-26"
+]
+},
+{
+"id": "grid_coordinates",
+"title": "Reading grid coordinates on a map",
+"domain": "navigation",
+"also": [
+"UTM coordinates",
+"grid reference",
+"read right then up",
+"give my location coordinates"
+],
+"def": "Grid coordinates locate a point using the map's grid lines: read the easting (left to right) first, then the northing (bottom to top).",
+"look": [
+"the grid line labels along the map edges",
+"a coordinate scale or ruler",
+"the datum and zone printed in the margin"
+],
+"use": "Read right, then up; give the coordinates and the datum to rescuers if asked, or read latitude and longitude from your phone.",
+"not": "Do not mix up datums or give only partial numbers to rescuers.",
+"rel": [
+"map_scale_limits"
+],
+"src": [
+"fm3-25-26",
+"usgs"
+]
+},
+{
+"id": "turnaround_time",
+"title": "Turnaround time and trip plans",
+"domain": "navigation",
+"also": [
+"turnaround time",
+"trip plan",
+"leave a plan",
+"how late to hike"
+],
+"def": "A turnaround time is the hour you turn back no matter where you are, set so you are out before dark or bad weather; a trip plan tells someone your route and return.",
+"look": [
+"sunset time and forecast",
+"your pace on the way in",
+"who has your plan"
+],
+"use": "Set the turnaround time before you start, keep it, and leave your route and return time with someone who will call for help.",
+"not": "Do not push past the turnaround to reach a summit or spot.",
+"rel": [
+"lost_stop_plan"
+],
+"src": [
+"nps",
+"usfs"
+]
+}
+]
