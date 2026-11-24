@@ -220,3 +220,70 @@ test("the standalone Wind diagram is gone and Wind opens the Hunt map", () => {
   const native = readFileSync("./src/phone/OfflineMap.native.js", "utf8");
   assert.match(native, /scent-cone-fill/);
 });
+
+// ---- map layout: cone on the canvas map, About this map, state chips
+
+import fs from "node:fs";
+import { coneShape } from "./symbolic/hunt/cone_view.js";
+import { aboutThisMap, mapLayers } from "./symbolic/map_layers.js";
+import { addPack, emptyPackStore } from "./symbolic/map_packs.js";
+
+test("the canvas map (no pack) draws the cone outline and a fill, and nothing off screen", () => {
+  const view = coneView({ hunt: huntWith({ fromPoint: "W", speedClass: "light" }), fix: HERE, now: T });
+  const project = (p) => ({ x: 160 + (p.longitude - HERE.longitude) * 40000, y: 180 - (p.latitude - HERE.latitude) * 55000 });
+  const shape = coneShape(view.polygon, project, 320, 360);
+  assert.equal(shape.edges.length, view.polygon.length - 1);
+  assert.ok(shape.dots.length > 0);
+  assert.ok(shape.dots.every((d) => d.x >= 0 && d.x <= 320 && d.y >= 0 && d.y <= 360));
+  // Downwind of a west wind is east: the fill sits right of the apex.
+  assert.ok(shape.dots.every((d) => d.x >= 159));
+  assert.deepEqual(coneShape([], project, 320, 360), { edges: [], dots: [] });
+  const land = fs.readFileSync("src/phone/LandscapeMap.js", "utf8");
+  assert.match(land, /overlay\?\.markers/);
+  assert.match(land, /MarkPin/);
+  assert.match(land, /onTap/);
+});
+
+function packStore() {
+  const pack = {
+    ok: true, id: "pack-me-n", catalogId: "me-north-woods", name: "Maine, North Woods", kind: "mbtiles", format: "mbtiles", file: "me-north-woods.mbtiles",
+    bytes: 6 * 1024 * 1024, bounds: { west: -70.3, south: 45.2, east: -68.3, north: 47.4 }, minZoom: 6, maxZoom: 12, license: "ODbL 1.0 (OpenStreetMap parts); public domain (terrain, land cover)",
+    attribution: "Elevation: AWS Terrain Tiles (USGS 3DEP, SRTM, GMTED, ETOPO1; public domain). Land cover: NLCD 2021 (USGS/MRLC, public domain). Water, trails, protected areas: (c) OpenStreetMap contributors, ODbL 1.0.",
+    built: "2026-11-17", lines: []
+  };
+  return addPack(emptyPackStore(), pack).store;
+}
+const AREA = { id: "a1", name: "50 km area", box: { west: -70.3, south: 44.1, east: -69.3, north: 44.9 }, zooms: [8, 9], done: ["terrain:8/80/94"], status: "complete", rendered: true };
+
+test("About this map credits the Elevation source once, even with a pack and a downloaded area", () => {
+  const layers = mapLayers({ store: packStore(), areas: [AREA], port: 4000 });
+  assert.equal((layers.attribution.match(/AWS Terrain Tiles/g) || []).length, 1);
+  assert.equal((layers.about.credit.match(/Elevation:/g) || []).length, 1);
+  assert.equal((layers.about.credit.match(/May be dated/g) || []).length, 1);
+  assert.ok(layers.about.lines.includes("Maine, North Woods. Land, water, trails, place names, and terrain. No roads."));
+  const onlyArea = aboutThisMap({ packs: [], drawn: [AREA] });
+  assert.match(onlyArea.credit, /^Elevation: AWS Terrain Tiles/);
+  assert.equal(aboutThisMap({}).credit, "No map pack yet.");
+});
+
+test("under the map is one About this map link, not a credit paragraph", () => {
+  for (const file of ["src/phone/OfflineMap.js", "src/phone/OfflineMap.native.js"]) {
+    const src = fs.readFileSync(file, "utf8");
+    assert.match(src, /onAbout \? <AboutMapLink/);
+  }
+  const app = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.match(app, /onAbout=\{/);
+  assert.match(app, /About this map<\/Text>/);
+  assert.match(fs.readFileSync("src/phone/hunt_map_ui.js", "utf8"), />About this map</);
+});
+
+test("Hunt state chips are one scrolling row, and the legal card does not crush the map", () => {
+  const hud = fs.readFileSync("src/phone/HuntHud.js", "utf8");
+  assert.match(hud, /<Chips scroll label="State"/);
+  assert.doesNotMatch(hud, /maxHeight: 280/);
+  assert.match(hud, /maxHeight: sheetMax/);
+  const ui = fs.readFileSync("src/phone/hunt_ui.js", "utf8");
+  assert.match(ui, /horizontal/);
+  assert.match(ui, /flexWrap: "nowrap"/);
+  assert.match(ui, /export function orderChips/);
+});
