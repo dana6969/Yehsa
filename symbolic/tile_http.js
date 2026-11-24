@@ -9,9 +9,10 @@ export function parseRequest(text) {
   return { method: method || "GET", path };
 }
 
-const TILE_KINDS = new Set(["pack", "area"]);
+const TILE_KINDS = new Set(["pack", "area", "dem"]);
 
 // /pack/{z}/{x}/{y}  merged raster packs   /area/{z}/{x}/{y}  saved offline areas
+// /dem/{z}/{x}/{y}  bundled terrain elevation (Terrarium) for hillshade
 // /glyphs/{fontstack}/{range}.pbf  label font for road names
 export function routeTile(path) {
   const parts = String(path || "").split("/").filter(Boolean);

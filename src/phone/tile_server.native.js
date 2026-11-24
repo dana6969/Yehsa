@@ -2,6 +2,7 @@
 // MapLibre on the phone asks this process for tiles. Nothing is published off the device.
 //   /pack/{z}/{x}/{y}  raster tiles from the MBTiles packs on this phone (merged)
 //   /area/{z}/{x}/{y}  drawn terrain tiles of the areas saved with "Download this area"
+//   /dem/{z}/{x}/{y}   bundled terrain elevation (Terrarium) for Terrain shading
 // Tiles are read from disk one at a time. No pack is ever loaded whole into memory.
 
 import { createServer } from "react-native-tcp-socket";
@@ -10,6 +11,7 @@ import { createPackTiles, tileTouches } from "../../symbolic/pack_tiles.js";
 import { openMbtiles } from "./pack_files";
 import { readRender } from "./area_store";
 import { glyphRange } from "../../symbolic/roads.js";
+import { demTile } from "./dem_asset";
 
 const packTiles = createPackTiles();
 const open = new Map(); // pack id -> Promise<reader>
@@ -67,6 +69,8 @@ async function areaTile(z, x, y) {
 const providers = {
   pack: (z, x, y) => packTiles.get(z, x, y),
   area: areaTile,
+  // Bundled terrain elevation for Terrain shading (hillshade drawn by MapLibre).
+  dem: (z, x, y) => demTile(z, x, y),
   // The font for road names on the map, bundled in the app.
   glyphs: async (fontstack, range) => glyphRange(fontstack, range)
 };

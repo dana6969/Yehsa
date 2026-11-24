@@ -134,6 +134,7 @@ import { mapAbout, mapLayers } from "../../symbolic/map_layers.js";
 import { initialHost, mapViewKey, nextHost, rememberCamera, shouldMountMap } from "../../symbolic/map_host.js";
 import { pinFix, recenterState } from "../../symbolic/map_camera.js";
 import { lastMapCamera, rememberMapCamera } from "../../symbolic/map_camera_driver.js";
+import { loadMapStyle, saveMapStyle } from "../../symbolic/map_style_pref.js";
 import { mapWatchesGps, requestLocation, turnLocationOff } from "../../symbolic/location_setting.js";
 import { confirmLocation } from "./location_prompt.js";
 import MapRail from "./MapRail.js";
@@ -1753,7 +1754,17 @@ function LandPane({ active, fullScreen = false, onFullScreen, onSos, position, s
   const [mapFailed, setMapFailed] = useState(false);
   const [tilePort, setTilePort] = useState(null);
   const [elevNote, setElevNote] = useState("");
-  const [mapStyle, setMapStyle] = useState("standard");
+  const [mapStyle, setMapStyleNow] = useState("standard");
+  // R7: the look (Terrain shading included) is saved, so it survives a restart.
+  useEffect(() => {
+    let live = true;
+    loadMapStyle(AsyncStorage).then((saved) => { if (live) setMapStyleNow(saved); });
+    return () => { live = false; };
+  }, []);
+  const setMapStyle = (next) => {
+    setMapStyleNow(next);
+    saveMapStyle(AsyncStorage, next);
+  };
   const [focus, setFocus] = useState(null);
   const [focusKey, setFocusKey] = useState(0);
   const [host, setHost] = useState(initialHost);

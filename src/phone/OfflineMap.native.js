@@ -17,17 +17,7 @@ import {
 import { AboutMapLink, ConePill, DragPin, MarkPin } from "./hunt_map_ui.js";
 import { DestinationPin } from "./route/RoutePins.js";
 import { createCameraDriver } from "../../symbolic/map_camera_driver.js";
-
-// glyphs: the loopback URL for the road-name font, when the road layer is on.
-function blankStyle(color, glyphs) {
-  const style = {
-    version: 8,
-    sources: {},
-    layers: [{ id: "background", type: "background", paint: { "background-color": color } }]
-  };
-  if (glyphs) style.glyphs = glyphs;
-  return style;
-}
+import { TERRAIN_LAYER_ID, baseMapStyle } from "../../symbolic/map_layers.js";
 
 const NOT_TRACK = ["!=", ["get", "c"], "track"];
 const IS_TRACK = ["==", ["get", "c"], "track"];
@@ -96,7 +86,13 @@ export default function OfflineMap({
   const geo = useMemo(() => shapesToGeoJson(layers?.shapes), [layers?.shapes]);
   const land = layers?.hasLand ? layers.land : null;
   const roads = layers?.roads || null;
-  const style = useMemo(() => blankStyle(land ? land.water : "#101611", layers?.glyphs), [land?.water, layers?.glyphs]);
+  const shade = layers?.hillshade || null;
+  const style = useMemo(
+    () => baseMapStyle({ color: land ? land.water : "#101611", glyphs: layers?.glyphs, hillshade: shade }),
+    [land?.water, layers?.glyphs, shade?.template, JSON.stringify(shade?.paint || null)]
+  );
+  // With Terrain shading on, the land and pack pictures go under the shading layer.
+  const under = shade ? TERRAIN_LAYER_ID : undefined;
 
   // R7 camera: every move is decided by one driver (symbolic/map_camera_driver.js) and run here
   // on the Camera ref. The Camera has no controlled props, so nothing re-applies a camera on a
@@ -185,20 +181,22 @@ export default function OfflineMap({
       >
         <Camera ref={camera} defaultSettings={start.current} />
         {land ? (
-          <ShapeSource id="land" shape={geo.land}>
-            <FillLayer id="land-fill" style={{ fillColor: land.land }} />
+          // Keyed by the shading, so turning it on or off rebuilds this layer in the right place
+          // (a belowLayerID change on a live layer is not safe on Android).
+          <ShapeSource key={`land-${under ? "shade" : "flat"}`} id="land" shape={geo.land}>
+            <FillLayer id="land-fill" belowLayerID={under} style={{ fillColor: land.land }} />
           </ShapeSource>
         ) : null}
         {(layers?.rasters || []).map((raster) => (
           <RasterSource
-            key={`${raster.id}-${raster.template}`}
+            key={`${raster.id}-${raster.template}-${under ? "shade" : "flat"}`}
             id={`src-${raster.id}`}
             tileUrlTemplates={[raster.template]}
             tileSize={raster.tileSize || 256}
             minZoomLevel={raster.minZoom}
             maxZoomLevel={raster.maxZoom}
           >
-            <RasterLayer id={`layer-${raster.id}`} sourceID={`src-${raster.id}`} style={{ rasterOpacity: 1, ...paint }} />
+            <RasterLayer id={`layer-${raster.id}`} sourceID={`src-${raster.id}`} belowLayerID={under} style={{ rasterOpacity: 1, ...paint }} />
           </RasterSource>
         ))}
         {layers?.tint ? (

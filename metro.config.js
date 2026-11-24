@@ -8,7 +8,8 @@ const { getDefaultConfig } = require("expo/metro-config");
 const config = getDefaultConfig(__dirname);
 // The offline meaning matcher ships its model (.onnx) and int8 scripture rows (.i8) as assets.
 // Offline routing ships road graphs (.yrg) and place lists (.ypl) as assets (assets/routing).
-config.resolver.assetExts = [...new Set([...config.resolver.assetExts, "onnx", "i8", "yrg", "ypl"])];
+// Terrain shading ships one elevation archive (.ydm) (assets/dem).
+config.resolver.assetExts = [...new Set([...config.resolver.assetExts, "onnx", "i8", "yrg", "ypl", "ydm"])];
 const upstream = config.resolver.resolveRequest;
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {

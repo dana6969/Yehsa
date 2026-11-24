@@ -4,6 +4,7 @@
 
 import { attributionLine } from "./map_packs.js";
 import { ROADS_ATTRIBUTION, glyphsUrl, roadsLayer } from "./roads.js";
+import { DEM_ATTRIBUTION, DEM_MAX_ZOOM, DEM_MIN_ZOOM } from "./dem_archive.js";
 
 export const MAP_STYLES = [
   { id: "standard", label: "Standard" },
@@ -97,6 +98,10 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
   const sources = [];
   if (tiled.length) sources.push(...packs.filter((pack) => tiled.includes(pack)));
   const credit = aboutThisMap({ packs, drawn, roads: Boolean(roadLayer) }).credit;
+  // R7 Terrain shading: real hillshade (MapLibre raster-dem) from the elevation bundled in the
+  // app, drawn over the pack pictures and under roads and marks. Works offline everywhere the
+  // packs cover. Before R7 the switch only nudged picture contrast, so it looked like nothing.
+  const hillshade = style === "terrain" && port ? terrainShade({ port, mode, night }) : null;
   return {
     empty,
     // The map component draws whenever there is something to draw, even while the tile server
@@ -113,10 +118,54 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
     land: landStyleFor({ style, mode, night }),
     paint: look.paint,
     tint: look.tint,
+    hillshade,
     styleLabel: look.label,
     attribution: empty ? "No map pack yet." : credit,
     firstFocus: focusOf(tiled, drawn)
   };
+}
+
+export function terrainShade({ port, mode = "field", night = "red" } = {}) {
+  const dark = mode === "night";
+  return {
+    template: `http://127.0.0.1:${port}/dem/{z}/{x}/{y}`,
+    minZoom: DEM_MIN_ZOOM,
+    maxZoom: DEM_MAX_ZOOM,
+    tileSize: 256,
+    encoding: "terrarium",
+    paint: {
+      "hillshade-exaggeration": 0.75,
+      "hillshade-illumination-direction": 315,
+      "hillshade-shadow-color": dark ? (night === "amber" ? "#1a1000" : "#1a0000") : "#20180c",
+      "hillshade-highlight-color": dark ? "#00000000" : "#fffdf2",
+      "hillshade-accent-color": dark ? "#000000" : "#3b3320"
+    },
+    attribution: DEM_ATTRIBUTION
+  };
+}
+
+// MapLibre style for the map view: background, and the terrain shading when it is on. The pack
+// rasters are added by the map component below "terrain-shade", so the shading lies over them.
+export const TERRAIN_LAYER_ID = "terrain-shade";
+export function baseMapStyle({ color = "#101611", glyphs = null, hillshade = null } = {}) {
+  const style = {
+    version: 8,
+    sources: {},
+    layers: [{ id: "background", type: "background", paint: { "background-color": color } }]
+  };
+  if (glyphs) style.glyphs = glyphs;
+  if (hillshade) {
+    style.sources["terrain-dem"] = {
+      type: "raster-dem",
+      tiles: [hillshade.template],
+      tileSize: hillshade.tileSize,
+      encoding: hillshade.encoding,
+      minzoom: hillshade.minZoom,
+      maxzoom: hillshade.maxZoom
+    };
+    style.layers.push({ id: TERRAIN_LAYER_ID, type: "hillshade", source: "terrain-dem", paint: hillshade.paint });
+  }
+  return style;
 }
 
 // Zoom levels an area really has tiles for. Areas saved by older builds have no zooms list,
