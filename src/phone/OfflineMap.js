@@ -6,6 +6,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { PMTiles, Protocol } from "pmtiles";
 import { attributionLine } from "../../symbolic/map_packs.js";
 import { MemorySource } from "../../symbolic/archive_tiles.js";
+import { AboutMapLink } from "./hunt_map_ui.js";
 
 function lineCollection(shapes) {
   const features = [];
@@ -14,6 +15,75 @@ function lineCollection(shapes) {
     if (coords.length >= 2) features.push({ type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: coords } });
   }
   return { type: "FeatureCollection", features };
+}
+
+function coneData(overlay) {
+  const ring = overlay?.polygon;
+  if (!ring || ring.length < 4) return { type: "FeatureCollection", features: [] };
+  return { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [ring.map((p) => [p.longitude, p.latitude])] } };
+}
+
+const GLYPHS = { stand: "\u25A0", trail: "\u2505", bedding: "\u25B2", sighting: "S" };
+
+// A mark pin in the browser preview: the kind's shape, the name, and the state word.
+// Meaning is in the words (At risk, Clear, Out of cone), never in color alone.
+function markElement(mark, onPick) {
+  const el = document.createElement("button");
+  el.type = "button";
+  const word = mark.word ? ` \u00B7 ${mark.word}` : "";
+  const risky = mark.state === "risk";
+  el.setAttribute("aria-label", `${mark.name}, ${mark.kind}${mark.word ? `, ${mark.word}` : ""}`);
+  el.textContent = `${GLYPHS[mark.kind] || "\u25CF"} ${risky ? "! " : ""}${mark.name}${word}`;
+  Object.assign(el.style, {
+    font: "700 12px system-ui, sans-serif",
+    color: "#f4f0e6",
+    background: "#1b2420",
+    border: `${risky ? 2 : 1}px solid ${risky ? "#c0643c" : "#8a948a"}`,
+    outline: mark.selected ? "2px solid #e2b15a" : "none",
+    borderRadius: "11px",
+    padding: "2px 8px",
+    whiteSpace: "nowrap",
+    cursor: "pointer"
+  });
+  el.addEventListener("click", (event) => { event.stopPropagation(); onPick(mark.id); });
+  return el;
+}
+
+function labelElement(text) {
+  const el = document.createElement("div");
+  el.textContent = text;
+  Object.assign(el.style, {
+    font: "700 12px system-ui, sans-serif",
+    color: "#f4f0e6",
+    background: "#1b2420",
+    border: "1px solid #e2b15a",
+    borderRadius: "12px",
+    padding: "4px 10px",
+    maxWidth: "190px",
+    textAlign: "center",
+    pointerEvents: "none"
+  });
+  return el;
+}
+
+function syncPins(map, store, overlay, onPick, onDrop) {
+  store.forEach((marker) => marker.remove());
+  store.length = 0;
+  for (const mark of overlay?.markers || []) {
+    const dragging = mark.id === overlay?.dragId;
+    const marker = new maplibregl.Marker({ element: markElement(dragging ? { ...mark, name: `Drag ${mark.name}`, selected: true } : mark, dragging ? () => {} : onPick), anchor: "top", draggable: dragging })
+      .setLngLat([mark.longitude, mark.latitude]);
+    if (dragging) {
+      marker.on("dragend", () => {
+        const at = marker.getLngLat();
+        onDrop(mark.id, { latitude: at.lat, longitude: at.lng });
+      });
+    }
+    store.push(marker.addTo(map));
+  }
+  if (overlay?.labelAt && overlay.label) {
+    store.push(new maplibregl.Marker({ element: labelElement(overlay.label) }).setLngLat([overlay.labelAt.longitude, overlay.labelAt.latitude]).addTo(map));
+  }
 }
 
 const NO_TILES = [];
@@ -25,6 +95,11 @@ export default function OfflineMap({
   fix,
   onFail,
   onPress,
+  onLongPress,
+  overlay,
+  onMarkPress,
+  onMarkDragEnd,
+  onAbout,
   fill = false
 }) {
   const archive = layers?.archivePack?.archive;
@@ -35,6 +110,16 @@ export default function OfflineMap({
   const host = useRef(null);
   const pressRef = useRef(onPress);
   const failRef = useRef(onFail);
+  const longRef = useRef(onLongPress);
+  const markRef = useRef(onMarkPress);
+  const dropRef = useRef(onMarkDragEnd);
+  dropRef.current = onMarkDragEnd;
+  const overlayRef = useRef(overlay);
+  const mapRef = useRef(null);
+  const pinsRef = useRef([]);
+  longRef.current = onLongPress;
+  markRef.current = onMarkPress;
+  overlayRef.current = overlay;
   pressRef.current = onPress;
   failRef.current = onFail;
   const label = attribution || "No map pack. Blank landscape. No streets are stored.";
@@ -104,7 +189,7 @@ export default function OfflineMap({
           attributionControl: false
         });
       }
-      map.addControl(new maplibregl.AttributionControl({ customAttribution: label }));
+      map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: label }));
       map.on("load", () => {
         (demTiles || []).forEach((tile, index) => {
           if (!tile.url || !tile.bounds) return;
@@ -125,6 +210,10 @@ export default function OfflineMap({
         map.addLayer({ id: "contours", type: "line", source: "contours", paint: { "line-color": "#e6d7b8", "line-width": 1 } });
         map.addSource("overlays", { type: "geojson", data: lineCollection(shapes) });
         map.addLayer({ id: "overlays", type: "line", source: "overlays", paint: { "line-color": "#e2b15a", "line-width": 2 } });
+        map.addSource("cone", { type: "geojson", data: coneData(overlayRef.current) });
+        map.addLayer({ id: "cone-fill", type: "fill", source: "cone", paint: { "fill-color": overlayRef.current?.color || "#e2b15a", "fill-opacity": 0.3 } });
+        map.addLayer({ id: "cone-line", type: "line", source: "cone", paint: { "line-color": overlayRef.current?.color || "#e2b15a", "line-width": 2 } });
+        syncPins(map, pinsRef.current, overlayRef.current, (id) => markRef.current?.(id), (id, point) => dropRef.current?.(id, point));
         if (fix) {
           map.addSource("me", {
             type: "geojson",
@@ -134,27 +223,44 @@ export default function OfflineMap({
             id: "me",
             type: "circle",
             source: "me",
-            paint: { "circle-radius": 7, "circle-color": "#b7d0a4", "circle-stroke-width": 2, "circle-stroke-color": "#141a16" }
+            paint: { "circle-radius": 8, "circle-color": "#b7d0a4", "circle-opacity": 0.12, "circle-stroke-width": 3, "circle-stroke-color": "#b7d0a4" }
           });
         }
       });
       map.on("click", (event) => {
         pressRef.current?.({ latitude: event.lngLat.lat, longitude: event.lngLat.lng });
       });
+      // Right-click stands in for long-press in the browser preview.
+      map.on("contextmenu", (event) => {
+        longRef.current?.({ latitude: event.lngLat.lat, longitude: event.lngLat.lng });
+      });
+      mapRef.current = map;
     })().catch((err) => {
       console.error("offline map", err);
       failRef.current?.();
     });
     return () => {
       alive = false;
+      mapRef.current = null;
+      pinsRef.current.forEach((marker) => marker.remove());
+      pinsRef.current = [];
       map?.remove();
     };
   }, [archive, format, label, demTiles, contours, shapes, fix]);
 
+  // The cone and the marks follow the wind and the list without rebuilding the map.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !map.isStyleLoaded?.()) return;
+    map.getSource("cone")?.setData(coneData(overlay));
+    syncPins(map, pinsRef.current, overlay, (id) => markRef.current?.(id), (id, point) => dropRef.current?.(id, point));
+  }, [overlay]);
+
   return (
     <View style={fill ? { flex: 1 } : null}>
       <View ref={host} accessibilityLabel="Offline map" style={{ ...(fill ? { flex: 1, minHeight: 150 } : { height: 380 }), borderRadius: 16, overflow: "hidden", backgroundColor: "#101611" }} />
-      <MapCredit text={label} empty={!attribution} />
+      {/* One "About this map" link under the map: the sheet when the screen has one, else the fold-out credit. */}
+      {onAbout ? <AboutMapLink onPress={onAbout} /> : <MapCredit text={label} empty={!attribution} />}
     </View>
   );
 }

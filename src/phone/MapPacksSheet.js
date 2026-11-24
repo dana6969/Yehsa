@@ -65,7 +65,11 @@ function Group({ title, cards, open, onToggle, children }) {
     <View>
       <Pressable accessibilityRole="button" accessibilityState={{ expanded: open }} onPress={onToggle} style={styles.groupHead}>
         <Text style={styles.groupTitle}>{title}</Text>
-        <Text style={styles.groupCount}>{cards.length} · {open ? "Hide" : "Show"}</Text>
+        <View style={styles.groupRight}>
+          <Text style={styles.groupCount}>{cards.length === 1 ? "1 pack" : `${cards.length} packs`}</Text>
+          <Text style={styles.groupCount}>{open ? "Hide" : "Show"}</Text>
+          <Ionicons name={open ? "chevron-up" : "chevron-down"} size={18} color={colors.muted} />
+        </View>
       </Pressable>
       {open ? children : null}
     </View>
@@ -217,6 +221,7 @@ const styles = themedStyles((c) => ({
   groupHead: { minHeight: hit.min, flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: space.md, borderBottomColor: c.line, borderBottomWidth: 1 },
   groupTitle: { ...type.action, color: c.ink },
   groupCount: { ...type.label, color: c.muted },
+  groupRight: { flexDirection: "row", alignItems: "center", gap: 6 },
   card: { backgroundColor: c.surface, borderRadius: radius.lg, borderWidth: 2, borderColor: c.lineStrong, padding: 14, gap: 8, marginTop: 10 },
   head: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 8 },
   name: { color: c.ink, fontSize: 16, fontWeight: "600", flex: 1 },

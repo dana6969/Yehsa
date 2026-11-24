@@ -14,10 +14,13 @@ function when(t) {
   return new Date(t).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 }
 
-export default function SightingsScreen({ position, onBack }) {
+// prefill: { markId, spot, t, name } from a sighting mark on the Hunt map. The form opens with
+// that spot added and that time, so nothing has to be typed twice.
+export default function SightingsScreen({ position, onBack, prefill = null }) {
   const hunt = useHunt();
-  const [view, setView] = useState("list");
-  const [form, setForm] = useState({ species: "Deer", count: "1", sexAge: "unknown", points: "", activity: "feeding", direction: "", notes: "", addSpot: false });
+  const [from, setFrom] = useState(prefill);
+  const [view, setView] = useState(prefill ? "new" : "list");
+  const [form, setForm] = useState({ species: "Deer", count: "1", sexAge: "unknown", points: "", activity: "feeding", direction: "", notes: "", addSpot: Boolean(prefill?.spot) });
   const [undo, setUndo] = useState(null);
   const set = (patch) => setForm((current) => ({ ...current, ...patch }));
   const entries = hunt.sightings.entries;
@@ -33,12 +36,16 @@ export default function SightingsScreen({ position, onBack }) {
       precip: cond.precip?.kind || null,
       pressure: cond.pressure ? { band: cond.pressure.band, delta: cond.pressure.delta, source: "live" } : null
     };
+    const markSpot = from?.spot || null;
+    const spot = form.addSpot ? (markSpot || (fix ? { latitude: fix.latitude, longitude: fix.longitude } : null)) : null;
     const entry = newEntry({
       ...form,
-      spot: form.addSpot && fix ? { latitude: fix.latitude, longitude: fix.longitude } : null,
+      spot,
+      markId: from?.markId || null,
       weather,
       estimate: cond.estimate ? { level: cond.estimate.level, total: cond.estimate.total } : null
-    });
+    }, Number.isFinite(from?.t) ? from.t : Date.now());
+    setFrom(null);
     setHunt("sightings", (log) => addEntry(log, entry));
     setView("list");
     setForm({ species: "Deer", count: "1", sexAge: "unknown", points: "", activity: "feeding", direction: "", notes: "", addSpot: false });
@@ -52,7 +59,7 @@ export default function SightingsScreen({ position, onBack }) {
   if (view === "new") {
     return (
       <ScrollView contentContainerStyle={screenStyles.scroll} keyboardShouldPersistTaps="handled">
-        <ScreenHeader title="Log a sighting" lead="Zero deer is a real entry. Log every sit so the comparison stays fair." onBack={() => setView("list")} backLabel="Sightings" />
+        <ScreenHeader title="Log a sighting" lead="Zero deer is a real entry. Log every sit so the comparison stays fair." onBack={() => { setFrom(null); setView("list"); }} backLabel="Sightings" />
         <Card title="What you saw">
           <Chips label="Species" value={form.species} onChange={(id) => set({ species: id })} options={SPECIES.map((name) => ({ id: name, label: name }))} />
           <Field label="How many (0 if you saw none)" value={form.count} onChangeText={(value) => set({ count: value })} placeholder="1" />
@@ -64,7 +71,8 @@ export default function SightingsScreen({ position, onBack }) {
           <Field label="Notes" value={form.notes} onChangeText={(value) => set({ notes: value })} placeholder="Anything worth remembering" multiline />
         </Card>
         <Card title="Filled in for you">
-          <Line label="Time" value={when(Date.now())} />
+          <Line label="Time" value={when(Number.isFinite(from?.t) ? from.t : Date.now())} />
+          {from ? <SourceTag source={`${from.name || "sighting mark"} on the Hunt map`} /> : null}
           <Line label="Temperature" value={cond.temp ? `${cond.temp.f}°F` : "Not known"} />
           {cond.temp ? <SourceTag source={cond.temp.source} /> : null}
           <Line label="Wind" value={cond.wind?.ok ? `${cond.wind.point} ${Math.round(cond.wind.mph)} mph` : "Not known"} />
@@ -74,8 +82,17 @@ export default function SightingsScreen({ position, onBack }) {
         </Card>
         <Card title="Place">
           <Quiet>The place is left out unless you add it.</Quiet>
-          <Action label={form.addSpot ? "My spot is added" : "Add my spot"} tone={form.addSpot ? "brass" : "quiet"} disabled={!fix} onPress={() => set({ addSpot: !form.addSpot })} accessibilityHint="Uses your held position, if you turned it on in Map." />
-          {!fix ? <Quiet>Turn on your location in Map to add your spot.</Quiet> : null}
+          {from?.spot ? (
+            <>
+              <Line label="Marked spot" value={`${from.spot.latitude.toFixed(5)}, ${from.spot.longitude.toFixed(5)}`} />
+              <Action label={form.addSpot ? "Marked spot is added" : "Add the marked spot"} tone={form.addSpot ? "brass" : "quiet"} onPress={() => set({ addSpot: !form.addSpot })} accessibilityHint="The spot you marked on the Hunt map. It stays on this phone." />
+            </>
+          ) : (
+            <>
+              <Action label={form.addSpot ? "My spot is added" : "Add my spot"} tone={form.addSpot ? "brass" : "quiet"} disabled={!fix} onPress={() => set({ addSpot: !form.addSpot })} accessibilityHint="Uses your held position, if you turned it on in Map." />
+              {!fix ? <Quiet>Turn on your location in Map to add your spot.</Quiet> : null}
+            </>
+          )}
         </Card>
         <Action label="Save sighting" onPress={save} />
         <Quiet>{PRIVACY_TEXT}</Quiet>

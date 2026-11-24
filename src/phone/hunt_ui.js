@@ -8,32 +8,49 @@ export const screenStyles = themedStyles((c) => ({
   scroll: { paddingTop: Platform.OS === "ios" ? 52 : 22, paddingHorizontal: tokens.space.xl, paddingBottom: 180, gap: 10 }
 }));
 
-// scroll: one horizontal row that never wraps (the chosen option comes first). Use it for long lists
-// such as states, where a wrapped second row used to clip under the map.
+// Chips wrap by default. scroll: one horizontal row that never wraps or clips (selected first),
+// for lists that can grow, such as the legal-light states.
+export function orderChips(options, value, pickedFirst) {
+  return pickedFirst ? selectedFirst(options, value) : options;
+}
+
 export function Chips({ options, value, onChange, label, scroll = false }) {
   const display = useDisplay();
-  const Wrap = scroll ? ScrollView : View;
-  const wrapProps = scroll
-    ? { horizontal: true, showsHorizontalScrollIndicator: false, contentContainerStyle: styles.chipsScroll, style: styles.chipsScrollOuter, keyboardShouldPersistTaps: "handled" }
-    : { style: styles.chips };
+  const list = orderChips(options, value, scroll);
+  const chips = list.map((option) => {
+    const on = option.id === value;
+    return (
+      <Pressable
+        key={option.id}
+        accessibilityRole="button"
+        accessibilityState={{ selected: on }}
+        accessibilityLabel={`${option.label}${on ? ", selected" : ""}`}
+        onPress={() => onChange(option.id)}
+        style={[styles.chip, { borderColor: on ? colors.brass : display.line, backgroundColor: on ? colors.surface : "transparent" }]}
+      >
+        <Text style={[styles.chipText, { color: on ? colors.brassText : colors.ink, fontSize: display.size(14) }]}>{on ? `${option.label} ✓` : option.label}</Text>
+      </Pressable>
+    );
+  });
+  if (scroll) {
+    return (
+      <ScrollView
+        horizontal
+        accessibilityLabel={label}
+        showsHorizontalScrollIndicator
+        nestedScrollEnabled
+        keyboardShouldPersistTaps="handled"
+        style={styles.chipScroll}
+        contentContainerStyle={styles.chipRow}
+      >
+        {chips}
+      </ScrollView>
+    );
+  }
   return (
-    <Wrap accessibilityLabel={label} {...wrapProps}>
-      {(scroll ? selectedFirst(options, value) : options).map((option) => {
-        const on = option.id === value;
-        return (
-          <Pressable
-            key={option.id}
-            accessibilityRole="button"
-            accessibilityState={{ selected: on }}
-            accessibilityLabel={`${option.label}${on ? ", selected" : ""}`}
-            onPress={() => onChange(option.id)}
-            style={[styles.chip, { borderColor: on ? colors.brass : display.line, backgroundColor: on ? colors.surface : "transparent" }]}
-          >
-            <Text style={[styles.chipText, { color: on ? colors.brassText : colors.ink, fontSize: display.size(14) }]}>{on ? `${option.label} ✓` : option.label}</Text>
-          </Pressable>
-        );
-      })}
-    </Wrap>
+    <View accessibilityLabel={label} style={styles.chips}>
+      {chips}
+    </View>
   );
 }
 
@@ -67,8 +84,8 @@ export function Footer({ children }) {
 
 const styles = themedStyles((c) => ({
   chips: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 6 },
-  chipsScroll: { flexDirection: "row", flexWrap: "nowrap", gap: 8, paddingRight: 16 },
-  chipsScrollOuter: { flexGrow: 0, marginBottom: 6 },
+  chipScroll: { flexGrow: 0, marginBottom: 6 },
+  chipRow: { flexDirection: "row", flexWrap: "nowrap", gap: 8, paddingRight: 8 },
   chip: { minHeight: 44, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, justifyContent: "center" },
   chipText: { fontWeight: "600" },
   tag: { color: c.muted, fontSize: 12, marginTop: 2 },

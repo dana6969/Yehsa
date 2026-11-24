@@ -44,7 +44,9 @@ export function newEntry(fields, now = Date.now()) {
     weather: fields.weather || null,
     estimate: fields.estimate ? { level: fields.estimate.level, total: fields.estimate.total } : null,
     notes: String(fields.notes || "").slice(0, 600),
-    photoUri: fields.photoUri || null
+    photoUri: fields.photoUri || null,
+    // Set when the entry was logged from a sighting mark on the Hunt map, so the map shows one pin.
+    markId: typeof fields.markId === "string" && fields.markId ? fields.markId.slice(0, 80) : null
   };
 }
 

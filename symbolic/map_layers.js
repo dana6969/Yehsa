@@ -91,10 +91,7 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
   const look = rasterPaintFor({ style, mode, night });
   const sources = [];
   if (tiled.length) sources.push(...packs.filter((pack) => tiled.includes(pack)));
-  const credit = [];
-  const line = attributionLine({ packs: packs.filter((pack) => pack.attribution) });
-  // Pack credits already name the elevation source. Only add it when none of them did.
-  if (drawn.length && !/Elevation:/i.test(line)) credit.push("Elevation: AWS Terrain Tiles. May be dated.");
+  const credit = aboutThisMap({ packs, drawn }).credit;
   return {
     empty,
     // The map component draws whenever there is something to draw, even while the tile server
@@ -109,7 +106,7 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
     paint: look.paint,
     tint: look.tint,
     styleLabel: look.label,
-    attribution: empty ? "No map pack yet." : dedupeCredit([line.replace(/^No map pack yet\.$/, ""), ...credit].filter(Boolean).join(" ")),
+    attribution: empty ? "No map pack yet." : credit,
     firstFocus: focusOf(tiled, drawn)
   };
 }
@@ -146,4 +143,37 @@ export function dedupeCredit(text) {
     out.push(part.trim());
   }
   return out.join(" ");
+}
+
+// The About this map sheet for what is saved on the phone (same packs and areas the map draws).
+// Kept apart from mapLayers(), which only ever describes what is drawn.
+export function mapAbout({ store, areas = [] } = {}) {
+  const packs = store?.packs || [];
+  const drawn = (areas || []).filter((area) => area && area.rendered && area.box);
+  return aboutThisMap({ packs, drawn });
+}
+
+const ELEVATION_CREDIT = "Elevation: AWS Terrain Tiles (USGS 3DEP, SRTM, GMTED, ETOPO1; public domain)";
+
+// "About this map": what is on the map and every source credited once. The map itself only shows
+// an "About this map" link; the credit lives here, so it is never a wall of text under the map.
+export function aboutThisMap({ packs = [], drawn = [] } = {}) {
+  const lines = [];
+  for (const pack of packs) {
+    if (!pack?.name) continue;
+    const catalog = pack.kind === "mbtiles" && (pack.catalogId || /no roads/i.test(pack.description || "") || /AWS Terrain Tiles/i.test(pack.attribution || ""));
+    const what = catalog
+      ? "Land, water, trails, place names, and terrain. No roads."
+      : Array.isArray(pack.lines) && pack.lines.length ? "Lines and points you imported." : "Imported map file.";
+    const line = `${pack.name}. ${what}`;
+    if (!lines.includes(line)) lines.push(line);
+  }
+  if (drawn.length) lines.push(`${drawn.length === 1 ? "1 downloaded area" : `${drawn.length} downloaded areas`}. Terrain and elevation only. No roads.`);
+  const named = attributionLine({ packs: packs.filter((pack) => pack.attribution) });
+  let credit = /^No map pack yet\.$/.test(named) ? "" : named;
+  // The pack credit already names AWS Terrain Tiles; only add it when a downloaded area is the sole elevation source.
+  if (drawn.length && !/AWS Terrain Tiles/i.test(credit)) {
+    credit = credit ? credit.replace(/\s*May be dated\.$/, ` · ${ELEVATION_CREDIT}. May be dated.`) : `${ELEVATION_CREDIT}. May be dated.`;
+  }
+  return { title: "About this map", lines, credit: dedupeCredit(credit) || "No map pack yet." };
 }
