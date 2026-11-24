@@ -210,7 +210,7 @@ export default function BeforeYouGo({ target, position, packs, mesh, fieldNotes,
 
 const styles = themedStyles((colors) => ({
   screen: { flex: 1, backgroundColor: colors.bg },
-  content: { padding: space.lg, paddingBottom: space.xxxl },
+  content: { padding: space.lg, paddingBottom: 180 },
   summary: {
     borderWidth: 1,
     borderColor: colors.lineStrong,

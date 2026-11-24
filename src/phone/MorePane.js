@@ -40,7 +40,7 @@ const styles = themedStyles((colors) => ({
   scroll: {
     paddingTop: Platform.OS === "ios" ? 52 : 22,
     paddingHorizontal: tokens.space.xl,
-    paddingBottom: 40
+    paddingBottom: 180
   },
   list: {
     borderWidth: 1,

@@ -173,7 +173,7 @@ export default function BooksPane({ onClose, onBack, backLabel, title, lead, chi
 
 const styles = themedStyles((colors) => ({
   screen: { flex: 1, backgroundColor: colors.bg },
-  content: { padding: space.lg, paddingBottom: space.xxxl },
+  content: { padding: space.lg, paddingBottom: 180 },
   sub: { ...type.label, color: colors.muted, marginTop: space.xl, marginBottom: space.sm, textTransform: "uppercase", letterSpacing: 1 },
   book: { flexDirection: "row", paddingVertical: space.md, borderBottomWidth: 1, borderBottomColor: colors.line },
   bookBody: { flex: 1, marginLeft: space.md },

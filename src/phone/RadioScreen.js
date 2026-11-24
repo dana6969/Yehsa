@@ -260,7 +260,7 @@ function StationRow({ station, playing, saved, onPlay, onStop, onSave, display, 
 }
 
 const styles = themedStyles((colors) => ({
-  scroll: { paddingTop: Platform.OS === "ios" ? 52 : 22, paddingHorizontal: 20, paddingBottom: 48 },
+  scroll: { paddingTop: Platform.OS === "ios" ? 52 : 22, paddingHorizontal: 20, paddingBottom: 180 },
   card: { borderWidth: 1, borderColor: colors.lineStrong, borderRadius: 16, padding: 16, gap: 10, marginBottom: 14, backgroundColor: colors.surface },
   cardTitle: { color: colors.ink, fontWeight: "700" },
   body: { color: colors.ink, lineHeight: 24 },

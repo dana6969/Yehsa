@@ -163,7 +163,7 @@ export default function LearnedPane({ store, deviceId, onChange, onShare, onBack
 }
 
 const styles = themedStyles((colors) => ({
-  scroll: { paddingTop: 22, paddingHorizontal: 22, paddingBottom: 40, gap: 12 },
+  scroll: { paddingTop: 22, paddingHorizontal: 22, paddingBottom: 180, gap: 12 },
   input: { minHeight: 48, color: colors.ink, backgroundColor: colors.surface, borderRadius: 12, borderWidth: 1, borderColor: colors.lineStrong, paddingHorizontal: 12 },
   multi: { minHeight: 90, paddingVertical: 8 },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" },
