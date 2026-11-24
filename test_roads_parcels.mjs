@@ -19,7 +19,7 @@ import { viewBoxFrom } from "./symbolic/map_view_box.js";
 const DAY = 24 * 60 * 60 * 1000;
 
 const loadAsset = async (id, kind) => {
-  const file = `assets/routing/${id}.${kind === "graph" ? "yrg" : "ypl"}`;
+  const file = (kind === "graph" ? `assets/routing/${id}.yrg` : `assets/routing/${id}_places.ypl`);
   if (!fs.existsSync(file)) return null;
   return kind === "graph" ? new Uint8Array(fs.readFileSync(file)) : fs.readFileSync(file, "utf8");
 };

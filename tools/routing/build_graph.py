@@ -340,7 +340,7 @@ def write_places(p, out_prefix):
         rows.append((r[0], r[1], r[2], r[3], near if near != r[0] else ""))
     # Streets are not listed here: the app searches street names in the road graph itself.
     rows.sort(key=lambda r: r[0].lower())
-    with open(out_prefix + ".ypl", "w", encoding="utf-8") as f:
+    with open(out_prefix + "_places.ypl", "w", encoding="utf-8") as f:
         for r in rows:
             f.write(f"{r[0]}\t{r[1]}\t{r[2]:.5f}\t{r[3]:.5f}\t{r[4]}\n")
     print(f"places {len(rows)}", file=sys.stderr)
