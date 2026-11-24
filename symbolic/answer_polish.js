@@ -43,6 +43,8 @@ const NOT_A_PROMISE = /^(?:(?:This|That)\s+(?:note|guide|text|section)\s+(?:does
 export function warmFiller(text) {
   if (typeof text !== "string" || !text) return text;
   const lines = text.split("\n").map((line) => {
+    // A source line is a list of names ("ATP 4-02.11"), not sentences. Keep it whole.
+    if (/^\s*Sources?:/.test(line)) return line.trim();
     const sentences = line.match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g);
     if (!sentences) return line;
     const kept = sentences.filter((sentence) => {

@@ -1,0 +1,427 @@
+[
+{
+"id": "hope_in_hardship",
+"title": "Holding on to hope",
+"domain": "spiritual",
+"also": [
+"no hope",
+"losing hope",
+"how to keep going",
+"hopeless situation"
+],
+"def": "Hope is the sense that things can get better and that your actions matter; in hard times it grows from small, doable steps and from people who stand with you.",
+"look": [
+"a next step you can take in the next hour",
+"someone you are doing this for",
+"a past hard time you came through"
+],
+"use": "Pick one small task, finish it, and notice it; remember who is waiting for you; let someone help carry the load.",
+"not": "Do not mistake a dark hour for the end of the story; if hopelessness turns to thoughts of dying, reach out now.",
+"call": "Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
+"rel": [
+"gratitude_meaning_hardship",
+"suicidal_thoughts_help"
+],
+"src": [
+"atp3-50-21",
+"samhsa"
+]
+},
+{
+"id": "fear_of_death_moment",
+"title": "Facing fear of dying in a crisis",
+"domain": "spiritual",
+"also": [
+"am I going to die",
+"afraid to die",
+"scared of dying",
+"fear of death"
+],
+"def": "In a life-threatening moment, fear of dying is natural; turning attention to the next useful action and to people you love can steady you.",
+"look": [
+"racing heart and narrowed thinking",
+"thoughts of family",
+"an urge to freeze or flee"
+],
+"use": "Breathe slowly, focus on the next step to stay safe or call for help, and, if it helps you, use your own prayer, words, or silence.",
+"not": "Do not give up on the practical steps; most people in frightening situations survive.",
+"call": "Call 911 or use satellite SOS if your life is in danger.",
+"rel": [
+"scared_lost_calm",
+"spiritual_practice_own"
+],
+"src": [
+"atp3-50-21"
+]
+},
+{
+"id": "forgiveness_practice",
+"title": "Forgiveness",
+"domain": "spiritual",
+"also": [
+"how to forgive",
+"forgive myself",
+"holding a grudge",
+"can't forgive"
+],
+"def": "Forgiveness is choosing to let go of resentment or self-blame so it no longer runs your life; it does not mean excusing harm or returning to danger.",
+"look": [
+"anger that keeps replaying",
+"guilt over your own mistake",
+"a relationship you want to mend"
+],
+"use": "Name the hurt honestly, decide what you need to be safe, and let go in your own time and way, whether by prayer, writing, talking, or quiet.",
+"not": "Do not force yourself to forgive on a schedule or stay near someone who is harming you.",
+"rel": [
+"shame_after_mistake"
+],
+"src": [
+"va-ptsd"
+]
+},
+{
+"id": "uncertainty_acceptance",
+"title": "Living with uncertainty",
+"domain": "spiritual",
+"also": [
+"don't know what will happen",
+"can't control anything",
+"uncertain future",
+"acceptance"
+],
+"def": "Many traditions teach separating what you can change from what you cannot; acting on the first and accepting the second eases worry.",
+"look": [
+"worry about things far outside your control",
+"a list of what is in your hands today",
+"small routines that give structure"
+],
+"use": "Write what you can and cannot control, act on one thing you can, and set the rest down for now.",
+"not": "Do not mistake acceptance for giving up on safety steps.",
+"rel": [
+"anxiety_before_event",
+"hope_in_hardship"
+],
+"src": [
+"meditations",
+"samhsa"
+]
+},
+{
+"id": "memorial_ritual_loss",
+"title": "Small rituals for remembering someone",
+"domain": "spiritual",
+"also": [
+"memorial",
+"remember someone who died",
+"funeral far away",
+"grief ritual"
+],
+"def": "A small ritual, such as lighting a light, sharing stories, writing a letter, or a moment of silence, can help people honor someone when a full service is not possible.",
+"look": [
+"a quiet place and time",
+"a photo, object, or story",
+"the person's own customs or faith"
+],
+"use": "Gather those who want to take part, share memories, and use words from the person's tradition or your own.",
+"not": "Do not pressure anyone to join or to use religious words they do not hold.",
+"rel": [
+"grief_after_loss",
+"spiritual_practice_own"
+],
+"src": [
+"samhsa"
+]
+},
+{
+"id": "death_in_the_field",
+"title": "If someone dies in the field",
+"domain": "spiritual",
+"also": [
+"someone died on trail",
+"found a body",
+"person died hunting",
+"what to do if someone dies"
+],
+"def": "If someone dies outdoors, the first steps are to call for help, keep yourself and others safe, and leave the scene as it is for authorities.",
+"look": [
+"no breathing and no response",
+"a scene that may still be dangerous",
+"others in shock"
+],
+"use": "Call 911 or use SOS, start CPR if trained and it is not clearly too late, mark the location, keep others safe and warm, and take a quiet moment if you wish.",
+"not": "Do not move the body unless the place is dangerous, and do not touch weapons or evidence beyond what safety needs.",
+"call": "Call 911 or use satellite SOS.",
+"rel": [
+"acute_stress_close_call",
+"grief_after_loss"
+],
+"src": [
+"nps",
+"atp4-02-11"
+]
+},
+{
+"id": "quiet_in_nature",
+"title": "Quiet and awe in nature",
+"domain": "spiritual",
+"also": [
+"peace in nature",
+"mindfulness outdoors",
+"sit spot",
+"nature calm"
+],
+"def": "Spending quiet time outdoors, noticing sounds, light, and the land, is a simple way many people find calm and perspective.",
+"look": [
+"a safe, comfortable spot",
+"a few minutes without the phone",
+"sounds and changes you start to notice"
+],
+"use": "Sit for a few minutes, breathe, and notice what you see and hear; return to the same place over days.",
+"not": "Do not sit alone somewhere unsafe, near cliffs or water, or without telling someone where you are.",
+"rel": [
+"spiritual_practice_own",
+"grounding_breathing"
+],
+"src": [
+"nps",
+"va-ptsd"
+]
+},
+{
+"id": "values_hard_decisions",
+"title": "Making hard decisions by your values",
+"domain": "spiritual",
+"also": [
+"hard decision",
+"right thing to do",
+"moral choice",
+"what should I do"
+],
+"def": "When choices are hard, naming what matters most to you, such as safety, family, honesty, or faith, helps you decide and live with the outcome.",
+"look": [
+"two choices that both cost something",
+"pressure to decide fast",
+"people who will be affected"
+],
+"use": "Get safe first, list your options, ask which fits what you value most, and talk with someone you trust if time allows.",
+"not": "Do not let fear or exhaustion make a choice you would not make rested, if you can wait.",
+"rel": [
+"exhaustion_bad_decisions"
+],
+"src": [
+"va-ptsd"
+]
+},
+{
+"id": "purpose_after_loss",
+"title": "Finding purpose after a loss",
+"domain": "spiritual",
+"also": [
+"lost my purpose",
+"what's the point",
+"meaning after loss"
+],
+"def": "After a major loss, many people slowly rebuild purpose through caring for others, honoring the person they lost, and small daily commitments.",
+"look": [
+"days that feel empty",
+"wanting to do something in the person's memory",
+"people who need your help"
+],
+"use": "Start with one small commitment, help someone else, and give yourself time.",
+"not": "Do not judge yourself for how long it takes.",
+"call": "If the emptiness includes thoughts of not wanting to live, Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
+"rel": [
+"grief_after_loss",
+"hope_in_hardship"
+],
+"src": [
+"samhsa"
+]
+},
+{
+"id": "rest_sabbath",
+"title": "Rest and a day of rest",
+"domain": "spiritual",
+"also": [
+"need rest",
+"day of rest",
+"sabbath",
+"burned out"
+],
+"def": "Many faiths and simple wisdom set aside regular rest; stepping back restores energy and judgment for the long haul.",
+"look": [
+"exhaustion and short temper",
+"no break for many days",
+"work that can wait"
+],
+"use": "Plan a regular pause, even a few hours, and protect it for sleep, quiet, family, or worship as you choose.",
+"not": "Do not skip rest during long emergencies; tired people make dangerous mistakes.",
+"rel": [
+"caregiver_burnout",
+"exhaustion_bad_decisions"
+],
+"src": [
+"kjv",
+"samhsa"
+]
+},
+{
+"id": "scripture_on_phone",
+"title": "Reading scripture or classic wisdom texts in Yehsa",
+"domain": "spiritual",
+"also": [
+"read the Bible",
+"find a verse",
+"Tao Te Ching",
+"Bhagavad Gita",
+"Dhammapada",
+"Marcus Aurelius"
+],
+"def": "Yehsa carries several public-domain texts, including the King James Bible, the Tao Te Ching, the Bhagavad Gita, the Dhammapada, and Marcus Aurelius's Meditations, which you can ask about by name or topic.",
+"look": [
+"asking for a book and chapter",
+"asking what a text says about a topic",
+"quotes shown as what the text says, not a verdict"
+],
+"use": "Ask what a named text says about a topic, for example 'What does the Tao Te Ching say about water?'; Yehsa quotes matching lines without interpreting them, and some topics find no passage.",
+"not": "Yehsa is not a chaplain and does not debate faith; follow your own tradition and leaders.",
+"rel": [
+"spiritual_practice_own"
+],
+"src": [
+"kjv",
+"tao",
+"gita",
+"dhammapada",
+"meditations"
+]
+},
+{
+"id": "courage_under_fear",
+"title": "Courage when afraid",
+"domain": "spiritual",
+"also": [
+"need courage",
+"scared to act",
+"be brave"
+],
+"def": "Courage is acting on what matters while still afraid; fear often shrinks once you take the first step.",
+"look": [
+"a clear next step that frightens you",
+"people depending on you",
+"fear that grows the longer you wait"
+],
+"use": "Breathe, name the step, and take it; ask for help or company if you can.",
+"not": "Do not confuse courage with taking unnecessary risks.",
+"rel": [
+"scared_lost_calm",
+"values_hard_decisions"
+],
+"src": [
+"atp3-50-21"
+]
+},
+{
+"id": "respect_different_beliefs",
+"title": "Respecting different beliefs in a group",
+"domain": "spiritual",
+"also": [
+"different religions in group",
+"praying with others",
+"non-religious",
+"interfaith"
+],
+"def": "In a mixed group, people may want prayer, silence, or no religious words at all; inviting rather than assuming keeps everyone included.",
+"look": [
+"someone asking for prayer",
+"someone who prefers silence",
+"customs around food, rest, or the dead"
+],
+"use": "Ask what people want, offer a moment of silence that everyone can use their own way, and respect customs where you can.",
+"not": "Do not press beliefs on someone who is hurt, grieving, or frightened.",
+"rel": [
+"spiritual_practice_own",
+"memorial_ritual_loss"
+],
+"src": [
+"va-ptsd"
+]
+},
+{
+"id": "kindness_service",
+"title": "Helping others as a source of strength",
+"domain": "spiritual",
+"also": [
+"helping others",
+"kindness",
+"serve neighbors",
+"volunteer after disaster"
+],
+"def": "Helping others after a disaster or in daily life gives purpose and connection, and it strengthens the helper too.",
+"look": [
+"neighbors who live alone or are ill",
+"official volunteer channels after a disaster",
+"your own limits"
+],
+"use": "Check on neighbors, share skills or supplies, and volunteer through organized groups rather than self-deploying into danger zones.",
+"not": "Do not exhaust yourself or enter hazardous areas to help without training.",
+"rel": [
+"check_older_relatives",
+"purpose_after_loss"
+],
+"src": [
+"fema",
+"ready"
+]
+},
+{
+"id": "patience_long_wait",
+"title": "Patience through a long wait",
+"domain": "spiritual",
+"also": [
+"waiting for rescue",
+"waiting it out",
+"long outage patience",
+"how to stay patient"
+],
+"def": "Long waits, for rescue, power, or news, wear people down; structure, small goals, and company make time more bearable.",
+"look": [
+"restlessness and irritability",
+"repeated checking for news",
+"the urge to take risks to end the wait"
+],
+"use": "Set a routine for the day, take turns on watch or tasks, conserve energy, and check news at set times.",
+"not": "Do not leave a safe shelter just because waiting is hard.",
+"rel": [
+"morale_routines",
+"lost_stop_plan"
+],
+"src": [
+"atp3-50-21"
+]
+},
+{
+"id": "gratitude_journal",
+"title": "Writing down what went right",
+"domain": "spiritual",
+"also": [
+"gratitude journal",
+"write what I'm thankful for",
+"journal in hard times"
+],
+"def": "Writing a few lines each day about what went right or what you are thankful for can lift mood and help you see progress.",
+"look": [
+"a small notebook or the phone's notes",
+"three short lines a day",
+"names of people who helped"
+],
+"use": "Each evening write three things that went well and one thing you did that helped.",
+"not": "Do not use it to deny real problems; note them too and plan for them.",
+"rel": [
+"gratitude_meaning_hardship"
+],
+"src": [
+"va-ptsd"
+]
+}
+]

@@ -1,0 +1,470 @@
+[
+{
+"id": "hunt_before_you_go",
+"title": "Before you hunt: license, tags, orange, and this year's rules",
+"domain": "hunting",
+"also": [
+"hunting license",
+"deer tag",
+"what do I need to hunt",
+"hunter orange",
+"blaze orange",
+"hunting regulations"
+],
+"def": "Before a hunt you need a valid license and any tags for the animal, the hunter orange your state requires, and this season's official rules, which change every year.",
+"look": [
+"license and tags on you, not at home",
+"orange hat and vest where the state requires it",
+"the current year's regulation page from the state wildlife agency"
+],
+"use": "Read the state wildlife agency's current page for seasons, bag limits, legal methods, and orange rules before every season, and carry the license and tags while you hunt.",
+"not": "Do not rely on last year's dates or limits, a forum post, or a remembered rule. Yehsa does not store season dates or bag limits because they go stale.",
+"steps": [
+"Buy or renew the license and tags for this season.",
+"Read the state agency's current rules for the area and weapon.",
+"Pack hunter orange and wear it as the rules require.",
+"Tell someone where you will be and when you will be back."
+],
+"rel": [
+"hunt_firearm_safety",
+"hunt_legal_light_note"
+],
+"src": [
+"state-regs-link",
+"ihea"
+]
+},
+{
+"id": "hunt_legal_light_note",
+"title": "Legal shooting light",
+"domain": "hunting",
+"also": [
+"shooting hours",
+"legal shooting time",
+"half hour before sunrise",
+"when can I shoot"
+],
+"def": "Legal shooting light is the window each day when hunting is allowed; many states use about 30 minutes before sunrise to 30 minutes after sunset, but the exact rule is set by each state and sometimes by species.",
+"look": [
+"sunrise and sunset for your exact spot",
+"the state's own rule for the species",
+"enough light to identify the animal and what is beyond it"
+],
+"use": "Check your state's current rule, then work out the times for your location; Yehsa's sun tool can show sunrise and sunset for where you are if you turn position on.",
+"not": "Do not shoot in poor light even inside legal hours if you cannot identify the animal and the background. Do not assume the 30-minute rule applies to every state or species.",
+"rel": [
+"hunt_before_you_go"
+],
+"src": [
+"state-regs-link",
+"nws"
+]
+},
+{
+"id": "hunt_firearm_safety",
+"title": "Firearm safety in the field",
+"domain": "hunting",
+"also": [
+"gun safety",
+"hunting gun safety",
+"muzzle control",
+"treat every gun as loaded",
+"firearm rules"
+],
+"def": "Field firearm safety comes down to four habits: treat every gun as loaded, keep the muzzle pointed in a safe direction, keep your finger off the trigger until you are ready to shoot, and be sure of your target and what is beyond it.",
+"look": [
+"muzzle never sweeps a person, including yourself",
+"finger rests along the frame, outside the trigger guard",
+"action open and unloaded when crossing, climbing, or riding"
+],
+"use": "Unload before crossing a fence, climbing a stand, entering a vehicle, or entering camp. Use a haul line to raise or lower an unloaded gun.",
+"not": "Do not lean a loaded gun against a tree or vehicle, shoot at a sound or movement, or shoot at a flat hard surface or water where a bullet can skip.",
+"steps": [
+"Point the muzzle in a safe direction.",
+"Keep your finger off the trigger.",
+"Identify the target fully.",
+"Know what is behind and beyond it.",
+"Unload before obstacles, stands, and vehicles."
+],
+"call": "If someone is shot, call 911 at once, put firm direct pressure on the wound, and use a tourniquet on a limb if pressure does not stop heavy bleeding.",
+"rel": [
+"hunt_target_beyond",
+"hunt_fence_crossing",
+"tree_stand_safety"
+],
+"src": [
+"ihea",
+"state-regs-link"
+]
+},
+{
+"id": "hunt_target_beyond",
+"title": "Know your target and what is beyond it",
+"domain": "hunting",
+"also": [
+"identify before you shoot",
+"not sure what it is",
+"is it a deer",
+"backstop",
+"what is behind the target"
+],
+"def": "Before any shot you must be certain of the species, sex if it matters for your tag, and that a safe backstop such as rising ground stops the bullet; anything uncertain means no shot.",
+"look": [
+"whole animal seen, not just a patch of brown or a sound",
+"no house, road, trail, or person in the line of fire",
+"a hill or earth bank behind the animal"
+],
+"use": "When unsure of the animal or the shot, do not shoot. Wait for a clear view or let it walk.",
+"not": "Do not shoot at a skyline animal on a ridge top, at movement in brush, or toward another hunter's orange.",
+"rel": [
+"hunt_firearm_safety",
+"hunt_shot_placement"
+],
+"src": [
+"ihea"
+]
+},
+{
+"id": "hunt_shot_placement",
+"title": "Shot placement and what to do after the shot",
+"domain": "hunting",
+"also": [
+"where to shoot a deer",
+"ethical shot",
+"vital zone",
+"heart lung shot",
+"after the shot"
+],
+"def": "An ethical shot aims at the heart and lungs from a broadside or slightly quartering-away angle within the range you have practiced, so the animal goes down quickly.",
+"look": [
+"the animal standing still and broadside",
+"a clear lane with no branches in the path",
+"a range you have confirmed on paper"
+],
+"use": "After the shot, watch where the animal goes, mark the spot where it stood and the last place you saw it, and wait quietly before following unless you see it fall.",
+"not": "Do not take long, running, or head-on shots you have not practiced, and do not rush after a hit animal; pushing it can make it run farther.",
+"steps": [
+"Note where the animal stood when hit.",
+"Mark the last place you saw it.",
+"Listen for a crash.",
+"Wait before tracking, longer if the hit looked far back.",
+"Start at the hit site and look for hair and blood."
+],
+"rel": [
+"hunt_blood_trail",
+"hunt_lost_animal"
+],
+"src": [
+"ihea"
+]
+},
+{
+"id": "hunt_blood_trail",
+"title": "Tracking a hit deer and reading a blood trail",
+"domain": "hunting",
+"also": [
+"blood trail",
+"tracking a wounded deer",
+"following blood",
+"lost blood trail",
+"how long to wait before tracking"
+],
+"def": "Following a hit deer means starting at the spot it stood, finding hair and blood, and moving slowly from sign to sign while marking each spot.",
+"look": [
+"bright red, frothy blood often means a lung hit",
+"dark blood or green matter can mean a gut hit and a longer wait",
+"drops on both sides of the trail, smears on brush at body height"
+],
+"use": "Mark each blood spot with tape or tissue so you can see the line of travel, and look ahead and around the last sign when it thins out.",
+"not": "Do not walk on the trail itself, track in the dark alone in rough country, or give up after the first gap; circle the last sign first.",
+"steps": [
+"Start at the hit site.",
+"Mark every sign you find.",
+"Move slowly and look ahead.",
+"When it stops, circle out from the last mark.",
+"Bring a partner and a light if it gets late."
+],
+"rel": [
+"hunt_lost_animal",
+"hunt_shot_placement"
+],
+"src": [
+"ihea"
+]
+},
+{
+"id": "hunt_lost_animal",
+"title": "When you cannot find the animal",
+"domain": "hunting",
+"also": [
+"can't find my deer",
+"lost the blood trail",
+"wounded deer lost",
+"deer ran off"
+],
+"def": "When a hit animal cannot be found, the ethical next steps are a careful grid search, a second person's eyes, and, where the state allows it, a leashed tracking dog.",
+"look": [
+"the last marked sign",
+"water, thick cover, and downhill paths nearby",
+"birds such as crows or ravens gathering"
+],
+"use": "Search in widening loops from the last sign, check thick cover and water, and come back at first light if needed. Check your state's rules on tagging and on tracking dogs.",
+"not": "Do not trespass to follow an animal without asking the landowner, and do not shoot another animal before you have made every effort.",
+"rel": [
+"hunt_blood_trail",
+"hunt_before_you_go"
+],
+"src": [
+"ihea",
+"state-regs-link"
+]
+},
+{
+"id": "field_dressing_deer",
+"title": "Field dressing a deer",
+"domain": "hunting",
+"also": [
+"gutting a deer",
+"field dress",
+"clean a deer",
+"how to gut a deer"
+],
+"def": "Field dressing removes the internal organs soon after the kill so the body heat can escape and the meat cools quickly.",
+"look": [
+"gloves on, sharp knife, clean water or wipes",
+"belly opened shallow so the gut is not cut",
+"body cavity propped open to cool"
+],
+"use": "Tag the animal first if your state requires it, open the body from the pelvis toward the ribs with the blade edge up, remove the organs, then prop the cavity open in shade.",
+"not": "Do not cut into the stomach or intestines, handle the brain or spinal cord bare-handed, or leave the carcass in sun or a closed truck bed.",
+"steps": [
+"Tag the animal if required.",
+"Put on gloves.",
+"Cut shallow from the pelvis to the ribs, edge up.",
+"Free and roll out the organs.",
+"Wipe out blood and hair; prop open and keep it cool."
+],
+"rel": [
+"meat_care_temperature",
+"cwd_awareness"
+],
+"src": [
+"usda-fsis",
+"cdc",
+"ihea"
+]
+},
+{
+"id": "meat_care_temperature",
+"title": "Keeping game meat cool and spotting spoiled meat",
+"domain": "hunting",
+"also": [
+"meat care warm weather",
+"is my deer meat spoiled",
+"hanging a deer",
+"cooling venison",
+"game meat spoiled"
+],
+"def": "Game meat stays safe when it is cooled below 40 °F (4 °C) quickly; in warm weather that means skinning, quartering, and icing within hours.",
+"look": [
+"air temperature above 40 °F means the clock is running",
+"a sour or rotten smell, slime, or green color means spoiled",
+"meat kept clean, dry, and shaded"
+],
+"use": "In warm weather, skin and quarter the animal, bag the meat, and put it on ice or in a cooler or cold storage the same day. In cold weather hang it in shade, protected from animals.",
+"not": "Do not leave a carcass in the sun or a warm vehicle overnight, and do not eat meat that smells sour or rotten; cooking does not make spoiled meat safe.",
+"rel": [
+"field_dressing_deer",
+"game_cooking_temps"
+],
+"src": [
+"usda-fsis"
+]
+},
+{
+"id": "cwd_awareness",
+"title": "Chronic wasting disease (CWD) and deer",
+"domain": "hunting",
+"also": [
+"CWD",
+"chronic wasting disease",
+"zombie deer",
+"sick looking deer",
+"deer disease"
+],
+"def": "Chronic wasting disease is a fatal prion disease of deer, elk, and moose; no human case has been confirmed, but health agencies advise people not to eat meat from an infected animal.",
+"look": [
+"a thin, drooling, stumbling, or unafraid deer",
+"animals found dead",
+"areas where your state reports CWD"
+],
+"use": "Do not shoot or handle animals that look sick, wear gloves while dressing, avoid the brain, spine, eyes, spleen, and lymph nodes, and test animals from CWD areas before eating.",
+"not": "Do not eat meat from an animal that tests positive, and do not saw through the spine or skull with tools used for meat.",
+"call": "Report a sick-looking deer to your state wildlife agency.",
+"rel": [
+"field_dressing_deer",
+"hunt_before_you_go"
+],
+"src": [
+"cdc",
+"usgs",
+"state-regs-link"
+]
+},
+{
+"id": "game_cooking_temps",
+"title": "Cooking venison and wild game safely",
+"domain": "hunting",
+"also": [
+"venison temperature",
+"cook deer meat",
+"ground venison temperature",
+"wild game cooking"
+],
+"def": "Game meat is safest cooked to a measured temperature: whole cuts of venison to at least 145 °F (63 °C) with a 3-minute rest, ground venison to 160 °F (71 °C), and wild birds to 165 °F (74 °C).",
+"look": [
+"a food thermometer in the thickest part",
+"ground meat cooked through",
+"juices and color are not a reliable test"
+],
+"use": "Use a thermometer, keep raw game apart from cooked food, and wash hands and boards after handling raw meat.",
+"not": "Do not judge doneness by color, and do not eat bear, wild boar, or other carnivore meat undercooked; they can carry trichinella.",
+"rel": [
+"meat_care_temperature",
+"small_game_tularemia"
+],
+"src": [
+"usda-fsis",
+"cdc"
+]
+},
+{
+"id": "tree_stand_safety",
+"title": "Tree-stand safety",
+"domain": "hunting",
+"also": [
+"tree stand",
+"deer stand fall",
+"safety harness",
+"full body harness",
+"climbing a stand"
+],
+"def": "Tree-stand safety means staying attached to the tree from the moment you leave the ground until you are back on it, with a full-body harness and a lifeline or tether.",
+"look": [
+"full-body harness worn and connected",
+"stand straps and chains checked before each season",
+"gun or bow raised with a haul line, unloaded"
+],
+"use": "Inspect the stand, wear a harness connected to a lifeline while climbing, keep three points of contact, and pull up your unloaded gun or bow with a rope.",
+"not": "Do not climb with a loaded gun, use a waist belt only, or use a stand left on the tree for years without checking its straps.",
+"call": "If someone falls, call 911; do not move them if the neck or back may be hurt, and if they hang in a harness, get their weight off the straps quickly.",
+"rel": [
+"hunt_firearm_safety"
+],
+"src": [
+"ihea"
+]
+},
+{
+"id": "hunt_fence_crossing",
+"title": "Crossing fences and obstacles with a firearm",
+"domain": "hunting",
+"also": [
+"crossing a fence with a gun",
+"climbing over a log with a gun",
+"crossing a stream with a rifle"
+],
+"def": "Crossing a fence, ditch, log, or stream with a firearm is safe only with the action open and the gun unloaded, set down on the far side with the muzzle pointed away.",
+"look": [
+"action open and chamber empty",
+"muzzle pointed away from you and others",
+"gun laid down before you climb"
+],
+"use": "Unload, open the action, slide the gun under or across, cross yourself, then pick it up by the stock. With a partner, one holds both guns while the other crosses.",
+"not": "Do not climb over with a gun in your hand, pull a gun toward you by the muzzle, or jump a ditch with a loaded gun.",
+"rel": [
+"hunt_firearm_safety"
+],
+"src": [
+"ihea"
+]
+},
+{
+"id": "small_game_tularemia",
+"title": "Small game: rabbits, squirrels, and tularemia",
+"domain": "hunting",
+"also": [
+"rabbit fever",
+"tularemia",
+"cleaning rabbits",
+"squirrel hunting safety"
+],
+"def": "Tularemia is a bacterial disease people can catch from handling or eating rabbits, hares, and rodents; gloves and thorough cooking prevent most cases.",
+"look": [
+"a rabbit or squirrel that is slow, sick, or found dead",
+"white spots on the liver",
+"small cuts on your hands while cleaning"
+],
+"use": "Wear gloves when skinning and cleaning, cook the meat thoroughly, and wash hands and tools afterward.",
+"not": "Do not handle sick or dead animals bare-handed, and do not eat rabbit or squirrel undercooked.",
+"call": "See a doctor for fever, a sore that will not heal, or swollen glands after handling wild rabbits or rodents, and say you handled game.",
+"rel": [
+"game_cooking_temps"
+],
+"src": [
+"cdc"
+]
+},
+{
+"id": "waterfowl_rules_link",
+"title": "Waterfowl and migratory birds have their own rules",
+"domain": "hunting",
+"also": [
+"duck hunting rules",
+"goose hunting",
+"migratory bird hunting",
+"duck stamp",
+"waterfowl regulations"
+],
+"def": "Ducks, geese, and other migratory birds are hunted under federal rules plus state rules, which differ from deer rules, including shot type and a federal duck stamp for many hunters.",
+"look": [
+"a federal duck stamp and state permits where required",
+"non-toxic shot required for waterfowl",
+"birds identified in flight before the shot"
+],
+"use": "Read the US Fish and Wildlife Service and your state's current waterfowl pages before the season.",
+"not": "Do not shoot a bird you cannot identify, and do not use lead shot for waterfowl.",
+"rel": [
+"hunt_before_you_go"
+],
+"src": [
+"fws",
+"state-regs-link"
+]
+},
+{
+"id": "turkey_hunting_safety",
+"title": "Turkey hunting safety",
+"domain": "hunting",
+"also": [
+"turkey hunting",
+"spring turkey safety",
+"gobbler hunting",
+"turkey call safety"
+],
+"def": "Turkey hunting has its own risks because hunters wear camouflage and use calls, so another hunter can mistake a person for a bird.",
+"look": [
+"no red, white, or blue clothing, which can look like a gobbler's head",
+"a tree trunk wider than your shoulders at your back",
+"a clear view of the whole bird and its beard before the shot"
+],
+"use": "Sit against a wide tree, call out loudly to an approaching hunter instead of moving, and carry a harvested bird out wrapped in orange.",
+"not": "Do not stalk a gobbling sound, shoot at sound or movement, or wave to an approaching hunter.",
+"rel": [
+"hunt_target_beyond"
+],
+"src": [
+"ihea"
+]
+}
+]

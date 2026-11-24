@@ -12,6 +12,11 @@ function clip(text, limit) {
   return `${flat.slice(0, limit - 1).trimEnd()}…`;
 }
 
+// A field entry's passage is written to fit; older notes keep the shorter clip.
+function clipFor(source) {
+  return /\/entries_[a-z]+\.json$/.test(String(source || "")) ? 480 : 320;
+}
+
 function addHit(bag, hit) {
   if (!hit || !hit.symbol || !hit.text || !(hit.score > 0)) return;
   const key = `${hit.kind}:${String(hit.symbol).toLowerCase()}`;
@@ -46,7 +51,7 @@ export function rankKnowledge(parsed, corpora) {
     addHit(bag, {
       kind,
       symbol: passage.symbol,
-      text: clip(passage.context, 320),
+      text: clip(passage.context, clipFor(passage.source)),
       title: passage.title || "",
       source: passage.source || "",
       score: boost(kind, passage.score)
@@ -58,7 +63,7 @@ export function rankKnowledge(parsed, corpora) {
       addHit(bag, {
         kind,
         symbol: passage.symbol,
-        text: clip(passage.context, 320),
+        text: clip(passage.context, clipFor(passage.source)),
         title: passage.title || "",
         source: passage.source || "",
         score: boost(kind, passage.score)

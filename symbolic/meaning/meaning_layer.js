@@ -13,6 +13,7 @@
 
 import { base64ToBytes, dot, scoreAll, topK, unpackIndex } from "./int8_index.js";
 import { BLOCKING_INTENTS, FIELD_INTENTS } from "./prototypes.js";
+import { entryHeadHit } from "../entries.js";
 import { isCareNote, namesOwnCondition, replyAddressesCondition, treatmentGuard } from "./treatment_guard.js";
 
 export const THRESHOLDS = Object.freeze({
@@ -65,6 +66,12 @@ function lexicalSupport(question, note) {
   const asked = contentStems(question);
   const noteWords = contentStems(`${noteTitle(note.symbol)} ${note.text}`);
   for (const word of asked) if (noteWords.has(word)) return true;
+  // A short question word that starts a note's title word also counts ("sign" for signaling).
+  const titleWords = contentStems(noteTitle(note.symbol));
+  for (const word of asked) {
+    if (word.length < 4) continue;
+    for (const title of titleWords) if (title.length > word.length && title.startsWith(word)) return true;
+  }
   return false;
 }
 
@@ -100,7 +107,7 @@ export function rankNotes(ctx, text) {
   if (!q || !ctx.index) return null;
   const idx = decodeIndex(ctx.index);
   const scores = scoreAll(idx.noteIndex, q);
-  const top = topK(scores, 8).map(({ row, score }) => ({ ...idx.notes[row], score }));
+  const top = entryAware(topK(scores, 24).map(({ row, score }) => ({ ...idx.notes[row], score })), text).slice(0, 8);
   return {
     scores,
     top,
@@ -109,6 +116,21 @@ export function rankNotes(ctx, text) {
       return row == null ? null : scores[row];
     }
   };
+}
+
+// Field entries (the round-4 glossary) are dense and close together in meaning, so a paraphrase can land
+// on a near neighbour. An entry takes part in meaning only when the question says its name or most of its
+// title (it then gets a small title boost); otherwise it is left out, both as a pick and as a margin rival.
+// Older notes rank exactly as before.
+export const ENTRY_TITLE_BOOST = 0.02;
+function entryAware(top, text) {
+  const out = [];
+  for (const note of top) {
+    const hit = entryHeadHit(note.symbol, text);
+    if (hit === null) out.push(note);
+    else if (hit) out.push({ ...note, score: note.score + ENTRY_TITLE_BOOST, titleBoost: true });
+  }
+  return out.sort((a, b) => b.score - a.score);
 }
 
 export function routeIntent(ctx, text) {
@@ -203,7 +225,10 @@ function confidentNote(ranked, question, floor = THRESHOLDS.fill) {
   const confirmed = isCareNote(first.symbol) && namesOwnCondition(question, first.symbol);
   const needed = confirmed ? floor - 0.08 : floor;
   if (first.score < needed) return { note: null, reason: "below threshold" };
-  const rival = allowed.find((note) => noteFamily(note.symbol) !== noteFamily(first.symbol));
+  // The margin is scoped by note type: a field entry is measured against other entries, an older note
+  // against older notes, so a named entry and the older note on the same topic do not cancel each other out.
+  const isEntry = (note) => entryHeadHit(note.symbol, "") !== null;
+  const rival = allowed.find((note) => noteFamily(note.symbol) !== noteFamily(first.symbol) && isEntry(note) === isEntry(first));
   if (!confirmed && rival && first.score - rival.score < THRESHOLDS.margin) return { note: null, reason: "no clear margin" };
   return { note: first, reason: confirmed ? "confident; question names this note's condition" : "confident" };
 }

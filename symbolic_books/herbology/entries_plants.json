@@ -1,0 +1,307 @@
+[
+ {
+  "symbol": "ramps",
+  "title": "Ramps (wild leek)",
+  "context": "Ramps are wild leeks with two or three broad smooth leaves in spring and a strong onion-garlic smell. Also called wild leek, Allium tricoccum, ramp. Look for two or three broad smooth leaves per plant in spring, red-purple stalk base, strong onion and garlic smell; every leaf smells of onion when crushed."
+ },
+ {
+  "symbol": "false_hellebore",
+  "title": "False hellebore (Indian poke)",
+  "context": "False hellebore is a wetland plant with large pleated leaves spiraling up the stem, and it is deadly. Also called Indian poke, Veratrum, green hellebore, corn lily, Veratrum viride. Look for big pleated leaves that wrap the stem in a spiral; wet woods and meadows. Learn it so you can avoid it and warn others. Sometimes mistaken for ramps. Deadly."
+ },
+ {
+  "symbol": "lily_of_valley",
+  "title": "Lily of the valley",
+  "context": "Lily of the valley is a garden and wild plant with small white bell flowers, and every part is deadly to the heart. Also called lily of the valley, Convallaria, May bells, Convallaria majalis. Look for two smooth upright leaves, small white bells on an arching stem, red berries; no onion smell, unlike ramps. Learn it so you can avoid it and warn others. Mistaken for ramps. Every part is deadly."
+ },
+ {
+  "symbol": "chicory",
+  "title": "Chicory",
+  "context": "Chicory is a roadside plant with sky-blue flowers on stiff stems whose leaves and roasted roots are used as food. Also called blue sailors, Cichorium, coffee weed, succory, Cichorium intybus. Look for sky blue flowers on stiff, nearly leafless stems along roadsides; milky sap."
+ },
+ {
+  "symbol": "red_clover",
+  "title": "Red clover",
+  "context": "Red clover is a common field plant with round pink-purple flower heads and three leaflets marked with a pale V. Also called Trifolium pratense, clover. Look for pink-purple round flower heads; three leaflets with a pale V mark. Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount."
+ },
+ {
+  "symbol": "white_clover",
+  "title": "White clover",
+  "context": "White clover is a low creeping lawn plant with round white flower heads and three leaflets. Also called Trifolium repens, Dutch clover, lawn clover. Look for low creeping plant, white round flower heads, three leaflets often with a pale band; stems creep and root along the ground."
+ },
+ {
+  "symbol": "burdock",
+  "title": "Burdock",
+  "context": "Burdock is a large weed with huge heart-shaped leaves and hooked burrs that stick to clothing; its first-year root is eaten cooked. Also called Arctium, gobo, great burdock, beggar's buttons. Look for very large heart-shaped leaves, hooked burr heads, purple thistle-like flowers; leaves pale and woolly underneath."
+ },
+ {
+  "symbol": "foxglove",
+  "title": "Foxglove",
+  "context": "Foxglove is a garden and wild plant with a tall spike of tubular pink-purple flowers, and every part is deadly to the heart. Also called Digitalis, fairy gloves, purple foxglove, Digitalis purpurea. Look for fuzzy leaves in a rosette, tall spike of tubular pink-purple bells; spotted throat inside each bell. Learn it so you can avoid it and warn others. Deadly to the heart. Often confused with comfrey in the first year."
+ },
+ {
+  "symbol": "comfrey",
+  "title": "Comfrey",
+  "context": "Comfrey is a hairy-leaved garden plant with curled clusters of bell flowers that contains liver-damaging compounds. Also called Symphytum, knitbone, boneset, Symphytum officinale. Look for rough hairy leaves, bell flowers in curled clusters; leaves run down onto the stem as wings. Learn it so you can avoid it and warn others. Contains liver-damaging compounds. Do not eat or brew it."
+ },
+ {
+  "symbol": "iris_flag",
+  "title": "Wild iris (blue flag, yellow flag)",
+  "context": "Wild iris, or blue flag, is a wetland plant with flat sword-shaped leaves in a fan, and it is poisonous. Also called blue flag, yellow flag, flag iris, Iris versicolor. Look for flat sword-shaped leaves in a fan; blue-violet or yellow flowers. Learn it so you can avoid it and warn others. Toxic if eaten. Often mistaken for cattail shoots."
+ },
+ {
+  "symbol": "wild_strawberry",
+  "title": "Wild strawberry",
+  "context": "Wild strawberry is a low native plant whose tiny red berries carry their seeds on the outside and taste like small garden strawberries. Also called Fragaria, woodland strawberry, wild strawberries, Fragaria virginiana. Look for three toothed leaflets, white five-petal flowers, tiny red berries with seeds on the outside; runners that root along the ground."
+ },
+ {
+  "symbol": "brambles",
+  "title": "Blackberry and raspberry (Rubus)",
+  "context": "Brambles are the prickly canes of blackberries and raspberries, whose berries are built from many small beads. Also called blackberry, raspberry, Rubus, blackcap, dewberry. Look for arching prickly canes, toothed compound leaves, clustered berries made of tiny beads; raspberries pull off hollow like a cap; blackberries keep a white core."
+ },
+ {
+  "symbol": "blueberry",
+  "title": "Blueberry",
+  "context": "Lowbush blueberry is a small shrub of sunny barrens and woods whose blue berries end in a five-point crown. Also called lowbush blueberry, wild blueberry, huckleberry, Vaccinium angustifolium. Look for low shrub, small oval leaves, blue berries with a five-point crown at the tip; many tiny seeds inside, not one stone."
+ },
+ {
+  "symbol": "cranberry",
+  "title": "Cranberry",
+  "context": "Cranberry is a trailing evergreen vine of bogs whose sour red berries ripen in fall. Also called wild cranberry, bog cranberry, Vaccinium macrocarpon. Look for trailing evergreen vine in bogs, tiny leaves, red berries; berries bounce and have air pockets inside."
+ },
+ {
+  "symbol": "elderberry",
+  "title": "Elderberry",
+  "context": "Elderberry is a shrub with flat clusters of tiny white flowers and dark purple berries that are only safe to eat cooked and ripe. Also called elder, Sambucus, black elderberry, elderflower, Sambucus canadensis. Look for opposite compound leaves, flat clusters of white flowers, dark purple (or red) berries, pithy stems; stems have soft white pith inside."
+ },
+ {
+  "symbol": "pokeweed",
+  "title": "Pokeweed",
+  "context": "Pokeweed is a tall plant with purple-red stems and drooping clusters of dark berries, and its berries, roots, and mature leaves are poisonous. Also called poke, pokeberry, poke salad, inkberry, Phytolacca. Look for purple-red stems, large leaves, drooping clusters of dark purple berries; can grow taller than a person in one season. Learn it so you can avoid it and warn others. Berries, roots and mature leaves are toxic."
+ },
+ {
+  "symbol": "staghorn_sumac",
+  "title": "Staghorn sumac",
+  "context": "Staghorn sumac is a shrub with velvety twigs and upright cones of red fuzzy berries; it is not poison sumac. Also called red sumac, sumac berries, sumac lemonade, Rhus typhina. Look for fuzzy velvet twigs, long compound leaves, upright red fuzzy berry cones; berries are red and point up, never white and drooping."
+ },
+ {
+  "symbol": "virginia_creeper",
+  "title": "Virginia creeper",
+  "context": "Virginia creeper is a climbing vine with five leaflets spread like a hand, often confused with poison ivy, and its berries are poisonous. Also called five-leaved ivy, woodbine, Parthenocissus, Parthenocissus quinquefolia. Look for five leaflets spread like a hand; climbing vine with tendrils. Learn it so you can avoid it and warn others. Berries are toxic. Sometimes mistaken for poison ivy."
+ },
+ {
+  "symbol": "stinging_nettle",
+  "title": "Stinging nettle",
+  "context": "Stinging nettle is a plant covered in fine stinging hairs that burn the skin on contact; cooking or drying removes the sting. Also called nettle, nettles, Urtica, Urtica dioica. Look for opposite toothed leaves with stinging hairs, square stem, small green flower strings; a burning, tingling rash right after you brush it."
+ },
+ {
+  "symbol": "lambsquarters",
+  "title": "Lambsquarters",
+  "context": "Lambsquarters is a common garden weed whose diamond-shaped leaves have a white mealy coating underneath. Also called goosefoot, pigweed, wild spinach, Chenopodium, Chenopodium album. Look for diamond-shaped leaves with a white mealy powder underneath; water beads on the leaves."
+ },
+ {
+  "symbol": "wood_sorrel",
+  "title": "Wood sorrel",
+  "context": "Wood sorrel is a small plant with heart-shaped leaflets in threes and a sour, lemony taste from oxalic acid. Also called sour grass, Oxalis, yellow wood sorrel, sheep sorrel, Oxalis stricta. Look for heart-shaped leaflets in threes like a clover, small yellow or pink five-petal flowers; sour taste."
+ },
+ {
+  "symbol": "jewelweed",
+  "title": "Jewelweed",
+  "context": "Jewelweed is a soft wet-ground plant with orange spotted trumpet flowers and seed pods that burst when touched. Also called spotted touch-me-not, touch-me-not, Impatiens capensis. Look for orange or yellow spotted trumpet flowers, pale watery stems, leaves bead up water; seed pods burst when touched."
+ },
+ {
+  "symbol": "bracken",
+  "title": "Bracken fern",
+  "context": "Bracken is a large common fern with triangular fronds; it is toxic and not a safe fiddlehead. Also called bracken fern, brake fern, Pteridium, Pteridium aquilinum. Look for large triangular fronds on a single stalk, fuzzy coiled shoots, open ground; young shoots are fuzzy, not smooth and grooved. Learn it so you can avoid it and warn others. Toxic and linked to cancer. Do not eat."
+ },
+ {
+  "symbol": "common_milkweed",
+  "title": "Common milkweed",
+  "context": "Common milkweed is a tall plant with milky sap, broad paired leaves, and warty pods, and it is toxic raw. Also called milkweed, Asclepias syriaca, monarch plant. Look for thick stem with milky white sap, big opposite oval leaves, pink ball flower clusters, warty pods; pods full of silky seeds in fall. Learn it so you can avoid it and warn others. Toxic raw. Only a trained forager should use it, and not by photo."
+ },
+ {
+  "symbol": "dogbane",
+  "title": "Dogbane",
+  "context": "Dogbane is a milky-sapped plant with red-tinged stems and slim paired pods that is poisonous to the heart and looks like milkweed. Also called Indian hemp, hemp dogbane, Apocynum, Apocynum cannabinum. Look for red-tinged stems with milky sap, pointed opposite leaves, tiny white bells, slim paired pods; branches near the top, unlike young milkweed. Learn it so you can avoid it and warn others. Toxic to the heart. Looks like milkweed."
+ },
+ {
+  "symbol": "mullein",
+  "title": "Mullein",
+  "context": "Mullein is a tall roadside plant with large, soft, gray, fuzzy leaves and a yellow flower spike in its second year. Also called common mullein, flannel leaf, cowboy toilet paper, Verbascum, Verbascum thapsus. Look for large grey fuzzy leaves in a rosette and a tall yellow flower spike in the second year; dry stalks stand through winter."
+ },
+ {
+  "symbol": "st_johns_wort",
+  "title": "St. John's wort",
+  "context": "St. John's wort is a yellow-flowered plant whose leaves show tiny see-through dots when held to the light. Also called Hypericum, St Johns wort, goatweed, Hypericum perforatum. Look for opposite small leaves with see-through dots when held to light; yellow five-petal flowers that stain purple."
+ },
+ {
+  "symbol": "self_heal",
+  "title": "Self-heal",
+  "context": "Self-heal is a low lawn and trail plant with a square stem and a spiky purple flower head. Also called heal-all, Prunella, selfheal, Prunella vulgaris. Look for low plant, square stem, spiky purple flower head with ruffled lips; opposite leaves on a square stem. Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care."
+ },
+ {
+  "symbol": "goldenrod",
+  "title": "Goldenrod",
+  "context": "Goldenrod is a tall late-summer plant with plumes of small yellow flowers; it is often blamed for hay fever caused by ragweed. Also called Solidago, goldenrods. Look for tall plume of tiny yellow flowers in late summer, alternate narrow leaves; stands in old fields and roadsides by the thousands. Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care."
+ },
+ {
+  "symbol": "white_snakeroot",
+  "title": "White snakeroot",
+  "context": "White snakeroot is a woodland plant with fuzzy white fall flowers that poisons livestock and can pass into their milk. Also called snakeroot, Ageratina, milk sickness plant, Ageratina altissima. Look for opposite toothed leaves on a branching stem, fuzzy white flower clusters in autumn; grows in shade at woods edges. Learn it so you can avoid it and warn others. Poisons livestock and milk. Do not eat."
+ },
+ {
+  "symbol": "jerusalem_artichoke",
+  "title": "Jerusalem artichoke",
+  "context": "Jerusalem artichoke is a tall wild sunflower whose knobby underground tubers are edible. Also called sunchoke, sunroot, Helianthus tuberosus. Look for tall rough sunflower-like plant with small yellow flowers and knobby tubers; leaves rough like sandpaper."
+ },
+ {
+  "symbol": "evening_primrose",
+  "title": "Evening primrose",
+  "context": "Evening primrose is a tall plant with four-petal yellow flowers that open at dusk. Also called Oenothera, common evening primrose, Oenothera biennis. Look for tall plant with four-petal yellow flowers that open at dusk, reddish stem; first-year rosette with a pink-tinged midrib."
+ },
+ {
+  "symbol": "pineapple_weed",
+  "title": "Pineapple weed",
+  "context": "Pineapple weed is a low weed of packed paths whose petal-less yellow-green flower cones smell like pineapple when crushed. Also called wild chamomile, disc mayweed, Matricaria discoidea. Look for low plant with feathery leaves, yellow-green cone flowers with no petals; smells like pineapple when crushed."
+ },
+ {
+  "symbol": "wild_bergamot",
+  "title": "Wild bergamot",
+  "context": "Wild bergamot is a mint-family wildflower with lavender shaggy flower heads and an oregano-like smell. Also called bee balm, Monarda, horsemint, Monarda fistulosa. Look for square stem, lavender shaggy flower heads, minty oregano smell; square stem and paired leaves like other mints. Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care."
+ },
+ {
+  "symbol": "mayapple",
+  "title": "Mayapple",
+  "context": "Mayapple is a spring woodland plant with umbrella-like leaves, and every part except the fully ripe fruit is poisonous. Also called American mandrake, Podophyllum, umbrella plant, Podophyllum peltatum. Look for umbrella-like lobed leaves, a single white flower under the leaves, one green-yellow fruit; grows in large colonies on the forest floor. Learn it so you can avoid it and warn others. Everything except the ripe fruit is toxic."
+ },
+ {
+  "symbol": "bloodroot",
+  "title": "Bloodroot",
+  "context": "Bloodroot is an early-spring wildflower with one lobed leaf and a white flower whose root bleeds red-orange sap, and it is poisonous. Also called Sanguinaria, red puccoon, Sanguinaria canadensis. Look for one clasped rounded lobed leaf and a white eight-petal flower in early spring; red-orange sap. Learn it so you can avoid it and warn others. Toxic."
+ },
+ {
+  "symbol": "baneberry",
+  "title": "Baneberry",
+  "context": "Baneberry, or doll's eyes, is a woodland plant whose white or red berries on thick red stalks are deadly. Also called doll's eyes, white baneberry, red baneberry, Actaea, Actaea pachypoda. Look for compound toothed leaves, a white or red berry cluster on thick red stalks (doll's eyes); each white berry has a black dot like an eye. Learn it so you can avoid it and warn others. Berries are deadly."
+ },
+ {
+  "symbol": "jimsonweed",
+  "title": "Jimsonweed",
+  "context": "Jimsonweed is a rank-smelling weed with large white trumpet flowers and spiny seed pods, and every part is deadly. Also called Datura, thorn apple, devil's trumpet, locoweed, Datura stramonium. Look for large white trumpet flowers, spiny egg-shaped seed pods, strong smell; grows in disturbed ground and barnyards. Learn it so you can avoid it and warn others. Every part is deadly."
+ },
+ {
+  "symbol": "bittersweet_nightshade",
+  "title": "Bittersweet nightshade",
+  "context": "Bittersweet nightshade is a climbing vine with small purple star flowers and red egg-shaped berries that are poisonous. Also called climbing nightshade, woody nightshade, Solanum dulcamara. Look for climbing vine, purple flowers with a yellow cone, red egg-shaped berries; green berries turn orange, then red. Learn it so you can avoid it and warn others. Berries are toxic."
+ },
+ {
+  "symbol": "monkshood",
+  "title": "Monkshood",
+  "context": "Monkshood is a garden and wild plant with hooded blue-purple flowers, and every part is deadly, even through the skin. Also called Aconitum, wolfsbane, aconite. Look for deeply cut leaves and tall spikes of hooded blue-purple flowers; top petal shaped like a monk's hood. Learn it so you can avoid it and warn others. Deadly. Even skin contact can numb or harm."
+ },
+ {
+  "symbol": "giant_hogweed",
+  "title": "Giant hogweed",
+  "context": "Giant hogweed is a huge carrot-family plant whose sap, with sunlight, causes severe burns and blisters on skin. Also called hogweed, Heracleum mantegazzianum. Look for huge: stem 5-10 cm wide with purple blotches and stiff hairs, umbrella flower head up to 1 m; can be taller than a person, with a flower umbrella over a meter across. Learn it so you can avoid it and warn others. Sap plus sunlight causes severe burns. Do not touch."
+ },
+ {
+  "symbol": "cow_parsnip",
+  "title": "Cow parsnip",
+  "context": "Cow parsnip is a large native carrot-family plant with maple-like leaves whose sap can burn sunlit skin. Also called Heracleum maximum, Indian celery. Look for big maple-like leaves, white flat umbrella, hairy hollow stem; smaller than giant hogweed, with a greener, less blotched stem. Learn it so you can avoid it and warn others. Sap can cause burns on sunny skin."
+ },
+ {
+  "symbol": "wild_parsnip",
+  "title": "Wild parsnip",
+  "context": "Wild parsnip is a yellow-flowered carrot-family roadside plant whose sap, with sunlight, causes burns and blisters. Also called Pastinaca, poison parsnip, Pastinaca sativa. Look for yellow umbrella flowers, grooved hollow stem, toothed leaflets; flat yellow umbrella flowers in midsummer. Learn it so you can avoid it and warn others. Sap plus sunlight causes burns and blisters."
+ },
+ {
+  "symbol": "skunk_cabbage",
+  "title": "Skunk cabbage",
+  "context": "Skunk cabbage is a wetland plant with a mottled hooded flower in late winter and big leaves that smell skunky when torn; it is toxic raw. Also called Symplocarpus, swamp cabbage, eastern skunk cabbage, Symplocarpus foetidus. Look for wet ground; mottled purple-maroon hooded flower in late winter. Learn it so you can avoid it and warn others. Toxic raw."
+ },
+ {
+  "symbol": "japanese_knotweed",
+  "title": "Japanese knotweed",
+  "context": "Japanese knotweed is an invasive plant with hollow, bamboo-like jointed canes that forms dense stands. Also called knotweed, Fallopia japonica, Mexican bamboo, Reynoutria, Reynoutria japonica. Look for hollow bamboo-like reddish canes, heart-shaped leaves, dense stands; zigzag stems with a leaf at each joint."
+ },
+ {
+  "symbol": "curly_dock",
+  "title": "Curly dock",
+  "context": "Curly dock is a common weed with long, wavy-edged leaves and a tall rust-red seed stalk. Also called yellow dock, sour dock, Rumex crispus, dock. Look for long leaves with wavy ruffled edges, tall rust-red seed stalk; papery sheath where each leaf meets the stem."
+ },
+ {
+  "symbol": "wintergreen",
+  "title": "Wintergreen",
+  "context": "Wintergreen is a low evergreen ground plant whose glossy leaves smell of wintergreen when crushed and whose berries are red. Also called teaberry, checkerberry, Gaultheria, Gaultheria procumbens. Look for low evergreen with glossy leaves that smell of wintergreen when crushed; red berries."
+ },
+ {
+  "symbol": "wild_rose",
+  "title": "Wild rose",
+  "context": "Wild rose is a prickly shrub with five-petal pink flowers that leave red rose hips in fall. Also called rose hips, pasture rose, Rosa, multiflora rose, Rosa carolina. Look for prickly canes, five-petal pink flowers, red rose hips; hips stay on the canes into winter."
+ },
+ {
+  "symbol": "hawthorn",
+  "title": "Hawthorn",
+  "context": "Hawthorn is a thorny small tree with lobed leaves and small red apple-like fruits called haws. Also called Crataegus, thornapple, haws, whitethorn. Look for thorny small tree or shrub with lobed leaves and red apple-like haws; long straight thorns on the twigs."
+ },
+ {
+  "symbol": "mountain_laurel",
+  "title": "Mountain laurel",
+  "context": "Mountain laurel is an evergreen shrub with clusters of pink-white cup flowers, and its leaves, flowers, and honey are poisonous. Also called Kalmia, calico bush, spoonwood, Kalmia latifolia. Look for evergreen glossy leaves, clusters of pink-white cup flowers; forms dense thickets on rocky slopes. Learn it so you can avoid it and warn others. Leaves, flowers and honey from it are toxic."
+ },
+ {
+  "symbol": "sphagnum",
+  "title": "Sphagnum moss",
+  "context": "Sphagnum is the spongy bog moss that holds many times its weight in water. Also called peat moss, bog moss, sphagnum moss, Sphagnum. Look for pale green to red spongy moss in bogs that holds a lot of water; grows in bogs in green, red, or brown carpets."
+ },
+ {
+  "symbol": "usnea",
+  "title": "Old man's beard (Usnea)",
+  "context": "Usnea, or old man's beard, is a pale green hair-like lichen on branches whose strands have a white elastic core. Also called old man's beard, beard lichen, Usnea lichen, Usnea. Look for pale green hair-like lichen on branches; pull it and the core is a white elastic thread. Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care."
+ },
+ {
+  "symbol": "cleavers",
+  "title": "Cleavers",
+  "context": "Cleavers is a sprawling plant whose square stems and narrow whorled leaves stick to clothing with tiny hooks. Also called bedstraw, stickyweed, goosegrass, Galium, Galium aparine. Look for sprawling square stem with whorls of narrow leaves that cling by tiny hooks; sticks to your sleeve when you brush it."
+ },
+ {
+  "symbol": "moonseed",
+  "title": "Canada moonseed",
+  "context": "Canada moonseed is a climbing vine with grape-like berries that are deadly; each berry holds one crescent-shaped seed. Also called moonseed vine, Menispermum, yellow parilla, Menispermum canadense. Look for climbing vine with big lobed leaves, dark blue-black berries each with a single crescent seed; no tendrils, unlike grape. Learn it so you can avoid it and warn others. Looks like wild grape. Grapes have several seeds and tendrils. Moonseed has neither."
+ },
+ {
+  "symbol": "wild_grape",
+  "title": "Wild grape",
+  "context": "Wild grape is a climbing vine with tendrils, toothed lobed leaves, and bunches of small dark grapes. Also called riverbank grape, fox grape, Vitis, Vitis riparia. Look for climbing vine with tendrils, toothed lobed leaves, round berries in a bunch; shreddy bark on older vines."
+ },
+ {
+  "symbol": "thistle",
+  "title": "Thistle",
+  "context": "Thistle is a spiny plant with round purple flower heads whose peeled young stems and roots are edible. Also called bull thistle, Cirsium, spear thistle, Cirsium vulgare. Look for spiny leaves and stem, round purple flower heads; fluffy seed heads in late summer."
+ },
+ {
+  "symbol": "spurge",
+  "title": "Spotted spurge (Euphorbia)",
+  "context": "Spotted spurge is a flat mat-forming weed whose milky sap irritates skin and which is toxic if eaten. Also called Euphorbia, spotted spurge, prostrate spurge, Euphorbia maculata. Look for flat mat of small oval leaves with a dark spot, milky sap; thin wiry stems, not fat and succulent. Learn it so you can avoid it and warn others. Sap irritates. Mistaken for purslane."
+ },
+ {
+  "symbol": "purslane",
+  "title": "Purslane",
+  "context": "Purslane is a low succulent weed with thick paddle-shaped leaves and reddish stems, a common edible green. Also called Portulaca, pigweed, verdolaga, little hogweed, Portulaca oleracea. Look for flat mat of thick succulent paddle leaves with reddish stems; clear sap."
+ },
+ {
+  "symbol": "chickweed",
+  "title": "Chickweed",
+  "context": "Chickweed is a small, soft, sprawling weed with tiny white star flowers and a single line of hairs along the stem. Also called Stellaria media, common chickweed, starweed. Look for low plant with small oval leaves and one line of hairs along the stem; tiny white deep-notched petals."
+ },
+ {
+  "symbol": "common_mallow",
+  "title": "Common mallow",
+  "context": "Common mallow is a low weed with round lobed leaves and small pale pink flowers that leave cheese-wheel shaped seeds. Also called cheeseweed, Malva, buttonweed, Malva neglecta. Look for round lobed leaves on long stalks, small pale pink flowers, round cheese-wheel fruits; slimy texture when the leaves are chewed or crushed."
+ },
+ {
+  "symbol": "garlic_mustard",
+  "title": "Garlic mustard",
+  "context": "Garlic mustard is an invasive woodland plant whose heart-shaped leaves smell of garlic when crushed. Also called Alliaria, hedge garlic, jack-by-the-hedge, Alliaria petiolata. Look for heart-shaped toothed leaves smelling of garlic, small white four-petal flowers; first-year rosettes stay green through winter."
+ }
+]

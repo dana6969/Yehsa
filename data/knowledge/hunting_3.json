@@ -1,0 +1,477 @@
+[
+{
+"id": "quartering_packing_out",
+"title": "Quartering and packing out game",
+"domain": "hunting",
+"also": [
+"quarter a deer",
+"pack out meat",
+"gutless method",
+"boning out a deer"
+],
+"def": "Quartering means cutting a large animal into its four legs plus the backstraps, neck, and other meat so it can be carried out in loads and cooled faster.",
+"look": [
+"clean game bags for each quarter",
+"a sharp knife and a spare blade",
+"a pack frame or sled for heavy loads"
+],
+"use": "Skin one side at a time, take the front and hind quarters, backstraps, and tenderloins, bag each piece, and hang or lay the bags in shade to cool before carrying.",
+"not": "Do not leave meat in a pile on the ground in the sun, and check your state's evidence-of-sex and tagging rules before you separate parts.",
+"rel": [
+"field_dressing_deer",
+"meat_care_temperature"
+],
+"src": [
+"usda-fsis",
+"ihea",
+"state-regs-link"
+]
+},
+{
+"id": "skinning_hanging_deer",
+"title": "Skinning and hanging a deer",
+"domain": "hunting",
+"also": [
+"skin a deer",
+"hang a deer",
+"how long to hang venison",
+"deer gambrel"
+],
+"def": "Skinning removes the hide so meat can cool and stay clean; hanging lets the carcass cool and drain in cold, shaded, animal-proof conditions.",
+"look": [
+"a stable gambrel or rope and a strong limb or beam",
+"air at or below 40 °F (4 °C) for hanging",
+"hair kept off the meat"
+],
+"use": "Hang by the hind legs or the head, skin from the top down with the blade edge out, and keep the carcass cold and covered from flies and animals.",
+"not": "Do not hang meat in temperatures above 40 °F for long, and do not let pets or wildlife reach it.",
+"rel": [
+"meat_care_temperature",
+"basic_butcher_cuts"
+],
+"src": [
+"usda-fsis",
+"ihea"
+]
+},
+{
+"id": "basic_butcher_cuts",
+"title": "Basic venison butchering cuts",
+"domain": "hunting",
+"also": [
+"butcher a deer",
+"venison cuts",
+"backstrap",
+"tenderloin",
+"deer processing at home"
+],
+"def": "Home butchering divides a deer into a few simple groups: backstraps and tenderloins for steaks, hind-quarter roasts, shoulder and neck for stew, and trim for grinding.",
+"look": [
+"silver skin and fat trimmed off",
+"a clean, cold work surface",
+"meat wrapped airtight and labeled with date"
+],
+"use": "Work cold and clean, trim fat, silver skin, and bloodshot meat, wrap tightly, label, and freeze.",
+"not": "Do not saw through bone or the spine in CWD areas, and do not leave meat warm on the counter while you work.",
+"rel": [
+"skinning_hanging_deer",
+"cwd_awareness",
+"game_cooking_temps"
+],
+"src": [
+"usda-fsis",
+"cdc"
+]
+},
+{
+"id": "tag_transport_checkin",
+"title": "Tagging, transport, and checking in game",
+"domain": "hunting",
+"also": [
+"tag a deer",
+"check in deer",
+"register harvest",
+"transport deer legally"
+],
+"def": "Most states require you to tag an animal right away, keep the tag with it during transport, and report or check in the harvest within a set time.",
+"look": [
+"the tag filled out and attached as your state requires",
+"the state's online, phone, or station check-in",
+"rules on moving carcasses from CWD areas"
+],
+"use": "Read your state agency's current tagging and check-in page before the season and follow it exactly.",
+"not": "Do not guess the deadline or carry an untagged animal; rules differ by state and change.",
+"rel": [
+"hunt_before_you_go",
+"cwd_awareness"
+],
+"src": [
+"state-regs-link"
+]
+},
+{
+"id": "cwd_processor_request",
+"title": "Using a processor when CWD is a concern",
+"domain": "hunting",
+"also": [
+"deer processor CWD",
+"individual processing",
+"commercial processing venison"
+],
+"def": "If you hunt where chronic wasting disease is found, ask a processor to process your animal by itself so its meat is not mixed with others.",
+"look": [
+"the processor's policy on batch versus individual processing",
+"test results before you eat the meat",
+"how they dispose of bones and trimmings"
+],
+"use": "Ask for individual processing, get the animal tested, and keep the meat frozen and unused until the result comes back.",
+"not": "Do not eat meat from an animal that tests positive.",
+"rel": [
+"cwd_awareness"
+],
+"src": [
+"cdc",
+"state-regs-link"
+]
+},
+{
+"id": "recover_game_water_cover",
+"title": "Recovering game in water or thick cover",
+"domain": "hunting",
+"also": [
+"deer in the water",
+"deer in a swamp",
+"retrieve deer thick brush"
+],
+"def": "Getting an animal out of water, swamp, or thick cover comes after your own safety: cold water and deep mud can kill.",
+"look": [
+"water depth, current, and temperature",
+"ice that may not hold",
+"dark or difficult ground near nightfall"
+],
+"use": "Bring a partner and a rope, wait for light if needed, and reach the animal from shore or shallow water where you can.",
+"not": "Do not wade into deep, fast, or ice-cold water or walk onto thin ice for an animal.",
+"call": "Call 911 if anyone falls through ice or into cold water.",
+"rel": [
+"hunt_lost_animal"
+],
+"src": [
+"nws",
+"ihea"
+]
+},
+{
+"id": "ground_blind_safety",
+"title": "Ground blind safety",
+"domain": "hunting",
+"also": [
+"ground blind",
+"pop-up blind",
+"hunting blind safety"
+],
+"def": "A ground blind hides you at ground level, but it also hides you from other hunters, so safe setup matters.",
+"look": [
+"orange on the outside of the blind where required",
+"a clear, safe shooting lane",
+"a known exit route"
+],
+"use": "Put orange on and around the blind as your state requires, know your shooting lanes and backstops, and keep the gun pointed out the window only when ready.",
+"not": "Do not run a heater with an open flame inside a closed blind; carbon monoxide builds fast.",
+"rel": [
+"hunt_firearm_safety",
+"co_alarms_indoor_fuel"
+],
+"src": [
+"ihea",
+"cpsc"
+]
+},
+{
+"id": "youth_hunter_mentor",
+"title": "Hunting with a young or new hunter",
+"domain": "hunting",
+"also": [
+"take a kid hunting",
+"mentor hunt",
+"youth hunter",
+"new hunter safety"
+],
+"def": "Mentoring a new or young hunter means close supervision, short trips, and teaching safety before success.",
+"look": [
+"the new hunter within arm's reach when handling a gun",
+"a completed hunter-education course where required",
+"warm clothes, snacks, and a short plan"
+],
+"use": "Keep sessions short and comfortable, review the firearm rules often, and check your state's youth and apprentice rules.",
+"not": "Do not hand an untrained person a loaded gun, or push a tired or cold child to stay out.",
+"rel": [
+"hunt_firearm_safety",
+"hunt_before_you_go"
+],
+"src": [
+"ihea",
+"state-regs-link"
+]
+},
+{
+"id": "bear_moose_camp_safety",
+"title": "Black bear and moose around camps and carcasses",
+"domain": "hunting",
+"also": [
+"bear at my deer",
+"bear near camp",
+"moose charge",
+"bear safety hunting"
+],
+"def": "Black bears are drawn to carcasses, gut piles, and camp food, and a moose can charge if crowded, especially a cow with a calf or a bull in the rut.",
+"look": [
+"fresh bear sign near a gut pile or meat pole",
+"a moose with ears back and hackles raised",
+"food or meat left out at camp"
+],
+"use": "Hang meat away from sleeping areas, store food sealed, approach a kill carefully and make noise, and give moose plenty of room.",
+"not": "Do not approach a bear on a carcass or a moose at close range, and do not run from a bear.",
+"rel": [
+"meat_care_temperature"
+],
+"src": [
+"nps",
+"state-regs-link"
+]
+},
+{
+"id": "field_dressing_birds",
+"title": "Field dressing birds",
+"domain": "hunting",
+"also": [
+"clean a turkey",
+"gut a pheasant",
+"field dress grouse",
+"dress a duck"
+],
+"def": "Birds keep best when the crop and entrails are removed soon after the kill and the body is cooled.",
+"look": [
+"gloves on",
+"crop and intestines removed",
+"the bird kept cool and dry"
+],
+"use": "Remove the entrails and crop, wipe the cavity, and cool the bird quickly; pluck or skin at home.",
+"not": "Do not leave birds in a warm vest or pile them in a closed bag in warm weather.",
+"rel": [
+"game_cooking_temps"
+],
+"src": [
+"usda-fsis",
+"fws"
+]
+},
+{
+"id": "lead_ammo_awareness",
+"title": "Lead versus non-lead ammunition",
+"domain": "hunting",
+"also": [
+"lead bullet fragments",
+"copper bullets",
+"non-toxic shot",
+"lead in venison"
+],
+"def": "Lead bullets can break into small fragments in meat, and scavengers such as eagles can be poisoned by lead in gut piles; non-lead options exist.",
+"look": [
+"fragments spread several inches from the wound channel",
+"federal non-toxic shot rules for waterfowl",
+"local rules on lead ammunition"
+],
+"use": "Trim generously around the wound channel, consider copper or other non-lead ammunition, and follow any rules where you hunt.",
+"not": "Do not feed trimmings from around a lead wound channel to children or pets.",
+"rel": [
+"waterfowl_rules_link"
+],
+"src": [
+"fws",
+"cdc"
+]
+},
+{
+"id": "hunting_ethics_waste",
+"title": "Hunting ethics: no waste, respect for land and people",
+"domain": "hunting",
+"also": [
+"hunting ethics",
+"fair chase",
+"wanton waste",
+"respect landowners"
+],
+"def": "Ethical hunting means taking only shots you can make cleanly, using the animal well, and respecting landowners, other hunters, and the law.",
+"look": [
+"permission in hand on private land",
+"a plan to recover and use the meat",
+"courtesy to others in the field"
+],
+"use": "Practice before the season, pass on doubtful shots, recover and use what you take, and leave gates and land as you found them.",
+"not": "Do not waste meat, shoot from roads where it is illegal, or interfere with other hunters.",
+"rel": [
+"respect_after_harvest",
+"land_access_trespass"
+],
+"src": [
+"ihea",
+"state-regs-link"
+]
+},
+{
+"id": "land_access_trespass",
+"title": "Land access, permission, and trespass",
+"domain": "hunting",
+"also": [
+"hunting private land",
+"landowner permission",
+"posted land",
+"trespass hunting"
+],
+"def": "Hunting on private land needs the owner's permission, and posting and trespass rules differ from state to state; Yehsa has no property-owner map.",
+"look": [
+"posted signs or paint marks on trees",
+"a written or verbal permission you can show",
+"public land boundaries on official maps"
+],
+"use": "Ask permission early, carry the owner's contact, learn your state's posting rules, and check official public-land maps.",
+"not": "Do not cross onto land you are not sure about to follow game without permission.",
+"rel": [
+"hunt_lost_animal",
+"hunting_ethics_waste"
+],
+"src": [
+"state-regs-link"
+]
+},
+{
+"id": "trapping_regulated",
+"title": "Trapping is tightly regulated",
+"domain": "hunting",
+"also": [
+"trapping license",
+"how to trap",
+"trap rules",
+"snare rules"
+],
+"def": "Trapping usually needs its own license or education course and has strict rules on trap types, placement, checking times, and seasons.",
+"look": [
+"the state's trapper-education requirement",
+"trap check intervals",
+"rules that protect pets and non-target animals"
+],
+"use": "Take your state's trapper-education course and follow its current rules.",
+"not": "Yehsa does not give trap-setting instructions; do not set traps or snares without the license and training.",
+"rel": [
+"hunt_before_you_go"
+],
+"src": [
+"state-regs-link",
+"ihea"
+]
+},
+{
+"id": "game_camera_etiquette",
+"title": "Game cameras: etiquette and privacy",
+"domain": "hunting",
+"also": [
+"trail camera",
+"game camera privacy",
+"cellular trail cam"
+],
+"def": "Trail cameras record whatever passes, including people, so place them where you have permission and think about privacy.",
+"look": [
+"the landowner's permission",
+"trails used by hikers or neighbors",
+"state rules on cameras during the season"
+],
+"use": "Get permission, aim cameras at game trails rather than paths people use, and check whether your state limits cellular cameras.",
+"not": "Do not record people without consent where it is prohibited, or share images that show others.",
+"rel": [
+"land_access_trespass"
+],
+"src": [
+"state-regs-link"
+]
+},
+{
+"id": "wind_scent_hunting",
+"title": "Wind direction and your scent",
+"domain": "hunting",
+"also": [
+"wind direction hunting",
+"scent cone",
+"deer smell me",
+"play the wind"
+],
+"def": "Deer rely on smell, and your scent drifts downwind in a widening cone, so hunters set up with the wind blowing from the deer toward them.",
+"look": [
+"wind direction from a light feather, milkweed fluff, or powder",
+"thermals rising in the morning warmth and sinking in the evening",
+"deer approaching from downwind"
+],
+"use": "Check the wind before you walk in, approach and sit so the wind carries your scent away from where deer travel, and move if it shifts.",
+"not": "Do not walk your stand trail with the wind at your back toward the deer.",
+"rel": [
+"deer_sign_reading"
+],
+"src": [
+"ihea",
+"nws"
+]
+},
+{
+"id": "dragging_deer_safety",
+"title": "Dragging a deer without hurting yourself",
+"domain": "hunting",
+"also": [
+"drag a deer",
+"heart attack dragging deer",
+"deer sled",
+"moving a deer out"
+],
+"def": "Dragging a deer is hard work that strains the back and heart, especially in cold weather and for people who do not exercise.",
+"look": [
+"chest pain, shortness of breath, or dizziness",
+"a long or uphill drag",
+"help available nearby"
+],
+"use": "Use a sled or cart, get help, take frequent breaks, and quarter a large animal rather than drag it far.",
+"not": "Do not push through chest pain or breathlessness.",
+"call": "Call 911 for chest pain, pain spreading to the arm or jaw, or fainting.",
+"rel": [
+"quartering_packing_out"
+],
+"src": [
+"cdc",
+"ihea"
+]
+},
+{
+"id": "hunting_alone_plan",
+"title": "Hunting alone: leave a plan",
+"domain": "hunting",
+"also": [
+"solo hunting",
+"hunting alone safety",
+"tell someone where I hunt"
+],
+"def": "A solo hunter should leave a plan with someone: where you will park and sit, when you will be back, and when they should call for help.",
+"look": [
+"a marked map or pin of your stand",
+"a check-in time",
+"a charged phone and a light"
+],
+"use": "Leave the plan, carry a whistle, light, and first aid, and stick to your return time or update it.",
+"not": "Do not change areas without telling your contact.",
+"call": "Your contact should call 911 if you miss the agreed time and cannot be reached.",
+"rel": [
+"hunt_before_you_go",
+"tree_stand_safety"
+],
+"src": [
+"nps",
+"ihea"
+]
+}
+]

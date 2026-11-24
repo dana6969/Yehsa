@@ -5,6 +5,8 @@ import test from "node:test";
 import manifest from "./assets/pictures/manifest.json" with { type: "json" };
 import {
   PICTURE_BUDGET_BYTES,
+  APP_SIZE_LIMIT_BYTES,
+  answerPictures,
   PLANT_CAUTION,
   guideView,
   imageHref,
@@ -20,7 +22,7 @@ const files = fs.readdirSync("public/pictures/files");
 test("every picture has a source, a license, and an author, and none are unlicensed", () => {
   assert.ok(manifest.images.length > 0);
   for (const image of manifest.images) {
-    assert.ok(image.sourceUrl.startsWith("https://commons.wikimedia.org/"));
+    assert.match(image.sourceUrl, /^https:\/\/(commons\.wikimedia\.org|www\.inaturalist\.org)\//);
     assert.ok(image.author);
     assert.ok(image.attribution);
     assert.equal(licenseAllowed(image.license), true);
@@ -88,10 +90,56 @@ test("every picture ships inside the app bundle, and a missing one is labeled", 
     assert.ok(bundled.includes(line), `${image.file} is not required in picture_assets.native.js`);
     assert.ok(web.includes(line), `${image.file} is not required in picture_assets.web.js`);
   }
-  assert.ok(total < 15 * 1024 * 1024);
+  assert.ok(total < PICTURE_BUDGET_BYTES);
   const screen = fs.readFileSync("src/phone/PictureGuide.js", "utf8");
   assert.doesNotMatch(screen, /uri:\s*imageHref/);
   assert.match(screen, /Picture not included/);
   const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
   assert.doesNotMatch(home, /source=\{\{ uri: picture\.href \}\}/);
+});
+
+import packs from "./assets/pictures/packs.json" with { type: "json" };
+import classes from "./assets/camera_id/classes.json" with { type: "json" };
+import { CAMERA_NOTES } from "./symbolic/camera_notes.js";
+
+test("round 4: every camera label has field photos under its note, with credits and an allowed license", () => {
+  for (const [label, meta] of Object.entries(classes)) {
+    if (meta.group === "everyday") continue;
+    const own = manifest.images.filter((image) => image.label === label && image.role !== "lookalike" && image.role !== "example");
+    assert.ok(own.length >= 1, `${label} has no field photo`);
+    for (const image of own) {
+      assert.equal(image.symbol, CAMERA_NOTES[label]);
+      assert.match(image.license, /^(CC0|CC BY 4\.0)$/);
+      assert.ok(image.author && image.attribution && image.licenseUrl);
+    }
+  }
+  const field = manifest.images.filter((image) => image.source === "iNaturalist");
+  assert.ok(field.every((image) => !/SA|NC|ND/.test(image.license)));
+});
+
+test("round 4: plants and mushrooms show their look-alikes, with a warning", () => {
+  for (const label of ["wild_carrot", "chanterelle", "jack_o_lantern", "ramps"]) {
+    const rows = picturesFor(manifest, CAMERA_NOTES[label]).filter((image) => image.role === "lookalike");
+    assert.ok(rows.length >= 1, `${label} has no look-alike picture`);
+    assert.ok(rows.every((image) => /^Look-alike: /.test(image.warning)));
+  }
+  const deathCap = guideView(manifest).find((entry) => entry.symbol === "amanita_death_cap");
+  assert.match(deathCap.caution, /Never eat a wild mushroom/);
+});
+
+test("round 4: bytes per category match the files, and stay under the 2 GB app limit", () => {
+  const unique = [...new Set(manifest.images.map((image) => image.file))];
+  const bytes = unique.reduce((sum, file) => sum + fs.statSync(path.join("assets/pictures", file)).size, 0);
+  assert.equal(packs.total.files, unique.length);
+  assert.equal(packs.total.bytes, bytes);
+  const sum = Object.values(packs.categories).reduce((total, item) => total + item.bytes, 0);
+  assert.equal(sum, bytes);
+  assert.ok(bytes < PICTURE_BUDGET_BYTES && PICTURE_BUDGET_BYTES < APP_SIZE_LIMIT_BYTES);
+});
+
+test("round 4: an Ask answer shows at most four pictures, own photos first", () => {
+  const pics = answerPictures(manifest, "amanita_death_cap");
+  assert.ok(pics.length >= 1 && pics.length <= 4);
+  assert.notEqual(pics[0].role, "lookalike");
+  assert.ok(answerPictures(manifest, "deer_scat").length >= 1);
 });

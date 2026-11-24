@@ -1,6 +1,7 @@
 // Drop a note that only shares a loose word with the question.
 import { loadFieldNotes } from "./field_vocab_source.js";
 import { textHasToken } from "./book_search.js";
+import { entryFor, entryHeadHit } from "./entries.js";
 
 const LOOSE = new Set([
   "light", "life", "repeated", "opening", "times", "time", "city", "plant", "plants",
@@ -74,7 +75,21 @@ function careLink(parsed, symbol) {
   return insect && CARE_SYMBOLS.has(symbol);
 }
 
+// A field entry is long, so one shared word is weak evidence. The question has to say the entry's
+// name, one of its other names, or most of its title (entries.js entryHeadHit).
+function entryNamed(entry, parsed) {
+  return entryHeadHit(entry.id, parsed?.text || parsed?.topic || "") === true;
+}
+
 export function hitIsRelevant(hit, parsed) {
+  const entry = entryFor(hit?.symbol);
+  if (entry && !entryNamed(entry, parsed)) return false;
+  // Entries never give a dose, so a dose question is not answered by one.
+  if (entry && /\b(dose|doses|dosage|dosing|mg|milligrams?)\b/i.test(`${parsed?.topic || ""} ${parsed?.text || ""}`)) return false;
+  return noteIsRelevant(hit, parsed);
+}
+
+function noteIsRelevant(hit, parsed) {
   const { tokens, specific } = specificTokens(parsed);
   const needed = specific.length ? specific : tokens;
   if (!needed.length) return true;

@@ -1,0 +1,57 @@
+[
+ {
+  "symbol": "hungry_in_woods",
+  "title": "Hungry in the woods",
+  "context": "If you are hungry in the woods, eat the food you carried and focus first on water, shelter, warmth, and being found, because a person can go weeks without food but only days without water. Also called I am hungry, no food in the woods, need to eat, starving lost. Look for a hunger that feels urgent but is not an emergency; packed food, even small amounts."
+ },
+ {
+  "symbol": "food_danger_zone",
+  "title": "Danger zone: 40 to 140 F",
+  "context": "The danger zone is 40 to 140 F (4 to 60 C), where bacteria multiply fast, so perishable food should not stay out more than two hours, or one hour above 90 F. Also called how long can food sit out, bacteria grow in food, two hour rule, food temperature danger zone. Look for perishable food left out on a counter or picnic table; food not kept cold in a cooler."
+ },
+ {
+  "symbol": "food_safe_cook_temps",
+  "title": "Safe minimum cooking temperatures",
+  "context": "Use a food thermometer: 165 F (74 C) for poultry and leftovers, 160 F (71 C) for ground meats and egg dishes, and 145 F (63 C) for whole cuts of meat and fish with a three-minute rest. Also called what temperature to cook chicken, how done should venison be, meat thermometer, ground meat temperature. Look for poultry and reheated food: 165 F; ground beef, pork, and ground game: 160 F."
+ },
+ {
+  "symbol": "food_leftovers_safety",
+  "title": "Are leftovers, picnic food, or cooler food still safe?",
+  "context": "Leftovers are safe for three to four days in the fridge and picnic or cooler food is safe only if it stayed at 40 F or below; when in doubt, throw it out. Also called is this food still good, leftovers how long, cooler food melted ice, can I eat this. Look for how long it sat in the danger zone; a cooler with ice still present and food cold."
+ },
+ {
+  "symbol": "food_field_hygiene",
+  "title": "Food hygiene in the field",
+  "context": "Wash hands and tools, keep raw meat separate from ready-to-eat food, and cook to a safe temperature. Also called wash hands before eating, keep raw meat separate, clean cutting board outdoors. Look for hands washed with soap or sanitizer; separate cutting boards and knives. Wash hands with soap and treated water before touching food, bag raw meat separately, wash utensils, and keep the cooler in shade."
+ },
+ {
+  "symbol": "food_outage",
+  "title": "Food in the fridge and freezer during an outage",
+  "context": "A closed refrigerator keeps food safe about 4 hours without power; a full freezer holds for about 48 hours (24 if half full) if the door stays shut. Also called power outage food, how long does a fridge stay cold, freezer without power, throw out food. Look for a thermometer in the fridge at 40 F or below; ice crystals still in the freezer food."
+ },
+ {
+  "symbol": "jerky_drying_meat",
+  "title": "Making jerky safely",
+  "context": "Safe jerky starts with heating the meat to a safe internal temperature before or during drying, and the drying alone does not kill bacteria. Also called dry meat, venison jerky, dehydrating meat. Look for lean meat sliced thin; heat to 160 F (71 C), poultry to 165 F, then dry at 130 to 140 F (54 to 60 C). Follow USDA guidance: marinate in the fridge, steam or oven-heat to the right internal temperature, then dry. Store in a cool dry place."
+ },
+ {
+  "symbol": "home_canning_safe",
+  "title": "Home canning: pressure canner for meat and vegetables",
+  "context": "Low-acid foods such as meat and vegetables must be canned in a pressure canner following the USDA guide, because boiling-water canning cannot make them safe from botulism. Also called canning venison, botulism, low-acid canning, pressure canner. Look for a pressure canner with a tested gauge; a bulging lid, spurting liquid, or a bad smell. Follow the USDA Complete Guide to Home Canning for your food, jar size, and altitude. Check each jar seal before storage."
+ },
+ {
+  "symbol": "food_allergies",
+  "title": "Allergies to wild or familiar foods",
+  "context": "Food allergies can cause hives, swelling, or trouble breathing within minutes; carry any prescribed epinephrine and tell your group. Also called food allergy outdoors, allergic reaction to nuts, epinephrine on a trip. Look for hives, swelling of the lips or tongue, wheezing; vomiting or dizziness after eating. Know your allergens, tell your group, carry medicine, and avoid new wild foods. Use epinephrine as prescribed and call 911."
+ },
+ {
+  "symbol": "fish_cleaning_spoilage",
+  "title": "Cleaning fish and spoilage signs",
+  "context": "Gut and chill fish quickly; cook it to 145 F; spoiled fish smells sour, feels slimy, and has cloudy eyes. Also called how to clean a fish, is the fish bad, fish smell. Look for fresh: clear eyes, firm flesh, mild smell; spoiled: sour smell, slime, sunken or cloudy eyes. Gut the fish soon after catching, keep it on ice, wash your hands, and cook it to 145 F. Check the state health department's fish advisories for mercury and other contaminants."
+ },
+ {
+  "symbol": "shellfish_closures",
+  "title": "Shellfish closures and red tide",
+  "context": "Shellfish can carry toxins from algal blooms, and cooking does not remove them, so follow the official closure notices. Also called clams closed, paralytic shellfish poisoning, red tide, mussels safe. Look for a posted closure or red tide notice; numbness around the mouth after eating shellfish. Check the state shellfish closure page before you harvest; if you cannot confirm that the area is open, do not eat shellfish from it."
+ }
+]

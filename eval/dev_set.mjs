@@ -2,6 +2,9 @@
 // This file is not the frozen v1 suite and it is not the external holdout.
 // eval/run.mjs does not load it.
 
+import { CAMERA_DEV_SET } from "./dev_camera_set.mjs";
+import { DOMAIN_DEV_SET } from "./dev_domains_set.mjs";
+
 export const DEV_SET = [
   {
     id: "off-tokyo",
@@ -416,5 +419,7 @@ export const DEV_SET = [
     category: "herbology",
     prompt: "which wild plants are deadly to taste",
     expect: { kind: "facts", all: ["hemlock", "death camas"] }
-  }
+  },
+  ...CAMERA_DEV_SET,
+  ...DOMAIN_DEV_SET
 ];

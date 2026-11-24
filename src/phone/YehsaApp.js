@@ -83,7 +83,7 @@ import { outboundQuery, queryAllowed } from "../../symbolic/web/sources.js";
 import { guessState } from "./radio_data.js";
 import PictureGuide, { CorpusHealth } from "./PictureGuide.js";
 import pictureManifest from "../../assets/pictures/manifest.json";
-import { creditLine, friendlySource, imageHref, picturesFor } from "../../symbolic/picture_guide.js";
+import { answerPictures, creditLine, friendlySource, imageHref } from "../../symbolic/picture_guide.js";
 import { pictureSource } from "../../symbolic/picture_assets.js";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -1171,7 +1171,7 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
             feedbackEligible: false,
             chips: sourceChips(result),
             source: result?.source || null,
-            pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
+            pictures: answerPictures(pictureManifest, result?.symbol).map((image) => ({
               id: image.id,
               href: imageHref(image.file),
               attribution: creditLine(image),
@@ -1216,7 +1216,7 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
           feedbackEligible: isFeedbackEligible(result),
           chips: sourceChips(result),
           source: result?.source || null,
-          pictures: picturesFor(pictureManifest, result?.symbol).map((image) => ({
+          pictures: answerPictures(pictureManifest, result?.symbol).map((image) => ({
             id: image.id,
             href: imageHref(image.file),
             attribution: creditLine(image),

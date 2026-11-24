@@ -1,0 +1,367 @@
+[
+{
+"id": "weather_trend_reading",
+"title": "What is the weather trend?",
+"domain": "weather",
+"also": [
+"weather trend",
+"is the weather getting worse",
+"will it rain",
+"pressure trend",
+"barometer says",
+"forecast for today"
+],
+"def": "The weather trend is the direction air pressure and the sky are moving over the last few hours, read from this phone's barometer together with the saved forecast and how old it is.",
+"look": [
+"pressure falling 1 hPa or more per hour: weather is worsening, often rain or wind",
+"pressure steady: no big change soon",
+"pressure rising: clearing and drier air",
+"the age of the saved forecast and any alert's expiry time"
+],
+"use": "Check the pressure trend and the saved forecast age first, then look at the sky and wind. Prepare shelter and gear if the pressure is falling and clouds are thickening. Use the NOAA Weather Radio or a fresh forecast whenever you have signal.",
+"not": "A barometer trend is a clue, not a forecast, and a saved forecast more than about 6 hours old may be stale.",
+"call": "If a warning is in effect for your area, follow it first; call 911 in an emergency.",
+"rel": [
+"barometer_trend",
+"forecast_staleness"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "forecast_staleness",
+"title": "How old is the saved forecast or alert?",
+"domain": "weather",
+"also": [
+"is the forecast out of date",
+"stale forecast",
+"when was the alert issued",
+"alert expires"
+],
+"def": "A saved forecast or alert is a snapshot; it gets less reliable with age, and every NWS alert carries its own expiry time.",
+"look": [
+"the issue time on the forecast",
+"the 'until' or expiry time on an alert",
+"weather that no longer matches what you see"
+],
+"use": "Treat a forecast over about 6 hours old as aging and one over a day old as stale. Refresh when you have signal, and trust what the sky and your barometer are doing over an old forecast.",
+"not": "Do not assume an alert is still in effect after its expiry time, or that no alert means no danger.",
+"call": "If conditions look dangerous and you cannot refresh, act on what you see: seek shelter.",
+"rel": [
+"weather_trend_reading",
+"noaa_weather_radio"
+],
+"src": [
+"nws"
+]
+},
+{
+"id": "hypothermia_mild_weather",
+"title": "Hypothermia in mild but wet weather",
+"domain": "weather",
+"also": [
+"cold and wet",
+"hypothermia at 50 degrees",
+"rain and wind chill",
+"cold drizzle"
+],
+"def": "Hypothermia can happen well above freezing: cool air plus rain, wind, and wet clothes steals body heat fast.",
+"look": [
+"air temperatures from 30 to 50 F (minus 1 to 10 C) with rain or wind",
+"shivering, clumsiness, and mumbling",
+"wet cotton clothing and no wind block"
+],
+"use": "Put on a waterproof shell and a hat, swap wet layers for dry ones, eat and drink, and get out of the wind. Stop and warm up at the first shivering.",
+"not": "Do not trust a mild number on the thermometer, and do not wear wet cotton.",
+"call": "Call 911 if shivering stops or the person is confused or drowsy.",
+"rel": [
+"hypothermia_stages",
+"clothing_layers"
+],
+"src": [
+"cdc",
+"nws"
+]
+},
+{
+"id": "fog_hunting_visibility",
+"title": "Fog and low visibility on a hunt or hike",
+"domain": "weather",
+"also": [
+"foggy morning hunt",
+"can't see in the fog",
+"low light and mist"
+],
+"def": "Fog cuts visibility, hides landmarks, and can make a known place unfamiliar; it also muffles sound.",
+"look": [
+"valley fog at dawn on calm clear mornings",
+"visibility dropping below a few hundred feet",
+"damp clothing and falling temperature"
+],
+"use": "Stay on a known route, use a compass or GPS, and keep track of the time. If you lose your bearings, stop, and wait for the fog to lift; mark your position on your phone. Make noise with a whistle if you need help.",
+"not": "Do not take shots you cannot clearly identify and see beyond, and do not walk near cliffs, water, or roads by sight alone.",
+"rel": [
+"fog_types"
+],
+"src": [
+"nws",
+"atp3-50-21"
+]
+},
+{
+"id": "thunderstorm_hunting_water",
+"title": "A thunderstorm starts while you are hunting or on the water",
+"domain": "weather",
+"also": [
+"storm while hunting",
+"lightning in the woods",
+"storm on the boat",
+"lightning on the lake"
+],
+"def": "If thunder is heard, get to a vehicle, a building, or low ground at once, and get off the water, ridges, and open fields.",
+"look": [
+"thunder or a flash within 30 seconds",
+"dark towers and a sudden cool breeze",
+"hair standing on end or buzzing metal"
+],
+"use": "Walk to a vehicle or building now. If none is near, go to a low spot away from lone trees, water, and metal fences, and spread out groups by 50 feet. On water, head for shore immediately. Wait 30 minutes after the last thunder.",
+"not": "Do not shelter under a lone tree, in a pop-up blind, or on a ridge, and do not leave a firearm propped on a tree.",
+"call": "Call 911 for a lightning strike; start CPR if the person is not breathing.",
+"rel": [
+"lightning",
+"flash_to_bang"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "tree_ice_branches",
+"title": "Ice, branches, and downed lines after a storm",
+"domain": "weather",
+"also": [
+"tree limb down",
+"power line on the ground",
+"ice storm cleanup",
+"widowmaker after a storm"
+],
+"def": "After ice or wind storms, ice-loaded limbs and downed lines are the main hazards, and any line on the ground should be treated as live.",
+"look": [
+"ice-coated or cracked limbs overhead",
+"wires on the ground or hanging in trees",
+"a vehicle touching a line"
+],
+"use": "Stay at least 10 meters (30 feet) from any downed line and call the utility or 911. Stay out from under heavily loaded trees, and wait for daylight to clear debris. If a line falls on your car, stay in the car and wait for help.",
+"not": "Do not touch anything in contact with a line, and do not drive over a downed wire. If you must leave a car on a live wire, jump clear with both feet together and shuffle away.",
+"call": "Call 911 and the utility for any downed power line.",
+"rel": [
+"power_out_safety",
+"ice_storm_freezing_rain"
+],
+"src": [
+"fema",
+"nws",
+"cpsc"
+]
+},
+{
+"id": "red_flag_fire_weather",
+"title": "Red flag warning and fire weather",
+"domain": "weather",
+"also": [
+"red flag warning",
+"fire weather watch",
+"dry windy day",
+"drought and fire risk"
+],
+"def": "A red flag warning means warm temperatures, very low humidity, and strong winds are creating critical fire conditions.",
+"look": [
+"low humidity, dry vegetation, and gusty winds",
+"a burn ban or an NWS red flag warning",
+"smoke or a fire nearby"
+],
+"use": "Do not burn outdoors, keep vehicles off dry grass, and have an escape route ready. Check local burn bans. Put out any fire completely.",
+"not": "Do not drag chains, park on tall dry grass, or use fireworks and open flames on a red flag day.",
+"call": "Call 911 at the first sign of a wildfire.",
+"rel": [
+"wildfire_evacuation",
+"fire_legal_ban"
+],
+"src": [
+"nws",
+"usfs",
+"fema"
+]
+},
+{
+"id": "rain_on_snow_flood",
+"title": "Rain on snow and ice jam flooding",
+"domain": "weather",
+"also": [
+"thaw flooding",
+"ice jam",
+"snowmelt flood",
+"spring flood"
+],
+"def": "Rain on deep snow plus warm air can melt it fast and send a surge of water into streams, and ice jams can back up rivers.",
+"look": [
+"warm rain on a deep snowpack",
+"rapidly rising streams and cracking river ice",
+"water pooling at culverts and low crossings"
+],
+"use": "Stay away from rivers and stream banks, move to higher ground if water rises, and avoid crossing flooded roads. Move vehicles and valuables from low spots early.",
+"not": "Do not walk or drive through floodwater or on river ice during a thaw.",
+"call": "Call 911 if trapped by water; stay on high ground.",
+"rel": [
+"flash_flood_risk"
+],
+"src": [
+"nws",
+"fema"
+]
+},
+{
+"id": "small_craft_marine_forecast",
+"title": "Marine and small-craft forecast",
+"domain": "weather",
+"also": [
+"small craft advisory",
+"coastal waters forecast",
+"boating weather",
+"choppy seas"
+],
+"def": "A small craft advisory warns that winds or seas are hazardous for small boats, and a marine forecast gives wind, seas, and visibility for coastal waters.",
+"look": [
+"winds around 20 to 33 knots and rough seas",
+"fog and reduced visibility",
+"gale or storm warnings for larger systems"
+],
+"use": "Check the marine forecast before you go and again before you leave the dock. Stay in port when an advisory is posted, wear a life jacket, and know where to land.",
+"not": "Do not rely on a calm morning; coastal weather can change fast.",
+"region": "On the Maine and Rhode Island coasts, fog and cold water are constant risks even in summer.",
+"call": "Call the Coast Guard on VHF channel 16 or 911 in an emergency on the water.",
+"rel": [
+"cold_water_shock",
+"weather_trend_reading"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "dew_frost_overnight",
+"title": "Dew, frost, and overnight lows",
+"domain": "weather",
+"also": [
+"will it freeze tonight",
+"frost forecast",
+"ground frost",
+"heavy dew"
+],
+"def": "Dew forms when surfaces cool to the dew point, and frost forms when they cool below freezing on a clear, calm night.",
+"look": [
+"clear skies and calm winds cool the ground fastest",
+"wet grass or a white coating at dawn",
+"low spots and valleys are coldest"
+],
+"use": "Expect a frost when the forecast low is near 36 F (2 C) on a clear, calm night. Cover gear, bring water filters and batteries inside, and sleep above the cold air in the valley.",
+"not": "Do not leave a wet water filter out to freeze.",
+"rel": [
+"temperature_inversion",
+"dew_point"
+],
+"src": [
+"nws",
+"noaa"
+]
+},
+{
+"id": "whiteout_snow",
+"title": "Whiteout",
+"domain": "weather",
+"also": [
+"can't see in the snow",
+"blowing snow",
+"snow squall",
+"white out"
+],
+"def": "A whiteout is a loss of depth and horizon in blowing snow or flat light, and it makes it easy to lose direction or walk off an edge.",
+"look": [
+"no visible horizon or shadows",
+"blowing snow and low visibility",
+"sudden snow squalls"
+],
+"use": "Stop moving unless you are on a sure handrail such as a fence or a wall. Put on warm layers, take shelter, and wait for visibility to improve. Use a compass if you must move.",
+"not": "Do not walk on without a reference, and do not leave a vehicle in a whiteout without a plan.",
+"call": "Call 911 if stranded; stay with the vehicle.",
+"rel": [
+"blizzard_safety"
+],
+"src": [
+"nws",
+"atp3-50-21"
+]
+},
+{
+"id": "weather_signals_combined",
+"title": "Using pressure, wind, and clouds together",
+"domain": "weather",
+"also": [
+"how do I forecast the weather myself",
+"signs of a storm coming",
+"weather clues",
+"predict rain"
+],
+"def": "A better local forecast comes from combining pressure trend, wind shift, cloud change, and temperature rather than relying on any one sign.",
+"look": [
+"falling pressure plus thickening high cloud: wet weather in a day",
+"backing wind plus low, dark cloud: worsening",
+"rising pressure plus a northwest wind and clearing sky: improving",
+"three or more signs agreeing is strong"
+],
+"use": "Write down pressure, wind, and sky every few hours. If two or more clues point to worsening weather, prepare for it. Refresh with the NWS forecast whenever you have signal.",
+"not": "Do not trust a single sign, and do not ignore an official warning for a hunch.",
+"rel": [
+"barometer_trend",
+"wind_shift_signs"
+],
+"src": [
+"nws",
+"noaa",
+"jetstream"
+]
+},
+{
+"id": "tropical_remnants_coastal_flooding",
+"title": "Tropical storm remnants and coastal flooding",
+"domain": "weather",
+"also": [
+"hurricane remnants",
+"nor'easter",
+"coastal flood",
+"storm tide"
+],
+"def": "Remnants of tropical storms and nor'easters bring heavy rain, wind, and high tides that flood coasts and rivers well inland.",
+"look": [
+"tropical storm or nor'easter in the forecast",
+"heavy rain bands and rising rivers",
+"high tide plus onshore wind causing coastal flooding"
+],
+"use": "Follow evacuation orders, move to higher ground, secure outside items, and avoid flooded roads. Have supplies for several days.",
+"not": "Do not drive through floodwater, and do not assume a weakened storm is harmless.",
+"region": "The Rhode Island and Maine coasts are exposed to storm surge and coastal flooding from hurricanes and nor'easters.",
+"call": "Call 911 if trapped by water.",
+"rel": [
+"storm_surge",
+"hurricane_safety"
+],
+"src": [
+"nws",
+"fema"
+]
+}
+]

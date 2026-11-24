@@ -1,0 +1,1695 @@
+[
+{
+"id": "ramps",
+"title": "Ramps (wild leek)",
+"domain": "plants",
+"also": [
+"wild leek",
+"Allium tricoccum",
+"ramp"
+],
+"def": "Ramps are wild leeks with two or three broad smooth leaves in spring and a strong onion-garlic smell.",
+"look": [
+"two or three broad smooth leaves per plant in spring, red-purple stalk base, strong onion and garlic smell",
+"every leaf smells of onion when crushed"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount. Check smell on every leaf. False hellebore and lily of the valley grow in the same woods and are deadly.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"alike": [
+"False hellebore (Indian poke): Big pleated leaves that wrap the stem in a spiral; wet woods and meadows. No onion smell. Sometimes mistaken for ramps. Deadly",
+"Lily of the valley: Two smooth upright leaves, small white bells on an arching stem, red berries. Mistaken for ramps. Every part is deadly"
+],
+"rel": [
+"false_hellebore",
+"lily_of_valley"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about ramps"
+},
+{
+"id": "false_hellebore",
+"title": "False hellebore (Indian poke)",
+"domain": "plants",
+"also": [
+"Indian poke",
+"Veratrum",
+"green hellebore",
+"corn lily",
+"Veratrum viride"
+],
+"def": "False hellebore is a wetland plant with large pleated leaves spiraling up the stem, and it is deadly.",
+"look": [
+"big pleated leaves that wrap the stem in a spiral",
+"wet woods and meadows",
+"no onion smell",
+"no onion smell at all"
+],
+"use": "Learn it so you can avoid it and warn others. Sometimes mistaken for ramps. Deadly.",
+"not": "Never eat, brew, chew, or burn any part of it, and wash your hands after touching it. Do not trust a photo or a taste test.",
+"alike": [
+"Ramps (wild leek): Two or three broad smooth leaves per plant in spring, red-purple stalk base, strong onion and garlic smell. Check smell on every leaf. False hellebore and lily of the valley grow in the same woods and are deadly"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"ramps"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about false hellebore"
+},
+{
+"id": "lily_of_valley",
+"title": "Lily of the valley",
+"domain": "plants",
+"also": [
+"lily of the valley",
+"Convallaria",
+"May bells",
+"Convallaria majalis"
+],
+"def": "Lily of the valley is a garden and wild plant with small white bell flowers, and every part is deadly to the heart.",
+"look": [
+"two smooth upright leaves, small white bells on an arching stem, red berries",
+"no onion smell, unlike ramps"
+],
+"use": "Learn it so you can avoid it and warn others. Mistaken for ramps. Every part is deadly.",
+"not": "Never eat, brew, chew, or burn any part of it, and wash your hands after touching it. Do not trust a photo or a taste test.",
+"alike": [
+"Ramps (wild leek): Two or three broad smooth leaves per plant in spring, red-purple stalk base, strong onion and garlic smell. Check smell on every leaf. False hellebore and lily of the valley grow in the same woods and are deadly"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"ramps"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about lily of the valley"
+},
+{
+"id": "chicory",
+"title": "Chicory",
+"domain": "plants",
+"also": [
+"blue sailors",
+"Cichorium",
+"coffee weed",
+"succory",
+"Cichorium intybus"
+],
+"def": "Chicory is a roadside plant with sky-blue flowers on stiff stems whose leaves and roasted roots are used as food.",
+"look": [
+"sky blue flowers on stiff, nearly leafless stems along roadsides",
+"milky sap",
+"flowers close by afternoon"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"alike": [
+"Dandelion: Rosette of toothed leaves, one yellow flower per hollow stalk, milky sap"
+],
+"rel": [
+"dandelion_greens"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about chicory"
+},
+{
+"id": "red_clover",
+"title": "Red clover",
+"domain": "plants",
+"also": [
+"Trifolium pratense",
+"clover"
+],
+"def": "Red clover is a common field plant with round pink-purple flower heads and three leaflets marked with a pale V.",
+"look": [
+"pink-purple round flower heads",
+"three leaflets with a pale V mark",
+"upright, taller than white clover"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"alike": [
+"White clover: Low creeping plant, white round flower heads, three leaflets often with a pale band"
+],
+"rel": [
+"white_clover"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about red clover"
+},
+{
+"id": "white_clover",
+"title": "White clover",
+"domain": "plants",
+"also": [
+"Trifolium repens",
+"Dutch clover",
+"lawn clover"
+],
+"def": "White clover is a low creeping lawn plant with round white flower heads and three leaflets.",
+"look": [
+"low creeping plant, white round flower heads, three leaflets often with a pale band",
+"stems creep and root along the ground"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"alike": [
+"Red clover: Pink-purple round flower heads; three leaflets with a pale V mark"
+],
+"rel": [
+"red_clover"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about white clover"
+},
+{
+"id": "burdock",
+"title": "Burdock",
+"domain": "plants",
+"also": [
+"Arctium",
+"gobo",
+"great burdock",
+"beggar's buttons"
+],
+"def": "Burdock is a large weed with huge heart-shaped leaves and hooked burrs that stick to clothing; its first-year root is eaten cooked.",
+"look": [
+"very large heart-shaped leaves, hooked burr heads, purple thistle-like flowers",
+"leaves pale and woolly underneath"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount. Young leaves can be mistaken for foxglove, which is deadly.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"alike": [
+"Foxglove: Fuzzy leaves in a rosette, tall spike of tubular pink-purple bells. Deadly to the heart. Often confused with comfrey in the first year"
+],
+"rel": [
+"foxglove"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about burdock"
+},
+{
+"id": "foxglove",
+"title": "Foxglove",
+"domain": "plants",
+"also": [
+"Digitalis",
+"fairy gloves",
+"purple foxglove",
+"Digitalis purpurea"
+],
+"def": "Foxglove is a garden and wild plant with a tall spike of tubular pink-purple flowers, and every part is deadly to the heart.",
+"look": [
+"fuzzy leaves in a rosette, tall spike of tubular pink-purple bells",
+"spotted throat inside each bell"
+],
+"use": "Learn it so you can avoid it and warn others. Deadly to the heart. Often confused with comfrey in the first year.",
+"not": "Never eat, brew, chew, or burn any part of it, and wash your hands after touching it. Do not trust a photo or a taste test.",
+"alike": [
+"Burdock: Very large heart-shaped leaves, hooked burr heads, purple thistle-like flowers. Young leaves can be mistaken for foxglove, which is deadly",
+"Comfrey: Rough hairy leaves, bell flowers in curled clusters. Contains liver-damaging compounds. Do not eat or brew it"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"burdock",
+"comfrey"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about foxglove"
+},
+{
+"id": "comfrey",
+"title": "Comfrey",
+"domain": "plants",
+"also": [
+"Symphytum",
+"knitbone",
+"boneset",
+"Symphytum officinale"
+],
+"def": "Comfrey is a hairy-leaved garden plant with curled clusters of bell flowers that contains liver-damaging compounds.",
+"look": [
+"rough hairy leaves, bell flowers in curled clusters",
+"leaves run down onto the stem as wings"
+],
+"use": "Learn it so you can avoid it and warn others. Contains liver-damaging compounds. Do not eat or brew it.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Foxglove: Fuzzy leaves in a rosette, tall spike of tubular pink-purple bells. Deadly to the heart. Often confused with comfrey in the first year"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"foxglove"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about comfrey"
+},
+{
+"id": "iris_flag",
+"title": "Wild iris (blue flag, yellow flag)",
+"domain": "plants",
+"also": [
+"blue flag",
+"yellow flag",
+"flag iris",
+"Iris versicolor"
+],
+"def": "Wild iris, or blue flag, is a wetland plant with flat sword-shaped leaves in a fan, and it is poisonous.",
+"look": [
+"flat sword-shaped leaves in a fan",
+"blue-violet or yellow flowers",
+"wet ground",
+"leaves flat and folded like a fan, not round like cattail"
+],
+"use": "Learn it so you can avoid it and warn others. Toxic if eaten. Often mistaken for cattail shoots.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Cattail: Tall blade leaves, brown sausage-shaped seed head; wet places. Iris leaves look alike before flowering and are toxic"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"cattail_lookalikes"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about wild iris"
+},
+{
+"id": "wild_strawberry",
+"title": "Wild strawberry",
+"domain": "plants",
+"also": [
+"Fragaria",
+"woodland strawberry",
+"wild strawberries",
+"Fragaria virginiana"
+],
+"def": "Wild strawberry is a low native plant whose tiny red berries carry their seeds on the outside and taste like small garden strawberries.",
+"look": [
+"three toothed leaflets, white five-petal flowers, tiny red berries with seeds on the outside",
+"runners that root along the ground"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about wild strawberry"
+},
+{
+"id": "brambles",
+"title": "Blackberry and raspberry (Rubus)",
+"domain": "plants",
+"also": [
+"blackberry",
+"raspberry",
+"Rubus",
+"blackcap",
+"dewberry"
+],
+"def": "Brambles are the prickly canes of blackberries and raspberries, whose berries are built from many small beads.",
+"look": [
+"arching prickly canes, toothed compound leaves, clustered berries made of tiny beads",
+"raspberries pull off hollow like a cap; blackberries keep a white core"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about blackberry and raspberry"
+},
+{
+"id": "blueberry",
+"title": "Blueberry",
+"domain": "plants",
+"also": [
+"lowbush blueberry",
+"wild blueberry",
+"huckleberry",
+"Vaccinium angustifolium"
+],
+"def": "Lowbush blueberry is a small shrub of sunny barrens and woods whose blue berries end in a five-point crown.",
+"look": [
+"low shrub, small oval leaves, blue berries with a five-point crown at the tip",
+"many tiny seeds inside, not one stone"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about blueberry"
+},
+{
+"id": "cranberry",
+"title": "Cranberry",
+"domain": "plants",
+"also": [
+"wild cranberry",
+"bog cranberry",
+"Vaccinium macrocarpon"
+],
+"def": "Cranberry is a trailing evergreen vine of bogs whose sour red berries ripen in fall.",
+"look": [
+"trailing evergreen vine in bogs, tiny leaves, red berries",
+"berries bounce and have air pockets inside"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about cranberry"
+},
+{
+"id": "elderberry",
+"title": "Elderberry",
+"domain": "plants",
+"also": [
+"elder",
+"Sambucus",
+"black elderberry",
+"elderflower",
+"Sambucus canadensis"
+],
+"def": "Elderberry is a shrub with flat clusters of tiny white flowers and dark purple berries that are only safe to eat cooked and ripe.",
+"look": [
+"opposite compound leaves, flat clusters of white flowers, dark purple (or red) berries, pithy stems",
+"stems have soft white pith inside"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount. Raw berries, leaves and stems are toxic. Cook the berries.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"alike": [
+"Water hemlock: Wet ground; clustered tuberous roots; leaves with sharp toothed leaflets and side veins that run to the notches. One of the most toxic plants in North America. Every part is deadly",
+"Pokeweed: Purple-red stems, large leaves, drooping clusters of dark purple berries. Berries, roots and mature leaves are toxic"
+],
+"rel": [
+"water_hemlock",
+"pokeweed"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about elderberry"
+},
+{
+"id": "pokeweed",
+"title": "Pokeweed",
+"domain": "plants",
+"also": [
+"poke",
+"pokeberry",
+"poke salad",
+"inkberry",
+"Phytolacca",
+"Phytolacca americana"
+],
+"def": "Pokeweed is a tall plant with purple-red stems and drooping clusters of dark berries, and its berries, roots, and mature leaves are poisonous.",
+"look": [
+"purple-red stems, large leaves, drooping clusters of dark purple berries",
+"can grow taller than a person in one season"
+],
+"use": "Learn it so you can avoid it and warn others. Berries, roots and mature leaves are toxic.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Elderberry: Opposite compound leaves, flat clusters of white flowers, dark purple (or red) berries, pithy stems. Raw berries, leaves and stems are toxic. Cook the berries"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"elderberry"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about pokeweed"
+},
+{
+"id": "staghorn_sumac",
+"title": "Staghorn sumac",
+"domain": "plants",
+"also": [
+"red sumac",
+"sumac berries",
+"sumac lemonade",
+"Rhus typhina"
+],
+"def": "Staghorn sumac is a shrub with velvety twigs and upright cones of red fuzzy berries; it is not poison sumac.",
+"look": [
+"fuzzy velvet twigs, long compound leaves, upright red fuzzy berry cones",
+"berries are red and point up, never white and drooping"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount. Poison sumac has white drooping berries and grows in wet ground.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"alike": [
+"Poison sumac: Wet ground, smooth stems, leaves with a red stalk, drooping white-grey berries. Skin contact causes a severe rash"
+],
+"rel": [
+"poison_sumac"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about staghorn sumac"
+},
+{
+"id": "virginia_creeper",
+"title": "Virginia creeper",
+"domain": "plants",
+"also": [
+"five-leaved ivy",
+"woodbine",
+"Parthenocissus",
+"Parthenocissus quinquefolia"
+],
+"def": "Virginia creeper is a climbing vine with five leaflets spread like a hand, often confused with poison ivy, and its berries are poisonous.",
+"look": [
+"five leaflets spread like a hand",
+"climbing vine with tendrils",
+"tendrils end in small sticky pads",
+"dark blue berries on red stalks in fall"
+],
+"use": "Learn it so you can avoid it and warn others. Berries are toxic. Sometimes mistaken for poison ivy.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Poison ivy: Three leaflets, the middle one on a longer stalk; hairy vine on trees; leaves red in autumn. Leaves of three. Skin contact causes a rash. Smoke from burning it is dangerous"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"poison_ivy_id"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about virginia creeper"
+},
+{
+"id": "stinging_nettle",
+"title": "Stinging nettle",
+"domain": "plants",
+"also": [
+"nettle",
+"nettles",
+"Urtica",
+"Urtica dioica"
+],
+"def": "Stinging nettle is a plant covered in fine stinging hairs that burn the skin on contact; cooking or drying removes the sting.",
+"look": [
+"opposite toothed leaves with stinging hairs, square stem, small green flower strings",
+"a burning, tingling rash right after you brush it"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount. Stings on touch. Cooking removes the sting.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about stinging nettle"
+},
+{
+"id": "lambsquarters",
+"title": "Lambsquarters",
+"domain": "plants",
+"also": [
+"goosefoot",
+"pigweed",
+"wild spinach",
+"Chenopodium",
+"Chenopodium album"
+],
+"def": "Lambsquarters is a common garden weed whose diamond-shaped leaves have a white mealy coating underneath.",
+"look": [
+"diamond-shaped leaves with a white mealy powder underneath",
+"water beads on the leaves"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about lambsquarters"
+},
+{
+"id": "wood_sorrel",
+"title": "Wood sorrel",
+"domain": "plants",
+"also": [
+"sour grass",
+"Oxalis",
+"yellow wood sorrel",
+"sheep sorrel",
+"Oxalis stricta"
+],
+"def": "Wood sorrel is a small plant with heart-shaped leaflets in threes and a sour, lemony taste from oxalic acid.",
+"look": [
+"heart-shaped leaflets in threes like a clover, small yellow or pink five-petal flowers",
+"sour taste",
+"leaflets fold down at night"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount. Eat only small amounts.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"alike": [
+"White clover: Low creeping plant, white round flower heads, three leaflets often with a pale band"
+],
+"rel": [
+"white_clover"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about wood sorrel"
+},
+{
+"id": "jewelweed",
+"title": "Jewelweed",
+"domain": "plants",
+"also": [
+"spotted touch-me-not",
+"touch-me-not",
+"Impatiens capensis"
+],
+"def": "Jewelweed is a soft wet-ground plant with orange spotted trumpet flowers and seed pods that burst when touched.",
+"look": [
+"orange or yellow spotted trumpet flowers, pale watery stems, leaves bead up water",
+"seed pods burst when touched",
+"grows near water and often near poison ivy"
+],
+"use": "Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care.",
+"not": "Do not swallow, brew, or put it on a wound on a photo match; identify it in person first, and ask a clinician before using any plant as medicine.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about jewelweed"
+},
+{
+"id": "bracken",
+"title": "Bracken fern",
+"domain": "plants",
+"also": [
+"bracken fern",
+"brake fern",
+"Pteridium",
+"Pteridium aquilinum"
+],
+"def": "Bracken is a large common fern with triangular fronds; it is toxic and not a safe fiddlehead.",
+"look": [
+"large triangular fronds on a single stalk, fuzzy coiled shoots, open ground",
+"young shoots are fuzzy, not smooth and grooved"
+],
+"use": "Learn it so you can avoid it and warn others. Toxic and linked to cancer. Do not eat.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Ostrich fern (fiddleheads): Tightly coiled fiddlehead with a smooth U-shaped groove on the inside of the stem, papery brown scales. Fiddleheads must be cooked. Bracken is not safe to eat"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"fiddleheads_ostrich_fern"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about bracken fern"
+},
+{
+"id": "common_milkweed",
+"title": "Common milkweed",
+"domain": "plants",
+"also": [
+"milkweed",
+"Asclepias syriaca",
+"monarch plant"
+],
+"def": "Common milkweed is a tall plant with milky sap, broad paired leaves, and warty pods, and it is toxic raw.",
+"look": [
+"thick stem with milky white sap, big opposite oval leaves, pink ball flower clusters, warty pods",
+"pods full of silky seeds in fall"
+],
+"use": "Learn it so you can avoid it and warn others. Toxic raw. Only a trained forager should use it, and not by photo.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Dogbane: Red-tinged stems with milky sap, pointed opposite leaves, tiny white bells, slim paired pods. Toxic to the heart. Looks like milkweed"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"dogbane"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about common milkweed"
+},
+{
+"id": "dogbane",
+"title": "Dogbane",
+"domain": "plants",
+"also": [
+"Indian hemp",
+"hemp dogbane",
+"Apocynum",
+"Apocynum cannabinum"
+],
+"def": "Dogbane is a milky-sapped plant with red-tinged stems and slim paired pods that is poisonous to the heart and looks like milkweed.",
+"look": [
+"red-tinged stems with milky sap, pointed opposite leaves, tiny white bells, slim paired pods",
+"branches near the top, unlike young milkweed",
+"smooth leaves without milkweed's fine hair"
+],
+"use": "Learn it so you can avoid it and warn others. Toxic to the heart. Looks like milkweed.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Common milkweed: Thick stem with milky white sap, big opposite oval leaves, pink ball flower clusters, warty pods. Toxic raw. Only a trained forager should use it, and not by photo"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"common_milkweed"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about dogbane"
+},
+{
+"id": "mullein",
+"title": "Mullein",
+"domain": "plants",
+"also": [
+"common mullein",
+"flannel leaf",
+"cowboy toilet paper",
+"Verbascum",
+"Verbascum thapsus"
+],
+"def": "Mullein is a tall roadside plant with large, soft, gray, fuzzy leaves and a yellow flower spike in its second year.",
+"look": [
+"large grey fuzzy leaves in a rosette and a tall yellow flower spike in the second year",
+"dry stalks stand through winter"
+],
+"use": "Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care.",
+"not": "Do not swallow, brew, or put it on a wound on a photo match; identify it in person first, and ask a clinician before using any plant as medicine.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about mullein"
+},
+{
+"id": "st_johns_wort",
+"title": "St. John's wort",
+"domain": "plants",
+"also": [
+"Hypericum",
+"St Johns wort",
+"goatweed",
+"Hypericum perforatum"
+],
+"def": "St. John's wort is a yellow-flowered plant whose leaves show tiny see-through dots when held to the light.",
+"look": [
+"opposite small leaves with see-through dots when held to light",
+"yellow five-petal flowers that stain purple",
+"flowers bleed a red stain when crushed"
+],
+"use": "Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care. Interacts with many medicines and causes sun sensitivity.",
+"not": "Do not swallow, brew, or put it on a wound on a photo match; identify it in person first, and ask a clinician before using any plant as medicine.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about st. john's wort"
+},
+{
+"id": "self_heal",
+"title": "Self-heal",
+"domain": "plants",
+"also": [
+"heal-all",
+"Prunella",
+"selfheal",
+"Prunella vulgaris"
+],
+"def": "Self-heal is a low lawn and trail plant with a square stem and a spiky purple flower head.",
+"look": [
+"low plant, square stem, spiky purple flower head with ruffled lips",
+"opposite leaves on a square stem"
+],
+"use": "Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care.",
+"not": "Do not swallow, brew, or put it on a wound on a photo match; identify it in person first, and ask a clinician before using any plant as medicine.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about self-heal"
+},
+{
+"id": "goldenrod",
+"title": "Goldenrod",
+"domain": "plants",
+"also": [
+"Solidago",
+"goldenrods"
+],
+"def": "Goldenrod is a tall late-summer plant with plumes of small yellow flowers; it is often blamed for hay fever caused by ragweed.",
+"look": [
+"tall plume of tiny yellow flowers in late summer, alternate narrow leaves",
+"stands in old fields and roadsides by the thousands"
+],
+"use": "Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care.",
+"not": "Do not swallow, brew, or put it on a wound on a photo match; identify it in person first, and ask a clinician before using any plant as medicine.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about goldenrod"
+},
+{
+"id": "white_snakeroot",
+"title": "White snakeroot",
+"domain": "plants",
+"also": [
+"snakeroot",
+"Ageratina",
+"milk sickness plant",
+"Ageratina altissima"
+],
+"def": "White snakeroot is a woodland plant with fuzzy white fall flowers that poisons livestock and can pass into their milk.",
+"look": [
+"opposite toothed leaves on a branching stem, fuzzy white flower clusters in autumn",
+"grows in shade at woods edges"
+],
+"use": "Learn it so you can avoid it and warn others. Poisons livestock and milk. Do not eat.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about white snakeroot"
+},
+{
+"id": "jerusalem_artichoke",
+"title": "Jerusalem artichoke",
+"domain": "plants",
+"also": [
+"sunchoke",
+"sunroot",
+"Helianthus tuberosus"
+],
+"def": "Jerusalem artichoke is a tall wild sunflower whose knobby underground tubers are edible.",
+"look": [
+"tall rough sunflower-like plant with small yellow flowers and knobby tubers",
+"leaves rough like sandpaper"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about jerusalem artichoke"
+},
+{
+"id": "evening_primrose",
+"title": "Evening primrose",
+"domain": "plants",
+"also": [
+"Oenothera",
+"common evening primrose",
+"Oenothera biennis"
+],
+"def": "Evening primrose is a tall plant with four-petal yellow flowers that open at dusk.",
+"look": [
+"tall plant with four-petal yellow flowers that open at dusk, reddish stem",
+"first-year rosette with a pink-tinged midrib"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about evening primrose"
+},
+{
+"id": "pineapple_weed",
+"title": "Pineapple weed",
+"domain": "plants",
+"also": [
+"wild chamomile",
+"disc mayweed",
+"Matricaria discoidea"
+],
+"def": "Pineapple weed is a low weed of packed paths whose petal-less yellow-green flower cones smell like pineapple when crushed.",
+"look": [
+"low plant with feathery leaves, yellow-green cone flowers with no petals",
+"smells like pineapple when crushed",
+"grows in hard, trampled ground"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about pineapple weed"
+},
+{
+"id": "wild_bergamot",
+"title": "Wild bergamot",
+"domain": "plants",
+"also": [
+"bee balm",
+"Monarda",
+"horsemint",
+"Monarda fistulosa"
+],
+"def": "Wild bergamot is a mint-family wildflower with lavender shaggy flower heads and an oregano-like smell.",
+"look": [
+"square stem, lavender shaggy flower heads, minty oregano smell",
+"square stem and paired leaves like other mints"
+],
+"use": "Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care.",
+"not": "Do not swallow, brew, or put it on a wound on a photo match; identify it in person first, and ask a clinician before using any plant as medicine.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about wild bergamot"
+},
+{
+"id": "mayapple",
+"title": "Mayapple",
+"domain": "plants",
+"also": [
+"American mandrake",
+"Podophyllum",
+"umbrella plant",
+"Podophyllum peltatum"
+],
+"def": "Mayapple is a spring woodland plant with umbrella-like leaves, and every part except the fully ripe fruit is poisonous.",
+"look": [
+"umbrella-like lobed leaves, a single white flower under the leaves, one green-yellow fruit",
+"grows in large colonies on the forest floor"
+],
+"use": "Learn it so you can avoid it and warn others. Everything except the ripe fruit is toxic.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about mayapple"
+},
+{
+"id": "bloodroot",
+"title": "Bloodroot",
+"domain": "plants",
+"also": [
+"Sanguinaria",
+"red puccoon",
+"Sanguinaria canadensis"
+],
+"def": "Bloodroot is an early-spring wildflower with one lobed leaf and a white flower whose root bleeds red-orange sap, and it is poisonous.",
+"look": [
+"one clasped rounded lobed leaf and a white eight-petal flower in early spring",
+"red-orange sap",
+"leaf wraps the flower stalk as it opens"
+],
+"use": "Learn it so you can avoid it and warn others. Toxic.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about bloodroot"
+},
+{
+"id": "baneberry",
+"title": "Baneberry",
+"domain": "plants",
+"also": [
+"doll's eyes",
+"white baneberry",
+"red baneberry",
+"Actaea",
+"Actaea pachypoda"
+],
+"def": "Baneberry, or doll's eyes, is a woodland plant whose white or red berries on thick red stalks are deadly.",
+"look": [
+"compound toothed leaves, a white or red berry cluster on thick red stalks (doll's eyes)",
+"each white berry has a black dot like an eye"
+],
+"use": "Learn it so you can avoid it and warn others. Berries are deadly.",
+"not": "Never eat, brew, chew, or burn any part of it, and wash your hands after touching it. Do not trust a photo or a taste test.",
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about baneberry"
+},
+{
+"id": "jimsonweed",
+"title": "Jimsonweed",
+"domain": "plants",
+"also": [
+"Datura",
+"thorn apple",
+"devil's trumpet",
+"locoweed",
+"Datura stramonium"
+],
+"def": "Jimsonweed is a rank-smelling weed with large white trumpet flowers and spiny seed pods, and every part is deadly.",
+"look": [
+"large white trumpet flowers, spiny egg-shaped seed pods, strong smell",
+"grows in disturbed ground and barnyards"
+],
+"use": "Learn it so you can avoid it and warn others. Every part is deadly.",
+"not": "Never eat, brew, chew, or burn any part of it, and wash your hands after touching it. Do not trust a photo or a taste test.",
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about jimsonweed"
+},
+{
+"id": "bittersweet_nightshade",
+"title": "Bittersweet nightshade",
+"domain": "plants",
+"also": [
+"climbing nightshade",
+"woody nightshade",
+"Solanum dulcamara"
+],
+"def": "Bittersweet nightshade is a climbing vine with small purple star flowers and red egg-shaped berries that are poisonous.",
+"look": [
+"climbing vine, purple flowers with a yellow cone, red egg-shaped berries",
+"green berries turn orange, then red"
+],
+"use": "Learn it so you can avoid it and warn others. Berries are toxic.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about bittersweet nightshade"
+},
+{
+"id": "monkshood",
+"title": "Monkshood",
+"domain": "plants",
+"also": [
+"Aconitum",
+"wolfsbane",
+"aconite"
+],
+"def": "Monkshood is a garden and wild plant with hooded blue-purple flowers, and every part is deadly, even through the skin.",
+"look": [
+"deeply cut leaves and tall spikes of hooded blue-purple flowers",
+"top petal shaped like a monk's hood"
+],
+"use": "Learn it so you can avoid it and warn others. Deadly. Even skin contact can numb or harm.",
+"not": "Never eat, brew, chew, or burn any part of it, and wash your hands after touching it. Do not trust a photo or a taste test.",
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about monkshood"
+},
+{
+"id": "giant_hogweed",
+"title": "Giant hogweed",
+"domain": "plants",
+"also": [
+"hogweed",
+"Heracleum mantegazzianum"
+],
+"def": "Giant hogweed is a huge carrot-family plant whose sap, with sunlight, causes severe burns and blisters on skin.",
+"look": [
+"huge: stem 5-10 cm wide with purple blotches and stiff hairs, umbrella flower head up to 1 m",
+"can be taller than a person, with a flower umbrella over a meter across"
+],
+"use": "Learn it so you can avoid it and warn others. Sap plus sunlight causes severe burns. Do not touch.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Cow parsnip: Big maple-like leaves, white flat umbrella, hairy hollow stem. Sap can cause burns on sunny skin",
+"Poison hemlock: Smooth hairless stem with purple blotches, finely cut leaves, white umbrella flowers. Smells musty. Every part is deadly"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"cow_parsnip",
+"poison_hemlock"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about giant hogweed"
+},
+{
+"id": "cow_parsnip",
+"title": "Cow parsnip",
+"domain": "plants",
+"also": [
+"Heracleum maximum",
+"Indian celery"
+],
+"def": "Cow parsnip is a large native carrot-family plant with maple-like leaves whose sap can burn sunlit skin.",
+"look": [
+"big maple-like leaves, white flat umbrella, hairy hollow stem",
+"smaller than giant hogweed, with a greener, less blotched stem"
+],
+"use": "Learn it so you can avoid it and warn others. Sap can cause burns on sunny skin.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Giant hogweed: Huge: stem 5-10 cm wide with purple blotches and stiff hairs, umbrella flower head up to 1 m. Sap plus sunlight causes severe burns. Do not touch",
+"Poison hemlock: Smooth hairless stem with purple blotches, finely cut leaves, white umbrella flowers. Smells musty. Every part is deadly"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"giant_hogweed",
+"poison_hemlock"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about cow parsnip"
+},
+{
+"id": "wild_parsnip",
+"title": "Wild parsnip",
+"domain": "plants",
+"also": [
+"Pastinaca",
+"poison parsnip",
+"Pastinaca sativa"
+],
+"def": "Wild parsnip is a yellow-flowered carrot-family roadside plant whose sap, with sunlight, causes burns and blisters.",
+"look": [
+"yellow umbrella flowers, grooved hollow stem, toothed leaflets",
+"flat yellow umbrella flowers in midsummer"
+],
+"use": "Learn it so you can avoid it and warn others. Sap plus sunlight causes burns and blisters.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Poison hemlock: Smooth hairless stem with purple blotches, finely cut leaves, white umbrella flowers. Smells musty. Every part is deadly"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"poison_hemlock"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about wild parsnip"
+},
+{
+"id": "skunk_cabbage",
+"title": "Skunk cabbage",
+"domain": "plants",
+"also": [
+"Symplocarpus",
+"swamp cabbage",
+"eastern skunk cabbage",
+"Symplocarpus foetidus"
+],
+"def": "Skunk cabbage is a wetland plant with a mottled hooded flower in late winter and big leaves that smell skunky when torn; it is toxic raw.",
+"look": [
+"wet ground",
+"mottled purple-maroon hooded flower in late winter",
+"big cabbage-like leaves with a skunky smell",
+"one of the first plants up in wet woods, even through snow"
+],
+"use": "Learn it so you can avoid it and warn others. Toxic raw.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"False hellebore (Indian poke): Big pleated leaves that wrap the stem in a spiral; wet woods and meadows. No onion smell. Sometimes mistaken for ramps. Deadly"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"false_hellebore"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about skunk cabbage"
+},
+{
+"id": "japanese_knotweed",
+"title": "Japanese knotweed",
+"domain": "plants",
+"also": [
+"knotweed",
+"Fallopia japonica",
+"Mexican bamboo",
+"Reynoutria",
+"Reynoutria japonica"
+],
+"def": "Japanese knotweed is an invasive plant with hollow, bamboo-like jointed canes that forms dense stands.",
+"look": [
+"hollow bamboo-like reddish canes, heart-shaped leaves, dense stands",
+"zigzag stems with a leaf at each joint"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount. Invasive. Do not spread it.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about japanese knotweed"
+},
+{
+"id": "curly_dock",
+"title": "Curly dock",
+"domain": "plants",
+"also": [
+"yellow dock",
+"sour dock",
+"Rumex crispus",
+"dock"
+],
+"def": "Curly dock is a common weed with long, wavy-edged leaves and a tall rust-red seed stalk.",
+"look": [
+"long leaves with wavy ruffled edges, tall rust-red seed stalk",
+"papery sheath where each leaf meets the stem"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about curly dock"
+},
+{
+"id": "wintergreen",
+"title": "Wintergreen",
+"domain": "plants",
+"also": [
+"teaberry",
+"checkerberry",
+"Gaultheria",
+"Gaultheria procumbens"
+],
+"def": "Wintergreen is a low evergreen ground plant whose glossy leaves smell of wintergreen when crushed and whose berries are red.",
+"look": [
+"low evergreen with glossy leaves that smell of wintergreen when crushed",
+"red berries",
+"grows under pines and oaks in acid soil"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about wintergreen"
+},
+{
+"id": "wild_rose",
+"title": "Wild rose",
+"domain": "plants",
+"also": [
+"rose hips",
+"pasture rose",
+"Rosa",
+"multiflora rose",
+"Rosa carolina"
+],
+"def": "Wild rose is a prickly shrub with five-petal pink flowers that leave red rose hips in fall.",
+"look": [
+"prickly canes, five-petal pink flowers, red rose hips",
+"hips stay on the canes into winter"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount. Hips have irritating hairs inside. Remove them.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about wild rose"
+},
+{
+"id": "hawthorn",
+"title": "Hawthorn",
+"domain": "plants",
+"also": [
+"Crataegus",
+"thornapple",
+"haws",
+"whitethorn"
+],
+"def": "Hawthorn is a thorny small tree with lobed leaves and small red apple-like fruits called haws.",
+"look": [
+"thorny small tree or shrub with lobed leaves and red apple-like haws",
+"long straight thorns on the twigs"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about hawthorn"
+},
+{
+"id": "mountain_laurel",
+"title": "Mountain laurel",
+"domain": "plants",
+"also": [
+"Kalmia",
+"calico bush",
+"spoonwood",
+"Kalmia latifolia"
+],
+"def": "Mountain laurel is an evergreen shrub with clusters of pink-white cup flowers, and its leaves, flowers, and honey are poisonous.",
+"look": [
+"evergreen glossy leaves, clusters of pink-white cup flowers",
+"forms dense thickets on rocky slopes"
+],
+"use": "Learn it so you can avoid it and warn others. Leaves, flowers and honey from it are toxic.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about mountain laurel"
+},
+{
+"id": "sphagnum",
+"title": "Sphagnum moss",
+"domain": "plants",
+"also": [
+"peat moss",
+"bog moss",
+"sphagnum moss",
+"Sphagnum"
+],
+"def": "Sphagnum is the spongy bog moss that holds many times its weight in water.",
+"look": [
+"pale green to red spongy moss in bogs that holds a lot of water",
+"grows in bogs in green, red, or brown carpets"
+],
+"use": "Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care. Wild moss can carry germs. Do not put it on an open wound.",
+"not": "Do not swallow, brew, or put it on a wound on a photo match; identify it in person first, and ask a clinician before using any plant as medicine.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about sphagnum moss"
+},
+{
+"id": "usnea",
+"title": "Old man's beard (Usnea)",
+"domain": "plants",
+"also": [
+"old man's beard",
+"beard lichen",
+"Usnea lichen",
+"Usnea"
+],
+"def": "Usnea, or old man's beard, is a pale green hair-like lichen on branches whose strands have a white elastic core.",
+"look": [
+"pale green hair-like lichen on branches",
+"pull it and the core is a white elastic thread",
+"dry strands make fine tinder"
+],
+"use": "Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care.",
+"not": "Do not swallow, brew, or put it on a wound on a photo match; identify it in person first, and ask a clinician before using any plant as medicine.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about old man's beard"
+},
+{
+"id": "cleavers",
+"title": "Cleavers",
+"domain": "plants",
+"also": [
+"bedstraw",
+"stickyweed",
+"goosegrass",
+"Galium",
+"Galium aparine"
+],
+"def": "Cleavers is a sprawling plant whose square stems and narrow whorled leaves stick to clothing with tiny hooks.",
+"look": [
+"sprawling square stem with whorls of narrow leaves that cling by tiny hooks",
+"sticks to your sleeve when you brush it"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about cleavers"
+},
+{
+"id": "moonseed",
+"title": "Canada moonseed",
+"domain": "plants",
+"also": [
+"moonseed vine",
+"Menispermum",
+"yellow parilla",
+"Menispermum canadense"
+],
+"def": "Canada moonseed is a climbing vine with grape-like berries that are deadly; each berry holds one crescent-shaped seed.",
+"look": [
+"climbing vine with big lobed leaves, dark blue-black berries each with a single crescent seed",
+"no tendrils, unlike grape"
+],
+"use": "Learn it so you can avoid it and warn others. Looks like wild grape. Grapes have several seeds and tendrils. Moonseed has neither.",
+"not": "Never eat, brew, chew, or burn any part of it, and wash your hands after touching it. Do not trust a photo or a taste test.",
+"alike": [
+"Wild grape: Climbing vine with tendrils, toothed lobed leaves, round berries in a bunch"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"wild_grape"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about canada moonseed"
+},
+{
+"id": "wild_grape",
+"title": "Wild grape",
+"domain": "plants",
+"also": [
+"riverbank grape",
+"fox grape",
+"Vitis",
+"Vitis riparia"
+],
+"def": "Wild grape is a climbing vine with tendrils, toothed lobed leaves, and bunches of small dark grapes.",
+"look": [
+"climbing vine with tendrils, toothed lobed leaves, round berries in a bunch",
+"shreddy bark on older vines",
+"several pear-shaped seeds per grape"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"alike": [
+"Canada moonseed: Climbing vine with big lobed leaves, dark blue-black berries each with a single crescent seed. Looks like wild grape. Grapes have several seeds and tendrils. Moonseed has neither"
+],
+"rel": [
+"moonseed"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about wild grape"
+},
+{
+"id": "thistle",
+"title": "Thistle",
+"domain": "plants",
+"also": [
+"bull thistle",
+"Cirsium",
+"spear thistle",
+"Cirsium vulgare"
+],
+"def": "Thistle is a spiny plant with round purple flower heads whose peeled young stems and roots are edible.",
+"look": [
+"spiny leaves and stem, round purple flower heads",
+"fluffy seed heads in late summer"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about thistle"
+},
+{
+"id": "spurge",
+"title": "Spotted spurge (Euphorbia)",
+"domain": "plants",
+"also": [
+"Euphorbia",
+"spotted spurge",
+"prostrate spurge",
+"Euphorbia maculata"
+],
+"def": "Spotted spurge is a flat mat-forming weed whose milky sap irritates skin and which is toxic if eaten.",
+"look": [
+"flat mat of small oval leaves with a dark spot, milky sap",
+"thin wiry stems, not fat and succulent"
+],
+"use": "Learn it so you can avoid it and warn others. Sap irritates. Mistaken for purslane.",
+"not": "Do not eat, brew, or chew any part of it, and wash skin and tools that touched the sap.",
+"alike": [
+"Purslane: Flat mat of thick succulent paddle leaves with reddish stems; clear sap. Spurge has milky sap. Check the sap"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"purslane"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21",
+"poison-control"
+],
+"ask": "Tell me about spotted spurge"
+},
+{
+"id": "purslane",
+"title": "Purslane",
+"domain": "plants",
+"also": [
+"Portulaca",
+"pigweed",
+"verdolaga",
+"little hogweed",
+"Portulaca oleracea"
+],
+"def": "Purslane is a low succulent weed with thick paddle-shaped leaves and reddish stems, a common edible green.",
+"look": [
+"flat mat of thick succulent paddle leaves with reddish stems",
+"clear sap",
+"clear watery sap, never milky"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount. Spurge has milky sap. Check the sap.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"alike": [
+"Spotted spurge (Euphorbia): Flat mat of small oval leaves with a dark spot, milky sap. Sap irritates. Mistaken for purslane"
+],
+"rel": [
+"spurge"
+],
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about purslane"
+},
+{
+"id": "chickweed",
+"title": "Chickweed",
+"domain": "plants",
+"also": [
+"Stellaria media",
+"common chickweed",
+"starweed"
+],
+"def": "Chickweed is a small, soft, sprawling weed with tiny white star flowers and a single line of hairs along the stem.",
+"look": [
+"low plant with small oval leaves and one line of hairs along the stem",
+"tiny white deep-notched petals",
+"stretchy inner thread when a stem is pulled apart"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about chickweed"
+},
+{
+"id": "common_mallow",
+"title": "Common mallow",
+"domain": "plants",
+"also": [
+"cheeseweed",
+"Malva",
+"buttonweed",
+"Malva neglecta"
+],
+"def": "Common mallow is a low weed with round lobed leaves and small pale pink flowers that leave cheese-wheel shaped seeds.",
+"look": [
+"round lobed leaves on long stalks, small pale pink flowers, round cheese-wheel fruits",
+"slimy texture when the leaves are chewed or crushed"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about common mallow"
+},
+{
+"id": "garlic_mustard",
+"title": "Garlic mustard",
+"domain": "plants",
+"also": [
+"Alliaria",
+"hedge garlic",
+"jack-by-the-hedge",
+"Alliaria petiolata"
+],
+"def": "Garlic mustard is an invasive woodland plant whose heart-shaped leaves smell of garlic when crushed.",
+"look": [
+"heart-shaped toothed leaves smelling of garlic, small white four-petal flowers",
+"first-year rosettes stay green through winter"
+],
+"use": "Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount. Invasive. Do not spread it.",
+"not": "Do not eat it on a photo match or a single feature, and do not eat it if you cannot rule out its look-alikes.",
+"src": [
+"usda-nrcs",
+"usfs",
+"atp3-50-21"
+],
+"ask": "Tell me about garlic mustard"
+}
+]

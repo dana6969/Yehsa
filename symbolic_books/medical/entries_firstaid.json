@@ -1,0 +1,432 @@
+[
+ {
+  "symbol": "wound_cleaning",
+  "title": "Cleaning a wound",
+  "context": "Cleaning a wound means flushing dirt and germs out with plenty of clean running water after bleeding is under control. Also called wash a cut, rinse a scrape, irrigate a wound. Look for bleeding has stopped or is controlled; visible dirt or grit in the wound. Rinse for several minutes with clean water, use mild soap on the skin around it, and lift out loose grit with clean tweezers. Pat dry and cover."
+ },
+ {
+  "symbol": "wound_infection_signs",
+  "title": "Signs a wound is infected",
+  "context": "A wound is likely infected when it gets worse over days instead of better, with growing redness, warmth, swelling, pus, or pain. Also called infected cut, cellulitis, pus in a wound, red streaks. Look for redness that spreads outward from the wound; warmth, swelling, and increasing pain after the first day or two."
+ },
+ {
+  "symbol": "sepsis_signs",
+  "title": "Sepsis warning signs",
+  "context": "Sepsis is the body's dangerous overreaction to an infection, and it can quickly harm organs and cause death if not treated. Also called blood poisoning, septic, infection spreading through the body. Look for fever or shivering, or feeling very cold; fast heartbeat and fast breathing. Treat it as an emergency in anyone with a known or suspected infection who has these signs. Get to hospital care fast; sepsis needs medical treatment."
+ },
+ {
+  "symbol": "bandaging_basics",
+  "title": "Bandaging a wound",
+  "context": "A dressing is the clean pad that sits on the wound, and a bandage is what holds it in place without cutting off blood flow. Also called dressing a wound, wrap a cut, cover a wound, gauze. Look for clean, non-stick or gauze pad; wrap snug but loose enough for a finger beneath. Cover the wound with a clean dressing, wrap over it firmly, and check the fingers or toes beyond it for color, warmth, and feeling every little while."
+ },
+ {
+  "symbol": "pressure_bandage",
+  "title": "Pressure bandage",
+  "context": "A pressure bandage is a thick pad held over a bleeding wound with a firm wrap, so you can keep pressure on without your hands. Also called emergency bandage, israeli bandage, wrap that stops bleeding. Look for thick pad directly on the wound; firm wrap that presses the pad down. Use it after direct pressure when bleeding is steady and you need your hands free. Add more padding on top if blood soaks through; do not remove the first layer."
+ },
+ {
+  "symbol": "arterial_bleeding",
+  "title": "Arterial bleeding",
+  "context": "Arterial bleeding is blood from an artery: bright red and often spurting with each heartbeat, and it can be fatal within minutes. Also called spurting blood, bright red bleeding, life-threatening bleeding. Look for bright red blood that spurts or pulses; blood that quickly pools or soaks clothing."
+ },
+ {
+  "symbol": "internal_bleeding",
+  "title": "Internal bleeding",
+  "context": "Internal bleeding is blood loss inside the body that you cannot see, often after a hard blow, a fall, a crash, or a deep injury to the torso. Also called bleeding inside the body, hidden bleeding, blood loss you cannot see. Look for bruising, swelling, or a hard painful belly after a blow; pale, cold, clammy skin, fast weak pulse, dizziness."
+ },
+ {
+  "symbol": "abdominal_injury",
+  "title": "Belly (abdominal) wound or injury",
+  "context": "A serious belly injury can damage organs and bleed inside, and an open wound can let intestines show. Also called stomach wound, bowel sticking out, gut injury, blow to the belly. Look for open wound or protruding bowel; a rigid, swollen, very painful belly. Keep the person lying on their back with knees bent if comfortable, cover any exposed organs loosely with a clean moist cloth, and get emergency help."
+ },
+ {
+  "symbol": "chest_wound",
+  "title": "Chest wound (sucking chest wound)",
+  "context": "A penetrating chest wound can let air into the chest around the lung, making breathing hard and getting worse. Also called punctured lung, stab to the chest, penetrating chest injury, pneumothorax. Look for hole in the chest, sometimes with a sucking sound or bubbling blood; trouble breathing and chest pain."
+ },
+ {
+  "symbol": "impaled_object",
+  "title": "Object stuck in a wound",
+  "context": "An embedded object plugs the wound it caused, and pulling it out can release heavy bleeding. Also called impaled object, stabbed, something stuck in the leg, embedded object. Look for object visibly stuck in the body; bleeding around, not through, the object. Leave it in place. Pad around it to hold it still and stop it moving, control bleeding by pressing around it, and get emergency help."
+ },
+ {
+  "symbol": "amputation_care",
+  "title": "Amputation: care of the person and the part",
+  "context": "After an amputation, the first job is to stop the bleeding and treat shock; the severed part is saved wrapped and cool so it might be reattached. Also called severed finger, cut off hand, body part cut off, avulsion. Look for heavy bleeding from the stump; a separated finger, hand, or limb."
+ },
+ {
+  "symbol": "crush_injury",
+  "title": "Crush injury",
+  "context": "A crush injury is damage from a heavy weight pressing a body part, and releasing a long-trapped limb can suddenly cause shock or kidney trouble. Also called pinned under something, trapped limb, crushed leg, building collapse injury. Look for limb pinned under a heavy object; swelling, numbness, and pain. Get emergency help first. If trapped less than about 15 minutes and the load is safe to lift, free the person, control bleeding, and treat for shock. Keep them still."
+ },
+ {
+  "symbol": "broken_bone_signs",
+  "title": "Signs of a broken bone",
+  "context": "A fracture is a break or crack in a bone, and the signs are pain that is worse with movement, swelling, bruising, and an odd shape or loss of use. Also called fracture, broken arm, broken leg, did I break it, cracked bone. Look for sharp pain at one spot that is worse with use; swelling, bruising, and a limb that looks bent or short."
+ },
+ {
+  "symbol": "open_fracture",
+  "title": "Open (compound) fracture",
+  "context": "An open fracture is a broken bone with an open wound, which means a high risk of infection and bleeding. Also called bone sticking out, compound fracture, bone through skin. Look for bone end visible or a wound over a deformed limb; bleeding at the break. Control bleeding with pressure around the bone, not on it. Cover the wound loosely with a clean moist dressing, splint without pushing the bone back, and get emergency help."
+ },
+ {
+  "symbol": "sling_and_swathe",
+  "title": "Sling and swathe",
+  "context": "A sling holds the forearm up, and a swathe is a second bandage that binds the arm against the chest so it cannot swing. Also called arm sling, triangle bandage sling, broken collarbone sling, shoulder injury support. Look for a triangular bandage or a shirt tail; forearm rests higher than the elbow. Use it for a broken arm, collarbone, shoulder or dislocation, after you have checked the fingers for color and feeling. Put padding between the arm and body."
+ },
+ {
+  "symbol": "dislocation",
+  "title": "Dislocated joint",
+  "context": "A dislocation is when the ends of the bones in a joint are forced out of place, leaving the joint looking wrong and unable to move. Also called dislocated shoulder, dislocated finger, joint out of place, popped out of socket. Look for joint looks deformed or out of position; severe pain and swelling and unable to move it. Support the joint in the position found with padding and a sling or splint, apply a cool pack for pain, and get it put back by a clinician."
+ },
+ {
+  "symbol": "concussion_signs",
+  "title": "Concussion and head injury",
+  "context": "A concussion is a mild brain injury from a blow or jolt to the head, and the danger is that a serious bleed can build slowly. Also called hit head, bump on the head, knocked out, head trauma, brain injury. Look for headache, dizziness, confusion, or memory gaps; nausea or vomiting, or blurred vision."
+ },
+ {
+  "symbol": "unconscious_person",
+  "title": "Person who is unconscious but breathing",
+  "context": "An unresponsive person who is still breathing normally needs their airway kept open and an ambulance, because they can choke on their own tongue or vomit. Also called passed out, fainted, not waking up, unresponsive. Look for does not respond to voice or a shoulder tap; chest rises and falls with normal breathing."
+ },
+ {
+  "symbol": "fainting",
+  "title": "Fainting",
+  "context": "Fainting is a short loss of consciousness when the brain briefly gets too little blood, often from standing too long, heat, fear, pain, or dehydration. Also called passing out, about to faint, blacked out, lightheaded and dizzy. Look for lightheaded, pale, sweaty, vision narrowing; collapse that lasts under a minute or two."
+ },
+ {
+  "symbol": "eye_object",
+  "title": "Something in the eye",
+  "context": "A speck or grit in the eye usually washes out with tears or clean water, and anything stuck or sharp needs a clinician. Also called speck in eye, grit in eye, eyelash in eye, foreign body in eye, eye pain. Look for watering, blinking, redness, a gritty feel; pain that is worse when blinking. Do not rub. Blink, then flush the eye with clean water or saline for several minutes. Pull the upper lid over the lower to let lashes sweep it out."
+ },
+ {
+  "symbol": "snow_blindness",
+  "title": "Snow blindness",
+  "context": "Snow blindness is a painful sunburn of the surface of the eye from bright ultraviolet light reflecting off snow, ice, or water. Also called sun burned eyes, photokeratitis, eye sunburn, welder flash. Look for gritty, burning pain and tears hours after exposure; red, swollen lids and sensitivity to light. Get out of the light, cover both eyes with a dark soft cloth, rest, and use cool damp cloths for comfort. Prevent it with dark tinted glasses with side shields."
+ },
+ {
+  "symbol": "tooth_knocked_out",
+  "title": "Knocked-out tooth",
+  "context": "A knocked-out adult tooth can sometimes be saved if it is kept moist and put back or seen by a dentist within about an hour. Also called lost a tooth, avulsed tooth, broken tooth, tooth fell out. Look for a whole tooth out with the root attached; bleeding in the socket. Pick up the tooth by the crown, not the root. Rinse gently with milk or saline if dirty and try to push it back into the socket; otherwise keep it in milk or against the cheek. See a dentist right away."
+ },
+ {
+  "symbol": "toothache_field",
+  "title": "Toothache in the field",
+  "context": "A toothache is pain from decay, a crack, or an abscess, and swelling or fever means the infection may be spreading. Also called tooth pain, abscess, swollen gum, dental pain. Look for steady throbbing pain, worse with hot or cold; swollen gum or cheek, a bad taste. Rinse with warm salt water, keep the mouth clean, and use over-the-counter pain relievers as directed on the label. See a dentist as soon as you can."
+ },
+ {
+  "symbol": "fishhook_removal",
+  "title": "Fishhook removal",
+  "context": "A fishhook is barbed, so pulling straight back tears the skin; it is pushed through or backed out along its curve. Also called hook in finger, fish hook stuck, hook in skin. Look for hook embedded in finger, arm, or face; barb under the skin. For a shallow hook, push the point through, snip off the barb with clippers, and back the shaft out. Clean the wound and cover it. Check your tetanus status."
+ },
+ {
+  "symbol": "tetanus_shot",
+  "title": "Tetanus and wounds",
+  "context": "Tetanus is a serious infection from bacteria in soil and dirt that enter a wound, and it is prevented by vaccination with boosters. Also called lockjaw, tetanus booster, rusty nail, dirty wound vaccine. Look for a dirty, deep, or puncture wound; animal bite or rusty or soil-contaminated injury. Ask a clinician about a booster after a dirty or deep wound, usually if you have not had one in the last five years for dirty wounds or ten years for clean ones."
+ },
+ {
+  "symbol": "animal_bite",
+  "title": "Animal bite",
+  "context": "An animal bite can cause infection and, from wild animals, rabies, so it needs washing and a call to a clinician or health department. Also called dog bite, cat bite, bitten by a wild animal, rabies exposure, bat in the house. Look for puncture or torn skin from teeth or claws; a wild, strange-acting, or unprovoked animal."
+ },
+ {
+  "symbol": "splinter_removal",
+  "title": "Splinter removal",
+  "context": "A splinter is a small piece of wood, thorn, or glass in the skin that is removed with clean tweezers along the angle it went in. Also called sliver, thorn in the skin, wood splinter, cactus spines. Look for a visible end sticking out; tenderness at the spot. Wash the skin, clean the tweezers with alcohol or boiling water, pull the splinter out in the line it entered, and wash again. Tape can lift fine cactus spines."
+ },
+ {
+  "symbol": "blister_care",
+  "title": "Blisters and hot spots",
+  "context": "A blister is a fluid-filled pocket from friction or heat, and a hot spot is the warm, tender patch that warns one is coming. Also called foot blister, rubbing boot, hot spot on heel, blister on foot. Look for a warm, red, tender patch where a boot rubs; a raised bubble of clear fluid."
+ },
+ {
+  "symbol": "foot_care_hiking",
+  "title": "Foot care on the trail",
+  "context": "Foot care is keeping feet dry, clean, and padded so friction, wet, and cold do not disable you. Also called sore feet, care for feet when hiking, preventing blisters, dry socks. Look for changing to dry socks at breaks; trimmed toenails and well-fitting boots. Stop at the first hot spot, dry feet at rests, rotate socks, and use powder or tape where you rub. Air feet at night and dry socks against your body."
+ },
+ {
+  "symbol": "trench_foot",
+  "title": "Trench foot (immersion foot)",
+  "context": "Trench foot is damage to the feet from long exposure to wet and cold, even above freezing, and it can lead to tissue loss. Also called wet foot injury, immersion foot, feet numb and swollen from wet. Look for cold, numb, tingling feet that may look pale, blue, or red; swelling and a heavy, 'wooden' feel. Get out of wet footwear, dry and gently warm the feet, keep them raised and clean, and get medical care. Prevent it with dry socks and regular foot checks."
+ },
+ {
+  "symbol": "sunburn",
+  "title": "Sunburn",
+  "context": "Sunburn is skin damage from ultraviolet light that shows up as red, painful skin hours after exposure. Also called burned by the sun, red skin, sun poisoning. Look for red, hot, painful skin that appears hours later; blisters on bad burns. Get out of the sun, cool the skin with cool water, drink fluids, and use moisturizer. Cover up and keep burned skin out of the sun. Prevent it with shade, clothing, a hat, and sunscreen."
+ },
+ {
+  "symbol": "recovery_position",
+  "title": "Recovery position",
+  "context": "The recovery position lays an unresponsive person who is breathing on their side so the tongue falls forward and fluid drains out of the mouth. Also called lateral position, roll someone on their side, put them on their side, keep airway open. Look for person is unresponsive but breathing normally; lying on their side with the top leg bent for stability."
+ },
+ {
+  "symbol": "heat_exhaustion_signs",
+  "title": "Heat exhaustion",
+  "context": "Heat exhaustion is the body overheating from heat and fluid loss, with heavy sweating, weakness, and dizziness. It can progress to heat stroke. Also called overheated, heavy sweating and weak, too hot and dizzy, heat sickness. Look for heavy sweating, pale or clammy skin; headache, dizziness, nausea, and weakness. Move to shade or a cool place, loosen clothes, cool with wet cloths or a fan, and give small sips of water. Rest and do not go back to hard work that day."
+ },
+ {
+  "symbol": "heat_stroke_signs",
+  "title": "Heat stroke",
+  "context": "Heat stroke is a life-threatening emergency in which the body temperature rises dangerously high and the brain is affected. Also called sunstroke, hyperthermia, very hot skin and confused, body overheated. Look for hot, red, dry or damp skin; sweating may stop; confusion, slurred speech, or odd behavior."
+ },
+ {
+  "symbol": "heat_cramps",
+  "title": "Heat cramps",
+  "context": "Heat cramps are painful muscle spasms during or after hard work in the heat, usually from fluid and salt loss. Also called muscle cramps in the heat, leg cramps from sweating, cramping while hiking. Look for cramping in the legs, arms, or belly; heavy sweating. Stop, rest in the shade, stretch and gently massage the cramping muscle, and sip water or a drink with electrolytes."
+ },
+ {
+  "symbol": "hydration_basics",
+  "title": "Staying hydrated",
+  "context": "Staying hydrated means drinking steadily so urine stays pale; thirst lags behind, so drink before you are thirsty during work or heat. Also called how much water to drink, drink more water, thirst, pale urine. Look for pale yellow urine means good hydration; dark urine, headache, dry mouth, and tiredness mean you need more. Sip regularly through the day and more in heat, at altitude, or when ill. Add food and some salt when sweating heavily for hours."
+ },
+ {
+  "symbol": "hyponatremia",
+  "title": "Water intoxication (low blood sodium)",
+  "context": "Drinking far more water than you sweat out can dilute the salt in the blood, causing headache, nausea, and confusion. Also called drinking too much water, hyponatremia, overhydration. Look for headache, nausea, and bloated feeling after drinking lots of water; confusion, weakness, or seizures in severe cases. Stop drinking plain water and eat salty snacks. Get medical help for confusion or severe symptoms."
+ },
+ {
+  "symbol": "hypothermia_stages",
+  "title": "Hypothermia: mild to severe",
+  "context": "Hypothermia is when body temperature falls below normal, and the signs progress from shivering to clumsiness and confusion to stopped shivering. Also called too cold, shivering uncontrollably, umbles, stumbling and mumbling, cold exposure. Look for mild: shivering, cold hands, clumsy; moderate: stumbling, slurred speech, apathy, confusion."
+ },
+ {
+  "symbol": "rewarming_safely",
+  "title": "Rewarming a cold person",
+  "context": "Rewarming a cold person means stopping heat loss first and then adding gentle heat to the trunk, not to the limbs. Also called warm someone up, how to warm a hypothermic person, sleeping bag with another person. Look for dry insulation under and over them; warm packs or bottles wrapped in cloth at chest, armpits, groin."
+ },
+ {
+  "symbol": "drowning_rescue",
+  "title": "Drowning rescue and first aid",
+  "context": "Drowning is trouble breathing from submersion; the first moves are to reach the person safely, then get them breathing again. Also called near drowning, pulled from water, pulled someone out of the water, cold water immersion. Look for person in the water who is quiet, vertical, and not waving; not breathing or breathing with difficulty after being rescued."
+ },
+ {
+  "symbol": "electric_shock",
+  "title": "Electrical shock",
+  "context": "An electric shock can stop the heart and cause internal burns that are bigger than they look, so every significant shock needs a medical check. Also called electrocuted, got shocked, downed power line, live wire. Look for person still touching a live source or near a downed wire; burns at the entry and exit points."
+ },
+ {
+  "symbol": "lightning_strike_first_aid",
+  "title": "Lightning strike victim",
+  "context": "A lightning strike victim does not carry a charge, and they often need CPR because the heart or breathing may stop. Also called struck by lightning, lightning injury, hit by lightning. Look for unconscious or not breathing; burns, confusion, hearing or vision loss. Move them to a safer place away from the storm, call for help, check breathing and pulse, and start CPR if needed. Treat burns and fractures after the person is breathing."
+ },
+ {
+  "symbol": "carbon_monoxide_poisoning",
+  "title": "Carbon monoxide poisoning",
+  "context": "Carbon monoxide is an invisible, odorless gas from burning fuel that keeps blood from carrying oxygen. Also called CO poisoning, gas stove in tent, generator fumes, headache and dizzy in a closed room, carbon monoxide. Look for headache, dizziness, nausea, confusion; several people ill at the same time, or pets sick."
+ },
+ {
+  "symbol": "smoke_inhalation",
+  "title": "Smoke inhalation",
+  "context": "Breathing smoke can burn the airway and carry poisonous gases, even if the skin is not burned. Also called breathed smoke, house fire fumes, smoke in the lungs. Look for coughing, hoarse voice, black spit; singed nose hairs or soot around the mouth and nose. Move the person into fresh air, call emergency services, and keep them sitting upright and calm. Start CPR if they stop breathing."
+ },
+ {
+  "symbol": "burn_degrees",
+  "title": "Burn severity: first, second, third degree",
+  "context": "Burns are graded by depth: first-degree is red and dry, second-degree blisters, and third-degree is white, brown, or charred and may be numb. Also called how bad is the burn, burn blisters, charred skin, degrees of burns. Look for first degree: red, dry, painful, no blisters; second degree: blisters, moist, very painful."
+ },
+ {
+  "symbol": "chemical_burn_skin",
+  "title": "Chemical burn on the skin",
+  "context": "A chemical burn keeps damaging skin until the chemical is removed, so flushing starts immediately. Also called acid on skin, bleach on skin, lye, caustic burn. Look for burning, redness, or blistering after contact; chemical container or label nearby. Remove contaminated clothing, brush off dry powder first, and flush with lots of cool running water for at least 20 minutes. Cover loosely and call poison control or emergency services."
+ },
+ {
+  "symbol": "stroke_fast",
+  "title": "Stroke signs (FAST)",
+  "context": "A stroke is a blocked or burst blood vessel in the brain, and fast treatment limits the damage. Also called face drooping, slurred speech, arm weakness, mini stroke, TIA. Look for Face drooping on one side; Arm weakness or drifting down. Note the time symptoms started, call emergency services immediately, keep the person calm and seated or lying with the head slightly raised, and do not give food or drink."
+ },
+ {
+  "symbol": "asthma_attack",
+  "title": "Asthma attack",
+  "context": "An asthma attack is a tightening of the airways that makes breathing hard and noisy. Also called wheezing, cannot breathe tight chest, inhaler, shortness of breath. Look for wheezing, coughing, tight chest; struggling to speak a full sentence. Sit the person upright, help them use their own quick-relief inhaler as directed, keep them calm, and move them away from triggers. Call emergency help if it does not ease."
+ },
+ {
+  "symbol": "anaphylaxis_signs",
+  "title": "Severe allergic reaction (anaphylaxis) signs",
+  "context": "Anaphylaxis is a rapid, whole-body allergic reaction that can close the airway and drop blood pressure. Also called allergic reaction, swelling of throat, hives and trouble breathing, bee sting allergy, peanut allergy. Look for hives, swelling of the face, lips or tongue; wheezing, throat tightness, trouble breathing."
+ },
+ {
+  "symbol": "bee_wasp_sting",
+  "title": "Bee and wasp stings",
+  "context": "A sting injects venom that causes pain and swelling; a honeybee leaves its stinger and venom sac in the skin. Also called bee sting, hornet sting, stung by a wasp, stinger. Look for sharp pain, a red welt, and local swelling; a small black stinger in the skin. Move away from the nest, scrape the stinger out with a card edge or fingernail, wash, and apply a cool pack. Watch for allergy signs for at least 30 minutes."
+ },
+ {
+  "symbol": "spider_bites",
+  "title": "Black widow and brown recluse bites",
+  "context": "Most spiders are harmless, but black widows and brown recluses have bites that need medical care. Also called spider bite, black widow, brown recluse, venomous spider. Look for black widow: shiny black spider with a red hourglass underneath; severe cramps and sweating; brown recluse: tan spider with a violin mark; a blister that can turn into a sore."
+ },
+ {
+  "symbol": "scorpion_sting",
+  "title": "Scorpion sting",
+  "context": "Most scorpion stings hurt like a bee sting, but the bark scorpion of the US Southwest can cause serious nerve symptoms, especially in children. Also called stung by a scorpion, bark scorpion. Look for sharp burning pain, numbness, and tingling; drooling, odd eye movements, or twitching muscles in severe stings. Wash with soap and water, apply a cool pack, keep the area still, and get medical advice or call poison control. Shake out shoes and clothes in scorpion country."
+ },
+ {
+  "symbol": "poison_ivy_rash",
+  "title": "Poison ivy, oak, and sumac rash",
+  "context": "Poison ivy, oak, and sumac carry an oil called urushiol that causes an itchy, blistering rash on contact. Also called itchy rash from a plant, leaves of three, urushiol, contact dermatitis. Look for streaks or patches of itchy red bumps and blisters; rash shows up hours to days after touching the plant. Wash skin with soap and cool water as soon as you can, then wash clothing and tools. Cool compresses and calamine can ease the itch."
+ },
+ {
+  "symbol": "jellyfish_sting",
+  "title": "Jellyfish and marine stings",
+  "context": "Jellyfish tentacles carry stinging cells that keep firing; treat by removing them and soaking in hot water, not by rubbing. Also called jellyfish, portuguese man o war, stingray, sea urchin. Look for lines of welts where a tentacle touched; burning pain and itching. Rinse the area with seawater (not fresh water), pick off tentacles with tweezers or a gloved hand, and soak in hot water, as hot as is comfortable, for 20 to 45 minutes. Vinegar helps with some species."
+ },
+ {
+  "symbol": "low_blood_sugar",
+  "title": "Low blood sugar (diabetic emergency)",
+  "context": "Low blood sugar in a person with diabetes causes shakiness, sweating, and confusion and is fixed fast with sugar. Also called hypoglycemia, diabetic passed out, shaky and sweaty, insulin shock, blood sugar low. Look for shaky, sweaty, hungry, and anxious; confusion, slurred speech, or odd behavior. If they are awake and can swallow, give fast sugar such as juice, glucose tablets, or regular soda, then a snack. Call for help if it does not improve in about 15 minutes."
+ },
+ {
+  "symbol": "fever_adult",
+  "title": "Fever in an adult",
+  "context": "A fever is a body temperature of about 38 C (100.4 F) or higher, usually a sign the body is fighting an infection. Also called high temperature, running a fever, hot and chills. Look for hot skin, chills, sweating, and aches; temperature above 38 C (100.4 F). Rest, drink fluids, and dress lightly. Over-the-counter fever reducers can help if used as the label says. Watch for signs of getting worse."
+ },
+ {
+  "symbol": "vomiting_diarrhea",
+  "title": "Vomiting and diarrhea",
+  "context": "Vomiting and diarrhea are the body's way of clearing a gut infection or toxin; the main danger is dehydration. Also called stomach bug, food poisoning, traveler's diarrhea, gastroenteritis, upset stomach. Look for frequent loose stools or vomiting; dry mouth, dark urine, dizziness. Rest, take frequent small sips of clean water or oral rehydration solution, and eat bland food when you can. Wash hands carefully and keep clear of food prep."
+ },
+ {
+  "symbol": "abdominal_pain_red_flags",
+  "title": "Belly pain: when it is urgent",
+  "context": "Most belly pain is minor, but pain that is severe, constant, or moving to the lower right can be appendicitis or another emergency. Also called stomach ache, appendicitis, severe stomach pain, belly pain. Look for pain that starts near the navel and moves to the lower right; rigid, tender belly, fever, vomiting. Rest, take nothing by mouth if you may need surgery, and get medical care quickly if pain is severe or getting worse."
+ },
+ {
+  "symbol": "childbirth_field",
+  "title": "Emergency childbirth",
+  "context": "When a baby is crowning and cannot be reached by help in time, you can support the delivery, keep the baby warm, and wait for emergency services. Also called baby coming now, giving birth, delivery in the field, woman in labor. Look for contractions a minute or two apart, urge to push; the baby's head is visible."
+ },
+ {
+  "symbol": "newborn_care",
+  "title": "Care of a newborn",
+  "context": "A newborn loses heat quickly, so drying, warming, and watching the breathing are the first jobs. Also called baby just born, keep a newborn warm, infant born outside. Look for baby cries or breathes within seconds; wet, slippery, and cold skin. Dry the baby, wrap in warm dry cloths with the head covered, and hold skin-to-skin against the mother. Keep the face clear and note the time of birth."
+ },
+ {
+  "symbol": "miscarriage_bleeding",
+  "title": "Heavy bleeding in pregnancy",
+  "context": "Bleeding, severe pain, or fainting in a pregnant woman can be serious and needs medical help. Also called bleeding while pregnant, miscarriage, pregnancy emergency. Look for vaginal bleeding with cramps or pain; dizzy, pale, faint, or severe one-sided belly pain. Have her lie down on her left side, keep her warm and calm, and get emergency help. Note how many pads she is soaking."
+ },
+ {
+  "symbol": "altitude_sickness_levels",
+  "title": "Altitude sickness: mild versus dangerous",
+  "context": "Altitude sickness is an illness from too little oxygen at height; mild forms ease with rest, but fluid on the lungs or brain is life-threatening. Also called AMS, HAPE, HACE, mountain sickness, can't breathe at altitude. Look for mild: headache, nausea, poor sleep, tiredness; HAPE: breathlessness at rest, wet cough, pink froth. Stop climbing, rest, drink water, and descend if symptoms are getting worse. Dangerous forms need immediate descent."
+ },
+ {
+  "symbol": "poisoning_swallowed",
+  "title": "Swallowed poison or overdose",
+  "context": "For a swallowed poison, the quickest help is poison control or emergency services, who tell you exactly what to do for that substance. Also called swallowed something poisonous, child ate pills, drank cleaner, poison control. Look for an opened container, plants, berries, or pills nearby; vomiting, drowsiness, confusion, or burns around the mouth."
+ },
+ {
+  "symbol": "heavy_vs_minor_bleeding",
+  "title": "Heavy bleeding versus a minor cut",
+  "context": "Heavy bleeding is blood that spurts, pools, soaks through cloth, or does not slow after 10 minutes of firm pressure; a minor cut slows and stops with pressure. Also called is the bleeding serious, how bad is the bleeding, bleeding will not stop, bleeding a lot. Look for spurting, pulsing, or fast flowing blood; blood soaking through several layers or pooling on the ground."
+ },
+ {
+  "symbol": "tourniquet_apply",
+  "title": "How to apply a tourniquet",
+  "context": "A tourniquet is a tight band, ideally a commercial windlass device, and a last resort for life-threatening bleeding from an arm or leg when firm direct pressure has not stopped it. Also called CAT tourniquet, windlass tourniquet, TQ, strap to stop bleeding, tourniquet time. Look for life-threatening bleeding from an arm or leg; a traumatic amputation."
+ },
+ {
+  "symbol": "tourniquet_bleeding_continues",
+  "title": "Bleeding continues after a tourniquet",
+  "context": "If blood keeps flowing after a tourniquet is on, it is usually not tight enough or not high enough, and the fix is to tighten it or add a second one. Also called tourniquet not working, still bleeding with tourniquet, second tourniquet, tourniquet too loose. Look for blood still flowing or spurting below the band; a pulse can still be felt below it."
+ },
+ {
+  "symbol": "wound_packing",
+  "title": "Packing a wound and pressure dressing",
+  "context": "Packing means pushing gauze or clean cloth deep into a bleeding wound and pressing hard on it; it is used where a tourniquet will not work, such as the neck, armpit, or groin. Also called pack the wound, gauze in the wound, hemostatic gauze, wound that tourniquet cannot reach, neck bleeding. Look for deep wound at the neck, armpit, groin, or the top of a limb; blood welling from the depth of the wound."
+ },
+ {
+  "symbol": "child_infant_choking",
+  "title": "Choking in a child or infant",
+  "context": "For an infant under one year, a choking rescue uses five back blows and five chest thrusts, not abdominal thrusts; a child over one uses abdominal thrusts like an adult. Also called baby choking, toddler choking, back blows infant, chest thrusts infant. Look for cannot cry, cough, or breathe, silent or high-pitched noise; blue lips or face."
+ },
+ {
+  "symbol": "child_infant_cpr",
+  "title": "CPR for a child or infant",
+  "context": "CPR for children and infants keeps blood and oxygen moving; it is similar to adult CPR but uses less force, and breaths matter more because children often stop breathing first. Also called baby CPR, infant not breathing, child not breathing, rescue breaths for a baby. Look for not breathing or only gasping; limp and unresponsive."
+ },
+ {
+  "symbol": "aed_use",
+  "title": "Using an AED",
+  "context": "An AED is a portable device that checks the heart's rhythm and, if needed, gives a shock; it talks you through each step. Also called defibrillator, automated external defibrillator, heart paddles, shock machine. Look for person is unresponsive and not breathing normally; voice prompts after you turn it on."
+ },
+ {
+  "symbol": "naloxone_overdose",
+  "title": "Opioid overdose and naloxone",
+  "context": "An opioid overdose slows or stops breathing, and naloxone (Narcan) is a medicine that can reverse it for a short time. Also called narcan, overdose, passed out from pills, blue lips pinpoint pupils, fentanyl overdose. Look for will not wake, slow or stopped breathing; blue or gray lips and skin."
+ },
+ {
+  "symbol": "fracture_sprain_dislocation",
+  "title": "Broken bone, sprain, or dislocation?",
+  "context": "A fracture is a broken bone, a sprain is a stretched or torn ligament, and a dislocation is a joint forced out of place; the field answer is the same: stabilize and get care. Also called is it broken or sprained, sprain versus fracture, twisted ankle or broken ankle. Look for fracture: point pain on the bone, deformity, cannot bear weight; sprain: pain and swelling at a joint, some use possible."
+ },
+ {
+  "symbol": "infant_hypothermia",
+  "title": "Cold baby: infant hypothermia",
+  "context": "Babies lose heat fast, and a cold infant may have bright red, cold skin and very low energy, not just shivering. Also called baby too cold, newborn cold, bright red cold skin baby, low energy baby. Look for bright red, cold skin; very low energy, weak cry, or refusing to feed. Take the baby indoors, remove damp clothing, and hold the baby skin to skin under dry blankets, with the head and a hat covered. Warm the room. Get urgent care at once."
+ },
+ {
+  "symbol": "frostbite_dont",
+  "title": "Frostbite: what not to do",
+  "context": "Frostbitten skin is numb and easily damaged; rubbing, high heat, or thawing then re-freezing makes it worse. Also called rub frostbite, thaw frozen fingers, stove on frostbite, heating pad frostbite. Look for pale, waxy, hard, or blotchy skin that is numb; tingling and then loss of feeling."
+ },
+ {
+  "symbol": "cold_water_shock",
+  "title": "Cold-water shock and near-drowning",
+  "context": "Cold-water shock is the gasp and panic in the first minute after falling into very cold water, and it can cause drowning before hypothermia sets in. Also called fell through the ice, fell in cold water, capsized, cold shock, cold water immersion. Look for a sudden gasp, rapid breathing, and panic; swimming ability lost within minutes."
+ },
+ {
+  "symbol": "call_911_dispatcher",
+  "title": "Talking to a 911 dispatcher",
+  "context": "When you call 911, stay on the line and give your location and what happened; the dispatcher will tell you what to do next. Also called what to say when I call 911, how to call for help, emergency call, giving my location. Look for your exact location, with a road, landmark, or GPS coordinates; what happened and how many people are hurt."
+ },
+ {
+  "symbol": "describe_symptoms",
+  "title": "Describing symptoms clearly to a clinician",
+  "context": "Clear information helps a clinician decide fast: when it started, what makes it worse or better, what medicines and allergies the person has. Also called what to tell the doctor, how to explain symptoms, medical history for an emergency crew. Look for start time and how it began; what makes it better or worse."
+ },
+ {
+  "symbol": "medication_questions",
+  "title": "Medication basics: missed dose, expired, sharing",
+  "context": "For a missed dose, an expired medicine, or a drug interaction, read the label and ask a pharmacist; never share prescription drugs. Also called missed a pill, expired medicine, share a prescription, can I take this with that. Look for label directions for a missed dose; an expiration date. Check the label or the pharmacist or Poison Control line for a missed dose, and keep medicines in a cool, dry place. Ask a pharmacist before mixing medicines. Keep a list of what you take."
+ },
+ {
+  "symbol": "lyme_signs",
+  "title": "Lyme disease signs after a tick bite",
+  "context": "Lyme disease is spread by blacklegged (deer) ticks, and an expanding red rash, often with fever, chills, and aches, can appear three to thirty days after a bite. Also called bullseye rash, erythema migrans, tick fever, deer tick bite, Lyme. Look for a red expanding rash, sometimes with a clear center; fever, chills, headache, and tiredness."
+ },
+ {
+  "symbol": "tick_prevention",
+  "title": "Preventing tick bites",
+  "context": "Preventing tick bites means covering skin, using repellent, and checking your whole body after being outdoors. Also called tick check, permethrin, stay safe from ticks, repellent for ticks. Look for tick season from spring through fall, with nymphs most active in late spring and summer; brush, leaf litter, and tall grass."
+ },
+ {
+  "symbol": "snakebite_new_england",
+  "title": "Snakebite in New England",
+  "context": "New England has very few venomous snakes: the timber rattlesnake and the northern copperhead in a few southern areas; most snakes are harmless. Also called timber rattlesnake, northern copperhead, snake bit me, venomous snake, garter snake bite. Look for venomous bites leave two puncture marks with swelling and severe pain; timber rattlesnake has a rattle and a heavy body."
+ },
+ {
+  "symbol": "nail_puncture",
+  "title": "Nail or tool puncture wound",
+  "context": "A puncture wound is narrow and deep, closes quickly, and traps germs, so it can get infected and may need a tetanus shot. Also called stepped on a nail, puncture in the foot, deep puncture. Look for a small hole with little bleeding; pain that gets worse in the next days. Let it bleed a little, wash with soap and clean water, and cover. See a clinician the same day for a deep wound, a rusty or dirty object, or a wound in the foot. Ask about a tetanus shot."
+ },
+ {
+  "symbol": "high_blood_sugar",
+  "title": "High blood sugar (diabetic emergency)",
+  "context": "High blood sugar builds slowly with thirst, frequent urination, tiredness, and fruity breath, and it can become a medical emergency. Also called hyperglycemia, diabetic ketoacidosis, very thirsty and frequent urination, fruity breath. Look for extreme thirst and frequent urination; nausea, belly pain, and fast deep breathing."
+ },
+ {
+  "symbol": "ear_sinus_pain",
+  "title": "Ear or sinus pain after a swim or a cold",
+  "context": "Ear or sinus pain after swimming or a cold is often a mild infection, but severe pain, fever, or discharge needs a clinician. Also called swimmer's ear, earache, sinus pressure, ear infection. Look for ear pain that hurts when you pull on it; stuffy nose and pressure around the eyes. Keep the ear dry, use a warm compress, and take over-the-counter pain medicine as the label says. See a clinician if pain lasts more than a day or two or if there is fever or drainage."
+ },
+ {
+  "symbol": "frostnip_vs_frostbite",
+  "title": "Frostnip versus frostbite",
+  "context": "Frostnip is a mild cold injury that turns skin pale and numb but is reversible with warming; frostbite is a deeper freeze injury. Also called cold fingers pale, nose turned white, ears numb. Look for frostnip: pale or red skin that tingles and returns to normal when warmed; frostbite: hard, waxy, numb skin that stays white or gray."
+ },
+ {
+  "symbol": "cpr_when_to_start",
+  "title": "When to start CPR",
+  "context": "Start CPR for anyone who is unresponsive and not breathing, or only gasping, and call 911 first. Also called should I do CPR, no pulse, not breathing what do I do, hands only CPR. Look for no response to a shout or shoulder tap; not breathing, or only occasional gasps."
+ }
+]

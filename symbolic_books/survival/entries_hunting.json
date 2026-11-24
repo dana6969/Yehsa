@@ -1,0 +1,197 @@
+[
+ {
+  "symbol": "hunt_before_you_go",
+  "title": "Before you hunt: license, tags, orange, and this year's rules",
+  "context": "Before a hunt you need a valid license and any tags for the animal, the hunter orange your state requires, and this season's official rules, which change every year. Also called hunting license, deer tag, what do I need to hunt, hunter orange, blaze orange. Look for license and tags on you, not at home; orange hat and vest where the state requires it."
+ },
+ {
+  "symbol": "hunt_legal_light_note",
+  "title": "Legal shooting light",
+  "context": "Legal shooting light is the window each day when hunting is allowed; many states use about 30 minutes before sunrise to 30 minutes after sunset, but the exact rule is set by each state and sometimes by species. Also called shooting hours, legal shooting time, half hour before sunrise, when can I shoot. Look for sunrise and sunset for your exact spot; the state's own rule for the species."
+ },
+ {
+  "symbol": "hunt_firearm_safety",
+  "title": "Firearm safety in the field",
+  "context": "Field firearm safety comes down to four habits: treat every gun as loaded, keep the muzzle pointed in a safe direction, keep your finger off the trigger until you are ready to shoot, and be sure of your target and what is beyond it. Also called gun safety, hunting gun safety, muzzle control, treat every gun as loaded, firearm rules. Look for muzzle never sweeps a person, including yourself; finger rests along the frame, outside the trigger guard."
+ },
+ {
+  "symbol": "hunt_target_beyond",
+  "title": "Know your target and what is beyond it",
+  "context": "Before any shot you must be certain of the species, sex if it matters for your tag, and that a safe backstop such as rising ground stops the bullet; anything uncertain means no shot. Also called identify before you shoot, not sure what it is, is it a deer, backstop, what is behind the target. Look for whole animal seen, not just a patch of brown or a sound; no house, road, trail, or person in the line of fire."
+ },
+ {
+  "symbol": "hunt_shot_placement",
+  "title": "Shot placement and what to do after the shot",
+  "context": "An ethical shot aims at the heart and lungs from a broadside or slightly quartering-away angle within the range you have practiced, so the animal goes down quickly. Also called where to shoot a deer, ethical shot, vital zone, heart lung shot, after the shot. Look for the animal standing still and broadside; a clear lane with no branches in the path."
+ },
+ {
+  "symbol": "hunt_blood_trail",
+  "title": "Tracking a hit deer and reading a blood trail",
+  "context": "Following a hit deer means starting at the spot it stood, finding hair and blood, and moving slowly from sign to sign while marking each spot. Also called blood trail, tracking a wounded deer, following blood, lost blood trail, how long to wait before tracking. Look for bright red, frothy blood often means a lung hit; dark blood or green matter can mean a gut hit and a longer wait."
+ },
+ {
+  "symbol": "hunt_lost_animal",
+  "title": "When you cannot find the animal",
+  "context": "When a hit animal cannot be found, the ethical next steps are a careful grid search, a second person's eyes, and, where the state allows it, a leashed tracking dog. Also called can't find my deer, lost the blood trail, wounded deer lost, deer ran off. Look for the last marked sign; water, thick cover, and downhill paths nearby."
+ },
+ {
+  "symbol": "field_dressing_deer",
+  "title": "Field dressing a deer",
+  "context": "Field dressing removes the internal organs soon after the kill so the body heat can escape and the meat cools quickly. Also called gutting a deer, field dress, clean a deer, how to gut a deer. Look for gloves on, sharp knife, clean water or wipes; belly opened shallow so the gut is not cut. Tag the animal first if your state requires it, open the body from the pelvis toward the ribs with the blade edge up, remove the organs, then prop the cavity open in shade."
+ },
+ {
+  "symbol": "meat_care_temperature",
+  "title": "Keeping game meat cool and spotting spoiled meat",
+  "context": "Game meat stays safe when it is cooled below 40 °F (4 °C) quickly; in warm weather that means skinning, quartering, and icing within hours. Also called meat care warm weather, is my deer meat spoiled, hanging a deer, cooling venison, game meat spoiled. Look for air temperature above 40 °F means the clock is running; a sour or rotten smell, slime, or green color means spoiled."
+ },
+ {
+  "symbol": "cwd_awareness",
+  "title": "Chronic wasting disease (CWD) and deer",
+  "context": "Chronic wasting disease is a fatal prion disease of deer, elk, and moose; no human case has been confirmed, but health agencies advise people not to eat meat from an infected animal. Also called CWD, chronic wasting disease, zombie deer, sick looking deer, deer disease. Look for a thin, drooling, stumbling, or unafraid deer; animals found dead."
+ },
+ {
+  "symbol": "game_cooking_temps",
+  "title": "Cooking venison and wild game safely",
+  "context": "Game meat is safest cooked to a measured temperature: whole cuts of venison to at least 145 °F (63 °C) with a 3-minute rest, ground venison to 160 °F (71 °C), and wild birds to 165 °F (74 °C). Also called venison temperature, cook deer meat, ground venison temperature, wild game cooking. Look for a food thermometer in the thickest part; ground meat cooked through. Use a thermometer, keep raw game apart from cooked food, and wash hands and boards after handling raw meat."
+ },
+ {
+  "symbol": "tree_stand_safety",
+  "title": "Tree-stand safety",
+  "context": "Tree-stand safety means staying attached to the tree from the moment you leave the ground until you are back on it, with a full-body harness and a lifeline or tether. Also called tree stand, deer stand fall, safety harness, full body harness, climbing a stand. Look for full-body harness worn and connected; stand straps and chains checked before each season."
+ },
+ {
+  "symbol": "hunt_fence_crossing",
+  "title": "Crossing fences and obstacles with a firearm",
+  "context": "Crossing a fence, ditch, log, or stream with a firearm is safe only with the action open and the gun unloaded, set down on the far side with the muzzle pointed away. Also called crossing a fence with a gun, climbing over a log with a gun, crossing a stream with a rifle. Look for action open and chamber empty; muzzle pointed away from you and others."
+ },
+ {
+  "symbol": "small_game_tularemia",
+  "title": "Small game: rabbits, squirrels, and tularemia",
+  "context": "Tularemia is a bacterial disease people can catch from handling or eating rabbits, hares, and rodents; gloves and thorough cooking prevent most cases. Also called rabbit fever, tularemia, cleaning rabbits, squirrel hunting safety. Look for a rabbit or squirrel that is slow, sick, or found dead; white spots on the liver. Wear gloves when skinning and cleaning, cook the meat thoroughly, and wash hands and tools afterward."
+ },
+ {
+  "symbol": "waterfowl_rules_link",
+  "title": "Waterfowl and migratory birds have their own rules",
+  "context": "Ducks, geese, and other migratory birds are hunted under federal rules plus state rules, which differ from deer rules, including shot type and a federal duck stamp for many hunters. Also called duck hunting rules, goose hunting, migratory bird hunting, duck stamp, waterfowl regulations. Look for a federal duck stamp and state permits where required; non-toxic shot required for waterfowl."
+ },
+ {
+  "symbol": "turkey_hunting_safety",
+  "title": "Turkey hunting safety",
+  "context": "Turkey hunting has its own risks because hunters wear camouflage and use calls, so another hunter can mistake a person for a bird. Also called turkey hunting, spring turkey safety, gobbler hunting, turkey call safety. Look for no red, white, or blue clothing, which can look like a gobbler's head; a tree trunk wider than your shoulders at your back."
+ },
+ {
+  "symbol": "quartering_packing_out",
+  "title": "Quartering and packing out game",
+  "context": "Quartering means cutting a large animal into its four legs plus the backstraps, neck, and other meat so it can be carried out in loads and cooled faster. Also called quarter a deer, pack out meat, gutless method, boning out a deer. Look for clean game bags for each quarter; a sharp knife and a spare blade. Skin one side at a time, take the front and hind quarters, backstraps, and tenderloins, bag each piece, and hang or lay the bags in shade to cool before carrying."
+ },
+ {
+  "symbol": "skinning_hanging_deer",
+  "title": "Skinning and hanging a deer",
+  "context": "Skinning removes the hide so meat can cool and stay clean; hanging lets the carcass cool and drain in cold, shaded, animal-proof conditions. Also called skin a deer, hang a deer, how long to hang venison, deer gambrel. Look for a stable gambrel or rope and a strong limb or beam; air at or below 40 °F (4 °C) for hanging. Hang by the hind legs or the head, skin from the top down with the blade edge out, and keep the carcass cold and covered from flies and animals."
+ },
+ {
+  "symbol": "basic_butcher_cuts",
+  "title": "Basic venison butchering cuts",
+  "context": "Home butchering divides a deer into a few simple groups: backstraps and tenderloins for steaks, hind-quarter roasts, shoulder and neck for stew, and trim for grinding. Also called butcher a deer, venison cuts, backstrap, tenderloin, deer processing at home. Look for silver skin and fat trimmed off; a clean, cold work surface. Work cold and clean, trim fat, silver skin, and bloodshot meat, wrap tightly, label, and freeze."
+ },
+ {
+  "symbol": "tag_transport_checkin",
+  "title": "Tagging, transport, and checking in game",
+  "context": "Most states require you to tag an animal right away, keep the tag with it during transport, and report or check in the harvest within a set time. Also called tag a deer, check in deer, register harvest, transport deer legally. Look for the tag filled out and attached as your state requires; the state's online, phone, or station check-in. Read your state agency's current tagging and check-in page before the season and follow it exactly."
+ },
+ {
+  "symbol": "cwd_processor_request",
+  "title": "Using a processor when CWD is a concern",
+  "context": "If you hunt where chronic wasting disease is found, ask a processor to process your animal by itself so its meat is not mixed with others. Also called deer processor CWD, individual processing, commercial processing venison. Look for the processor's policy on batch versus individual processing; test results before you eat the meat. Ask for individual processing, get the animal tested, and keep the meat frozen and unused until the result comes back."
+ },
+ {
+  "symbol": "recover_game_water_cover",
+  "title": "Recovering game in water or thick cover",
+  "context": "Getting an animal out of water, swamp, or thick cover comes after your own safety: cold water and deep mud can kill. Also called deer in the water, deer in a swamp, retrieve deer thick brush. Look for water depth, current, and temperature; ice that may not hold. Bring a partner and a rope, wait for light if needed, and reach the animal from shore or shallow water where you can."
+ },
+ {
+  "symbol": "ground_blind_safety",
+  "title": "Ground blind safety",
+  "context": "A ground blind hides you at ground level, but it also hides you from other hunters, so safe setup matters. Also called ground blind, pop-up blind, hunting blind safety. Look for orange on the outside of the blind where required; a clear, safe shooting lane. Put orange on and around the blind as your state requires, know your shooting lanes and backstops, and keep the gun pointed out the window only when ready."
+ },
+ {
+  "symbol": "youth_hunter_mentor",
+  "title": "Hunting with a young or new hunter",
+  "context": "Mentoring a new or young hunter means close supervision, short trips, and teaching safety before success. Also called take a kid hunting, mentor hunt, youth hunter, new hunter safety. Look for the new hunter within arm's reach when handling a gun; a completed hunter-education course where required. Keep sessions short and comfortable, review the firearm rules often, and check your state's youth and apprentice rules."
+ },
+ {
+  "symbol": "bear_moose_camp_safety",
+  "title": "Black bear and moose around camps and carcasses",
+  "context": "Black bears are drawn to carcasses, gut piles, and camp food, and a moose can charge if crowded, especially a cow with a calf or a bull in the rut. Also called bear at my deer, bear near camp, moose charge, bear safety hunting. Look for fresh bear sign near a gut pile or meat pole; a moose with ears back and hackles raised. Hang meat away from sleeping areas, store food sealed, approach a kill carefully and make noise, and give moose plenty of room."
+ },
+ {
+  "symbol": "field_dressing_birds",
+  "title": "Field dressing birds",
+  "context": "Birds keep best when the crop and entrails are removed soon after the kill and the body is cooled. Also called clean a turkey, gut a pheasant, field dress grouse, dress a duck. Look for gloves on; crop and intestines removed. Remove the entrails and crop, wipe the cavity, and cool the bird quickly; pluck or skin at home."
+ },
+ {
+  "symbol": "lead_ammo_awareness",
+  "title": "Lead versus non-lead ammunition",
+  "context": "Lead bullets can break into small fragments in meat, and scavengers such as eagles can be poisoned by lead in gut piles; non-lead options exist. Also called lead bullet fragments, copper bullets, non-toxic shot, lead in venison. Look for fragments spread several inches from the wound channel; federal non-toxic shot rules for waterfowl. Trim generously around the wound channel, consider copper or other non-lead ammunition, and follow any rules where you hunt."
+ },
+ {
+  "symbol": "hunting_ethics_waste",
+  "title": "Hunting ethics: no waste, respect for land and people",
+  "context": "Ethical hunting means taking only shots you can make cleanly, using the animal well, and respecting landowners, other hunters, and the law. Also called hunting ethics, fair chase, wanton waste, respect landowners. Look for permission in hand on private land; a plan to recover and use the meat. Practice before the season, pass on doubtful shots, recover and use what you take, and leave gates and land as you found them."
+ },
+ {
+  "symbol": "land_access_trespass",
+  "title": "Land access, permission, and trespass",
+  "context": "Hunting on private land needs the owner's permission, and posting and trespass rules differ from state to state; Yehsa has no property-owner map. Also called hunting private land, landowner permission, posted land, trespass hunting. Look for posted signs or paint marks on trees; a written or verbal permission you can show. Ask permission early, carry the owner's contact, learn your state's posting rules, and check official public-land maps."
+ },
+ {
+  "symbol": "trapping_regulated",
+  "title": "Trapping is tightly regulated",
+  "context": "Trapping usually needs its own license or education course and has strict rules on trap types, placement, checking times, and seasons. Also called trapping license, how to trap, trap rules, snare rules. Look for the state's trapper-education requirement; trap check intervals. Take your state's trapper-education course and follow its current rules."
+ },
+ {
+  "symbol": "game_camera_etiquette",
+  "title": "Game cameras: etiquette and privacy",
+  "context": "Trail cameras record whatever passes, including people, so place them where you have permission and think about privacy. Also called trail camera, game camera privacy, cellular trail cam. Look for the landowner's permission; trails used by hikers or neighbors. Get permission, aim cameras at game trails rather than paths people use, and check whether your state limits cellular cameras."
+ },
+ {
+  "symbol": "wind_scent_hunting",
+  "title": "Wind direction and your scent",
+  "context": "Deer rely on smell, and your scent drifts downwind in a widening cone, so hunters set up with the wind blowing from the deer toward them. Also called wind direction hunting, scent cone, deer smell me, play the wind. Look for wind direction from a light feather, milkweed fluff, or powder; thermals rising in the morning warmth and sinking in the evening."
+ },
+ {
+  "symbol": "dragging_deer_safety",
+  "title": "Dragging a deer without hurting yourself",
+  "context": "Dragging a deer is hard work that strains the back and heart, especially in cold weather and for people who do not exercise. Also called drag a deer, heart attack dragging deer, deer sled, moving a deer out. Look for chest pain, shortness of breath, or dizziness; a long or uphill drag. Use a sled or cart, get help, take frequent breaks, and quarter a large animal rather than drag it far."
+ },
+ {
+  "symbol": "hunting_alone_plan",
+  "title": "Hunting alone: leave a plan",
+  "context": "A solo hunter should leave a plan with someone: where you will park and sit, when you will be back, and when they should call for help. Also called solo hunting, hunting alone safety, tell someone where I hunt. Look for a marked map or pin of your stand; a check-in time. Leave the plan, carry a whistle, light, and first aid, and stick to your return time or update it."
+ },
+ {
+  "symbol": "deer_scat",
+  "title": "Deer scat",
+  "context": "Deer scat is a pile of small, dark, oval or acorn-shaped pellets, often 20 to 50 together, that shows where deer have fed or bedded. Also called deer droppings, deer poop, deer pellets, deer poo, deer dung. Look for pellets about 1/2 to 3/4 inch (1.5 to 2 cm) long, often with a small point or dimple at one end; dark and shiny when fresh, dull and dry or crumbly when old."
+ },
+ {
+  "symbol": "deer_track",
+  "title": "Deer tracks",
+  "context": "A deer track is a split, heart-shaped hoof print made by two pointed toes, about 2 to 3 1/2 inches (5 to 9 cm) long. Also called deer track, deer prints, deer hoof print, whitetail track, deer sign. Look for two teardrop toes forming a heart with the point toward travel; two dewclaw dots behind the print in mud, snow, or when running."
+ },
+ {
+  "symbol": "deer_rub",
+  "title": "Deer rubs",
+  "context": "A rub is a sapling or small tree where a buck has scraped off bark with his antlers, mostly in fall before and during the rut. Also called buck rub, antler rub, rubs on trees, scraped bark, deer sign. Look for bark stripped from one side of a small tree, often 1 to 4 inches (2.5 to 10 cm) thick, from knee to waist height; pale fresh wood, shredded bark curls on the ground, and broken twigs."
+ },
+ {
+  "symbol": "deer_scrape",
+  "title": "Deer scrapes",
+  "context": "A scrape is a patch of bare earth that a buck paws clear under an overhanging branch and marks with scent, mostly in the weeks before the rut. Also called buck scrape, deer scrape, scrape under a branch, licking branch, deer sign. Look for a pawed oval of bare dirt, often 1 to 3 feet (30 to 90 cm) across; a chewed or broken licking branch about head height above it."
+ },
+ {
+  "symbol": "deer_sign_reading",
+  "title": "Reading deer sign",
+  "context": "Deer sign is the tracks, scat, rubs, scrapes, beds, and browsed plants that deer leave, and reading it shows where they travel, feed, and rest. Also called deer sign, signs of deer, how to scout for deer, deer scouting, where are the deer. Look for trails and tracks between thick cover and food; scat piles, oval beds pressed in leaves or snow."
+ }
+]

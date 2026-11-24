@@ -1,0 +1,926 @@
+[
+{
+"id": "recovery_position",
+"title": "Recovery position",
+"domain": "firstaid",
+"also": [
+"lateral position",
+"roll someone on their side",
+"put them on their side",
+"keep airway open"
+],
+"def": "The recovery position lays an unresponsive person who is breathing on their side so the tongue falls forward and fluid drains out of the mouth.",
+"look": [
+"person is unresponsive but breathing normally",
+"lying on their side with the top leg bent for stability",
+"head tilted back slightly with the mouth angled down"
+],
+"use": "Use it when someone who is breathing normally will not wake and no spine injury is suspected. Stay with them, call for help, and check their breathing again and again.",
+"not": "Do not use it if they are not breathing (start CPR). If you suspect a neck or spine injury, keep the head, neck, and back in line and move them only as much as needed to keep the airway open.",
+"steps": [
+"Kneel beside them and place the arm nearest you at a right angle.",
+"Bring the far arm across the chest and hold the back of the hand against their cheek.",
+"Bend the far knee and roll them toward you onto their side.",
+"Tilt the head back to keep the airway open and adjust the top leg so they cannot roll forward."
+],
+"call": "Call emergency services for anyone who will not wake up.",
+"rel": [
+"cpr_rate_depth",
+"unconscious_person"
+],
+"src": [
+"atp4-02-11",
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "heat_exhaustion_signs",
+"title": "Heat exhaustion",
+"domain": "firstaid",
+"also": [
+"overheated",
+"heavy sweating and weak",
+"too hot and dizzy",
+"heat sickness"
+],
+"def": "Heat exhaustion is the body overheating from heat and fluid loss, with heavy sweating, weakness, and dizziness. It can progress to heat stroke.",
+"look": [
+"heavy sweating, pale or clammy skin",
+"headache, dizziness, nausea, and weakness",
+"fast weak pulse and muscle cramps",
+"body temperature is raised but the person is alert"
+],
+"use": "Move to shade or a cool place, loosen clothes, cool with wet cloths or a fan, and give small sips of water. Rest and do not go back to hard work that day.",
+"not": "Do not let them keep exercising, and do not give salt tablets or alcohol. Do not force fluids on someone vomiting or confused.",
+"call": "Call emergency services if they vomit repeatedly, get confused, faint, stop sweating, or are not better within about 30 minutes.",
+"rel": [
+"heat_stroke_signs",
+"hydration_basics"
+],
+"src": [
+"cdc",
+"nws",
+"nih-medline"
+]
+},
+{
+"id": "heat_stroke_signs",
+"title": "Heat stroke",
+"domain": "firstaid",
+"also": [
+"sunstroke",
+"hyperthermia",
+"very hot skin and confused",
+"body overheated"
+],
+"def": "Heat stroke is a life-threatening emergency in which the body temperature rises dangerously high and the brain is affected.",
+"look": [
+"hot, red, dry or damp skin; sweating may stop",
+"confusion, slurred speech, or odd behavior",
+"throbbing headache, fast pulse, and collapse",
+"seizure or loss of consciousness"
+],
+"use": "Call for emergency help, move the person to shade, and cool them fast: remove extra clothing and use cold water on the skin, wet sheets, fanning, or ice packs on the neck, armpits, and groin.",
+"not": "Do not give fluids to someone who is confused or unconscious, and do not stop cooling until help arrives.",
+"call": "Call emergency services immediately; heat stroke can be fatal.",
+"rel": [
+"heat_exhaustion_signs",
+"hydration_basics"
+],
+"src": [
+"cdc",
+"nws",
+"nih-medline"
+]
+},
+{
+"id": "heat_cramps",
+"title": "Heat cramps",
+"domain": "firstaid",
+"also": [
+"muscle cramps in the heat",
+"leg cramps from sweating",
+"cramping while hiking"
+],
+"def": "Heat cramps are painful muscle spasms during or after hard work in the heat, usually from fluid and salt loss.",
+"look": [
+"cramping in the legs, arms, or belly",
+"heavy sweating",
+"otherwise alert and normal temperature"
+],
+"use": "Stop, rest in the shade, stretch and gently massage the cramping muscle, and sip water or a drink with electrolytes.",
+"not": "Do not keep pushing through cramps. Do not take salt tablets without advice.",
+"call": "Get medical care if cramps last more than an hour or you also feel confused, faint, or very ill.",
+"rel": [
+"heat_exhaustion_signs",
+"hydration_basics"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "hydration_basics",
+"title": "Staying hydrated",
+"domain": "firstaid",
+"also": [
+"how much water to drink",
+"drink more water",
+"thirst",
+"pale urine"
+],
+"def": "Staying hydrated means drinking steadily so urine stays pale; thirst lags behind, so drink before you are thirsty during work or heat.",
+"look": [
+"pale yellow urine means good hydration",
+"dark urine, headache, dry mouth, and tiredness mean you need more",
+"very little urine or dizziness are warning signs"
+],
+"use": "Sip regularly through the day and more in heat, at altitude, or when ill. Add food and some salt when sweating heavily for hours.",
+"not": "Do not drink only when thirsty during hard work, and do not drink huge amounts quickly; too much plain water can dilute the body's salt.",
+"call": "Call emergency services for confusion, fainting, or no urination for many hours.",
+"rel": [
+"hyponatremia",
+"oral_rehydration"
+],
+"src": [
+"cdc",
+"nih-medline",
+"atp3-50-21"
+]
+},
+{
+"id": "hyponatremia",
+"title": "Water intoxication (low blood sodium)",
+"domain": "firstaid",
+"also": [
+"drinking too much water",
+"hyponatremia",
+"overhydration"
+],
+"def": "Drinking far more water than you sweat out can dilute the salt in the blood, causing headache, nausea, and confusion.",
+"look": [
+"headache, nausea, and bloated feeling after drinking lots of water",
+"confusion, weakness, or seizures in severe cases",
+"long endurance effort with lots of plain water and little food"
+],
+"use": "Stop drinking plain water and eat salty snacks. Get medical help for confusion or severe symptoms.",
+"not": "Do not keep forcing water or treat it as dehydration, and do not drink large volumes in a short time.",
+"call": "Call emergency services for confusion, vomiting, seizure, or collapse.",
+"rel": [
+"hydration_basics",
+"heat_exhaustion_signs"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "hypothermia_stages",
+"title": "Hypothermia: mild to severe",
+"domain": "firstaid",
+"also": [
+"too cold",
+"shivering uncontrollably",
+"umbles",
+"stumbling and mumbling",
+"cold exposure"
+],
+"def": "Hypothermia is when body temperature falls below normal, and the signs progress from shivering to clumsiness and confusion to stopped shivering.",
+"look": [
+"mild: shivering, cold hands, clumsy",
+"moderate: stumbling, slurred speech, apathy, confusion",
+"severe: shivering stops, drowsy, very slow pulse or breathing"
+],
+"use": "Get out of wind and wet, remove wet clothes, insulate from the ground, wrap in a dry blanket and add a vapor barrier, then give warm sweet drinks if awake and able to swallow. Handle severely cold people gently.",
+"not": "Do not rub the limbs, give alcohol, or put a severely cold person in a hot bath. Do not leave them alone.",
+"call": "Call emergency services for confusion, stopped shivering, or unconsciousness. Begin CPR if no pulse or breathing and keep going until help arrives.",
+"rel": [
+"rewarming_safely",
+"cold_layers"
+],
+"src": [
+"cdc",
+"atp3-50-21",
+"atp4-02-11",
+"nih-medline"
+]
+},
+{
+"id": "rewarming_safely",
+"title": "Rewarming a cold person",
+"domain": "firstaid",
+"also": [
+"warm someone up",
+"how to warm a hypothermic person",
+"sleeping bag with another person"
+],
+"def": "Rewarming a cold person means stopping heat loss first and then adding gentle heat to the trunk, not to the limbs.",
+"look": [
+"dry insulation under and over them",
+"warm packs or bottles wrapped in cloth at chest, armpits, groin",
+"warm sweet drink only if fully awake"
+],
+"use": "Put them in a pre-warmed sleeping bag, cover the head, add warm packs to the trunk, and give warm sweet drinks if they are alert. Keep them horizontal and handle gently.",
+"not": "Do not rub or massage, do not use direct heat on the skin, and do not give alcohol or caffeine.",
+"call": "Call emergency services for anyone who is confused or not shivering.",
+"rel": [
+"hypothermia_stages",
+"frostbite_warming"
+],
+"src": [
+"cdc",
+"atp4-02-11",
+"atp3-50-21"
+]
+},
+{
+"id": "drowning_rescue",
+"title": "Drowning rescue and first aid",
+"domain": "firstaid",
+"also": [
+"near drowning",
+"pulled from water",
+"pulled someone out of the water",
+"cold water immersion"
+],
+"def": "Drowning is trouble breathing from submersion; the first moves are to reach the person safely, then get them breathing again.",
+"look": [
+"person in the water who is quiet, vertical, and not waving",
+"not breathing or breathing with difficulty after being rescued",
+"coughing or vomiting water"
+],
+"use": "Reach or throw something to them rather than going in. Once out, call for help and start rescue breaths and CPR if they are not breathing, then keep them warm.",
+"not": "Do not swim out unless you are trained, and do not press on the stomach to remove water.",
+"steps": [
+"Reach with a pole or throw a rope or a float.",
+"Get them out and check for breathing.",
+"If not breathing, give 5 rescue breaths, then CPR.",
+"Treat for hypothermia and watch for later breathing trouble."
+],
+"call": "Call emergency services for everyone who was submerged, even if they seem fine; breathing trouble can appear hours later.",
+"rel": [
+"cpr_rate_depth",
+"hypothermia_stages"
+],
+"src": [
+"cdc",
+"atp4-02-11",
+"nih-medline"
+]
+},
+{
+"id": "electric_shock",
+"title": "Electrical shock",
+"domain": "firstaid",
+"also": [
+"electrocuted",
+"got shocked",
+"downed power line",
+"live wire"
+],
+"def": "An electric shock can stop the heart and cause internal burns that are bigger than they look, so every significant shock needs a medical check.",
+"look": [
+"person still touching a live source or near a downed wire",
+"burns at the entry and exit points",
+"unconscious, irregular pulse, or confusion"
+],
+"use": "Do not touch them until the power is off or the source is safely removed. If a downed line is near, stay back at least 10 meters, call emergency services, and do not approach. After power is off, check breathing and start CPR if needed.",
+"not": "Do not touch a person in contact with a live source, do not move near a downed line, and do not use a metal or wet object to move a wire.",
+"call": "Call emergency services for any electrical injury, including high-voltage or lightning.",
+"rel": [
+"lightning_strike_first_aid",
+"burn_cool_water"
+],
+"src": [
+"cdc",
+"nih-medline",
+"atp4-02-11"
+]
+},
+{
+"id": "lightning_strike_first_aid",
+"title": "Lightning strike victim",
+"domain": "firstaid",
+"also": [
+"struck by lightning",
+"lightning injury",
+"hit by lightning"
+],
+"def": "A lightning strike victim does not carry a charge, and they often need CPR because the heart or breathing may stop.",
+"look": [
+"unconscious or not breathing",
+"burns, confusion, hearing or vision loss",
+"several people hit in a group"
+],
+"use": "Move them to a safer place away from the storm, call for help, check breathing and pulse, and start CPR if needed. Treat burns and fractures after the person is breathing.",
+"not": "Do not wait for the storm to end if more strikes are close and you can safely move them, and do not leave a seemingly dead person; people struck may revive with CPR.",
+"call": "Call emergency services; lightning victims should always be checked at a hospital. Treat the most still ones first.",
+"rel": [
+"lightning",
+"cpr_rate_depth"
+],
+"src": [
+"nws",
+"cdc",
+"atp4-02-11"
+]
+},
+{
+"id": "carbon_monoxide_poisoning",
+"title": "Carbon monoxide poisoning",
+"domain": "firstaid",
+"also": [
+"CO poisoning",
+"gas stove in tent",
+"generator fumes",
+"headache and dizzy in a closed room",
+"carbon monoxide"
+],
+"def": "Carbon monoxide is an invisible, odorless gas from burning fuel that keeps blood from carrying oxygen.",
+"look": [
+"headache, dizziness, nausea, confusion",
+"several people ill at the same time, or pets sick",
+"symptoms ease when you go outside",
+"cooking or heating fuel burning in a closed space"
+],
+"use": "Get everyone into fresh air at once, turn off the source, and call emergency services. Stay out until the space has been checked. Run generators and grills outside, far from doors and windows, and use CO alarms.",
+"not": "Do not use a stove, grill, lantern, or generator inside a tent, vehicle, garage, or house, even with a door open.",
+"call": "Call emergency services for anyone with symptoms, and move them out first.",
+"rel": [],
+"src": [
+"cdc",
+"fema",
+"usfa"
+]
+},
+{
+"id": "smoke_inhalation",
+"title": "Smoke inhalation",
+"domain": "firstaid",
+"also": [
+"breathed smoke",
+"house fire fumes",
+"smoke in the lungs"
+],
+"def": "Breathing smoke can burn the airway and carry poisonous gases, even if the skin is not burned.",
+"look": [
+"coughing, hoarse voice, black spit",
+"singed nose hairs or soot around the mouth and nose",
+"shortness of breath, headache, confusion"
+],
+"use": "Move the person into fresh air, call emergency services, and keep them sitting upright and calm. Start CPR if they stop breathing.",
+"not": "Do not let them go back inside, and do not wait for symptoms to worsen; airway swelling can develop later.",
+"call": "Call emergency services for anyone who breathed smoke.",
+"rel": [
+"carbon_monoxide_poisoning",
+"burn_cool_water"
+],
+"src": [
+"cdc",
+"usfa",
+"nih-medline"
+]
+},
+{
+"id": "burn_degrees",
+"title": "Burn severity: first, second, third degree",
+"domain": "firstaid",
+"also": [
+"how bad is the burn",
+"burn blisters",
+"charred skin",
+"degrees of burns"
+],
+"def": "Burns are graded by depth: first-degree is red and dry, second-degree blisters, and third-degree is white, brown, or charred and may be numb.",
+"look": [
+"first degree: red, dry, painful, no blisters",
+"second degree: blisters, moist, very painful",
+"third degree: leathery, white or charred, may not hurt",
+"size, face, hands, genitals, and joints raise the danger"
+],
+"use": "Cool any burn under cool running water for about 20 minutes, remove rings and loose clothing, and cover with a clean non-stick dressing. Get care for blisters larger than the palm.",
+"not": "Do not use ice, butter, oils, toothpaste, or popped blisters. Do not pull off stuck clothing.",
+"call": "Call emergency services for third-degree burns, burns on the face, hands, feet, genitals, or over joints, chemical or electrical burns, or burns bigger than a palm in a child.",
+"rel": [
+"burn_cool_water",
+"chemical_burn_skin"
+],
+"src": [
+"cdc",
+"nih-medline",
+"atp4-02-11"
+]
+},
+{
+"id": "chemical_burn_skin",
+"title": "Chemical burn on the skin",
+"domain": "firstaid",
+"also": [
+"acid on skin",
+"bleach on skin",
+"lye",
+"caustic burn"
+],
+"def": "A chemical burn keeps damaging skin until the chemical is removed, so flushing starts immediately.",
+"look": [
+"burning, redness, or blistering after contact",
+"chemical container or label nearby",
+"itching or pain that keeps getting worse"
+],
+"use": "Remove contaminated clothing, brush off dry powder first, and flush with lots of cool running water for at least 20 minutes. Cover loosely and call poison control or emergency services.",
+"not": "Do not try to neutralize the chemical, and do not use only a small splash of water. Do not rub.",
+"call": "Call emergency services or poison control (in the US, 1-800-222-1222) with the container label in hand.",
+"rel": [
+"chemical_eye_flush",
+"burn_degrees"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "stroke_fast",
+"title": "Stroke signs (FAST)",
+"domain": "firstaid",
+"also": [
+"face drooping",
+"slurred speech",
+"arm weakness",
+"mini stroke",
+"TIA"
+],
+"def": "A stroke is a blocked or burst blood vessel in the brain, and fast treatment limits the damage.",
+"look": [
+"Face drooping on one side",
+"Arm weakness or drifting down",
+"Speech slurred or confused",
+"Time to call emergency services"
+],
+"use": "Note the time symptoms started, call emergency services immediately, keep the person calm and seated or lying with the head slightly raised, and do not give food or drink.",
+"not": "Do not wait to see if it passes, do not drive them yourself if an ambulance is available, and do not give aspirin unless a dispatcher tells you to.",
+"call": "Call emergency services immediately.",
+"rel": [
+"heart_attack_signs",
+"fainting"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "asthma_attack",
+"title": "Asthma attack",
+"domain": "firstaid",
+"also": [
+"wheezing",
+"cannot breathe tight chest",
+"inhaler",
+"shortness of breath"
+],
+"def": "An asthma attack is a tightening of the airways that makes breathing hard and noisy.",
+"look": [
+"wheezing, coughing, tight chest",
+"struggling to speak a full sentence",
+"using neck and belly muscles to breathe, or blue lips"
+],
+"use": "Sit the person upright, help them use their own quick-relief inhaler as directed, keep them calm, and move them away from triggers. Call emergency help if it does not ease.",
+"not": "Do not lay them flat, do not leave them alone, and do not use someone else's medicine unless a dispatcher tells you to.",
+"call": "Call emergency services if breathing is not quickly better after the inhaler, if lips or fingers turn blue, or if they cannot speak.",
+"rel": [
+"anaphylaxis_signs",
+"choking_thrusts"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "anaphylaxis_signs",
+"title": "Severe allergic reaction (anaphylaxis) signs",
+"domain": "firstaid",
+"also": [
+"allergic reaction",
+"swelling of throat",
+"hives and trouble breathing",
+"bee sting allergy",
+"peanut allergy"
+],
+"def": "Anaphylaxis is a rapid, whole-body allergic reaction that can close the airway and drop blood pressure.",
+"look": [
+"hives, swelling of the face, lips or tongue",
+"wheezing, throat tightness, trouble breathing",
+"vomiting, dizziness, pale or faint",
+"symptoms within minutes of a sting, food, or medicine"
+],
+"use": "Use the person's prescribed epinephrine auto-injector right away on the outer thigh if one is available, call emergency services, and lay them down with legs raised unless breathing is easier sitting.",
+"not": "Do not wait to see if it settles, do not give food or drink, and do not stand them up quickly.",
+"call": "Call emergency services immediately, even if the injector helped.",
+"rel": [
+"epinephrine_auto",
+"bee_wasp_sting"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "bee_wasp_sting",
+"title": "Bee and wasp stings",
+"domain": "firstaid",
+"also": [
+"bee sting",
+"hornet sting",
+"stung by a wasp",
+"stinger"
+],
+"def": "A sting injects venom that causes pain and swelling; a honeybee leaves its stinger and venom sac in the skin.",
+"look": [
+"sharp pain, a red welt, and local swelling",
+"a small black stinger in the skin",
+"hives, wheezing, or swelling away from the sting mean an allergic reaction"
+],
+"use": "Move away from the nest, scrape the stinger out with a card edge or fingernail, wash, and apply a cool pack. Watch for allergy signs for at least 30 minutes.",
+"not": "Do not squeeze the stinger with tweezers, and do not ignore breathing trouble, a swollen face, or dizziness.",
+"call": "Call emergency services for any sign of a severe allergic reaction, or for many stings at once.",
+"rel": [
+"anaphylaxis_signs",
+"spider_bites"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "spider_bites",
+"title": "Black widow and brown recluse bites",
+"domain": "firstaid",
+"also": [
+"spider bite",
+"black widow",
+"brown recluse",
+"venomous spider"
+],
+"def": "Most spiders are harmless, but black widows and brown recluses have bites that need medical care.",
+"look": [
+"black widow: shiny black spider with a red hourglass underneath; severe cramps and sweating",
+"brown recluse: tan spider with a violin mark; a blister that can turn into a sore",
+"pain, redness, and a spreading wound"
+],
+"use": "Clean the bite, apply a cool pack, keep the area still and raised, and get medical care. If you can safely do so, note what the spider looked like.",
+"not": "Do not cut the bite, apply a tourniquet, or try to suck out venom.",
+"call": "Call emergency services for severe pain, belly cramps, trouble breathing, or a child or older adult bitten.",
+"rel": [
+"scorpion_sting",
+"bee_wasp_sting"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "scorpion_sting",
+"title": "Scorpion sting",
+"domain": "firstaid",
+"also": [
+"stung by a scorpion",
+"bark scorpion"
+],
+"def": "Most scorpion stings hurt like a bee sting, but the bark scorpion of the US Southwest can cause serious nerve symptoms, especially in children.",
+"look": [
+"sharp burning pain, numbness, and tingling",
+"drooling, odd eye movements, or twitching muscles in severe stings",
+"a child who is restless or crying and cannot be calmed"
+],
+"use": "Wash with soap and water, apply a cool pack, keep the area still, and get medical advice or call poison control. Shake out shoes and clothes in scorpion country.",
+"not": "Do not cut the sting, apply a tourniquet, or ignore a child with severe symptoms.",
+"call": "Call emergency services or poison control (US 1-800-222-1222) for severe symptoms, a young child, or an older adult.",
+"rel": [
+"spider_bites",
+"bee_wasp_sting"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "poison_ivy_rash",
+"title": "Poison ivy, oak, and sumac rash",
+"domain": "firstaid",
+"also": [
+"itchy rash from a plant",
+"leaves of three",
+"urushiol",
+"contact dermatitis"
+],
+"def": "Poison ivy, oak, and sumac carry an oil called urushiol that causes an itchy, blistering rash on contact.",
+"look": [
+"streaks or patches of itchy red bumps and blisters",
+"rash shows up hours to days after touching the plant",
+"oil can be carried on tools, pets, and clothes"
+],
+"use": "Wash skin with soap and cool water as soon as you can, then wash clothing and tools. Cool compresses and calamine can ease the itch.",
+"not": "Do not burn the plants, scratch blisters open, or touch your face after handling them.",
+"call": "Get medical care for a rash on the face, genitals, or over much of the body, or swelling and trouble breathing; never breathe smoke from burning these plants.",
+"rel": [
+"poison_ivy_id",
+"wound_cleaning"
+],
+"src": [
+"cdc",
+"nih-medline",
+"usda-nrcs"
+]
+},
+{
+"id": "jellyfish_sting",
+"title": "Jellyfish and marine stings",
+"domain": "firstaid",
+"also": [
+"jellyfish",
+"portuguese man o war",
+"stingray",
+"sea urchin"
+],
+"def": "Jellyfish tentacles carry stinging cells that keep firing; treat by removing them and soaking in hot water, not by rubbing.",
+"look": [
+"lines of welts where a tentacle touched",
+"burning pain and itching",
+"trouble breathing or chest pain in severe stings"
+],
+"use": "Rinse the area with seawater (not fresh water), pick off tentacles with tweezers or a gloved hand, and soak in hot water, as hot as is comfortable, for 20 to 45 minutes. Vinegar helps with some species.",
+"not": "Do not rinse with fresh water, rub with sand, or use urine.",
+"call": "Call emergency services for trouble breathing, chest pain, a large area stung, or a stingray puncture.",
+"rel": [
+"anaphylaxis_signs",
+"wound_cleaning"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "low_blood_sugar",
+"title": "Low blood sugar (diabetic emergency)",
+"domain": "firstaid",
+"also": [
+"hypoglycemia",
+"diabetic passed out",
+"shaky and sweaty",
+"insulin shock",
+"blood sugar low"
+],
+"def": "Low blood sugar in a person with diabetes causes shakiness, sweating, and confusion and is fixed fast with sugar.",
+"look": [
+"shaky, sweaty, hungry, and anxious",
+"confusion, slurred speech, or odd behavior",
+"drowsy, seizure, or unconscious in severe cases"
+],
+"use": "If they are awake and can swallow, give fast sugar such as juice, glucose tablets, or regular soda, then a snack. Call for help if it does not improve in about 15 minutes.",
+"not": "Do not give food or drink to someone who is unconscious or cannot swallow, and do not give insulin.",
+"call": "Call emergency services if they are unconscious, having a seizure, or are not better in 15 minutes.",
+"rel": [
+"fainting",
+"unconscious_person"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "fever_adult",
+"title": "Fever in an adult",
+"domain": "firstaid",
+"also": [
+"high temperature",
+"running a fever",
+"hot and chills"
+],
+"def": "A fever is a body temperature of about 38 C (100.4 F) or higher, usually a sign the body is fighting an infection.",
+"look": [
+"hot skin, chills, sweating, and aches",
+"temperature above 38 C (100.4 F)",
+"stiff neck, rash, confusion, or trouble breathing are red flags"
+],
+"use": "Rest, drink fluids, and dress lightly. Over-the-counter fever reducers can help if used as the label says. Watch for signs of getting worse.",
+"not": "Do not give aspirin to children or teens, do not bundle up in heavy covers, and do not ignore a fever that lasts more than a few days.",
+"call": "Call emergency services or get care for a stiff neck, severe headache, confusion, trouble breathing, a fever over 40 C (104 F), or fever with a new rash.",
+"rel": [
+"sepsis_signs",
+"hydration_basics"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "vomiting_diarrhea",
+"title": "Vomiting and diarrhea",
+"domain": "firstaid",
+"also": [
+"stomach bug",
+"food poisoning",
+"traveler's diarrhea",
+"gastroenteritis",
+"upset stomach"
+],
+"def": "Vomiting and diarrhea are the body's way of clearing a gut infection or toxin; the main danger is dehydration.",
+"look": [
+"frequent loose stools or vomiting",
+"dry mouth, dark urine, dizziness",
+"blood in stool, high fever, or severe belly pain are red flags"
+],
+"use": "Rest, take frequent small sips of clean water or oral rehydration solution, and eat bland food when you can. Wash hands carefully and keep clear of food prep.",
+"not": "Do not drink untreated water, and do not give anti-diarrhea medicine to young children or when there is high fever or blood.",
+"call": "Call emergency services or get care for blood, high fever, severe pain, signs of dehydration, an infant, or illness lasting more than a couple of days.",
+"rel": [
+"oral_rehydration",
+"hydration_basics"
+],
+"src": [
+"cdc",
+"nih-medline",
+"atp3-50-21"
+]
+},
+{
+"id": "abdominal_pain_red_flags",
+"title": "Belly pain: when it is urgent",
+"domain": "firstaid",
+"also": [
+"stomach ache",
+"appendicitis",
+"severe stomach pain",
+"belly pain"
+],
+"def": "Most belly pain is minor, but pain that is severe, constant, or moving to the lower right can be appendicitis or another emergency.",
+"look": [
+"pain that starts near the navel and moves to the lower right",
+"rigid, tender belly, fever, vomiting",
+"pain with fainting, black stool, or vomiting blood"
+],
+"use": "Rest, take nothing by mouth if you may need surgery, and get medical care quickly if pain is severe or getting worse.",
+"not": "Do not give laxatives or heat pads on a painful belly, and do not wait if the pain is severe.",
+"call": "Call emergency services for severe or worsening pain, rigid belly, fever with pain, or pain after an injury.",
+"rel": [
+"internal_bleeding",
+"vomiting_diarrhea"
+],
+"src": [
+"nih-medline",
+"cdc"
+]
+},
+{
+"id": "childbirth_field",
+"title": "Emergency childbirth",
+"domain": "firstaid",
+"also": [
+"baby coming now",
+"giving birth",
+"delivery in the field",
+"woman in labor"
+],
+"def": "When a baby is crowning and cannot be reached by help in time, you can support the delivery, keep the baby warm, and wait for emergency services.",
+"look": [
+"contractions a minute or two apart, urge to push",
+"the baby's head is visible",
+"water has broken"
+],
+"use": "Call emergency services, put clean towels under her, let her push, and support the baby's head as it emerges. Dry and wrap the baby, place the baby on her chest, and keep both warm.",
+"not": "Do not pull the baby, cut the cord, or pull on the placenta. Do not push the baby back.",
+"call": "Call emergency services right away; stay on the phone with the dispatcher if you can.",
+"rel": [
+"newborn_care",
+"shock_position"
+],
+"src": [
+"nih-medline",
+"cdc",
+"atp4-02-11"
+]
+},
+{
+"id": "newborn_care",
+"title": "Care of a newborn",
+"domain": "firstaid",
+"also": [
+"baby just born",
+"keep a newborn warm",
+"infant born outside"
+],
+"def": "A newborn loses heat quickly, so drying, warming, and watching the breathing are the first jobs.",
+"look": [
+"baby cries or breathes within seconds",
+"wet, slippery, and cold skin",
+"blue color or no breathing needs help"
+],
+"use": "Dry the baby, wrap in warm dry cloths with the head covered, and hold skin-to-skin against the mother. Keep the face clear and note the time of birth.",
+"not": "Do not slap or shake the baby, do not bathe the baby, and do not cut the cord unless told to by a dispatcher.",
+"call": "Call emergency services; if the baby is not breathing, rub the back firmly and follow the dispatcher.",
+"rel": [
+"childbirth_field",
+"hypothermia_stages"
+],
+"src": [
+"nih-medline",
+"cdc"
+]
+},
+{
+"id": "miscarriage_bleeding",
+"title": "Heavy bleeding in pregnancy",
+"domain": "firstaid",
+"also": [
+"bleeding while pregnant",
+"miscarriage",
+"pregnancy emergency"
+],
+"def": "Bleeding, severe pain, or fainting in a pregnant woman can be serious and needs medical help.",
+"look": [
+"vaginal bleeding with cramps or pain",
+"dizzy, pale, faint, or severe one-sided belly pain",
+"fluid leaking or no baby movement late in pregnancy"
+],
+"use": "Have her lie down on her left side, keep her warm and calm, and get emergency help. Note how many pads she is soaking.",
+"not": "Do not put anything in the vagina, and do not wait to see if it passes.",
+"call": "Call emergency services for heavy bleeding, severe pain, or fainting.",
+"rel": [
+"shock_position",
+"childbirth_field"
+],
+"src": [
+"nih-medline",
+"cdc"
+]
+},
+{
+"id": "altitude_sickness_levels",
+"title": "Altitude sickness: mild versus dangerous",
+"domain": "firstaid",
+"also": [
+"AMS",
+"HAPE",
+"HACE",
+"mountain sickness",
+"can't breathe at altitude"
+],
+"def": "Altitude sickness is an illness from too little oxygen at height; mild forms ease with rest, but fluid on the lungs or brain is life-threatening.",
+"look": [
+"mild: headache, nausea, poor sleep, tiredness",
+"HAPE: breathlessness at rest, wet cough, pink froth",
+"HACE: stumbling, confusion, severe headache"
+],
+"use": "Stop climbing, rest, drink water, and descend if symptoms are getting worse. Dangerous forms need immediate descent.",
+"not": "Do not keep going up with symptoms, and do not sleep higher until symptoms clear.",
+"call": "Call emergency services or start descent immediately for breathlessness at rest, confusion, loss of balance, or a wet cough.",
+"rel": [
+"altitude_descend",
+"hydration_basics"
+],
+"src": [
+"nps",
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "poisoning_swallowed",
+"title": "Swallowed poison or overdose",
+"domain": "firstaid",
+"also": [
+"swallowed something poisonous",
+"child ate pills",
+"drank cleaner",
+"poison control"
+],
+"def": "For a swallowed poison, the quickest help is poison control or emergency services, who tell you exactly what to do for that substance.",
+"look": [
+"an opened container, plants, berries, or pills nearby",
+"vomiting, drowsiness, confusion, or burns around the mouth",
+"a child who may have swallowed something"
+],
+"use": "Call poison control (US 1-800-222-1222) or emergency services right away, have the container or plant with you, and follow their directions. Keep the person awake and calm.",
+"not": "Do not make the person vomit, give salt water, or give milk or other home remedies unless told to.",
+"call": "Call poison control or emergency services immediately; do not wait for symptoms.",
+"rel": [
+"fainting"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+}
+]
