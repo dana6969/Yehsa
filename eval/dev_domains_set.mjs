@@ -891,5 +891,236 @@ export const DOMAIN_DEV_SET = [
     "how much water to carry"
    ]
   }
+ },
+ {
+  "id": "dom-family-emergency-plan",
+  "category": "domain-family",
+  "prompt": "Tell me about family plan",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "family emergency plan and meeting points"
+   ]
+  }
+ },
+ {
+  "id": "dom-child-lost-woods",
+  "category": "domain-family",
+  "prompt": "Tell me about kid lost in woods",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "what to teach a child about being lost in the woods"
+   ]
+  }
+ },
+ {
+  "id": "dom-child-calls-emergency",
+  "category": "domain-family",
+  "prompt": "Tell me about teach kids to call 911",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "how a child calls 911"
+   ]
+  }
+ },
+ {
+  "id": "dom-child-cold-infant",
+  "category": "domain-family",
+  "prompt": "Tell me about baby hypothermia",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "keeping children warm and spotting cold stress in infants"
+   ]
+  }
+ },
+ {
+  "id": "dom-child-dehydration-fever",
+  "category": "domain-family",
+  "prompt": "Tell me about child dehydrated",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "dehydration and fever in a child"
+   ]
+  }
+ },
+ {
+  "id": "dom-kids-prevention-rules",
+  "category": "domain-family",
+  "prompt": "Tell me about kids safety outdoors",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "kids outdoors"
+   ]
+  }
+ },
+ {
+  "id": "dom-infant-formula-unsafe-water",
+  "category": "domain-family",
+  "prompt": "Tell me about baby formula water",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "infant formula when the water is unsafe"
+   ]
+  }
+ },
+ {
+  "id": "dom-child-in-vehicle",
+  "category": "domain-family",
+  "prompt": "Tell me about child left in car",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "a child left in a vehicle is an emergency"
+   ]
+  }
+ },
+ {
+  "id": "dom-pet-kit-evacuation",
+  "category": "domain-family",
+  "prompt": "Tell me about pet emergency kit",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "pet kit, pet evacuation, and pet poisoning"
+   ]
+  }
+ },
+ {
+  "id": "dom-talk-kids-emergency",
+  "category": "domain-family",
+  "prompt": "Tell me about kids scared storm",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "talking to children during an emergency"
+   ]
+  }
+ },
+ {
+  "id": "dom-reunification-after-disaster",
+  "category": "domain-family",
+  "prompt": "Tell me about find family after disaster",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "reuniting a family after a storm or evacuation"
+   ]
+  }
+ },
+ {
+  "id": "dom-school-pickup-plan",
+  "category": "domain-family",
+  "prompt": "Tell me about school emergency pickup",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "school or daycare pickup when phones or roads fail"
+   ]
+  }
+ },
+ {
+  "id": "dom-child-carrier-trail",
+  "category": "domain-family",
+  "prompt": "Tell me about hiking with a baby",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "child carriers and trail safety with little ones"
+   ]
+  }
+ },
+ {
+  "id": "dom-shared-kit-meds",
+  "category": "domain-family",
+  "prompt": "Tell me about family medicines trip",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "shared kit"
+   ]
+  }
+ },
+ {
+  "id": "dom-pets-outage-weather",
+  "category": "domain-family",
+  "prompt": "Tell me about pets cold weather",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "pets in a power outage, heat, or cold"
+   ]
+  }
+ },
+ {
+  "id": "dom-after-hard-event-kids",
+  "category": "domain-family",
+  "prompt": "Tell me about kid saw something scary",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "helping children after a hard event"
+   ]
+  }
+ },
+ {
+  "id": "dom-youth-hunts-link",
+  "category": "domain-family",
+  "prompt": "Tell me about youth deer season",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "youth seasons and mentored hunts"
+   ]
+  }
+ },
+ {
+  "id": "dom-teen-crisis-support",
+  "category": "domain-family",
+  "prompt": "Tell me about teen depressed",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "supporting a teenager in crisis"
+   ]
+  }
+ },
+ {
+  "id": "dom-emergency-info-card",
+  "category": "domain-family",
+  "prompt": "Tell me about medical info card",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "emergency contact and medical card"
+   ]
+  }
+ },
+ {
+  "id": "dom-check-older-relatives",
+  "category": "domain-family",
+  "prompt": "Tell me about check on elderly parent",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "checking on older relatives and neighbors"
+   ]
+  }
+ },
+ {
+  "id": "dom-kids-water-safety",
+  "category": "domain-family",
+  "prompt": "Tell me about kids drowning",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "children and water"
+   ]
+  }
  }
 ];

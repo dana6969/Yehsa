@@ -330,7 +330,9 @@
 ],
 "use": "Use repellent on exposed skin as the label directs, treat boots and pants with permethrin, and do a tick check after.",
 "not": "Do not put permethrin on skin, spray repellent on a child's hands, or use oil of lemon eucalyptus on children under three.",
-"rel": [],
+"rel": [
+"kids_prevention_rules"
+],
 "src": [
 "cdc",
 "epa"
