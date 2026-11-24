@@ -14,6 +14,7 @@ import {
   searchLearned
 } from "../../symbolic/learned_notes.js";
 import { Action, Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
+import { WebLearnedSection } from "./WebLearnCards.js";
 
 // What Yehsa has learned. Copy and layout follow /workspace/yehsa-design/fixes-handoff.md §2.
 export default function LearnedPane({ store, deviceId, onChange, onShare, onBack, backLabel, onOpenDid }) {
@@ -137,6 +138,7 @@ export default function LearnedPane({ store, deviceId, onChange, onShare, onBack
           </View>
         </View>
       ) : null}
+      <WebLearnedSection />
       {onOpenDid ? (
         <Pressable accessibilityRole="link" onPress={onOpenDid} style={styles.link}>
           <Text style={styles.linkText}>What Yehsa did</Text>

@@ -75,6 +75,10 @@ import { sendToModel } from "./model_client.js";
 import { deleteModelKey, readModelKey, saveModelKey } from "./model_secrets.js";
 import ModelsPane from "./ModelsPane.js";
 import LearnedPane from "./LearnedPane.js";
+import { AnswerReview, LookupOffer, MISS_OFFER } from "./WebLearnCards.js";
+import { useWebLearn, webLearn } from "./web_learn.js";
+import { outboundQuery, queryAllowed } from "../../symbolic/web/sources.js";
+import { guessState } from "./radio_data.js";
 import PictureGuide, { CorpusHealth } from "./PictureGuide.js";
 import pictureManifest from "../../assets/pictures/manifest.json";
 import { creditLine, friendlySource, imageHref, picturesFor } from "../../symbolic/picture_guide.js";
@@ -668,6 +672,8 @@ export default function YehsaApp() {
 }
 
 function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
+  // Look it up: kept web answers, and the review cards for fresh ones.
+  const web = useWebLearn();
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [messages, setMessages] = useState([]);
@@ -767,9 +773,33 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
     return undefined;
   }, [active]);
 
+  const messageSeq = useRef(0);
   function pushMessage(message) {
-    setMessages((current) => [...current, { id: `m-${Date.now()}-${current.length}`, ...message }]);
+    messageSeq.current += 1;
+    const id = `m-${Date.now()}-${messageSeq.current}`;
+    setMessages((current) => [...current, { id, ...message }]);
     setTimeout(() => threadRef.current?.scrollToEnd?.({ animated: false }), 50);
+    return id;
+  }
+
+  // The state for a link-only wildlife page, guessed on this phone from a held position. Nothing is sent.
+  function homeStateNow() {
+    const fix = position?.consent === true && position.status === "locked" ? position.fix : null;
+    try {
+      return fix ? guessState(fix.latitude, fix.longitude) || null : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function lookUpLive(text, id) {
+    webLearn.lookUp(text, { homeState: homeStateNow() }).then((result) => {
+      if (result.ok) {
+        patchMessage(id, { reviewNoteId: result.note.id, reviewSent: result.sent });
+      } else {
+        patchMessage(id, { text: `${result.reason} ${result.offline ? "" : "Want it saved to try again later?"}`.trim(), lookupOffer: { question: text } });
+      }
+    }).catch(() => patchMessage(id, { text: MISS_OFFER, lookupOffer: { question: text } }));
   }
 
   function applyCard(card) {
@@ -1080,8 +1110,10 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
         if (domainOf(text) === "trip") return tripResult();
         return answerOne(text);
       };
-      run().then((result) => {
+      run().then((found) => {
         if (askGen.current !== generation) return;
+        // A kept "Learned, from ..." note answers offline when the field notes had nothing.
+        const result = !found?.answered ? (webLearn.answer(text) || found) : found;
         const provider = selectedProvider(models);
         const askedModel = intent.type === "ask-model";
         const questionForModel = askedModel ? intent.payload.question : text;
@@ -1148,6 +1180,17 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
         priorRef.current = { utterance: text };
         const voiced = voiceReply(result, text, threadMem.current);
         threadMem.current = voiced.thread;
+        if (!result?.answered && queryAllowed(outboundQuery(text)).ok) {
+          // A miss offers Look it up. With live look-ups on, it looks right away; the answer still waits for Keep or Toss.
+          setPhase("miss");
+          if (web.store.enabled) {
+            const id = pushMessage({ role: "yehsa", text: `I don't have that yet. Looking it up now. Only the words "${outboundQuery(text)}" leave this phone.`, question: text });
+            lookUpLive(text, id);
+          } else {
+            pushMessage({ role: "yehsa", text: MISS_OFFER, lookupOffer: { question: text }, question: text });
+          }
+          return;
+        }
         setPhase(result?.answered ? "ready" : "miss");
         pushMessage({
           role: "yehsa",
@@ -1441,6 +1484,20 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
                 onCancel={() => patchMessage(item.id, { feedback: null, reason: null, detail: "" })}
               />
             ) : null}
+            {item.role === "yehsa" && item.lookupOffer ? (
+              <LookupOffer
+                question={item.lookupOffer.question}
+                done={item.lookupDone}
+                live={false}
+                onSaved={(note) => patchMessage(item.id, { lookupDone: note })}
+              />
+            ) : null}
+            {item.role === "yehsa" && item.reviewNoteId ? (() => {
+              const note = web.store.notes.find((entry) => entry.id === item.reviewNoteId && entry.status === "waiting");
+              return note
+                ? <AnswerReview note={note} sent={item.reviewSent} onDone={(note2) => patchMessage(item.id, { reviewDone: note2 })} />
+                : <Quiet>{item.reviewDone || "Reviewed. See Me, Learned."}</Quiet>;
+            })() : null}
             {item.card && gate.pending?.id === item.card.id ? (
               <View style={styles.card}>
                 <Text style={styles.bubbleText}>{item.card.label}</Text>
