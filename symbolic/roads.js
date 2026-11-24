@@ -1,51 +1,66 @@
-// The built-in offline road and street layer: OpenStreetMap roads with names, bundled in the app
-// as vector MBTiles shards (see tools/roads/ and docs/map-layers.md). Pure: no files, no network.
-// The phone side (src/phone/roads_store.native.js) installs and opens the shards; the loopback
-// tile server serves /roads/{z}/{x}/{y} and /glyphs/{fontstack}/{range}.pbf from them.
+// The road and street layer on the Map and Hunt map. Drawn from the offline OpenStreetMap road
+// graphs that routing already ships (assets/routing/<state>.yrg, read with roadsInBox), so the app
+// carries one copy of the roads. Pure: no files, no network. Road names are drawn with a small
+// bundled font served by the loopback tile server at /glyphs/{fontstack}/{range}.pbf.
 
-import ROADS_MANIFEST from "./roads_manifest.js";
+import { GLYPH_BASE64 } from "./road_glyphs.js";
 
 export const ROADS_ATTRIBUTION = "Roads and street names: © OpenStreetMap contributors, ODbL 1.0";
 export const ROAD_FONT = "Noto Sans Regular";
-// Glyph ranges bundled with the app (Latin, Latin Extended, punctuation). Others get an empty range.
-export const GLYPH_RANGES = ["0-255", "256-511", "8192-8447"];
+// Glyph ranges bundled with the app (Latin and punctuation). Others get an empty range.
+export const GLYPH_RANGES = Object.keys(GLYPH_BASE64);
+// Below this zoom the packs' own picture is enough; roads would be too many to read from the graph.
+export const ROADS_MIN_ZOOM = 9;
 
-const STATE_NAMES = {
-  "rhode-island": "Rhode Island", maine: "Maine", "new-hampshire": "New Hampshire", vermont: "Vermont",
-  massachusetts: "Massachusetts", connecticut: "Connecticut", "new-york": "New York", pennsylvania: "Pennsylvania",
-  michigan: "Michigan", wisconsin: "Wisconsin", minnesota: "Minnesota", colorado: "Colorado",
-  montana: "Montana", idaho: "Idaho", wyoming: "Wyoming"
-};
+// Road class numbers in the routing graph (symbolic/routing/graph_format.js CLASS_NAMES) -> drawing class.
+const GRAPH_CLASS = ["motorway", "motorway", "primary", "secondary", "tertiary", "minor", "minor", "service", "track"];
 
-export function stateLabel(id) {
-  return STATE_NAMES[id] || String(id || "");
+// Highest graph class to read at a zoom: main roads when zoomed out, every street and track close in.
+export function roadMaxClassForZoom(zoom) {
+  if (!(zoom >= ROADS_MIN_ZOOM)) return -1;
+  if (zoom < 10) return 2;
+  if (zoom < 11.5) return 3;
+  if (zoom < 12.5) return 4;
+  if (zoom < 13.5) return 6;
+  return 8;
 }
 
-export function roadsCoverageText(manifest = ROADS_MANIFEST) {
-  const names = (manifest?.states || []).map(stateLabel);
-  if (!names.length) return "No road layer in this build.";
-  const list = names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names.at(-1)}` : names[0];
-  return `Roads and street names for ${list}, built in and offline. OpenStreetMap data from ${manifest.osmDate}. Not every logging road or gate is mapped; check on the ground.`;
+// Most lines handed to the map at once (bigger roads kept first), so a wide view stays smooth.
+export const ROAD_LINE_CAP = 12000;
+const r5 = (n) => Math.round(n * 1e5) / 1e5;
+
+// roadsInBox() GeoJSON -> the drawing's properties: c (class), n (name). Paths are left to the packs.
+export function roadLinesFromGraph(collections, { cap = ROAD_LINE_CAP } = {}) {
+  const features = [];
+  const seen = new Set();
+  for (const fc of collections || []) {
+    for (const f of fc?.features || []) {
+      const cls = f?.properties?.cls;
+      const c = GRAPH_CLASS[cls];
+      if (!c || f.geometry?.type !== "LineString") continue;
+      const a = f.geometry.coordinates[0];
+      const b = f.geometry.coordinates.at(-1);
+      const key = `${a[0]},${a[1]},${b[0]},${b[1]}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const props = { c };
+      if (f.properties.name) props.n = f.properties.name;
+      features.push({ cls, f: { type: "Feature", properties: props, geometry: { type: "LineString", coordinates: f.geometry.coordinates.map((p) => [r5(p[0]), r5(p[1])]) } } });
+    }
+  }
+  if (features.length > cap) features.sort((x, y) => x.cls - y.cls);
+  return { type: "FeatureCollection", features: features.slice(0, cap).map((x) => x.f) };
 }
 
-// Which shard file holds tile z/x/y. Same rule as tools/roads/shard.py.
-export function roadShardFor(x, y, count) {
-  const n = Math.max(1, count | 0);
-  return (((x + y) % n) + n) % n;
+// Pads the view so a small pan does not need a new read.
+export function padBox(box, fraction = 0.25) {
+  const w = (box.east - box.west) * fraction;
+  const h = (box.north - box.south) * fraction;
+  return { west: box.west - w, east: box.east + w, south: box.south - h, north: box.north + h };
 }
 
-// Is this tile inside the road layer at all (zoom and bounds)? Saves a file read for open ocean.
-export function roadTileWanted(z, x, y, manifest = ROADS_MANIFEST) {
-  if (!manifest || z < manifest.minZoom || z > manifest.maxZoom) return false;
-  const b = manifest.bounds;
-  if (!b) return true;
-  const n = 2 ** z;
-  const west = (x / n) * 360 - 180;
-  const east = ((x + 1) / n) * 360 - 180;
-  const lat = (t) => (Math.atan(Math.sinh(Math.PI * (1 - (2 * t) / n))) * 180) / Math.PI;
-  const north = lat(y);
-  const south = lat(y + 1);
-  return east >= b.west && west <= b.east && north >= b.south && south <= b.north;
+export function boxInside(inner, outer) {
+  return Boolean(inner && outer && inner.west >= outer.west && inner.east <= outer.east && inner.south >= outer.south && inner.north <= outer.north);
 }
 
 // Colors per map look. Roads sit above the terrain picture and below marks and the cone.
@@ -96,70 +111,20 @@ export function roadLayerSpecs(look = {}) {
   };
 }
 
-// What the map needs to draw roads, or null when they are off or not installed yet.
-export function roadsLayer({ on = true, ready = false, port = null, look = {}, manifest = ROADS_MANIFEST } = {}) {
-  if (!on || !ready || !port || !manifest?.shards?.length) return null;
+export function glyphsUrl(port) {
+  return port ? `http://127.0.0.1:${port}/glyphs/{fontstack}/{range}.pbf` : null;
+}
+
+// What the map needs to draw roads, or null when they are off. shape: the GeoJSON lines on screen.
+export function roadsLayer({ on = true, port = null, shape = null, look = {} } = {}) {
+  if (!on || !port || !shape?.features?.length) return null;
   return {
     id: "roads",
-    template: `http://127.0.0.1:${port}/roads/{z}/{x}/{y}.pbf`,
-    glyphs: `http://127.0.0.1:${port}/glyphs/{fontstack}/{range}.pbf`,
-    minZoom: manifest.minZoom,
-    maxZoom: manifest.maxZoom,
-    sourceLayer: manifest.layer || "roads",
+    shape,
+    glyphs: glyphsUrl(port),
     specs: roadLayerSpecs(look),
     attribution: ROADS_ATTRIBUTION
   };
-}
-
-// ------------------------------------------------------------------ search by name
-
-// One SQL query for road names. Prefix match first (uses the NOCASE index); `anywhere` also
-// finds a word inside the name ("Ridge" finds "Old Ridge Road").
-export function roadSearchQuery(text, { anywhere = false, limit = 40 } = {}) {
-  const clean = String(text || "").replace(/[%_\\]/g, " ").replace(/\s+/g, " ").trim();
-  if (clean.length < 2) return null;
-  const pattern = anywhere ? `%${clean}%` : `${clean}%`;
-  return {
-    sql: "SELECT name, state, lon, lat, cls FROM road_names WHERE name LIKE ? ESCAPE '\\' LIMIT ?",
-    args: [pattern, limit]
-  };
-}
-
-function km(a, b) {
-  const rad = Math.PI / 180;
-  const dLat = (b.latitude - a.latitude) * rad;
-  const dLon = (b.longitude - a.longitude) * rad;
-  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.latitude * rad) * Math.cos(b.latitude * rad) * Math.sin(dLon / 2) ** 2;
-  return 2 * 6371 * Math.asin(Math.min(1, Math.sqrt(h)));
-}
-
-// Rows from the query, nearest first when we know where you are, each once per ~4 km.
-export function rankRoadHits(rows, { near = null, limit = 12 } = {}) {
-  const seen = new Set();
-  const hits = [];
-  for (const row of rows || []) {
-    const point = { latitude: Number(row.lat), longitude: Number(row.lon) };
-    if (!Number.isFinite(point.latitude) || !Number.isFinite(point.longitude)) continue;
-    const key = `${String(row.name).toLowerCase()}|${Math.round(point.latitude * 25)}|${Math.round(point.longitude * 20)}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    const distanceKm = near ? km(near, point) : null;
-    hits.push({ name: row.name, state: stateLabel(row.state), cls: row.cls, ...point, distanceKm });
-  }
-  hits.sort((a, b) => (a.distanceKm ?? 0) - (b.distanceKm ?? 0) || a.name.localeCompare(b.name));
-  return hits.slice(0, limit);
-}
-
-export function roadHitText(hit) {
-  const where = hit.distanceKm == null ? hit.state : `${hit.state}, ${hit.distanceKm < 10 ? hit.distanceKm.toFixed(1) : Math.round(hit.distanceKm)} km away`;
-  return `${hit.name} · ${where}`;
-}
-
-// A small box around a hit, for "Show on map".
-export function roadHitBox(hit, halfKm = 0.6) {
-  const dLat = halfKm / 111;
-  const dLon = halfKm / (111 * Math.max(0.2, Math.cos((hit.latitude * Math.PI) / 180)));
-  return { west: hit.longitude - dLon, east: hit.longitude + dLon, south: hit.latitude - dLat, north: hit.latitude + dLat };
 }
 
 // ------------------------------------------------------------------ glyphs
@@ -192,4 +157,20 @@ export function glyphRangeOk(range) {
   return lo % 256 === 0 && hi === lo + 255 && hi <= 65535;
 }
 
-export { ROADS_MANIFEST };
+function fromBase64(text) {
+  if (typeof Buffer !== "undefined") return new Uint8Array(Buffer.from(text, "base64"));
+  const binary = globalThis.atob(text);
+  const out = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) out[i] = binary.charCodeAt(i);
+  return out;
+}
+
+const glyphBytes = new Map();
+
+// The bytes for one glyph range of the label font (an empty range when we do not ship it).
+export function glyphRange(fontstack, range) {
+  if (!glyphRangeOk(range)) return null;
+  if (!GLYPH_BASE64[range]) return emptyGlyphRange(fontstack, range);
+  if (!glyphBytes.has(range)) glyphBytes.set(range, fromBase64(GLYPH_BASE64[range]));
+  return glyphBytes.get(range);
+}

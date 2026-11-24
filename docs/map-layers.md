@@ -8,36 +8,21 @@ keep them updated", Nov 24, 2026). Both are switches in **Layers and packs → R
 
 | | |
 | --- | --- |
-| What | Roads, streets, tracks and logging roads with names and route numbers, as vector tiles |
-| Where it shows | Map and Hunt map (same map view), above the terrain picture, below marks and the scent cone |
-| Source | OpenStreetMap, via Geofabrik state extracts (`https://download.geofabrik.de/north-america/us/<state>-latest.osm.pbf`) |
-| License | Open Database License (ODbL) 1.0. Credit: "© OpenStreetMap contributors". Shown in About this map. |
-| Coverage | Every state that has a Yehsa map pack: Rhode Island, Maine, New Hampshire, Vermont, Massachusetts, Connecticut, New York, Pennsylvania, Michigan, Wisconsin, Minnesota, Colorado, Montana, Idaho, Wyoming (list in `symbolic/roads_manifest.js`) |
-| Zooms | 6 to 14 (the map overzooms 14 for closer views). Highways from 6, main roads 7 to 10, local streets and tracks from 12, named service roads at 14 |
-| Kept from OSM | Road class (`c`), name (`n`), route number (`r`). Nothing else: no addresses, no access notes, no people |
-| Left out | Driveways, parking aisles, drive-throughs, unnamed service roads |
-| Search | "Find a road by name" searches `assets/roads/road-names.db` (one row per named road per ~4 km), nearest first; "Show" frames it on the map |
-| Font | Noto Sans Regular glyphs (Latin, Latin Extended, punctuation) from protomaps/basemaps-assets, SIL Open Font License 1.1 (`assets/roads/glyphs/OFL.txt`) |
+| What | Roads, streets, tracks and logging roads with names, drawn as lines with name labels |
+| Where it shows | Map and Hunt map (same map view), above the terrain picture, below marks and the scent cone. Also shows with no map pack yet |
+| Data | The offline OpenStreetMap road graphs that routing (PR #33) already bundles, `assets/routing/<state>.yrg`, read with `createRouteService().roadsInBox(region, box, { maxClass })`. **No second copy of the roads is bundled; this layer adds no road data to the APK** |
+| Source / license | OpenStreetMap via Geofabrik extracts, Open Database License (ODbL) 1.0. Credit "© OpenStreetMap contributors", shown in About this map |
+| Coverage | The 15 map-pack states in `symbolic/routing/regions.js` (Colorado, Connecticut, Idaho, Maine, Massachusetts, Michigan, Minnesota, Montana, New Hampshire, New York, Pennsylvania, Rhode Island, Vermont, Wisconsin, Wyoming) |
+| Detail by zoom | Below 9: none (the packs show the land). 9 to 10: motorways, trunk, primary, secondary. 10 to 11.5: plus tertiary. 11.5 to 13: plus local and residential streets. 13 and closer: plus service roads and tracks (dashed). Paths and trails stay with the packs |
+| Kept | Road class and name only (`c`, `n`) |
+| How | After the map stops moving, the road lines for the state under the middle of the screen are read for the view plus 40% padding; panning inside that box reads nothing new. One state graph is in memory at a time (shared with routing) |
+| Search by name | Use the Map search from routing (streets in the graph and places) |
+| Font | Noto Sans Regular map glyphs (ranges 0-255 and 8192-8447) from protomaps/basemaps-assets, SIL Open Font License 1.1 (`docs/fonts-OFL.txt`), in `symbolic/road_glyphs.js` (~190 KB), served by the loopback tile server at `/glyphs/{fontstack}/{range}.pbf` (127.0.0.1 only). Other ranges get an empty range |
 
-How it works on the phone: the shard files ship inside the APK (`assets/roads/roads-<k>.mbtiles`,
-each under 45 MB because GitHub rejects files over 100 MB). The first time the map needs roads they
-are moved once into expo-sqlite's folder; a marker file holds the manifest version so an app update
-with new road data replaces them. The loopback tile server (127.0.0.1 only) serves
-`/roads/{z}/{x}/{y}.pbf` from shard `(x + y) % shards` and `/glyphs/{fontstack}/{range}.pbf`.
-Nothing goes over the network.
+To refresh the roads, rebuild the routing graphs (`tools/routing/build_all.sh`, see `docs/routing.md`).
+Not every logging road, gate or closure is mapped.
 
-Rebuild (needs `osmium-tool`, felt/tippecanoe and python3):
-
-```
-tools/roads/build_roads.sh                 # all states
-tools/roads/build_roads.sh rhode-island    # one state (for a quick check)
-```
-
-It writes the shards, `road-names.db`, `symbolic/roads_manifest.js` and
-`src/phone/roads_assets.native.js`. OSM is edited daily, so rebuild when you want fresher roads;
-not every logging road, gate or closure is mapped.
-
-The downloaded offline **areas** (terrain tiles) still carry no roads; the road layer draws them.
+The downloaded offline **areas** (terrain tiles) still carry no roads; this layer draws them.
 The raster **map packs** (`tools/mappacks/`) are unchanged.
 
 ## Property lines (Hunt map; online, then saved)

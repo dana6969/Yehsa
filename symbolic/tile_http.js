@@ -9,10 +9,9 @@ export function parseRequest(text) {
   return { method: method || "GET", path };
 }
 
-const TILE_KINDS = new Set(["pack", "area", "roads"]);
+const TILE_KINDS = new Set(["pack", "area"]);
 
 // /pack/{z}/{x}/{y}  merged raster packs   /area/{z}/{x}/{y}  saved offline areas
-// /roads/{z}/{x}/{y}.pbf  the built-in road layer (vector)
 // /glyphs/{fontstack}/{range}.pbf  label font for road names
 export function routeTile(path) {
   const parts = String(path || "").split("/").filter(Boolean);
@@ -44,8 +43,7 @@ export function contentTypeFor(bytes) {
   return "application/octet-stream";
 }
 
-// Vector tiles and glyphs are protobuf. Tiles from MBTiles are usually gzip, which the map's
-// HTTP client undoes itself when the reply says Content-Encoding: gzip.
+// Glyphs are protobuf; if one is ever gzip, say so and the map's HTTP client undoes it.
 export function isGzip(bytes) {
   return Boolean(bytes && bytes.length > 2 && bytes[0] === 0x1f && bytes[1] === 0x8b);
 }
@@ -65,7 +63,7 @@ export function buildResponse(status, body, type = "text/plain", encoding = null
   return out;
 }
 
-// providers: { pack(z, x, y), area(z, x, y), roads(z, x, y) -> Promise<Uint8Array|null>,
+// providers: { pack(z, x, y), area(z, x, y) -> Promise<Uint8Array|null>,
 //   glyphs(fontstack, range) -> Promise<Uint8Array|null> }
 export async function handleRequest(text, providers) {
   const { method, path } = parseRequest(text);
@@ -79,11 +77,6 @@ export async function handleRequest(text, providers) {
       return buildResponse(200, glyphs, "application/x-protobuf", isGzip(glyphs) ? "gzip" : null);
     }
     const body = await providers[route.kind]?.(route.z, route.x, route.y);
-    if (route.kind === "roads") {
-      // An empty vector tile is a valid answer (no roads there), so the map does not retry it.
-      if (!body || !body.length) return buildResponse(204, null, "application/x-protobuf");
-      return buildResponse(200, body, "application/x-protobuf", isGzip(body) ? "gzip" : null);
-    }
     if (!body || !body.length) return buildResponse(404, null);
     return buildResponse(200, body, contentTypeFor(body));
   } catch {

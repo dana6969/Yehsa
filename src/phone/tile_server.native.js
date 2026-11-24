@@ -9,7 +9,7 @@ import { handleRequest, isLoopback } from "../../symbolic/tile_http.js";
 import { createPackTiles, tileTouches } from "../../symbolic/pack_tiles.js";
 import { openMbtiles } from "./pack_files";
 import { readRender } from "./area_store";
-import { glyphRange, roadTile } from "./roads_store";
+import { glyphRange } from "../../symbolic/roads.js";
 
 const packTiles = createPackTiles();
 const open = new Map(); // pack id -> Promise<reader>
@@ -67,9 +67,8 @@ async function areaTile(z, x, y) {
 const providers = {
   pack: (z, x, y) => packTiles.get(z, x, y),
   area: areaTile,
-  // The built-in road layer and the font for its names. Both are files inside the app.
-  roads: roadTile,
-  glyphs: glyphRange
+  // The font for road names on the map, bundled in the app.
+  glyphs: async (fontstack, range) => glyphRange(fontstack, range)
 };
 
 export function startTileServer() {

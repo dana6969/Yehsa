@@ -3,7 +3,7 @@
 // coming back (the screen is rebuilt) draws exactly what it drew before.
 
 import { attributionLine } from "./map_packs.js";
-import { ROADS_ATTRIBUTION, roadsLayer } from "./roads.js";
+import { ROADS_ATTRIBUTION, glyphsUrl, roadsLayer } from "./roads.js";
 
 export const MAP_STYLES = [
   { id: "standard", label: "Standard" },
@@ -58,7 +58,7 @@ function zoomRange(items) {
 }
 
 // store: the pack store. areas: saved areas. port: loopback tile server port (null until bound).
-// roads: { on, ready } for the built-in road layer (off unless given).
+// roads: { on, shape } for the road layer (GeoJSON lines on screen; off unless given).
 export function mapLayers({ store, areas = [], port = null, style = "standard", mode = "field", night = "red", roads = null } = {}) {
   const packs = store?.packs || [];
   const tiled = tilePacks(packs);
@@ -88,8 +88,10 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
     });
   }
   const archivePack = packs.find((pack) => pack.archive) || null;
-  const roadLayer = roads ? roadsLayer({ on: roads.on, ready: roads.ready, port, look: { style, mode, night } }) : null;
-  const empty = !tiled.length && !drawn.length && !shapes.length && !archivePack && !roadLayer;
+  const roadLayer = roads ? roadsLayer({ on: roads.on, shape: roads.shape, port, look: { style, mode, night } }) : null;
+  // With roads on, the map shows even with no pack yet: zoom in and the streets draw.
+  const roadsWanted = Boolean(roads?.on && port);
+  const empty = !tiled.length && !drawn.length && !shapes.length && !archivePack && !roadsWanted;
   const hasLand = shapes.some((line) => line.ring);
   const look = rasterPaintFor({ style, mode, night });
   const sources = [];
@@ -103,6 +105,8 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
     waitingForTiles: (tiled.length > 0 || drawn.length > 0) && !port,
     rasters,
     roads: roadLayer,
+    // The road-name font; kept while roads are on so the map style does not reload as you zoom.
+    glyphs: roadsWanted ? glyphsUrl(port) : null,
     archivePack,
     shapes,
     hasLand,
@@ -173,7 +177,7 @@ export function aboutThisMap({ packs = [], drawn = [], roads = false } = {}) {
     if (!lines.includes(line)) lines.push(line);
   }
   if (drawn.length) lines.push(`${drawn.length === 1 ? "1 downloaded area" : `${drawn.length} downloaded areas`}. Terrain and elevation only. No roads.`);
-  if (roads) lines.push("Roads and streets. Built into the app, from OpenStreetMap.");
+  if (roads) lines.push("Roads and streets. Built into the app (the offline road data routing uses), from OpenStreetMap.");
   const named = attributionLine({ packs: packs.filter((pack) => pack.attribution) });
   let credit = /^No map pack yet\.$/.test(named) ? "" : named;
   // The pack credit already names AWS Terrain Tiles; only add it when a downloaded area is the sole elevation source.

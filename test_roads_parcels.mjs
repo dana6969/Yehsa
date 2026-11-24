@@ -4,97 +4,56 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { DatabaseSync } from "node:sqlite";
-import { gunzipSync } from "fflate";
 import {
-  ROADS_MANIFEST, emptyGlyphRange, glyphRangeOk, rankRoadHits, roadHitBox, roadHitText, roadLayerSpecs, roadSearchQuery,
-  roadShardFor, roadTileWanted, roadsCoverageText, roadsLayer
+  GLYPH_RANGES, boxInside, emptyGlyphRange, glyphRange, glyphRangeOk, padBox, roadLayerSpecs, roadLinesFromGraph, roadMaxClassForZoom, roadsLayer
 } from "./symbolic/roads.js";
+import { createRouteService, regionsAt } from "./symbolic/routing/route_service.js";
 import {
   PARCEL_GAPS, PARCEL_MIN_ZOOM, PARCEL_REFRESH_DAYS, PARCEL_SOURCES, cellFromKey, cellsForView, createParcelCache, fetchCell,
   gapAt, isStale, parcelCoverageList, parcelGeoJson, parcelNote, parcelQueryUrl, ringsFromGeoJson, sourcesAt
 } from "./symbolic/parcels.js";
 import { handleRequest, routeTile } from "./symbolic/tile_http.js";
-import { mbtilesQuery } from "./symbolic/dem_tiles.js";
 import { mapAbout, mapLayers } from "./symbolic/map_layers.js";
 import { viewBoxFrom } from "./symbolic/map_view_box.js";
 
 const DAY = 24 * 60 * 60 * 1000;
 
-function lonLatTile(lon, lat, z) {
-  const x = Math.floor(((lon + 180) / 360) * 2 ** z);
-  const r = (lat * Math.PI) / 180;
-  const y = Math.floor(((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2) * 2 ** z);
-  return { x, y };
-}
+const loadAsset = async (id, kind) => {
+  const file = `assets/routing/${id}.${kind === "graph" ? "yrg" : "ypl"}`;
+  if (!fs.existsSync(file)) return null;
+  return kind === "graph" ? new Uint8Array(fs.readFileSync(file)) : fs.readFileSync(file, "utf8");
+};
 
-// ------------------------------------------------------------------ roads
-
-test("the road manifest lists real shard files under GitHub's size limit, and covers Rhode Island", () => {
-  assert.ok(ROADS_MANIFEST.shards.length >= 1);
-  for (const shard of ROADS_MANIFEST.shards) {
-    const size = fs.statSync(`assets/roads/${shard.file}`).size;
-    assert.equal(size, shard.bytes);
-    assert.ok(size < 50 * 1024 * 1024, `${shard.file} stays under 50 MB`);
+test("roads draw from the routing graphs (one copy of the roads), with class and name only", async () => {
+  const svc = createRouteService({ loadAsset, fetchImpl: async () => { throw new Error("offline"); } });
+  const providence = { longitude: -71.41, latitude: 41.82 };
+  const region = regionsAt(providence)[0];
+  assert.ok(region, "Providence is inside a road region");
+  const box = { west: -71.42, east: -71.40, south: 41.815, north: 41.825 };
+  const fc = await svc.roadsInBox(region.id, box, { maxClass: roadMaxClassForZoom(14) });
+  const lines = roadLinesFromGraph([fc]);
+  assert.ok(lines.features.length > 20, "downtown streets");
+  assert.ok(lines.features.some((f) => f.properties.n), "street names");
+  for (const f of lines.features) {
+    assert.deepEqual(Object.keys(f.properties).filter((k) => !["c", "n"].includes(k)), []);
+    assert.equal(f.geometry.type, "LineString");
   }
-  assert.ok(fs.statSync(`assets/roads/${ROADS_MANIFEST.names.file}`).size < 50 * 1024 * 1024);
-  assert.ok(ROADS_MANIFEST.states.includes("rhode-island"));
-  assert.match(ROADS_MANIFEST.attribution, /OpenStreetMap contributors, ODbL/);
-  assert.match(roadsCoverageText(), /Rhode Island/);
-  const assets = fs.readFileSync("src/phone/roads_assets.native.js", "utf8");
-  for (const shard of ROADS_MANIFEST.shards) assert.ok(assets.includes(`assets/roads/${shard.file}`));
+  const zoomedOut = roadLinesFromGraph([await svc.roadsInBox(region.id, box, { maxClass: roadMaxClassForZoom(9.5) })]);
+  assert.ok(zoomedOut.features.length < lines.features.length);
+  assert.ok(zoomedOut.features.every((f) => ["motorway", "primary"].includes(f.properties.c)));
+  assert.ok(!fs.existsSync("assets/roads"), "no second copy of the roads is bundled");
 });
 
-test("a Rhode Island road tile is found in its shard, unzips to a vector tile, and is served as protobuf", async () => {
-  const { x, y } = lonLatTile(-71.41, 41.82, 14); // Providence
-  assert.equal(roadTileWanted(14, x, y), true);
-  assert.equal(roadTileWanted(5, x >> 9, y >> 9), false, "below the layer's min zoom");
-  const k = roadShardFor(x, y, ROADS_MANIFEST.shards.length);
-  const db = new DatabaseSync(`assets/roads/${ROADS_MANIFEST.shards[k].file}`, { readOnly: true });
-  const q = mbtilesQuery(14, x, y);
-  const row = db.prepare(q.sql).get(...q.args);
-  assert.ok(row?.tile_data, "Providence has roads at z14");
-  const raw = new Uint8Array(row.tile_data);
-  const tile = raw[0] === 0x1f && raw[1] === 0x8b ? gunzipSync(raw) : raw;
-  assert.ok(Buffer.from(tile).includes(Buffer.from("roads")), "layer named roads");
-  db.close();
-  const reply = await handleRequest(`GET /roads/14/${x}/${y}.pbf HTTP/1.1\r\n\r\n`, { roads: async () => tile });
-  const head = Buffer.from(reply).toString("latin1").split("\r\n\r\n")[0];
-  assert.match(head, /^HTTP\/1\.1 200/);
-  assert.match(head, /application\/x-protobuf/);
-  const none = await handleRequest("GET /roads/14/1/1.pbf HTTP/1.1\r\n\r\n", { roads: async () => null });
-  assert.match(Buffer.from(none).toString("latin1"), /^HTTP\/1\.1 204/);
-});
-
-test("the road layer only ever keeps class, name and route number", () => {
-  const db = new DatabaseSync(`assets/roads/${ROADS_MANIFEST.shards[0].file}`, { readOnly: true });
-  const meta = Object.fromEntries(db.prepare("SELECT name, value FROM metadata").all().map((r) => [r.name, r.value]));
-  db.close();
-  const json = JSON.parse(meta.json);
-  const fields = Object.keys(json.vector_layers.find((l) => l.id === "roads").fields).sort();
-  assert.deepEqual(fields, ["c", "n", "r"].filter((f) => fields.includes(f)));
-  assert.ok(fields.includes("c") && fields.includes("n"));
-});
-
-test("road search finds a name by prefix and by a word inside it, nearest first", () => {
-  const db = new DatabaseSync(`assets/roads/${ROADS_MANIFEST.names.file}`, { readOnly: true });
-  const q = roadSearchQuery("Main St");
-  const rows = db.prepare(q.sql).all(...q.args);
-  assert.ok(rows.length > 0);
-  const near = { latitude: 41.82, longitude: -71.41 };
-  const hits = rankRoadHits(rows, { near });
-  assert.ok(hits.every((h, i) => i === 0 || h.distanceKm >= hits[i - 1].distanceKm));
-  assert.match(roadHitText(hits[0]), /Main St.* · .*km away/);
-  const box = roadHitBox(hits[0]);
-  assert.ok(box.west < hits[0].longitude && box.east > hits[0].longitude);
-  const inside = roadSearchQuery("Ridge", { anywhere: true });
-  assert.equal(inside.args[0], "%Ridge%");
-  assert.ok(db.prepare(inside.sql).all(...inside.args).length > 0);
-  const plan = db.prepare(`EXPLAIN QUERY PLAN ${q.sql}`).all(...q.args).map((r) => r.detail).join(" ");
-  assert.match(plan, /road_names_name/, "prefix search uses the index");
-  assert.equal(roadSearchQuery("a"), null);
-  assert.equal(roadSearchQuery("50%_off").args[0], "50 off%");
-  db.close();
+test("road detail follows zoom, and a pan inside the padded box needs no new read", () => {
+  assert.equal(roadMaxClassForZoom(8), -1);
+  assert.equal(roadMaxClassForZoom(9.2), 2);
+  assert.equal(roadMaxClassForZoom(12), 4);
+  assert.equal(roadMaxClassForZoom(15), 8);
+  const box = { west: -71, east: -70.9, south: 42, north: 42.1 };
+  const padded = padBox(box, 0.4);
+  assert.equal(boxInside({ west: -70.98, east: -70.89, south: 42.01, north: 42.11 }, padded), true);
+  assert.equal(boxInside({ west: -71.2, east: -71.1, south: 42, north: 42.1 }, padded), false);
+  assert.equal(roadLinesFromGraph([{ features: [{ properties: { cls: 9, name: "A trail" }, geometry: { type: "LineString", coordinates: [[0, 0], [1, 1]] } }] }]).features.length, 0, "paths stay with the packs");
 });
 
 test("road styles differ by look, tracks are dashed, and labels use the bundled font", () => {
@@ -103,9 +62,10 @@ test("road styles differ by look, tracks are dashed, and labels use the bundled 
   assert.notDeepEqual(day.line.lineColor, night.line.lineColor);
   assert.deepEqual(day.track.lineDasharray, [2, 1.5]);
   assert.deepEqual(day.label.textFont, ["Noto Sans Regular"]);
-  assert.equal(roadsLayer({ on: false, ready: true, port: 1 }), null);
-  assert.equal(roadsLayer({ on: true, ready: false, port: 1 }), null);
-  assert.match(roadsLayer({ on: true, ready: true, port: 9 }).glyphs, /^http:\/\/127\.0\.0\.1:9\/glyphs\/\{fontstack\}\/\{range\}\.pbf$/);
+  const shape = { type: "FeatureCollection", features: [{ type: "Feature", properties: { c: "minor" }, geometry: { type: "LineString", coordinates: [[0, 0], [1, 1]] } }] };
+  assert.equal(roadsLayer({ on: false, port: 1, shape }), null);
+  assert.equal(roadsLayer({ on: true, port: 1, shape: null }), null);
+  assert.match(roadsLayer({ on: true, port: 9, shape }).glyphs, /^http:\/\/127\.0\.0\.1:9\/glyphs\/\{fontstack\}\/\{range\}\.pbf$/);
 });
 
 test("glyph requests route to the bundled font; unknown ranges get a valid empty range", async () => {
@@ -113,7 +73,8 @@ test("glyph requests route to the bundled font; unknown ranges get a valid empty
   assert.equal(routeTile("/glyphs/x/abc.pbf"), null);
   assert.equal(glyphRangeOk("256-511"), true);
   assert.equal(glyphRangeOk("1-256"), false);
-  for (const range of ["0-255", "256-511", "8192-8447"]) assert.ok(fs.statSync(`assets/roads/glyphs/${range}.pbf`).size > 1000);
+  for (const range of GLYPH_RANGES) assert.ok(glyphRange("Noto Sans Regular", range).length > 1000);
+  assert.ok(glyphRange("Noto Sans Regular", "256-511").length < 100, "a range we do not ship is empty, not missing");
   const empty = emptyGlyphRange("Noto Sans Regular", "19968-20223");
   assert.equal(empty[0], 0x0a);
   assert.ok(Buffer.from(empty).includes(Buffer.from("19968-20223")));
@@ -122,13 +83,14 @@ test("glyph requests route to the bundled font; unknown ranges get a valid empty
 });
 
 test("with roads on, the map shows even before any pack, and About credits OpenStreetMap once", () => {
-  const layers = mapLayers({ store: { packs: [] }, areas: [], port: 4100, roads: { on: true, ready: true } });
+  const layers = mapLayers({ store: { packs: [] }, areas: [], port: 4100, roads: { on: true, shape: null } });
   assert.equal(layers.empty, false);
   assert.equal(layers.useMap, true);
+  assert.match(layers.glyphs, /127\.0\.0\.1:4100\/glyphs/);
   const about = mapAbout({ store: { packs: [] }, areas: [], roads: true });
   assert.ok(about.lines.some((l) => /Roads and streets/.test(l)));
   assert.equal((about.credit.match(/OpenStreetMap/g) || []).length, 1);
-  assert.equal(mapLayers({ store: { packs: [] }, areas: [], port: 4100, roads: { on: false, ready: true } }).empty, true);
+  assert.equal(mapLayers({ store: { packs: [] }, areas: [], port: 4100, roads: { on: false } }).empty, true);
 });
 
 // ------------------------------------------------------------------ parcels
@@ -287,6 +249,7 @@ test("docs/map-layers.md names every parcel source, its license, the refresh int
   for (const s of PARCEL_SOURCES) assert.ok(doc.includes(s.url), `${s.state} URL in docs`);
   for (const g of PARCEL_GAPS) assert.ok(doc.includes(g.name));
   assert.match(doc, /ODbL/);
+  assert.match(doc, /roadsInBox/);
   assert.match(doc, /30 days/);
   assert.match(doc, /not a legal survey/i);
 });

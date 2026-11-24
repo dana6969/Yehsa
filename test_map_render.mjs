@@ -242,8 +242,9 @@ test("roads only come from the built-in OpenStreetMap layer, and parcel lines ca
   assert.equal(layers.roads, null);
   const { roads, ...rest } = layers;
   assert.doesNotMatch(JSON.stringify(rest).replace(/OpenStreetMap/g, ""), /road|street|parcel|owner/i);
-  const withRoads = mapLayers({ store: storeWithPack(), areas: [AREA], port: 4000, roads: { on: true, ready: true } });
-  assert.equal(withRoads.roads.template, "http://127.0.0.1:4000/roads/{z}/{x}/{y}.pbf");
+  const shape = { type: "FeatureCollection", features: [{ type: "Feature", properties: { c: "minor", n: "Main St" }, geometry: { type: "LineString", coordinates: [[-69, 45], [-69.01, 45.01]] } }] };
+  const withRoads = mapLayers({ store: storeWithPack(), areas: [AREA], port: 4000, roads: { on: true, shape } });
+  assert.equal(withRoads.roads.shape, shape);
   assert.match(withRoads.attribution, /OpenStreetMap contributors, ODbL/);
   const src = fs.readFileSync("src/phone/OfflineMap.native.js", "utf8");
   assert.doesNotMatch(src, /owner/i);

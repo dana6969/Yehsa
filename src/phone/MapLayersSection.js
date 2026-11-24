@@ -1,11 +1,11 @@
-// "Roads and property lines" in Layers and packs: two switches, road search, and the plain
-// notes on where the lines come from. Shown on the Map and the Hunt map.
+// "Roads and property lines" in Layers and packs: two switches and the plain notes on where the
+// lines come from. Shown on the Map and the Hunt map.
 
 import React, { useState } from "react";
 import { Pressable, Switch, Text, View } from "react-native";
-import { Action, Field, Quiet, themedStyles } from "./ui.js";
+import { Action, Quiet, themedStyles } from "./ui.js";
 import { hit, space, type } from "./tokens.js";
-import { ROADS_MANIFEST, roadHitBox, roadHitText, roadsCoverageText } from "../../symbolic/roads.js";
+import { ROUTE_DATA_BUILT, ROUTE_REGIONS } from "../../symbolic/routing/regions.js";
 import { PARCEL_REFRESH_DAYS, parcelCoverageList } from "../../symbolic/parcels.js";
 
 function Row({ label, value, onChange, hint }) {
@@ -17,22 +17,14 @@ function Row({ label, value, onChange, hint }) {
   );
 }
 
-export default function MapLayersSection({ extras, near, onShowBox }) {
-  const [query, setQuery] = useState("");
-  const [hits, setHits] = useState(null);
-  const [searching, setSearching] = useState(false);
-  const [sources, setSources] = useState(false);
+function coverageText() {
+  const names = ROUTE_REGIONS.map((r) => r.name).sort();
+  const list = names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names.at(-1)}` : names[0] || "";
+  return `Roads and street names for ${list}, offline, from the same OpenStreetMap road data routing uses (built ${ROUTE_DATA_BUILT}). Zoom in to see local streets and tracks. To find a road by name, use the Map search. Not every logging road or gate is mapped; check on the ground.`;
+}
 
-  async function search() {
-    setSearching(true);
-    try {
-      setHits(await extras.search(query, near || null));
-    } catch {
-      setHits([]);
-    } finally {
-      setSearching(false);
-    }
-  }
+export default function MapLayersSection({ extras }) {
+  const [sources, setSources] = useState(false);
 
   return (
     <View>
@@ -40,26 +32,8 @@ export default function MapLayersSection({ extras, near, onShowBox }) {
       {extras.roadsAvailable ? (
         <>
           <Row label="Roads and streets" value={extras.roadsOn} onChange={extras.setRoadsOn} hint="Shows built-in road and street names on the Map and Hunt map. Works offline." />
-          <Quiet>{roadsCoverageText(ROADS_MANIFEST)}</Quiet>
+          <Quiet>{coverageText()}</Quiet>
           {extras.roadsNote ? <Quiet live>{extras.roadsNote}</Quiet> : null}
-          {extras.roadsOn ? (
-            <>
-              <Field label="Find a road by name" value={query} onChangeText={setQuery} placeholder="e.g. Ridge Road" />
-              <Action label={searching ? "Searching…" : "Find road"} tone="quiet" disabled={searching || query.trim().length < 2} onPress={search} />
-              {hits && !hits.length ? <Quiet live>No road by that name in the built-in road layer.</Quiet> : null}
-              {(hits || []).map((item) => (
-                <Pressable
-                  key={`${item.name}-${item.latitude}-${item.longitude}`}
-                  accessibilityRole="button"
-                  accessibilityLabel={`Show ${roadHitText(item)} on the map`}
-                  style={styles.hit}
-                  onPress={() => onShowBox?.(roadHitBox(item))}
-                >
-                  <Text style={styles.hitText}>{roadHitText(item)}</Text>
-                </Pressable>
-              ))}
-            </>
-          ) : null}
         </>
       ) : (
         <Quiet>The road layer is in the Android app.</Quiet>
@@ -88,8 +62,6 @@ const styles = themedStyles((c) => ({
   section: { ...type.label, color: c.muted, marginTop: space.lg, textTransform: "uppercase", letterSpacing: 1 },
   row: { minHeight: hit.min, flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: space.sm },
   rowLabel: { ...type.action, color: c.ink, flex: 1 },
-  hit: { minHeight: hit.min, justifyContent: "center", borderBottomColor: c.line, borderBottomWidth: 1 },
-  hitText: { color: c.ink, fontSize: 15 },
   meta: { color: c.muted, fontSize: 13, marginTop: 6 },
   gap: { color: c.ink, fontSize: 13, marginTop: 6 },
   link: { color: c.brassText, fontSize: 14, minHeight: 32, paddingTop: 6 }

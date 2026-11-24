@@ -1,10 +1,13 @@
-// Roads and property lines for the Map and Hunt map: the switches (saved on the phone), the
-// built-in road layer coming up, road search, and the property lines for what is on screen.
+// Roads and property lines for the Map and Hunt map: the switches (saved on the phone), the road
+// lines for what is on screen (read from the offline road graphs routing ships, one state at a
+// time), and the property lines for what is on screen.
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Dimensions, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { openRoads, roadsSupported, searchRoads } from "./roads_store";
+import { routeService } from "./route/useRoute.js";
+import { regionsAt } from "../../symbolic/routing/route_service.js";
+import { boxInside, padBox, roadLinesFromGraph, roadMaxClassForZoom } from "../../symbolic/roads.js";
 import { parcelCache, parcelStorage, parcelsSupported } from "./parcel_store";
 import { PARCEL_MIN_ZOOM, parcelGeoJson, parcelNote } from "../../symbolic/parcels.js";
 import { viewBoxFrom } from "../../symbolic/map_view_box.js";
@@ -15,8 +18,10 @@ const EMPTY = { type: "FeatureCollection", features: [] };
 export function useMapExtras({ active = true } = {}) {
   const [roadsOn, setRoadsOn] = useState(true);
   const [parcelsOn, setParcelsOn] = useState(false);
-  const [roadsReady, setRoadsReady] = useState(false);
+  const [roadLines, setRoadLines] = useState(null);
   const [roadsNote, setRoadsNote] = useState("");
+  const roadRead = useRef(null); // { region, maxClass, box } last read
+  const roadSeq = useRef(0);
   const [parcels, setParcels] = useState(EMPTY);
   const [parcelText, setParcelText] = useState("");
   const [busy, setBusy] = useState(false);
@@ -40,18 +45,46 @@ export function useMapExtras({ active = true } = {}) {
     AsyncStorage.setItem(KEY, JSON.stringify({ roads: roadsOn, parcels: parcelsOn })).catch(() => {});
   }, [roadsOn, parcelsOn]);
 
+  // Road lines for the view: the state under the middle of the map, main roads when zoomed out,
+  // every street and track close in. Re-read only when the view leaves the last padded box.
+  const loadRoads = useCallback(async (box, zoom) => {
+    const maxClass = roadMaxClassForZoom(zoom);
+    if (maxClass < 0) {
+      setRoadLines(null);
+      setRoadsNote("Zoom in to see roads and street names.");
+      return;
+    }
+    const center = { longitude: (box.west + box.east) / 2, latitude: (box.south + box.north) / 2 };
+    const region = regionsAt(center)[0];
+    if (!region) {
+      setRoadLines(null);
+      setRoadsNote("No built-in roads here (they cover the map-pack states).");
+      return;
+    }
+    const last = roadRead.current;
+    if (last && last.region === region.id && last.maxClass === maxClass && boxInside(box, last.box)) return;
+    const padded = padBox(box, 0.4);
+    const mine = ++roadSeq.current;
+    try {
+      const fc = await routeService().roadsInBox(region.id, padded, { maxClass });
+      if (mine !== roadSeq.current) return;
+      roadRead.current = { region: region.id, maxClass, box: padded };
+      setRoadLines(roadLinesFromGraph([fc]));
+      setRoadsNote("");
+    } catch {
+      if (mine === roadSeq.current) setRoadsNote("The road data could not be read on this phone.");
+    }
+  }, []);
+
   useEffect(() => {
-    if (!roadsOn || roadsReady || Platform.OS === "web" || !roadsSupported()) return undefined;
-    let live = true;
-    openRoads((text) => live && setRoadsNote(text)).then((roads) => {
-      if (!live) return;
-      setRoadsReady(Boolean(roads));
-      setRoadsNote(roads ? "" : "The road layer could not open on this phone.");
-    });
-    return () => {
-      live = false;
-    };
-  }, [roadsOn, roadsReady]);
+    if (!roadsOn) {
+      setRoadLines(null);
+      roadRead.current = null;
+      return;
+    }
+    const v = view.current;
+    if (v) loadRoads(v.box, v.zoom);
+  }, [roadsOn, loadRoads]);
 
   const loadParcels = useCallback(async (box, zoom) => {
     if (!box) return;
@@ -77,11 +110,14 @@ export function useMapExtras({ active = true } = {}) {
 
   // Called with every map camera event. Property lines load after the map stops moving.
   const timer = useRef(null);
+  const roadTimer = useRef(null);
   const onView = useCallback((event) => {
     const { width, height } = Dimensions.get("window");
     const next = viewBoxFrom(event, { width, height });
     if (!next) return;
     view.current = next;
+    clearTimeout(roadTimer.current);
+    if (roadsOn && Platform.OS !== "web") roadTimer.current = setTimeout(() => loadRoads(next.box, next.zoom), 400);
     if (!parcelsOn || !active) return;
     clearTimeout(timer.current);
     timer.current = setTimeout(() => {
@@ -91,7 +127,7 @@ export function useMapExtras({ active = true } = {}) {
       }
       loadParcels(next.box, next.zoom);
     }, 700);
-  }, [parcelsOn, active, loadParcels]);
+  }, [parcelsOn, active, loadParcels, roadsOn, loadRoads]);
 
   useEffect(() => {
     if (!parcelsOn) {
@@ -105,21 +141,23 @@ export function useMapExtras({ active = true } = {}) {
     else setParcelText("Zoom in closer to see property lines.");
   }, [parcelsOn, active, loadParcels]);
 
-  useEffect(() => () => clearTimeout(timer.current), []);
+  useEffect(() => () => {
+    clearTimeout(timer.current);
+    clearTimeout(roadTimer.current);
+  }, []);
 
   return {
     roadsOn,
     setRoadsOn,
-    roadsReady,
+    roadLines,
     roadsNote,
-    roadsAvailable: Platform.OS !== "web" && roadsSupported(),
+    roadsAvailable: Platform.OS !== "web",
     parcelsOn,
     setParcelsOn,
     parcelsAvailable: parcelsSupported,
     parcels,
     parcelText,
     parcelBusy: busy,
-    search: (text, near) => searchRoads(text, { near }),
     clearParcels: async () => {
       await parcelStorage.clear();
       setParcels(EMPTY);

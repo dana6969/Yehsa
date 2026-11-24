@@ -12,10 +12,10 @@ import {
   RasterLayer,
   RasterSource,
   ShapeSource,
-  SymbolLayer,
-  VectorSource
+  SymbolLayer
 } from "@maplibre/maplibre-react-native";
 import { AboutMapLink, ConePill, DragPin, MarkPin } from "./hunt_map_ui.js";
+import { DestinationPin } from "./route/RoutePins.js";
 
 // glyphs: the loopback URL for the road-name font, when the road layer is on.
 function blankStyle(color, glyphs) {
@@ -74,6 +74,7 @@ export default function OfflineMap({
   onMarkDragEnd,
   onAbout,
   parcels,
+  route = null,
   fill = false
 }) {
   const camera = useRef(null);
@@ -81,7 +82,7 @@ export default function OfflineMap({
   const fixed = useRef(false);
   const land = layers?.hasLand ? layers.land : null;
   const roads = layers?.roads || null;
-  const style = useMemo(() => blankStyle(land ? land.water : "#101611", roads?.glyphs), [land?.water, roads?.glyphs]);
+  const style = useMemo(() => blankStyle(land ? land.water : "#101611", layers?.glyphs), [land?.water, layers?.glyphs]);
 
   // Look at the right place once the map has a camera, and again when asked (Show on map).
   useEffect(() => {
@@ -105,6 +106,17 @@ export default function OfflineMap({
     });
   }, [follow, fix?.latitude, fix?.longitude, headingDeg]);
 
+  // The route line and destination pin (regular Map). Built once per route, not per render.
+  const routeShape = useMemo(() => {
+    const line = route?.line;
+    if (!line || line.length < 2) return null;
+    return { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: line.map((p) => [p.longitude, p.latitude]) } };
+  }, [route?.line]);
+  useEffect(() => {
+    const cam = camera.current;
+    if (!cam || !route?.box || !route?.fitKey) return;
+    cam.fitBounds([route.box.east, route.box.north], [route.box.west, route.box.south], 60, 700);
+  }, [route?.fitKey]);
   const center = fix ? [fix.longitude, fix.latitude] : [-69, 45];
   const start = initialCamera ? { centerCoordinate: initialCamera.center, zoomLevel: initialCamera.zoom } : { centerCoordinate: center, zoomLevel: fix ? 11 : 4 };
   const paint = layers?.paint || {};
@@ -158,13 +170,13 @@ export default function OfflineMap({
           </ShapeSource>
         ) : null}
         {roads ? (
-          // Built-in OpenStreetMap roads (vector), above the terrain picture and below your marks.
-          <VectorSource id="roads-src" tileUrlTemplates={[roads.template]} minZoomLevel={roads.minZoom} maxZoomLevel={roads.maxZoom}>
-            <LineLayer id="roads-casing" sourceLayerID={roads.sourceLayer} filter={NOT_TRACK} minZoomLevel={10} style={roads.specs.casing} />
-            <LineLayer id="roads-line" sourceLayerID={roads.sourceLayer} filter={NOT_TRACK} style={roads.specs.line} />
-            <LineLayer id="roads-track" sourceLayerID={roads.sourceLayer} filter={IS_TRACK} style={{ ...roads.specs.line, ...roads.specs.track }} />
-            <SymbolLayer id="roads-label" sourceLayerID={roads.sourceLayer} minZoomLevel={roads.specs.labelMinZoom} style={roads.specs.label} />
-          </VectorSource>
+          // OpenStreetMap roads from the built-in road graphs, above the terrain and below your marks.
+          <ShapeSource id="roads-src" shape={roads.shape}>
+            <LineLayer id="roads-casing" filter={NOT_TRACK} minZoomLevel={10} style={roads.specs.casing} />
+            <LineLayer id="roads-line" filter={NOT_TRACK} style={roads.specs.line} />
+            <LineLayer id="roads-track" filter={IS_TRACK} style={{ ...roads.specs.line, ...roads.specs.track }} />
+            <SymbolLayer id="roads-label" minZoomLevel={roads.specs.labelMinZoom} style={roads.specs.label} />
+          </ShapeSource>
         ) : null}
         {parcels?.features?.length ? (
           // Property lines: outlines only, nothing else about the land. Approximate, not a survey.
@@ -183,6 +195,17 @@ export default function OfflineMap({
             <FillLayer id="scent-cone-fill" style={{ fillColor: overlay.color, fillOpacity: 0.3 }} />
             <LineLayer id="scent-cone-line" style={{ lineColor: overlay.color, lineWidth: 2, lineOpacity: 0.95 }} />
           </ShapeSource>
+        ) : null}
+        {routeShape ? (
+          <ShapeSource id="route" shape={routeShape}>
+            <LineLayer id="route-casing" style={{ lineColor: "#141a16", lineWidth: 9, lineOpacity: 0.9, lineCap: "round", lineJoin: "round" }} />
+            <LineLayer id="route-line" style={{ lineColor: "#e2b15a", lineWidth: 5, lineOpacity: 1, lineCap: "round", lineJoin: "round" }} />
+          </ShapeSource>
+        ) : null}
+        {route?.destination ? (
+          <MarkerView coordinate={[route.destination.longitude, route.destination.latitude]} anchor={{ x: 0.5, y: 1 }} allowOverlap>
+            <DestinationPin name={route.destination.name} />
+          </MarkerView>
         ) : null}
         {fix ? (
           // A ring with a clear middle, so a place name under the dot stays readable.
