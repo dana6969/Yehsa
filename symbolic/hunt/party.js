@@ -173,7 +173,9 @@ export function extendSession(roster, minutes = EXTEND_MINUTES, now = Date.now()
  * into another card. `keyState` is the result of getOrCreateIdentity() ("ready" | "error" | "foreign"
  * | "loading"). `linkUp` is whether a mesh or internet link is up. Returns notices in display order.
  */
-export function partyNotices({ roster, keyState = "ready", linkUp = false, now = Date.now() }) {
+export const NO_PEERS_TEXT = "No peers nearby";
+
+export function partyNotices({ roster, keyState = "ready", linkUp = false, peersNearby = null, now = Date.now() }) {
   const out = [];
   if (keyState === "error") out.push({ id: "key-error", tone: "problem", title: "I couldn't open your key.", body: "Pairing and sessions are paused until this is fixed.", action: "retry" });
   if (keyState === "foreign") out.push({ id: "key-foreign", tone: "problem", title: "This copy can't open the original owner's chats", body: "Keys stay on the original phone. You can start a new key here. Your contacts will have to check you again.", action: "replace" });
@@ -185,6 +187,7 @@ export function partyNotices({ roster, keyState = "ready", linkUp = false, now =
       out.push({ id: "ending", tone: "info", title: `The session stops in ${minutes} minute${minutes === 1 ? "" : "s"}.`, body: "Nothing is shared after that unless you start a new one.", action: "extend" });
     }
     if (!linkUp) out.push({ id: "offline", tone: "info", title: OFFLINE_TEXT, body: "Nothing left the phone while the link is down.", action: null });
+    else if (peersNearby === 0) out.push({ id: "no-peers", tone: "info", title: "No one in the party is in range right now.", body: "The session keeps running. Updates are held until someone is in range; nothing is marked as sent.", action: null });
   }
   return out;
 }

@@ -86,7 +86,8 @@ export default function PartyScreen({ position, mesh, onBack, onPair }) {
   const sharing = isSharing(roster);
   const fix = position?.consent === true && position.status === "locked";
   const verified = verifiedMembers(roster);
-  const notices = partyNotices({ roster, keyState: keyResult.state, linkUp: Boolean(mesh?.link?.primary) });
+  const notices = partyNotices({ roster, keyState: keyResult.state, linkUp: Boolean(mesh?.link?.primary), peersNearby: Array.isArray(mesh?.peers) ? mesh.peers.length : null });
+  const noPeers = sharing && Array.isArray(mesh?.peers) && mesh.peers.length === 0;
 
   function add() {
     const result = addMember(roster, { name, card: cardFromText(code), me });
@@ -138,7 +139,12 @@ export default function PartyScreen({ position, mesh, onBack, onPair }) {
       ) : (
         <Card title="No session right now.">
           {roster.session?.stopped ? <Quiet>{roster.session.stoppedBecause === "ended" ? "The last session ended on its own. Nothing is being shared." : "You stopped the last session. Nothing is being shared."}</Quiet> : null}
-          {verified.length === 0 ? <Quiet>Add someone and check their safety number first. Then you can start a session.</Quiet> : (
+          {verified.length === 0 ? (
+            <>
+              <Quiet>Add someone and check their safety number first. Then you can start a session.</Quiet>
+              {!adding && roster.members.length === 0 ? <Action label="Add someone" onPress={() => setAdding(true)} /> : null}
+            </>
+          ) : (
             <>
               <Text style={styles.group}>WHO SEES YOUR SPOT</Text>
               <Chips label="Who sees your spot" value="" onChange={(id) => setPick((current) => (current.includes(id) ? current.filter((x) => x !== id) : [...current, id]))} options={verified.map((member) => ({ id: member.id, label: pick.includes(member.id) ? `${member.name} ✓` : member.name }))} />
@@ -156,7 +162,7 @@ export default function PartyScreen({ position, mesh, onBack, onPair }) {
       {roster.members.map((member) => (
         <Card key={member.id} title={member.name}>
           <Text style={styles.number}>{member.safety}</Text>
-          {member.verified ? <Quiet>Safety number · verified</Quiet> : (
+          {member.verified ? <Quiet>{noPeers ? "Safety number · verified · no peers nearby" : "Safety number · verified"}</Quiet> : (
             <>
               <Quiet>Safety number · unverified · cannot join until verified</Quiet>
               <Quiet>Read the number above to them, and type the number their phone shows.</Quiet>
@@ -179,7 +185,7 @@ export default function PartyScreen({ position, mesh, onBack, onPair }) {
           {me ? <Quiet>Your own pairing code, to give them:</Quiet> : null}
           {me ? <Text selectable style={styles.code}>{qrPayload(me)}</Text> : null}
         </Card>
-      ) : <Action label="Add someone" tone="quiet" onPress={() => setAdding(true)} />}
+      ) : roster.members.length ? <Action label="Add someone" tone="quiet" onPress={() => setAdding(true)} /> : null}
       {PARTY_RULES.map((rule) => <Quiet key={rule}>{rule}</Quiet>)}
       <Quiet>Your sightings log is never part of this. You can share one pin by hand.</Quiet>
     </ScrollView>
