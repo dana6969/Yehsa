@@ -7,11 +7,12 @@ import {
   LineLayer,
   MapView,
   MarkerView,
+  PointAnnotation,
   RasterLayer,
   RasterSource,
   ShapeSource
 } from "@maplibre/maplibre-react-native";
-import { AboutMapLink, ConePill, MarkPin } from "./hunt_map_ui.js";
+import { AboutMapLink, ConePill, DragPin, MarkPin } from "./hunt_map_ui.js";
 
 function blankStyle(color) {
   return {
@@ -61,6 +62,7 @@ export default function OfflineMap({
   onLongPress,
   overlay,
   onMarkPress,
+  onMarkDragEnd,
   onAbout,
   fill = false
 }) {
@@ -164,11 +166,28 @@ export default function OfflineMap({
             <CircleLayer id="me-center" style={{ circleRadius: 2, circleColor: "#141a16" }} />
           </ShapeSource>
         ) : null}
-        {(overlay?.markers || []).map((mark) => (
+        {(overlay?.markers || []).map((mark) => (mark.id === overlay?.dragId ? (
+          // MarkerView cannot be dragged, so the mark being moved is a draggable PointAnnotation.
+          // Press and hold, drag, and the new spot is saved on release (with Undo).
+          <PointAnnotation
+            key={`drag-${mark.id}`}
+            id={`drag-${mark.id}`}
+            coordinate={[mark.longitude, mark.latitude]}
+            anchor={{ x: 0.5, y: 0.5 }}
+            draggable
+            onDragEnd={(payload) => {
+              const coords = payload?.geometry?.coordinates;
+              if (!coords) return;
+              onMarkDragEnd?.(mark.id, { longitude: coords[0], latitude: coords[1] });
+            }}
+          >
+            <DragPin mark={mark} />
+          </PointAnnotation>
+        ) : (
           <MarkerView key={mark.id} coordinate={[mark.longitude, mark.latitude]} anchor={{ x: 0.5, y: 0.3 }} allowOverlap>
             <MarkPin mark={mark} onPress={() => onMarkPress?.(mark.id)} />
           </MarkerView>
-        ))}
+        )))}
         {overlay?.labelAt ? (
           <MarkerView coordinate={[overlay.labelAt.longitude, overlay.labelAt.latitude]} anchor={{ x: 0.5, y: 0.5 }} allowOverlap>
             <ConePill text={overlay.label} />

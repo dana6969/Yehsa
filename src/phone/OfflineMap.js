@@ -65,11 +65,20 @@ function labelElement(text) {
   return el;
 }
 
-function syncPins(map, store, overlay, onPick) {
+function syncPins(map, store, overlay, onPick, onDrop) {
   store.forEach((marker) => marker.remove());
   store.length = 0;
   for (const mark of overlay?.markers || []) {
-    store.push(new maplibregl.Marker({ element: markElement(mark, onPick), anchor: "top" }).setLngLat([mark.longitude, mark.latitude]).addTo(map));
+    const dragging = mark.id === overlay?.dragId;
+    const marker = new maplibregl.Marker({ element: markElement(dragging ? { ...mark, name: `Drag ${mark.name}`, selected: true } : mark, dragging ? () => {} : onPick), anchor: "top", draggable: dragging })
+      .setLngLat([mark.longitude, mark.latitude]);
+    if (dragging) {
+      marker.on("dragend", () => {
+        const at = marker.getLngLat();
+        onDrop(mark.id, { latitude: at.lat, longitude: at.lng });
+      });
+    }
+    store.push(marker.addTo(map));
   }
   if (overlay?.labelAt && overlay.label) {
     store.push(new maplibregl.Marker({ element: labelElement(overlay.label) }).setLngLat([overlay.labelAt.longitude, overlay.labelAt.latitude]).addTo(map));
@@ -88,6 +97,7 @@ export default function OfflineMap({
   onLongPress,
   overlay,
   onMarkPress,
+  onMarkDragEnd,
   onAbout,
   fill = false
 }) {
@@ -101,6 +111,8 @@ export default function OfflineMap({
   const failRef = useRef(onFail);
   const longRef = useRef(onLongPress);
   const markRef = useRef(onMarkPress);
+  const dropRef = useRef(onMarkDragEnd);
+  dropRef.current = onMarkDragEnd;
   const overlayRef = useRef(overlay);
   const mapRef = useRef(null);
   const pinsRef = useRef([]);
@@ -200,7 +212,7 @@ export default function OfflineMap({
         map.addSource("cone", { type: "geojson", data: coneData(overlayRef.current) });
         map.addLayer({ id: "cone-fill", type: "fill", source: "cone", paint: { "fill-color": overlayRef.current?.color || "#e2b15a", "fill-opacity": 0.3 } });
         map.addLayer({ id: "cone-line", type: "line", source: "cone", paint: { "line-color": overlayRef.current?.color || "#e2b15a", "line-width": 2 } });
-        syncPins(map, pinsRef.current, overlayRef.current, (id) => markRef.current?.(id));
+        syncPins(map, pinsRef.current, overlayRef.current, (id) => markRef.current?.(id), (id, point) => dropRef.current?.(id, point));
         if (fix) {
           map.addSource("me", {
             type: "geojson",
@@ -240,7 +252,7 @@ export default function OfflineMap({
     const map = mapRef.current;
     if (!map || !map.isStyleLoaded?.()) return;
     map.getSource("cone")?.setData(coneData(overlay));
-    syncPins(map, pinsRef.current, overlay, (id) => markRef.current?.(id));
+    syncPins(map, pinsRef.current, overlay, (id) => markRef.current?.(id), (id, point) => dropRef.current?.(id, point));
   }, [overlay]);
 
   return (

@@ -1754,6 +1754,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
               onFail={() => setMapFailed(true)}
               overlay={huntMap.overlay}
               onMarkPress={huntMap.onMarkPress}
+              onMarkDragEnd={huntMap.onMarkDragEnd}
               onLongPress={huntMap.onMapLongPress}
               onAbout={() => { huntMap.closeSheets(); setLayersOpen(false); setAboutOpen(true); }}
               onPress={(point) => {

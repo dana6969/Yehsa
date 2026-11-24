@@ -45,6 +45,19 @@ export function MarkPin({ mark, onPress }) {
   );
 }
 
+// The pin being dragged. PointAnnotation draws its child as a picture on Android, so this is
+// plain views only (no buttons): the shape, the name, and the word "Drag".
+export function DragPin({ mark }) {
+  return (
+    <View style={styles.dragPin} collapsable={false}>
+      <MarkGlyph kind={mark.kind} size={34} />
+      <View style={[styles.pill, styles.pillDrag]}>
+        <Text numberOfLines={1} style={[styles.pillText, { fontSize: 12 }]}>{`Drag ${mark.name}`}</Text>
+      </View>
+    </View>
+  );
+}
+
 export function ConePill({ text }) {
   const display = useDisplay();
   return (
@@ -74,6 +87,8 @@ export const styles = themedStyles((c) => ({
   pin: { alignItems: "center", gap: 2 },
   pill: { maxWidth: 140, paddingHorizontal: 8, height: 22, borderRadius: 11, backgroundColor: c.surface, borderWidth: 1, borderColor: c.lineStrong, justifyContent: "center" },
   pillRisk: { borderColor: c.clay, borderWidth: 2 },
+  pillDrag: { borderColor: c.brass, borderWidth: 2 },
+  dragPin: { width: 150, alignItems: "center", gap: 2 },
   pillText: { color: c.ink, fontWeight: "700" },
   conePill: { maxWidth: 190, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, backgroundColor: c.surface, borderWidth: 1, borderColor: c.brass },
   coneText: { color: c.ink, fontWeight: "700", textAlign: "center" }

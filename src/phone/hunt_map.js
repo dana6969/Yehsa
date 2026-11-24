@@ -11,7 +11,7 @@ import { setHunt, useHunt } from "./hunt_state.js";
 import { useBackLayer } from "./back_layers.js";
 import { coneView, labelPoint } from "../../symbolic/hunt/cone_view.js";
 import {
-  KINDS, TEXT, UNDO_MS, addMark, boxAround, clearMarks, kindInfo, marksOf, removeMark,
+  KINDS, TEXT, UNDO_MS, addMark, boxAround, clearMarks, kindInfo, marksOf, moveMark, removeMark, undoMove,
   restoreAll, restoreMark, sightingMarks, toSpots, updateMark, whereText
 } from "../../symbolic/hunt/marks.js";
 import { windLabel } from "../../symbolic/hunt/conditions.js";
@@ -115,15 +115,17 @@ export function useHuntMap({ on, held, cameraCenter, onFocusBox }) {
     say(TEXT.allRemoved, [{ label: "Undo", run: () => writeMarks((list) => restoreAll(list, result.removed)) }]);
   }
 
-  function relocate(point) {
-    const mark = myMarks.find((item) => item.id === moveId);
+  // One path for every move: a finger drag (onDragEnd), a tap on the new spot, or Move here.
+  // Undo puts the mark back where it was.
+  function relocate(point, id = moveId) {
+    const mark = myMarks.find((item) => item.id === id);
     setMoveId(null);
     if (!mark) return;
-    const result = updateMark(myMarks, mark.id, { latitude: point.latitude, longitude: point.longitude });
+    const result = moveMark(myMarks, mark.id, point);
     if (!result.ok) { say(result.reason); return; }
     writeMarks(() => result.marks);
     say(`${mark.name} moved.`, [
-      { label: "Undo", run: () => writeMarks((list) => updateMark(list, mark.id, { latitude: mark.latitude, longitude: mark.longitude }).marks) }
+      { label: "Undo", run: () => writeMarks((list) => undoMove(list, mark.id, result.from)) }
     ]);
   }
 
@@ -144,8 +146,13 @@ export function useHuntMap({ on, held, cameraCenter, onFocusBox }) {
   function onMapLongPress(point) {
     if (!on) return;
     lastLong.current = Date.now();
-    if (moveId != null) { relocate(point); return; }
+    // While moving, press-and-hold belongs to dragging the pin, so it never drops the mark.
+    if (moveId != null) return;
     pickAtPoint(point);
+  }
+  function onMarkDragEnd(id, point) {
+    if (!on || !point || !Number.isFinite(point.latitude) || !Number.isFinite(point.longitude)) return;
+    relocate(point, id);
   }
   function onMarkPress(id) {
     if (moveId != null) return;
@@ -183,7 +190,9 @@ export function useHuntMap({ on, held, cameraCenter, onFocusBox }) {
       polygon: on && view.ok ? view.polygon : null,
       label: view.label,
       labelAt: on ? at : null,
-      markers: on ? pins : []
+      markers: on ? pins : [],
+      // The mark being moved is drawn as a draggable pin; the others stay tappable.
+      dragId: on ? moveId : null
     };
   }, [view, editId, moveId, on]);
 
@@ -267,7 +276,7 @@ export function useHuntMap({ on, held, cameraCenter, onFocusBox }) {
             <View style={styles.crossV} /><View style={styles.crossH} />
           </View>
           <View style={styles.bar} accessibilityLiveRegion="polite">
-            <Text style={styles.barText}>Moving {moving.name}. Tap or long-press the new spot, or pan the map so the cross sits on it.</Text>
+            <Text style={styles.barText}>Moving {moving.name}. Press and hold the pin, then drag it to the new spot. Or tap the new spot, or pan so the cross sits on it and tap Move here.</Text>
             <View style={styles.row}>
               <Action label="Move here" style={styles.grow} onPress={() => { const c = cameraCenter?.(); if (c) relocate(c); else say("Pan the map first, or tap the new spot."); }} />
               <Action label="Cancel" tone="quiet" onPress={() => setMoveId(null)} />
@@ -299,6 +308,7 @@ export function useHuntMap({ on, held, cameraCenter, onFocusBox }) {
     onMapPress,
     onMapLongPress,
     onMarkPress,
+    onMarkDragEnd,
     openWind: () => { setPickAt(null); setEditId(null); setSheet("wind"); },
     openMarks: () => { setPickAt(null); setEditId(null); setSheet("marks"); },
     closeSheets: close,
