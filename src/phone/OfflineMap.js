@@ -21,11 +21,58 @@ function coneData(overlay) {
   return { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [ring.map((p) => [p.longitude, p.latitude])] } };
 }
 
-function marksData(overlay) {
-  return {
-    type: "FeatureCollection",
-    features: (overlay?.markers || []).map((mark) => ({ type: "Feature", properties: { id: mark.id, name: mark.name }, geometry: { type: "Point", coordinates: [mark.longitude, mark.latitude] } }))
-  };
+const GLYPHS = { stand: "\u25A0", trail: "\u2505", bedding: "\u25B2", sighting: "S" };
+
+// A mark pin in the browser preview: the kind's shape, the name, and the state word.
+// Meaning is in the words (At risk, Clear, Out of cone), never in color alone.
+function markElement(mark, onPick) {
+  const el = document.createElement("button");
+  el.type = "button";
+  const word = mark.word ? ` \u00B7 ${mark.word}` : "";
+  const risky = mark.state === "risk";
+  el.setAttribute("aria-label", `${mark.name}, ${mark.kind}${mark.word ? `, ${mark.word}` : ""}`);
+  el.textContent = `${GLYPHS[mark.kind] || "\u25CF"} ${risky ? "! " : ""}${mark.name}${word}`;
+  Object.assign(el.style, {
+    font: "700 12px system-ui, sans-serif",
+    color: "#f4f0e6",
+    background: "#1b2420",
+    border: `${risky ? 2 : 1}px solid ${risky ? "#c0643c" : "#8a948a"}`,
+    outline: mark.selected ? "2px solid #e2b15a" : "none",
+    borderRadius: "11px",
+    padding: "2px 8px",
+    whiteSpace: "nowrap",
+    cursor: "pointer"
+  });
+  el.addEventListener("click", (event) => { event.stopPropagation(); onPick(mark.id); });
+  return el;
+}
+
+function labelElement(text) {
+  const el = document.createElement("div");
+  el.textContent = text;
+  Object.assign(el.style, {
+    font: "700 12px system-ui, sans-serif",
+    color: "#f4f0e6",
+    background: "#1b2420",
+    border: "1px solid #e2b15a",
+    borderRadius: "12px",
+    padding: "4px 10px",
+    maxWidth: "190px",
+    textAlign: "center",
+    pointerEvents: "none"
+  });
+  return el;
+}
+
+function syncPins(map, store, overlay, onPick) {
+  store.forEach((marker) => marker.remove());
+  store.length = 0;
+  for (const mark of overlay?.markers || []) {
+    store.push(new maplibregl.Marker({ element: markElement(mark, onPick), anchor: "top" }).setLngLat([mark.longitude, mark.latitude]).addTo(map));
+  }
+  if (overlay?.labelAt && overlay.label) {
+    store.push(new maplibregl.Marker({ element: labelElement(overlay.label) }).setLngLat([overlay.labelAt.longitude, overlay.labelAt.latitude]).addTo(map));
+  }
 }
 
 const NO_TILES = [];
@@ -54,6 +101,7 @@ export default function OfflineMap({
   const markRef = useRef(onMarkPress);
   const overlayRef = useRef(overlay);
   const mapRef = useRef(null);
+  const pinsRef = useRef([]);
   longRef.current = onLongPress;
   markRef.current = onMarkPress;
   overlayRef.current = overlay;
@@ -150,12 +198,7 @@ export default function OfflineMap({
         map.addSource("cone", { type: "geojson", data: coneData(overlayRef.current) });
         map.addLayer({ id: "cone-fill", type: "fill", source: "cone", paint: { "fill-color": overlayRef.current?.color || "#e2b15a", "fill-opacity": 0.3 } });
         map.addLayer({ id: "cone-line", type: "line", source: "cone", paint: { "line-color": overlayRef.current?.color || "#e2b15a", "line-width": 2 } });
-        map.addSource("marks", { type: "geojson", data: marksData(overlayRef.current) });
-        map.addLayer({ id: "marks", type: "circle", source: "marks", paint: { "circle-radius": 7, "circle-color": "#1b2420", "circle-stroke-width": 3, "circle-stroke-color": "#f4f0e6" } });
-        map.on("click", "marks", (event) => {
-          const id = event.features?.[0]?.properties?.id;
-          if (id) markRef.current?.(id);
-        });
+        syncPins(map, pinsRef.current, overlayRef.current, (id) => markRef.current?.(id));
         if (fix) {
           map.addSource("me", {
             type: "geojson",
@@ -170,7 +213,6 @@ export default function OfflineMap({
         }
       });
       map.on("click", (event) => {
-        if (map.getLayer("marks") && map.queryRenderedFeatures(event.point, { layers: ["marks"] }).length) return;
         pressRef.current?.({ latitude: event.lngLat.lat, longitude: event.lngLat.lng });
       });
       // Right-click stands in for long-press in the browser preview.
@@ -185,6 +227,8 @@ export default function OfflineMap({
     return () => {
       alive = false;
       mapRef.current = null;
+      pinsRef.current.forEach((marker) => marker.remove());
+      pinsRef.current = [];
       map?.remove();
     };
   }, [archive, format, label, demTiles, contours, shapes, fix]);
@@ -194,7 +238,7 @@ export default function OfflineMap({
     const map = mapRef.current;
     if (!map || !map.isStyleLoaded?.()) return;
     map.getSource("cone")?.setData(coneData(overlay));
-    map.getSource("marks")?.setData(marksData(overlay));
+    syncPins(map, pinsRef.current, overlay, (id) => markRef.current?.(id));
   }, [overlay]);
 
   return (

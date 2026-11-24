@@ -4,6 +4,7 @@ import { haversineKm, initialBearingDeg } from "../../symbolic/landscape_math.js
 import { courseSentence } from "../../symbolic/nav_sentence.js";
 import { colors } from "./ui.js";
 import { visibleSegments } from "./map_segments.js";
+import { ConePill, MarkPin } from "./hunt_map_ui.js";
 
 const KM_PER_DEG = 111.19;
 
@@ -41,6 +42,9 @@ export default function LandscapeMap({
   onRecenter,
   onUserPan,
   features,
+  overlay,
+  onMarkPress,
+  onTap,
   fill = false
 }) {
   const [size, setSize] = useState({ width: 320, height: 360 });
@@ -96,6 +100,8 @@ export default function LandscapeMap({
       return;
     }
     if (current.moved) return;
+    // The Hunt map takes plain taps for marks, so they do not become waypoint proposals.
+    if (onTap) { onTap(point); return; }
     if (held) {
       const km = haversineKm(held, point);
       const bearing = initialBearingDeg(held, point);
@@ -120,6 +126,12 @@ export default function LandscapeMap({
   const rotation = follow === true && Number.isFinite(Number(headingDeg)) ? `${-Number(headingDeg)}deg` : "0deg";
   const accuracyPx = Number.isFinite(Number(accuracyM)) ? (Number(accuracyM) / 1000) * zoom : 0;
   const you = held ? project(held) : null;
+  const cone = useMemo(
+    () => coneShape(overlay?.polygon, project, size.width, size.height),
+    // project depends on these values only.
+    [overlay?.polygon, origin?.latitude, origin?.longitude, pan.x, pan.y, zoom, size.width, size.height]
+  );
+  const coneLabel = overlay?.labelAt ? project(overlay.labelAt) : null;
   const segments = useMemo(
     () => visibleSegments(features, project, size.width, size.height),
     // project depends on these values only.
@@ -218,7 +230,25 @@ export default function LandscapeMap({
             }}
           />
         ) : null}
+        {cone.dots.map((dot) => (
+          <View key={dot.key} pointerEvents="none" style={{ position: "absolute", left: dot.x - 2, top: dot.y - 2, width: 4, height: 4, borderRadius: 2, backgroundColor: overlay?.color || colors.brass, opacity: 0.55 }} />
+        ))}
+        {cone.edges.map((edge) => <EdgeLine key={edge.key} from={edge.from} to={edge.to} color={overlay?.color || colors.brass} />)}
         {you ? <Dot x={you.x} y={you.y} color={colors.moss} label="You" /> : null}
+        {(overlay?.markers || []).map((mark) => {
+          const xy = project(mark);
+          if (!xy || xy.x < -70 || xy.y < -30 || xy.x > size.width + 70 || xy.y > size.height + 30) return null;
+          return (
+            <View key={mark.id} style={{ position: "absolute", left: xy.x - 70, top: xy.y - 16 }}>
+              <MarkPin mark={mark} onPress={() => onMarkPress?.(mark.id)} />
+            </View>
+          );
+        })}
+        {coneLabel && overlay?.label ? (
+          <View pointerEvents="none" style={{ position: "absolute", left: coneLabel.x - 95, top: coneLabel.y - 14, width: 190, alignItems: "center" }}>
+            <ConePill text={overlay.label} />
+          </View>
+        ) : null}
         {you && Number.isFinite(Number(headingDeg)) ? (
           <View style={{ position: "absolute", left: you.x - 1, top: you.y - 18, width: 2, height: 18, backgroundColor: colors.ink, transform: [{ rotate: `${Number(headingDeg)}deg` }] }} />
         ) : null}
@@ -255,6 +285,65 @@ export default function LandscapeMap({
           : "Drag to pan. Tap for a waypoint proposal. Tap a second point for distance and bearing."}
       </Text>
     </View>
+  );
+}
+
+function insideRing(ring, x, y) {
+  let hit = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i, i += 1) {
+    const a = ring[i];
+    const b = ring[j];
+    if ((a.y > y) !== (b.y > y) && x < ((b.x - a.x) * (y - a.y)) / (b.y - a.y) + a.x) hit = !hit;
+  }
+  return hit;
+}
+
+// The scent cone on the canvas map: its outline plus a light dot fill, clipped to the view.
+export function coneShape(polygon, project, width, height) {
+  const none = { edges: [], dots: [] };
+  if (!Array.isArray(polygon) || polygon.length < 4) return none;
+  const ring = polygon.map(project);
+  if (ring.some((point) => !point)) return none;
+  const edges = [];
+  for (let i = 1; i < ring.length; i += 1) edges.push({ key: `e${i}`, from: ring[i - 1], to: ring[i] });
+  const xs = ring.map((point) => point.x);
+  const ys = ring.map((point) => point.y);
+  const left = Math.max(0, Math.min(...xs));
+  const right = Math.min(width, Math.max(...xs));
+  const top = Math.max(0, Math.min(...ys));
+  const bottom = Math.min(height, Math.max(...ys));
+  const area = Math.max(0, right - left) * Math.max(0, bottom - top);
+  const step = Math.max(12, Math.sqrt(area / 400));
+  const dots = [];
+  for (let y = top + step / 2; y < bottom; y += step) {
+    for (let x = left + step / 2; x < right; x += step) {
+      if (insideRing(ring, x, y)) dots.push({ key: `d${Math.round(x)}-${Math.round(y)}`, x, y });
+    }
+  }
+  return { edges, dots };
+}
+
+// A straight line between two canvas points. Positioned by its middle, because a rotation turns a view
+// around its center.
+function EdgeLine({ from, to, color }) {
+  if (!from || !to) return null;
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const length = Math.hypot(dx, dy);
+  if (!Number.isFinite(length) || length < 0.5) return null;
+  return (
+    <View
+      pointerEvents="none"
+      style={{
+        position: "absolute",
+        left: (from.x + to.x) / 2 - length / 2,
+        top: (from.y + to.y) / 2 - 1,
+        width: length,
+        height: 2,
+        backgroundColor: color,
+        transform: [{ rotate: `${Math.atan2(dy, dx)}rad` }]
+      }}
+    />
   );
 }
 

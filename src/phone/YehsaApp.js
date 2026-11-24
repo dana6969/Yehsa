@@ -1783,6 +1783,10 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
           navTarget={gps.target}
           onRecenter={() => setGps((current) => recenterOnMe(current))}
           onUserPan={() => setGps((current) => noteUserPan(current))}
+          overlay={huntMap.overlay}
+          onMarkPress={huntMap.onMarkPress}
+          onLongPress={huntMap.onMapLongPress}
+          onTap={hunt ? huntMap.onMapPress : undefined}
           onWaypoint={(point) => {
             if (onMapTap) onMapTap(point);
             setImportNote(`Point ${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}. Open Ask and tap Approve to save it.`);
