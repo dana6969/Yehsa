@@ -1,0 +1,399 @@
+[
+{
+"id": "outage_toilet_sanitation",
+"title": "Toilet and sanitation when water is off",
+"domain": "home",
+"also": [
+"toilet won't flush",
+"no water toilet",
+"bucket toilet",
+"emergency toilet"
+],
+"def": "When water is off, a toilet can be flushed by pouring a bucket of water into the bowl, or a lined bucket can be used as an emergency toilet to keep waste contained.",
+"look": [
+"no water from taps",
+"a stored bucket of non-drinking water",
+"heavy-duty bags and a lid"
+],
+"use": "Pour about a gallon of water quickly into the bowl to flush, or line a bucket with two bags, add cat litter or sawdust after use, seal, and store away from living space; wash hands every time.",
+"not": "Do not flush if the sewer is backing up or the area is flooded, and do not use drinking water for flushing if supplies are short.",
+"rel": [
+"water_when_pump_down"
+],
+"src": [
+"cdc",
+"ready"
+]
+},
+{
+"id": "water_storage_home",
+"title": "Storing drinking water at home",
+"domain": "home",
+"also": [
+"how much water to store",
+"store water for emergency",
+"water storage"
+],
+"def": "A common rule is to store at least one gallon of water per person per day for several days, in clean, food-grade containers kept cool and dark.",
+"look": [
+"sealed store-bought water or clean food-grade jugs",
+"a date written on each container",
+"extra for pets and hot weather"
+],
+"use": "Store at least a three-day supply, replace self-filled water about every six months, and keep containers away from chemicals and sunlight.",
+"not": "Do not reuse milk jugs or containers that held chemicals.",
+"rel": [
+"water_when_pump_down",
+"kit_72_hour"
+],
+"src": [
+"ready",
+"cdc"
+]
+},
+{
+"id": "food_after_outage",
+"title": "Is the refrigerator food still safe after an outage?",
+"domain": "home",
+"also": [
+"fridge food after power outage",
+"freezer thawed",
+"food safe without power"
+],
+"def": "A closed refrigerator keeps food safe about 4 hours and a full closed freezer about 48 hours; after that, perishable food above 40°F for over 2 hours should be thrown out.",
+"look": [
+"a fridge or freezer thermometer",
+"how long the power was out",
+"ice crystals still in frozen food"
+],
+"use": "Keep doors closed, check temperatures when power returns, refreeze food that still has ice crystals or is at 40°F or below, and discard warm perishables.",
+"not": "Do not taste food to decide if it is safe; when in doubt, throw it out.",
+"rel": [
+"power_outage_first_steps"
+],
+"src": [
+"usda-fsis",
+"fda"
+]
+},
+{
+"id": "phone_charging_outage",
+"title": "Keeping phones charged in an outage",
+"domain": "home",
+"also": [
+"charge phone no power",
+"phone dying in outage",
+"charge phone in car"
+],
+"def": "In an outage, save phone battery with low-power mode and limited use, and recharge from power banks, a car, or solar chargers.",
+"look": [
+"a charged power bank",
+"a car charger",
+"low-power mode and dimmed screen"
+],
+"use": "Turn on low-power mode, text instead of calling, close apps, and charge from a power bank or a running car in an open area.",
+"not": "Do not run a car in a closed garage to charge a phone.",
+"rel": [
+"phone_battery_backup",
+"co_alarms_indoor_fuel"
+],
+"src": [
+"ready"
+]
+},
+{
+"id": "no_backfeeding_generator",
+"title": "Never plug a generator into a wall outlet",
+"domain": "home",
+"also": [
+"backfeed generator",
+"generator into house wiring",
+"suicide cord",
+"connect generator to house"
+],
+"def": "Backfeeding, plugging a generator into a wall outlet or the panel without a transfer switch, can send power into the lines and kill utility workers or neighbors.",
+"look": [
+"a cord with plugs on both ends",
+"no transfer switch or interlock",
+"an outdoor generator"
+],
+"use": "Plug appliances directly into the generator with outdoor-rated cords, or have an electrician install a transfer switch.",
+"not": "Do not plug a generator into a household outlet or connect it to the panel yourself.",
+"rel": [
+"generator_safety",
+"downed_power_lines"
+],
+"src": [
+"cpsc",
+"dol-osha"
+]
+},
+{
+"id": "fuel_storage_safe",
+"title": "Storing gasoline and fuel safely",
+"domain": "home",
+"also": [
+"store gasoline",
+"gas can storage",
+"fuel storage",
+"propane tank storage"
+],
+"def": "Gasoline and other fuels should be stored in approved containers, outside living spaces, away from heat and flame, and in small amounts.",
+"look": [
+"approved, labeled fuel cans",
+"a detached shed or well-ventilated area",
+"fuel stabilizer for long storage"
+],
+"use": "Store fuel in approved cans away from the house, keep propane tanks outdoors upright, and let engines cool before refueling.",
+"not": "Do not store fuel in the house or basement, or refuel a hot generator.",
+"rel": [
+"generator_safety",
+"stove_fuel_safety"
+],
+"src": [
+"usfa",
+"cpsc"
+]
+},
+{
+"id": "heat_wave_no_ac",
+"title": "Staying cool in a heat wave without air conditioning",
+"domain": "home",
+"also": [
+"heat wave",
+"no air conditioning",
+"too hot at home",
+"cooling center"
+],
+"def": "During extreme heat, fans alone may not prevent heat illness; cooling centers, cool showers, shade, and water lower the risk.",
+"look": [
+"indoor temperatures above the 90s °F",
+"older adults, babies, or ill people at home",
+"dizziness, headache, or confusion"
+],
+"use": "Go to an air-conditioned place or cooling center during the hottest hours, drink water, take cool showers, close blinds by day, and check on others.",
+"not": "Do not rely on a fan in very high heat, and never leave anyone in a parked car.",
+"rel": [
+"check_older_relatives",
+"hydration_basics"
+],
+"src": [
+"cdc",
+"nws"
+]
+},
+{
+"id": "wood_stove_fireplace_safe",
+"title": "Using a wood stove or fireplace safely",
+"domain": "home",
+"also": [
+"wood stove safety",
+"fireplace safety",
+"chimney fire",
+"heat with wood"
+],
+"def": "Wood stoves and fireplaces need a clean, inspected chimney, dry wood, clearance from things that burn, and working smoke and CO alarms.",
+"look": [
+"a chimney inspected each year",
+"dry, seasoned wood",
+"a screen and 3 feet of clear space"
+],
+"use": "Burn only dry wood, keep a screen in place, store ashes in a covered metal can outdoors, and test smoke and CO alarms.",
+"not": "Do not burn trash or treated wood, use gasoline to start a fire, or leave a fire unattended.",
+"rel": [
+"safe_heat_no_power",
+"co_alarms_indoor_fuel"
+],
+"src": [
+"usfa",
+"epa"
+]
+},
+{
+"id": "basement_flooding_sump",
+"title": "Basement flooding or a failed sump pump",
+"domain": "home",
+"also": [
+"basement flooding",
+"sump pump failed",
+"water in basement",
+"flooded basement electrical"
+],
+"def": "A flooded basement can hide electrical shock danger; power to the area should be off before anyone steps into the water.",
+"look": [
+"water near outlets, the panel, or appliances",
+"a sump pump that stopped",
+"a gas appliance under water"
+],
+"use": "Stay out of standing water until power to the basement is shut off by the main breaker from a dry spot or by the utility; then pump out, dry, and clean.",
+"not": "Do not walk into flooded basements with live power, or run gas pumps or generators indoors.",
+"rel": [
+"electric_shock",
+"generator_safety"
+],
+"src": [
+"fema",
+"cdc"
+]
+},
+{
+"id": "well_disinfection_flood",
+"title": "Well water after a flood",
+"domain": "home",
+"also": [
+"well flooded",
+"private well after flood",
+"shock chlorinate well",
+"well water safe"
+],
+"def": "A private well that was flooded may be contaminated and should not be used for drinking until it is disinfected and tested.",
+"look": [
+"floodwater over or near the wellhead",
+"cloudy or changed water",
+"a damaged well cap"
+],
+"use": "Use bottled or boiled water, contact the local health department for testing and disinfection guidance, and test again before drinking.",
+"not": "Do not drink, cook with, or brush teeth with well water after flooding until it tests safe.",
+"rel": [
+"water_when_pump_down"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "documents_cash_ready",
+"title": "Important documents and cash for emergencies",
+"domain": "home",
+"also": [
+"important documents",
+"grab and go documents",
+"emergency cash",
+"insurance papers"
+],
+"def": "Copies of IDs, insurance, medical records, and some small bills make it easier to evacuate, get help, and recover after a disaster.",
+"look": [
+"copies in a waterproof bag",
+"a digital copy saved securely",
+"small bills when card systems are down"
+],
+"use": "Keep copies of IDs, insurance, prescriptions, deeds, and contacts in a waterproof pouch with your kit, plus some cash.",
+"not": "Do not keep the only copies at home where a fire or flood could destroy them.",
+"rel": [
+"kit_72_hour",
+"emergency_info_card"
+],
+"src": [
+"ready",
+"fema",
+"cfpb"
+]
+},
+{
+"id": "smoke_alarm_testing",
+"title": "Testing smoke and CO alarms",
+"domain": "home",
+"also": [
+"test smoke alarm",
+"smoke detector chirping",
+"replace smoke alarm",
+"CO detector test"
+],
+"def": "Smoke and carbon monoxide alarms should be tested monthly, batteries changed as the maker says, and units replaced about every 10 years.",
+"look": [
+"a chirp that means a low battery",
+"the date printed on the alarm",
+"alarms on every level and outside sleeping areas"
+],
+"use": "Press the test button monthly, replace batteries or the unit when it chirps, and replace alarms older than 10 years.",
+"not": "Do not remove batteries to silence a chirp and forget to replace them.",
+"rel": [
+"co_alarms_indoor_fuel",
+"home_fire_escape"
+],
+"src": [
+"usfa",
+"cpsc"
+]
+},
+{
+"id": "burst_pipe_shutoff",
+"title": "Burst pipe: shutting off the water",
+"domain": "home",
+"also": [
+"pipe burst",
+"water leak flooding house",
+"main water shutoff",
+"turn off water to house"
+],
+"def": "When a pipe bursts, shutting the main water valve quickly limits damage; it is often where the water line enters the house.",
+"look": [
+"water spraying or pooling",
+"the main valve near the meter or entry point",
+"water near outlets or appliances"
+],
+"use": "Turn off the main water valve, shut off power to wet areas if it is safe to reach the breaker, open a faucet to drain, and call a plumber.",
+"not": "Do not touch electrical items while standing in water.",
+"rel": [
+"pipes_freezing",
+"basement_flooding_sump"
+],
+"src": [
+"fema",
+"ready"
+]
+},
+{
+"id": "stuck_car_snow",
+"title": "Stuck in a car in snow",
+"domain": "home",
+"also": [
+"stranded in car snow",
+"stuck in snowstorm car",
+"car stuck in blizzard"
+],
+"def": "If stranded in a vehicle in a snowstorm, it is usually safest to stay with the car, keep the exhaust pipe clear, and run the engine only briefly for heat.",
+"look": [
+"deep snow and no visibility",
+"the exhaust pipe buried",
+"falling body temperature"
+],
+"use": "Stay in the car, tie a bright cloth to the antenna, clear the exhaust pipe, run the engine about 10 minutes each hour with a window cracked, and move arms and legs to stay warm.",
+"not": "Do not walk away into a storm or run the engine with a blocked exhaust.",
+"call": "Call 911 if you are stranded and can get a signal.",
+"rel": [
+"co_alarms_indoor_fuel",
+"hypothermia_stages"
+],
+"src": [
+"nws",
+"ready",
+"cdc"
+]
+},
+{
+"id": "car_wont_start_cold",
+"title": "Car won't start in the cold",
+"domain": "home",
+"also": [
+"dead battery cold",
+"jump start car",
+"car won't start"
+],
+"def": "Cold weather weakens car batteries; a jump start, done in the right order, often gets the car going.",
+"look": [
+"clicking but no crank",
+"dim dash lights",
+"jumper cables or a jump pack"
+],
+"use": "Connect red to the dead battery's positive, red to the good positive, black to the good negative, and black to bare metal on the dead car away from the battery; start the good car, then the dead one.",
+"not": "Do not jump a cracked or leaking battery, or let the clamps touch each other.",
+"rel": [
+"stuck_car_snow"
+],
+"src": [
+"nhtsa"
+]
+}
+]

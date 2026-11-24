@@ -274,7 +274,9 @@
 "use": "Call or visit twice a day during extreme weather or outages, help them reach a cooling or warming center, and make sure they have water and medicines.",
 "not": "Do not assume they are fine because they say so on the phone if the home is very hot or cold.",
 "call": "Call 911 for confusion, collapse, or trouble breathing.",
-"rel": [],
+"rel": [
+"power_medical_devices"
+],
 "src": [
 "cdc",
 "ready"

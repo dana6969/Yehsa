@@ -180,6 +180,7 @@
 "not": "Do not skip your own medicines, food, or rest.",
 "call": "Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
 "rel": [
+"power_outage_first_steps",
 "check_older_relatives"
 ],
 "src": [

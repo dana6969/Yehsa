@@ -1,0 +1,339 @@
+[
+{
+"id": "power_outage_first_steps",
+"title": "Power outage: first steps",
+"domain": "home",
+"also": [
+"power outage",
+"lights went out",
+"blackout what to do",
+"electricity out"
+],
+"def": "When the power goes out, safety comes first: use flashlights, keep fridge and freezer doors shut, unplug electronics, and never run fuel-burning devices indoors.",
+"look": [
+"the neighborhood is dark too, or only your home",
+"outside temperature and how long it may last",
+"people who rely on powered medical devices"
+],
+"use": "Check on household members, report the outage to the utility, switch off major appliances, and keep phones charged from a power bank or a car run outdoors.",
+"not": "Do not use candles where a flashlight will do, or run a generator, grill, or camp stove indoors.",
+"steps": [
+"Grab flashlights, not candles.",
+"Keep fridge and freezer closed.",
+"Unplug sensitive electronics.",
+"Report the outage.",
+"Check on neighbors who may need help."
+],
+"rel": [
+"generator_safety",
+"food_outage",
+"co_alarms_indoor_fuel"
+],
+"src": [
+"ready",
+"cdc"
+]
+},
+{
+"id": "generator_safety",
+"title": "Generator safety",
+"domain": "home",
+"also": [
+"portable generator",
+"generator in garage",
+"where to put a generator",
+"generator carbon monoxide"
+],
+"def": "A portable generator makes deadly carbon monoxide, so it must run only outdoors, at least 20 feet from doors, windows, and vents, with the exhaust pointed away from the house.",
+"look": [
+"the generator outside, far from openings",
+"a working CO alarm inside",
+"heavy-duty outdoor extension cords"
+],
+"use": "Run it outdoors and dry, plug appliances in with outdoor-rated cords, let it cool before refueling, and keep CO alarms working inside.",
+"not": "Never run a generator in a home, garage, basement, or shed, even with doors open, and never plug it into a wall outlet to backfeed the house without a transfer switch.",
+"call": "Get to fresh air and call 911 if anyone has headache, dizziness, nausea, or confusion.",
+"rel": [
+"co_alarms_indoor_fuel",
+"power_outage_first_steps"
+],
+"src": [
+"cpsc",
+"ready"
+]
+},
+{
+"id": "co_alarms_indoor_fuel",
+"title": "Carbon monoxide: alarms, symptoms, and indoor fuel",
+"domain": "home",
+"also": [
+"carbon monoxide",
+"CO alarm",
+"CO detector",
+"grill indoors",
+"heating with a stove"
+],
+"def": "Carbon monoxide is an invisible, odorless gas from burning fuel; it causes headache, dizziness, nausea, and confusion, and can kill people as they sleep.",
+"look": [
+"several people or pets sick at once",
+"symptoms that improve outside",
+"a fuel-burning device running indoors"
+],
+"use": "Put CO alarms on every level and outside sleeping areas, test them monthly, and get everyone outside at once if an alarm sounds.",
+"not": "Never heat or cook indoors with a charcoal grill, camp stove, or generator, and never warm up a car in a closed garage.",
+"call": "Get to fresh air and call 911 if anyone has symptoms or the alarm sounds.",
+"rel": [
+"generator_safety"
+],
+"src": [
+"cdc",
+"cpsc"
+]
+},
+{
+"id": "water_when_pump_down",
+"title": "Drinking water when the well pump or city water is down",
+"domain": "home",
+"also": [
+"no water power outage",
+"well pump no power",
+"boil water notice",
+"emergency drinking water"
+],
+"def": "When the pump or city supply fails, use stored water first, then water from the hot water heater or ice, and treat any other water before drinking.",
+"look": [
+"stored water, at least a gallon per person per day",
+"the water heater tank as a reserve",
+"a boil-water notice from the utility"
+],
+"use": "Boil water for one minute (three above 6,500 feet), or disinfect clear water with unscented household bleach as the EPA directs, and follow utility notices.",
+"not": "Do not drink floodwater or water from a flooded well until it is tested, and do not use bleach with added scents or cleaners.",
+"rel": [
+"power_outage_first_steps"
+],
+"src": [
+"cdc",
+"epa",
+"ready"
+]
+},
+{
+"id": "safe_heat_no_power",
+"title": "Staying warm without power, and space-heater risk",
+"domain": "home",
+"also": [
+"no heat in winter outage",
+"space heater safety",
+"how to stay warm without electricity"
+],
+"def": "To stay warm without power, gather in one small room, layer clothing and blankets, and use only heaters rated for indoor use, kept away from anything that burns.",
+"look": [
+"one room with doors closed and windows covered",
+"hats, layers, and sleeping bags",
+"space heaters three feet from bedding and curtains"
+],
+"use": "Close off unused rooms, eat and drink warm fluids, and if the house gets dangerously cold, go to a warming center or a friend's home.",
+"not": "Do not use an oven, grill, camp stove, or generator for heat indoors, and do not leave a space heater running unattended or on an extension cord.",
+"rel": [
+"co_alarms_indoor_fuel",
+"pipes_freezing"
+],
+"src": [
+"ready",
+"cdc",
+"usfa"
+]
+},
+{
+"id": "pipes_freezing",
+"title": "Keeping pipes from freezing",
+"domain": "home",
+"also": [
+"frozen pipes",
+"pipes freezing",
+"burst pipe cold",
+"thaw a pipe"
+],
+"def": "Pipes freeze where cold air reaches them, such as outside walls, crawl spaces, and garages; a frozen pipe can burst when it thaws.",
+"look": [
+"little or no water from a tap in very cold weather",
+"frost on exposed pipes",
+"pipes along outside walls"
+],
+"use": "Let faucets drip, open cabinet doors under sinks, and warm a frozen pipe gently with a hair dryer or warm towels, starting at the tap end.",
+"not": "Do not thaw pipes with an open flame or torch.",
+"call": "If a pipe bursts, shut off the main water valve and call a plumber.",
+"rel": [
+"safe_heat_no_power"
+],
+"src": [
+"ready"
+]
+},
+{
+"id": "downed_power_lines",
+"title": "Downed power lines",
+"domain": "home",
+"also": [
+"power line down",
+"wire on my car",
+"fallen power line"
+],
+"def": "Treat every downed line as live and deadly; electricity can travel through wet ground and water around it.",
+"look": [
+"a sagging or fallen wire",
+"sparking or buzzing",
+"a line touching a car, fence, or puddle"
+],
+"use": "Stay at least 35 feet away and call 911 and the utility. If a line is on your car, stay inside and wait for help unless the car is on fire.",
+"not": "Do not touch a person or object in contact with a line, drive over a downed line, or walk through water near one.",
+"call": "Call 911 and the utility.",
+"rel": [
+"power_outage_first_steps"
+],
+"src": [
+"ready",
+"dol-osha"
+]
+},
+{
+"id": "flashlights_not_candles",
+"title": "Flashlights versus candles",
+"domain": "home",
+"also": [
+"candles power outage",
+"candle fire",
+"light during outage"
+],
+"def": "Battery flashlights and lanterns are far safer than candles during an outage; candles start many home fires.",
+"look": [
+"fresh batteries and spare flashlights",
+"candles near curtains, bedding, or children",
+"lights left burning at night"
+],
+"use": "Use flashlights or battery lanterns, keep spare batteries, and if you must use a candle, keep it in a sturdy holder, away from anything that burns, and never leave it alone.",
+"not": "Do not use candles while sleeping or near children and pets.",
+"rel": [
+"power_outage_first_steps",
+"home_fire_escape"
+],
+"src": [
+"usfa",
+"ready"
+]
+},
+{
+"id": "home_fire_escape",
+"title": "Home fire escape plan",
+"domain": "home",
+"also": [
+"fire escape plan",
+"house fire what to do",
+"smoke alarm going off",
+"get out of a fire"
+],
+"def": "A home fire escape plan gives every room two ways out and an outside meeting spot; in a fire you may have only a couple of minutes to escape.",
+"look": [
+"working smoke alarms on every level and in sleeping areas",
+"two exits from each room",
+"a meeting place outside"
+],
+"use": "Practice the plan twice a year, get out fast and stay out, crawl low under smoke, and call 911 from outside.",
+"not": "Do not go back inside for anything, and do not open a hot door.",
+"steps": [
+"Get out fast.",
+"Crawl low under smoke.",
+"Feel doors; use another way if hot.",
+"Meet at the outside spot.",
+"Call 911 from outside."
+],
+"call": "Call 911 once you are out.",
+"rel": [
+"flashlights_not_candles"
+],
+"src": [
+"usfa",
+"ready"
+]
+},
+{
+"id": "gas_smell_leave",
+"title": "If you smell gas",
+"domain": "home",
+"also": [
+"smell gas",
+"gas leak",
+"rotten egg smell",
+"propane leak"
+],
+"def": "A rotten-egg smell can mean a natural gas or propane leak, which can explode from a single spark.",
+"look": [
+"a rotten-egg or sulfur smell",
+"hissing near a gas line or appliance",
+"dead plants over a buried line"
+],
+"use": "Leave right away, leaving doors open behind you, then call the gas utility or 911 from a safe distance outside.",
+"not": "Do not flip light switches, use phones, start cars, or light anything inside or near the leak.",
+"call": "Call the gas utility or 911 from outside.",
+"rel": [
+"home_fire_escape"
+],
+"src": [
+"ready"
+]
+},
+{
+"id": "power_medical_devices",
+"title": "Medicines and medical devices during an outage",
+"domain": "home",
+"also": [
+"oxygen machine power outage",
+"insulin no fridge",
+"medical device battery",
+"CPAP outage"
+],
+"def": "People who rely on powered medical devices or refrigerated medicines need a plan for outages: backup power, a cooler, and a place to go.",
+"look": [
+"oxygen, CPAP, dialysis, or other powered equipment",
+"insulin or other medicines that need cold",
+"battery runtime for each device"
+],
+"use": "Register with your utility as a medical priority if offered, keep backup batteries charged, and plan where to go if power will be out long.",
+"not": "Do not use medicines that look changed after heat or freezing without asking a pharmacist.",
+"call": "Call 911 if a person dependent on a device is in danger.",
+"rel": [
+"power_outage_first_steps"
+],
+"src": [
+"ready",
+"fda"
+]
+},
+{
+"id": "stay_or_leave_home",
+"title": "When to stay home and when to leave",
+"domain": "home",
+"also": [
+"evacuate or shelter in place",
+"should I evacuate",
+"stay home in storm",
+"leave home in outage"
+],
+"def": "Stay home when it is safe, warm or cool enough, and supplied; leave when officials order an evacuation or when your home is no longer safe.",
+"look": [
+"an evacuation order from local officials",
+"no heat in freezing weather or no cooling in extreme heat",
+"rising water, fire, or a gas leak"
+],
+"use": "Follow local officials, leave early if you need extra time, and take your kit, medicines, documents, and pets.",
+"not": "Do not wait to see if it gets worse when told to evacuate, and do not drive through floodwater.",
+"rel": [
+"kit_72_hour",
+"power_outage_first_steps"
+],
+"src": [
+"ready",
+"fema"
+]
+}
+]

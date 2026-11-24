@@ -86,6 +86,7 @@
 "use": "Keep a grab bag by the door, a smaller kit in each car with blankets and a scraper, and a home kit for outages; check food, water, and batteries twice a year.",
 "not": "Do not pack only gadgets; water, medicines, and warm layers matter most. Do not store fuel in the living space.",
 "rel": [
+"power_outage_first_steps",
 "day_hike_essentials"
 ],
 "src": [
@@ -272,7 +273,9 @@
 "use": "Cook outside, light the stove before leaning over it, let it cool before refueling, and pack fuel apart from food.",
 "not": "Never cook or heat with a stove inside a tent, vestibule, car, or home; carbon monoxide can kill.",
 "call": "Get fresh air and call 911 for headache, dizziness, or confusion near a stove or heater.",
-"rel": [],
+"rel": [
+"co_alarms_indoor_fuel"
+],
 "src": [
 "cpsc",
 "nps"

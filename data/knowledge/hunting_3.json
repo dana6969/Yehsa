@@ -178,7 +178,8 @@
 "use": "Put orange on and around the blind as your state requires, know your shooting lanes and backstops, and keep the gun pointed out the window only when ready.",
 "not": "Do not run a heater with an open flame inside a closed blind; carbon monoxide builds fast.",
 "rel": [
-"hunt_firearm_safety"
+"hunt_firearm_safety",
+"co_alarms_indoor_fuel"
 ],
 "src": [
 "ihea",

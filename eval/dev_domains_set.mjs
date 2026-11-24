@@ -1562,5 +1562,302 @@ export const DOMAIN_DEV_SET = [
     "writing down what went right"
    ]
   }
+ },
+ {
+  "id": "dom-power-outage-first-steps",
+  "category": "domain-home",
+  "prompt": "Tell me about power outage",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "power outage"
+   ]
+  }
+ },
+ {
+  "id": "dom-generator-safety",
+  "category": "domain-home",
+  "prompt": "Tell me about portable generator",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "generator safety"
+   ]
+  }
+ },
+ {
+  "id": "dom-co-alarms-indoor-fuel",
+  "category": "domain-home",
+  "prompt": "Tell me about carbon monoxide",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "carbon monoxide"
+   ]
+  }
+ },
+ {
+  "id": "dom-water-when-pump-down",
+  "category": "domain-home",
+  "prompt": "Tell me about no water power outage",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "drinking water when the well pump or city water is down"
+   ]
+  }
+ },
+ {
+  "id": "dom-safe-heat-no-power",
+  "category": "domain-home",
+  "prompt": "Tell me about no heat in winter outage",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "staying warm without power, and space-heater risk"
+   ]
+  }
+ },
+ {
+  "id": "dom-pipes-freezing",
+  "category": "domain-home",
+  "prompt": "Tell me about frozen pipes",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "keeping pipes from freezing"
+   ]
+  }
+ },
+ {
+  "id": "dom-downed-power-lines",
+  "category": "domain-home",
+  "prompt": "Tell me about power line down",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "downed power lines"
+   ]
+  }
+ },
+ {
+  "id": "dom-flashlights-not-candles",
+  "category": "domain-home",
+  "prompt": "Tell me about light during outage",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "flashlights versus candles"
+   ]
+  }
+ },
+ {
+  "id": "dom-home-fire-escape",
+  "category": "domain-home",
+  "prompt": "Tell me about fire escape plan",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "home fire escape plan"
+   ]
+  }
+ },
+ {
+  "id": "dom-gas-smell-leave",
+  "category": "domain-home",
+  "prompt": "Tell me about smell gas",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "if you smell gas"
+   ]
+  }
+ },
+ {
+  "id": "dom-power-medical-devices",
+  "category": "domain-home",
+  "prompt": "Tell me about oxygen machine power outage",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "medicines and medical devices during an outage"
+   ]
+  }
+ },
+ {
+  "id": "dom-stay-or-leave-home",
+  "category": "domain-home",
+  "prompt": "Tell me about evacuate or shelter in place",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "when to stay home and when to leave"
+   ]
+  }
+ },
+ {
+  "id": "dom-outage-toilet-sanitation",
+  "category": "domain-home",
+  "prompt": "Tell me about toilet won't flush",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "toilet and sanitation when water is off"
+   ]
+  }
+ },
+ {
+  "id": "dom-water-storage-home",
+  "category": "domain-home",
+  "prompt": "Tell me about store water for emergency",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "storing drinking water at home"
+   ]
+  }
+ },
+ {
+  "id": "dom-food-after-outage",
+  "category": "domain-home",
+  "prompt": "Tell me about fridge food after power outage",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "is the refrigerator food still safe after an outage?"
+   ]
+  }
+ },
+ {
+  "id": "dom-phone-charging-outage",
+  "category": "domain-home",
+  "prompt": "Tell me about charge phone no power",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "keeping phones charged in an outage"
+   ]
+  }
+ },
+ {
+  "id": "dom-no-backfeeding-generator",
+  "category": "domain-home",
+  "prompt": "Tell me about backfeed generator",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "never plug a generator into a wall outlet"
+   ]
+  }
+ },
+ {
+  "id": "dom-fuel-storage-safe",
+  "category": "domain-home",
+  "prompt": "Tell me about store gasoline",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "storing gasoline and fuel safely"
+   ]
+  }
+ },
+ {
+  "id": "dom-heat-wave-no-ac",
+  "category": "domain-home",
+  "prompt": "Tell me about heat wave",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "staying cool in a heat wave without air conditioning"
+   ]
+  }
+ },
+ {
+  "id": "dom-wood-stove-fireplace-safe",
+  "category": "domain-home",
+  "prompt": "Tell me about wood stove safety",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "using a wood stove or fireplace safely"
+   ]
+  }
+ },
+ {
+  "id": "dom-basement-flooding-sump",
+  "category": "domain-home",
+  "prompt": "Tell me about basement flooding",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "basement flooding or a failed sump pump"
+   ]
+  }
+ },
+ {
+  "id": "dom-well-disinfection-flood",
+  "category": "domain-home",
+  "prompt": "Tell me about well flooded",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "well water after a flood"
+   ]
+  }
+ },
+ {
+  "id": "dom-documents-cash-ready",
+  "category": "domain-home",
+  "prompt": "Tell me about important documents",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "important documents and cash for emergencies"
+   ]
+  }
+ },
+ {
+  "id": "dom-smoke-alarm-testing",
+  "category": "domain-home",
+  "prompt": "Tell me about test smoke alarm",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "testing smoke and co alarms"
+   ]
+  }
+ },
+ {
+  "id": "dom-burst-pipe-shutoff",
+  "category": "domain-home",
+  "prompt": "Tell me about pipe burst",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "burst pipe"
+   ]
+  }
+ },
+ {
+  "id": "dom-stuck-car-snow",
+  "category": "domain-home",
+  "prompt": "Tell me about stranded in car snow",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "stuck in a car in snow"
+   ]
+  }
+ },
+ {
+  "id": "dom-car-wont-start-cold",
+  "category": "domain-home",
+  "prompt": "Tell me about dead battery cold",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "car won't start in the cold"
+   ]
+  }
  }
 ];

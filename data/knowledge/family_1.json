@@ -173,7 +173,9 @@
 ],
 "use": "Use ready-to-feed formula when you can; otherwise use bottled water or water brought to a rolling boil for one minute and cooled. Clean bottles in safe water.",
 "not": "Do not use water from a flooded well or treated only with a filter for an infant without checking with your health department.",
-"rel": [],
+"rel": [
+"power_outage_first_steps"
+],
 "src": [
 "cdc",
 "epa"
