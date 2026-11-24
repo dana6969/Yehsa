@@ -3,6 +3,7 @@
 // coming back (the screen is rebuilt) draws exactly what it drew before.
 
 import { attributionLine } from "./map_packs.js";
+import { ROADS_ATTRIBUTION, roadsLayer } from "./roads.js";
 
 export const MAP_STYLES = [
   { id: "standard", label: "Standard" },
@@ -57,7 +58,8 @@ function zoomRange(items) {
 }
 
 // store: the pack store. areas: saved areas. port: loopback tile server port (null until bound).
-export function mapLayers({ store, areas = [], port = null, style = "standard", mode = "field", night = "red" } = {}) {
+// roads: { on, ready } for the built-in road layer (off unless given).
+export function mapLayers({ store, areas = [], port = null, style = "standard", mode = "field", night = "red", roads = null } = {}) {
   const packs = store?.packs || [];
   const tiled = tilePacks(packs);
   const drawn = (areas || []).filter((area) => area && area.rendered && area.box);
@@ -86,12 +88,13 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
     });
   }
   const archivePack = packs.find((pack) => pack.archive) || null;
-  const empty = !tiled.length && !drawn.length && !shapes.length && !archivePack;
+  const roadLayer = roads ? roadsLayer({ on: roads.on, ready: roads.ready, port, look: { style, mode, night } }) : null;
+  const empty = !tiled.length && !drawn.length && !shapes.length && !archivePack && !roadLayer;
   const hasLand = shapes.some((line) => line.ring);
   const look = rasterPaintFor({ style, mode, night });
   const sources = [];
   if (tiled.length) sources.push(...packs.filter((pack) => tiled.includes(pack)));
-  const credit = aboutThisMap({ packs, drawn }).credit;
+  const credit = aboutThisMap({ packs, drawn, roads: Boolean(roadLayer) }).credit;
   return {
     empty,
     // The map component draws whenever there is something to draw, even while the tile server
@@ -99,6 +102,7 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
     useMap: !empty,
     waitingForTiles: (tiled.length > 0 || drawn.length > 0) && !port,
     rasters,
+    roads: roadLayer,
     archivePack,
     shapes,
     hasLand,
@@ -147,17 +151,17 @@ export function dedupeCredit(text) {
 
 // The About this map sheet for what is saved on the phone (same packs and areas the map draws).
 // Kept apart from mapLayers(), which only ever describes what is drawn.
-export function mapAbout({ store, areas = [] } = {}) {
+export function mapAbout({ store, areas = [], roads = false } = {}) {
   const packs = store?.packs || [];
   const drawn = (areas || []).filter((area) => area && area.rendered && area.box);
-  return aboutThisMap({ packs, drawn });
+  return aboutThisMap({ packs, drawn, roads });
 }
 
 const ELEVATION_CREDIT = "Elevation: AWS Terrain Tiles (USGS 3DEP, SRTM, GMTED, ETOPO1; public domain)";
 
 // "About this map": what is on the map and every source credited once. The map itself only shows
 // an "About this map" link; the credit lives here, so it is never a wall of text under the map.
-export function aboutThisMap({ packs = [], drawn = [] } = {}) {
+export function aboutThisMap({ packs = [], drawn = [], roads = false } = {}) {
   const lines = [];
   for (const pack of packs) {
     if (!pack?.name) continue;
@@ -169,11 +173,13 @@ export function aboutThisMap({ packs = [], drawn = [] } = {}) {
     if (!lines.includes(line)) lines.push(line);
   }
   if (drawn.length) lines.push(`${drawn.length === 1 ? "1 downloaded area" : `${drawn.length} downloaded areas`}. Terrain and elevation only. No roads.`);
+  if (roads) lines.push("Roads and streets. Built into the app, from OpenStreetMap.");
   const named = attributionLine({ packs: packs.filter((pack) => pack.attribution) });
   let credit = /^No map pack yet\.$/.test(named) ? "" : named;
   // The pack credit already names AWS Terrain Tiles; only add it when a downloaded area is the sole elevation source.
   if (drawn.length && !/AWS Terrain Tiles/i.test(credit)) {
     credit = credit ? credit.replace(/\s*May be dated\.$/, ` · ${ELEVATION_CREDIT}. May be dated.`) : `${ELEVATION_CREDIT}. May be dated.`;
   }
+  if (roads) credit = credit ? `${ROADS_ATTRIBUTION}. ${credit}` : `${ROADS_ATTRIBUTION}.`;
   return { title: "About this map", lines, credit: dedupeCredit(credit) || "No map pack yet." };
 }

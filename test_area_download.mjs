@@ -21,7 +21,8 @@ test("one-tap area shows its size, picks only terrain and elevation, and never a
   for (const id of REFUSED_LAYERS) {
     const refused = planArea({ around: camp, layers: ["terrain", id] });
     assert.equal(refused.ok, false);
-    assert.match(refused.reason, /Road and street layers are not in this build/);
+    assert.match(refused.reason, /built-in road layer/);
+    assert.match(refused.reason, /Nothing was downloaded/);
   }
   const bigger = planArea({ around: { ...camp, radiusKm: 50 } });
   assert.ok(bigger.tiles.length <= 600);

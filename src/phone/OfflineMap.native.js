@@ -11,17 +11,25 @@ import {
   PointAnnotation,
   RasterLayer,
   RasterSource,
-  ShapeSource
+  ShapeSource,
+  SymbolLayer,
+  VectorSource
 } from "@maplibre/maplibre-react-native";
 import { AboutMapLink, ConePill, DragPin, MarkPin } from "./hunt_map_ui.js";
 
-function blankStyle(color) {
-  return {
+// glyphs: the loopback URL for the road-name font, when the road layer is on.
+function blankStyle(color, glyphs) {
+  const style = {
     version: 8,
     sources: {},
     layers: [{ id: "background", type: "background", paint: { "background-color": color } }]
   };
+  if (glyphs) style.glyphs = glyphs;
+  return style;
 }
+
+const NOT_TRACK = ["!=", ["get", "c"], "track"];
+const IS_TRACK = ["==", ["get", "c"], "track"];
 
 const WORLD = {
   type: "Feature",
@@ -65,13 +73,15 @@ export default function OfflineMap({
   onMarkPress,
   onMarkDragEnd,
   onAbout,
+  parcels,
   fill = false
 }) {
   const camera = useRef(null);
   const geo = useMemo(() => shapesToGeoJson(layers?.shapes), [layers?.shapes]);
   const fixed = useRef(false);
   const land = layers?.hasLand ? layers.land : null;
-  const style = useMemo(() => blankStyle(land ? land.water : "#101611"), [land?.water]);
+  const roads = layers?.roads || null;
+  const style = useMemo(() => blankStyle(land ? land.water : "#101611", roads?.glyphs), [land?.water, roads?.glyphs]);
 
   // Look at the right place once the map has a camera, and again when asked (Show on map).
   useEffect(() => {
@@ -145,6 +155,21 @@ export default function OfflineMap({
         {layers?.tint ? (
           <ShapeSource id="tint" shape={WORLD}>
             <FillLayer id="tint-fill" style={{ fillColor: layers.tint.color, fillOpacity: layers.tint.opacity }} />
+          </ShapeSource>
+        ) : null}
+        {roads ? (
+          // Built-in OpenStreetMap roads (vector), above the terrain picture and below your marks.
+          <VectorSource id="roads-src" tileUrlTemplates={[roads.template]} minZoomLevel={roads.minZoom} maxZoomLevel={roads.maxZoom}>
+            <LineLayer id="roads-casing" sourceLayerID={roads.sourceLayer} filter={NOT_TRACK} minZoomLevel={10} style={roads.specs.casing} />
+            <LineLayer id="roads-line" sourceLayerID={roads.sourceLayer} filter={NOT_TRACK} style={roads.specs.line} />
+            <LineLayer id="roads-track" sourceLayerID={roads.sourceLayer} filter={IS_TRACK} style={{ ...roads.specs.line, ...roads.specs.track }} />
+            <SymbolLayer id="roads-label" sourceLayerID={roads.sourceLayer} minZoomLevel={roads.specs.labelMinZoom} style={roads.specs.label} />
+          </VectorSource>
+        ) : null}
+        {parcels?.features?.length ? (
+          // Property lines: outlines only, no names or owner data. Approximate, not a survey.
+          <ShapeSource id="parcel-lines" shape={parcels}>
+            <LineLayer id="parcel-line" minZoomLevel={12} style={{ lineColor: "#f2d04b", lineWidth: ["interpolate", ["linear"], ["zoom"], 13, 0.8, 17, 2.2], lineOpacity: 0.9, lineDasharray: [3, 2] }} />
           </ShapeSource>
         ) : null}
         <ShapeSource id="overlays" shape={geo.lines}>

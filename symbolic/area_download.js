@@ -77,7 +77,7 @@ export function planArea({ box, around, layers = ["terrain"], zooms, name } = {}
   }
   const refused = layers.filter((id) => REFUSED_LAYERS.includes(id));
   if (refused.length) {
-    return { ok: false, reason: "Road and street layers are not in this build. Nothing was downloaded." };
+    return { ok: false, reason: "Roads come from the built-in road layer (Layers and packs), not from downloaded areas. Nothing was downloaded." };
   }
   const chosen = AREA_LAYERS.filter((layer) => layers.includes(layer.id));
   if (!chosen.length) return { ok: false, reason: "No layer was chosen. Nothing was downloaded." };
@@ -110,7 +110,7 @@ export function planArea({ box, around, layers = ["terrain"], zooms, name } = {}
     bytes,
     capped,
     attribution: chosen.map((layer) => layer.attribution).join(" "),
-    sizeText: `About ${formatBytes(bytes)} for ${tiles.length} terrain and elevation tiles, zoom ${zoomList[0]} to ${zoomList[zoomList.length - 1]}.${capped ? " The area was trimmed to keep the size sane." : ""} No roads or streets. Stored only on this phone. Nothing downloads until you tap Download.`
+    sizeText: `About ${formatBytes(bytes)} for ${tiles.length} terrain and elevation tiles, zoom ${zoomList[0]} to ${zoomList[zoomList.length - 1]}.${capped ? " The area was trimmed to keep the size sane." : ""} No roads or streets in the download; the built-in road layer draws those. Stored only on this phone. Nothing downloads until you tap Download.`
   };
 }
 

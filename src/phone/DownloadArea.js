@@ -118,7 +118,7 @@ export default function DownloadArea({ center, visibleBox, areas, listRef, onCom
         <Ionicons name="download-outline" size={22} color={colors.brass} />
         <Text accessibilityRole="header" style={styles.title}>Download this area</Text>
       </View>
-      <Text style={styles.lead}>Terrain, hills and contour lines for offline use. No roads or streets.</Text>
+      <Text style={styles.lead}>Terrain, hills and contour lines for offline use. Roads and streets come from the built-in road layer.</Text>
       <View style={styles.chips} accessibilityRole="radiogroup">
         {choices.map((item) => {
           const selected = item === choice;
