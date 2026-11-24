@@ -6,7 +6,9 @@ import meta from "./assets/camera_id/classes.json" with { type: "json" };
 import raw from "./assets/camera_id/index.json" with { type: "json" };
 import oranges from "./eval/camera_id/fixtures/shot9_oranges.json" with { type: "json" };
 import cases from "./eval/camera_id/fixtures/round4_cases.json" with { type: "json" };
-import { DOMAINS, SCENE_QUIET, decodeIndex, identify, normalize, sceneOf } from "./src/phone/camera_id_match.js";
+import tomato from "./eval/camera_id/fixtures/heldout_tomato_vine.json" with { type: "json" };
+import camReport from "./eval/camera_id/report.json" with { type: "json" };
+import { DOMAINS, SCENE_QUIET, decodeIndex, gateDecision, identify, normalize, sceneOf } from "./src/phone/camera_id_match.js";
 import { selectedFirst } from "./symbolic/hunt/chip_order.js";
 import { dedupeCredit } from "./symbolic/map_layers.js";
 import { SECRET_KEYS, secureKeyFor } from "./symbolic/peer_secret_names.js";
@@ -199,4 +201,33 @@ test("domain gate: people and pets, screens and food each get their own words; w
     if (r.status === "match") assert.equal(r.scene, "wild", item.id);
     else assert.ok(["unclear", "wild"].includes(r.scene) || r.domain !== "everyday", item.id);
   }
+});
+
+// ---------- Round 4b: the one everyday photo still answered as a toxic species ----------
+
+test("regression: tomatoes on the vine (held out) are never answered as bittersweet nightshade", () => {
+  const th = index.thresholds;
+  assert.ok(th.toxicEverydayCap > 0 && th.toxicEverydayCap < 0.2, JSON.stringify(th));
+  // The held-out head's numbers for that photo: it cleared the toxic bar (0.667 >= 0.55) but carried
+  // 0.223 everyday mass. The cap declines it.
+  const held = tomato.heldout;
+  const before = gateDecision({ top: { id: held.top, score: held.topScore }, everyday: held.everyday, other: held.other, meta: meta[held.top], thresholds: { ...th, toxicEverydayCap: 1 } });
+  assert.equal(before.answer, true, "without the cap this photo was answered");
+  const after = gateDecision({ top: { id: held.top, score: held.topScore }, everyday: held.everyday, other: held.other, meta: meta[held.top], thresholds: th });
+  assert.deepEqual(after, { answer: false, why: "toxic-everyday" });
+  // The same everyday mass on a non-toxic class is not capped (the cap is only for toxic or deadly).
+  assert.equal(gateDecision({ top: { id: "yarrow", score: 0.667 }, everyday: 0.223, other: 0.014, meta: meta.yarrow, thresholds: th }).answer, true);
+  // The shipped head on the photo itself: no toxic or deadly species.
+  const r = identify(index, normalize(Float32Array.from(tomato.embedding)));
+  if (r.status === "match") assert.ok(!["toxic", "deadly"].includes(meta[r.suggestions[0].id].use), r.suggestions[0].id);
+  assert.doesNotMatch([r.title, r.text, r.quiet || "", r.deadlyLine || ""].join(" "), /nightshade|Solanum/i);
+});
+
+test("camera eval: no held-out everyday photo is answered as toxic, wild numbers unchanged", () => {
+  const h = camReport.heldout;
+  assert.equal(h.everyday_called_toxic, 0);
+  assert.deepEqual(h.everyday_called_toxic_photos, []);
+  assert.ok(h.everyday_declined >= 0.995);
+  assert.ok(h.answered_pos >= 0.66 && h.top1_answered >= 0.91 && h.top3_answered >= 0.97, JSON.stringify(h));
+  assert.ok(h.deadly_photos_with_deadly_top3 >= 0.96);
 });
