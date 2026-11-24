@@ -180,16 +180,33 @@ function warningFor(meta) {
 //     higher one. A deadly class that scores near but under that bar still gets one line of warning.
 //  3. The top three are wild classes only, and only when the photo passed 1 and 2.
 //  4. Nothing here says a thing is safe to eat. The notes are about the species, not a verdict on the photo.
+//  5. Round 4b: a toxic or deadly answer also needs the everyday mass under `toxicEverydayCap`
+//     (0.11, set on the calibration split). Real wild toxic photos carry almost none; garden
+//     tomatoes on the vine carried 0.22 and were answered as bittersweet nightshade.
+
+// The answer-or-decline rule on its own, so tests can check it with held-out numbers.
+// `top` is the best wild class { id, score }; `everyday` and `other` are summed probabilities.
+export function gateDecision({ top, everyday = 0, other = 0, meta, thresholds }) {
+  const th = thresholds || {};
+  if (!top) return { answer: false, why: "empty" };
+  if (other > top.score) return { answer: false, why: "other" };
+  if (everyday > top.score) return { answer: false, why: "everyday" };
+  const risky = isDeadly(meta) || meta?.use === "toxic";
+  const needed = risky ? Math.max(th.toxic ?? th.possible, th.weak) : th.weak;
+  if (top.score < needed) return { answer: false, why: "weak" };
+  if (risky && everyday >= (th.toxicEverydayCap ?? 1)) return { answer: false, why: "toxic-everyday" };
+  return { answer: true, why: "ok" };
+}
+
 export function identify(index, query) {
   const { ranked: all, other, everyday, everydayTop } = rankClasses(index, query);
   const ranked = all.filter((item) => index.meta[item.id]?.group !== EVERYDAY_GROUP);
   const top = ranked[0];
   const th = index.thresholds;
-  const strongestOther = other > top.score;
   const outOfDomain = everyday > top.score;
-  const needed = isDeadly(index.meta[top.id]) || index.meta[top.id]?.use === "toxic" ? Math.max(th.toxic ?? th.possible, th.weak) : th.weak;
+  const gate = gateDecision({ top, everyday, other, meta: top ? index.meta[top.id] : null, thresholds: th });
   const deadlyHints = ranked.slice(0, 3).filter((item) => isDeadly(index.meta[item.id]) && item.score >= DEADLY_HINT);
-  if (!top || strongestOther || outOfDomain || top.score < needed) {
+  if (!gate.answer) {
     return {
       status: "unsure",
       title: UNSURE_TITLE,
@@ -197,6 +214,7 @@ export function identify(index, query) {
       quiet: outOfDomain ? `${SCENE_QUIET[sceneOf(everydayTop?.id)] || EVERYDAY_QUIET} ${UNSURE_QUIET}` : UNSURE_QUIET,
       domain: outOfDomain ? EVERYDAY_GROUP : "unclear",
       scene: outOfDomain ? sceneOf(everydayTop?.id) : "unclear",
+      why: gate.why,
       everydayTitle: outOfDomain && everydayTop ? index.meta[everydayTop.id].title : "",
       // A look-alike scoring close to a deadly plant still gets one line, but no blanket paragraph.
       // Never on an everyday photo: there is nothing wild in it to warn about.
