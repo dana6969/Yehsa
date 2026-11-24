@@ -124,6 +124,7 @@ class Places(osmium.SimpleHandler):
     def __init__(self):
         super().__init__()
         self.rows = []
+        self.way_mid = {}  # way id -> (lat, lon, n) so relations (big lakes, parks) get a centre
     def add(self, tags, lat, lon):
         name = tags.get("name")
         if not name:
@@ -131,6 +132,8 @@ class Places(osmium.SimpleHandler):
         kind = None
         for key in ("place", "amenity", "shop", "tourism", "natural", "leisure", "highway", "boundary"):
             v = tags.get(key)
+            if key == "boundary" and v not in ("protected_area", "national_park"):
+                continue
             if v:
                 kind = v if key != "boundary" else "protected_area"
                 break
@@ -142,8 +145,6 @@ class Places(osmium.SimpleHandler):
         if n.tags:
             self.add(n.tags, n.location.lat, n.location.lon)
     def way(self, w):
-        if not w.tags or "highway" in w.tags and w.tags.get("highway") != "trailhead":
-            return
         try:
             pts = [(n.location.lat, n.location.lon) for n in w.nodes if n.location.valid()]
         except osmium.InvalidLocationError:
@@ -152,7 +153,25 @@ class Places(osmium.SimpleHandler):
             return
         lat = sum(p[0] for p in pts) / len(pts)
         lon = sum(p[1] for p in pts) / len(pts)
+        self.way_mid[w.id] = (lat, lon, len(pts))
+        if not w.tags or "highway" in w.tags and w.tags.get("highway") != "trailhead":
+            return
         self.add(w.tags, lat, lon)
+    def relation(self, r):
+        if not r.tags.get("name"):
+            return
+        mids = [self.way_mid[m.ref] for m in r.members if m.type == "w" and m.ref in self.way_mid and m.role != "inner"]
+        if not mids:
+            return
+        total = sum(m[2] for m in mids)
+        lat = sum(m[0] * m[2] for m in mids) / total
+        lon = sum(m[1] * m[2] for m in mids) / total
+        self.add(r.tags, lat, lon)
+
+def build_places(places_pbf, out_prefix):
+    p = Places()
+    p.apply_file(places_pbf, locations=True, idx="flex_mem")
+    write_places(p, out_prefix)
 
 def build(roads_pbf, places_pbf, out_prefix, tol, min_comp, walk_paths):
     h = Roads(walk_paths)
@@ -293,9 +312,9 @@ def build(roads_pbf, places_pbf, out_prefix, tol, min_comp, walk_paths):
     print("by class (edges, km): " + ", ".join(f"{CLASSES[k][0]} {v[0]}/{v[1]:.0f}" for k, v in sorted(stats.items())), file=sys.stderr)
     nremap_final = nremap
 
-    # place index: named places + one point per street name per ~5 km cell
-    p = Places()
-    p.apply_file(places_pbf, locations=True, idx="flex_mem")
+    build_places(places_pbf, out_prefix)
+
+def write_places(p, out_prefix):
     towns = [r for r in p.rows if r[1] in ("city", "town", "village", "hamlet")]
     tgrid = defaultdict(list)
     for t in towns:
@@ -319,20 +338,7 @@ def build(roads_pbf, places_pbf, out_prefix, tol, min_comp, walk_paths):
         seen.add(key)
         near = r[4] or (nearest_town(r[2], r[3]) if r[1] not in ("city", "town") else "")
         rows.append((r[0], r[1], r[2], r[3], near if near != r[0] else ""))
-    street_seen = set()
-    for e in edges:
-        if not e[5] or e[3] > 8:
-            continue
-        nm = out_names[nremap_final[e[5]]]
-        a = e[0]
-        lat = nlat[used[a]]; lon = nlon[used[a]]
-        town = nearest_town(lat, lon)
-        # One entry per street name per nearest town (the router snaps to the street from there).
-        key = (nm.lower(), town)
-        if key in street_seen:
-            continue
-        street_seen.add(key)
-        rows.append((nm, "street", lat, lon, town))
+    # Streets are not listed here: the app searches street names in the road graph itself.
     rows.sort(key=lambda r: r[0].lower())
     with open(out_prefix + ".ypl", "w", encoding="utf-8") as f:
         for r in rows:
@@ -345,5 +351,9 @@ if __name__ == "__main__":
     ap.add_argument("--tol", type=float, default=10.0)
     ap.add_argument("--min-comp", type=int, default=30)
     ap.add_argument("--no-paths", action="store_true")
+    ap.add_argument("--places-only", action="store_true")
     a = ap.parse_args()
-    build(a.roads, a.places, a.out, a.tol, a.min_comp, not a.no_paths)
+    if a.places_only:
+        build_places(a.places, a.out)
+    else:
+        build(a.roads, a.places, a.out, a.tol, a.min_comp, not a.no_paths)

@@ -83,8 +83,8 @@ export function decodeGraph(bytes, { id = "" } = {}) {
   const head = readHeader(bytes);
   const N = head.nodes;
   const E = head.edges;
-  const lat = new Float64Array(N);
-  const lon = new Float64Array(N);
+  const lat = new Float32Array(N);
+  const lon = new Float32Array(N);
   let r = reader(bytes, 68);
   let pl = 0;
   let po = 0;

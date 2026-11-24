@@ -20,9 +20,9 @@ one() {
     nw/amenity=fuel,hospital,clinic,pharmacy,police,fire_station,ranger_station,townhall,post_office,library,school,restaurant,cafe,fast_food,bank,shelter,doctors \
     nw/shop=supermarket,convenience,hardware,outdoor,sports,general,farm,department_store,doityourself \
     nw/tourism=camp_site,caravan_site,hotel,motel,viewpoint,alpine_hut,wilderness_hut,picnic_site,attraction,museum \
-    nw/natural=peak,water,spring,bay nw/highway=trailhead nw/leisure=park,nature_reserve nw/boundary=protected_area
+    nw/natural=peak,spring nwr/natural=water,bay nw/highway=trailhead nwr/leisure=park,nature_reserve nwr/boundary=protected_area
   "$PY" "$HERE/build_graph.py" "$WORK/$s-roads.pbf" "$WORK/$s-places.pbf" "$OUT/$c" 2> "$WORK/$c.log"
   echo "$c $(tail -n +2 "$WORK/$c.log" | head -1)"
 }
-export -f one; export WORK OUT PY HERE
+export -f one; export PBF WORK OUT PY HERE
 for s in "${!CODE[@]}"; do echo "$s ${CODE[$s]}"; done | xargs -P 4 -n 2 bash -c 'one "$0" "$1"'
