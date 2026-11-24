@@ -54,6 +54,7 @@ import {
   voiceButtonLabel
 } from "../../symbolic/voice_adapter.js";
 import HuntHud from "./HuntHud.js";
+import { useHuntMap } from "./hunt_map.js";
 import PartyScreen, { usePartyTicker } from "./PartyScreen.js";
 import { FamilyCardScreen } from "./KitScreen.js";
 import { loadHunt } from "./hunt_state.js";
@@ -147,6 +148,7 @@ export default function YehsaApp() {
   const [display, setDisplay] = useState(defaultDisplay);
   const [onboarding, setOnboarding] = useState(false);
   const [huntRequest, setHuntRequest] = useState(0);
+  const [windRequest, setWindRequest] = useState(0);
   const [partyRequest, setPartyRequest] = useState(0);
   // The theme is applied before any child renders, so colors.* and
   // themedStyles() lookups all follow the saved display mode.
@@ -394,6 +396,7 @@ export default function YehsaApp() {
             setMapPacks={setMapPacks}
             layersRequest={layersRequest}
             huntRequest={huntRequest}
+            windRequest={windRequest}
             display={display}
             onDisplay={storeDisplay}
             onParty={() => { setTab("people"); setPartyRequest(Date.now()); }}
@@ -409,6 +412,7 @@ export default function YehsaApp() {
             onEmergency={() => go({ type: "openSos" })}
             openRequest={fieldRequest}
             onOpenLayers={() => { setTab("map"); setLayersRequest(Date.now()); }}
+            onOpenWind={() => { setTab("map"); setHuntRequest(Date.now()); setWindRequest(Date.now()); }}
             onOpenScreen={(id) => (id === "people" ? setTab("people") : openScreen(id))}
             onAsk={askFromAnywhere}
           />
@@ -1587,7 +1591,7 @@ class MapBoundary extends React.Component {
   }
 }
 
-function LandPane({ active, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, display, onDisplay, onParty, onBefore, onOpenTool }) {
+function LandPane({ active, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, windRequest, display, onDisplay, onParty, onBefore, onOpenTool }) {
   const [layersOpen, setLayersOpen] = useState(false);
   const [hunt, setHunt] = useState(false);
   useBackLayer(hunt, () => setHunt(false));
@@ -1665,6 +1669,20 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
     setLayersOpen(false);
   }
 
+  // The scent cone, marks, and the Marks and Wind sheets for the Hunt view.
+  const huntMap = useHuntMap({
+    on: hunt,
+    held,
+    cameraCenter: () => (camera.current?.center ? { longitude: camera.current.center[0], latitude: camera.current.center[1] } : null),
+    onFocusBox: showBox
+  });
+  useEffect(() => {
+    if (!windRequest) return;
+    setHunt(true);
+    setLayersOpen(false);
+    huntMap.openWind();
+  }, [windRequest]);
+
   useEffect(() => {
     if (!consented || !gpsWanted) {
       if (!consented) setGps(revokeGpsConsent());
@@ -1714,7 +1732,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
           <Action label="Turn on GPS" style={styles.mapGps} onPress={() => { onConsent(true); setGpsWanted(true); }} accessibilityHint="GPS stays off until you turn it on. This also turns on location consent." />
         ) : null}
       </View>
-      {hunt ? <HuntHud position={position} onOpenTool={onOpenTool} /> : null}
+      {hunt ? <HuntHud position={position} onOpenTool={onOpenTool} onOpenWind={huntMap.openWind} /> : null}
       <View style={styles.mapFill}>
         {shouldMountMap(host, layers) && !mapFailed ? (
           <MapBoundary onFail={() => setMapFailed(true)}>
@@ -1731,7 +1749,11 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
               onCamera={(event) => { camera.current = rememberCamera(camera.current, event); }}
               attribution={layers.attribution}
               onFail={() => setMapFailed(true)}
+              overlay={huntMap.overlay}
+              onMarkPress={huntMap.onMarkPress}
+              onLongPress={huntMap.onMapLongPress}
               onPress={(point) => {
+                if (hunt) huntMap.onMapPress(point);
                 if (onMapTap) onMapTap(point);
                 elevationFromAreas(areaState.areas.filter((area) => area.rendered), point.longitude, point.latitude)
                   .then((meters) => setElevNote(meters == null ? "No elevation for that spot yet." : `About ${Math.round(meters)} m at that spot.`))
@@ -1767,6 +1789,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
           }}
         />
         )}
+        {huntMap.overlays}
       </View>
       <View style={styles.mapTools}>
         <Action label="Layers and packs" tone="quiet" style={styles.mapToolButton} onPress={() => setLayersOpen(true)} accessibilityHint="Map packs, elevation, declination, waypoints, and import." />
@@ -1774,10 +1797,12 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
       </View>
       {hunt ? (
         <View style={styles.mapTools}>
+          <Action label={huntMap.marks.length ? `Marks (${huntMap.marks.length})` : "Marks"} tone="quiet" style={styles.mapToolButton} onPress={huntMap.openMarks} accessibilityHint="Your stands, trails, bedding and sightings on the map." />
           <Action label="Party" tone="quiet" style={styles.mapToolButton} onPress={onParty} />
           <Action label="Before you go" tone="quiet" style={styles.mapToolButton} onPress={onBefore} />
         </View>
       ) : null}
+      {huntMap.sheets}
       {layersOpen ? (
         <View style={styles.sheet} accessibilityViewIsModal>
           <View style={styles.sheetHead}>
@@ -2386,6 +2411,7 @@ const styles = themedStyles((colors) => ({
   },
   mapPane: {
     flex: 1,
+    overflow: "hidden",
     paddingTop: Platform.OS === "ios" ? 52 : 22,
     paddingHorizontal: 16,
     paddingBottom: 8
@@ -2417,6 +2443,7 @@ const styles = themedStyles((colors) => ({
   emptyBody: { color: colors.muted, fontSize: 16, lineHeight: 23, textAlign: "center" },
   mapFill: {
     flex: 1,
+    minHeight: 140,
     overflow: "hidden"
   },
   mapTools: {
@@ -2468,7 +2495,10 @@ const styles = themedStyles((colors) => ({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 18,
-    paddingTop: 12
+    paddingTop: 12,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.line
   },
   sheetTitle: {
     color: colors.ink,
@@ -2480,6 +2510,7 @@ const styles = themedStyles((colors) => ({
   },
   sheetScroll: {
     paddingHorizontal: 18,
+    paddingTop: 12,
     paddingBottom: 32,
     gap: 4
   },

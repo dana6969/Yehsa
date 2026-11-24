@@ -8,7 +8,7 @@ import { conditionsFor, hudCards } from "../../symbolic/hunt/conditions.js";
 import { SPECIES, STATES } from "../../symbolic/hunt/legal_light.js";
 import { DISCLAIMER } from "../../symbolic/hunt/deer_estimate.js";
 
-export default function HuntHud({ position, onOpenTool }) {
+export default function HuntHud({ position, onOpenTool, onOpenWind }) {
   const hunt = useHunt();
   const display = useDisplay();
   const [open, setOpen] = useState("");
@@ -21,7 +21,7 @@ export default function HuntHud({ position, onOpenTool }) {
     <View style={styles.hud} accessibilityLabel="Hunt view">
       <View style={styles.row}>
         <HudCard label="Legal light" value={cards.legal.value} sub={cards.legal.sub} onPress={() => toggle("legal")} active={open === "legal"} />
-        <HudCard label="Wind" value={cards.wind.value} sub={cards.wind.sub} onPress={() => onOpenTool?.("wind")} />
+        <HudCard label="Wind" value={cards.wind.value} sub={cards.wind.sub} onPress={() => (onOpenWind ? onOpenWind() : onOpenTool?.("wind"))} />
         <HudCard label="Deer" value={cards.deer.value} sub={cards.deer.sub} onPress={() => toggle("deer")} active={open === "deer"} />
       </View>
       {open === "legal" ? (

@@ -7,7 +7,6 @@ import CameraIdScreen from "./CameraIdScreen.js";
 import WeatherScreen from "./WeatherScreen.js";
 import BallisticsScreen from "./BallisticsScreen.js";
 import SightingsScreen from "./SightingsScreen.js";
-import WindScreen from "./WindScreen.js";
 import KitScreen from "./KitScreen.js";
 import CompassScreen from "./CompassScreen.js";
 import RadioScreen from "./RadioScreen.js";
@@ -46,7 +45,7 @@ export const FIELD_GROUPS = [
       { id: "before", label: "Before you go", sub: "Plan, packs, check", icon: "checkbox-outline" },
       { id: "ballistics", label: "Ballistics", sub: "Drop and wind you enter", icon: "analytics-outline" },
       { id: "sightings", label: "Sightings", sub: "Private log", icon: "eye-outline" },
-      { id: "wind", label: "Wind", sub: "Scent cone for your stand", icon: "flag-outline" }
+      { id: "wind", label: "Wind", sub: "Scent cone on the Hunt map", icon: "flag-outline" }
     ]
   },
   {
@@ -73,8 +72,13 @@ function heldPair(position) {
   return `${position.fix.latitude.toFixed(5)}, ${position.fix.longitude.toFixed(5)}`;
 }
 
-export default function FieldPane({ position, mapPacks, waypoints, onEmergency, openRequest, onOpenLayers, onOpenScreen, onAsk }) {
-  const [open, setOpen] = useState(null);
+export default function FieldPane({ position, mapPacks, waypoints, onEmergency, openRequest, onOpenLayers, onOpenScreen, onOpenWind, onAsk }) {
+  const [open, setOpenRaw] = useState(null);
+  // Wind is not a Field screen any more. It is a sheet on the Hunt map, with the cone on it.
+  const setOpen = (id) => {
+    if (id === "wind" && onOpenWind) { onOpenWind(); setOpenRaw(null); return; }
+    setOpenRaw(id);
+  };
   const [guideSymbol, setGuideSymbol] = useState("");
   useEffect(() => {
     if (openRequest?.tile) setOpen(openRequest.tile);
@@ -140,7 +144,6 @@ export default function FieldPane({ position, mapPacks, waypoints, onEmergency, 
   if (open === "weather") return <WeatherScreen position={position} onBack={close} />;
   if (open === "ballistics") return <BallisticsScreen onBack={close} />;
   if (open === "sightings") return <SightingsScreen position={position} onBack={close} />;
-  if (open === "wind") return <WindScreen position={position} onBack={close} />;
   if (open === "kit") return <KitScreen onBack={close} onOpenFamily={() => onOpenScreen?.("family")} />;
 
   return (
