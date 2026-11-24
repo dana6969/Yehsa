@@ -78,6 +78,8 @@ import { deleteModelKey, readModelKey, saveModelKey } from "./model_secrets.js";
 import ModelsPane from "./ModelsPane.js";
 import LearnedPane from "./LearnedPane.js";
 import { AnswerReview, LookupOffer, MISS_OFFER, liveAnswerText } from "./WebLearnCards.js";
+import { DocumentResults } from "./DocumentCards.js";
+import { documentIntent, documents, questionVector } from "./documents.js";
 import { useWebLearn, webLearn } from "./web_learn.js";
 import { outboundQuery, queryAllowed } from "../../symbolic/web/sources.js";
 import { guessState } from "./radio_data.js";
@@ -1066,6 +1068,20 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
       onRoute(wantsRoute);
       return;
     }
+    // "Download FM 21-76", "find the Maine hunting regulations PDF": search for documents; nothing downloads until a tap.
+    const wantsDoc = documentIntent(effective);
+    if (wantsDoc) {
+      stopProse();
+      setQuestion("");
+      setNotice(null);
+      pushMessage({ role: "you", text: typed });
+      setPhase("ready");
+      const docMsg = pushMessage({ role: "yehsa", text: `Searching for documents. Only the words "${wantsDoc.query}" (plus "pdf") leave this phone.` });
+      documents.find(wantsDoc).then((found) => patchMessage(docMsg, found.ok
+        ? { text: `Here's what I found for "${wantsDoc.query}". Tap Download on the one you want, and I'll read it and learn from it on this phone.`, docFound: found }
+        : { text: found.reason })).catch(() => patchMessage(docMsg, { text: "I couldn't search for documents just now. Nothing was downloaded." }));
+      return;
+    }
     const text = continueUtterance(effective, priorRef.current);
     const held = position?.consent === true && position.status === "locked" ? position.fix : null;
     const origin = held || { latitude: 0, longitude: 0 };
@@ -1161,7 +1177,18 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
         if (domainOf(text) === "trip") return tripResult();
         return answerOne(text);
       };
-      run().then((found) => {
+      // Downloaded documents answer after the notes miss, or when the question names one ("in the canning guide").
+      const runWithDocs = async () => {
+        const found = await run();
+        try {
+          const fromDoc = await documents.answer(text, { queryVector: questionVector(text), notesAnswered: found?.answered === true });
+          if (fromDoc) return fromDoc;
+        } catch {
+          // Documents are an extra; the notes' answer stands.
+        }
+        return found;
+      };
+      runWithDocs().then((found) => {
         if (askGen.current !== generation) return;
         // A kept "Learned, from ..." note answers offline when the field notes had nothing.
         const result = !found?.answered ? (webLearn.answer(text) || found) : found;
@@ -1527,6 +1554,7 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
                 onCancel={() => patchMessage(item.id, { feedback: null, reason: null, detail: "" })}
               />
             ) : null}
+            {item.role === "yehsa" && item.docFound ? <DocumentResults found={item.docFound} /> : null}
             {item.role === "yehsa" && item.lookupOffer ? (
               <LookupOffer
                 question={item.lookupOffer.question}

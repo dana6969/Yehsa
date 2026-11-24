@@ -205,6 +205,17 @@ export function namedDocument(catalog, question) {
   return best?.id || null;
 }
 
+/** "in the canning guide, how long for tomatoes" -> "how long for tomatoes" when the guide is the named document. */
+export function withoutDocName(question, meta) {
+  const titleWords = new Set(queryTokens(meta?.title || ""));
+  let text = String(question || "")
+    .replace(/\b(?:in|from|according to|per|within|inside)\s+(?:the|my|that)?\s*/gi, " ")
+    .replace(/\b(?:what does|does)\b/gi, " ")
+    .replace(/\bsays?\b/gi, " ");
+  text = text.split(/(\s+)/).filter((w) => !titleWords.has(w.toLowerCase().replace(/[^a-z0-9.-]/g, "")) && !/^(?:manual|guide|document|pdf|book|handbook)[,.]?$/i.test(w)).join("");
+  return text.replace(/^[\s,;:]+/, "").replace(/\s+/g, " ").trim() || question;
+}
+
 const DOSE = /\b(?:dose|dosage|dosing|mg|milligrams?|mcg|tablets?|pills?|capsules?|ml|how much (?:\w+ )?(?:to take|should i take))\b/i;
 
 export function docAdvice(question, text) {

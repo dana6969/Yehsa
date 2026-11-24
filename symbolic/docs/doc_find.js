@@ -42,7 +42,8 @@ export function documentIntent(text) {
   if (!hasDocWord && !hasCode && !isDownload) return null;
   if (!hasCode && NOT_DOC.test(rest) && !/\b(?:pdf|manual|handbook|guide|regulations?|book|booklet)\b/i.test(rest)) return null;
   rest = rest.replace(/\s+(?:for me|please|to (?:my|the) phone|onto (?:my|the) phone|so (?:i|you) can .*)$/i, "").trim();
-  const query = outboundQuery(rest) || rest;
+  const trail = /\s+(?:for me|please|to (?:my|the) phone|onto (?:my|the) phone)$/i;
+  const query = (outboundQuery(rest) || rest).replace(trail, "").trim();
   if (!queryAllowed(query).ok) return null;
   return { query: query.slice(0, 100), format: /\bepub|e-?book\b/i.test(rest) ? "epub" : /\btxt|plain text\b/i.test(rest) ? "text" : "any" };
 }
