@@ -108,6 +108,11 @@ import { capabilitySummary, continueUtterance, isCapabilityQuestion, isFeedbackE
 import { isLibraryQuestion, libraryAnswer } from "../../symbolic/library_answer.js";
 import { loadAtpPack } from "./atp_pack.js";
 import LandscapeMap from "./LandscapeMap.js";
+import { useRoute } from "./route/useRoute.js";
+import { routeIntent, routeIntentReply } from "../../symbolic/routing/route_intent.js";
+import { SourcesFold, followUps } from "./parts/AskTidy.js";
+import { NavBanner, RouteCard, RouteResults, RouteSearchBar, StepsSheet } from "./route/RoutePanel.js";
+import { routeMapView } from "./route/route_view.js";
 import {
   elevationNear,
   emptyPackStore,
@@ -157,6 +162,7 @@ export default function YehsaApp() {
   const [onboarding, setOnboarding] = useState(false);
   const [huntRequest, setHuntRequest] = useState(0);
   const [windRequest, setWindRequest] = useState(0);
+  const [routeRequest, setRouteRequest] = useState(null);
   const [partyRequest, setPartyRequest] = useState(0);
   // The theme is applied before any child renders, so colors.* and
   // themedStyles() lookups all follow the saved display mode.
@@ -370,6 +376,7 @@ export default function YehsaApp() {
         <View {...pane("ask")}>
           <AskPane
             onGo={(tile) => { setTab("field"); setFieldRequest({ id: Date.now(), tile }); }}
+            onRoute={(intent) => { setTab("map"); setRouteRequest({ id: Date.now(), query: intent.destination, profile: intent.profile }); }}
             session={session}
             owner={owner}
             active
@@ -405,6 +412,7 @@ export default function YehsaApp() {
             layersRequest={layersRequest}
             huntRequest={huntRequest}
             windRequest={windRequest}
+            routeRequest={routeRequest}
             display={display}
             onDisplay={storeDisplay}
             onParty={() => { setTab("people"); setPartyRequest(Date.now()); }}
@@ -680,7 +688,7 @@ export default function YehsaApp() {
   );
 }
 
-function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
+function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
   // Look it up: kept web answers, and the review cards for fresh ones.
   const web = useWebLearn();
   const [question, setQuestion] = useState("");
@@ -1044,6 +1052,18 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
       return;
     }
     const effective = social?.kind === "ask" ? social.ask : typed;
+    // "Directions to X", "how far to X", "take me to X": open the Map with X searched and a route ready.
+    const wantsRoute = onRoute && !/\b(?:last|that|my) (?:point|waypoint|mark)\b/i.test(effective) ? routeIntent(effective) : null;
+    if (wantsRoute) {
+      stopProse();
+      setQuestion("");
+      setNotice(null);
+      pushMessage({ role: "you", text: typed });
+      setPhase("ready");
+      pushMessage({ role: "yehsa", text: routeIntentReply(wantsRoute) });
+      onRoute(wantsRoute);
+      return;
+    }
     const text = continueUtterance(effective, priorRef.current);
     const held = position?.consent === true && position.status === "locked" ? position.fix : null;
     const origin = held || { latitude: 0, longitude: 0 };
@@ -1471,9 +1491,7 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
         {messages.map((item) => (
           <View key={item.id} style={item.role === "you" ? styles.bubbleYou : styles.bubbleYehsa}>
             {item.role === "yehsa" && item.parts ? <AnswerBody parts={item.parts} /> : <Text style={styles.bubbleText}>{item.text}</Text>}
-            {item.role === "yehsa" && item.source ? (
-              <Text accessibilityRole="text" style={styles.sourceLine}>{`Source: ${item.source}`}</Text>
-            ) : null}
+
             {item.pictures?.length ? (
               <View style={styles.cardRow}>
                 {item.pictures.map((picture) => (
@@ -1486,22 +1504,16 @@ function AskPane({ onGo, pendingAsk, onSummary, session, owner, active, screen, 
                 ))}
               </View>
             ) : null}
-            {item.chips?.length ? (
-              <View style={styles.chips}>
-                {item.chips.map((chip) => (
-                  <Text key={chip} style={styles.sourceChip}>{friendlySource(chip)}</Text>
-                ))}
-              </View>
-            ) : null}
             {item.role === "yehsa" && item.suggestions?.length ? (
-              <View style={styles.chips}>
-                {item.suggestions.map((chip) => (
+              <View style={styles.answerChips}>
+                {followUps(item.suggestions).map((chip) => (
                   <Pressable key={chip.label} accessibilityRole="button" accessibilityLabel={chip.label} onPress={() => (chip.go ? onGo?.(chip.go) : runAsk(chip.ask))} style={styles.suggestChip}>
-                    <Text style={styles.suggestText}>{chip.label}</Text>
+                    <Text numberOfLines={1} style={styles.suggestText}>{chip.label}</Text>
                   </Pressable>
                 ))}
               </View>
             ) : null}
+            {item.role === "yehsa" ? <SourcesFold source={item.source ? `Source: ${item.source}` : ""} chips={item.chips} label={friendlySource} /> : (item.chips?.length ? <SourcesFold chips={item.chips} label={friendlySource} /> : null)}
             {item.role === "yehsa" && item.feedbackEligible === true ? (
               <FeedbackNote
                 item={item}
@@ -1673,7 +1685,7 @@ class MapBoundary extends React.Component {
   }
 }
 
-function LandPane({ active, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, windRequest, display, onDisplay, onParty, onBefore, onOpenTool, onLogSighting }) {
+function LandPane({ active, position, setPosition, onConsent, waypoints, track, onMapTap, mapPacks, setMapPacks, layersRequest, huntRequest, windRequest, routeRequest, display, onDisplay, onParty, onBefore, onOpenTool, onLogSighting }) {
   const [layersOpen, setLayersOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [hunt, setHunt] = useState(false);
@@ -1707,6 +1719,27 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
     : (gps.fix || (consented && position.status === "locked" && position.fix ? position.fix : { latitude: 0, longitude: 0 }));
   const held = gps.fix || (consented && position.status === "locked" ? position.fix : null);
   const crumbs = gps.track.length ? gps.track : track;
+  // Search, destination, route and Start (regular Map only; the Hunt view keeps its own taps).
+  const routeOrigin = useMemo(() => (held ? { latitude: held.latitude, longitude: held.longitude, accuracy: gps.accuracyM } : null), [held?.latitude, held?.longitude, gps.accuracyM]);
+  const nav = useRoute({
+    origin: routeOrigin,
+    nearFallback: () => (camera.current?.center ? { longitude: camera.current.center[0], latitude: camera.current.center[1] } : null)
+  });
+  const [stepsOpen, setStepsOpen] = useState(false);
+  useBackLayer(stepsOpen, () => setStepsOpen(false));
+  useBackLayer(Boolean(nav.results), () => nav.setResults(null));
+  const routeView = useMemo(() => routeMapView(nav.route, nav.destination), [nav.route, nav.destination]);
+  const routeViewThin = useMemo(() => routeMapView(nav.route, nav.destination, { maxPoints: 400 }), [nav.route, nav.destination]);
+  useEffect(() => {
+    if (!routeRequest?.query) return;
+    setHunt(false);
+    setLayersOpen(false);
+    nav.runSearch(routeRequest.query, { autoPick: true, profile: routeRequest.profile });
+    if (!consented || !gpsWanted) setImportNote("Turn on GPS so the route starts where you are.");
+  }, [routeRequest?.id]);
+  useEffect(() => {
+    if (nav.nav?.on) setGps((current) => recenterOnMe(current));
+  }, [nav.nav?.on]);
   // The native map view is built only while this screen shows, and fresh each time it shows again.
   useEffect(() => {
     setHost((current) => nextHost(current, Boolean(active)));
@@ -1825,6 +1858,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
         ) : null}
       </View>
       {hunt ? <HuntHud position={position} onOpenTool={onOpenTool} onOpenWind={huntMap.openWind} /> : null}
+      {!hunt && !nav.nav?.on ? <RouteSearchBar r={nav} /> : null}
       <View style={styles.mapFill}>
         {shouldMountMap(host, layers) && !mapFailed ? (
           <MapBoundary onFail={() => setMapFailed(true)}>
@@ -1842,9 +1876,10 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
               attribution={layers.attribution}
               onFail={() => setMapFailed(true)}
               overlay={huntMap.overlay}
+              route={hunt ? null : routeView}
               onMarkPress={huntMap.onMarkPress}
               onMarkDragEnd={huntMap.onMarkDragEnd}
-              onLongPress={huntMap.onMapLongPress}
+              onLongPress={hunt ? huntMap.onMapLongPress : nav.dropPin}
               onAbout={() => { huntMap.closeSheets(); setLayersOpen(false); setAboutOpen(true); }}
               onPress={(point) => {
                 if (hunt) huntMap.onMapPress(point);
@@ -1855,7 +1890,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
               }}
             />
           </MapBoundary>
-        ) : layers.empty ? (
+        ) : layers.empty && !(nav.route && !hunt) ? (
           <View style={styles.emptyMap} accessibilityLabel="No map pack yet">
             <Text accessibilityRole="header" style={styles.emptyTitle}>No map pack yet</Text>
             <Text style={styles.emptyBody}>Download a region to see land, water, and terrain. The map stays quiet until a pack is on this phone.</Text>
@@ -1878,8 +1913,9 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
           onRecenter={() => setGps((current) => recenterOnMe(current))}
           onUserPan={() => setGps((current) => noteUserPan(current))}
           overlay={huntMap.overlay}
+          route={hunt ? null : routeViewThin}
           onMarkPress={huntMap.onMarkPress}
-          onLongPress={huntMap.onMapLongPress}
+          onLongPress={hunt ? huntMap.onMapLongPress : nav.dropPin}
           onTap={hunt ? huntMap.onMapPress : undefined}
           onWaypoint={(point) => {
             if (onMapTap) onMapTap(point);
@@ -1888,7 +1924,17 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
         />
         )}
         {huntMap.overlays}
+        {!hunt ? <NavBanner r={nav} onRecenter={() => setGps((current) => recenterOnMe(current))} /> : null}
+        {!hunt ? <RouteResults r={nav} /> : null}
       </View>
+      {!hunt && !nav.nav?.on ? (
+        <RouteCard
+          r={nav}
+          hasFix={Boolean(held)}
+          onTurnOnGps={() => { onConsent(true); setGpsWanted(true); }}
+          onShowSteps={() => setStepsOpen(true)}
+        />
+      ) : null}
       <View style={styles.mapTools}>
         <Action label="Layers and packs" tone="quiet" style={styles.mapToolButton} onPress={() => setLayersOpen(true)} accessibilityHint="Map packs, elevation, declination, waypoints, and import." />
         <Action label={hunt ? "Hunt on" : "Hunt"} tone={hunt ? "brass" : "quiet"} style={styles.mapToolSmall} onPress={() => setHunt((value) => !value)} accessibilityHint="Shows the hunt view on the map. Nothing is shared." />
@@ -1901,6 +1947,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
         </View>
       ) : null}
       {huntMap.sheets}
+      {stepsOpen && !hunt ? <StepsSheet route={nav.route} onClose={() => setStepsOpen(false)} /> : null}
       {aboutOpen ? (
         <View style={styles.sheet} accessibilityViewIsModal>
           <View style={styles.sheetHead}>
@@ -1910,7 +1957,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
           <ScrollView contentContainerStyle={styles.sheetScroll}>
             {about.lines.map((line) => <Text key={line} style={styles.aboutLine}>{line}</Text>)}
             <Quiet>{about.credit}</Quiet>
-            <Quiet>No streets, parcels, or owner names are stored on this phone.</Quiet>
+            <Quiet>Search and routes use a road and place list built into Yehsa for the map-pack states: © OpenStreetMap contributors, ODbL 1.0. Online search and routes are off until you turn them on in the Map search (Photon by Komoot, OSM Nominatim, and OSRM on routing.openstreetmap.de). No traffic data. No owner names.</Quiet>
           </ScrollView>
         </View>
       ) : null}
@@ -2935,8 +2982,9 @@ const styles = themedStyles((colors) => ({
   stepNum: { width: 24, color: colors.brassText, fontWeight: "700" },
   foldRow: { flexDirection: "row", alignItems: "center", gap: 6, minHeight: 44 },
   foldText: { color: colors.brassText, fontSize: 15, fontWeight: "600" },
-  suggestChip: { minHeight: 44, justifyContent: "center", paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, borderColor: colors.lineStrong, backgroundColor: colors.surface, marginTop: 6, marginRight: 8 },
+  suggestChip: { minHeight: 40, maxWidth: "100%", justifyContent: "center", paddingHorizontal: 12, borderRadius: 999, borderWidth: 1, borderColor: colors.lineStrong, backgroundColor: colors.surface, marginTop: 6, marginRight: 6 },
   suggestText: { color: colors.ink, fontSize: 14, fontWeight: "600" },
+  answerChips: { flexDirection: "row", flexWrap: "wrap", marginTop: 2 },
   thumb: { width: 88, height: 66, borderRadius: 10, backgroundColor: colors.field },
   info: { position: "absolute", right: 4, bottom: 4 },
   sourceChip: { color: colors.muted, fontSize: 12, marginRight: 8 },
