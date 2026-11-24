@@ -1,5 +1,5 @@
 {
- "date": "2026-11-17",
+ "date": "2026-11-24",
  "model": "DINOv2-small weight-only int8 ONNX, CLS token, 384-d, mean of photo and mirror",
  "head": "multinomial logistic regression C=10.0",
  "classes": 186,
@@ -12,7 +12,8 @@
  "thresholds": {
   "weak": 0.41,
   "possible": 0.46,
-  "toxic": 0.55
+  "toxic": 0.55,
+  "toxicEverydayCap": 0.11
  },
  "heldout": {
   "n_pos": 1385,
@@ -25,13 +26,14 @@
   "top3_answered": 0.9737704918032787,
   "possible_share": 0.6252707581227437,
   "top1_possible": 0.9318706697459584,
-  "neg_declined": 0.9107981220657277,
-  "neg_accept": 0.0892018779342723,
-  "everyday_declined": 0.995475113122172,
-  "everyday_called_toxic": 0.004524886877828055,
+  "neg_declined": 0.9123630672926447,
+  "neg_accept": 0.08763693270735524,
+  "everyday_declined": 1.0,
+  "everyday_called_toxic": 0.0,
   "neg_deadly_top1_accepted": 0.003129890453834116,
   "deadly_photos_with_deadly_top3": 0.9615384615384616,
-  "deadly_top1_is_nondeadly_answered": 0.023076923076923078
+  "deadly_top1_is_nondeadly_answered": 0.023076923076923078,
+  "everyday_called_toxic_photos": []
  },
  "per_group": {
   "plant": {

@@ -63,7 +63,9 @@ cal = [i for i in items if i["split"] == "cal"]; test = [i for i in items if i["
 TOXIC_USES = ("toxic", "deadly")
 tox_ids = {i for i, r in enumerate(spec) if r["use"] in TOXIC_USES and i < NW}
 
-def decide(P, t_weak, t_tox):
+T_EVCAP = 1.0  # set from the calibration split below
+
+def decide(P, t_weak, t_tox, t_evcap=None):
     """The phone's rule. A wild answer needs the best wild class to beat 'something else' AND the
     everyday classes together, to clear the weak bar, and (toxic or deadly look-alikes) a higher bar."""
     topw = P[:, :NW].argmax(1); topp = P[np.arange(len(P)), topw]
@@ -71,6 +73,11 @@ def decide(P, t_weak, t_tox):
     ok = (topp > ev) & (topp > oth) & (topp >= t_weak)
     tox = np.array([t in tox_ids for t in topw])
     ok &= ~(tox & (topp < t_tox))
+    # Round 4b: a toxic or deadly answer also needs almost no everyday mass. Real wild toxic photos
+    # carry very little (calibration 99th percentile 0.07); garden tomatoes on the vine scored 0.22 and
+    # were answered as bittersweet nightshade.
+    cap = T_EVCAP if t_evcap is None else t_evcap
+    ok &= ~(tox & (ev >= cap))
     return topw, topp, ok, ev
 
 def eval_set(sel, t_weak, t_poss, t_tox):
@@ -95,6 +102,7 @@ def eval_set(sel, t_weak, t_poss, t_tox):
     dpos = [k for k in np.where(pos)[0] if yt[k] in dead]
     res["deadly_photos_with_deadly_top3"] = float(np.mean([any(t in dead for t in top3[k]) for k in dpos])) if dpos else 0
     res["deadly_top1_is_nondeadly_answered"] = float(np.mean([answered[k] and top[k] not in dead for k in dpos])) if dpos else 0
+    res["everyday_called_toxic_photos"] = [sel[k]["obs"] for k in np.where(evm)[0] if answered[k] and top[k] in tox_ids]
     return res, P, top, answered, yt
 
 # thresholds from the calibration split
@@ -117,7 +125,14 @@ t_tox = t_poss
 for t in np.arange(t_weak, 0.995, 0.01):
     if float(np.mean((accc & (toppc >= t) & tox_c)[~posc])) <= 0.01: t_tox = float(round(max(t, t_poss), 2)); break
 else: t_tox = 0.95
-print("thresholds from calibration: weak", t_weak, "possible", t_poss, "toxic", t_tox)
+# Everyday cap for toxic or deadly answers: the smallest cap (0.01 steps) that keeps at least 99% of
+# the wild calibration photos the phone would answer with a toxic or deadly class.
+_, _, ans_nocap, _ = decide(Pc, t_weak, t_tox, t_evcap=1.0)
+wild_tox_c = ans_nocap & posc & tox_c
+T_EVCAP = 1.0
+for t in np.arange(0.02, 1.0, 0.01):
+    if float(np.mean(evc[wild_tox_c] < t)) >= 0.99: T_EVCAP = float(round(t, 2)); break
+print("thresholds from calibration: weak", t_weak, "possible", t_poss, "toxic", t_tox, "toxic everyday cap", T_EVCAP)
 res, P, top, answered, yt = eval_set(test, t_weak, t_poss, t_tox)
 print(json.dumps(res, indent=1))
 
@@ -145,7 +160,7 @@ print("top confusions", sorted(conf.items(), key=lambda kv: -kv[1])[:12])
 
 report = dict(date=datetime.date.today().isoformat(), model="DINOv2-small weight-only int8 ONNX, CLS token, 384-d, mean of photo and mirror", head="multinomial logistic regression C=%s" % C_REG,
               classes=N, photos=len(items), split={k: sum(1 for i in items if i["split"] == k) for k in ("ref", "cal", "test")},
-              thresholds=dict(weak=t_weak, possible=t_poss, toxic=t_tox), heldout=res, per_group=per_group, per_class=per_class, weakest=worst,
+              thresholds=dict(weak=t_weak, possible=t_poss, toxic=t_tox, toxicEverydayCap=T_EVCAP), heldout=res, per_group=per_group, per_class=per_class, weakest=worst,
               top_confusions=[[a, b, n] for (a, b), n in sorted(conf.items(), key=lambda kv: -kv[1])[:20]])
 json.dump(report, open(os.path.join(embdir, "report.json"), "w"), indent=1)
 if not WRITE: sys.exit(0)
@@ -170,7 +185,7 @@ index = {
               "preprocess": "centre square crop, 224x224 bilinear, RGB/255 then ImageNet mean/std; query = mean of the photo and its mirror, L2-normalised"},
     "classes": classes,
     "head": {"scale": [round(float(x), 8) for x in scale], "w": base64.b64encode(Wq.tobytes()).decode(), "b": [round(float(x), 5) for x in b]},
-    "thresholds": {"weak": t_weak, "possible": t_poss, "toxic": t_tox},
+    "thresholds": {"weak": t_weak, "possible": t_poss, "toxic": t_tox, "toxicEverydayCap": T_EVCAP},
     "stats": {"heldout": res, "per_group": per_group}
 }
 json.dump(index, open(os.path.join(outdir, "index.json"), "w"), separators=(",", ":"))
