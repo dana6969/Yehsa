@@ -133,6 +133,7 @@ import { elevationFromAreas } from "./area_elevation";
 import { mapAbout, mapLayers } from "../../symbolic/map_layers.js";
 import { initialHost, mapViewKey, nextHost, rememberCamera, shouldMountMap } from "../../symbolic/map_host.js";
 import { pinFix, recenterState } from "../../symbolic/map_camera.js";
+import { lastMapCamera, rememberMapCamera } from "../../symbolic/map_camera_driver.js";
 import { mapWatchesGps, requestLocation, turnLocationOff } from "../../symbolic/location_setting.js";
 import { confirmLocation } from "./location_prompt.js";
 import MapRail from "./MapRail.js";
@@ -1714,17 +1715,23 @@ function ResultText({ result }) {
 class MapBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { failed: false };
+    this.state = { failed: false, tries: 0 };
   }
   static getDerivedStateFromError() {
     return { failed: true };
   }
   componentDidCatch() {
+    // R7: one rebuild first (at the remembered camera), so a passing layer error does not drop
+    // the whole map to the fallback canvas for the rest of the session.
+    if (this.state.tries < 1) {
+      this.setState((current) => ({ failed: false, tries: current.tries + 1 }));
+      return;
+    }
     this.props.onFail?.();
   }
   render() {
     if (this.state.failed) return null;
-    return this.props.children;
+    return <React.Fragment key={`try-${this.state.tries}`}>{this.props.children}</React.Fragment>;
   }
 }
 
@@ -1750,7 +1757,9 @@ function LandPane({ active, fullScreen = false, onFullScreen, onSos, position, s
   const [focus, setFocus] = useState(null);
   const [focusKey, setFocusKey] = useState(0);
   const [host, setHost] = useState(initialHost);
-  const camera = useRef(null);
+  // R7: the camera the user left, kept for the app session outside this screen, so a rebuilt
+  // Map screen or map view opens there (not at the GPS fix, zoomed out).
+  const camera = useRef(lastMapCamera());
   const areaState = useAreas();
   const downloads = usePackDownloads({ store: mapPacks, setStore: setMapPacks });
   // Built-in roads (offline) and property lines for the Hunt map (online, then saved).
@@ -1765,9 +1774,13 @@ function LandPane({ active, fullScreen = false, onFullScreen, onSos, position, s
   useBackLayer(fullScreen, () => onFullScreen?.(false));
   const [backgroundGps, setBackgroundGps] = useState(false);
   const consented = position?.consent === true;
-  const origin = gps.follow && gps.fix
-    ? gps.fix
-    : (gps.fix || (consented && position.status === "locked" && position.fix ? position.fix : { latitude: 0, longitude: 0 }));
+  // The fallback canvas map is drawn around this point. It moves with the fix only while
+  // following; after a pan it stays put (R7: it used to re-center on every GPS sample).
+  const canvasAnchor = useRef(null);
+  const liveFix = gps.fix || (consented && position.status === "locked" && position.fix ? position.fix : null);
+  if (gps.follow && liveFix) canvasAnchor.current = liveFix;
+  else if (!canvasAnchor.current && liveFix) canvasAnchor.current = liveFix;
+  const origin = canvasAnchor.current || liveFix || { latitude: 0, longitude: 0 };
   const held = pinned || gps.fix || (consented && position.status === "locked" ? position.fix : null);
   const crumbs = gps.track.length ? gps.track : track;
   // Search, destination, route and Start (regular Map only; the Hunt view keeps its own taps).
@@ -1959,7 +1972,7 @@ function LandPane({ active, fullScreen = false, onFullScreen, onSos, position, s
               focusKey={focusKey}
               initialCamera={camera.current}
               onCamera={(event) => {
-                camera.current = rememberCamera(camera.current, event);
+                camera.current = rememberMapCamera(rememberCamera(camera.current, event));
                 extras.onView(event);
                 const turn = Math.round(Number(event?.properties?.heading) || 0);
                 setMapHeading((value) => (value === turn ? value : turn));

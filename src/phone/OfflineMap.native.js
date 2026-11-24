@@ -16,7 +16,7 @@ import {
 } from "@maplibre/maplibre-react-native";
 import { AboutMapLink, ConePill, DragPin, MarkPin } from "./hunt_map_ui.js";
 import { DestinationPin } from "./route/RoutePins.js";
-import { boxKey, followStop, isUserGesture, recenterStop, seedAppliedKey, shouldFitFocus, shouldFitRoute } from "../../symbolic/map_camera.js";
+import { createCameraDriver } from "../../symbolic/map_camera_driver.js";
 
 // glyphs: the loopback URL for the road-name font, when the road layer is on.
 function blankStyle(color, glyphs) {
@@ -56,6 +56,15 @@ export function shapesToGeoJson(shapes) {
   };
 }
 
+function runCameraCommand(cam, cmd) {
+  try {
+    if (cmd.type === "fit") cam.fitBounds([cmd.box.east, cmd.box.north], [cmd.box.west, cmd.box.south], cmd.padding, cmd.duration);
+    else if (cmd.type === "set") cam.setCamera(cmd.stop);
+  } catch {
+    // A camera move that fails leaves the map where it is.
+  }
+}
+
 // layers: from symbolic/map_layers.js. focus: { west, south, east, north } to look at when there is no GPS fix.
 export default function OfflineMap({
   layers,
@@ -85,77 +94,55 @@ export default function OfflineMap({
 }) {
   const camera = useRef(null);
   const geo = useMemo(() => shapesToGeoJson(layers?.shapes), [layers?.shapes]);
-  const fixed = useRef(false);
   const land = layers?.hasLand ? layers.land : null;
   const roads = layers?.roads || null;
   const style = useMemo(() => blankStyle(land ? land.water : "#101611", layers?.glyphs), [land?.water, layers?.glyphs]);
 
-  // Camera rules (symbolic/map_camera.js): a fit runs once per request key, never on a re-render.
-  // Before R6 this effect also ran whenever layers.firstFocus became a new object, which happens
-  // every time roads reload after a pan or zoom, so the map snapped back to the Hunt / Show box.
-  const firstKey = boxKey(layers?.firstFocus);
-  const appliedFocus = useRef(seedAppliedKey(focusKey, Boolean(initialCamera)));
-  const zoomNow = useRef(initialCamera?.zoom ?? null);
+  // R7 camera: every move is decided by one driver (symbolic/map_camera_driver.js) and run here
+  // on the Camera ref. The Camera has no controlled props, so nothing re-applies a camera on a
+  // re-render, a layer or road rebuild, or a GPS sample. See the driver for the rules.
+  const driver = useRef(null);
+  if (!driver.current) {
+    driver.current = createCameraDriver({
+      remembered: initialCamera,
+      focusKey,
+      routeKey: route?.fitKey,
+      recenterKey,
+      northKey
+    });
+  }
   useEffect(() => {
     const cam = camera.current;
     if (!cam) return;
-    if (shouldFitFocus({ focus, focusKey, lastKey: appliedFocus.current })) {
-      appliedFocus.current = focusKey;
-      cam.fitBounds([focus.east, focus.north], [focus.west, focus.south], 40, 700);
-    } else if (!fixed.current && !fix && !initialCamera && (focus || layers?.firstFocus)) {
-      const box = focus || layers.firstFocus;
-      cam.fitBounds([box.east, box.north], [box.west, box.south], 40, 0);
-    }
-    fixed.current = true;
-  }, [focusKey, firstKey]);
-
-  // Follow moves the center only (and the heading when following a route's course). It never
-  // sets a zoom, so the user's zoom is kept. Follow is dropped by any pan or pinch (onUserPan).
-  // When follow is turned on by a Recenter tap, that tap already made the move (below), so the
-  // first follow step is skipped and the two camera moves do not fight.
-  const following = useRef(false);
-  useEffect(() => {
-    if (!follow || !fix || !camera.current) {
-      following.current = false;
-      return;
-    }
-    const first = !following.current;
-    following.current = true;
-    if (first && recenterKey) return;
-    const stop = followStop(fix, { headingDeg, course: followCourse });
-    if (stop) camera.current.setCamera(stop);
-  }, [follow, fix?.latitude, fix?.longitude, followCourse ? headingDeg : null]);
-
-  // Recenter tap: one move to you at your zoom (steps in only from a whole-state view).
-  useEffect(() => {
-    if (!recenterKey || !fix || !camera.current) return;
-    const stop = recenterStop(fix, { zoom: zoomNow.current });
-    if (stop) camera.current.setCamera(stop);
-  }, [recenterKey]);
-
-  // North up.
-  useEffect(() => {
-    if (!northKey || !camera.current) return;
-    camera.current.setCamera({ heading: 0, animationDuration: 300 });
-  }, [northKey]);
-
+    const cmds = driver.current.sync({
+      fix,
+      follow,
+      headingDeg,
+      followCourse,
+      focus,
+      focusKey,
+      route: route ? { box: route.box, fitKey: route.fitKey } : null,
+      navOn,
+      recenterKey,
+      northKey,
+      firstFocus: layers?.firstFocus || null
+    });
+    for (const cmd of cmds) runCameraCommand(cam, cmd);
+  });
   // The route line and destination pin (regular Map). Built once per route, not per render.
   const routeShape = useMemo(() => {
     const line = route?.line;
     if (!line || line.length < 2) return null;
     return { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: line.map((p) => [p.longitude, p.latitude]) } };
   }, [route?.line]);
-  // Frame a new route once. Not while Start is on (a reroute must not zoom out), and not again
-  // when the map view is rebuilt on returning to the tab.
-  const appliedRoute = useRef(seedAppliedKey(route?.fitKey, Boolean(initialCamera)));
-  useEffect(() => {
-    const cam = camera.current;
-    if (!cam || !shouldFitRoute({ box: route?.box, fitKey: route?.fitKey, lastKey: appliedRoute.current, navOn })) return;
-    appliedRoute.current = route.fitKey;
-    cam.fitBounds([route.box.east, route.box.north], [route.box.west, route.box.south], 60, 700);
-  }, [route?.fitKey]);
   const center = fix ? [fix.longitude, fix.latitude] : [-69, 45];
-  const start = initialCamera ? { centerCoordinate: initialCamera.center, zoomLevel: initialCamera.zoom } : { centerCoordinate: center, zoomLevel: fix ? 11 : 4 };
+  // The opening camera, fixed for the life of this view (never re-applied).
+  const start = useRef(null);
+  if (!start.current) {
+    start.current = initialCamera
+      ? { centerCoordinate: initialCamera.center, zoomLevel: initialCamera.zoom }
+      : { centerCoordinate: center, zoomLevel: fix ? 13 : 4 };
+  }
   const paint = layers?.paint || {};
   const coneShape = useMemo(() => {
     const ring = overlay?.polygon;
@@ -163,7 +150,14 @@ export default function OfflineMap({
     return { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [ring.map((p) => [p.longitude, p.latitude])] } };
   }, [overlay?.polygon]);
   return (
-    <View style={fill ? { flex: 1 } : null}>
+    <View
+      style={fill ? { flex: 1 } : null}
+      // A finger dragging or pinching on the map is the only sure sign of a user move on Android.
+      onTouchStart={(event) => { if (driver.current.touchStart(event)) onUserPan?.(); }}
+      onTouchMove={(event) => { if (driver.current.touchMove(event)) onUserPan?.(); }}
+      onTouchEnd={() => driver.current.touchEnd()}
+      onTouchCancel={() => driver.current.touchEnd()}
+    >
       <MapView
         style={fill ? { flex: 1, minHeight: 150 } : { height: 380 }}
         mapStyle={style}
@@ -172,12 +166,10 @@ export default function OfflineMap({
         compassEnabled={false}
         onDidFailLoadingMap={() => onFail?.()}
         onRegionWillChange={(event) => {
-          if (isUserGesture(event)) onUserPan?.();
+          if (driver.current.regionEvent(event)) onUserPan?.();
         }}
         onRegionDidChange={(event) => {
-          const z = event?.properties?.zoomLevel;
-          if (Number.isFinite(z)) zoomNow.current = z;
-          if (isUserGesture(event)) onUserPan?.();
+          if (driver.current.regionEvent(event)) onUserPan?.();
           onCamera?.(event);
         }}
         onPress={(event) => {
@@ -191,7 +183,7 @@ export default function OfflineMap({
           onLongPress?.({ longitude: coords[0], latitude: coords[1] });
         }}
       >
-        <Camera ref={camera} defaultSettings={start} />
+        <Camera ref={camera} defaultSettings={start.current} />
         {land ? (
           <ShapeSource id="land" shape={geo.land}>
             <FillLayer id="land-fill" style={{ fillColor: land.land }} />

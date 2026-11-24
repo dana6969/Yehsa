@@ -120,16 +120,17 @@ test("the app wires one setting: no map-only GPS switch, no silent consent", () 
   assert.match(helpers, /requestLocation\(/);
 });
 
-test("native map: no fit on layer rebuilds, follow without zoom, gestures drop follow", () => {
-  assert.doesNotMatch(nativeMap, /\[focusKey, layers\?\.firstFocus\]/);
-  assert.match(nativeMap, /\[focusKey, firstKey\]/);
+test("native map: one camera driver, no controlled Camera props, touch drops follow", () => {
+  assert.match(nativeMap, /createCameraDriver\(/);
   assert.match(nativeMap, /onRegionWillChange/);
-  assert.match(nativeMap, /isUserGesture\(event\)\) onUserPan/);
-  assert.match(nativeMap, /shouldFitRoute\(/);
-  const follow = nativeMap.slice(nativeMap.indexOf("if (!follow || !fix"), nativeMap.indexOf("if (!follow || !fix") + 300);
-  assert.doesNotMatch(follow, /zoomLevel/);
-  assert.match(nativeMap, /defaultSettings=\{start\}/, "the start camera is only the default, never a bound prop");
-  assert.doesNotMatch(nativeMap, /<Camera[^>]*(zoomLevel|centerCoordinate)=/);
+  assert.match(nativeMap, /driver\.current\.regionEvent\(event\)\) onUserPan/);
+  assert.match(nativeMap, /onTouchMove=\{\(event\) => \{ if \(driver\.current\.touchMove\(event\)\) onUserPan/);
+  assert.match(nativeMap, /defaultSettings=\{start\.current\}/, "the start camera is only the default, never a bound prop");
+  assert.doesNotMatch(nativeMap, /<Camera[^>]*(zoomLevel|centerCoordinate|bounds|followUserLocation|followUserMode)=/);
+  assert.doesNotMatch(nativeMap, /<UserLocation/);
+  // Every camera call goes through the driver's commands.
+  const calls = nativeMap.match(/\.(setCamera|fitBounds|flyTo|moveTo|zoomTo)\(/g) || [];
+  assert.equal(calls.length, 2, "only runCameraCommand calls the Camera ref");
 });
 
 test("full screen hides the tabs and keeps SOS; the rail has the map controls", () => {
