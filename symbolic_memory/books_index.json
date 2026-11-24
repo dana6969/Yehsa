@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-24T14:25:29.783Z",
-  "passageCount": 965,
+  "generatedAt": "2026-11-24T14:33:53.909Z",
+  "passageCount": 985,
   "sources": [
     {
       "file": "symbolic_memory/full_book_verses.json",
@@ -146,6 +146,12 @@
       "status": "indexed",
       "title": "entries_sign",
       "passages": 12
+    },
+    {
+      "file": "symbolic_books/survival/entries_spiritual.json",
+      "status": "indexed",
+      "title": "entries_spiritual",
+      "passages": 20
     },
     {
       "file": "symbolic_books/survival/entries_water.json",
@@ -4612,6 +4618,126 @@
       "context": "Rabbit and hare tracks come in groups of four: two long hind feet side by side in front of two small front feet, one behind the other. Also called rabbit track, hare track, bunny prints, snowshoe hare track. Look for Y-shaped or triangle-shaped track group; snowshoe hare hind prints very large and splayed in snow. The big hind prints land ahead of the front prints, so the wide end of the group points the way the animal went.",
       "title": "Rabbit or hare tracks",
       "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "spiritual_practice_own",
+      "context": "Many people find steadiness in prayer, silence, a familiar verse, or a small ritual; it is a personal practice, used in the person's own way or not at all. Also called pray in an emergency, spiritual comfort, meditation outdoors, quiet time, finding peace. Look for what the person already finds comforting; a short quiet moment before acting. If you want, take a minute of quiet, prayer, or slow breathing, then return to the practical steps.",
+      "title": "Prayer, quiet, or ritual as your own tool",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "gratitude_meaning_hardship",
+      "context": "Remembering what you are grateful for and who you are living for can strengthen the will to keep going through hardship. Also called finding meaning, gratitude practice, hope in hard times, will to survive. Look for thinking of family, friends, or faith; small wins noticed each day. Name three things you are grateful for, or the people waiting for you, and set one small goal for the next hour.",
+      "title": "Gratitude and meaning in hard times",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "respect_after_harvest",
+      "context": "Many hunters pause after a kill to thank or honor the animal; it is a personal custom that often goes with using the meat well and wasting nothing. Also called after killing a deer, respect for the animal, thanks after a kill. Look for a quiet moment with the animal; care in handling and dressing. Take a moment in your own way, then handle the animal with care and get the meat cool quickly.",
+      "title": "A moment of respect after a harvest",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "faith_contacts_card",
+      "context": "A family card can hold contacts for the people who support you, such as a faith leader, a friend, or a counselor, along with crisis lines. Also called pastor contact, faith community, support contacts, who to call for support. Look for names and numbers written on paper as well as in the phone; 988 and the Veterans Crisis Line. Add supporters to your family emergency card, ask them ahead of time whether you can call in a crisis, and keep a paper copy.",
+      "title": "Faith-community and support contacts on your card",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "hope_in_hardship",
+      "context": "Hope is the sense that things can get better and that your actions matter; in hard times it grows from small, doable steps and from people who stand with you. Also called no hope, losing hope, how to keep going, hopeless situation. Look for a next step you can take in the next hour; someone you are doing this for. Pick one small task, finish it, and notice it; remember who is waiting for you; let someone help carry the load.",
+      "title": "Holding on to hope",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "fear_of_death_moment",
+      "context": "In a life-threatening moment, fear of dying is natural; turning attention to the next useful action and to people you love can steady you. Also called am I going to die, afraid to die, scared of dying, fear of death. Look for racing heart and narrowed thinking; thoughts of family. Breathe slowly, focus on the next step to stay safe or call for help, and, if it helps you, use your own prayer, words, or silence.",
+      "title": "Facing fear of dying in a crisis",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "forgiveness_practice",
+      "context": "Forgiveness is choosing to let go of resentment or self-blame so it no longer runs your life; it does not mean excusing harm or returning to danger. Also called how to forgive, forgive myself, holding a grudge, can't forgive. Look for anger that keeps replaying; guilt over your own mistake. Name the hurt honestly, decide what you need to be safe, and let go in your own time and way, whether by prayer, writing, talking, or quiet.",
+      "title": "Forgiveness",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "uncertainty_acceptance",
+      "context": "Many traditions teach separating what you can change from what you cannot; acting on the first and accepting the second eases worry. Also called don't know what will happen, can't control anything, uncertain future, acceptance. Look for worry about things far outside your control; a list of what is in your hands today. Write what you can and cannot control, act on one thing you can, and set the rest down for now.",
+      "title": "Living with uncertainty",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "memorial_ritual_loss",
+      "context": "A small ritual, such as lighting a light, sharing stories, writing a letter, or a moment of silence, can help people honor someone when a full service is not possible. Also called memorial, remember someone who died, funeral far away, grief ritual. Look for a quiet place and time; a photo, object, or story. Gather those who want to take part, share memories, and use words from the person's tradition or your own.",
+      "title": "Small rituals for remembering someone",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "death_in_the_field",
+      "context": "If someone dies outdoors, the first steps are to call for help, keep yourself and others safe, and leave the scene as it is for authorities. Also called someone died on trail, found a body, person died hunting, what to do if someone dies. Look for no breathing and no response; a scene that may still be dangerous. Call 911 or use SOS, start CPR if trained and it is not clearly too late, mark the location, keep others safe and warm, and take a quiet moment if you wish.",
+      "title": "If someone dies in the field",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "quiet_in_nature",
+      "context": "Spending quiet time outdoors, noticing sounds, light, and the land, is a simple way many people find calm and perspective. Also called peace in nature, mindfulness outdoors, sit spot, nature calm. Look for a safe, comfortable spot; a few minutes without the phone. Sit for a few minutes, breathe, and notice what you see and hear; return to the same place over days.",
+      "title": "Quiet and awe in nature",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "values_hard_decisions",
+      "context": "When choices are hard, naming what matters most to you, such as safety, family, honesty, or faith, helps you decide and live with the outcome. Also called hard decision, right thing to do, moral choice, what should I do. Look for two choices that both cost something; pressure to decide fast. Get safe first, list your options, ask which fits what you value most, and talk with someone you trust if time allows.",
+      "title": "Making hard decisions by your values",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "purpose_after_loss",
+      "context": "After a major loss, many people slowly rebuild purpose through caring for others, honoring the person they lost, and small daily commitments. Also called lost my purpose, what's the point, meaning after loss. Look for days that feel empty; wanting to do something in the person's memory. Start with one small commitment, help someone else, and give yourself time.",
+      "title": "Finding purpose after a loss",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "rest_sabbath",
+      "context": "Many faiths and simple wisdom set aside regular rest; stepping back restores energy and judgment for the long haul. Also called need rest, day of rest, sabbath, burned out. Look for exhaustion and short temper; no break for many days. Plan a regular pause, even a few hours, and protect it for sleep, quiet, family, or worship as you choose.",
+      "title": "Rest and a day of rest",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "scripture_on_phone",
+      "context": "Yehsa carries several public-domain texts, including the King James Bible, the Tao Te Ching, the Bhagavad Gita, the Dhammapada, and Marcus Aurelius's Meditations, which you can ask about by name or topic. Also called read the Bible, find a verse, Tao Te Ching, Bhagavad Gita, Dhammapada. Look for asking for a book and chapter; asking what a text says about a topic.",
+      "title": "Reading scripture or classic wisdom texts in Yehsa",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "courage_under_fear",
+      "context": "Courage is acting on what matters while still afraid; fear often shrinks once you take the first step. Also called need courage, scared to act, be brave. Look for a clear next step that frightens you; people depending on you. Breathe, name the step, and take it; ask for help or company if you can.",
+      "title": "Courage when afraid",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "respect_different_beliefs",
+      "context": "In a mixed group, people may want prayer, silence, or no religious words at all; inviting rather than assuming keeps everyone included. Also called different religions in group, praying with others, non-religious, interfaith. Look for someone asking for prayer; someone who prefers silence. Ask what people want, offer a moment of silence that everyone can use their own way, and respect customs where you can.",
+      "title": "Respecting different beliefs in a group",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "kindness_service",
+      "context": "Helping others after a disaster or in daily life gives purpose and connection, and it strengthens the helper too. Also called helping others, kindness, serve neighbors, volunteer after disaster. Look for neighbors who live alone or are ill; official volunteer channels after a disaster. Check on neighbors, share skills or supplies, and volunteer through organized groups rather than self-deploying into danger zones.",
+      "title": "Helping others as a source of strength",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "patience_long_wait",
+      "context": "Long waits, for rescue, power, or news, wear people down; structure, small goals, and company make time more bearable. Also called waiting for rescue, waiting it out, long outage patience, how to stay patient. Look for restlessness and irritability; repeated checking for news. Set a routine for the day, take turns on watch or tasks, conserve energy, and check news at set times.",
+      "title": "Patience through a long wait",
+      "source": "symbolic_books/survival/entries_spiritual.json"
+    },
+    {
+      "symbol": "gratitude_journal",
+      "context": "Writing a few lines each day about what went right or what you are thankful for can lift mood and help you see progress. Also called gratitude journal, write what I'm thankful for, journal in hard times. Look for a small notebook or the phone's notes; three short lines a day. Each evening write three things that went well and one thing you did that helped.",
+      "title": "Writing down what went right",
+      "source": "symbolic_books/survival/entries_spiritual.json"
     },
     {
       "symbol": "water_how_much",

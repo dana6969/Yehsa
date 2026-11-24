@@ -309,6 +309,7 @@
 "use": "Practice before the season, pass on doubtful shots, recover and use what you take, and leave gates and land as you found them.",
 "not": "Do not waste meat, shoot from roads where it is illegal, or interfere with other hunters.",
 "rel": [
+"respect_after_harvest",
 "land_access_trespass"
 ],
 "src": [

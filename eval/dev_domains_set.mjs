@@ -1342,5 +1342,225 @@ export const DOMAIN_DEV_SET = [
     "stress after a disaster"
    ]
   }
+ },
+ {
+  "id": "dom-spiritual-practice-own",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about pray in an emergency",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "prayer, quiet, or ritual as your own tool"
+   ]
+  }
+ },
+ {
+  "id": "dom-gratitude-meaning-hardship",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about finding meaning",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "gratitude and meaning in hard times"
+   ]
+  }
+ },
+ {
+  "id": "dom-respect-after-harvest",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about after killing a deer",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "a moment of respect after a harvest"
+   ]
+  }
+ },
+ {
+  "id": "dom-faith-contacts-card",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about pastor contact",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "faith-community and support contacts on your card"
+   ]
+  }
+ },
+ {
+  "id": "dom-hope-in-hardship",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about no hope",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "holding on to hope"
+   ]
+  }
+ },
+ {
+  "id": "dom-fear-of-death-moment",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about am I going to die",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "facing fear of dying in a crisis"
+   ]
+  }
+ },
+ {
+  "id": "dom-forgiveness-practice",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about forgive myself",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "forgiveness"
+   ]
+  }
+ },
+ {
+  "id": "dom-uncertainty-acceptance",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about uncertain future",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "living with uncertainty"
+   ]
+  }
+ },
+ {
+  "id": "dom-memorial-ritual-loss",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about memorial",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "small rituals for remembering someone"
+   ]
+  }
+ },
+ {
+  "id": "dom-death-in-the-field",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about someone died on trail",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "if someone dies in the field"
+   ]
+  }
+ },
+ {
+  "id": "dom-quiet-in-nature",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about peace in nature",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "quiet and awe in nature"
+   ]
+  }
+ },
+ {
+  "id": "dom-values-hard-decisions",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about hard decision",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "making hard decisions by your values"
+   ]
+  }
+ },
+ {
+  "id": "dom-purpose-after-loss",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about lost my purpose",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "finding purpose after a loss"
+   ]
+  }
+ },
+ {
+  "id": "dom-rest-sabbath",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about need rest",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "rest and a day of rest"
+   ]
+  }
+ },
+ {
+  "id": "dom-scripture-on-phone",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about read the Bible",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "reading scripture or classic wisdom texts in yehsa"
+   ]
+  }
+ },
+ {
+  "id": "dom-courage-under-fear",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about need courage",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "courage when afraid"
+   ]
+  }
+ },
+ {
+  "id": "dom-respect-different-beliefs",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about different religions in group",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "respecting different beliefs in a group"
+   ]
+  }
+ },
+ {
+  "id": "dom-kindness-service",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about helping others",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "helping others as a source of strength"
+   ]
+  }
+ },
+ {
+  "id": "dom-patience-long-wait",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about waiting for rescue",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "patience through a long wait"
+   ]
+  }
+ },
+ {
+  "id": "dom-gratitude-journal",
+  "category": "domain-spiritual",
+  "prompt": "Tell me about gratitude journal",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "writing down what went right"
+   ]
+  }
  }
 ];

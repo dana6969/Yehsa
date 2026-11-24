@@ -234,7 +234,8 @@
 "use": "Set a daily rhythm, give everyone a job, and mark small successes.",
 "not": "Do not let days blur into no structure for weeks.",
 "rel": [
-"low_mood_winter"
+"low_mood_winter",
+"gratitude_meaning_hardship"
 ],
 "src": [
 "atp3-50-21",
