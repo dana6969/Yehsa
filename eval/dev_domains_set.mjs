@@ -627,5 +627,269 @@ export const DOMAIN_DEV_SET = [
     "turnaround time and trip plans"
    ]
   }
+ },
+ {
+  "id": "dom-day-hike-essentials",
+  "category": "domain-gear",
+  "prompt": "Tell me about ten essentials",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "day-hike essentials checklist"
+   ]
+  }
+ },
+ {
+  "id": "dom-deer-hunt-day-kit",
+  "category": "domain-gear",
+  "prompt": "Tell me about hunting pack list",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "deer-hunt day kit"
+   ]
+  }
+ },
+ {
+  "id": "dom-kit-72-hour",
+  "category": "domain-gear",
+  "prompt": "Tell me about go bag",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "72-hour bag, car kit, and home outage kit"
+   ]
+  }
+ },
+ {
+  "id": "dom-forgot-knife-light-fire",
+  "category": "domain-gear",
+  "prompt": "Tell me about forgot my knife",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "forgot your knife, light, or fire starter"
+   ]
+  }
+ },
+ {
+  "id": "dom-clothing-layers-wet",
+  "category": "domain-gear",
+  "prompt": "Tell me about layering",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "clothing layers"
+   ]
+  }
+ },
+ {
+  "id": "dom-headlamp-red-light",
+  "category": "domain-gear",
+  "prompt": "Tell me about headlamp",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "headlamp, spare batteries, and red mode"
+   ]
+  }
+ },
+ {
+  "id": "dom-knife-safety-edge",
+  "category": "domain-gear",
+  "prompt": "Tell me about knife safety",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "knife safety and a basic edge"
+   ]
+  }
+ },
+ {
+  "id": "dom-water-filter-care",
+  "category": "domain-gear",
+  "prompt": "Tell me about hollow fiber filter frozen",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "water filter care"
+   ]
+  }
+ },
+ {
+  "id": "dom-first-aid-kit-contents",
+  "category": "domain-gear",
+  "prompt": "Tell me about first aid kit list",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "first-aid kit contents"
+   ]
+  }
+ },
+ {
+  "id": "dom-stove-fuel-safety",
+  "category": "domain-gear",
+  "prompt": "Tell me about camp stove safety",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "stove and fuel safety"
+   ]
+  }
+ },
+ {
+  "id": "dom-boot-fit-blisters",
+  "category": "domain-gear",
+  "prompt": "Tell me about blisters hiking",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "boot fit and blister prevention"
+   ]
+  }
+ },
+ {
+  "id": "dom-sleeping-bag-ratings",
+  "category": "domain-gear",
+  "prompt": "Tell me about sleeping bag rating",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "sleeping bag temperature ratings"
+   ]
+  }
+ },
+ {
+  "id": "dom-pack-fit",
+  "category": "domain-gear",
+  "prompt": "Tell me about backpack fit",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "fitting a backpack"
+   ]
+  }
+ },
+ {
+  "id": "dom-field-repair-kit",
+  "category": "domain-gear",
+  "prompt": "Tell me about repair kit",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "field repair"
+   ]
+  }
+ },
+ {
+  "id": "dom-rope-cordage-basics",
+  "category": "domain-gear",
+  "prompt": "Tell me about paracord",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "rope and cordage basics"
+   ]
+  }
+ },
+ {
+  "id": "dom-binoculars-rangefinder",
+  "category": "domain-gear",
+  "prompt": "Tell me about binoculars",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "binoculars and rangefinders in practice"
+   ]
+  }
+ },
+ {
+  "id": "dom-trekking-poles",
+  "category": "domain-gear",
+  "prompt": "Tell me about hiking poles",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "trekking poles"
+   ]
+  }
+ },
+ {
+  "id": "dom-saw-hatchet-safety",
+  "category": "domain-gear",
+  "prompt": "Tell me about hatchet safety",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "saw and hatchet safety"
+   ]
+  }
+ },
+ {
+  "id": "dom-winter-travel-gear",
+  "category": "domain-gear",
+  "prompt": "Tell me about snowshoes",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "winter travel gear"
+   ]
+  }
+ },
+ {
+  "id": "dom-phone-battery-backup",
+  "category": "domain-gear",
+  "prompt": "Tell me about phone battery dying",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "phone battery and backup power"
+   ]
+  }
+ },
+ {
+  "id": "dom-satellite-sos-messenger",
+  "category": "domain-gear",
+  "prompt": "Tell me about satellite SOS",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "satellite sos and messengers"
+   ]
+  }
+ },
+ {
+  "id": "dom-whistle-mirror-signal",
+  "category": "domain-gear",
+  "prompt": "Tell me about emergency whistle",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "whistle and signal mirror"
+   ]
+  }
+ },
+ {
+  "id": "dom-insect-repellent-use",
+  "category": "domain-gear",
+  "prompt": "Tell me about bug spray",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "insect repellent and tick-treated clothing"
+   ]
+  }
+ },
+ {
+  "id": "dom-water-carry-capacity",
+  "category": "domain-gear",
+  "prompt": "Tell me about water bottles",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "how much water to carry"
+   ]
+  }
  }
 ];

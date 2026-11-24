@@ -1,0 +1,281 @@
+[
+{
+"id": "day_hike_essentials",
+"title": "Day-hike essentials checklist",
+"domain": "gear",
+"also": [
+"ten essentials",
+"what to bring hiking",
+"hiking checklist",
+"day pack list"
+],
+"def": "The day-hike essentials are the few items that let you get through an unplanned night: navigation, light, sun protection, first aid, a knife, fire, shelter, extra food, extra water, and extra clothes.",
+"look": [
+"map and compass as well as a phone",
+"headlamp with spare batteries",
+"an emergency blanket or bivy and a warm layer"
+],
+"use": "Pack the same essentials for every hike, even a short one, and leave a trip plan with someone at home.",
+"not": "Do not skip the essentials because the trail is short or familiar; most rescues start on day hikes.",
+"steps": [
+"Navigation: map, compass, charged phone.",
+"Headlamp and spare batteries.",
+"Sun protection.",
+"First-aid kit.",
+"Knife or multi-tool.",
+"Fire starter.",
+"Emergency shelter.",
+"Extra food.",
+"Extra water or a filter.",
+"Extra warm, dry layer."
+],
+"rel": [
+"clothing_layers_wet",
+"headlamp_red_light",
+"first_aid_kit_contents"
+],
+"src": [
+"nps",
+"ready"
+]
+},
+{
+"id": "deer_hunt_day_kit",
+"title": "Deer-hunt day kit",
+"domain": "gear",
+"also": [
+"what to bring deer hunting",
+"hunting pack list",
+"deer hunting gear checklist"
+],
+"def": "A deer-hunt day kit covers the hunt itself, getting an animal out, and getting yourself home: license and tags, orange, a sharp knife, gloves, a drag rope, light, water, and first aid.",
+"look": [
+"license, tags, and a pen or zip ties for tagging",
+"hunter orange hat and vest",
+"knife, disposable gloves, and a drag rope"
+],
+"use": "Pack it the night before, add a headlamp and spare batteries for the walk out in the dark, and tell someone where you will sit.",
+"not": "Do not leave license and tags in the truck, or rely on a phone light to track or walk out.",
+"rel": [
+"hunt_before_you_go",
+"field_dressing_deer"
+],
+"src": [
+"ihea",
+"nps"
+]
+},
+{
+"id": "kit_72_hour",
+"title": "72-hour bag, car kit, and home outage kit",
+"domain": "gear",
+"also": [
+"go bag",
+"bug out bag",
+"72 hour kit",
+"emergency kit",
+"car emergency kit",
+"home emergency kit"
+],
+"def": "A 72-hour kit holds what each person needs for three days without help: water, food, light, radio, first aid, medicines, warmth, copies of documents, and cash.",
+"look": [
+"a gallon of water per person per day",
+"a week of prescription medicines where possible",
+"a battery or hand-crank NOAA weather radio"
+],
+"use": "Keep a grab bag by the door, a smaller kit in each car with blankets and a scraper, and a home kit for outages; check food, water, and batteries twice a year.",
+"not": "Do not pack only gadgets; water, medicines, and warm layers matter most. Do not store fuel in the living space.",
+"rel": [
+"day_hike_essentials"
+],
+"src": [
+"ready",
+"fema"
+]
+},
+{
+"id": "forgot_knife_light_fire",
+"title": "Forgot your knife, light, or fire starter",
+"domain": "gear",
+"also": [
+"forgot my knife",
+"no flashlight",
+"forgot lighter",
+"no fire starter",
+"improvise gear"
+],
+"def": "When a key item is left behind, safer substitutes and a changed plan beat improvising something risky: a phone light in short bursts, a multi-tool or sharp-edged stone, and turning back before dark.",
+"look": [
+"phone battery level",
+"how much daylight is left",
+"whether the trip still makes sense"
+],
+"use": "Shorten the trip, start back early, save phone battery for calls and short light, and borrow from a partner.",
+"not": "Do not push on into the night without a light or try to make fire with fuel such as gasoline.",
+"rel": [
+"day_hike_essentials",
+"headlamp_red_light"
+],
+"src": [
+"nps",
+"atp3-50-21"
+]
+},
+{
+"id": "clothing_layers_wet",
+"title": "Clothing layers: wool and synthetics versus cotton",
+"domain": "gear",
+"also": [
+"layering",
+"cotton kills",
+"what to wear hiking",
+"wool vs cotton",
+"base layer"
+],
+"def": "Layers let you adjust warmth: a base layer that moves sweat, an insulating layer, and a wind and rain shell; wool and synthetics stay warm when damp, while wet cotton pulls heat away fast.",
+"look": [
+"cotton jeans or a cotton hoodie on a cold, wet day",
+"shivering when you stop",
+"sweat-soaked base layer"
+],
+"use": "Take layers off before you sweat, put them on before you chill, and carry a dry spare insulating layer and hat in a waterproof bag.",
+"not": "Do not wear cotton as your main layer in cold, wet, or windy weather.",
+"rel": [
+"day_hike_essentials"
+],
+"src": [
+"nps",
+"cdc",
+"atp3-50-21"
+]
+},
+{
+"id": "headlamp_red_light",
+"title": "Headlamp, spare batteries, and red mode",
+"domain": "gear",
+"also": [
+"headlamp",
+"red light mode",
+"spare batteries",
+"flashlight for camping"
+],
+"def": "A headlamp keeps your hands free; spare batteries or a charged backup, and a dim red mode that protects night vision, make it last the night.",
+"look": [
+"batteries tested before the trip",
+"a red or dim setting",
+"cold weather draining batteries"
+],
+"use": "Carry a headlamp and spares on every outing, keep batteries warm in cold weather, and use red mode around camp and when reading a map.",
+"not": "Do not rely on a phone as your only light.",
+"rel": [
+"day_hike_essentials"
+],
+"src": [
+"nps"
+]
+},
+{
+"id": "knife_safety_edge",
+"title": "Knife safety and a basic edge",
+"domain": "gear",
+"also": [
+"knife safety",
+"sharpen a knife",
+"cut away from yourself",
+"dull knife"
+],
+"def": "Safe knife use means cutting away from your body and others, keeping a blood circle clear around you, and keeping the blade sharp so it does not slip.",
+"look": [
+"a clear arm's length around you",
+"a firm grip and a stable work surface",
+"a dull edge that skids instead of biting"
+],
+"use": "Cut away from your body, close or sheath the knife when not using it, and sharpen at a steady, shallow angle on a stone or rod.",
+"not": "Do not cut toward your hand or leg, catch a falling knife, or pass an open blade edge-first.",
+"call": "For a deep cut, press firmly with a clean cloth and get medical care if it gapes or will not stop bleeding.",
+"rel": [
+"first_aid_kit_contents"
+],
+"src": [
+"atp3-50-21"
+]
+},
+{
+"id": "water_filter_care",
+"title": "Water filter care",
+"domain": "gear",
+"also": [
+"hollow fiber filter frozen",
+"sawyer filter care",
+"backflush filter",
+"water filter cold"
+],
+"def": "Hollow-fiber water filters must be kept from freezing once wet, because ice can crack the fibers without any visible sign and let germs through.",
+"look": [
+"a filter used on a cold trip",
+"slower flow over time",
+"the maker's backflush syringe or instructions"
+],
+"use": "In freezing weather keep a used filter in an inside pocket and in your sleeping bag at night, and backflush it as the maker directs.",
+"not": "Do not trust a filter that may have frozen; boil or disinfect the water instead.",
+"rel": [
+"day_hike_essentials"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "first_aid_kit_contents",
+"title": "First-aid kit contents",
+"domain": "gear",
+"also": [
+"first aid kit list",
+"what to put in a first aid kit",
+"trauma kit",
+"IFAK"
+],
+"def": "A useful first-aid kit matches your trip and training: bandages and gauze, tape, gloves, blister care, pain relievers, personal medicines, and for bleeding, pressure dressings and a commercial tourniquet if you have trained with it.",
+"look": [
+"personal medicines and an epinephrine auto-injector if prescribed",
+"gloves and a pressure dressing",
+"tweezers for ticks and splinters"
+],
+"use": "Build the kit around what you can use, keep it where you can reach it fast, and replace used and expired items after each trip.",
+"not": "Do not carry items you do not know how to use as a substitute for training.",
+"rel": [
+"day_hike_essentials",
+"knife_safety_edge"
+],
+"src": [
+"atp4-02-11",
+"ready"
+]
+},
+{
+"id": "stove_fuel_safety",
+"title": "Stove and fuel safety",
+"domain": "gear",
+"also": [
+"camp stove safety",
+"propane safety",
+"white gas stove",
+"cooking in a tent"
+],
+"def": "Camp stoves and fuel are safe used outdoors in open air, set on a stable surface away from tents and brush, with fuel stored cool and closed.",
+"look": [
+"a stable, flat base",
+"no tent fabric, overhanging branches, or dry grass nearby",
+"fuel canisters away from heat and sun"
+],
+"use": "Cook outside, light the stove before leaning over it, let it cool before refueling, and pack fuel apart from food.",
+"not": "Never cook or heat with a stove inside a tent, vestibule, car, or home; carbon monoxide can kill.",
+"call": "Get fresh air and call 911 for headache, dizziness, or confusion near a stove or heater.",
+"rel": [],
+"src": [
+"cpsc",
+"nps"
+]
+}
+]

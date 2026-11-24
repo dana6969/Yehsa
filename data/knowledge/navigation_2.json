@@ -43,7 +43,8 @@
 "use": "Shorten legs between landmarks, count paces, check the compass often, and stop and camp if the ground gets rough.",
 "not": "Do not travel cross-country at night in steep or unknown terrain if you can safely wait for light.",
 "rel": [
-"lost_stop_plan"
+"lost_stop_plan",
+"headlamp_red_light"
 ],
 "src": [
 "fm3-25-26",
@@ -307,7 +308,8 @@
 "use": "Set the turnaround time before you start, keep it, and leave your route and return time with someone who will call for help.",
 "not": "Do not push past the turnaround to reach a summit or spot.",
 "rel": [
-"lost_stop_plan"
+"lost_stop_plan",
+"day_hike_essentials"
 ],
 "src": [
 "nps",
