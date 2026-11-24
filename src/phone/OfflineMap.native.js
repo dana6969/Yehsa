@@ -16,6 +16,7 @@ import {
 } from "@maplibre/maplibre-react-native";
 import { AboutMapLink, ConePill, DragPin, MarkPin } from "./hunt_map_ui.js";
 import { DestinationPin } from "./route/RoutePins.js";
+import { boxKey, followStop, isUserGesture, recenterStop, seedAppliedKey, shouldFitFocus, shouldFitRoute } from "../../symbolic/map_camera.js";
 
 // glyphs: the loopback URL for the road-name font, when the road layer is on.
 function blankStyle(color, glyphs) {
@@ -75,6 +76,11 @@ export default function OfflineMap({
   onAbout,
   parcels,
   route = null,
+  navOn = false,
+  followCourse = false,
+  recenterKey = 0,
+  northKey = 0,
+  onUserPan,
   fill = false
 }) {
   const camera = useRef(null);
@@ -84,27 +90,45 @@ export default function OfflineMap({
   const roads = layers?.roads || null;
   const style = useMemo(() => blankStyle(land ? land.water : "#101611", layers?.glyphs), [land?.water, layers?.glyphs]);
 
-  // Look at the right place once the map has a camera, and again when asked (Show on map).
+  // Camera rules (symbolic/map_camera.js): a fit runs once per request key, never on a re-render.
+  // Before R6 this effect also ran whenever layers.firstFocus became a new object, which happens
+  // every time roads reload after a pan or zoom, so the map snapped back to the Hunt / Show box.
+  const firstKey = boxKey(layers?.firstFocus);
+  const appliedFocus = useRef(seedAppliedKey(focusKey, Boolean(initialCamera)));
+  const zoomNow = useRef(initialCamera?.zoom ?? null);
   useEffect(() => {
     const cam = camera.current;
     if (!cam) return;
-    if (focus && focusKey) {
+    if (shouldFitFocus({ focus, focusKey, lastKey: appliedFocus.current })) {
+      appliedFocus.current = focusKey;
       cam.fitBounds([focus.east, focus.north], [focus.west, focus.south], 40, 700);
     } else if (!fixed.current && !fix && !initialCamera && (focus || layers?.firstFocus)) {
       const box = focus || layers.firstFocus;
       cam.fitBounds([box.east, box.north], [box.west, box.south], 40, 0);
     }
     fixed.current = true;
-  }, [focusKey, layers?.firstFocus]);
+  }, [focusKey, firstKey]);
 
+  // Follow moves the center only (and the heading when following a route's course). It never
+  // sets a zoom, so the user's zoom is kept. Follow is dropped by any pan or pinch (onUserPan).
   useEffect(() => {
     if (!follow || !fix || !camera.current) return;
-    camera.current.setCamera({
-      centerCoordinate: [fix.longitude, fix.latitude],
-      heading: Number.isFinite(headingDeg) ? headingDeg : 0,
-      animationDuration: 500
-    });
-  }, [follow, fix?.latitude, fix?.longitude, headingDeg]);
+    const stop = followStop(fix, { headingDeg, course: followCourse });
+    if (stop) camera.current.setCamera(stop);
+  }, [follow, fix?.latitude, fix?.longitude, followCourse ? headingDeg : null]);
+
+  // Recenter tap: one move to you at your zoom (steps in only from a whole-state view).
+  useEffect(() => {
+    if (!recenterKey || !fix || !camera.current) return;
+    const stop = recenterStop(fix, { zoom: zoomNow.current });
+    if (stop) camera.current.setCamera(stop);
+  }, [recenterKey]);
+
+  // North up.
+  useEffect(() => {
+    if (!northKey || !camera.current) return;
+    camera.current.setCamera({ heading: 0, animationDuration: 300 });
+  }, [northKey]);
 
   // The route line and destination pin (regular Map). Built once per route, not per render.
   const routeShape = useMemo(() => {
@@ -112,9 +136,13 @@ export default function OfflineMap({
     if (!line || line.length < 2) return null;
     return { type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: line.map((p) => [p.longitude, p.latitude]) } };
   }, [route?.line]);
+  // Frame a new route once. Not while Start is on (a reroute must not zoom out), and not again
+  // when the map view is rebuilt on returning to the tab.
+  const appliedRoute = useRef(seedAppliedKey(route?.fitKey, Boolean(initialCamera)));
   useEffect(() => {
     const cam = camera.current;
-    if (!cam || !route?.box || !route?.fitKey) return;
+    if (!cam || !shouldFitRoute({ box: route?.box, fitKey: route?.fitKey, lastKey: appliedRoute.current, navOn })) return;
+    appliedRoute.current = route.fitKey;
     cam.fitBounds([route.box.east, route.box.north], [route.box.west, route.box.south], 60, 700);
   }, [route?.fitKey]);
   const center = fix ? [fix.longitude, fix.latitude] : [-69, 45];
@@ -132,9 +160,17 @@ export default function OfflineMap({
         mapStyle={style}
         logoEnabled={false}
         attributionEnabled={false}
-        compassEnabled
+        compassEnabled={false}
         onDidFailLoadingMap={() => onFail?.()}
-        onRegionDidChange={(event) => onCamera?.(event)}
+        onRegionWillChange={(event) => {
+          if (isUserGesture(event)) onUserPan?.();
+        }}
+        onRegionDidChange={(event) => {
+          const z = event?.properties?.zoomLevel;
+          if (Number.isFinite(z)) zoomNow.current = z;
+          if (isUserGesture(event)) onUserPan?.();
+          onCamera?.(event);
+        }}
         onPress={(event) => {
           const coords = event?.geometry?.coordinates || event?.coordinates;
           if (!coords) return;
