@@ -316,3 +316,47 @@ test("touch: a tap is not a gesture; a drag or two fingers is", () => {
   assert.equal(touchIsGesture(start, { nativeEvent: { pageX: 130, pageY: 100, touches: [{}] } }), true);
   assert.equal(touchIsGesture(start, { nativeEvent: { pageX: 100, pageY: 100, touches: [{}, {}] } }), true);
 });
+
+// ---- R7: Terrain shading ------------------------------------------------------------------------
+import { mapLayers, rasterPaintFor, terrainIn } from "./symbolic/map_layers.js";
+
+const RASTER_KEYS = ["rasterOpacity", "rasterContrast", "rasterSaturation", "rasterBrightnessMin", "rasterBrightnessMax", "rasterHueRotate"];
+
+test("terrain shading: every raster property is always set, so switching resets the native layer", () => {
+  for (const style of ["standard", "terrain", "simple", "night"]) {
+    for (const shading of [true, false]) {
+      const { paint } = rasterPaintFor({ style, shading });
+      for (const key of RASTER_KEYS) assert.ok(Number.isFinite(paint[key]), `${style}/${shading} sets ${key}`);
+    }
+  }
+});
+
+test("terrain shading: off and on look clearly different (not a dead switch)", () => {
+  const on = rasterPaintFor({ shading: true }).paint;
+  const off = rasterPaintFor({ shading: false }).paint;
+  assert.ok(on.rasterContrast - off.rasterContrast >= 0.5, "relief contrast drops a lot when off");
+  assert.ok(off.rasterBrightnessMin - on.rasterBrightnessMin >= 0.3, "shadows lift when off");
+  const strong = rasterPaintFor({ style: "terrain", shading: true }).paint;
+  assert.ok(strong.rasterContrast > on.rasterContrast, "the Terrain style brings out relief more");
+});
+
+test("terrain shading: the panel says when there is no terrain instead of a dead switch", () => {
+  const yehsaPack = { id: "p", catalogId: "me-southern", kind: "mbtiles", file: "p.mbtiles", attribution: "Elevation: AWS Terrain Tiles", bounds: { west: -71, south: 43, east: -69, north: 45 }, minZoom: 6, maxZoom: 12 };
+  const imported = { id: "q", kind: "mbtiles", file: "q.mbtiles", attribution: "My scan", bounds: { west: -71, south: 43, east: -69, north: 45 } };
+  assert.equal(terrainIn({ tiled: [yehsaPack] }).ok, true);
+  assert.equal(terrainIn({ tiled: [imported] }).ok, false);
+  assert.match(terrainIn({ tiled: [imported] }).why, /no terrain/);
+  assert.match(terrainIn({}).why, /map pack/);
+  const withPack = mapLayers({ store: { packs: [yehsaPack] }, port: 4000, shading: false });
+  assert.equal(withPack.terrain.ok, true);
+  assert.equal(withPack.terrain.shading, false);
+  assert.equal(withPack.paint.rasterBrightnessMin, rasterPaintFor({ shading: false }).paint.rasterBrightnessMin);
+  const waiting = mapLayers({ store: { packs: [yehsaPack] }, port: null });
+  assert.equal(waiting.terrain.ok, false);
+  const none = mapLayers({ store: { packs: [imported] }, port: 4000 });
+  assert.equal(none.terrain.ok, false);
+  // The Layers row reads that state.
+  assert.match(app, /id: "terrain", label: "Terrain shading", on: layers\.terrain\?\.ok/);
+  assert.match(app, /available: Boolean\(layers\.terrain\?\.ok\), why: layers\.terrain\?\.why/);
+  assert.match(nativeMap, /style=\{\{ rasterOpacity: 1, \.\.\.paint \}\}/);
+});

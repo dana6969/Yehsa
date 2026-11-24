@@ -1747,6 +1747,15 @@ function LandPane({ active, fullScreen = false, onFullScreen, onSos, position, s
   const [tilePort, setTilePort] = useState(null);
   const [elevNote, setElevNote] = useState("");
   const [mapStyle, setMapStyle] = useState("standard");
+  // Terrain shading (R7): a real switch on the relief drawn into the packs, kept on this phone.
+  const [shading, setShading] = useState(true);
+  useEffect(() => {
+    AsyncStorage.getItem("yehsa.map.shading.v1").then((raw) => { if (raw === "off") setShading(false); }).catch(() => {});
+  }, []);
+  const toggleShading = () => setShading((value) => {
+    AsyncStorage.setItem("yehsa.map.shading.v1", value ? "off" : "on").catch(() => {});
+    return !value;
+  });
   const [focus, setFocus] = useState(null);
   const [focusKey, setFocusKey] = useState(0);
   const [host, setHost] = useState(initialHost);
@@ -1816,8 +1825,9 @@ function LandPane({ active, fullScreen = false, onFullScreen, onSos, position, s
     style: mapStyle,
     mode: display?.mode || "field",
     night: display?.night || "red",
-    roads: { on: extras.roadsOn, shape: extras.roadLines }
-  }), [mapPacks, areaState.areas, tilePort, mapStyle, display?.mode, display?.night, extras.roadsOn, extras.roadLines]);
+    roads: { on: extras.roadsOn, shape: extras.roadLines },
+    shading
+  }), [mapPacks, areaState.areas, tilePort, mapStyle, display?.mode, display?.night, extras.roadsOn, extras.roadLines, shading]);
   const about = useMemo(() => mapAbout({ store: mapPacks, areas: areaState.areas, roads: Boolean(layers.roads) }), [mapPacks, areaState.areas, layers.roads]);
   const [metersHere, setMetersHere] = useState(null);
   useEffect(() => {
@@ -1923,7 +1933,7 @@ function LandPane({ active, fullScreen = false, onFullScreen, onSos, position, s
     { id: "location", label: "Location", on: consented, hint: "The same switch as Settings, Location. Turning it on asks first.", onToggle: () => (consented ? turnLocationOff({ onConsent }) : turnOnLocation()) },
     { id: "roads", label: "Roads and street names", on: extras.roadsOn, available: extras.roadsAvailable, onToggle: () => extras.setRoadsOn(!extras.roadsOn) },
     { id: "parcels", label: "Property lines", on: extras.parcelsOn, available: Boolean(hunt && extras.parcelsAvailable), why: hunt ? "Not on this phone" : "On the Hunt map", onToggle: () => extras.setParcelsOn(!extras.parcelsOn) },
-    { id: "terrain", label: "Terrain shading", on: mapStyle === "terrain", onToggle: () => setMapStyle(mapStyle === "terrain" ? "standard" : "terrain") },
+    { id: "terrain", label: "Terrain shading", on: layers.terrain?.ok ? layers.terrain.shading : false, available: Boolean(layers.terrain?.ok), why: layers.terrain?.why, hint: "Hills and valleys from the relief in your map packs. Off makes the picture flat and light.", onToggle: toggleShading },
     { id: "hunt", label: "Hunt view", on: hunt, hint: "Scent cone, marks and property lines. Nothing is shared.", onToggle: () => setHunt((value) => !value) }
   ];
 
