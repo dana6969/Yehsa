@@ -21,7 +21,10 @@
 "fws",
 "state-regs-link"
 ],
-"ask": "Tell me about white-tailed deer"
+"ask": "Tell me about white-tailed deer",
+"rel": [
+"field_dressing_deer"
+]
 },
 {
 "id": "moose",
@@ -43,7 +46,10 @@
 "nps",
 "fws"
 ],
-"ask": "Tell me about moose"
+"ask": "Tell me about moose",
+"rel": [
+"field_dressing_moose"
+]
 },
 {
 "id": "elk",
@@ -65,7 +71,10 @@
 "nps",
 "fws"
 ],
-"ask": "Tell me about elk"
+"ask": "Tell me about elk",
+"rel": [
+"field_dressing_elk"
+]
 },
 {
 "id": "black_bear",
@@ -88,7 +97,10 @@
 "nps",
 "fws"
 ],
-"ask": "Tell me about black bear"
+"ask": "Tell me about black bear",
+"rel": [
+"field_dressing_black_bear"
+]
 },
 {
 "id": "coyote",
@@ -274,7 +286,10 @@
 "cdc",
 "state-regs-link"
 ],
-"ask": "Tell me about snowshoe hare"
+"ask": "Tell me about snowshoe hare",
+"rel": [
+"field_dressing_rabbit"
+]
 },
 {
 "id": "wild_turkey",
@@ -297,7 +312,10 @@
 "fws",
 "state-regs-link"
 ],
-"ask": "Tell me about wild turkey"
+"ask": "Tell me about wild turkey",
+"rel": [
+"field_dressing_turkey"
+]
 },
 {
 "id": "ruffed_grouse",
@@ -320,7 +338,10 @@
 "fws",
 "state-regs-link"
 ],
-"ask": "Tell me about ruffed grouse"
+"ask": "Tell me about ruffed grouse",
+"rel": [
+"field_dressing_upland_birds"
+]
 },
 {
 "id": "bald_eagle",
@@ -384,7 +405,10 @@
 "fws",
 "state-regs-link"
 ],
-"ask": "Tell me about canada goose"
+"ask": "Tell me about canada goose",
+"rel": [
+"field_dressing_waterfowl"
+]
 },
 {
 "id": "rattlesnake",
@@ -693,6 +717,9 @@
 "cdc",
 "state-regs-link"
 ],
-"ask": "Tell me about wild boar"
+"ask": "Tell me about wild boar",
+"rel": [
+"field_dressing_wild_hog"
+]
 }
 ]

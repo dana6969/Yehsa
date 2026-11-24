@@ -227,32 +227,43 @@
 "gutting a deer",
 "field dress",
 "clean a deer",
-"how to gut a deer"
+"how to gut a deer",
+"how do I field dress a deer",
+"field dress a deer",
+"field dress a mule deer",
+"whitetail field dressing"
 ],
-"def": "Field dressing removes the internal organs soon after the kill so the body heat can escape and the meat cools quickly.",
+"def": "Field dressing a white-tailed or mule deer means removing the internal organs soon after the kill so body heat can escape and the meat can cool; wear gloves, tag the animal first if required, and keep the cavity clean.",
 "look": [
-"gloves on, sharp knife, clean water or wipes",
-"belly opened shallow so the gut is not cut",
-"body cavity propped open to cool"
+"gloves on, a sharp knife, and clean cloths or paper towels",
+"a shallow belly cut with the blade edge up so the stomach and intestines are not opened",
+"the body cavity wiped and propped open in the shade"
 ],
-"use": "Tag the animal first if your state requires it, open the body from the pelvis toward the ribs with the blade edge up, remove the organs, then prop the cavity open in shade.",
-"not": "Do not cut into the stomach or intestines, handle the brain or spinal cord bare-handed, or leave the carcass in sun or a closed truck bed.",
+"use": "Tag the deer if your state requires it, put on gloves, place the deer on its back, open the body from the breastbone toward the pelvis with the blade edge up, free and roll out the organs, then wipe the cavity and prop it open to cool.",
+"not": "Do not cut into the stomach, intestines, or bladder, handle the brain or spinal cord bare-handed, or leave the carcass in the sun or on a hot vehicle. Do not shoot, handle, or eat a deer that looks sick, and do not eat meat from an animal that tests positive for chronic wasting disease.",
 "steps": [
-"Tag the animal if required.",
-"Put on gloves.",
-"Cut shallow from the pelvis to the ribs, edge up.",
-"Free and roll out the organs.",
-"Wipe out blood and hair; prop open and keep it cool."
+"Tag the deer if required, then put on gloves and place it on its back with the hind legs spread.",
+"Make a shallow cut from the breastbone toward the pelvis, blade edge up, using your fingers to keep the guts away from the knife.",
+"Cut around the anus so the bung can come out with the entrails, and pinch off and free the bladder without spilling it.",
+"Cut the diaphragm free, reach forward, and cut the windpipe and gullet so the heart, lungs, and guts can be pulled out.",
+"Wipe blood and hair from the cavity (use little water, and dry it if you rinse), prop the chest open, and keep the carcass shaded and cooling; in warm weather add bagged ice and skin or quarter it the same day."
 ],
 "rel": [
 "meat_care_temperature",
-"cwd_awareness"
+"cwd_awareness",
+"gutless_method",
+"game_cooking_temps",
+"evidence_of_sex_tag"
 ],
 "src": [
+"ncwildlife-dress",
+"ndsu-game",
+"idfg-field",
 "usda-fsis",
 "cdc",
-"ihea"
-]
+"state-regs-link"
+],
+"ask": "How do I field dress a deer?"
 },
 {
 "id": "meat_care_temperature",
@@ -275,10 +286,14 @@
 "not": "Do not leave a carcass in the sun or a warm vehicle overnight, and do not eat meat that smells sour or rotten; cooking does not make spoiled meat safe.",
 "rel": [
 "field_dressing_deer",
-"game_cooking_temps"
+"game_cooking_temps",
+"field_dress_tools",
+"gutless_method"
 ],
 "src": [
-"usda-fsis"
+"usda-fsis",
+"ndsu-game",
+"idfg-field"
 ]
 },
 {
@@ -303,7 +318,9 @@
 "call": "Report a sick-looking deer to your state wildlife agency.",
 "rel": [
 "field_dressing_deer",
-"hunt_before_you_go"
+"hunt_before_you_go",
+"game_disease_field_signs",
+"cwd_processor_request"
 ],
 "src": [
 "cdc",
@@ -319,24 +336,40 @@
 "venison temperature",
 "cook deer meat",
 "ground venison temperature",
-"wild game cooking"
+"wild game cooking",
+"venison cook temperature",
+"bear cooking temperature",
+"wild game internal temperature",
+"what temperature should I cook venison to",
+"cook venison to"
 ],
-"def": "Game meat is safest cooked to a measured temperature: whole cuts of venison to at least 145 °F (63 °C) with a 3-minute rest, ground venison to 160 °F (71 °C), and wild birds to 165 °F (74 °C).",
+"def": "Game meat is safest cooked to a measured temperature: rabbit and venison to 160 °F (71 °C), wild birds to 165 °F (74 °C), fish to 145 °F (63 °C), and bear or wild hog to at least 165 °F (74 °C) because of Trichinella.",
 "look": [
-"a food thermometer in the thickest part",
-"ground meat cooked through",
-"juices and color are not a reliable test"
+"a food thermometer in the thickest part of the meat",
+"ground meat and sausage cooked through, not judged by color",
+"bear and wild hog treated as Trichinella-risk meat"
 ],
-"use": "Use a thermometer, keep raw game apart from cooked food, and wash hands and boards after handling raw meat.",
-"not": "Do not judge doneness by color, and do not eat bear, wild boar, or other carnivore meat undercooked; they can carry trichinella.",
+"use": "Use a thermometer. FoodSafety.gov lists rabbit and venison, wild or farm-raised, at 160 °F (71 °C), poultry and other wild birds at 165 °F (74 °C), and fish at 145 °F (63 °C). CDC advises cooking bear and other Trichinella-risk wild game to at least 165 °F (74 °C); freezing, drying, smoking, or microwaving alone does not reliably kill the parasite in wild game.",
+"not": "Do not judge doneness by color, and do not eat bear, wild hog, or other carnivore meat undercooked. Do not eat meat from an animal that tests positive for chronic wasting disease.",
 "rel": [
 "meat_care_temperature",
-"small_game_tularemia"
+"small_game_tularemia",
+"field_dressing_black_bear",
+"field_dressing_wild_hog"
 ],
 "src": [
+"foodsafety-gov",
 "usda-fsis",
 "cdc"
-]
+],
+"steps": [
+"Use a clean food thermometer in the thickest part, not touching only bone.",
+"Cook venison and rabbit to 160 °F (71 °C).",
+"Cook all wild birds to 165 °F (74 °C), and fish to 145 °F (63 °C).",
+"Cook bear and wild hog to at least 165 °F (74 °C); do not rely on freezing.",
+"Keep raw game apart from other food, and wash hands and boards after handling it."
+],
+"ask": "Tell me about venison temperature"
 },
 {
 "id": "tree_stand_safety",
@@ -409,7 +442,10 @@
 "not": "Do not handle sick or dead animals bare-handed, and do not eat rabbit or squirrel undercooked.",
 "call": "See a doctor for fever, a sore that will not heal, or swollen glands after handling wild rabbits or rodents, and say you handled game.",
 "rel": [
-"game_cooking_temps"
+"game_cooking_temps",
+"field_dressing_rabbit",
+"field_dressing_squirrel",
+"game_disease_field_signs"
 ],
 "src": [
 "cdc"

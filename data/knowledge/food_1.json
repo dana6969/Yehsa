@@ -244,25 +244,39 @@
 "also": [
 "how to clean a fish",
 "is the fish bad",
-"fish smell"
+"fish smell",
+"clean a fish",
+"gut a fish",
+"fish cleaning",
+"how to gut a fish"
 ],
-"def": "Gut and chill fish quickly; cook it to 145 F; spoiled fish smells sour, feels slimy, and has cloudy eyes.",
+"def": "Cleaning a fish means gutting it soon after the catch, keeping it cold, and cooking it to 145 °F (63 °C); spoiled fish smells sour, feels slimy, and has cloudy or sunken eyes.",
 "look": [
-"fresh: clear eyes, firm flesh, mild smell",
-"spoiled: sour smell, slime, sunken or cloudy eyes",
-"check state fish consumption advisories"
+"fresh fish: clear eyes, firm flesh, and a mild smell",
+"spoiled fish: a sour smell, slime, and sunken or cloudy eyes",
+"the fish on ice, not left in the sun"
 ],
-"use": "Gut the fish soon after catching, keep it on ice, wash your hands, and cook it to 145 F. Check the state health department's fish advisories for mercury and other contaminants.",
-"not": "Do not eat fish that smells off, and do not leave it in the sun.",
+"use": "Gut the fish soon after catching it, keep it on ice, wash your hands, and cook it to 145 °F (63 °C), until the flesh is no longer translucent and separates easily with a fork. Check the state health department's fish advisories for mercury and other contaminants.",
+"not": "Do not eat fish that smells off, and do not leave it in the sun. Cooking does not make spoiled fish safe.",
 "region": "Maine and Rhode Island post fish consumption advisories; check them before you eat what you catch.",
 "rel": [
 "food_danger_zone",
-"food_safe_cook_temps"
+"food_safe_cook_temps",
+"game_cooking_temps"
 ],
 "src": [
 "usda-fsis",
-"cdc"
-]
+"cdc",
+"foodsafety-gov"
+],
+"steps": [
+"Keep the fish cool from the moment you land it; use ice if you can.",
+"Make a shallow cut from the vent toward the head and remove the entrails without spilling the gut contents over the meat.",
+"Remove the gills if you will keep the head on, and rinse the cavity with clean water, then keep the fish on ice.",
+"Cook fish to 145 °F (63 °C) on a thermometer, or until the flesh is opaque and flakes easily.",
+"Check your state's fish-consumption advisories before you eat what you catch."
+],
+"ask": "How do I clean a fish?"
 },
 {
 "id": "shellfish_closures",

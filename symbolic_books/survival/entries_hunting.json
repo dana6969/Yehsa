@@ -37,7 +37,7 @@
  {
   "symbol": "field_dressing_deer",
   "title": "Field dressing a deer",
-  "context": "Field dressing removes the internal organs soon after the kill so the body heat can escape and the meat cools quickly. Also called gutting a deer, field dress, clean a deer, how to gut a deer. Look for gloves on, sharp knife, clean water or wipes; belly opened shallow so the gut is not cut. Tag the animal first if your state requires it, open the body from the pelvis toward the ribs with the blade edge up, remove the organs, then prop the cavity open in shade."
+  "context": "Field dressing a white-tailed or mule deer means removing the internal organs soon after the kill so body heat can escape and the meat can cool; wear gloves, tag the animal first if required, and keep the cavity clean. Also called gutting a deer, field dress, clean a deer, how to gut a deer, how do I field dress a deer. Look for gloves on, a sharp knife, and clean cloths or paper towels; a shallow belly cut with the blade edge up so the stomach and intestines are not opened."
  },
  {
   "symbol": "meat_care_temperature",
@@ -52,7 +52,7 @@
  {
   "symbol": "game_cooking_temps",
   "title": "Cooking venison and wild game safely",
-  "context": "Game meat is safest cooked to a measured temperature: whole cuts of venison to at least 145 °F (63 °C) with a 3-minute rest, ground venison to 160 °F (71 °C), and wild birds to 165 °F (74 °C). Also called venison temperature, cook deer meat, ground venison temperature, wild game cooking. Look for a food thermometer in the thickest part; ground meat cooked through. Use a thermometer, keep raw game apart from cooked food, and wash hands and boards after handling raw meat."
+  "context": "Game meat is safest cooked to a measured temperature: rabbit and venison to 160 °F (71 °C), wild birds to 165 °F (74 °C), fish to 145 °F (63 °C), and bear or wild hog to at least 165 °F (74 °C) because of Trichinella. Also called venison temperature, cook deer meat, ground venison temperature, wild game cooking, venison cook temperature. Look for a food thermometer in the thickest part of the meat; ground meat and sausage cooked through, not judged by color."
  },
  {
   "symbol": "tree_stand_safety",
@@ -82,7 +82,7 @@
  {
   "symbol": "quartering_packing_out",
   "title": "Quartering and packing out game",
-  "context": "Quartering means cutting a large animal into its four legs plus the backstraps, neck, and other meat so it can be carried out in loads and cooled faster. Also called quarter a deer, pack out meat, gutless method, boning out a deer. Look for clean game bags for each quarter; a sharp knife and a spare blade. Skin one side at a time, take the front and hind quarters, backstraps, and tenderloins, bag each piece, and hang or lay the bags in shade to cool before carrying."
+  "context": "Quartering means cutting a large animal into its four legs plus the backstraps, neck, and other meat so it can be carried out in loads and cooled faster; elk and moose often need this, and deer may too in warm weather. Also called quarter a deer, pack out meat, boning out a deer, how to quarter a deer. Look for clean game bags for each quarter and for the backstraps; a sharp knife, a spare blade, and a pack frame or sled for heavy loads."
  },
  {
   "symbol": "skinning_hanging_deer",
@@ -127,7 +127,7 @@
  {
   "symbol": "field_dressing_birds",
   "title": "Field dressing birds",
-  "context": "Birds keep best when the crop and entrails are removed soon after the kill and the body is cooled. Also called clean a turkey, gut a pheasant, field dress grouse, dress a duck. Look for gloves on; crop and intestines removed. Remove the entrails and crop, wipe the cavity, and cool the bird quickly; pluck or skin at home."
+  "context": "Birds keep best when the crop and entrails are removed soon after the kill and the body is cooled. Also called clean a turkey, field dress a bird, gut a bird, dress a game bird. Look for gloves on; crop and intestines removed. Remove the entrails and crop, wipe the cavity, and cool the bird quickly; pluck or skin at home."
  },
  {
   "symbol": "lead_ammo_awareness",
@@ -168,6 +168,76 @@
   "symbol": "hunting_alone_plan",
   "title": "Hunting alone: leave a plan",
   "context": "A solo hunter should leave a plan with someone: where you will park and sit, when you will be back, and when they should call for help. Also called solo hunting, hunting alone safety, tell someone where I hunt. Look for a marked map or pin of your stand; a check-in time. Leave the plan, carry a whistle, light, and first aid, and stick to your return time or update it."
+ },
+ {
+  "symbol": "field_dress_tools",
+  "title": "Field dressing tools",
+  "context": "A field dressing kit is a sharp knife and a spare blade, disposable gloves, clean cloths or paper towels, a tag, game bags, and a way to keep meat clean, dry, and cool. Also called field dressing kit, what do I need to field dress, game bags, dressing knife. Look for a sharp knife, a spare blade, and a small sharpener; disposable or rubber gloves, and eye protection for hogs and other high-risk game."
+ },
+ {
+  "symbol": "field_dressing_elk",
+  "title": "Field dressing an elk",
+  "context": "Elk are large and hold heat, so the meat must be opened or quartered soon after the kill and cooled; many hunters use the gutless method to pack an elk out. Also called field dress an elk, how to field dress an elk, gut an elk, dress an elk, elk field dressing. Look for a carcass too heavy to drag far, with thick quarters and a lot of body heat; clean game bags, a sharp knife, gloves, and a pack frame for several loads."
+ },
+ {
+  "symbol": "field_dressing_moose",
+  "title": "Field dressing a moose",
+  "context": "A moose is too large to cool as a whole carcass; the usual field care is to skin and quarter it, often with the gutless method, and hang the meat in clean game bags the same day. Also called field dress a moose, how to field dress a moose, gut a moose, dress a moose, moose field dressing. Look for a very large, heavily muscled carcass that stays warm inside for hours; several game bags, gloves, a sharp knife, a saw or axe, rope, and a way to pack heavy loads."
+ },
+ {
+  "symbol": "field_dressing_pronghorn",
+  "title": "Field dressing a pronghorn",
+  "context": "A pronghorn is a small, thin-skinned plains animal that spoils quickly in heat, so it should be field dressed or skinned soon after the kill, kept free of hair, and cooled the same day. Also called field dress a pronghorn, field dress an antelope, gut a pronghorn, pronghorn field care, clean a pronghorn. Look for a slim carcass and a thin hide whose hair slips and sticks to meat easily; warm, open country with little shade."
+ },
+ {
+  "symbol": "field_dressing_black_bear",
+  "title": "Field dressing a black bear",
+  "context": "Black bear meat must be handled with gloves, cooled after the thick fat is dealt with, and cooked to a measured 165 °F (74 °C) because bears can carry Trichinella; freezing does not reliably kill it. Also called field dress a bear, field dress a black bear, gut a bear, bear trichinella, cook bear meat. Look for a thick hide and a heavy fat layer that holds heat in the carcass; gloves on, and a clean knife kept off the gut contents."
+ },
+ {
+  "symbol": "field_dressing_wild_hog",
+  "title": "Field dressing a wild hog",
+  "context": "Wild hogs, or feral swine, can carry brucellosis and Trichinella, so you should wear gloves and eye protection while dressing them, keep bare skin off fluids and organs, and cook the meat thoroughly. Also called field dress a hog, field dress a wild boar, gut a hog, feral hog brucellosis, clean a wild hog. Look for a bristly hog with a thick hide and, often, sharp tusks; gloves and eye protection on before you open the carcass."
+ },
+ {
+  "symbol": "field_dressing_rabbit",
+  "title": "Cleaning a rabbit or hare",
+  "context": "Cleaning a rabbit or hare means skinning and gutting it with gloves on, checking the liver, cooling the meat, and cooking it to 160 °F (71 °C), because rabbits and hares can carry tularemia. Also called clean a rabbit, gut a rabbit, field dress a rabbit, clean a hare, how to clean a rabbit. Look for gloves on before you skin or gut the animal; a liver without white spots; white spots are a warning."
+ },
+ {
+  "symbol": "field_dressing_squirrel",
+  "title": "Cleaning a squirrel",
+  "context": "Cleaning a squirrel means skinning and gutting it with gloves on, cooling the meat, and cooking it thoroughly, because squirrels and other rodents can carry tularemia. Also called clean a squirrel, gut a squirrel, field dress a squirrel, how to clean a squirrel. Look for gloves on before you skin or gut the squirrel; a liver without white spots."
+ },
+ {
+  "symbol": "field_dressing_turkey",
+  "title": "Field dressing a turkey",
+  "context": "Field dressing a turkey means removing the entrails and the crop soon after the kill, cooling the bird, and later cooking all turkey meat to 165 °F (74 °C). Also called gut a turkey, field dress a turkey, how to gut a turkey, dress a turkey. Look for gloves on, and a way to open the body cavity without bursting the gut or the crop; the crop emptied or removed at the base of the neck."
+ },
+ {
+  "symbol": "field_dressing_upland_birds",
+  "title": "Field dressing grouse, pheasant, and quail",
+  "context": "Upland birds such as grouse, pheasant, and quail keep best when the crop and entrails come out soon after the kill and the birds are cooled, then cooked to 165 °F (74 °C). Also called gut a pheasant, field dress grouse, clean a quail, field dress a pheasant, gut a grouse. Look for gloves on, and entrails and crop removed while the bird is still fresh; birds kept separate, cool, and dry, not in a warm pile."
+ },
+ {
+  "symbol": "field_dressing_waterfowl",
+  "title": "Field dressing ducks and geese",
+  "context": "Ducks and geese should be gutted and cooled soon after the kill, cooked to 165 °F (74 °C), and transported with the head or one fully feathered wing still attached until you are home, unless a stated exception applies. Also called dress a duck, field dress a duck, gut a goose, clean a duck, field dress a goose. Look for gloves on, entrails removed, and the bird kept cool and dry; the head or one fully feathered wing still on the bird during transport from the field."
+ },
+ {
+  "symbol": "gutless_method",
+  "title": "Gutless method",
+  "context": "The gutless method is a way to skin and quarter a large animal, such as an elk or a moose, without first removing the guts, so the meat can be packed out in loads and cooled the same day. Also called gutless quartering, quarter an elk, quarter a moose, bone out an elk, gutless field dressing. Look for the animal on its side, one half of the hide skinned back as a clean work surface; front and hind quarters, backstraps, and tenderloins going into clean, dry game bags."
+ },
+ {
+  "symbol": "evidence_of_sex_tag",
+  "title": "Evidence of sex, tagging, and the waterfowl wing rule",
+  "context": "Many hunts require you to tag the animal promptly and leave evidence of sex naturally attached to the meat, and federal migratory-bird rules require the head or one fully feathered wing to stay on most waterfowl during transport. Also called evidence of sex, leave proof of sex, fully feathered wing, tagging and evidence of sex, proof of sex on a quarter."
+ },
+ {
+  "symbol": "game_disease_field_signs",
+  "title": "Disease signs while dressing game",
+  "context": "While you dress game, look at the animal and its organs for signs of disease: a thin, stumbling, or unafraid deer, an animal found dead, or a liver with white spots, and do not eat a suspect animal. Also called white spots on the liver, liver spots on game, sick looking game, inspect the liver, spots on a deer liver."
  },
  {
   "symbol": "deer_scat",

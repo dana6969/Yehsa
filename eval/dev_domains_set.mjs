@@ -1860,4 +1860,203 @@ export const DOMAIN_DEV_SET = [
    ]
   }
  }
+,
+ {
+  "id": "dom-r5-field-dress-deer-how",
+  "category": "domain-hunting",
+  "prompt": 'how do I field dress a deer',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'field dressing a deer'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-gut-turkey",
+  "category": "domain-hunting",
+  "prompt": 'gut a turkey',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'field dressing a turkey'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-clean-rabbit",
+  "category": "domain-hunting",
+  "prompt": 'clean a rabbit',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'cleaning a rabbit or hare'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-quarter-elk",
+  "category": "domain-hunting",
+  "prompt": 'quarter an elk',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'gutless method'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-field-dress-elk",
+  "category": "domain-hunting",
+  "prompt": 'Tell me about field dress an elk',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'field dressing an elk'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-field-dress-moose",
+  "category": "domain-hunting",
+  "prompt": 'Tell me about field dress a moose',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'field dressing a moose'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-field-dress-pronghorn",
+  "category": "domain-hunting",
+  "prompt": 'Tell me about field dress a pronghorn',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'field dressing a pronghorn'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-field-dress-bear",
+  "category": "domain-hunting",
+  "prompt": 'How do I field dress a black bear?',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'field dressing a black bear'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-field-dress-hog",
+  "category": "domain-hunting",
+  "prompt": 'Tell me about field dress a wild boar',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'field dressing a wild hog'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-clean-squirrel",
+  "category": "domain-hunting",
+  "prompt": 'Tell me about clean a squirrel',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'cleaning a squirrel'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-gut-pheasant",
+  "category": "domain-hunting",
+  "prompt": 'Tell me about gut a pheasant',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'field dressing grouse, pheasant, and quail'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-dress-duck",
+  "category": "domain-hunting",
+  "prompt": 'Tell me about dress a duck',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'field dressing ducks and geese'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-gutless",
+  "category": "domain-hunting",
+  "prompt": 'Tell me about gutless method',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'gutless method'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-evidence-sex",
+  "category": "domain-hunting",
+  "prompt": 'Tell me about evidence of sex',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'evidence of sex, tagging, and the waterfowl wing rule'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-liver-spots",
+  "category": "domain-hunting",
+  "prompt": 'Tell me about white spots on the liver',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'disease signs while dressing game'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-dress-tools",
+  "category": "domain-hunting",
+  "prompt": 'What do I need to field dress game?',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'field dressing tools'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-fish-clean",
+  "category": "domain-hunting",
+  "prompt": 'how to clean a fish',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    'cleaning fish and spoilage signs'
+   ]
+  }
+ },
+ {
+  "id": "dom-r5-venison-temp-160",
+  "category": "domain-hunting",
+  "prompt": 'What temperature should I cook venison to?',
+  "expect": {
+   "kind": "facts",
+   "all": [
+    '160'
+   ]
+  }
+ }
 ];

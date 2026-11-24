@@ -2,6 +2,7 @@
 // A picture is never treated as a safe identification.
 
 import { FIELD_GUIDE_ENTRIES } from "./picture_guide_field.js";
+import { HUNTING_GUIDE_ENTRIES } from "./picture_guide_hunting.js";
 
 // Round 4: the whole app may be up to 2 GB. Pictures may use up to 1.5 GB of that, leaving room for the
 // app, models, maps, and books. assets/pictures/packs.json lists bytes per category for later Play Asset
@@ -44,6 +45,12 @@ export const GUIDE_ENTRIES = [
 // plus foraging entries that show example photos. Notes already listed above keep their first entry.
 const LISTED = new Set(GUIDE_ENTRIES.map((entry) => entry.symbol));
 for (const entry of FIELD_GUIDE_ENTRIES) {
+  if (!LISTED.has(entry.symbol)) {
+    GUIDE_ENTRIES.push(entry);
+    LISTED.add(entry.symbol);
+  }
+}
+for (const entry of HUNTING_GUIDE_ENTRIES) {
   if (!LISTED.has(entry.symbol)) {
     GUIDE_ENTRIES.push(entry);
     LISTED.add(entry.symbol);
