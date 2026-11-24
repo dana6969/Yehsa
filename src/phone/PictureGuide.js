@@ -24,7 +24,7 @@ const missingStyles = themedStyles((colors) => ({
   text: { color: colors.muted, fontSize: 12, textAlign: "center" }
 }));
 
-const DOMAINS = ["", "plants", "trees", "mushrooms", "foraging", "animals", "tracks-scat", "herbology", "first-aid", "knots", "fire", "shelter", "water", "sky", "landscape", "signaling"];
+const DOMAINS = ["", "plants", "trees", "mushrooms", "foraging", "animals", "tracks-scat", "hunting", "herbology", "first-aid", "knots", "fire", "shelter", "water", "sky", "landscape", "signaling"];
 // A closed card shows a few thumbnails; the rest appear when it is opened.
 const THUMBS = 4;
 
