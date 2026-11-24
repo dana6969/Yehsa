@@ -283,3 +283,12 @@ export function boxAround(point, meters = 400) {
   const west = destinationPoint(point, 270, meters / 1000);
   return { north: north.latitude, south: south.latitude, east: east.longitude, west: west.longitude };
 }
+
+// P2: Hunt starts tight on you (about 1.2 km each way), not a whole-state frame. With no fix it
+// frames your first stand; with neither it leaves the map where it is.
+export const HUNT_FOCUS_M = 1200;
+export function huntFocus(fix, marks = []) {
+  if (fix && validPoint(fix.latitude, fix.longitude)) return boxAround(fix, HUNT_FOCUS_M);
+  const stand = (marks || []).find((mark) => mark.kind === "stand" && validPoint(mark.latitude, mark.longitude));
+  return stand ? boxAround(stand, HUNT_FOCUS_M) : null;
+}

@@ -348,3 +348,17 @@ test("a new sighting mark offers Log in Sightings, prefilled with its spot and t
   assert.match(screen, /markId: from\?\.markId/);
   assert.match(fs.readFileSync("src/phone/FieldPane.js", "utf8"), /prefill=\{sightingPrefill\}/);
 });
+
+import { HUNT_FOCUS_M, huntFocus } from "./symbolic/hunt/marks.js";
+
+test("Hunt starts tight on you, or on your first stand, not a whole-state frame", () => {
+  const box = huntFocus(HERE, []);
+  assert.ok(box.north > HERE.latitude && box.south < HERE.latitude);
+  assert.ok((box.north - box.south) * 111 < 3, "under 3 km tall");
+  const stand = addMark([], { kind: "stand", latitude: 44.7, longitude: -69.5 }).marks;
+  const standBox = huntFocus(null, stand);
+  assert.ok(standBox.north > 44.7 && standBox.south < 44.7);
+  assert.equal(huntFocus(null, []), null);
+  assert.equal(HUNT_FOCUS_M, 1200);
+  assert.match(fs.readFileSync("src/phone/YehsaApp.js", "utf8"), /huntFocus\(held, huntMap\.marks\)/);
+});

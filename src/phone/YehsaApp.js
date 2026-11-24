@@ -55,6 +55,7 @@ import {
 } from "../../symbolic/voice_adapter.js";
 import HuntHud from "./HuntHud.js";
 import { useHuntMap } from "./hunt_map.js";
+import { huntFocus } from "../../symbolic/hunt/marks.js";
 import PartyScreen, { usePartyTicker } from "./PartyScreen.js";
 import { FamilyCardScreen } from "./KitScreen.js";
 import { loadHunt } from "./hunt_state.js";
@@ -1681,6 +1682,12 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
     onFocusBox: showBox,
     onLogSighting
   });
+  // Turning Hunt on frames you (or your first stand) closely instead of the whole pack.
+  useEffect(() => {
+    if (!hunt) return;
+    const box = huntFocus(held, huntMap.marks);
+    if (box) showBox(box);
+  }, [hunt]);
   useEffect(() => {
     if (!windRequest) return;
     setHunt(true);
