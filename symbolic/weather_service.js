@@ -21,12 +21,14 @@
 
 import { ageText, trendOf } from "./hunt/baro.js";
 import { NWS_HEADERS, compassToDegrees, degreesToCompass, forecastNow, parseAlerts, parseHourly, rainText } from "./hunt/nws.js";
-import { classFor, pointToDegrees } from "./hunt/scent.js";
+import { SPEED_CLASSES, classFor, pointToDegrees } from "./hunt/scent.js";
 
 export const USER_AGENT = NWS_HEADERS["User-Agent"];
 export const FRESH_MS = 90 * 60 * 1000;
 export const STALE_MS = 6 * 60 * 60 * 1000;
 export const SNAPSHOT_VERSION = 2;
+// Said every time Ask updates the copy, so a question never sends the position silently.
+export const SENT_NOTE = "Asking sent your approximate area (about 100 m) to that service. Nothing else left the phone.";
 const TIMEOUT_MS = 8000;
 
 const round = (value, places = 0) => (Number.isFinite(value) ? Math.round(value * 10 ** places) / 10 ** places : null);
@@ -281,8 +283,8 @@ function manualWind(hunt) {
   if (deg == null) return null;
   const typed = hunt?.manual?.windMph;
   const hasTyped = typed !== "" && typed != null && Number.isFinite(Number(typed));
-  const cls = ["calm", "light", "moderate", "strong"].includes(wind.speedClass) ? wind.speedClass : "light";
-  const mph = hasTyped ? Number(typed) : { calm: 1, light: 5, moderate: 11, strong: 20 }[cls];
+  const cls = SPEED_CLASSES.find((item) => item.id === wind.speedClass) || SPEED_CLASSES[1];
+  const mph = hasTyped ? Number(typed) : cls.mph;
   return { fromDeg: deg, point: wind.fromPoint, mph, swirling: wind.swirling === true, enteredAt: wind.enteredAt || null };
 }
 
@@ -506,7 +508,7 @@ export function answerWeather(question, record, { now = Date.now(), fetched = fa
   } else if (intent.aspect === "alerts") {
     sections.push({ title: null, text: record.saved.source === "open-meteo" ? "The backup service does not carry alerts. I cannot tell you there are none." : "No active alerts in the saved copy." });
   }
-  const fresh = fetched ? `Updated just now from ${record.sourceName}.` : `As of ${asOfText(record.saved.savedAt)} (${agoText(record.saved.savedAt, now)}) from ${record.sourceName}.`;
+  const fresh = fetched ? `Updated just now from ${record.sourceName}. ${SENT_NOTE}` : `As of ${asOfText(record.saved.savedAt)} (${agoText(record.saved.savedAt, now)}) from ${record.sourceName}.`;
   const caveat = record.stale ? " That is old. Treat it as a rough guide." : "";
   sections.push({ title: null, text: `${fresh}${offlineBit}${caveat}${fetchNote && !fetched ? ` ${fetchNote}` : ""}` });
   for (const note of record.saved.notes || []) sections.push({ title: null, text: note });
