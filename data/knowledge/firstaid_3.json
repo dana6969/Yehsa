@@ -39,13 +39,13 @@
 "strap to stop bleeding",
 "tourniquet time"
 ],
-"def": "A tourniquet is a tight band, ideally a commercial windlass device, used to stop life-threatening bleeding from an arm or leg when firm pressure has not worked.",
+"def": "A tourniquet is a tight band, ideally a commercial windlass device, and a last resort for life-threatening bleeding from an arm or leg when firm direct pressure has not stopped it.",
 "look": [
 "life-threatening bleeding from an arm or leg",
 "a traumatic amputation",
 "pressure and packing are not controlling it"
 ],
-"use": "Place the tourniquet 2 to 3 inches (5 to 8 cm) above the wound on bare skin, not over a joint. Pull the strap tight, turn the windlass until the bleeding stops, lock it, and write the time on it. If you cannot see the wound or are in a hurry, put it high and tight on the limb. Call 911.",
+"use": "Place the tourniquet 2 to 3 inches (5 to 8 cm) above the wound on bare skin, not over a joint. Pull the strap tight, turn the windlass until the bleeding stops, lock it, and note the time it went on by writing it on the band. If you cannot see the wound or are in a hurry, put it high and tight on the limb. Call 911.",
 "not": "Do not use it for a minor cut, on the neck, chest, or belly, or over a joint, a pocket, or a wallet. Do not loosen it once on; only medical staff do that.",
 "steps": [
 "Call 911 and keep pressing on the wound until the tourniquet is ready.",
@@ -140,7 +140,7 @@
 ],
 "use": "Call 911. For an infant, lay the baby face down along your forearm with the head lower than the body and give five back blows, then turn the baby over and give five chest thrusts with two fingers. Repeat until the object comes out or the baby becomes unresponsive. For a child, give abdominal thrusts from behind.",
 "not": "Do not do blind finger sweeps. Do not give abdominal thrusts to an infant. Do not hold an infant upside down by the legs.",
-"call": "Call 911; if the child becomes unresponsive, start CPR. Take a pediatric first-aid and CPR class before you need it.",
+"call": "Call 911 or your local emergency services; if the child becomes unresponsive, start CPR. Take a pediatric first-aid and CPR class before you need it.",
 "rel": [
 "child_infant_cpr",
 "choking_thrusts"
@@ -251,7 +251,7 @@
 "dislocation: joint visibly out of place and will not move",
 "numbness or a pale limb beyond the injury is an emergency"
 ],
-"use": "Stop using the limb, immobilize it in the position found with padding and a splint or sling, and apply a cool pack for swelling. Get X-rays if you cannot walk on it or the pain is intense.",
+"use": "Stop using the limb, immobilize it in the position found with padding and a splint or sling, and apply a cool pack for swelling. Get X-rays if you cannot walk on it or the pain is intense. For a simple sprain, use rest, a cool pack, gentle compression, and elevation above the heart.",
 "not": "Do not try to straighten a deformity or to pop a joint back in. Do not test it by walking.",
 "call": "Call 911 for an open wound over the break, a limb that is blue, pale, or numb, or a suspected thigh, hip, neck, or back fracture.",
 "rel": [

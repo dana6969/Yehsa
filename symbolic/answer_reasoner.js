@@ -1,6 +1,7 @@
 // One prose answer from field notes. Dictionary hits stay evidence unless no note answers.
 import { textHasToken } from "./book_search.js";
 import { hitIsRelevant, specificTokens, tokenCoverage } from "./relevance.js";
+import { entryFor } from "./entries.js";
 import { disagreementFlag } from "./premise.js";
 
 const FIELD = new Set(["herbology", "survival", "medical", "math", "landscape"]);
@@ -296,8 +297,10 @@ function uniqueHits(pieces) {
 export function reasonAnswer(parsed, hits) {
   const list = (Array.isArray(hits) ? hits : []).filter((hit) => hitIsRelevant(hit, parsed));
   const field = list.filter(isField);
+  // Stitching sentences from several notes is for the short notes. A field entry is answered whole.
+  const shortNotes = field.filter((hit) => !entryFor(hit.symbol));
   if (shouldConnect(parsed)) {
-    const pieces = selectPieces(parsed, field);
+    const pieces = selectPieces(parsed, shortNotes);
     if (pieces.length) return { text: connect(parsed, pieces), used: uniqueHits(pieces) };
   }
   const overview = field.find((hit) => hit.symbol === "toxic_plant_facts");
@@ -306,7 +309,7 @@ export function reasonAnswer(parsed, hits) {
   const namedPlant = /\b(carrot|onion|hemlock|camas|willow|yarrow|plantain)\b/i.test(asked);
   const toxicOverview = overview && !namedPlant && /\b(deadly|poisonous plants|which plants)\b/i.test(asked) ? overview : null;
   const identifyFirst = identify && /\b(taste|identif|lookalike|look-alike)\b/i.test(asked) ? identify : null;
-  const best = dehydrationNote(parsed, field) || identifyFirst || toxicOverview || bestField(parsed, field);
+  const best = dehydrationNote(parsed, shortNotes) || identifyFirst || toxicOverview || bestField(parsed, field);
   if (best) {
     const sentences = orderSentences(splitSentences(best.text), parsed);
     let text = frame(parsed, sentences.join(" "));

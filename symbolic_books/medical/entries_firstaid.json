@@ -322,7 +322,7 @@
  {
   "symbol": "tourniquet_apply",
   "title": "How to apply a tourniquet",
-  "context": "A tourniquet is a tight band, ideally a commercial windlass device, used to stop life-threatening bleeding from an arm or leg when firm pressure has not worked. Also called CAT tourniquet, windlass tourniquet, TQ, strap to stop bleeding, tourniquet time. Look for life-threatening bleeding from an arm or leg; a traumatic amputation."
+  "context": "A tourniquet is a tight band, ideally a commercial windlass device, and a last resort for life-threatening bleeding from an arm or leg when firm direct pressure has not stopped it. Also called CAT tourniquet, windlass tourniquet, TQ, strap to stop bleeding, tourniquet time. Look for life-threatening bleeding from an arm or leg; a traumatic amputation."
  },
  {
   "symbol": "tourniquet_bleeding_continues",
