@@ -1,6 +1,7 @@
 // The online channel on the phone. Its keys are the phone's one identity (src/phone/identity.js,
-// the shared key module), so Hunt party, People pairing and Online all show the same safety number.
-// This file never makes keys of its own. Channel state (contacts, ratchet sessions, held messages)
+// the shared key module), the same keys Hunt party and People pairing use. This file never makes
+// keys of its own. Note: the Online safety number (symbolic/online/safety.js, v2) covers both public
+// keys, so it is a different 32-digit number from the People/Hunt one (box key only) for the same pair. Channel state (contacts, ratchet sessions, held messages)
 // lives in its own sealed store, separate from the identity and from web notes.
 
 import { createChannel, emptyOnlineState } from "../../symbolic/online/channel.js";
