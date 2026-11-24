@@ -18,7 +18,7 @@
 ],
 "use": "Put firm direct pressure on the wound: press hard and straight down with a thick pad or both hands and keep pressing. Call 911 for heavy bleeding. If it is a limb and pressure does not control it, put on a tourniquet. For a minor cut, wash, press, and cover.",
 "not": "Do not lift the cloth to check; add more on top. Do not use a tourniquet on a minor cut or on the neck.",
-"call": "Call 911 for any bleeding that will not stop with firm pressure.",
+"call": "Heavy bleeding is urgent: call 911 early and get help on the way for any bleeding that will not stop with firm pressure.",
 "rel": [
 "tourniquet_apply",
 "wound_packing"
