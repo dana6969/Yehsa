@@ -51,7 +51,13 @@ export const CARE_NOTES = {
   clean_water_before_care: ["cut", "scrape", "dehydration", "bleeding", "burn", "insect_bite", "tick"],
   plantain_plantago: ["insect_bite"],
   yarrow_achillea: ["scrape", "bleeding", "cut"],
-  willow_bark: []
+  willow_bark: [],
+  // Round 4 field entries that are bleeding care.
+  tourniquet_apply: ["bleeding"],
+  tourniquet_bleeding_continues: ["bleeding"],
+  wound_packing: ["bleeding"],
+  arterial_bleeding: ["bleeding"],
+  heavy_vs_minor_bleeding: ["bleeding", "cut", "scrape"]
 };
 
 // Medication notes: the question has to show the note's own condition, not just sit near it.

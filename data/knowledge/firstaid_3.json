@@ -16,7 +16,7 @@
 "person pale, clammy, dizzy, or confused",
 "a minor cut oozes and slows within a few minutes of pressure"
 ],
-"use": "Press hard and straight down on the wound with a thick pad or both hands and keep pressing. Call 911 for heavy bleeding. If it is a limb and pressure does not control it, put on a tourniquet. For a minor cut, wash, press, and cover.",
+"use": "Put firm direct pressure on the wound: press hard and straight down with a thick pad or both hands and keep pressing. Call 911 for heavy bleeding. If it is a limb and pressure does not control it, put on a tourniquet. For a minor cut, wash, press, and cover.",
 "not": "Do not lift the cloth to check; add more on top. Do not use a tourniquet on a minor cut or on the neck.",
 "call": "Call 911 for any bleeding that will not stop with firm pressure.",
 "rel": [
@@ -56,6 +56,7 @@
 ],
 "call": "Call 911; a tourniquet is emergency care, not a replacement for a hospital. Get trained in a Stop the Bleed or first-aid class before you need one.",
 "rel": [
+"heavy_vs_minor_bleeding",
 "tourniquet_bleeding_continues",
 "wound_packing"
 ],
