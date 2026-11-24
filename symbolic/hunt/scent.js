@@ -72,7 +72,7 @@ export function conePolygon(stand, cone, steps = 6) {
   return points;
 }
 
-function inside(stand, point, cone) {
+export function inside(stand, point, cone) {
   const km = haversineKm(stand, point);
   if (km * 1000 > cone.lengthM) return false;
   if (km === 0) return true;

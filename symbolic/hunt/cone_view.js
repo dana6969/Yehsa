@@ -1,0 +1,39 @@
+// What the Hunt map draws for the scent cone: the origin, the polygon, the on-map label and
+// the state of every mark. Pure. The wind comes from wind_source.js, so one swap changes all of it.
+
+import { conePolygon, scentCone } from "./scent.js";
+import { TEXT, assessMarks } from "./marks.js";
+import { currentWind, degreesToCompass } from "./wind_source.js";
+
+// fix: { latitude, longitude } or null. marks: all marks. coneStandId: a stand the person chose as the origin.
+export function chooseApex(fix, marks, coneStandId) {
+  const stands = marks.filter((mark) => mark.kind === "stand");
+  const picked = coneStandId ? stands.find((mark) => mark.id === coneStandId) : null;
+  if (picked) return { latitude: picked.latitude, longitude: picked.longitude, kind: "stand", name: picked.name, id: picked.id };
+  if (fix) return { latitude: fix.latitude, longitude: fix.longitude, kind: "you", name: "you", id: null };
+  const first = stands[0];
+  if (first) return { latitude: first.latitude, longitude: first.longitude, kind: "stand", name: first.name, id: first.id };
+  return null;
+}
+
+export function coneView({ hunt, fix = null, marks = [], coneStandId = null, now = Date.now() }) {
+  const wind = currentWind(hunt, now);
+  const apex = chooseApex(fix, marks, coneStandId);
+  if (!wind.ok) {
+    return { ok: false, wind, apex, cone: null, polygon: [], label: "", message: TEXT.noWind, assessed: assessMarks(marks, null, apex) };
+  }
+  const cone = scentCone({ fromDeg: wind.fromDeg, mph: wind.mph, swirling: wind.swirling, source: wind.source });
+  if (!apex) {
+    return { ok: false, wind, apex: null, cone, polygon: [], label: "", message: TEXT.noFix, assessed: assessMarks(marks, cone, null) };
+  }
+  const polygon = conePolygon(apex, cone, 10);
+  const label = `Scent cone · downwind ${degreesToCompass(cone.downwindDeg)} · about ${cone.widthDeg}°`;
+  return { ok: true, wind, apex, cone, polygon, label, message: "", assessed: assessMarks(marks, cone, apex) };
+}
+
+// Where to hang the on-map label: the middle of the far edge of the cone.
+export function labelPoint(view) {
+  if (!view.ok || !view.polygon.length) return null;
+  const arc = view.polygon.slice(1, -1);
+  return arc[Math.floor(arc.length / 2)] || null;
+}
