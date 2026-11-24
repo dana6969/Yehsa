@@ -37,7 +37,8 @@ function cameraIndex() {
 
 const PICK_OPTIONS = { mediaTypes: ["images"], quality: 0.9, allowsEditing: false, exif: false };
 const GROUP_LABEL = { plant: "Plants", tree: "Trees and shrubs", mushroom: "Mushrooms", animal: "Animals", track: "Tracks", scat: "Scat" };
-const USE_TAG = { deadly: "DEADLY", toxic: "TOXIC" };
+// A note about the species, not a verdict on the photo. The camera never says a thing is safe to eat.
+const USE_TAG = { deadly: "Reference note: this species is deadly. Not a verdict on your photo.", toxic: "Reference note: this species is toxic. Not a verdict on your photo." };
 
 export default function CameraIdScreen({ onOpenNote, onOpenGuide, onBack }) {
   const [photo, setPhoto] = useState(null);
@@ -90,14 +91,14 @@ export default function CameraIdScreen({ onOpenNote, onOpenGuide, onBack }) {
     if (!setList) return null;
     const meta = cameraIndex().meta;
     const out = {};
-    Object.values(meta).forEach((m) => { (out[m.group] = out[m.group] || []).push(m.title); });
+    Object.values(meta).filter((m) => m.group !== "everyday").forEach((m) => { (out[m.group] = out[m.group] || []).push(m.title); });
     return out;
   }, [setList]);
-  const total = useMemo(() => (available ? Object.keys(cameraIndex().meta).length : 0), [available]);
+  const total = useMemo(() => (available ? Object.values(cameraIndex().meta).filter((m) => m.group !== "everyday").length : 0), [available]);
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <ScreenHeader title="Identify" lead="Fill the frame with one plant. I only compare these photos with notes on this phone." onBack={onBack} backLabel="Field" />
+      <ScreenHeader title="Identify" lead="Fill the frame with one wild plant, mushroom or animal. Food and objects are not in the set. I only compare these photos with notes on this phone." onBack={onBack} backLabel="Field" />
 
       {!available ? <Quiet>{CAMERA_ID_UNAVAILABLE}</Quiet> : null}
       <View style={styles.row}>
@@ -123,8 +124,9 @@ export default function CameraIdScreen({ onOpenNote, onOpenGuide, onBack }) {
         <View style={styles.card} accessibilityRole="summary">
           <Text accessibilityRole="header" style={styles.title}>{result.title}</Text>
           <Text style={styles.body} accessibilityLiveRegion="polite">{result.text}</Text>
+          {result.domain === "everyday" ? <Quiet>{result.quiet}</Quiet> : null}
           {result.deadlyLine ? <Text style={styles.warnText}>{result.deadlyLine} {result.emergency}</Text> : null}
-          <Quiet>{UNSURE_QUIET}</Quiet>
+          {result.domain !== "everyday" ? <Quiet>{UNSURE_QUIET}</Quiet> : null}
           <Action label="Try another photo" onPress={choosePhoto} disabled={busy || !available} />
           {onOpenGuide ? <Action label="Open the picture guide" tone="quiet" onPress={onOpenGuide} /> : null}
         </View>
@@ -217,7 +219,7 @@ function ClassCredits({ id }) {
 }
 
 const styles = themedStyles((colors) => ({
-  scroll: { padding: 20, paddingBottom: 48, gap: 12 },
+  scroll: { padding: 20, paddingBottom: 180, gap: 12 },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 8, alignItems: "center" },
   grow: { flexGrow: 1 },
   warnBox: { borderWidth: 1, borderColor: colors.clay, backgroundColor: colors.surface, borderRadius: 12, padding: 14, gap: 4 },

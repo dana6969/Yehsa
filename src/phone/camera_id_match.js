@@ -17,7 +17,34 @@ export const MUSHROOM_WARNING =
 
 export const UNSURE_TITLE = "I'm not sure";
 export const UNSURE_TEXT =
-  "Nothing in the reference photos is close enough to this picture, so I will not guess. That includes trees that are not in the set.";
+  "Nothing in the reference photos is close enough to this picture, so I will not guess. Grocery food and household objects are not in the set.";
+// Shown with "I'm not sure" when the photo looks like food, an object, a hand or a pet.
+export const EVERYDAY_QUIET = "This looks more like an everyday thing than something growing or living in the wild.";
+export const EVERYDAY_GROUP = "everyday";
+// Jeff's domain gate, round 4. Every photo lands in one of these before any species is shown:
+//   wild            a wild organism in habitat: the only domain that can name a species
+//   food_household  grocery food, packaging, kitchen, household things, clothing, tools, streets
+//   person_pet      a hand, a person, a pet or a farm animal
+//   document_screen a phone, screen, gadget, book or paper
+//   unclear         nothing in the set is close enough
+// The four non-wild domains never show a species name, a top three, or toxicity text.
+export const DOMAINS = Object.freeze(["wild", "food_household", "person_pet", "document_screen", "unclear"]);
+const SCENE_OF = Object.freeze({
+  ev_hands_people: "person_pet",
+  ev_dog: "person_pet",
+  ev_cat: "person_pet",
+  ev_pets_farm: "person_pet",
+  ev_electronics: "document_screen"
+});
+export const SCENE_QUIET = Object.freeze({
+  food_household: "This looks like food or a household thing, not something growing wild.",
+  person_pet: "This looks like a person or a pet. Yehsa does not identify people or pets.",
+  document_screen: "This looks like a screen, a gadget or paper. Point the camera at the real thing outdoors."
+});
+// The domain for an everyday class id (food_household unless listed above).
+export function sceneOf(id) {
+  return SCENE_OF[id] || "food_household";
+}
 export const UNSURE_QUIET = "This is a photo hint, not an identification.";
 // Kept for older callers.
 export const DECLINE_TEXT = UNSURE_TEXT;
@@ -112,7 +139,14 @@ export function classProbabilities(index, query) {
 export function rankClasses(index, query) {
   const p = classProbabilities(index, query);
   const ranked = index.classes.map((id, k) => ({ id, score: p[k] })).sort((a, b) => b.score - a.score);
-  return { ranked, other: p[index.rows - 1], probabilities: p };
+  let everyday = 0;
+  let everydayTop = null;
+  index.classes.forEach((id, k) => {
+    if (index.meta[id]?.group !== EVERYDAY_GROUP) return;
+    everyday += p[k];
+    if (!everydayTop || p[k] > everydayTop.score) everydayTop = { id, score: p[k] };
+  });
+  return { ranked, other: p[index.rows - 1], probabilities: p, everyday, everydayTop };
 }
 
 function bandFor(score, thresholds) {
@@ -138,22 +172,55 @@ function warningFor(meta) {
   return "";
 }
 
+// How the phone decides (same rule the held-out numbers in eval/camera_id use):
+//  1. Domain gate. Everyday classes (food, packaging, household objects, hands, pets) are part of the
+//     model. If they together outweigh the best wild class, or "something else" does, the photo is out
+//     of domain: no species name, no top three, no toxicity text. The answer is "I'm not sure".
+//  2. A wild answer needs the best wild class to clear the weak bar. A toxic or deadly class needs a
+//     higher one. A deadly class that scores near but under that bar still gets one line of warning.
+//  3. The top three are wild classes only, and only when the photo passed 1 and 2.
+//  4. Nothing here says a thing is safe to eat. The notes are about the species, not a verdict on the photo.
+//  5. Round 4b: a toxic or deadly answer also needs the everyday mass under `toxicEverydayCap`
+//     (0.11, set on the calibration split). Real wild toxic photos carry almost none; garden
+//     tomatoes on the vine carried 0.22 and were answered as bittersweet nightshade.
+
+// The answer-or-decline rule on its own, so tests can check it with held-out numbers.
+// `top` is the best wild class { id, score }; `everyday` and `other` are summed probabilities.
+export function gateDecision({ top, everyday = 0, other = 0, meta, thresholds }) {
+  const th = thresholds || {};
+  if (!top) return { answer: false, why: "empty" };
+  if (other > top.score) return { answer: false, why: "other" };
+  if (everyday > top.score) return { answer: false, why: "everyday" };
+  const risky = isDeadly(meta) || meta?.use === "toxic";
+  const needed = risky ? Math.max(th.toxic ?? th.possible, th.weak) : th.weak;
+  if (top.score < needed) return { answer: false, why: "weak" };
+  if (risky && everyday >= (th.toxicEverydayCap ?? 1)) return { answer: false, why: "toxic-everyday" };
+  return { answer: true, why: "ok" };
+}
+
 export function identify(index, query) {
-  const { ranked, other, probabilities } = rankClasses(index, query);
+  const { ranked: all, other, everyday, everydayTop } = rankClasses(index, query);
+  const ranked = all.filter((item) => index.meta[item.id]?.group !== EVERYDAY_GROUP);
   const top = ranked[0];
   const th = index.thresholds;
-  const strongestOther = other > top.score;
+  const outOfDomain = everyday > top.score;
+  const gate = gateDecision({ top, everyday, other, meta: top ? index.meta[top.id] : null, thresholds: th });
   const deadlyHints = ranked.slice(0, 3).filter((item) => isDeadly(index.meta[item.id]) && item.score >= DEADLY_HINT);
-  if (!top || strongestOther || top.score < th.weak) {
+  if (!gate.answer) {
     return {
       status: "unsure",
       title: UNSURE_TITLE,
       text: UNSURE_TEXT,
-      quiet: UNSURE_QUIET,
+      quiet: outOfDomain ? `${SCENE_QUIET[sceneOf(everydayTop?.id)] || EVERYDAY_QUIET} ${UNSURE_QUIET}` : UNSURE_QUIET,
+      domain: outOfDomain ? EVERYDAY_GROUP : "unclear",
+      scene: outOfDomain ? sceneOf(everydayTop?.id) : "unclear",
+      why: gate.why,
+      everydayTitle: outOfDomain && everydayTop ? index.meta[everydayTop.id].title : "",
       // A look-alike scoring close to a deadly plant still gets one line, but no blanket paragraph.
-      deadlyNearby: deadlyHints.map((d) => d.id),
-      deadlyLine: deadlyHints.length ? `Part of this picture resembles a deadly plant or mushroom (${deadlyHints.map((d) => index.meta[d.id].title).join(", ")}). Do not eat or handle it.` : "",
-      emergency: deadlyHints.length ? EMERGENCY_TEXT : "",
+      // Never on an everyday photo: there is nothing wild in it to warn about.
+      deadlyNearby: outOfDomain ? [] : deadlyHints.map((d) => d.id),
+      deadlyLine: !outOfDomain && deadlyHints.length ? `Part of this picture resembles a deadly plant or mushroom (${deadlyHints.map((d) => index.meta[d.id].title).join(", ")}). Do not eat or handle it.` : "",
+      emergency: !outOfDomain && deadlyHints.length ? EMERGENCY_TEXT : "",
       suggestions: [],
       ranked,
       other
@@ -191,6 +258,8 @@ export function identify(index, query) {
   });
   return {
     status: "match",
+    domain: "wild",
+    scene: "wild",
     text: `Top match: ${suggestions[0].title} (${suggestions[0].bandText.toLowerCase()}). This is a photo hint, not an identification.`,
     warning: suggestions.some((s) => s.group === "mushroom") ? MUSHROOM_WARNING : PHOTO_WARNING,
     emergency: EMERGENCY_TEXT,

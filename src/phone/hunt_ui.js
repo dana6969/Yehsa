@@ -1,17 +1,24 @@
 // Small shared pieces for the hunting screens. Meaning is always in words, never color alone.
 import React from "react";
-import { Platform, Pressable, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, View } from "react-native";
+import { selectedFirst } from "../../symbolic/hunt/chip_order.js";
 import { Quiet, colors, tokens, themedStyles, useDisplay } from "./ui.js";
 
 export const screenStyles = themedStyles((c) => ({
-  scroll: { paddingTop: Platform.OS === "ios" ? 52 : 22, paddingHorizontal: tokens.space.xl, paddingBottom: 48, gap: 10 }
+  scroll: { paddingTop: Platform.OS === "ios" ? 52 : 22, paddingHorizontal: tokens.space.xl, paddingBottom: 180, gap: 10 }
 }));
 
-export function Chips({ options, value, onChange, label }) {
+// scroll: one horizontal row that never wraps (the chosen option comes first). Use it for long lists
+// such as states, where a wrapped second row used to clip under the map.
+export function Chips({ options, value, onChange, label, scroll = false }) {
   const display = useDisplay();
+  const Wrap = scroll ? ScrollView : View;
+  const wrapProps = scroll
+    ? { horizontal: true, showsHorizontalScrollIndicator: false, contentContainerStyle: styles.chipsScroll, style: styles.chipsScrollOuter, keyboardShouldPersistTaps: "handled" }
+    : { style: styles.chips };
   return (
-    <View accessibilityLabel={label} style={styles.chips}>
-      {options.map((option) => {
+    <Wrap accessibilityLabel={label} {...wrapProps}>
+      {(scroll ? selectedFirst(options, value) : options).map((option) => {
         const on = option.id === value;
         return (
           <Pressable
@@ -26,7 +33,7 @@ export function Chips({ options, value, onChange, label }) {
           </Pressable>
         );
       })}
-    </View>
+    </Wrap>
   );
 }
 
@@ -60,6 +67,8 @@ export function Footer({ children }) {
 
 const styles = themedStyles((c) => ({
   chips: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 6 },
+  chipsScroll: { flexDirection: "row", flexWrap: "nowrap", gap: 8, paddingRight: 16 },
+  chipsScrollOuter: { flexGrow: 0, marginBottom: 6 },
   chip: { minHeight: 44, paddingHorizontal: 14, borderRadius: 999, borderWidth: 1, justifyContent: "center" },
   chipText: { fontWeight: "600" },
   tag: { color: c.muted, fontSize: 12, marginTop: 2 },

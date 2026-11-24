@@ -40,6 +40,7 @@ export function capabilitySummary(meta = {}) {
 }
 
 export function sourceChips(result) {
+  if (Array.isArray(result?.chips) && result.chips.length) return result.chips.map(String).slice(0, 4);
   const chips = [];
   if (result?.kind) chips.push(String(result.kind));
   if (result?.symbol) chips.push(String(result.symbol));
@@ -53,6 +54,6 @@ export function sourceChips(result) {
 // Misses, status lines, approval cards, errors, thank-yous, and capability blurbs never do.
 export function isFeedbackEligible(result) {
   if (!result || result.answered !== true || !result.text) return false;
-  if (result.kind === "about" || result.kind === "calculator") return false;
+  if (result.kind === "about" || result.kind === "calculator" || result.kind === "weather") return false;
   return true;
 }

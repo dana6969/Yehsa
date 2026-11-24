@@ -92,8 +92,9 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
   const sources = [];
   if (tiled.length) sources.push(...packs.filter((pack) => tiled.includes(pack)));
   const credit = [];
-  if (drawn.length) credit.push("Elevation: AWS Terrain Tiles. May be dated.");
   const line = attributionLine({ packs: packs.filter((pack) => pack.attribution) });
+  // Pack credits already name the elevation source. Only add it when none of them did.
+  if (drawn.length && !/Elevation:/i.test(line)) credit.push("Elevation: AWS Terrain Tiles. May be dated.");
   return {
     empty,
     // The map component draws whenever there is something to draw, even while the tile server
@@ -108,7 +109,7 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
     paint: look.paint,
     tint: look.tint,
     styleLabel: look.label,
-    attribution: empty ? "No map pack yet." : [line.replace(/^No map pack yet\.$/, ""), ...credit].filter(Boolean).join(" "),
+    attribution: empty ? "No map pack yet." : dedupeCredit([line.replace(/^No map pack yet\.$/, ""), ...credit].filter(Boolean).join(" ")),
     firstFocus: focusOf(tiled, drawn)
   };
 }
@@ -132,4 +133,17 @@ function focusOf(tiled, drawn) {
   if (area?.box) return { west: area.box.west, south: area.box.south, east: area.box.east, north: area.box.north };
   const pack = tiled[tiled.length - 1];
   return pack?.bounds || null;
+}
+
+// Each sentence of a credit once, in order. "May be dated." and "Elevation: ..." never repeat.
+export function dedupeCredit(text) {
+  const seen = new Set();
+  const out = [];
+  for (const part of String(text || "").split(/(?<=\.)\s+/)) {
+    const key = part.trim().toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push(part.trim());
+  }
+  return out.join(" ");
 }

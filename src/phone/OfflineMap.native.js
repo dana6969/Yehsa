@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { Text, View } from "react-native";
+import MapCredit from "./MapCredit.js";
 import {
   Camera,
   CircleLayer,
@@ -140,7 +141,7 @@ export default function OfflineMap({
           </ShapeSource>
         ) : null}
       </MapView>
-      <Text style={{ color: "#b7bfb2", marginTop: 8 }}>{attribution || layers?.attribution || ""}</Text>
+      <MapCredit text={attribution || layers?.attribution || ""} empty={layers?.empty === true} />
     </View>
   );
 }

@@ -4,7 +4,8 @@
 // update is sealed for one member with that member's key, so a relay cannot read it. Nothing
 // is sent unless a session is running and a position is held with consent.
 
-import { safetyNumber, sealDirect, publicCard } from "../peer_chat.js";
+import { sealDirect, publicCard } from "../peer_chat.js";
+import { safetyNumber } from "../online/safety.js";
 
 export const MIN_MINUTES = 15;
 export const MAX_MINUTES = 12 * 60;
@@ -46,7 +47,7 @@ export function addMember(roster, { name, card, me }) {
     name: label,
     boxPublic: card.boxPublic,
     signPublic: card.signPublic,
-    safety: safetyNumber(me.boxPublic, card.boxPublic),
+    safety: safetyNumber(publicCard(me), publicCard(card)),
     verified: false
   };
   return { ok: true, roster: { ...roster, members: [...roster.members, member] }, member };
@@ -152,4 +153,58 @@ export function dueForUpdate(roster, now = Date.now()) {
 export function noteSent(roster, now = Date.now()) {
   if (!roster.session) return roster;
   return { ...roster, session: { ...roster.session, lastSentAt: now, sent: (roster.session.sent || 0) + 1 } };
+}
+
+export const EXTEND_MINUTES = 30;
+export const ENDING_SOON_MS = 10 * 60 * 1000;
+export const VERIFY_FAIL_TEXT = "Those numbers did not match. Read them out loud again, or ask them to show their pairing code again. Do not trust this contact until they match.";
+export const OFFLINE_TEXT = "No mesh or internet link right now. Updates are held on this phone and will not go out until a link is up.";
+
+// Add time to a running session (never past the longest allowed session).
+export function extendSession(roster, minutes = EXTEND_MINUTES, now = Date.now()) {
+  const session = roster.session;
+  if (!session || session.stopped || now >= session.endsAt) return { ok: false, reason: "There is no running session to extend.", roster };
+  const endsAt = Math.min(session.endsAt + minutes * 60000, session.startedAt + MAX_MINUTES * 60000);
+  if (endsAt <= session.endsAt) return { ok: false, reason: "This session is already as long as it can be.", roster };
+  return { ok: true, roster: { ...roster, session: { ...session, endsAt } } };
+}
+
+/**
+ * The separate, honest states for the Hunt party screen. Each one is its own notice, never mixed
+ * into another card. `keyState` is the result of getOrCreateIdentity() ("ready" | "error" | "foreign"
+ * | "loading"). `linkUp` is whether a mesh or internet link is up. Returns notices in display order.
+ */
+export const NO_PEERS_TEXT = "No peers nearby";
+
+export function partyNotices({ roster, keyState = "ready", linkUp = false, peersNearby = null, now = Date.now() }) {
+  const out = [];
+  if (keyState === "error") out.push({ id: "key-error", tone: "problem", title: "I couldn't open your key.", body: "Pairing and sessions are paused until this is fixed.", action: "retry" });
+  if (keyState === "foreign") out.push({ id: "key-foreign", tone: "problem", title: "This copy can't open the original owner's chats", body: "Keys stay on the original phone. You can start a new key here. Your contacts will have to check you again.", action: "replace" });
+  const sharing = isSharing(roster, now);
+  if (sharing) {
+    const left = roster.session.endsAt - now;
+    if (left <= ENDING_SOON_MS) {
+      const minutes = Math.max(1, Math.ceil(left / 60000));
+      out.push({ id: "ending", tone: "info", title: `The session stops in ${minutes} minute${minutes === 1 ? "" : "s"}.`, body: "Nothing is shared after that unless you start a new one.", action: "extend" });
+    }
+    if (!linkUp) out.push({ id: "offline", tone: "info", title: OFFLINE_TEXT, body: "Nothing left the phone while the link is down.", action: null });
+    else if (peersNearby === 0) out.push({ id: "no-peers", tone: "info", title: "No one in the party is in range right now.", body: "The session keeps running. Updates are held until someone is in range; nothing is marked as sent.", action: null });
+  }
+  return out;
+}
+
+// Members added before round 4 carry the old box-key-only number. Recompute it with the one shared
+// number (both keys, symbolic/online/safety.js) so People, Hunt party and Online all match. A member
+// already verified stays verified: they checked the same keys.
+export function refreshSafety(roster, me) {
+  if (!me?.boxPublic || !me?.signPublic || !roster?.members?.length) return roster;
+  let changed = false;
+  const members = roster.members.map((member) => {
+    if (!member.boxPublic || !member.signPublic) return member;
+    const safety = safetyNumber(publicCard(me), publicCard(member));
+    if (safety === member.safety) return member;
+    changed = true;
+    return { ...member, safety };
+  });
+  return changed ? { ...roster, members } : roster;
 }

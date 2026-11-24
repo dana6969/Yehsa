@@ -9,6 +9,8 @@ import credits from "./assets/camera_id/credits.json" with { type: "json" };
 import meta from "./assets/camera_id/classes.json" with { type: "json" };
 import raw from "./assets/camera_id/index.json" with { type: "json" };
 import fixture from "./eval/camera_id/fixtures/shot8_conifer.json" with { type: "json" };
+import oranges from "./eval/camera_id/fixtures/shot9_oranges.json" with { type: "json" };
+import cases from "./eval/camera_id/fixtures/round4_cases.json" with { type: "json" };
 import { UNSURE_TITLE, decodeIndex, identify, normalize, pixelsToInputs, rankClasses } from "./src/phone/camera_id_match.js";
 
 const index = decodeIndex(raw, meta);
@@ -26,7 +28,7 @@ test("every class has a name, a use, a look, a caution, and look-alike links tha
     for (const other of m.lookalikes || []) assert.ok(meta[other], `${id} -> ${other}`);
   }
   const groups = new Set(Object.values(meta).map((m) => m.group));
-  for (const g of ["plant", "tree", "mushroom", "animal", "track", "scat"]) assert.ok(groups.has(g), `group ${g}`);
+  for (const g of ["plant", "tree", "mushroom", "animal", "track", "scat", "everyday"]) assert.ok(groups.has(g), `group ${g}`);
 });
 
 test("mushrooms and deadly plants point at their deadly look-alikes", () => {
@@ -42,7 +44,8 @@ test("shipped assets are small, licensed, and complete", () => {
   assert.equal(raw.model.dim, 384);
   assert.ok(fs.statSync("assets/camera_id/index.json").size < 400e3);
   assert.ok(raw.thresholds.possible > raw.thresholds.weak && raw.thresholds.weak > 0.1);
-  assert.ok(Object.keys(credits.classes).length === index.classes.length);
+  const wildClasses = index.classes.filter((id) => meta[id].group !== "everyday");
+  assert.ok(Object.keys(credits.classes).length === wildClasses.length);
   const sample = Object.values(credits.classes)[0];
   assert.ok(Array.isArray(sample) && sample.length > 3);
 });
@@ -124,4 +127,100 @@ test("the shipped ONNX model reproduces the stored embedding of the conifer phot
   assert.ok(dot > 0.995, `cosine to the Python embedding was ${dot}`);
   const r = identify(index, q);
   assert.ok(r.status === "unsure" || CONIFERS.has(r.suggestions[0].id), r.status === "match" ? r.suggestions[0].id : "");
+});
+
+// ---- Round 4: grocery oranges, the everyday domain gate, and no verdicts from the camera ----
+
+const WILD_GROUPS = new Set(["plant", "tree", "mushroom", "animal", "track", "scat"]);
+const EVERYDAY = index.classes.filter((id) => meta[id].group === "everyday");
+
+test("round 4 regression: a bag of supermarket oranges is 'I'm not sure', never a mushroom", () => {
+  const q = normalize(Float32Array.from(oranges.embedding));
+  const r = identify(index, q);
+  const { ranked, everydayTop } = rankClasses(index, q);
+  assert.equal(r.status, "unsure");
+  assert.equal(r.title, UNSURE_TITLE);
+  assert.deepEqual(r.suggestions, []);
+  assert.equal(r.domain, "everyday");
+  assert.equal(everydayTop.id, "ev_citrus", `everyday top was ${everydayTop.id}`);
+  assert.ok(ranked[0].id === "ev_citrus", `top class was ${ranked[0].id}`);
+  assert.match(r.text, /Grocery food and household objects are not in the set/);
+  // No species name, no toxicity, no emergency line on a grocery photo.
+  // Values only: the key names ("deadlyLine") are not shown to anyone.
+  const shown = [r.title, r.text, r.quiet, r.deadlyLine, r.emergency].join(" | ");
+  assert.ok(!/Jack-o|Omphalotus|toxic|deadly|edible|mushroom/i.test(shown), shown);
+  assert.deepEqual(r.deadlyNearby, []);
+});
+
+test("everyday photos (food, packaging, household things, hands, pets) never get a species name", () => {
+  assert.ok(EVERYDAY.length >= 12, `${EVERYDAY.length} everyday classes`);
+  assert.ok(cases.everyday.length >= 30);
+  for (const item of cases.everyday) {
+    const r = identify(index, normalize(Float32Array.from(item.embedding)));
+    assert.equal(r.status, "unsure", `${item.id} photo ${item.photo}`);
+    assert.deepEqual(r.suggestions, [], `${item.id} photo ${item.photo}`);
+  }
+});
+
+test("New England look-alike pairs stay in domain and keep their true class in the top three", () => {
+  assert.ok(cases.lookalikes.length >= 20);
+  let kept = 0;
+  let gated = 0;
+  for (const item of cases.lookalikes) {
+    const q = normalize(Float32Array.from(item.embedding));
+    const r = identify(index, q);
+    if (r.domain === "everyday") gated += 1;
+    const wild = rankClasses(index, q).ranked.filter((x) => WILD_GROUPS.has(meta[x.id].group)).slice(0, 3).map((x) => x.id);
+    if (wild.includes(item.id)) kept += 1;
+  }
+  assert.equal(gated, 0, "a wild photo was called an everyday thing");
+  assert.ok(kept / cases.lookalikes.length >= 0.8, `true class in top three for ${kept}/${cases.lookalikes.length}`);
+});
+
+test("toxic and deadly classes need a higher score than the weak bar", () => {
+  const th = raw.thresholds;
+  assert.ok(th.toxic >= th.possible && th.weak >= 0.4, JSON.stringify(th));
+  // A synthetic query that scores just above weak for a toxic class must not be a match.
+  const id = "jack_o_lantern";
+  const row = index.classes.indexOf(id);
+  const q = unit(row);
+  const strong = identify(index, q);
+  assert.ok(strong.status === "match" || strong.status === "unsure");
+  const blend = new Float32Array(index.dim);
+  const flat = unit(index.classes.indexOf("balsam_fir"));
+  for (let i = 0; i < blend.length; i += 1) blend[i] = 0.35 * q[i] + 0.65 * flat[i];
+  const r = identify(index, normalize(blend));
+  if (r.status === "match") assert.notEqual(r.suggestions[0].id, id);
+});
+
+test("a match never says the thing is safe to eat, and a grocery result carries no toxicity text", () => {
+  for (const id of ["yarrow", "wild_carrot", "chanterelle", "red_maple"].filter((x) => index.classes.includes(x))) {
+    const r = identify(index, unit(index.classes.indexOf(id)));
+    if (r.status !== "match") continue;
+    const text = JSON.stringify(r);
+    assert.ok(!/you can eat|safe to eat|is edible|edible\b.*photo/i.test(r.text + (r.warning || "")), text);
+    assert.match(r.warning, /Never eat|never eat/i);
+  }
+});
+
+test("the shipped ONNX model reproduces the stored embedding of the oranges photo and declines it", { skip: ort ? false : "onnxruntime-node not installed" }, async () => {
+  const png = decodePng(fs.readFileSync("eval/camera_id/fixtures/shot9_oranges_224.png"));
+  const [plain, mirror] = pixelsToInputs(png, raw.model);
+  const session = await ort.InferenceSession.create(`assets/camera_id/${raw.model.file}`);
+  const run = async (data) => {
+    const out = await session.run({ pixel_values: new ort.Tensor("float32", data, [1, 3, 224, 224]) });
+    return normalize(out.last_hidden_state.data.slice(0, raw.model.dim));
+  };
+  const a = await run(plain);
+  const b = await run(mirror);
+  const mean = new Float32Array(a.length);
+  for (let i = 0; i < a.length; i += 1) mean[i] = (a[i] + b[i]) / 2;
+  const q = normalize(mean);
+  const ref = normalize(Float32Array.from(oranges.embedding));
+  let dot = 0;
+  for (let i = 0; i < q.length; i += 1) dot += q[i] * ref[i];
+  assert.ok(dot > 0.995, `cosine to the Python embedding was ${dot}`);
+  const r = identify(index, q);
+  assert.equal(r.status, "unsure");
+  assert.deepEqual(r.suggestions, []);
 });

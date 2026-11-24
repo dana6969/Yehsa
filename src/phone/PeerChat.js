@@ -9,10 +9,10 @@ import {
   openDirect,
   publicCard,
   qrPayload,
-  safetyNumber,
   sealDirect,
   sweepExpired
 } from "../../symbolic/peer_chat.js";
+import { safetyNumber as sharedSafetyNumber } from "../../symbolic/online/safety.js";
 import { CLONE_MESSAGE, KEY_CHANGE_WARNING, notePeerKey } from "../../symbolic/peer_vault.js";
 import { approveFreshIdentity, loadOrCreateIdentity, loadPeerHistory, savePeerHistory } from "./mesh_keys.js";
 import { Action, Quiet, colors, themedStyles } from "./ui.js";
@@ -77,7 +77,8 @@ export default function PeerChat({ includeLocation = false, header = null, onVie
     if (!ready || !practice) return;
     savePeerHistory({ messages, peers, practice }).catch(() => {});
   }, [ready, messages, peers, practice]);
-  const number = me && practice ? safetyNumber(me.boxPublic, practice.boxPublic) : "";
+  // The one shared number (both keys of both people), the same one Hunt party and Online show.
+  const number = me && practice ? sharedSafetyNumber(publicCard(me), publicCard(practice)) : "";
   const cells = useMemo(() => (me ? qrCells(qrPayload(me)) : []), [me]);
   const visible = sweepExpired(messages, Date.now());
 

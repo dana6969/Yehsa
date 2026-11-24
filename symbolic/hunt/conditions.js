@@ -3,10 +3,11 @@
 // read this one place so they never disagree. Pure JavaScript.
 
 import { trendOf } from "./baro.js";
-import { forecastNow, compassToDegrees, degreesToCompass, rainText } from "./nws.js";
+import { degreesToCompass } from "./nws.js";
 import { estimateDeer } from "./deer_estimate.js";
 import { legalLight } from "./legal_light.js";
-import { classFor, pointToDegrees, scentCone, SPEED_CLASSES } from "./scent.js";
+import { scentCone } from "./scent.js";
+import { weatherRecord } from "../weather_service.js";
 
 function pad(value) {
   return String(value).padStart(2, "0");
@@ -17,21 +18,10 @@ export function localDateText(now) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
+// The wind every screen uses. It comes from the one weather record (symbolic/weather_service.js):
+// the wind you entered wins, else the saved forecast, else nothing. `tag` says where and how old.
 export function windFrom(hunt, now = Date.now()) {
-  const wind = hunt?.wind || {};
-  if (wind.fromPoint) {
-    const deg = pointToDegrees(wind.fromPoint);
-    const typed = Number(hunt?.manual?.windMph);
-    const cls = SPEED_CLASSES.find((item) => item.id === wind.speedClass) || SPEED_CLASSES[1];
-    const mph = Number.isFinite(typed) && hunt?.manual?.windMph !== "" ? typed : cls.mph;
-    return { ok: deg != null, fromDeg: deg, point: wind.fromPoint, mph, cls: Number.isFinite(typed) && hunt?.manual?.windMph !== "" ? classFor(typed).id : cls.id, swirling: wind.swirling === true, source: "manual", enteredAt: wind.enteredAt || null };
-  }
-  const hour = forecastNow(hunt?.saved, now);
-  if (hour && hour.windFrom && hour.windMph != null) {
-    const deg = compassToDegrees(hour.windFrom);
-    if (deg != null) return { ok: true, fromDeg: deg, point: hour.windFrom, mph: hour.windMph, cls: classFor(hour.windMph).id, swirling: false, source: "saved forecast", stale: hour.stale === true };
-  }
-  return { ok: false, source: "none" };
+  return weatherRecord(hunt, { now }).wind;
 }
 
 export function conditionsFor(hunt, { position, now = Date.now(), offsetMinutes = 0, hasSensor = true } = {}) {
@@ -40,15 +30,10 @@ export function conditionsFor(hunt, { position, now = Date.now(), offsetMinutes 
   const nowMinutes = d.getHours() * 60 + d.getMinutes();
   const fix = position?.consent === true && position.status === "locked" ? position.fix : null;
   const stateInfo = hunt?.legal?.state || "";
-  const wind = windFrom(hunt, now);
-  const hour = forecastNow(hunt?.saved, now);
-  const tempManual = hunt?.manual?.tempF;
-  let temp = null;
-  if (tempManual !== "" && tempManual != null && Number.isFinite(Number(tempManual))) temp = { f: Number(tempManual), source: "manual" };
-  else if (hour && Number.isFinite(hour.tempF)) temp = { f: hour.tempF, source: "saved forecast" };
-  let precip = null;
-  if (hunt?.manual?.precip) precip = { kind: hunt.manual.precip, source: "manual" };
-  else if (hour && hour.rainChance != null) precip = { kind: rainText(hour.rainChance), source: "saved forecast" };
+  const record = weatherRecord(hunt, { now, hasSensor });
+  const wind = record.wind;
+  const temp = record.temp ? { f: record.temp.f, source: record.temp.source } : null;
+  const precip = record.precip ? { kind: record.precip.kind, source: record.precip.source } : null;
   const trend = trendOf(hunt?.baro, now, { hasSensor });
   const pressure = trend.state === "trend" ? { band: trend.band, delta: trend.delta, source: "live" } : null;
   const place = fix ? { lat: fix.latitude, lon: fix.longitude } : null;
@@ -62,7 +47,7 @@ export function conditionsFor(hunt, { position, now = Date.now(), offsetMinutes 
       pressureOnHunt: hunt?.huntPressure === "high" ? "high" : "normal"
     });
   }
-  return { date, nowMinutes, place, wind, temp, precip, pressure, trend, light, estimate, cone: wind.ok ? scentCone({ fromDeg: wind.fromDeg, mph: wind.mph, swirling: wind.swirling, source: wind.source }) : null };
+  return { date, nowMinutes, place, weather: record, wind, temp, precip, pressure, trend, light, estimate, cone: wind.ok ? scentCone({ fromDeg: wind.fromDeg, mph: wind.mph, swirling: wind.swirling, source: wind.source }) : null };
 }
 
 export function windLabel(wind) {
@@ -85,7 +70,7 @@ export function hudCards(cond) {
             ? { value: "Closed", sub: `Closed at ${light.closesText}` }
             : { value: `${light.opensText}`, sub: `to ${light.closesText}` };
   const wind = cond.wind?.ok
-    ? { value: windLabel(cond.wind), sub: `From ${cond.wind.source}` }
+    ? { value: windLabel(cond.wind), sub: cond.wind.tag || `From ${cond.wind.source}` }
     : { value: "Add wind", sub: "Direction and speed" };
   const deer = cond.estimate
     ? { value: cond.estimate.level === "Medium" ? "Med" : cond.estimate.level, sub: "Tap for reasons" }

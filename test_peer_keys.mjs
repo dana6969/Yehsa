@@ -23,7 +23,11 @@ test("a secure-store mock round trip keeps the key and seals history", async () 
   assert.match(native, /WHEN_UNLOCKED_THIS_DEVICE_ONLY/);
   assert.match(native, /requireAuthentication/);
   assert.match(native, /expo-secure-store/);
-  assert.match(native, /historyKey/);
+  assert.match(native, /secureKeyFor\(/);
+  // Slot names live in one file now, shared with the key module (symbolic/peer_secret_names.js).
+  const names = fs.readFileSync("symbolic/peer_secret_names.js", "utf8");
+  assert.match(names, /historyKey/);
+  assert.match(names, /bindToken/);
   assert.doesNotMatch(native, /Math\.random/);
 });
 

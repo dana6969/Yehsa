@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Text, View } from "react-native";
+import MapCredit from "./MapCredit.js";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { PMTiles, Protocol } from "pmtiles";
@@ -153,7 +154,7 @@ export default function OfflineMap({
   return (
     <View style={fill ? { flex: 1 } : null}>
       <View ref={host} accessibilityLabel="Offline map" style={{ ...(fill ? { flex: 1, minHeight: 150 } : { height: 380 }), borderRadius: 16, overflow: "hidden", backgroundColor: "#101611" }} />
-      <Text style={{ color: "#b7bfb2", marginTop: 8 }}>{label}</Text>
+      <MapCredit text={label} empty={!attribution} />
     </View>
   );
 }

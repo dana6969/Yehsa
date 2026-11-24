@@ -314,7 +314,7 @@ function Dial({ size, heading, lock, target, onTarget }) {
 }
 
 const styles = themedStyles((colors) => ({
-  scroll: { paddingTop: Platform.OS === "ios" ? 52 : 22, paddingHorizontal: 20, paddingBottom: 48 },
+  scroll: { paddingTop: Platform.OS === "ios" ? 52 : 22, paddingHorizontal: 20, paddingBottom: 180 },
   readout: { alignItems: "center", marginTop: 4 },
   bigHeading: { color: colors.ink, fontWeight: "800", fontVariant: ["tabular-nums"], letterSpacing: -1 },
   pointText: { color: colors.ink, fontWeight: "600", textAlign: "center" },

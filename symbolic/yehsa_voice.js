@@ -265,6 +265,20 @@ export function voiceReply(result, question, thread = newThread()) {
     return { text: result.text, offer: null, thread: { ...next, offer: null }, spoken: result.text };
   }
 
+  // Weather comes from the one weather record. It leads with real numbers and freshness, so no
+  // opener and no unrelated follow-up offer. One button opens the Weather card.
+  if (result.kind === "weather") {
+    const sections = (result.sections || [{ title: null, text: result.text }]).map((section) => ({ title: section.title, shape: shapeAnswer(section.text) }));
+    return {
+      text: result.text,
+      parts: { opener: "", sections, offer: "" },
+      suggestions: [{ label: "Open Weather", go: "weather" }],
+      offer: null,
+      thread: { ...next, lastDomain: "weather", lastSymbol: "weather_now", topics: [...state.topics, "weather"].slice(-6), offer: null },
+      spoken: result.text.replace(/\n+/g, " ")
+    };
+  }
+
   const domain = result.offerDomain || domainOfResult(result, question);
   const body = result.voiced ? result.text : warmFiller(result.text);
   const serious = result.emergency === true || (SERIOUS.test(question) && (domain === "medical" || result.kind === "medical"));
