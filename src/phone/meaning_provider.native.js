@@ -88,3 +88,15 @@ export async function prepareMeaning(question, { replies = [], spiritual = false
   }
   return context(scripture);
 }
+
+/**
+ * Vectors for approved web notes, made after the person approves them and never on the hot path.
+ * Returns { model, vectors } or null when the model cannot load. The static field-note index is not touched.
+ */
+export async function embedNotes(texts) {
+  if (failed || !texts?.length) return null;
+  const embedder = await loadEmbedder();
+  if (!embedder) return null;
+  const vectors = await embedder.embed(texts, { maxLength: MODEL_INFO.passageMaxTokens, batchSize: 2 });
+  return { model: MODEL_INFO.file, vectors };
+}
