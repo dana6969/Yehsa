@@ -15,6 +15,19 @@ function lineCollection(shapes) {
   return { type: "FeatureCollection", features };
 }
 
+function coneData(overlay) {
+  const ring = overlay?.polygon;
+  if (!ring || ring.length < 4) return { type: "FeatureCollection", features: [] };
+  return { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [ring.map((p) => [p.longitude, p.latitude])] } };
+}
+
+function marksData(overlay) {
+  return {
+    type: "FeatureCollection",
+    features: (overlay?.markers || []).map((mark) => ({ type: "Feature", properties: { id: mark.id, name: mark.name }, geometry: { type: "Point", coordinates: [mark.longitude, mark.latitude] } }))
+  };
+}
+
 const NO_TILES = [];
 const NO_CONTOURS = { type: "FeatureCollection", features: [] };
 
@@ -24,6 +37,9 @@ export default function OfflineMap({
   fix,
   onFail,
   onPress,
+  onLongPress,
+  overlay,
+  onMarkPress,
   fill = false
 }) {
   const archive = layers?.archivePack?.archive;
@@ -34,6 +50,13 @@ export default function OfflineMap({
   const host = useRef(null);
   const pressRef = useRef(onPress);
   const failRef = useRef(onFail);
+  const longRef = useRef(onLongPress);
+  const markRef = useRef(onMarkPress);
+  const overlayRef = useRef(overlay);
+  const mapRef = useRef(null);
+  longRef.current = onLongPress;
+  markRef.current = onMarkPress;
+  overlayRef.current = overlay;
   pressRef.current = onPress;
   failRef.current = onFail;
   const label = attribution || "No map pack. Blank landscape. No streets are stored.";
@@ -124,6 +147,15 @@ export default function OfflineMap({
         map.addLayer({ id: "contours", type: "line", source: "contours", paint: { "line-color": "#e6d7b8", "line-width": 1 } });
         map.addSource("overlays", { type: "geojson", data: lineCollection(shapes) });
         map.addLayer({ id: "overlays", type: "line", source: "overlays", paint: { "line-color": "#e2b15a", "line-width": 2 } });
+        map.addSource("cone", { type: "geojson", data: coneData(overlayRef.current) });
+        map.addLayer({ id: "cone-fill", type: "fill", source: "cone", paint: { "fill-color": overlayRef.current?.color || "#e2b15a", "fill-opacity": 0.3 } });
+        map.addLayer({ id: "cone-line", type: "line", source: "cone", paint: { "line-color": overlayRef.current?.color || "#e2b15a", "line-width": 2 } });
+        map.addSource("marks", { type: "geojson", data: marksData(overlayRef.current) });
+        map.addLayer({ id: "marks", type: "circle", source: "marks", paint: { "circle-radius": 7, "circle-color": "#1b2420", "circle-stroke-width": 3, "circle-stroke-color": "#f4f0e6" } });
+        map.on("click", "marks", (event) => {
+          const id = event.features?.[0]?.properties?.id;
+          if (id) markRef.current?.(id);
+        });
         if (fix) {
           map.addSource("me", {
             type: "geojson",
@@ -133,22 +165,37 @@ export default function OfflineMap({
             id: "me",
             type: "circle",
             source: "me",
-            paint: { "circle-radius": 7, "circle-color": "#b7d0a4", "circle-stroke-width": 2, "circle-stroke-color": "#141a16" }
+            paint: { "circle-radius": 8, "circle-color": "#b7d0a4", "circle-opacity": 0.12, "circle-stroke-width": 3, "circle-stroke-color": "#b7d0a4" }
           });
         }
       });
       map.on("click", (event) => {
+        if (map.getLayer("marks") && map.queryRenderedFeatures(event.point, { layers: ["marks"] }).length) return;
         pressRef.current?.({ latitude: event.lngLat.lat, longitude: event.lngLat.lng });
       });
+      // Right-click stands in for long-press in the browser preview.
+      map.on("contextmenu", (event) => {
+        longRef.current?.({ latitude: event.lngLat.lat, longitude: event.lngLat.lng });
+      });
+      mapRef.current = map;
     })().catch((err) => {
       console.error("offline map", err);
       failRef.current?.();
     });
     return () => {
       alive = false;
+      mapRef.current = null;
       map?.remove();
     };
   }, [archive, format, label, demTiles, contours, shapes, fix]);
+
+  // The cone and the marks follow the wind and the list without rebuilding the map.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !map.isStyleLoaded?.()) return;
+    map.getSource("cone")?.setData(coneData(overlay));
+    map.getSource("marks")?.setData(marksData(overlay));
+  }, [overlay]);
 
   return (
     <View style={fill ? { flex: 1 } : null}>

@@ -6,10 +6,12 @@ import {
   FillLayer,
   LineLayer,
   MapView,
+  MarkerView,
   RasterLayer,
   RasterSource,
   ShapeSource
 } from "@maplibre/maplibre-react-native";
+import { ConePill, MarkPin } from "./hunt_map_ui.js";
 
 function blankStyle(color) {
   return {
@@ -56,6 +58,9 @@ export default function OfflineMap({
   attribution,
   onFail,
   onPress,
+  onLongPress,
+  overlay,
+  onMarkPress,
   fill = false
 }) {
   const camera = useRef(null);
@@ -89,6 +94,11 @@ export default function OfflineMap({
   const center = fix ? [fix.longitude, fix.latitude] : [-69, 45];
   const start = initialCamera ? { centerCoordinate: initialCamera.center, zoomLevel: initialCamera.zoom } : { centerCoordinate: center, zoomLevel: fix ? 11 : 4 };
   const paint = layers?.paint || {};
+  const coneShape = useMemo(() => {
+    const ring = overlay?.polygon;
+    if (!ring || ring.length < 4) return null;
+    return { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [ring.map((p) => [p.longitude, p.latitude])] } };
+  }, [overlay?.polygon]);
   return (
     <View style={fill ? { flex: 1 } : null}>
       <MapView
@@ -103,6 +113,11 @@ export default function OfflineMap({
           const coords = event?.geometry?.coordinates || event?.coordinates;
           if (!coords) return;
           onPress?.({ longitude: coords[0], latitude: coords[1] });
+        }}
+        onLongPress={(event) => {
+          const coords = event?.geometry?.coordinates || event?.coordinates;
+          if (!coords) return;
+          onLongPress?.({ longitude: coords[0], latitude: coords[1] });
         }}
       >
         <Camera ref={camera} defaultSettings={start} />
@@ -134,10 +149,29 @@ export default function OfflineMap({
         <ShapeSource id="overlay-points" shape={geo.points}>
           <CircleLayer id="overlay-point" style={{ circleRadius: 4, circleColor: "#9a6b1f", circleStrokeWidth: 1, circleStrokeColor: "#ffffff" }} />
         </ShapeSource>
-        {fix ? (
-          <ShapeSource id="me" shape={{ type: "Feature", geometry: { type: "Point", coordinates: center }, properties: {} }}>
-            <CircleLayer id="me-dot" style={{ circleRadius: 8, circleColor: "#b7d0a4", circleStrokeWidth: 3, circleStrokeColor: "#141a16" }} />
+        {coneShape ? (
+          <ShapeSource id="scent-cone" shape={coneShape}>
+            <FillLayer id="scent-cone-fill" style={{ fillColor: overlay.color, fillOpacity: 0.3 }} />
+            <LineLayer id="scent-cone-line" style={{ lineColor: overlay.color, lineWidth: 2, lineOpacity: 0.95 }} />
           </ShapeSource>
+        ) : null}
+        {fix ? (
+          // A ring with a clear middle, so a place name under the dot stays readable.
+          <ShapeSource id="me" shape={{ type: "Feature", geometry: { type: "Point", coordinates: center }, properties: {} }}>
+            <CircleLayer id="me-dot" style={{ circleRadius: 9, circleColor: "#b7d0a4", circleOpacity: 0.12, circleStrokeWidth: 3, circleStrokeColor: "#141a16" }} />
+            <CircleLayer id="me-ring" style={{ circleRadius: 6, circleColor: "#b7d0a4", circleOpacity: 0, circleStrokeWidth: 2, circleStrokeColor: "#b7d0a4" }} />
+            <CircleLayer id="me-center" style={{ circleRadius: 2, circleColor: "#141a16" }} />
+          </ShapeSource>
+        ) : null}
+        {(overlay?.markers || []).map((mark) => (
+          <MarkerView key={mark.id} coordinate={[mark.longitude, mark.latitude]} anchor={{ x: 0.5, y: 0.3 }} allowOverlap>
+            <MarkPin mark={mark} onPress={() => onMarkPress?.(mark.id)} />
+          </MarkerView>
+        ))}
+        {overlay?.labelAt ? (
+          <MarkerView coordinate={[overlay.labelAt.longitude, overlay.labelAt.latitude]} anchor={{ x: 0.5, y: 0.5 }} allowOverlap>
+            <ConePill text={overlay.label} />
+          </MarkerView>
         ) : null}
       </MapView>
       <Text style={{ color: "#b7bfb2", marginTop: 8 }}>{attribution || layers?.attribution || ""}</Text>
