@@ -23,7 +23,9 @@ test("a secure-store mock round trip keeps the key and seals history", async () 
   assert.match(native, /WHEN_UNLOCKED_THIS_DEVICE_ONLY/);
   assert.match(native, /requireAuthentication/);
   assert.match(native, /expo-secure-store/);
-  assert.match(native, /historyKey/);
+  // Slot names moved to symbolic/peer_secret_names.js so every slot (bindToken too) has a valid name.
+  assert.match(native, /secureKeyFor/);
+  assert.match(fs.readFileSync("symbolic/peer_secret_names.js", "utf8"), /historyKey/);
   assert.doesNotMatch(native, /Math\.random/);
 });
 
