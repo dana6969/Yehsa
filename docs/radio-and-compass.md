@@ -9,7 +9,7 @@ Yehsa never claims a phone can tune AM or FM. What ships:
 | NOAA Weather Radio guide | yes | no | Seven channels (WX1 162.550 to WX7 162.525 MHz), SAME county codes, and a county/area lookup from `assets/radio/nwr_stations.json`. This is a list to read, not a tuner. |
 | Emergency stations by area | yes | no | FEMA Primary Entry Point (PEP) stations from `assets/radio/pep_stations.json`. |
 | Open the phone's own FM app | where the maker ships one | no | `expo-intent-launcher` plus a `<queries>` list (`plugins/withFmAppQueries.js`). Yehsa only launches it. Many phones have no FM app, or the chip is disabled. Yehsa cannot detect the FM chip from JavaScript, so the button is offered as "try", never as "your phone can". |
-| Internet radio | yes | **yes (data or Wi-Fi)** | Directory is radio-browser.info. Playback through `expo-audio`. Labelled as needing signal. |
+| Internet radio | yes | **yes (data or Wi-Fi)** | Directory is radio-browser.info. Playback through `expo-audio` with `shouldPlayInBackground`. On Android a media-playback foreground service (`plugins/withRadioBackground.js`, `modules/yehsa-radio-playback`) keeps the stream going when the phone is locked, with play, pause, and stop on the notification and lock screen. |
 | USB RTL-SDR dongle | **not shipped** | n/a | See below. |
 
 ### Why FM and AM are not tuned in-app

@@ -29,7 +29,11 @@
         "BLUETOOTH_CONNECT",
         "BLUETOOTH_SCAN",
         "RECORD_AUDIO",
-        "CAMERA"
+        "CAMERA",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "WAKE_LOCK",
+        "POST_NOTIFICATIONS"
       ]
     },
     "ios": {
@@ -39,7 +43,10 @@
         "NSBluetoothAlwaysUsageDescription": "Yehsa scans for nearby Yehsa peers only after you tap Scan. It does not scan at launch.",
         "NSBluetoothPeripheralUsageDescription": "Yehsa connects to a Yehsa peer you choose. It does not disconnect a link already held.",
         "NSMicrophoneUsageDescription": "Yehsa uses the microphone only while you hold or tap to talk on Ask.",
-        "NSSpeechRecognitionUsageDescription": "Yehsa turns that question into text on this device when the recognizer can do that."
+        "NSSpeechRecognitionUsageDescription": "Yehsa turns that question into text on this device when the recognizer can do that.",
+        "UIBackgroundModes": [
+          "audio"
+        ]
       }
     },
     "plugins": [
@@ -97,6 +104,7 @@
           "microphonePermission": false
         }
       ],
+      "./plugins/withRadioBackground.js",
       [
         "expo-camera",
         {
