@@ -24,6 +24,9 @@ export function isHeading(line) {
   if (text.length < 3 || text.length > 90) return false;
   if (/[.,;:]$/.test(text) && !/^(?:chapter|section|part|appendix)\b/i.test(text)) return false;
   if (!/[A-Za-z]{2}/.test(text)) return false;
+  // Dates, page labels and table rows ("September 19, 2026", "2-22 ATP 3-50.21") are not headings.
+  if (text.replace(/[^A-Za-z]/g, "").length < text.replace(/\s/g, "").length * 0.6) return false;
+  if (/^(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d/i.test(text)) return false;
   if (/^(?:chapter|section|part|appendix|annex)\s+[\dA-Z]+\b/i.test(text)) return true;
   const letters = text.replace(/[^A-Za-z]/g, "");
   if (letters.length >= 4 && letters === letters.toUpperCase()) return true;

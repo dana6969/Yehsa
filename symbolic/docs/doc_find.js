@@ -89,7 +89,7 @@ export function rankDocResults(results, query) {
     const fileBonus = kind === "pdf" ? 0.35 : kind === "epub" || kind === "text" ? 0.25 : 0;
     out.push({
       url: result.url,
-      title: result.title || file || host,
+      title: String(result.title || file || host).replace(/^\s*\[?(?:PDF|EPUB|TXT)\]?\s+/i, ""),
       site: host,
       format: kind,
       snippet: result.snippet || "",

@@ -6,7 +6,7 @@
 
 import { queryTokens, tokenForms } from "../book_search.js";
 import { coverage, questionGroups, splitSentences } from "../web/answer_builder.js";
-import { looksLikeInstruction } from "../web/sanitize.js";
+import { looksLikeInstruction, sensitiveKind } from "../web/sanitize.js";
 import { ADVICE_LINE, adviceKind } from "../web/web_search.js";
 import { sectionRef } from "./doc_sections.js";
 
@@ -220,7 +220,9 @@ const DOSE = /\b(?:dose|dosage|dosing|mg|milligrams?|mcg|tablets?|pills?|capsule
 
 export function docAdvice(question, text) {
   const kind = adviceKind(question);
-  if (DOSE.test(question) || DOSE.test(text)) return "Check the source; this is not dosing advice. Confirm any dose with a pharmacist or doctor.";
+  const sensitive = sensitiveKind(text, question);
+  if (DOSE.test(question) || DOSE.test(text) || sensitive === "dosing") return "Check the source; this is not dosing advice. Confirm any dose with a pharmacist or doctor.";
+  if (sensitive === "plant-toxicity") return "Check the source; do not use this alone to decide whether to eat or touch a plant or mushroom.";
   return kind ? ADVICE_LINE[kind] : null;
 }
 
@@ -268,6 +270,9 @@ export function quotePassages(hits, question) {
       lines.push(line);
       len += line.length + 1;
     }
+    // A quote ends on a whole sentence; a line cut off by a column or a table is dropped.
+    while (lines.length && !/[.!?]["”')\]]?$/.test(lines[lines.length - 1])) lines.pop();
+    len = lines.reduce((n, line) => n + line.length + 1, 0);
     if (!lines.length || (passages.length && len < 60)) continue;
     passages.push({ hit: best.hit, cov: best.cov, text: lines.join(" ") });
     chars += len;
