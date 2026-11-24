@@ -172,7 +172,8 @@
 "not": "Do not lecture or force a child to talk.",
 "call": "Ask a pediatrician or counselor if distress lasts more than a few weeks.",
 "rel": [
-"talk_kids_emergency"
+"talk_kids_emergency",
+"grief_after_loss"
 ],
 "src": [
 "samhsa",
@@ -222,7 +223,10 @@
 "use": "Listen without judging, ask directly about suicide if worried, lock up guns and medicines, and call or text 988 together.",
 "not": "Do not promise secrecy about safety or wait for it to pass.",
 "call": "Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
-"rel": [],
+"rel": [
+"suicidal_thoughts_help",
+"helping_friend_crisis"
+],
 "src": [
 "988",
 "nimh"

@@ -1,0 +1,102 @@
+[
+ {
+  "symbol": "panic_attack_help",
+  "title": "Panic attack: what to do",
+  "context": "A panic attack is a sudden wave of fear with a racing heart, fast breathing, shaking, or a sense of doom; it peaks within minutes and passes. Also called panic attack, can't breathe panic, heart racing anxiety, freaking out. Look for fast breathing, tingling hands, chest tightness; a strong urge to flee. Sit down, breathe out slowly, longer than you breathe in, name five things you can see, and remind yourself it will pass. Stay with someone who is panicking and speak calmly."
+ },
+ {
+  "symbol": "scared_lost_calm",
+  "title": "Scared or lost: calming down so you can act",
+  "context": "Fear in a bad situation is normal; slowing your breathing and taking one small practical step at a time brings back clear thinking. Also called I am scared, I think we are lost and I'm scared, afraid in the woods, calm down. Look for racing thoughts and an urge to hurry; a group arguing or splitting up. Stop, sit, breathe slowly, then do the next useful thing: check water, warmth, and shelter, look at the map, and decide together."
+ },
+ {
+  "symbol": "suicidal_thoughts_help",
+  "title": "Thoughts of suicide or not wanting to be here",
+  "context": "Thoughts of suicide or of not wanting to be alive are a sign of serious pain and deserve immediate support, not judgment. Also called I don't want to be here, suicidal, want to die, friend talking about suicide, kill myself. Look for talk of being a burden or wanting to die; giving things away or saying goodbye."
+ },
+ {
+  "symbol": "acute_stress_close_call",
+  "title": "Shaken after a close call, crash, or bad hunt",
+  "context": "After a frightening event it is common to feel shaky, numb, jumpy, or replay it for days; for most people these reactions fade over a few weeks. Also called acute stress, shaken up after accident, can't stop thinking about it, trauma after close call. Look for trouble sleeping and replaying the event; feeling on edge or numb. Get safe, warm, and fed, talk with someone you trust, keep simple routines, and give it time."
+ },
+ {
+  "symbol": "grief_after_loss",
+  "title": "Grief after a death, and grief after a kill",
+  "context": "Grief is the natural response to loss; it can come in waves of sadness, anger, guilt, or numbness, and some hunters feel a quieter grief after a kill. Also called grief, someone died, sad after killing a deer, hunter remorse, grieving. Look for waves of feeling that come and go; tiredness and poor sleep. Let the feelings come, talk with people who care, keep basic routines, and honor the loss in your own way."
+ },
+ {
+  "symbol": "when_get_help",
+  "title": "When to get professional mental health help",
+  "context": "Professional help makes sense when distress lasts for weeks, gets in the way of work, sleep, or family, or includes thoughts of self-harm. Also called need a therapist, mental health help, find counseling, 988 lifeline. Look for low mood or worry most days for two weeks or more; drinking or drug use to cope. Talk to a doctor or a licensed counselor; the 988 Lifeline is free, confidential, and available 24/7 by call or text."
+ },
+ {
+  "symbol": "exhaustion_bad_decisions",
+  "title": "Exhaustion, poor sleep, and bad decisions in the field",
+  "context": "Fatigue, cold, hunger, and poor sleep slow thinking and make people take risks they would never take rested. Also called too tired to think, sleep deprived, fatigue mistakes, exhausted hiking. Look for clumsiness and short temper; pushing on to reach a goal despite warning signs. Stop, eat, drink, warm up, and rest before any big decision; set a turnaround time and keep it."
+ },
+ {
+  "symbol": "alcohol_outdoors_risk",
+  "title": "Alcohol and drugs as a way to cope outdoors",
+  "context": "Alcohol and drugs can feel like relief, but outdoors they raise the risk of hypothermia, falls, drowning, and firearm accidents, and they deepen low mood afterward. Also called drinking at camp, alcohol and hypothermia, drunk hunting, using to cope. Look for drinking to sleep or calm down; drinking around water, fire, or firearms. Keep alcohol away from firearms, boats, and climbing, and look for other ways to unwind: food, warmth, talk, and rest."
+ },
+ {
+  "symbol": "helping_friend_crisis",
+  "title": "Helping a friend in crisis",
+  "context": "Helping a friend in crisis mostly means staying with them, listening without fixing, and connecting them with help. Also called friend in crisis, how to help someone struggling, listen to a friend, someone is not okay. Look for a friend withdrawing or talking about hopelessness; sudden changes in behavior. Ask how they are and listen, say you care, ask directly about suicide if you are worried, and help them call or text 988 or a professional."
+ },
+ {
+  "symbol": "anxiety_before_event",
+  "title": "Anxiety before a storm, trip, or hunt",
+  "context": "Worry before a storm or a big trip is common; preparing, planning, and calming the body bring it down to a useful level. Also called nervous before trip, storm anxiety, worried about hunt, pre-trip anxiety. Look for racing thoughts at night; tight chest or upset stomach. Make a short checklist, do one preparation step, then do something calming such as slow breathing or a walk."
+ },
+ {
+  "symbol": "grounding_breathing",
+  "title": "Slow breathing and grounding",
+  "context": "Slow breathing and grounding are simple ways to calm a racing body and mind: breathe out longer than in, and notice what is around you. Also called breathing exercise, grounding technique, 5 4 3 2 1, calm my nerves. Look for breathing in for about four counts, out for six; naming five things you see, four you hear, three you can touch. Sit or stand steady, breathe slowly for a few minutes, and name what you sense around you."
+ },
+ {
+  "symbol": "low_mood_winter",
+  "title": "Low mood in short winter days or isolation",
+  "context": "Many people feel lower in short, dark days or in isolation; some have seasonal affective disorder, a form of depression that returns each winter. Also called winter blues, seasonal depression, SAD, sad in winter. Look for low energy, oversleeping, and craving carbohydrates in winter; loss of interest that lasts weeks. Get outside in daylight, move your body, keep regular sleep and meals, and stay in touch with people."
+ },
+ {
+  "symbol": "loneliness_help",
+  "title": "Loneliness",
+  "context": "Loneliness is the painful feeling of being disconnected; it is common and it affects health, and small regular contact helps. Also called lonely, isolated, no one to talk to. Look for long stretches without talking to anyone; feeling unseen even around people. Reach out to one person today, join a regular activity, help someone else, and keep in touch on a schedule."
+ },
+ {
+  "symbol": "anger_conflict_group",
+  "title": "Anger and conflict in a family or group under stress",
+  "context": "Stress, hunger, cold, and fatigue shorten tempers; groups do better when they pause, meet basic needs, and decide calmly. Also called arguing in group, family fighting during outage, hunt party conflict, losing temper. Look for raised voices and blame; people splitting off. Take a break, eat and warm up, let each person speak, and agree on one next step together."
+ },
+ {
+  "symbol": "shame_after_mistake",
+  "title": "Shame after a mistake",
+  "context": "After a mistake, shame can feel overwhelming; owning what happened, making it right where you can, and learning from it is healthier than self-punishment. Also called I messed up, feel ashamed, my fault, guilt after mistake. Look for replaying the mistake; hiding it from others. Name what happened, take one step to repair or learn, and talk to someone you trust."
+ },
+ {
+  "symbol": "caregiver_burnout",
+  "title": "Caregiver or parent burnout in a long outage",
+  "context": "Caring for others through a long outage or crisis drains people; burnout shows up as exhaustion, irritability, and feeling numb. Also called burned out parent, caregiver stress, exhausted caring for family. Look for no time to eat or sleep yourself; snapping at people you care for. Share tasks, take short breaks, eat and sleep when you can, and ask neighbors or relatives for help."
+ },
+ {
+  "symbol": "trauma_find_clinician",
+  "title": "Finding help for lasting trauma",
+  "context": "When nightmares, flashbacks, or avoidance last more than a month after a frightening event, it may be post-traumatic stress, and effective treatment exists. Also called PTSD, trauma therapy, find a therapist, nightmares months later. Look for flashbacks or nightmares; avoiding reminders. Talk to a doctor or a licensed mental health professional; veterans can use VA services, and SAMHSA's helpline can point to local care."
+ },
+ {
+  "symbol": "morale_routines",
+  "title": "Routines that keep morale up",
+  "context": "Simple routines such as regular meals, daylight, movement, shared tasks, and time with others keep morale steady through long hard periods. Also called keep spirits up, morale in survival, daily routine crisis. Look for meals at regular times; a daily walk or chore outside. Set a daily rhythm, give everyone a job, and mark small successes."
+ },
+ {
+  "symbol": "veterans_support",
+  "title": "Support for veterans",
+  "context": "Veterans and their families can reach the Veterans Crisis Line by calling 988 and pressing 1, by text, or by chat, and VA offers mental health care. Also called veterans crisis line, veteran struggling, VA mental health. Look for a veteran withdrawing or drinking more; anniversary dates of hard events. Call 988 and press 1, or text 838255, and connect with VA mental health services."
+ },
+ {
+  "symbol": "stress_after_disaster",
+  "title": "Stress after a disaster",
+  "context": "After a disaster, people often feel anxious, sad, angry, or numb, have trouble sleeping, and worry about money and home; support and time help most recover. Also called disaster stress, after the storm stress, can't cope after flood. Look for trouble sleeping or concentrating; headaches or stomach upset. Take care of basics, stay connected, limit news, take breaks from cleanup, and use crisis counseling if you need it."
+ }
+]

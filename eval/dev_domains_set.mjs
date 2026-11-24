@@ -1122,5 +1122,225 @@ export const DOMAIN_DEV_SET = [
     "children and water"
    ]
   }
+ },
+ {
+  "id": "dom-panic-attack-help",
+  "category": "domain-mental",
+  "prompt": "Tell me about panic attack",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "panic attack"
+   ]
+  }
+ },
+ {
+  "id": "dom-scared-lost-calm",
+  "category": "domain-mental",
+  "prompt": "Tell me about afraid in the woods",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "scared or lost"
+   ]
+  }
+ },
+ {
+  "id": "dom-suicidal-thoughts-help",
+  "category": "domain-mental",
+  "prompt": "Tell me about suicidal",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "thoughts of suicide or not wanting to be here"
+   ]
+  }
+ },
+ {
+  "id": "dom-acute-stress-close-call",
+  "category": "domain-mental",
+  "prompt": "Tell me about acute stress",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "shaken after a close call, crash, or bad hunt"
+   ]
+  }
+ },
+ {
+  "id": "dom-grief-after-loss",
+  "category": "domain-mental",
+  "prompt": "Tell me about hunter remorse",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "grief after a death, and grief after a kill"
+   ]
+  }
+ },
+ {
+  "id": "dom-when-get-help",
+  "category": "domain-mental",
+  "prompt": "Tell me about need a therapist",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "when to get professional mental health help"
+   ]
+  }
+ },
+ {
+  "id": "dom-exhaustion-bad-decisions",
+  "category": "domain-mental",
+  "prompt": "Tell me about too tired to think",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "exhaustion, poor sleep, and bad decisions in the field"
+   ]
+  }
+ },
+ {
+  "id": "dom-alcohol-outdoors-risk",
+  "category": "domain-mental",
+  "prompt": "Tell me about drinking at camp",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "alcohol and drugs as a way to cope outdoors"
+   ]
+  }
+ },
+ {
+  "id": "dom-helping-friend-crisis",
+  "category": "domain-mental",
+  "prompt": "Tell me about friend in crisis",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "helping a friend in crisis"
+   ]
+  }
+ },
+ {
+  "id": "dom-anxiety-before-event",
+  "category": "domain-mental",
+  "prompt": "Tell me about nervous before trip",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "anxiety before a storm, trip, or hunt"
+   ]
+  }
+ },
+ {
+  "id": "dom-grounding-breathing",
+  "category": "domain-mental",
+  "prompt": "Tell me about breathing exercise",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "slow breathing and grounding"
+   ]
+  }
+ },
+ {
+  "id": "dom-low-mood-winter",
+  "category": "domain-mental",
+  "prompt": "Tell me about winter blues",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "low mood in short winter days or isolation"
+   ]
+  }
+ },
+ {
+  "id": "dom-loneliness-help",
+  "category": "domain-mental",
+  "prompt": "Tell me about lonely",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "loneliness"
+   ]
+  }
+ },
+ {
+  "id": "dom-anger-conflict-group",
+  "category": "domain-mental",
+  "prompt": "Tell me about arguing in group",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "anger and conflict in a family or group under stress"
+   ]
+  }
+ },
+ {
+  "id": "dom-shame-after-mistake",
+  "category": "domain-mental",
+  "prompt": "Tell me about feel ashamed",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "shame after a mistake"
+   ]
+  }
+ },
+ {
+  "id": "dom-caregiver-burnout",
+  "category": "domain-mental",
+  "prompt": "Tell me about burned out parent",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "caregiver or parent burnout in a long outage"
+   ]
+  }
+ },
+ {
+  "id": "dom-trauma-find-clinician",
+  "category": "domain-mental",
+  "prompt": "Tell me about PTSD",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "finding help for lasting trauma"
+   ]
+  }
+ },
+ {
+  "id": "dom-morale-routines",
+  "category": "domain-mental",
+  "prompt": "Tell me about keep spirits up",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "routines that keep morale up"
+   ]
+  }
+ },
+ {
+  "id": "dom-veterans-support",
+  "category": "domain-mental",
+  "prompt": "Tell me about veterans crisis line",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "support for veterans"
+   ]
+  }
+ },
+ {
+  "id": "dom-stress-after-disaster",
+  "category": "domain-mental",
+  "prompt": "Tell me about disaster stress",
+  "expect": {
+   "kind": "facts",
+   "all": [
+    "stress after a disaster"
+   ]
+  }
  }
 ];
