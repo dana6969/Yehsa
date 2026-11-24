@@ -19,7 +19,7 @@ export function routeService() {
 
 export { ROAD_NOTE };
 
-export function useRoute({ origin }) {
+export function useRoute({ origin, nearFallback }) {
   const [prefs, setPrefs] = useState({ online: false, profile: "drive", voice: true });
   const [query, setQuery] = useState("");
   const [results, setResults] = useState(null);
@@ -62,7 +62,9 @@ export function useRoute({ origin }) {
     setSearching(true);
     setNotes([]);
     try {
-      const res = await routeService().search(q, { near: originRef.current || null, online: prefs.online });
+      // Bias toward where you are, or toward where the map is looking when GPS is off.
+      const near = originRef.current || (typeof nearFallback === "function" ? nearFallback() : null) || null;
+      const res = await routeService().search(q, { near, online: prefs.online });
       setResults(res.results);
       setNotes(res.notes);
       if (autoPick && res.results.length) {

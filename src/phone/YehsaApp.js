@@ -1707,7 +1707,10 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
   const crumbs = gps.track.length ? gps.track : track;
   // Search, destination, route and Start (regular Map only; the Hunt view keeps its own taps).
   const routeOrigin = useMemo(() => (held ? { latitude: held.latitude, longitude: held.longitude, accuracy: gps.accuracyM } : null), [held?.latitude, held?.longitude, gps.accuracyM]);
-  const nav = useRoute({ origin: routeOrigin });
+  const nav = useRoute({
+    origin: routeOrigin,
+    nearFallback: () => (camera.current?.center ? { longitude: camera.current.center[0], latitude: camera.current.center[1] } : null)
+  });
   const [stepsOpen, setStepsOpen] = useState(false);
   useBackLayer(stepsOpen, () => setStepsOpen(false));
   useBackLayer(Boolean(nav.results), () => nav.setResults(null));
@@ -1873,7 +1876,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
               }}
             />
           </MapBoundary>
-        ) : layers.empty ? (
+        ) : layers.empty && !(nav.route && !hunt) ? (
           <View style={styles.emptyMap} accessibilityLabel="No map pack yet">
             <Text accessibilityRole="header" style={styles.emptyTitle}>No map pack yet</Text>
             <Text style={styles.emptyBody}>Download a region to see land, water, and terrain. The map stays quiet until a pack is on this phone.</Text>
@@ -1940,7 +1943,7 @@ function LandPane({ active, position, setPosition, onConsent, waypoints, track, 
           <ScrollView contentContainerStyle={styles.sheetScroll}>
             {about.lines.map((line) => <Text key={line} style={styles.aboutLine}>{line}</Text>)}
             <Quiet>{about.credit}</Quiet>
-            <Quiet>No streets, parcels, or owner names are stored on this phone.</Quiet>
+            <Quiet>Search and routes use a road and place list built into Yehsa for the map-pack states: © OpenStreetMap contributors, ODbL 1.0. Online search and routes are off until you turn them on in the Map search (Photon by Komoot, OSM Nominatim, and OSRM on routing.openstreetmap.de). No traffic data. No owner names.</Quiet>
           </ScrollView>
         </View>
       ) : null}

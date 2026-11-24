@@ -104,7 +104,10 @@ export function createRouteService({ loadAsset, fetchImpl = globalThis.fetch, no
         }
       }
     };
-    for (const [i, id] of ids.entries()) await searchIn(id, i === 0);
+    // Streets are read from the road graph of the first region only, and only when that region
+    // is where you are or the state you named (not when every state is being searched).
+    const streetsOk = Boolean(regions || parsed.state || local.length);
+    for (const [i, id] of ids.entries()) await searchIn(id, streetsOk && i === 0);
     if (fallback && !kinds && !found.some((f) => f.score >= 60)) {
       for (const r of ROUTE_REGIONS) if (!ids.includes(r.id)) await searchIn(r.id, false);
     }
