@@ -90,7 +90,8 @@ export function cleanFetched(raw, { html = false, maxChars = 1200 } = {}) {
   let removed = 0;
   const kept = [];
   for (const line of lines) {
-    const sentences = line.match(/[^.!?]+(?:[.!?]+(?=\s|$)|$)/g) || [line];
+    // A sentence ends at . ! or ? followed by a space or the end. "3-50.21" and "0.5%" stay whole.
+    const sentences = line.match(/(?:[^.!?]|[.!?]+(?=\S))+(?:[.!?]+)?/g) || [line];
     const good = [];
     for (const sentence of sentences) {
       if (looksLikeInstruction(sentence)) removed += 1;
