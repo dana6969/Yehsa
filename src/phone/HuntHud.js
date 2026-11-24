@@ -1,6 +1,6 @@
 // The Hunt view's three cards: Legal light, Wind, Deer. Each one is real and tappable.
 import React, { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View, useWindowDimensions } from "react-native";
 import { Action, Quiet, themedStyles, useDisplay, colors } from "./ui.js";
 import { Chips, Line, SourceTag } from "./hunt_ui.js";
 import { setHunt, useHunt } from "./hunt_state.js";
@@ -11,6 +11,9 @@ import { DISCLAIMER } from "../../symbolic/hunt/deer_estimate.js";
 export default function HuntHud({ position, onOpenTool, onOpenWind }) {
   const hunt = useHunt();
   const display = useDisplay();
+  const { height } = useWindowDimensions();
+  // The detail card stays short so the map under it keeps a usable, tappable piece.
+  const sheetMax = Math.max(150, Math.min(220, Math.round(height * 0.26)));
   const [open, setOpen] = useState("");
   const cond = conditionsFor(hunt, { position, now: Date.now(), offsetMinutes: -new Date().getTimezoneOffset() });
   const cards = hudCards(cond);
@@ -25,7 +28,7 @@ export default function HuntHud({ position, onOpenTool, onOpenWind }) {
         <HudCard label="Deer" value={cards.deer.value} sub={cards.deer.sub} onPress={() => toggle("deer")} active={open === "deer"} />
       </View>
       {open === "legal" ? (
-        <ScrollView style={[styles.sheet, { borderColor: display.line }]} nestedScrollEnabled>
+        <ScrollView style={[styles.sheet, { borderColor: display.line, maxHeight: sheetMax }]} nestedScrollEnabled>
           {light?.ok ? (
             <>
               <Line label="Sunrise" value={light.sunriseText} />
@@ -35,9 +38,9 @@ export default function HuntHud({ position, onOpenTool, onOpenWind }) {
             </>
           ) : <Quiet>{light?.text || "Need a location to estimate legal light."}</Quiet>}
           <Text style={styles.group}>STATE</Text>
-          <Chips label="State" value={hunt.legal.state} onChange={(id) => setHunt("legal", (current) => ({ ...current, state: current.state === id ? "" : id }))} options={STATES.map((state) => ({ id: state.code, label: state.code }))} />
+          <Chips scroll label="State" value={hunt.legal.state} onChange={(id) => setHunt("legal", (current) => ({ ...current, state: current.state === id ? "" : id }))} options={STATES.map((state) => ({ id: state.code, label: state.code }))} />
           <Text style={styles.group}>WHAT YOU HUNT</Text>
-          <Chips label="Species" value={hunt.legal.species} onChange={(id) => setHunt("legal", (current) => ({ ...current, species: id }))} options={SPECIES.map((item) => ({ id: item.id, label: item.name }))} />
+          <Chips scroll label="Species" value={hunt.legal.species} onChange={(id) => setHunt("legal", (current) => ({ ...current, species: id }))} options={SPECIES.map((item) => ({ id: item.id, label: item.name }))} />
           {light?.warning ? <Quiet>{light.warning}</Quiet> : null}
           {(light?.notes || []).map((note) => <Quiet key={note}>{note}</Quiet>)}
           {light?.source ? <Quiet>Source: {light.source.title}. Season {light.season}. Read {light.source.read}.</Quiet> : null}
@@ -45,7 +48,7 @@ export default function HuntHud({ position, onOpenTool, onOpenWind }) {
         </ScrollView>
       ) : null}
       {open === "deer" ? (
-        <ScrollView style={[styles.sheet, { borderColor: display.line }]} nestedScrollEnabled>
+        <ScrollView style={[styles.sheet, { borderColor: display.line, maxHeight: sheetMax }]} nestedScrollEnabled>
           {est ? (
             <>
               <Text style={styles.level}>{est.level === "Medium" ? "Med" : est.level}. {DISCLAIMER}</Text>
@@ -91,7 +94,7 @@ const styles = themedStyles((c) => ({
   cardLabel: { fontSize: 11, fontWeight: "700", letterSpacing: 0.8 },
   cardValue: { color: c.ink, fontWeight: "700" },
   cardSub: { lineHeight: 16 },
-  sheet: { maxHeight: 280, borderWidth: 1, borderRadius: 14, backgroundColor: c.surface, padding: 12 },
+  sheet: { maxHeight: 220, borderWidth: 1, borderRadius: 14, backgroundColor: c.surface, padding: 12 },
   group: { color: c.muted, fontSize: 12, fontWeight: "700", letterSpacing: 1, marginTop: 6, marginBottom: 6 },
   level: { color: c.ink, fontSize: 20, fontWeight: "700" },
   factor: { borderTopWidth: 1, borderTopColor: c.line, paddingTop: 6, marginTop: 6 },
