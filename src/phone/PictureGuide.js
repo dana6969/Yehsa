@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import manifest from "../../assets/pictures/manifest.json";
 import { pictureSource } from "../../symbolic/picture_assets.js";
-import { creditLine, guideView, imageHref, packDecision, pictureHealth, PICTURE_BUDGET_BYTES } from "../../symbolic/picture_guide.js";
+import { creditLine, guideView, imageHref, packDecision, pictureHealth, pictureSourceName, PICTURE_BUDGET_BYTES } from "../../symbolic/picture_guide.js";
 import { Quiet, ScreenHeader, colors, themedStyles } from "./ui.js";
 
 // A picture that is not in the app shows a labeled box, never a silent empty one.
@@ -24,7 +24,9 @@ const missingStyles = themedStyles((colors) => ({
   text: { color: colors.muted, fontSize: 12, textAlign: "center" }
 }));
 
-const DOMAINS = ["", "herbology", "first-aid", "knots", "fire", "shelter", "water", "sky", "landscape", "signaling"];
+const DOMAINS = ["", "plants", "trees", "mushrooms", "foraging", "animals", "tracks-scat", "herbology", "first-aid", "knots", "fire", "shelter", "water", "sky", "landscape", "signaling"];
+// A closed card shows a few thumbnails; the rest appear when it is opened.
+const THUMBS = 4;
 
 export default function PictureGuide({ onBack, backLabel, initialDomain = "", initialSymbol = "" }) {
   // initialSymbol opens one entry, for example from Identify's "Picture guide" button.
@@ -35,8 +37,8 @@ export default function PictureGuide({ onBack, backLabel, initialDomain = "", in
   const bytes = (manifest.images || []).reduce((sum, image) => sum + (Number(image.bytes) || 0), 0);
   const decision = packDecision(bytes || 391744);
 
-  return (
-    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+  const header = (
+    <View style={styles.headerBox}>
       <ScreenHeader
         onBack={onBack}
         backLabel={backLabel}
@@ -52,33 +54,50 @@ export default function PictureGuide({ onBack, backLabel, initialDomain = "", in
           </Pressable>
         ))}
       </View>
-      {entries.map((entry) => (
-        <Pressable key={entry.symbol} accessibilityRole="button" accessibilityLabel={entry.title} onPress={() => setOpen(open === entry.symbol ? null : entry.symbol)} style={styles.card}>
+    </View>
+  );
+
+  // A FlatList renders only the cards near the screen, so hundreds of field photos stay light.
+  return (
+    <FlatList
+      data={entries}
+      keyExtractor={(entry) => entry.symbol}
+      ListHeaderComponent={header}
+      contentContainerStyle={styles.scroll}
+      keyboardShouldPersistTaps="handled"
+      initialNumToRender={8}
+      windowSize={5}
+      renderItem={({ item: entry }) => (
+        <Pressable accessibilityRole="button" accessibilityLabel={entry.title} onPress={() => setOpen(open === entry.symbol ? null : entry.symbol)} style={styles.card}>
           <Text style={styles.title}>{entry.title}</Text>
           <Quiet>{entry.domain}</Quiet>
           {entry.placeholder ? <Text style={styles.placeholder}>No picture yet.</Text> : null}
           {entry.caution ? <Text style={styles.warn}>{entry.caution}</Text> : null}
           <View style={styles.row}>
-            {entry.images.map((image) => (
+            {entry.images.slice(0, THUMBS).map((image) => (
               <GuideImage key={image.id} image={image} style={styles.thumb} />
             ))}
+            {entry.images.length > THUMBS ? <Quiet>{`+${entry.images.length - THUMBS} more`}</Quiet> : null}
           </View>
           {open === entry.symbol ? entry.images.map((image) => (
             <View key={`${image.id}-full`}>
+              {image.caption ? <Text style={styles.caption}>{image.caption}</Text> : null}
               {image.warning ? <Text style={styles.warn}>{image.warning}</Text> : null}
-              {image.role === "lookalike" ? <Text style={styles.warn}>Look-alike warning. This is not the plant in the note.</Text> : null}
+              {image.role === "lookalike" ? <Text style={styles.warn}>Look-alike warning. This is not the species in the note.</Text> : null}
               <GuideImage image={image} style={styles.zoom} fit="contain" />
-              <Quiet>{`${creditLine(image)}. Source: Wikimedia Commons.`}</Quiet>
+              <Quiet>{`${creditLine(image)}.${pictureSourceName(image) ? ` Source: ${pictureSourceName(image)}.` : ""}`}</Quiet>
             </View>
           )) : null}
         </Pressable>
-      ))}
-    </ScrollView>
+      )}
+    />
   );
 }
 
 const styles = themedStyles((colors) => ({
   scroll: { paddingTop: 22, paddingHorizontal: 22, paddingBottom: 180, gap: 10 },
+  headerBox: { gap: 10, marginBottom: 10 },
+  caption: { color: colors.ink, fontSize: 15, fontWeight: "600" },
   input: { minHeight: 48, color: colors.ink, backgroundColor: colors.surface, borderRadius: 12, paddingHorizontal: 12 },
   row: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   chip: { minHeight: 44, paddingHorizontal: 12, borderRadius: 999, borderWidth: 1, borderColor: colors.lineStrong, justifyContent: "center" },

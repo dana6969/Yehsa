@@ -1,9 +1,16 @@
 // Picture guide metadata. This module does not read image bytes.
 // A picture is never treated as a safe identification.
 
-export const PICTURE_BUDGET_BYTES = 150 * 1024 * 1024;
+import { FIELD_GUIDE_ENTRIES } from "./picture_guide_field.js";
+
+// Round 4: the whole app may be up to 2 GB. Pictures may use up to 1.5 GB of that, leaving room for the
+// app, models, maps, and books. assets/pictures/packs.json lists bytes per category for later Play Asset
+// Delivery packs.
+export const APP_SIZE_LIMIT_BYTES = 2 * 1024 * 1024 * 1024;
+export const PICTURE_BUDGET_BYTES = 1536 * 1024 * 1024;
 
 export const PLANT_CAUTION = "A picture is not a safe identification. Never eat or use a plant from a photo alone. Look-alikes can be toxic.";
+export const MUSHROOM_CAUTION = "A picture is not a safe identification. Never eat a wild mushroom from a photo alone. Deadly look-alikes exist.";
 
 const ALLOWED = /^(public domain|cc0|cc zero|cc by( [0-9.]+)?( [a-z]{2})?|cc by-sa( [0-9.]+)?( [a-z]{2})?)$/i;
 const FORBIDDEN = /\b(nc|nd|gfdl|all rights|fair use|no restrictions)\b/i;
@@ -33,6 +40,15 @@ export const GUIDE_ENTRIES = [
   { symbol: "watershed", title: "Watershed", domain: "landscape", plant: false },
   { symbol: "signaling", title: "Signaling", domain: "signaling", plant: false }
 ];
+// One entry per camera-label note with field photos (plants, trees, mushrooms, animals, tracks and scat),
+// plus foraging entries that show example photos. Notes already listed above keep their first entry.
+const LISTED = new Set(GUIDE_ENTRIES.map((entry) => entry.symbol));
+for (const entry of FIELD_GUIDE_ENTRIES) {
+  if (!LISTED.has(entry.symbol)) {
+    GUIDE_ENTRIES.push(entry);
+    LISTED.add(entry.symbol);
+  }
+}
 
 export function licenseAllowed(license) {
   const text = String(license || "").trim();
@@ -42,6 +58,16 @@ export function licenseAllowed(license) {
 
 export function picturesFor(manifest, symbol) {
   return (manifest?.images || []).filter((image) => image.symbol === symbol);
+}
+
+// Pictures shown under an Ask answer: up to three of the note's own photos, then one look-alike or example,
+// so a chat bubble stays short. The picture guide shows all of them.
+export function answerPictures(manifest, symbol, limit = 4) {
+  const all = picturesFor(manifest, symbol);
+  const own = all.filter((image) => image.role !== "lookalike" && image.role !== "example");
+  const other = all.filter((image) => image.role === "lookalike" || image.role === "example");
+  const pick = own.slice(0, Math.max(1, limit - (other.length ? 1 : 0)));
+  return [...pick, ...other].slice(0, limit);
 }
 
 export function guideView(manifest, { query = "", domain = "" } = {}) {
@@ -56,7 +82,7 @@ export function guideView(manifest, { query = "", domain = "" } = {}) {
       ...entry,
       images,
       placeholder: images.length === 0,
-      caution: entry.plant ? PLANT_CAUTION : ""
+      caution: entry.mushroom ? MUSHROOM_CAUTION : entry.plant ? PLANT_CAUTION : ""
     };
   });
 }
@@ -90,7 +116,7 @@ export function packDecision(totalBytes) {
       included: false,
       optionalPack: true,
       bytes,
-      text: "The pictures are over 150 MB, so they stay an optional pack and are not inside the core install."
+      text: "The pictures are over the 1.5 GB picture budget, so they stay an optional pack and are not inside the core install."
     };
   }
   return {
@@ -131,6 +157,14 @@ export function creditLine(image) {
   if (!license || author.toLowerCase().includes(license.toLowerCase())) return author || license;
   if (!author) return license;
   return `${author}, ${license}`;
+}
+
+// Where a picture came from, for the credit line.
+export function pictureSourceName(image) {
+  const url = String(image?.sourceUrl || "");
+  if (/inaturalist\.org/.test(url)) return "iNaturalist";
+  if (/commons\.wikimedia\.org/.test(url)) return "Wikimedia Commons";
+  return "";
 }
 
 export function imageHref(file) {
