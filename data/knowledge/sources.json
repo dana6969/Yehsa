@@ -274,5 +274,41 @@
   "short": "Ready.gov",
   "license": "Public domain (US government work)",
   "url": "https://www.ready.gov/"
+ },
+ "foodsafety-gov": {
+  "name": "FoodSafety.gov, Safe Minimum Internal Temperature Chart (reviewed Nov. 21, 2024)",
+  "short": "FoodSafety.gov",
+  "license": "Public domain (US government work)",
+  "url": "https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures"
+ },
+ "ndsu-game": {
+  "name": "NDSU Extension FN536, A Pocket Guide for the Care and Handling of Deer and Elk (reviewed April 2024)",
+  "short": "NDSU Extension FN536",
+  "license": "Cited with original wording (land-grant extension). No text copied.",
+  "url": "https://www.ndsu.edu/agriculture/extension/publications/pocket-guide-care-and-handling-deer-and-elk"
+ },
+ "adfg-gutless": {
+  "name": "Alaska Department of Fish and Game, Field Dressing Big Game: how to field dress a big game animal using the gutless method (2017)",
+  "short": "ADF&G gutless method",
+  "license": "Cited with original wording (state wildlife agency). Brochure illustrations are copyrighted and are not bundled.",
+  "url": "https://www.adfg.alaska.gov/static/hunting/pdfs/field_dressing_big_game_gutless_method.pdf"
+ },
+ "ncwildlife-dress": {
+  "name": "North Carolina Wildlife Resources Commission, Field Dressing and Transporting Wild Game",
+  "short": "NC Wildlife field dressing",
+  "license": "Cited with original wording (state wildlife agency). No text copied.",
+  "url": "https://www.ncwildlife.gov/hunting/after-hunt/field-dressing-and-transporting-wild-game"
+ },
+ "idfg-field": {
+  "name": "Idaho Fish and Game, From field to freezer: tips for processing your big game animal (2016)",
+  "short": "Idaho Fish and Game",
+  "license": "Cited with original wording (state wildlife agency). No text copied.",
+  "url": "https://idfg.idaho.gov/press/field-freezer-tips-processing-your-big-game-animal-0"
+ },
+ "ecfr-mbta": {
+  "name": "50 CFR 20.43, species identification requirement for transporting migratory game birds",
+  "short": "50 CFR 20.43",
+  "license": "Public domain (US government work)",
+  "url": "https://www.ecfr.gov/current/title-50/chapter-I/subchapter-B/part-20/subpart-E/section-20.43"
  }
 }

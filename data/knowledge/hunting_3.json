@@ -6,26 +6,39 @@
 "also": [
 "quarter a deer",
 "pack out meat",
-"gutless method",
-"boning out a deer"
+"boning out a deer",
+"how to quarter a deer"
 ],
-"def": "Quartering means cutting a large animal into its four legs plus the backstraps, neck, and other meat so it can be carried out in loads and cooled faster.",
+"def": "Quartering means cutting a large animal into its four legs plus the backstraps, neck, and other meat so it can be carried out in loads and cooled faster; elk and moose often need this, and deer may too in warm weather.",
 "look": [
-"clean game bags for each quarter",
-"a sharp knife and a spare blade",
-"a pack frame or sled for heavy loads"
+"clean game bags for each quarter and for the backstraps",
+"a sharp knife, a spare blade, and a pack frame or sled for heavy loads",
+"meat kept off the dirt and out of the sun"
 ],
-"use": "Skin one side at a time, take the front and hind quarters, backstraps, and tenderloins, bag each piece, and hang or lay the bags in shade to cool before carrying.",
-"not": "Do not leave meat in a pile on the ground in the sun, and check your state's evidence-of-sex and tagging rules before you separate parts.",
+"use": "Skin one side at a time, take the front and hind quarters, backstraps, and tenderloins, bag each piece, and hang or lay the bags in shade with airflow before you carry them. In warm weather, quartering helps a deer cool; elk and moose should be quartered because a large carcass with the hide on can spoil even in freezing temperatures.",
+"not": "Do not leave meat in a pile on the ground in the sun, wrap it in sealed plastic, or stack game bags tightly. Check your state's evidence-of-sex, salvage, and tagging rules before you separate parts.",
 "rel": [
+"gutless_method",
 "field_dressing_deer",
-"meat_care_temperature"
+"meat_care_temperature",
+"evidence_of_sex_tag"
 ],
 "src": [
 "usda-fsis",
 "ihea",
-"state-regs-link"
-]
+"state-regs-link",
+"adfg-gutless",
+"idfg-field",
+"ndsu-game"
+],
+"steps": [
+"Tag the animal if required, put on gloves, and spread a tarp or the hide as a clean surface.",
+"Skin one side and remove the front quarter, hind quarter, backstrap, and tenderloin, then roll the animal and repeat.",
+"Bag each piece in a clean, dry, breathable game bag.",
+"Hang the bags so air can move around them, then pack them out in loads you can carry safely.",
+"Leave evidence of sex naturally attached if your state requires it."
+],
+"ask": "How do I quarter a deer?"
 },
 {
 "id": "skinning_hanging_deer",
@@ -47,11 +60,14 @@
 "not": "Do not hang meat in temperatures above 40 °F for long, and do not let pets or wildlife reach it.",
 "rel": [
 "meat_care_temperature",
-"basic_butcher_cuts"
+"basic_butcher_cuts",
+"field_dressing_deer"
 ],
 "src": [
 "usda-fsis",
-"ihea"
+"ihea",
+"ndsu-game",
+"idfg-field"
 ]
 },
 {
@@ -103,7 +119,8 @@
 "not": "Do not guess the deadline or carry an untagged animal; rules differ by state and change.",
 "rel": [
 "hunt_before_you_go",
-"cwd_awareness"
+"cwd_awareness",
+"evidence_of_sex_tag"
 ],
 "src": [
 "state-regs-link"
@@ -232,7 +249,9 @@
 "use": "Hang meat away from sleeping areas, store food sealed, approach a kill carefully and make noise, and give moose plenty of room.",
 "not": "Do not approach a bear on a carcass or a moose at close range, and do not run from a bear.",
 "rel": [
-"meat_care_temperature"
+"meat_care_temperature",
+"field_dressing_black_bear",
+"field_dressing_moose"
 ],
 "src": [
 "nps",
@@ -245,9 +264,9 @@
 "domain": "hunting",
 "also": [
 "clean a turkey",
-"gut a pheasant",
-"field dress grouse",
-"dress a duck"
+"field dress a bird",
+"gut a bird",
+"dress a game bird"
 ],
 "def": "Birds keep best when the crop and entrails are removed soon after the kill and the body is cooled.",
 "look": [
@@ -258,11 +277,15 @@
 "use": "Remove the entrails and crop, wipe the cavity, and cool the bird quickly; pluck or skin at home.",
 "not": "Do not leave birds in a warm vest or pile them in a closed bag in warm weather.",
 "rel": [
-"game_cooking_temps"
+"game_cooking_temps",
+"field_dressing_turkey",
+"field_dressing_upland_birds",
+"field_dressing_waterfowl"
 ],
 "src": [
 "usda-fsis",
-"fws"
+"fws",
+"foodsafety-gov"
 ]
 },
 {
