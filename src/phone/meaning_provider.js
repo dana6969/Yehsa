@@ -6,3 +6,7 @@ export function meaningSupported() {
 export async function prepareMeaning() {
   return null;
 }
+
+export async function embedNotes() {
+  return null;
+}
