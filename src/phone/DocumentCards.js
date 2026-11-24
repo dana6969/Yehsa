@@ -1,12 +1,14 @@
 // Documents on screen: the search results card in Ask (title, site, size, date, link, Download),
-// and the Documents section under Me, Learned (view, rename, delete, re-index).
+// and the Documents section under Me, Learned (read, rename, delete, re-index). Reading opens the
+// full reader (ReaderScreen.js).
 // Document text is shown as plain text only. Nothing in a document is run, rendered as HTML, or
 // followed; links open only when the person taps them.
 
 import React, { useState } from "react";
-import { Linking, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Linking, Pressable, Text, TextInput, View } from "react-native";
 import { Action, Quiet, colors, themedStyles } from "./ui.js";
 import { documents, useDocuments } from "./documents.js";
+import { openReader } from "./reader_store.js";
 
 function stepText(step, title) {
   if (!step) return null;
@@ -19,6 +21,10 @@ function stepText(step, title) {
 function sizeWord(bytes) {
   if (!bytes) return "";
   return bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+}
+
+function candidates(found) {
+  return found?.candidates?.length || 0;
 }
 
 /** Under "find the ... PDF": the candidates, each with its link and a Download button. */
@@ -36,14 +42,14 @@ export function DocumentResults({ found, onSaved }) {
     setBusy(null);
     setStep(null);
     if (!result.ok) {
-      setMsg(result.reason);
+      setMsg(candidates(found) > 1 ? `${result.reason} You can try another link above.` : result.reason);
       return;
     }
     const meta = result.meta;
     const line = result.already
       ? `"${meta.title}" is already on this phone.`
       : `Saved "${meta.title}" on this phone: ${meta.pageCount} ${meta.pageKind === "page" ? "pages" : "parts"}, sealed. Ask me about it any time, even offline. It's under Me, Learned, Documents.`;
-    setDone((prev) => ({ ...prev, [candidate.id]: line }));
+    setDone((prev) => ({ ...prev, [candidate.id]: { line, id: meta.id } }));
     onSaved?.(line, meta);
   }
 
@@ -57,7 +63,12 @@ export function DocumentResults({ found, onSaved }) {
           <Pressable accessibilityRole="link" accessibilityLabel={`Open link to ${c.site}`} onPress={() => Linking.openURL(c.url).catch(() => {})}>
             <Text style={styles.link} numberOfLines={2}>{c.url}</Text>
           </Pressable>
-          {done[c.id] ? <Quiet live>{done[c.id]}</Quiet> : c.tooBig ? (
+          {done[c.id] ? (
+            <View style={styles.row}>
+              <Quiet live>{done[c.id].line}</Quiet>
+              <Action label="Read it" tone="quiet" onPress={() => openReader(`doc:${done[c.id].id}`)} />
+            </View>
+          ) : c.tooBig ? (
             <Quiet>Over 50 MB, so I won't download it.</Quiet>
           ) : (
             <View style={styles.row}>
@@ -73,51 +84,9 @@ export function DocumentResults({ found, onSaved }) {
   );
 }
 
-function Reader({ doc, onClose }) {
-  const [pages, setPages] = useState(null);
-  const [at, setAt] = useState(0);
-  const [find, setFind] = useState("");
-  React.useEffect(() => {
-    let live = true;
-    documents.pages(doc.id).then((p) => live && setPages(p || []));
-    return () => {
-      live = false;
-    };
-  }, [doc.id]);
-  if (!pages) return <Quiet>Opening...</Quiet>;
-  const label = doc.pageKind === "page" ? "Page" : "Part";
-  const jump = () => {
-    const q = find.trim().toLowerCase();
-    if (!q) return;
-    for (let k = 1; k <= pages.length; k += 1) {
-      const i = (at + k) % pages.length;
-      if (pages[i].toLowerCase().includes(q)) {
-        setAt(i);
-        return;
-      }
-    }
-  };
-  return (
-    <View style={styles.card}>
-      <Text style={styles.title}>{doc.title}</Text>
-      <Text style={styles.meta}>{`${label} ${at + 1} of ${pages.length}. The text Yehsa read from it, shown as plain text.`}</Text>
-      <View style={styles.row}>
-        <Action label="Previous" tone="quiet" disabled={at === 0} onPress={() => setAt(Math.max(0, at - 1))} />
-        <Action label="Next" tone="quiet" disabled={at >= pages.length - 1} onPress={() => setAt(Math.min(pages.length - 1, at + 1))} />
-        <Action label="Close" tone="quiet" onPress={onClose} />
-      </View>
-      <TextInput accessibilityLabel="Find in this document" value={find} onChangeText={setFind} onSubmitEditing={jump} placeholder="Find a word, then press enter" placeholderTextColor={colors.muted} style={styles.input} returnKeyType="search" />
-      <ScrollView style={styles.page} nestedScrollEnabled>
-        <Text selectable style={styles.body}>{pages[at] || "(No text on this page. It may be a picture.)"}</Text>
-      </ScrollView>
-    </View>
-  );
-}
-
 /** Me, Learned, Documents: everything downloaded, with view, rename, delete and re-index. */
 export function DocumentsSection() {
   const snap = useDocuments();
-  const [viewing, setViewing] = useState(null);
   const [renaming, setRenaming] = useState(null);
   const [draft, setDraft] = useState("");
   const [confirm, setConfirm] = useState(null);
@@ -167,18 +136,17 @@ export function DocumentsSection() {
             ) : confirm === doc.id ? (
               <View style={styles.row}>
                 <Text style={styles.body}>Delete it from this phone?</Text>
-                <Action label="Delete" tone="clay" onPress={async () => { await documents.remove(doc.id); setConfirm(null); setViewing(null); setMsg("Deleted from this phone."); }} />
+                <Action label="Delete" tone="clay" onPress={async () => { await documents.remove(doc.id); setConfirm(null); setMsg("Deleted from this phone."); }} />
                 <Action label="Cancel" tone="quiet" onPress={() => setConfirm(null)} />
               </View>
             ) : (
               <View style={styles.row}>
-                <Action label={viewing === doc.id ? "Hide" : "View"} onPress={() => setViewing(viewing === doc.id ? null : doc.id)} />
+                <Action label="Read" onPress={() => openReader(`doc:${doc.id}`)} accessibilityHint="Opens it in the reader, at the page you left off." />
                 <Action label="Rename" tone="quiet" onPress={() => { setRenaming(doc.id); setDraft(doc.title); }} />
                 <Action label="Re-index" tone="quiet" disabled={!!job} onPress={async () => { const r = await documents.reindex(doc.id); setMsg(r.ok ? `Re-indexed: ${r.sections} sections.` : r.reason); }} />
                 <Action label="Delete" tone="clay" onPress={() => setConfirm(doc.id)} />
               </View>
             )}
-            {viewing === doc.id ? <Reader doc={doc} onClose={() => setViewing(null)} /> : null}
           </View>
         );
       })}

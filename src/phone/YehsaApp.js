@@ -139,6 +139,11 @@ import MapRail from "./MapRail.js";
 import PeerChat from "./PeerChat.js";
 import PeerSecurity from "./PeerSecurity.js";
 import EmergencyScreen from "./EmergencyScreen.js";
+import ReaderScreen from "./ReaderScreen.js";
+import { openLibrary, openReader } from "./reader_store.js";
+import { libraryEntriesNow, loadBook } from "./library_source.js";
+import { pendingLine, planBookRequest } from "../../symbolic/library/book_request.js";
+import { libraryAnswer as bookAnswer } from "../../symbolic/library/library_answer.js";
 import { BackLayers, useBackLayer } from "./back_layers.js";
 import { MORE_ITEMS, TABS, destinationActions, backAction, backLabel, createBackLayers, initialNav, navReduce, topScreen } from "./nav_model.js";
 import FieldPane from "./FieldPane.js";
@@ -556,6 +561,8 @@ export default function YehsaApp() {
               <Prose>{`${books.passages.length} field passages from ${(books.sources || []).length || "several"} packaged sources.`}</Prose>
               <Quiet>{`Dictionary: ${phoneCorpusMeta.headwords} headwords and ${phoneCorpusMeta.medicalNames} medical names.`}</Quiet>
               <Quiet>Spiritual texts open only when you ask a spiritual question in Ask. They are kept separate from field notes.</Quiet>
+              <Prose>Read the books and manuals on this phone, with chapters, find, and your place kept. Works offline.</Prose>
+              <Action label="Open the reader" onPress={openLibrary} accessibilityHint="Opens the library: the Army manuals, the books in the app, books you imported, and documents you downloaded." />
             </BooksPane>
           </View>
         ) : null}
@@ -686,6 +693,7 @@ export default function YehsaApp() {
       {nav.command && !nav.sos ? (
         <CommandSheet onGo={goDestination} onAsk={askFromAnywhere} onClose={() => go({ type: "closeCommand" })} />
       ) : null}
+      <ReaderScreen />
       {nav.sos ? (
         <EmergencyScreen
           position={position}
@@ -705,6 +713,12 @@ export default function YehsaApp() {
   );
 }
 
+// Web answers already shown this session, by question (see lookUpLive).
+const liveAnswers = new Map();
+function sameQuestionKey(text) {
+  return String(text || "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\b(?:please|can|could|you|me|the|a|an)\b/g, " ").replace(/\s+/g, " ").trim();
+}
+
 function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active, screen, position, setPosition, waypoints, setWaypoints, setMesh, mapTap, models, setModels, ownerId, learned, setLearned, mapPacks, onActions }) {
   // Look it up: kept web answers, and the review cards for fresh ones.
   const web = useWebLearn();
@@ -715,6 +729,11 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
   const [notes, setNotes] = useState([]);
   const priorRef = useRef(null);
   const threadMem = useRef(newThread());
+  // The last document search results, so "summary of kubark" right after "download kubark" offers them.
+  const lastFound = useRef(null);
+  useEffect(() => {
+    documents.load().catch(() => {});
+  }, []);
   const [correction, setCorrection] = useState(null);
   const [credits, setCredits] = useState(null);
   const gateRef = useRef(gate);
@@ -827,8 +846,16 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
   }
 
   function lookUpLive(text, id) {
+    // The same question in one session gets the same web answer, not a fresh search with other quotes.
+    const sameKey = sameQuestionKey(text);
+    const cached = liveAnswers.get(sameKey);
+    if (cached) {
+      patchMessage(id, { text: liveAnswerText(cached.note), reviewNoteId: cached.note.id, reviewSent: cached.sent });
+      return;
+    }
     webLearn.lookUp(text, { homeState: homeStateNow() }).then((result) => {
       if (result.ok) {
+        liveAnswers.set(sameKey, { note: result.note, sent: result.disclosure || result.sent });
         // Online: the answer shows here in the chat, quoted with its sources and date. Keep or Toss decides if it stays.
         patchMessage(id, { text: liveAnswerText(result.note), reviewNoteId: result.note.id, reviewSent: result.disclosure || result.sent });
       } else if (result.offline) {
@@ -1081,6 +1108,42 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
       onRoute(wantsRoute);
       return;
     }
+    // "Summary of kubark", "chapters of ATP 3-50.21", "chapter 2 of the Kybalion", "open the Bible":
+    // answered from the book or document itself, never from a web search.
+    const wantsBook = planBookRequest(effective, { entries: libraryEntriesNow(), recentFound: lastFound.current });
+    if (wantsBook) {
+      stopProse();
+      setQuestion("");
+      setNotice(null);
+      pushMessage({ role: "you", text: typed });
+      setPhase("ready");
+      const { req } = wantsBook;
+      if (wantsBook.entry) {
+        const msg = pushMessage({ role: "yehsa", text: `Opening "${wantsBook.entry.title}"...` });
+        loadBook(wantsBook.entry.id).then((book) => {
+          const got = book ? bookAnswer(req, book) : null;
+          if (!got) {
+            patchMessage(msg, { text: `I couldn't open "${wantsBook.entry.title}" on this phone just now.` });
+            return;
+          }
+          patchMessage(msg, bookMessage(got));
+          if (got.reader?.auto) openReader(got.reader.bookId, got.reader.page);
+        }).catch(() => patchMessage(msg, { text: `I couldn't open "${wantsBook.entry.title}" on this phone just now.` }));
+        return;
+      }
+      if (wantsBook.offer) {
+        pushMessage({ role: "yehsa", text: pendingLine(req, wantsBook.offer.query || req.target), docFound: wantsBook.offer, pendingDoc: req });
+        return;
+      }
+      const searchMsg = pushMessage({ role: "yehsa", text: `"${req.target}" isn't on this phone yet. Searching for it. Only the words "${req.target}" (plus "pdf") leave this phone.` });
+      documents.find(wantsBook.search).then((found) => {
+        if (found.ok) lastFound.current = { ...found, query: found.query || req.target };
+        patchMessage(searchMsg, found.ok
+          ? { text: pendingLine(req, req.target), docFound: found, pendingDoc: req }
+          : { text: found.reason });
+      }).catch(() => patchMessage(searchMsg, { text: "I couldn't search for documents just now. Nothing was downloaded." }));
+      return;
+    }
     // "Download FM 21-76", "find the Maine hunting regulations PDF": search for documents; nothing downloads until a tap.
     const wantsDoc = documentIntent(effective);
     if (wantsDoc) {
@@ -1091,7 +1154,7 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
       setPhase("ready");
       const docMsg = pushMessage({ role: "yehsa", text: `Searching for documents. Only the words "${wantsDoc.query}" (plus "pdf") leave this phone.` });
       documents.find(wantsDoc).then((found) => patchMessage(docMsg, found.ok
-        ? { text: `Here's what I found for "${wantsDoc.query}". Tap Download on the one you want, and I'll read it and learn from it on this phone.`, docFound: found }
+        ? (lastFound.current = { ...found, query: found.query || wantsDoc.query }, { text: `Here's what I found for "${wantsDoc.query}". Tap Download on the one you want, and I'll read it and learn from it on this phone.`, docFound: found })
         : { text: found.reason })).catch(() => patchMessage(docMsg, { text: "I couldn't search for documents just now. Nothing was downloaded." }));
       return;
     }
@@ -1319,6 +1382,22 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
   function ask() {
     setVoiceNote(null);
     runAsk(question);
+  }
+
+  // A whole-book answer as a chat message: the text, its pages, and the reader button.
+  function bookMessage(got) {
+    return { text: got.text, source: got.source || null, chips: sourceChips(got), reader: got.reader || null, chapterLinks: got.chapterLinks || null, feedbackEligible: false };
+  }
+
+  // "Summary of X" asked before X was downloaded: answer as soon as the Download finishes.
+  function answerPending(item, meta) {
+    const req = item.pendingDoc;
+    if (!req || !meta?.id) return;
+    patchMessage(item.id, { pendingDoc: null });
+    loadBook(`doc:${meta.id}`).then((book) => {
+      const got = book ? bookAnswer(req, book) : null;
+      if (got) pushMessage({ role: "yehsa", ...bookMessage(got) });
+    }).catch(() => {});
   }
 
   function finishListen() {
@@ -1567,7 +1646,21 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
                 onCancel={() => patchMessage(item.id, { feedback: null, reason: null, detail: "" })}
               />
             ) : null}
-            {item.role === "yehsa" && item.docFound ? <DocumentResults found={item.docFound} /> : null}
+            {item.role === "yehsa" && item.docFound ? <DocumentResults found={item.docFound} onSaved={item.pendingDoc ? (line, meta) => answerPending(item, meta) : undefined} /> : null}
+            {item.role === "yehsa" && item.chapterLinks?.length ? (
+              <View style={styles.answerChips}>
+                {item.chapterLinks.slice(0, 24).map((c, i) => (
+                  <Pressable key={`${i}-${c.page}`} accessibilityRole="button" accessibilityLabel={`Open ${c.label} in the reader`} onPress={() => openReader(c.bookId, c.page)} style={styles.suggestChip}>
+                    <Text numberOfLines={1} style={styles.suggestText}>{c.label}</Text>
+                  </Pressable>
+                ))}
+              </View>
+            ) : null}
+            {item.role === "yehsa" && item.reader ? (
+              <View style={styles.cardRow}>
+                <Action label={`Open in reader at page ${item.reader.page}`} tone="quiet" onPress={() => openReader(item.reader.bookId, item.reader.page)} />
+              </View>
+            ) : null}
             {item.role === "yehsa" && item.lookupOffer ? (
               <LookupOffer
                 question={item.lookupOffer.question}
