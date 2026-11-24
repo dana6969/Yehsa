@@ -1,6 +1,7 @@
 // Learn from the internet: the phone side. A small shared store, like hunt_state, over the sealed web-notes
-// vault. Nothing here runs unless the person turned the switch on, and every fetch is its own approved request.
-// The text it keeps is a quote with its source. It never changes a rule or a setting.
+// vault. Every fetch is the person's own request: a Fetch tap on a saved question, or a live question
+// while "Look up live questions" is on. Every answer waits for Keep or Toss before it is used.
+// The text it keeps is a quote with its sources. It never changes a rule or a setting.
 
 import { useEffect, useState } from "react";
 import { getVector } from "../../symbolic/meaning/vector_cache.js";
@@ -9,6 +10,10 @@ import {
 } from "../../symbolic/web/web_notes.js";
 import { lookupGovPage, lookupWeather, lookupWikipedia, outboundQuery } from "../../symbolic/web/sources.js";
 import { attachVectors, noteDocument, notesNeedingVectors, scoreWebNotes } from "../../symbolic/web/web_index.js";
+import { editWebNote, keepAnswer, tossAnswer } from "../../symbolic/web/web_notes.js";
+import { answerCandidate, markTried, removeQueued, saveForLater } from "../../symbolic/web/lookup_queue.js";
+import { lookUp } from "../../symbolic/web/look_up.js";
+import { loadAtpPack } from "./atp_pack.js";
 import { embedNotes } from "./meaning_provider";
 import { webNotesVault } from "./sealed_stores.js";
 
@@ -116,11 +121,63 @@ export const webLearn = {
     loading = null;
     publish({ loaded: true, foreign: false, store: emptyWebStore() });
   },
-  /** An answer from approved or kept web notes, only after the local notes had none. */
+  /** An answer from kept web notes, only after the local notes had none. Works offline, switch on or off. */
   answer(question) {
-    if (!state.store.enabled) return null;
+    if (!state.store.notes.length) return null;
     const q = getVector(`q:${question}`);
     return webAnswer(state.store, question, { vectorScores: q ? scoreWebNotes(state.store, q) : null });
+  },
+  /** Save a missed question to Look it up later. Stays on this phone, sealed. */
+  saveForLater(question) {
+    if (state.foreign) return Promise.resolve({ ok: false, reason: "Saved web notes from another phone can't be opened here." });
+    const result = saveForLater(state.store, question);
+    if (!result.ok) return Promise.resolve(result);
+    return commit(result.store).then(() => ({ ok: true, item: result.item, already: result.already === true }));
+  },
+  removeQueued(id) {
+    return commit(removeQueued(state.store, id));
+  },
+  /**
+   * Look one question up now. queueId: the saved question it came from, if any. The answer waits
+   * for Keep or Toss. Returns { ok, note, sent, tried } or { ok: false, reason, offline }.
+   */
+  async lookUp(question, { queueId = null, homeState = null } = {}) {
+    if (state.foreign) return { ok: false, reason: "Saved web notes from another phone can't be opened here." };
+    const result = await lookUp({ question, fetchImpl: globalThis.fetch?.bind(globalThis), atpPack: await loadAtpPack(), homeState });
+    if (!result.ok) {
+      if (queueId) await commit(markTried(state.store, queueId, result.reason));
+      return result;
+    }
+    const proposed = proposeWebNote(state.store, answerCandidate(result.answer, queueId), Date.now(), { requested: true });
+    if (!proposed.ok) return proposed;
+    // The saved question moves to review: it is answered, waiting for Keep or Toss.
+    const next = queueId ? removeQueued(proposed.store, queueId) : proposed.store;
+    await commit(next);
+    return { ok: true, note: proposed.note, sent: result.sent, tried: result.tried, offline: result.offline };
+  },
+  fetchQueued(item, options) {
+    return this.lookUp(item.question, { ...options, queueId: item.id });
+  },
+  /** Keep: the answer becomes a learned note and answers offline from now on. */
+  keepAnswer(id) {
+    const result = keepAnswer(state.store, id);
+    if (!result.ok) return Promise.resolve(result);
+    return commit(result.store).then(() => {
+      if (!result.unverified) indexApproved();
+      return { ok: true, note: result.note, unverified: result.unverified === true };
+    });
+  },
+  /** Toss: gone, as if it was never fetched. */
+  tossAnswer(id) {
+    return commit(tossAnswer(state.store, id));
+  },
+  edit(id, patch) {
+    const result = editWebNote(state.store, id, patch);
+    if (!result.ok) return Promise.resolve(result);
+    return commit(result.store).then(() => {
+      indexApproved();
+      return { ok: true };
+    });
   },
   saveModelNote(note) {
     const result = proposeWebNote(state.store, note);
