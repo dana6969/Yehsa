@@ -81,6 +81,8 @@ export function buildAnswer({ question, query = "", candidates = [], link = null
       if (looksLikeInstruction(sentence)) return;
       // Page chrome on open-web pages: "For more information, visit ...", cookie and sign-up lines.
       if ((candidate.kind === "web" || candidate.kind === "gov") && BOILERPLATE.test(sentence)) return;
+      // Headings and list labels from open-web pages ("Influenza outbreaks.") are not answers.
+      if (candidate.kind === "web" && sentence.split(/\s+/).length < 8) return;
       const words = coverage(sentence, groups);
       // The on-device meaning matcher (when it ran) can lift a sentence that says it in other words.
       const sim = meaning?.get?.(sentence);
