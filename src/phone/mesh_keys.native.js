@@ -6,12 +6,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import { CLONE_MESSAGE, createPeerVault, secureStoreOptions } from "../../symbolic/peer_vault.js";
-
-const NAMES = {
-  identity: "yehsa.peer.secret.v1",
-  historyKey: "yehsa.peer.history.key.v1",
-  authFlag: "yehsa.peer.auth.flag.v1"
-};
+import { secureKeyFor } from "../../symbolic/peer_secret_names.js";
 
 function nativeOptions(options) {
   return {
@@ -24,16 +19,16 @@ function nativeOptions(options) {
 
 const adapter = {
   async getSecret(name) {
-    const flag = name === "authFlag" ? false : (await SecureStore.getItemAsync(NAMES.authFlag, nativeOptions(secureStoreOptions(false)))) === "1";
+    const flag = name === "authFlag" ? false : (await SecureStore.getItemAsync(secureKeyFor("authFlag"), nativeOptions(secureStoreOptions(false)))) === "1";
     const options = nativeOptions(secureStoreOptions(name === "authFlag" ? false : flag));
-    return SecureStore.getItemAsync(NAMES[name], options);
+    return SecureStore.getItemAsync(secureKeyFor(name), options);
   },
   async setSecret(name, value, options) {
-    await SecureStore.setItemAsync(NAMES[name], value, nativeOptions(options));
+    await SecureStore.setItemAsync(secureKeyFor(name), value, nativeOptions(options));
   },
   async deleteSecret(name) {
-    const flag = (await SecureStore.getItemAsync(NAMES.authFlag, nativeOptions(secureStoreOptions(false)))) === "1";
-    await SecureStore.deleteItemAsync(NAMES[name], nativeOptions(secureStoreOptions(name === "authFlag" ? false : flag)));
+    const flag = (await SecureStore.getItemAsync(secureKeyFor("authFlag"), nativeOptions(secureStoreOptions(false)))) === "1";
+    await SecureStore.deleteItemAsync(secureKeyFor(name), nativeOptions(secureStoreOptions(name === "authFlag" ? false : flag)));
   },
   async getData(name) {
     const raw = await AsyncStorage.getItem(`yehsa.peer.data.${name}`);
@@ -55,8 +50,9 @@ export function peerVault() {
 }
 
 export async function loadOrCreateIdentity() {
-  if (!session) session = vault.openSession();
-  const loaded = await session;
+  // No cached result: a failed open is never remembered (the next call tries again), and a key
+  // replaced through src/phone/identity.js is seen at once. The vault shares one open between callers.
+  const loaded = await vault.openSession();
   if (loaded.foreign) {
     return { foreign: true, identity: null, persisted: false, demo: false, created: false, message: loaded.message || CLONE_MESSAGE };
   }

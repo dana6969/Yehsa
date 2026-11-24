@@ -92,6 +92,7 @@ async function authOn(adapter) {
 }
 
 export function createPeerVault(adapter) {
+  let inflight = null;
   async function writeIdentity(identity) {
     const options = secureStoreOptions(await authOn(adapter));
     await adapter.setSecret(IDENTITY, JSON.stringify(identity), options);
@@ -120,7 +121,15 @@ export function createPeerVault(adapter) {
       if (!raw) return null;
       return decode(raw);
     },
-    async openSession() {
+    // Concurrent callers (Party screen, party ticker, Pair) share one open, so a first launch cannot
+    // make two identities and keep the wrong one.
+    openSession() {
+      if (!inflight) {
+        inflight = this.openSessionOnce().finally(() => { inflight = null; });
+      }
+      return inflight;
+    },
+    async openSessionOnce() {
       try {
         const identity = await this.loadIdentity();
         let token = await this.readBindToken();
