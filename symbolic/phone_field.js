@@ -24,7 +24,7 @@ import { formatImported, isCareQuestion, retrieveImported } from "./book_import.
 import { currentImportIndex, currentImported } from "./imported_registry.js";
 import { fieldGuideAnswer } from "./field_guide.js";
 import { stripFiller } from "./answer_polish.js";
-import { expandKnowledge } from "./entries.js";
+import { expandKnowledge, namedEntryKnowledge, namedNote } from "./entries.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -166,7 +166,9 @@ export function askField(input, passages, options = {}) {
       }] : []
     });
   }
-  const guide = fieldGuideAnswer(raw);
+  // A question that only names a thing gets the note with that exact name (same rule as ask.js).
+  const named = namedNote(raw);
+  const guide = named?.entry ? null : fieldGuideAnswer(raw);
   if (guide) {
     return fieldResult({
       answered: true,
@@ -226,12 +228,18 @@ export function askField(input, passages, options = {}) {
   if (question.topic) {
     knowledge = recallFromCorpora(expanded, corporaFor(passages, options.corpora));
   }
+  if (named?.entry) {
+    knowledge = namedEntryKnowledge(named.entry);
+  } else if (named && knowledge?.symbol !== named.symbol) {
+    const hit = (knowledge?.hits || []).find((item) => item.symbol === named.symbol);
+    if (hit) knowledge = { ...knowledge, kind: hit.kind, symbol: hit.symbol, title: hit.title, source: hit.source, text: hit.text, hits: [hit, ...knowledge.hits.filter((item) => item !== hit)] };
+  }
   const nav = navigationSentence(raw, {
     consent: options.session?.consent === true,
     ingress: "local"
   }, sessionIo(options.session));
   let meaningInfo = null;
-  if (meaning && !nav?.sentence) {
+  if (meaning && !nav?.sentence && !named) {
     const reply = meaningReply(meaning, raw, knowledge);
     meaningInfo = reply.meaning;
     if (reply.text !== (knowledge?.text || null)) {

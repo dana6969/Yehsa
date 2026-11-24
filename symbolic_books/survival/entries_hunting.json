@@ -1,0 +1,27 @@
+[
+ {
+  "symbol": "deer_scat",
+  "title": "Deer scat",
+  "context": "Deer scat is a pile of small, dark, oval or acorn-shaped pellets, often 20 to 50 together, that shows where deer have fed or bedded. Also called deer droppings, deer poop, deer pellets, deer poo, deer dung. Look for pellets about 1/2 to 3/4 inch (1.5 to 2 cm) long, often with a small point or dimple at one end; dark and shiny when fresh, dull and dry or crumbly when old."
+ },
+ {
+  "symbol": "deer_track",
+  "title": "Deer tracks",
+  "context": "A deer track is a split, heart-shaped hoof print made by two pointed toes, about 2 to 3 1/2 inches (5 to 9 cm) long. Also called deer track, deer prints, deer hoof print, whitetail track, deer sign. Look for two teardrop toes forming a heart with the point toward travel; two dewclaw dots behind the print in mud, snow, or when running."
+ },
+ {
+  "symbol": "deer_rub",
+  "title": "Deer rubs",
+  "context": "A rub is a sapling or small tree where a buck has scraped off bark with his antlers, mostly in fall before and during the rut. Also called buck rub, antler rub, rubs on trees, scraped bark, deer sign. Look for bark stripped from one side of a small tree, often 1 to 4 inches (2.5 to 10 cm) thick, from knee to waist height; pale fresh wood, shredded bark curls on the ground, and broken twigs."
+ },
+ {
+  "symbol": "deer_scrape",
+  "title": "Deer scrapes",
+  "context": "A scrape is a patch of bare earth that a buck paws clear under an overhanging branch and marks with scent, mostly in the weeks before the rut. Also called buck scrape, deer scrape, scrape under a branch, licking branch, deer sign. Look for a pawed oval of bare dirt, often 1 to 3 feet (30 to 90 cm) across; a chewed or broken licking branch about head height above it."
+ },
+ {
+  "symbol": "deer_sign_reading",
+  "title": "Reading deer sign",
+  "context": "Deer sign is the tracks, scat, rubs, scrapes, beds, and browsed plants that deer leave, and reading it shows where they travel, feed, and rest. Also called deer sign, signs of deer, how to scout for deer, deer scouting, where are the deer. Look for trails and tracks between thick cover and food; scat piles, oval beds pressed in leaves or snow."
+ }
+]

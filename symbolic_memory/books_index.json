@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-24T12:40:35.993Z",
-  "passageCount": 689,
+  "generatedAt": "2026-11-24T12:51:28.864Z",
+  "passageCount": 843,
   "sources": [
     {
       "file": "symbolic_memory/full_book_verses.json",
@@ -25,6 +25,24 @@
       "status": "indexed",
       "title": "entries_foraging",
       "passages": 21
+    },
+    {
+      "file": "symbolic_books/herbology/entries_fungi.json",
+      "status": "indexed",
+      "title": "entries_fungi",
+      "passages": 18
+    },
+    {
+      "file": "symbolic_books/herbology/entries_plants.json",
+      "status": "indexed",
+      "title": "entries_plants",
+      "passages": 61
+    },
+    {
+      "file": "symbolic_books/herbology/entries_trees.json",
+      "status": "indexed",
+      "title": "entries_trees",
+      "passages": 29
     },
     {
       "file": "symbolic_books/herbology/notes.json",
@@ -70,6 +88,12 @@
       "passages": 6
     },
     {
+      "file": "symbolic_books/survival/entries_animals.json",
+      "status": "indexed",
+      "title": "entries_animals",
+      "passages": 29
+    },
+    {
       "file": "symbolic_books/survival/entries_fire.json",
       "status": "indexed",
       "title": "entries_fire",
@@ -82,10 +106,22 @@
       "passages": 11
     },
     {
+      "file": "symbolic_books/survival/entries_hunting.json",
+      "status": "indexed",
+      "title": "entries_hunting",
+      "passages": 5
+    },
+    {
       "file": "symbolic_books/survival/entries_shelter.json",
       "status": "indexed",
       "title": "entries_shelter",
       "passages": 17
+    },
+    {
+      "file": "symbolic_books/survival/entries_sign.json",
+      "status": "indexed",
+      "title": "entries_sign",
+      "passages": 12
     },
     {
       "file": "symbolic_books/survival/entries_water.json",
@@ -376,6 +412,654 @@
       "context": "Plants can harm by contact (poison ivy, wild parsnip, giant hogweed), by eating (hemlocks, baneberry), or by smoke (burning poison ivy). Also called giant hogweed, wild parsnip burns, stinging nettle, poisonous plants overview. Look for wild parsnip and giant hogweed sap causes burns in sunlight; poison ivy oil causes a rash. Learn the plants of your area, wear long sleeves and gloves in brush, and wash exposed skin after contact. Keep children and pets from unknown plants.",
       "title": "Plants that poison by contact, eating, or smoke",
       "source": "symbolic_books/herbology/entries_foraging.json"
+    },
+    {
+      "symbol": "fly_agaric",
+      "context": "Fly agaric is a red or orange Amanita mushroom with white warts that is poisonous and related to the deadly Amanitas. Also called Amanita muscaria, red mushroom with white spots, toadstool. Look for red or orange cap with white warts, white gills, a ring on the stem and a bulb at the base; warts are remnants of a veil and can wash off in rain. Learn it as a warning. Toxic. Related to the deadly Amanitas.",
+      "title": "Fly agaric",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "deadly_galerina",
+      "context": "Deadly galerina is a small brown mushroom on rotting wood that contains the same liver toxins as the death cap. Also called Galerina marginata, funeral bell, autumn skullcap. Look for small brown mushroom on rotting wood with a thin ring and rusty brown spores; cap 1 to 4 cm, sticky when wet. Learn it as a warning. Deadly. Grows on the same logs as honey mushrooms.",
+      "title": "Deadly galerina",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "webcaps",
+      "context": "Webcaps are brown Cortinarius mushrooms with a cobweb veil, and some damage the kidneys days after eating. Also called Cortinarius, cortinarius, webcap. Look for rusty-brown spores, a web-like veil on young caps, often on the ground in woods; rusty-brown spore print. Learn it as a warning. Some are deadly to the kidneys. Never eat a brown mushroom you cannot identify.",
+      "title": "Webcaps (Cortinarius)",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "chicken_of_the_woods",
+      "context": "Chicken of the woods is a bright orange and yellow shelf fungus on trees with pores, not gills. Also called Laetiporus, sulphur shelf, chicken mushroom, Laetiporus sulphureus. Look for bright orange and yellow shelves with no gills on trees, soft when young; no gills; tiny pores underneath. Use it as an identification and look-alike lesson; only an expert who sees it in person can confirm it. Some people react badly, and growths on conifers or eucalyptus can be harmful.",
+      "title": "Chicken of the woods",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "hen_of_the_woods",
+      "context": "Hen of the woods is a large gray-brown clustered mushroom at the base of oaks, with pores instead of gills. Also called maitake, Grifola frondosa, sheep's head. Look for big clump of grey-brown overlapping fronds at the base of oaks; pores instead of gills. Use it as an identification and look-alike lesson; only an expert who sees it in person can confirm it.",
+      "title": "Hen of the woods (maitake)",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "giant_puffball",
+      "context": "A giant puffball is a round white mushroom with no stem or gills that is solid white inside when young. Also called puffball, Calvatia, puffballs, Calvatia gigantea. Look for round white ball with no stem or gills; solid white inside when cut. Use it as an identification and look-alike lesson; only an expert who sees it in person can confirm it. A young Amanita looks like a puffball. Cut it open: any outline of a cap and stem means leave it.",
+      "title": "Puffball",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "lions_mane",
+      "context": "Lion's mane is a white mushroom of hanging icicle-like spines that grows on hardwood trees. Also called Hericium, bearded tooth, pom pom mushroom. Look for white hanging icicle-like spines on trees; no cap and no gills. Use it as an identification and look-alike lesson; only an expert who sees it in person can confirm it.",
+      "title": "Lion's mane",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "oyster_mushroom",
+      "context": "The oyster mushroom is a gray-tan shelf mushroom on wood with gills running down to a short side stem. Also called Pleurotus, oyster mushrooms, tree oyster, Pleurotus ostreatus. Look for shelf-shaped grey-tan caps with gills running down to a short side stem, on wood; white to lilac spore print. Use it as an identification and look-alike lesson; only an expert who sees it in person can confirm it. Do not confuse it with other shelf fungi that have gills.",
+      "title": "Oyster mushroom",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "turkey_tail",
+      "context": "Turkey tail is a thin, tough shelf fungus on dead wood with colored bands and white pores underneath. Also called Trametes versicolor, turkey tails. Look for thin tough shelves with colored concentric bands and a white pore underside; tough and leathery, not fleshy. Use it as an identification lesson. Yehsa does not give doses or remedies with wild fungi.",
+      "title": "Turkey tail",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "birch_polypore",
+      "context": "Birch polypore is a rounded gray-white shelf fungus on dead birch, used historically as a razor strop and tinder. Also called razor strop, Fomitopsis betulina, birch bracket. Look for rounded grey-white shelf on dead birch; the pore side is white. Use it as an identification lesson. Yehsa does not give doses or remedies with wild fungi. Survival history only. Do not eat it.",
+      "title": "Birch polypore (razor strop)",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "reishi",
+      "context": "Reishi, or hemlock varnish shelf, is a glossy red-brown shelf fungus on hemlock and other conifers. Also called hemlock varnish shelf, Ganoderma, lingzhi, Ganoderma tsugae. Look for glossy varnished red-brown shelf on a stalk or the side of a tree; shiny, varnished-looking top. Use it as an identification lesson. Yehsa does not give doses or remedies with wild fungi.",
+      "title": "Reishi (hemlock varnish shelf)",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "honey_mushroom",
+      "context": "Honey mushrooms are clusters of honey-colored capped mushrooms with a ring that grow on wood and roots. Also called Armillaria, honey fungus, bootlace fungus. Look for clusters of honey-coloured caps on wood with a ring; white spores. Use it as an identification and look-alike lesson; only an expert who sees it in person can confirm it. The deadly galerina looks like it.",
+      "title": "Honey mushroom",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "shaggy_mane",
+      "context": "Shaggy mane is a tall white shaggy-capped mushroom that melts into black ink as it ages. Also called Coprinus comatus, lawyer's wig, inky cap. Look for tall white cylinder cap with shaggy scales that melts into ink; gills turn black and dissolve from the bottom up. Use it as an identification and look-alike lesson; only an expert who sees it in person can confirm it.",
+      "title": "Shaggy mane",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "bolete",
+      "context": "A bolete is a fleshy mushroom with a sponge of pores instead of gills under the cap. Also called Boletus, boletes, porcini, king bolete. Look for fat stem with a sponge of pores instead of gills under the cap; pores instead of gills under the cap. Use it as an identification and look-alike lesson; only an expert who sees it in person can confirm it. Red-pored and bitter ones are toxic. Do not eat on a photo.",
+      "title": "Bolete",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "green_spored_parasol",
+      "context": "The green-spored parasol is a large lawn mushroom whose gills turn green with age, and it causes the most mushroom poisonings in North America. Also called Chlorophyllum molybdites, false parasol, green-spored lepiota, vomiter. Look for big scaly cap with a ring; gills turn green with age. Learn it as a warning. The most common mushroom poisoning in North America.",
+      "title": "Green-spored parasol",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "hedgehog_mushroom",
+      "context": "The hedgehog mushroom is a pale orange mushroom with soft spines under the cap instead of gills. Also called Hydnum repandum, sweet tooth, hedgehog. Look for pale orange cap with soft spines instead of gills; small spines under the cap instead of gills. Use it as an identification and look-alike lesson; only an expert who sees it in person can confirm it.",
+      "title": "Hedgehog mushroom",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "tinder_fungus",
+      "context": "Tinder fungus is a hoof-shaped gray woody shelf on birch and beech whose inner layer was used to carry fire. Also called horse hoof fungus, Fomes fomentarius, amadou, hoof fungus. Look for hoof-shaped grey woody shelf on birch and beech; used for tinder. Use it as an identification lesson. Yehsa does not give doses or remedies with wild fungi. Survival use for fire only.",
+      "title": "Tinder fungus",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "chaga",
+      "context": "Chaga is a black, cracked, charcoal-like growth on birch that is orange-brown inside. Also called Inonotus obliquus, clinker fungus, birch conk. Look for black charcoal-like crust on birch with an orange inside; cracked black outer crust. Use it as an identification lesson. Yehsa does not give doses or remedies with wild fungi.",
+      "title": "Chaga",
+      "source": "symbolic_books/herbology/entries_fungi.json"
+    },
+    {
+      "symbol": "ramps",
+      "context": "Ramps are wild leeks with two or three broad smooth leaves in spring and a strong onion-garlic smell. Also called wild leek, Allium tricoccum, ramp. Look for two or three broad smooth leaves per plant in spring, red-purple stalk base, strong onion and garlic smell; every leaf smells of onion when crushed.",
+      "title": "Ramps (wild leek)",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "false_hellebore",
+      "context": "False hellebore is a wetland plant with large pleated leaves spiraling up the stem, and it is deadly. Also called Indian poke, Veratrum, green hellebore, corn lily, Veratrum viride. Look for big pleated leaves that wrap the stem in a spiral; wet woods and meadows. Learn it so you can avoid it and warn others. Sometimes mistaken for ramps. Deadly.",
+      "title": "False hellebore (Indian poke)",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "lily_of_valley",
+      "context": "Lily of the valley is a garden and wild plant with small white bell flowers, and every part is deadly to the heart. Also called lily of the valley, Convallaria, May bells, Convallaria majalis. Look for two smooth upright leaves, small white bells on an arching stem, red berries; no onion smell, unlike ramps. Learn it so you can avoid it and warn others. Mistaken for ramps. Every part is deadly.",
+      "title": "Lily of the valley",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "chicory",
+      "context": "Chicory is a roadside plant with sky-blue flowers on stiff stems whose leaves and roasted roots are used as food. Also called blue sailors, Cichorium, coffee weed, succory, Cichorium intybus. Look for sky blue flowers on stiff, nearly leafless stems along roadsides; milky sap.",
+      "title": "Chicory",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "red_clover",
+      "context": "Red clover is a common field plant with round pink-purple flower heads and three leaflets marked with a pale V. Also called Trifolium pratense, clover. Look for pink-purple round flower heads; three leaflets with a pale V mark. Learn it as an identification first. Eat it only after you have matched every feature in person, ideally with someone who knows the plant, from ground that was not sprayed or beside a busy road, and start with a small amount.",
+      "title": "Red clover",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "white_clover",
+      "context": "White clover is a low creeping lawn plant with round white flower heads and three leaflets. Also called Trifolium repens, Dutch clover, lawn clover. Look for low creeping plant, white round flower heads, three leaflets often with a pale band; stems creep and root along the ground.",
+      "title": "White clover",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "burdock",
+      "context": "Burdock is a large weed with huge heart-shaped leaves and hooked burrs that stick to clothing; its first-year root is eaten cooked. Also called Arctium, gobo, great burdock, beggar's buttons. Look for very large heart-shaped leaves, hooked burr heads, purple thistle-like flowers; leaves pale and woolly underneath.",
+      "title": "Burdock",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "foxglove",
+      "context": "Foxglove is a garden and wild plant with a tall spike of tubular pink-purple flowers, and every part is deadly to the heart. Also called Digitalis, fairy gloves, purple foxglove, Digitalis purpurea. Look for fuzzy leaves in a rosette, tall spike of tubular pink-purple bells; spotted throat inside each bell. Learn it so you can avoid it and warn others. Deadly to the heart. Often confused with comfrey in the first year.",
+      "title": "Foxglove",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "comfrey",
+      "context": "Comfrey is a hairy-leaved garden plant with curled clusters of bell flowers that contains liver-damaging compounds. Also called Symphytum, knitbone, boneset, Symphytum officinale. Look for rough hairy leaves, bell flowers in curled clusters; leaves run down onto the stem as wings. Learn it so you can avoid it and warn others. Contains liver-damaging compounds. Do not eat or brew it.",
+      "title": "Comfrey",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "iris_flag",
+      "context": "Wild iris, or blue flag, is a wetland plant with flat sword-shaped leaves in a fan, and it is poisonous. Also called blue flag, yellow flag, flag iris, Iris versicolor. Look for flat sword-shaped leaves in a fan; blue-violet or yellow flowers. Learn it so you can avoid it and warn others. Toxic if eaten. Often mistaken for cattail shoots.",
+      "title": "Wild iris (blue flag, yellow flag)",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "wild_strawberry",
+      "context": "Wild strawberry is a low native plant whose tiny red berries carry their seeds on the outside and taste like small garden strawberries. Also called Fragaria, woodland strawberry, wild strawberries, Fragaria virginiana. Look for three toothed leaflets, white five-petal flowers, tiny red berries with seeds on the outside; runners that root along the ground.",
+      "title": "Wild strawberry",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "brambles",
+      "context": "Brambles are the prickly canes of blackberries and raspberries, whose berries are built from many small beads. Also called blackberry, raspberry, Rubus, blackcap, dewberry. Look for arching prickly canes, toothed compound leaves, clustered berries made of tiny beads; raspberries pull off hollow like a cap; blackberries keep a white core.",
+      "title": "Blackberry and raspberry (Rubus)",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "blueberry",
+      "context": "Lowbush blueberry is a small shrub of sunny barrens and woods whose blue berries end in a five-point crown. Also called lowbush blueberry, wild blueberry, huckleberry, Vaccinium angustifolium. Look for low shrub, small oval leaves, blue berries with a five-point crown at the tip; many tiny seeds inside, not one stone.",
+      "title": "Blueberry",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "cranberry",
+      "context": "Cranberry is a trailing evergreen vine of bogs whose sour red berries ripen in fall. Also called wild cranberry, bog cranberry, Vaccinium macrocarpon. Look for trailing evergreen vine in bogs, tiny leaves, red berries; berries bounce and have air pockets inside.",
+      "title": "Cranberry",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "elderberry",
+      "context": "Elderberry is a shrub with flat clusters of tiny white flowers and dark purple berries that are only safe to eat cooked and ripe. Also called elder, Sambucus, black elderberry, elderflower, Sambucus canadensis. Look for opposite compound leaves, flat clusters of white flowers, dark purple (or red) berries, pithy stems; stems have soft white pith inside.",
+      "title": "Elderberry",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "pokeweed",
+      "context": "Pokeweed is a tall plant with purple-red stems and drooping clusters of dark berries, and its berries, roots, and mature leaves are poisonous. Also called poke, pokeberry, poke salad, inkberry, Phytolacca. Look for purple-red stems, large leaves, drooping clusters of dark purple berries; can grow taller than a person in one season. Learn it so you can avoid it and warn others. Berries, roots and mature leaves are toxic.",
+      "title": "Pokeweed",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "staghorn_sumac",
+      "context": "Staghorn sumac is a shrub with velvety twigs and upright cones of red fuzzy berries; it is not poison sumac. Also called red sumac, sumac berries, sumac lemonade, Rhus typhina. Look for fuzzy velvet twigs, long compound leaves, upright red fuzzy berry cones; berries are red and point up, never white and drooping.",
+      "title": "Staghorn sumac",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "virginia_creeper",
+      "context": "Virginia creeper is a climbing vine with five leaflets spread like a hand, often confused with poison ivy, and its berries are poisonous. Also called five-leaved ivy, woodbine, Parthenocissus, Parthenocissus quinquefolia. Look for five leaflets spread like a hand; climbing vine with tendrils. Learn it so you can avoid it and warn others. Berries are toxic. Sometimes mistaken for poison ivy.",
+      "title": "Virginia creeper",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "stinging_nettle",
+      "context": "Stinging nettle is a plant covered in fine stinging hairs that burn the skin on contact; cooking or drying removes the sting. Also called nettle, nettles, Urtica, Urtica dioica. Look for opposite toothed leaves with stinging hairs, square stem, small green flower strings; a burning, tingling rash right after you brush it.",
+      "title": "Stinging nettle",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "lambsquarters",
+      "context": "Lambsquarters is a common garden weed whose diamond-shaped leaves have a white mealy coating underneath. Also called goosefoot, pigweed, wild spinach, Chenopodium, Chenopodium album. Look for diamond-shaped leaves with a white mealy powder underneath; water beads on the leaves.",
+      "title": "Lambsquarters",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "wood_sorrel",
+      "context": "Wood sorrel is a small plant with heart-shaped leaflets in threes and a sour, lemony taste from oxalic acid. Also called sour grass, Oxalis, yellow wood sorrel, sheep sorrel, Oxalis stricta. Look for heart-shaped leaflets in threes like a clover, small yellow or pink five-petal flowers; sour taste.",
+      "title": "Wood sorrel",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "jewelweed",
+      "context": "Jewelweed is a soft wet-ground plant with orange spotted trumpet flowers and seed pods that burst when touched. Also called spotted touch-me-not, touch-me-not, Impatiens capensis. Look for orange or yellow spotted trumpet flowers, pale watery stems, leaves bead up water; seed pods burst when touched.",
+      "title": "Jewelweed",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "bracken",
+      "context": "Bracken is a large common fern with triangular fronds; it is toxic and not a safe fiddlehead. Also called bracken fern, brake fern, Pteridium, Pteridium aquilinum. Look for large triangular fronds on a single stalk, fuzzy coiled shoots, open ground; young shoots are fuzzy, not smooth and grooved. Learn it so you can avoid it and warn others. Toxic and linked to cancer. Do not eat.",
+      "title": "Bracken fern",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "common_milkweed",
+      "context": "Common milkweed is a tall plant with milky sap, broad paired leaves, and warty pods, and it is toxic raw. Also called milkweed, Asclepias syriaca, monarch plant. Look for thick stem with milky white sap, big opposite oval leaves, pink ball flower clusters, warty pods; pods full of silky seeds in fall. Learn it so you can avoid it and warn others. Toxic raw. Only a trained forager should use it, and not by photo.",
+      "title": "Common milkweed",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "dogbane",
+      "context": "Dogbane is a milky-sapped plant with red-tinged stems and slim paired pods that is poisonous to the heart and looks like milkweed. Also called Indian hemp, hemp dogbane, Apocynum, Apocynum cannabinum. Look for red-tinged stems with milky sap, pointed opposite leaves, tiny white bells, slim paired pods; branches near the top, unlike young milkweed. Learn it so you can avoid it and warn others. Toxic to the heart. Looks like milkweed.",
+      "title": "Dogbane",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "mullein",
+      "context": "Mullein is a tall roadside plant with large, soft, gray, fuzzy leaves and a yellow flower spike in its second year. Also called common mullein, flannel leaf, cowboy toilet paper, Verbascum, Verbascum thapsus. Look for large grey fuzzy leaves in a rosette and a tall yellow flower spike in the second year; dry stalks stand through winter.",
+      "title": "Mullein",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "st_johns_wort",
+      "context": "St. John's wort is a yellow-flowered plant whose leaves show tiny see-through dots when held to the light. Also called Hypericum, St Johns wort, goatweed, Hypericum perforatum. Look for opposite small leaves with see-through dots when held to light; yellow five-petal flowers that stain purple.",
+      "title": "St. John's wort",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "self_heal",
+      "context": "Self-heal is a low lawn and trail plant with a square stem and a spiky purple flower head. Also called heal-all, Prunella, selfheal, Prunella vulgaris. Look for low plant, square stem, spiky purple flower head with ruffled lips; opposite leaves on a square stem. Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care.",
+      "title": "Self-heal",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "goldenrod",
+      "context": "Goldenrod is a tall late-summer plant with plumes of small yellow flowers; it is often blamed for hay fever caused by ragweed. Also called Solidago, goldenrods. Look for tall plume of tiny yellow flowers in late summer, alternate narrow leaves; stands in old fields and roadsides by the thousands. Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care.",
+      "title": "Goldenrod",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "white_snakeroot",
+      "context": "White snakeroot is a woodland plant with fuzzy white fall flowers that poisons livestock and can pass into their milk. Also called snakeroot, Ageratina, milk sickness plant, Ageratina altissima. Look for opposite toothed leaves on a branching stem, fuzzy white flower clusters in autumn; grows in shade at woods edges. Learn it so you can avoid it and warn others. Poisons livestock and milk. Do not eat.",
+      "title": "White snakeroot",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "jerusalem_artichoke",
+      "context": "Jerusalem artichoke is a tall wild sunflower whose knobby underground tubers are edible. Also called sunchoke, sunroot, Helianthus tuberosus. Look for tall rough sunflower-like plant with small yellow flowers and knobby tubers; leaves rough like sandpaper.",
+      "title": "Jerusalem artichoke",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "evening_primrose",
+      "context": "Evening primrose is a tall plant with four-petal yellow flowers that open at dusk. Also called Oenothera, common evening primrose, Oenothera biennis. Look for tall plant with four-petal yellow flowers that open at dusk, reddish stem; first-year rosette with a pink-tinged midrib.",
+      "title": "Evening primrose",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "pineapple_weed",
+      "context": "Pineapple weed is a low weed of packed paths whose petal-less yellow-green flower cones smell like pineapple when crushed. Also called wild chamomile, disc mayweed, Matricaria discoidea. Look for low plant with feathery leaves, yellow-green cone flowers with no petals; smells like pineapple when crushed.",
+      "title": "Pineapple weed",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "wild_bergamot",
+      "context": "Wild bergamot is a mint-family wildflower with lavender shaggy flower heads and an oregano-like smell. Also called bee balm, Monarda, horsemint, Monarda fistulosa. Look for square stem, lavender shaggy flower heads, minty oregano smell; square stem and paired leaves like other mints. Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care.",
+      "title": "Wild bergamot",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "mayapple",
+      "context": "Mayapple is a spring woodland plant with umbrella-like leaves, and every part except the fully ripe fruit is poisonous. Also called American mandrake, Podophyllum, umbrella plant, Podophyllum peltatum. Look for umbrella-like lobed leaves, a single white flower under the leaves, one green-yellow fruit; grows in large colonies on the forest floor. Learn it so you can avoid it and warn others. Everything except the ripe fruit is toxic.",
+      "title": "Mayapple",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "bloodroot",
+      "context": "Bloodroot is an early-spring wildflower with one lobed leaf and a white flower whose root bleeds red-orange sap, and it is poisonous. Also called Sanguinaria, red puccoon, Sanguinaria canadensis. Look for one clasped rounded lobed leaf and a white eight-petal flower in early spring; red-orange sap. Learn it so you can avoid it and warn others. Toxic.",
+      "title": "Bloodroot",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "baneberry",
+      "context": "Baneberry, or doll's eyes, is a woodland plant whose white or red berries on thick red stalks are deadly. Also called doll's eyes, white baneberry, red baneberry, Actaea, Actaea pachypoda. Look for compound toothed leaves, a white or red berry cluster on thick red stalks (doll's eyes); each white berry has a black dot like an eye. Learn it so you can avoid it and warn others. Berries are deadly.",
+      "title": "Baneberry",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "jimsonweed",
+      "context": "Jimsonweed is a rank-smelling weed with large white trumpet flowers and spiny seed pods, and every part is deadly. Also called Datura, thorn apple, devil's trumpet, locoweed, Datura stramonium. Look for large white trumpet flowers, spiny egg-shaped seed pods, strong smell; grows in disturbed ground and barnyards. Learn it so you can avoid it and warn others. Every part is deadly.",
+      "title": "Jimsonweed",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "bittersweet_nightshade",
+      "context": "Bittersweet nightshade is a climbing vine with small purple star flowers and red egg-shaped berries that are poisonous. Also called climbing nightshade, woody nightshade, Solanum dulcamara. Look for climbing vine, purple flowers with a yellow cone, red egg-shaped berries; green berries turn orange, then red. Learn it so you can avoid it and warn others. Berries are toxic.",
+      "title": "Bittersweet nightshade",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "monkshood",
+      "context": "Monkshood is a garden and wild plant with hooded blue-purple flowers, and every part is deadly, even through the skin. Also called Aconitum, wolfsbane, aconite. Look for deeply cut leaves and tall spikes of hooded blue-purple flowers; top petal shaped like a monk's hood. Learn it so you can avoid it and warn others. Deadly. Even skin contact can numb or harm.",
+      "title": "Monkshood",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "giant_hogweed",
+      "context": "Giant hogweed is a huge carrot-family plant whose sap, with sunlight, causes severe burns and blisters on skin. Also called hogweed, Heracleum mantegazzianum. Look for huge: stem 5-10 cm wide with purple blotches and stiff hairs, umbrella flower head up to 1 m; can be taller than a person, with a flower umbrella over a meter across. Learn it so you can avoid it and warn others. Sap plus sunlight causes severe burns. Do not touch.",
+      "title": "Giant hogweed",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "cow_parsnip",
+      "context": "Cow parsnip is a large native carrot-family plant with maple-like leaves whose sap can burn sunlit skin. Also called Heracleum maximum, Indian celery. Look for big maple-like leaves, white flat umbrella, hairy hollow stem; smaller than giant hogweed, with a greener, less blotched stem. Learn it so you can avoid it and warn others. Sap can cause burns on sunny skin.",
+      "title": "Cow parsnip",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "wild_parsnip",
+      "context": "Wild parsnip is a yellow-flowered carrot-family roadside plant whose sap, with sunlight, causes burns and blisters. Also called Pastinaca, poison parsnip, Pastinaca sativa. Look for yellow umbrella flowers, grooved hollow stem, toothed leaflets; flat yellow umbrella flowers in midsummer. Learn it so you can avoid it and warn others. Sap plus sunlight causes burns and blisters.",
+      "title": "Wild parsnip",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "skunk_cabbage",
+      "context": "Skunk cabbage is a wetland plant with a mottled hooded flower in late winter and big leaves that smell skunky when torn; it is toxic raw. Also called Symplocarpus, swamp cabbage, eastern skunk cabbage, Symplocarpus foetidus. Look for wet ground; mottled purple-maroon hooded flower in late winter. Learn it so you can avoid it and warn others. Toxic raw.",
+      "title": "Skunk cabbage",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "japanese_knotweed",
+      "context": "Japanese knotweed is an invasive plant with hollow, bamboo-like jointed canes that forms dense stands. Also called knotweed, Fallopia japonica, Mexican bamboo, Reynoutria, Reynoutria japonica. Look for hollow bamboo-like reddish canes, heart-shaped leaves, dense stands; zigzag stems with a leaf at each joint.",
+      "title": "Japanese knotweed",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "curly_dock",
+      "context": "Curly dock is a common weed with long, wavy-edged leaves and a tall rust-red seed stalk. Also called yellow dock, sour dock, Rumex crispus, dock. Look for long leaves with wavy ruffled edges, tall rust-red seed stalk; papery sheath where each leaf meets the stem.",
+      "title": "Curly dock",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "wintergreen",
+      "context": "Wintergreen is a low evergreen ground plant whose glossy leaves smell of wintergreen when crushed and whose berries are red. Also called teaberry, checkerberry, Gaultheria, Gaultheria procumbens. Look for low evergreen with glossy leaves that smell of wintergreen when crushed; red berries.",
+      "title": "Wintergreen",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "wild_rose",
+      "context": "Wild rose is a prickly shrub with five-petal pink flowers that leave red rose hips in fall. Also called rose hips, pasture rose, Rosa, multiflora rose, Rosa carolina. Look for prickly canes, five-petal pink flowers, red rose hips; hips stay on the canes into winter.",
+      "title": "Wild rose",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "hawthorn",
+      "context": "Hawthorn is a thorny small tree with lobed leaves and small red apple-like fruits called haws. Also called Crataegus, thornapple, haws, whitethorn. Look for thorny small tree or shrub with lobed leaves and red apple-like haws; long straight thorns on the twigs.",
+      "title": "Hawthorn",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "mountain_laurel",
+      "context": "Mountain laurel is an evergreen shrub with clusters of pink-white cup flowers, and its leaves, flowers, and honey are poisonous. Also called Kalmia, calico bush, spoonwood, Kalmia latifolia. Look for evergreen glossy leaves, clusters of pink-white cup flowers; forms dense thickets on rocky slopes. Learn it so you can avoid it and warn others. Leaves, flowers and honey from it are toxic.",
+      "title": "Mountain laurel",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "sphagnum",
+      "context": "Sphagnum is the spongy bog moss that holds many times its weight in water. Also called peat moss, bog moss, sphagnum moss, Sphagnum. Look for pale green to red spongy moss in bogs that holds a lot of water; grows in bogs in green, red, or brown carpets.",
+      "title": "Sphagnum moss",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "usnea",
+      "context": "Usnea, or old man's beard, is a pale green hair-like lichen on branches whose strands have a white elastic core. Also called old man's beard, beard lichen, Usnea lichen, Usnea. Look for pale green hair-like lichen on branches; pull it and the core is a white elastic thread. Older manuals and folk use mention it, but Yehsa does not give doses or treatments with wild plants. Use it as an identification lesson, and use tested first-aid supplies for care.",
+      "title": "Old man's beard (Usnea)",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "cleavers",
+      "context": "Cleavers is a sprawling plant whose square stems and narrow whorled leaves stick to clothing with tiny hooks. Also called bedstraw, stickyweed, goosegrass, Galium, Galium aparine. Look for sprawling square stem with whorls of narrow leaves that cling by tiny hooks; sticks to your sleeve when you brush it.",
+      "title": "Cleavers",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "moonseed",
+      "context": "Canada moonseed is a climbing vine with grape-like berries that are deadly; each berry holds one crescent-shaped seed. Also called moonseed vine, Menispermum, yellow parilla, Menispermum canadense. Look for climbing vine with big lobed leaves, dark blue-black berries each with a single crescent seed; no tendrils, unlike grape. Learn it so you can avoid it and warn others. Looks like wild grape. Grapes have several seeds and tendrils. Moonseed has neither.",
+      "title": "Canada moonseed",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "wild_grape",
+      "context": "Wild grape is a climbing vine with tendrils, toothed lobed leaves, and bunches of small dark grapes. Also called riverbank grape, fox grape, Vitis, Vitis riparia. Look for climbing vine with tendrils, toothed lobed leaves, round berries in a bunch; shreddy bark on older vines.",
+      "title": "Wild grape",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "thistle",
+      "context": "Thistle is a spiny plant with round purple flower heads whose peeled young stems and roots are edible. Also called bull thistle, Cirsium, spear thistle, Cirsium vulgare. Look for spiny leaves and stem, round purple flower heads; fluffy seed heads in late summer.",
+      "title": "Thistle",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "spurge",
+      "context": "Spotted spurge is a flat mat-forming weed whose milky sap irritates skin and which is toxic if eaten. Also called Euphorbia, spotted spurge, prostrate spurge, Euphorbia maculata. Look for flat mat of small oval leaves with a dark spot, milky sap; thin wiry stems, not fat and succulent. Learn it so you can avoid it and warn others. Sap irritates. Mistaken for purslane.",
+      "title": "Spotted spurge (Euphorbia)",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "purslane",
+      "context": "Purslane is a low succulent weed with thick paddle-shaped leaves and reddish stems, a common edible green. Also called Portulaca, pigweed, verdolaga, little hogweed, Portulaca oleracea. Look for flat mat of thick succulent paddle leaves with reddish stems; clear sap.",
+      "title": "Purslane",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "chickweed",
+      "context": "Chickweed is a small, soft, sprawling weed with tiny white star flowers and a single line of hairs along the stem. Also called Stellaria media, common chickweed, starweed. Look for low plant with small oval leaves and one line of hairs along the stem; tiny white deep-notched petals.",
+      "title": "Chickweed",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "common_mallow",
+      "context": "Common mallow is a low weed with round lobed leaves and small pale pink flowers that leave cheese-wheel shaped seeds. Also called cheeseweed, Malva, buttonweed, Malva neglecta. Look for round lobed leaves on long stalks, small pale pink flowers, round cheese-wheel fruits; slimy texture when the leaves are chewed or crushed.",
+      "title": "Common mallow",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "garlic_mustard",
+      "context": "Garlic mustard is an invasive woodland plant whose heart-shaped leaves smell of garlic when crushed. Also called Alliaria, hedge garlic, jack-by-the-hedge, Alliaria petiolata. Look for heart-shaped toothed leaves smelling of garlic, small white four-petal flowers; first-year rosettes stay green through winter.",
+      "title": "Garlic mustard",
+      "source": "symbolic_books/herbology/entries_plants.json"
+    },
+    {
+      "symbol": "common_juniper",
+      "context": "Common juniper is a low, spreading evergreen shrub with sharp needles in threes and blue berry-like cones. Also called juniper, Juniperus communis, juniper berries. Look for low spreading evergreen shrub with sharp needles in threes and blue berry-like cones; needles have a white stripe on top. Knowing the tree helps you pick firewood, shelter sites, and landmarks. Do not mix it up with yew, which is deadly.",
+      "title": "Common juniper",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "yew",
+      "context": "Canada yew is a low evergreen shrub with flat needles and red fleshy berries whose seeds, needles, and bark are deadly. Also called Canada yew, ground hemlock, Taxus, yew berries, Taxus canadensis. Look for flat dark green needles with two pale lines underneath, red fleshy cup berries; low shrub. Knowing the tree helps you pick firewood, shelter sites, and landmarks. Needles, seeds and bark are deadly.",
+      "title": "Yew (Canada yew)",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "balsam_fir",
+      "context": "Balsam fir is a northern evergreen with flat, blunt, fragrant needles and resin blisters on smooth bark. Also called fir, Abies balsamea, Christmas tree fir, balsam. Look for flat blunt needles with two white lines underneath, upright cones, smooth bark with resin blisters, spicy smell; cones sit upright on top branches. Resin blisters burn well as fire starter, and boughs make soft bedding.",
+      "title": "Balsam fir",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "red_spruce",
+      "context": "Red spruce is a northern evergreen with stiff, square needles that roll between the fingers and small hanging cones. Also called spruce, Picea rubens, eastern spruce. Look for square four-sided stiff needles that roll between your fingers, hanging cones, reddish scaly bark; sharp needles on small woody pegs. Spruce boughs make shelter roofing and bedding; resin helps start fires.",
+      "title": "Red spruce",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "white_spruce",
+      "context": "White spruce is a northern evergreen with blue-green four-sided needles that smell strong when crushed. Also called Picea glauca, cat spruce, skunk spruce. Look for four-sided blue-green needles, slim hanging cones; needles smell strongly when crushed. Spruce boughs make shelter roofing and bedding; spruce roots make cordage.",
+      "title": "White spruce",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "black_spruce",
+      "context": "Black spruce is a slim bog spruce with short needles and small round cones that stay on the tree for years. Also called bog spruce, Picea mariana. Look for bog tree with a thin top, short needles, small round cones that stay on the tree; club-like dense top. Its presence usually means wet, boggy ground, so plan a route around it.",
+      "title": "Black spruce",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "white_pine",
+      "context": "Eastern white pine is a tall evergreen with soft needles in bundles of five and long slim cones. Also called white pine, Pinus strobus, eastern pine. Look for soft needles in bundles of five, long slim cones, tiered branches; one needle bundle has five needles, like the letters in white. Pitch from wounds is a fire starter, and inner bark is a famine food.",
+      "title": "Eastern white pine",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "red_pine",
+      "context": "Red pine is an evergreen with long needles in pairs that snap cleanly when bent and orange-red flaky bark. Also called Norway pine, Pinus resinosa. Look for long needles in bundles of two that snap cleanly, orange-red flaky bark; often in straight planted rows. Dead lower limbs are dry fuel, and fatwood makes strong tinder.",
+      "title": "Red pine",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "eastern_hemlock",
+      "context": "Eastern hemlock is a shade-loving evergreen tree with short flat needles; it is not the poisonous hemlock plants. Also called hemlock tree, Tsuga canadensis, Canada hemlock. Look for flat short needles with two white lines underneath on tiny stalks, tiny cones, drooping top; tiny cones at the branch tips. Dense hemlock gives good shelter from wind and snow. The tree is not the poison hemlock plants. Poison and water hemlock are herbs with umbrella flowers.",
+      "title": "Eastern hemlock (the tree)",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "eastern_red_cedar",
+      "context": "Eastern red cedar is a juniper tree with scaly leaves, blue berry-like cones, and fragrant reddish wood. Also called red cedar, Juniperus virginiana, aromatic cedar. Look for scaly green leaves or sharp awls, blue berry-like cones, shredding reddish bark; narrow cone shape in old fields. Shredded bark makes good tinder.",
+      "title": "Eastern red cedar",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "northern_white_cedar",
+      "context": "Northern white cedar is an evergreen with flat fans of scale-like leaves and stringy bark, common in wet ground. Also called arborvitae, Thuja, swamp cedar, Thuja occidentalis. Look for flat fans of scale-like leaves, small cones, stringy bark; wet ground. Its inner bark makes cordage and tinder.",
+      "title": "Northern white cedar",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "tamarack",
+      "context": "Tamarack is a larch, a conifer whose soft tufted needles turn gold and drop each fall. Also called larch, eastern larch, Larix laricina, hackmatack. Look for soft needles in tufts that turn gold and drop in autumn; bare in winter, unlike other conifers. It marks wet, boggy ground.",
+      "title": "Tamarack (larch)",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "sugar_maple",
+      "context": "Sugar maple is a hardwood with five-lobed leaves and rounded gaps, tapped in late winter for maple syrup. Also called hard maple, rock maple, Acer saccharum. Look for five-lobed leaf with smooth rounded gaps, opposite branches, grey furrowed bark; winged seeds in pairs. It is excellent firewood and the classic syrup tree.",
+      "title": "Sugar maple",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "red_maple",
+      "context": "Red maple is a common hardwood with three- to five-lobed toothed leaves and red twigs, buds, and fall color. Also called swamp maple, soft maple, Acer rubrum. Look for three- to five-lobed leaf with toothed edges and sharp gaps, red twigs and buds; red flowers before the leaves in spring. Its sap can be boiled for syrup too, with a lower sugar content.",
+      "title": "Red maple",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "paper_birch",
+      "context": "Paper birch is a hardwood with white bark that peels in papery sheets and burns even when damp. Also called white birch, canoe birch, Betula papyrifera. Look for white bark peeling in papery sheets with dark marks; toothed oval leaves. Peel bark only from dead or downed trees; it is one of the best natural tinders.",
+      "title": "Paper birch",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "yellow_birch",
+      "context": "Yellow birch is a hardwood with silver-yellow bark peeling in curly strips and twigs that smell of wintergreen. Also called Betula alleghaniensis, gold birch. Look for silver-yellow bark that peels in curly strips; twigs smell of wintergreen when scratched. Curly bark shreds catch a spark and burn wet.",
+      "title": "Yellow birch",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "american_beech",
+      "context": "American beech is a hardwood with smooth gray bark and pale papery leaves that cling through winter. Also called beech, Fagus grandifolia, beechnut tree. Look for smooth blue-grey bark, toothed oval leaves with straight veins, pale leaves that stay in winter; long pointed cigar-shaped buds. Its small triangular beechnuts are edible in fall.",
+      "title": "American beech",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "white_oak",
+      "context": "White oak is a hardwood with rounded leaf lobes and pale, scaly bark. Also called Quercus alba, white oaks. Look for rounded leaf lobes, pale scaly bark; acorns mature in one year and are less bitter. Acorns need leaching before eating.",
+      "title": "White oak",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "red_oak",
+      "context": "Northern red oak is a hardwood with pointed, bristle-tipped leaf lobes and ridged bark with shiny stripes. Also called northern red oak, Quercus rubra. Look for pointed leaf lobes with bristle tips, ridged bark with pale stripes; acorns take two years to ripen and are bitter. Acorns need long leaching before eating.",
+      "title": "Red oak",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "american_elm",
+      "context": "American elm is a hardwood with lopsided, double-toothed leaves and a vase-shaped crown. Also called elm, Ulmus americana, white elm. Look for leaves with uneven bases and double teeth, vase shape; many killed by Dutch elm disease. Inner bark makes cordage.",
+      "title": "American elm",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "white_ash",
+      "context": "White ash is a hardwood with opposite compound leaves and bark ridged in a diamond pattern. Also called ash, Fraxinus americana, American ash. Look for opposite compound leaves, diamond-pattern bark; opposite branches, unlike most trees. Ash splits easily and burns well even when fairly green.",
+      "title": "White ash",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "quaking_aspen",
+      "context": "Quaking aspen is a hardwood with round leaves that tremble on flat stalks and smooth pale green-white bark. Also called aspen, trembling aspen, popple, Populus tremuloides. Look for round leaves on flat stalks that tremble, smooth pale green-white bark; grows in clones of many trunks. Its bark rubs off a white powder some use as sunblock in a pinch.",
+      "title": "Quaking aspen",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "black_cherry",
+      "context": "Black cherry is a hardwood with dark, flaky bark like burnt potato chips; its wilted leaves, pits, and bark are poisonous. Also called wild black cherry, Prunus serotina, rum cherry. Look for dark scaly bark like burnt potato chips, glossy toothed leaves, dark berries; almond smell when a twig is scratched. Only the ripe fruit flesh is eaten, never the pits. Leaves, pits and bark contain cyanide compounds. Wilted leaves are dangerous.",
+      "title": "Black cherry",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "shagbark_hickory",
+      "context": "Shagbark hickory is a hardwood whose bark hangs in long loose plates and whose nuts are sweet and edible. Also called hickory, Carya ovata. Look for long loose plates of bark curling at the ends; compound leaves. Hickory is top firewood and smoking wood.",
+      "title": "Shagbark hickory",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "basswood",
+      "context": "Basswood is a hardwood with large lopsided heart-shaped leaves and fragrant summer flowers. Also called linden, lime tree, Tilia americana, bee tree. Look for large heart-shaped lopsided leaves, nut-like balls hanging from a leafy strip; nutlets hang from a leaf-like strip. Its inner bark is one of the best natural cordage fibers.",
+      "title": "Basswood (linden)",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "black_walnut",
+      "context": "Black walnut is a hardwood with long compound leaves and round green-husked nuts whose meat is edible. Also called walnut, Juglans nigra. Look for compound leaves of many leaflets, dark ridged bark, round green husked nuts; husks stain hands dark brown. Its roots release a chemical that stunts many plants beneath it.",
+      "title": "Black walnut",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "sassafras",
+      "context": "Sassafras is a small tree with three leaf shapes on one tree and a spicy, root-beer smell when crushed. Also called Sassafras albidum, mitten tree. Look for leaves of three shapes on one tree (oval, mitten, three-lobed); spicy smell when crushed. The root contains safrole, which FDA has banned as a food additive, so do not brew it.",
+      "title": "Sassafras",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "sycamore",
+      "context": "American sycamore is a large streamside tree whose bark flakes off in white, green, and brown patches. Also called buttonwood, plane tree, Platanus occidentalis. Look for bark flaking off in patches of white and brown, big lobed leaves, ball fruits; white upper limbs visible from far away. It almost always grows near water.",
+      "title": "American sycamore",
+      "source": "symbolic_books/herbology/entries_trees.json"
+    },
+    {
+      "symbol": "witch_hazel",
+      "context": "Witch hazel is an understory shrub with wavy-edged leaves and yellow ribbon flowers in late fall. Also called Hamamelis, winterbloom, Hamamelis virginiana. Look for wavy-edged uneven leaves, yellow ribbon flowers in late autumn; flowers after the leaves drop. Knowing the tree helps you pick firewood, shelter sites, and landmarks.",
+      "title": "Witch hazel",
+      "source": "symbolic_books/herbology/entries_trees.json"
     },
     {
       "symbol": "unknown_plant",
@@ -2652,6 +3336,180 @@
       "source": "symbolic_books/survival/camp.json"
     },
     {
+      "symbol": "white_tailed_deer",
+      "context": "The white-tailed deer is the common deer of the East, brown with a white belly and a tail it raises like a white flag when alarmed. Also called whitetail, white-tail deer, deer, buck, doe. Look for brown coat, white underside, tail raised like a white flag; bucks carry antlers from late summer to winter. Deer are the main big-game animal in New England; check your state's season and tag rules before hunting.",
+      "title": "White-tailed deer",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "moose",
+      "context": "The moose is the largest deer, with a long face, a hanging dewlap, and broad flat antlers on bulls. Also called Alces, bull moose, cow moose. Look for huge with a long face, dewlap, and broad flat antlers on bulls; dark body on long pale legs. Watch from at least 50 yards (about 45 m). If one lays its ears back or raises its hackles, back away and put a tree between you.",
+      "title": "Moose",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "elk",
+      "context": "The elk is a large deer with a pale rump, a dark neck, and branching antlers on bulls. Also called wapiti, Cervus canadensis, bull elk. Look for large with a pale rump and branching antlers; bugling calls in fall. Elk are rare in New England; a big brown deer there is more likely a moose or white-tailed deer.",
+      "title": "Elk",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "black_bear",
+      "context": "The black bear is the only bear in the East, black or brown, with a straight face profile and no shoulder hump. Also called bear, American black bear, Ursus americanus. Look for black or brown with a straight muzzle and no shoulder hump; tall pointed ears. Make noise on the trail, store food and trash away from camp, and if you meet one, stand tall, talk firmly, and back away slowly.",
+      "title": "Black bear",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "coyote",
+      "context": "The eastern coyote is a slim, dog-like wild canine with a bushy tail carried low and pointed ears. Also called eastern coyote, coywolf, Canis latrans, brush wolf. Look for slim dog-like with a bushy low tail and pointed ears; yips and howls at night. If one comes close, make yourself big, shout, and throw something toward it.",
+      "title": "Coyote",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "red_fox",
+      "context": "The red fox is a small wild canine with a red coat, black legs, and a white tail tip. Also called fox, Vulpes vulpes. Look for red coat, black legs, white tail tip; bushy tail longer than half its body. Watch from a distance; foxes are usually shy.",
+      "title": "Red fox",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "bobcat",
+      "context": "The bobcat is a medium wild cat with a short bobbed tail, tufted ears, and a spotted coat. Also called wildcat, Lynx rufus, bay lynx. Look for short tail with a black tip, tufted ears, spotted coat; tail tip black on top, white below. Bobcats avoid people; enjoy the sighting from where you are.",
+      "title": "Bobcat",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "porcupine",
+      "context": "The porcupine is a slow, round rodent covered in barbed quills. Also called porky, Erethizon dorsatum, quill pig. Look for round quill-covered body, slow waddle; chewed bark high on trees. Leave it alone and keep dogs away. A pet with quills needs a vet.",
+      "title": "Porcupine",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "raccoon",
+      "context": "The raccoon is a gray, masked, ring-tailed animal that raids camps and trash at night. Also called coon, Procyon lotor, trash panda. Look for black mask and ringed tail; handprint-like tracks near water. Lock food away at night and keep a clean camp.",
+      "title": "Raccoon",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "striped_skunk",
+      "context": "The striped skunk is a black animal with white stripes down its back that sprays a strong musk when threatened. Also called skunk, Mephitis. Look for black with white stripes down the back; stamps its feet and raises its tail before spraying. Back away slowly if it stamps or turns.",
+      "title": "Striped skunk",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "beaver",
+      "context": "The beaver is a large water rodent with a flat paddle tail that builds dams and lodges. Also called American beaver, Castor canadensis. Look for flat paddle tail, dam and cut sapling stumps; tooth-chewed pointed stumps near water. Beaver ponds flood trails and make routes longer; plan around them.",
+      "title": "Beaver",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "snowshoe_hare",
+      "context": "The snowshoe hare is a northern hare with huge furry hind feet whose coat turns white in winter. Also called varying hare, Lepus americanus, snowshoe rabbit. Look for large back feet, coat white in winter and brown in summer; brown in summer, white in winter. Hares are legal small game in many states; check your state's rules.",
+      "title": "Snowshoe hare",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "wild_turkey",
+      "context": "The wild turkey is a large dark bird with a bare red-blue head and a fanned tail. Also called turkey, Meleagris gallopavo, gobbler, tom turkey. Look for large dark bird with a bare head and fanned tail; toms gobble in spring. Turkey season has its own rules; identify the bird and what is beyond it before every shot.",
+      "title": "Wild turkey",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "ruffed_grouse",
+      "context": "The ruffed grouse is a brown or gray barred woodland bird with a fan tail and a dark neck ruff. Also called partridge, Bonasa umbellus, grouse, pa'tridge. Look for brown barred bird with a fan tail and dark neck ruff; drumming sound like a starting engine in spring. Grouse are upland game in New England; check season rules.",
+      "title": "Ruffed grouse",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "bald_eagle",
+      "context": "The bald eagle is a large raptor whose adults have a white head and tail and a yellow bill. Also called eagle, Haliaeetus leucocephalus, American eagle. Look for large dark bird with a white head and tail on adults; young birds are mottled brown for four years. Watch and photograph from a distance, especially near nests.",
+      "title": "Bald eagle",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "great_horned_owl",
+      "context": "The great horned owl is a large owl with ear tufts, yellow eyes, and a deep hooting call. Also called hoot owl, Bubo virginianus, cat owl. Look for large owl with ear tufts and yellow eyes; white throat patch. Enjoy it from a distance, especially near nests in late winter.",
+      "title": "Great horned owl",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "canada_goose",
+      "context": "The Canada goose is a large goose with a black neck and head and a white chin strap. Also called honker, Branta canadensis, goose. Look for black neck and head with a white chin strap; V-shaped flocks with loud honking. Geese are migratory birds with federal and state season rules; check both.",
+      "title": "Canada goose",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "rattlesnake",
+      "context": "The timber rattlesnake is a heavy-bodied venomous snake with a broad triangular head and a rattle on its tail. Also called timber rattlesnake, rattler, Crotalus horridus. Look for thick body, triangular head, a rattle on the tail; dark crossbands on a yellow or dark body. Rattlesnakes are rare and protected in much of New England. Back away slowly and walk around.",
+      "title": "Rattlesnake",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "copperhead",
+      "context": "The copperhead is a venomous snake with a copper-colored head and tan hourglass bands. Also called Agkistrodon contortrix, highland moccasin. Look for copper head, tan body with hourglass bands; bands narrow on the back and wide on the sides. Copperheads live in southern New England's rocky woods. Back away slowly.",
+      "title": "Copperhead",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "cottonmouth",
+      "context": "The cottonmouth is a heavy, dark venomous water snake that gapes to show a white mouth. Also called water moccasin, Agkistrodon piscivorus. Look for heavy dark water snake with a white mouth when it gapes; swims with its body high on the water. Cottonmouths do not live in New England; a dark snake in water there is almost always a northern water snake.",
+      "title": "Cottonmouth",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "eastern_garter_snake",
+      "context": "The eastern garter snake is a slim, harmless snake with three pale stripes along its body. Also called garter snake, garden snake, Thamnophis sirtalis. Look for slim, three pale stripes along the body; often basks on paths and rocks. It is harmless; let it go on its way.",
+      "title": "Garter snake",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "northern_water_snake",
+      "context": "The northern water snake is a common, non-venomous banded brown snake found in and near water. Also called water snake, Nerodia sipedon. Look for banded brown snake near water; round pupils. It is not venomous; give it room.",
+      "title": "Northern water snake",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "blacklegged_tick",
+      "context": "The blacklegged tick, or deer tick, is a tiny dark tick that spreads Lyme disease, anaplasmosis, and babesiosis. Also called deer tick, Ixodes scapularis, Lyme tick. Look for tiny dark tick; adult females have an orange-red body and black plate. Check your whole body after time outside, and remove ticks with fine tweezers pulled straight out.",
+      "title": "Blacklegged (deer) tick",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "american_dog_tick",
+      "context": "The American dog tick is a larger brown tick with cream markings that can carry Rocky Mountain spotted fever. Also called dog tick, wood tick, Dermacentor variabilis. Look for larger brown tick with white-cream markings on the back; common in grassy fields and trail edges. Remove it with fine tweezers close to the skin and wash the bite.",
+      "title": "American dog tick",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "lone_star_tick",
+      "context": "The lone star tick is a reddish-brown tick whose females have one white dot on the back; its bites are linked to a red-meat allergy. Also called Amblyomma americanum, turkey tick. Look for reddish-brown tick with one white dot on the back of females; aggressive biter, spreading north. Remove it with fine tweezers close to the skin.",
+      "title": "Lone star tick",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "black_widow",
+      "context": "The black widow is a shiny black spider with a red hourglass under its belly whose bite needs medical care. Also called widow spider, Latrodectus. Look for shiny black spider with a red hourglass underneath; messy webs under rocks, logs, and outhouse seats. Shake out gloves, boots, and firewood before use.",
+      "title": "Black widow",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "bald_faced_hornet",
+      "context": "The bald-faced hornet is a black-and-white wasp that builds a gray paper nest in trees and defends it fiercely. Also called white-faced hornet, Dolichovespula maculata. Look for black and white wasp with a grey paper nest the size of a football; nests hang from branches or eaves. Walk wide around nests.",
+      "title": "Bald-faced hornet",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "yellowjacket",
+      "context": "The yellowjacket is a black-and-yellow wasp that nests in the ground and stings repeatedly. Also called yellow jacket, ground wasp, Vespula. Look for black and yellow wasp that nests underground; busy hole in the ground. Watch for ground nests when clearing a camp or trail.",
+      "title": "Yellowjacket",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
+      "symbol": "wild_boar",
+      "context": "The wild boar, or feral hog, is a dark bristly pig with a long snout that can be aggressive. Also called feral hog, feral pig, wild pig, Sus scrofa. Look for dark bristly pig with a long snout; rooted-up ground. Feral hogs are not established in New England; report one to your state wildlife agency.",
+      "title": "Wild boar (feral hog)",
+      "source": "symbolic_books/survival/entries_animals.json"
+    },
+    {
       "symbol": "fire_site_choice",
       "context": "A safe fire site is on bare mineral soil, clear of overhanging branches, dry grass, and roots, and downwind from your shelter. Also called where to build a fire, fire ring, keep a fire from spreading, fire pit. Look for bare soil or sand, or an existing ring; a cleared circle about 10 feet (3 m) wide. Scrape away leaves and duff to bare soil, build a ring of rocks, keep water or a shovel at hand, and keep it small. Check local rules first.",
       "title": "Choosing a fire site",
@@ -2796,6 +3654,36 @@
       "source": "symbolic_books/survival/entries_food.json"
     },
     {
+      "symbol": "deer_scat",
+      "context": "Deer scat is a pile of small, dark, oval or acorn-shaped pellets, often 20 to 50 together, that shows where deer have fed or bedded. Also called deer droppings, deer poop, deer pellets, deer poo, deer dung. Look for pellets about 1/2 to 3/4 inch (1.5 to 2 cm) long, often with a small point or dimple at one end; dark and shiny when fresh, dull and dry or crumbly when old.",
+      "title": "Deer scat",
+      "source": "symbolic_books/survival/entries_hunting.json"
+    },
+    {
+      "symbol": "deer_track",
+      "context": "A deer track is a split, heart-shaped hoof print made by two pointed toes, about 2 to 3 1/2 inches (5 to 9 cm) long. Also called deer track, deer prints, deer hoof print, whitetail track, deer sign. Look for two teardrop toes forming a heart with the point toward travel; two dewclaw dots behind the print in mud, snow, or when running.",
+      "title": "Deer tracks",
+      "source": "symbolic_books/survival/entries_hunting.json"
+    },
+    {
+      "symbol": "deer_rub",
+      "context": "A rub is a sapling or small tree where a buck has scraped off bark with his antlers, mostly in fall before and during the rut. Also called buck rub, antler rub, rubs on trees, scraped bark, deer sign. Look for bark stripped from one side of a small tree, often 1 to 4 inches (2.5 to 10 cm) thick, from knee to waist height; pale fresh wood, shredded bark curls on the ground, and broken twigs.",
+      "title": "Deer rubs",
+      "source": "symbolic_books/survival/entries_hunting.json"
+    },
+    {
+      "symbol": "deer_scrape",
+      "context": "A scrape is a patch of bare earth that a buck paws clear under an overhanging branch and marks with scent, mostly in the weeks before the rut. Also called buck scrape, deer scrape, scrape under a branch, licking branch, deer sign. Look for a pawed oval of bare dirt, often 1 to 3 feet (30 to 90 cm) across; a chewed or broken licking branch about head height above it.",
+      "title": "Deer scrapes",
+      "source": "symbolic_books/survival/entries_hunting.json"
+    },
+    {
+      "symbol": "deer_sign_reading",
+      "context": "Deer sign is the tracks, scat, rubs, scrapes, beds, and browsed plants that deer leave, and reading it shows where they travel, feed, and rest. Also called deer sign, signs of deer, how to scout for deer, deer scouting, where are the deer. Look for trails and tracks between thick cover and food; scat piles, oval beds pressed in leaves or snow.",
+      "title": "Reading deer sign",
+      "source": "symbolic_books/survival/entries_hunting.json"
+    },
+    {
       "symbol": "shelter_site_hazards",
       "context": "Choose a shelter site away from hazards overhead and underfoot: dead branches, rockfall, flood channels, game trails, and low cold pockets. Also called widowmaker, dead tree over camp, flood channel, rockfall, bad campsite. Look for dead limbs or leaning trees overhead (widowmakers); dry washes, gullies, and stream banks that can flood.",
       "title": "Where not to camp or build a shelter",
@@ -2896,6 +3784,78 @@
       "context": "In plain terms, thicker is warmer: about 3 feet of dry debris on a hut and 6 to 8 inches under you, with a small vent. Also called thickness of debris, how thick should the leaves be. Look for 3 feet (1 m) of debris on a hut; 6 to 8 inches (15 to 20 cm) under you. Add more until you can no longer feel the cold coming through, and keep it dry. Leave a vent.",
       "title": "How much insulation is enough?",
       "source": "symbolic_books/survival/entries_shelter.json"
+    },
+    {
+      "symbol": "bear_scat",
+      "context": "Black bear scat is a large tubular or piled dropping, often full of berries, seeds, nut shells, grass, or hair, that means a bear has been in the area. Also called bear droppings, bear poop, bear dung, black bear scat, bear sign. Look for thick tubes about 1.5 to 2 inches (4 to 5 cm) wide, or loose piles; packed with berries, seeds, or grass in summer and fall.",
+      "title": "Bear scat",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "coyote_scat",
+      "context": "Coyote and fox scat is a twisted, rope-like dropping full of hair and small bones, with a tapered end, often left in the middle of a trail. Also called coyote droppings, fox scat, fox poop, coyote poop, canine scat. Look for coyote scat about 3/4 to 1 inch (2 to 2.5 cm) wide; fox scat thinner; packed with fur, bone, berries, or seeds. Scat on a trail or at a junction is a territory marker. It tells you which predators use the area.",
+      "title": "Coyote or fox scat",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "moose_scat",
+      "context": "Moose scat is a pile of large oval pellets of compressed wood fiber in winter, or soft clumps like a cow pie in summer. Also called moose droppings, moose poop, moose nuggets, moose pellets. Look for pellets about 1 to 1 1/2 inches (2.5 to 4 cm) long, much bigger than deer; sawdust-like texture when broken. Fresh piles mean moose are using the area; give any moose plenty of room.",
+      "title": "Moose scat",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "raccoon_scat",
+      "context": "Raccoon scat is a blunt-ended, tubular dropping often full of seeds and shell bits, left in piles called latrines on logs, rocks, roofs, or at tree bases. Also called raccoon droppings, raccoon poop, raccoon latrine, coon scat. Look for dark tubes about 3/4 inch (2 cm) wide with blunt ends; many droppings of different ages in one spot. A latrine means raccoons use the site regularly. Keep food and trash locked away.",
+      "title": "Raccoon scat",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "rabbit_scat",
+      "context": "Rabbit and hare scat is a scatter of round, slightly flattened, pea-sized pellets of chewed plant fiber. Also called rabbit droppings, rabbit poop, rabbit pellets, hare droppings, bunny poop. Look for round, about 1/4 to 1/2 inch (0.6 to 1.3 cm) across, flattened like a thick coin; light brown and fibrous inside. Lots of pellets near brush and browsed twigs mean rabbits or hares feed and hide there.",
+      "title": "Rabbit or hare scat",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "bear_track",
+      "context": "A black bear track is a wide print with five toes in an arc and a broad pad, the hind print looking like a flat-footed human foot. Also called bear track, bear prints, bear paw print, black bear track, bear sign. Look for front print about 4 to 6 inches (10 to 15 cm) wide with claw dots; hind print longer, up to about 7 inches (18 cm), with a heel. Fresh tracks mean a bear is close. Make noise, keep food sealed, and keep dogs leashed.",
+      "title": "Bear tracks",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "canine_track",
+      "context": "A canine track has four toes with claw marks around a triangular pad, and an X shape can be drawn through the space between toes and pad. Also called coyote track, fox track, dog track, canine prints, wolf track. Look for oval print; coyote about 2 1/2 inches (6 cm) long, fox smaller; wild canines walk in a straight, direct line; dogs wander. A straight, purposeful line of oval prints is usually a coyote or fox; a zigzagging line beside a person's tracks is usually a dog.",
+      "title": "Coyote, fox, or dog tracks",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "raccoon_track",
+      "context": "A raccoon track has five long, finger-like toes, like a small human handprint, usually in mud near water. Also called raccoon track, raccoon prints, coon track. Look for front print about 2 to 3 inches (5 to 8 cm) with separated fingers; hind print longer, like a small foot. Raccoon tracks near camp mean you should lock up food at night.",
+      "title": "Raccoon tracks",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "moose_track",
+      "context": "A moose track is a large split-hoof print over 4 inches (10 cm) long, shaped like a deer track but much bigger. Also called moose track, moose prints, moose hoof print. Look for blunt or pointed heart shape, about 4 to 6 inches (10 to 15 cm) long; deep in mud or snow, with dewclaws often showing. Fresh tracks mean moose are near; give them room, especially in fall and in calving season.",
+      "title": "Moose tracks",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "turkey_track",
+      "context": "A wild turkey track is a large bird print with three long forward toes and a short back toe, about 4 to 5 inches (10 to 13 cm) long. Also called turkey track, turkey prints, bird tracks. Look for middle toe longest and straight ahead; long stride of many prints in a line. Fresh tracks near fields, roosts, or dusting spots mean turkeys use the area.",
+      "title": "Turkey tracks",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "bobcat_track",
+      "context": "A bobcat track is a round print about 2 inches (5 cm) across with four toes, no claw marks, and a three-lobed pad. Also called bobcat track, cat track, lynx track, bobcat prints. Look for round, not oval like a canine; leading edge of the pad has two notches making three lobes. A round print with no claws is a cat; bobcats often walk with hind feet placed in the front prints.",
+      "title": "Bobcat tracks",
+      "source": "symbolic_books/survival/entries_sign.json"
+    },
+    {
+      "symbol": "rabbit_track",
+      "context": "Rabbit and hare tracks come in groups of four: two long hind feet side by side in front of two small front feet, one behind the other. Also called rabbit track, hare track, bunny prints, snowshoe hare track. Look for Y-shaped or triangle-shaped track group; snowshoe hare hind prints very large and splayed in snow. The big hind prints land ahead of the front prints, so the wide end of the group points the way the animal went.",
+      "title": "Rabbit or hare tracks",
+      "source": "symbolic_books/survival/entries_sign.json"
     },
     {
       "symbol": "water_how_much",

@@ -1,0 +1,369 @@
+[
+{
+"id": "bear_scat",
+"title": "Bear scat",
+"domain": "sign",
+"also": [
+"bear droppings",
+"bear poop",
+"bear dung",
+"black bear scat",
+"bear sign"
+],
+"def": "Black bear scat is a large tubular or piled dropping, often full of berries, seeds, nut shells, grass, or hair, that means a bear has been in the area.",
+"look": [
+"thick tubes about 1.5 to 2 inches (4 to 5 cm) wide, or loose piles",
+"packed with berries, seeds, or grass in summer and fall"
+],
+"use": "Fresh, moist scat means a bear was there recently. Make noise, keep food sealed and away from camp, and consider moving on.",
+"not": "Do not touch or sniff scat with bare hands; use a stick, and wash your hands after. Do not camp next to a latrine or fresh bear sign.",
+"alike": [
+"Coyote scat: thinner, twisted, full of hair and bone with tapered ends",
+"Moose summer scat: loose cow-pie clumps of plant fiber"
+],
+"rel": [
+"bear_track"
+],
+"src": [
+"nps",
+"usfs"
+],
+"ask": "Tell me about bear scat"
+},
+{
+"id": "coyote_scat",
+"title": "Coyote or fox scat",
+"domain": "sign",
+"also": [
+"coyote droppings",
+"fox scat",
+"fox poop",
+"coyote poop",
+"canine scat"
+],
+"def": "Coyote and fox scat is a twisted, rope-like dropping full of hair and small bones, with a tapered end, often left in the middle of a trail.",
+"look": [
+"coyote scat about 3/4 to 1 inch (2 to 2.5 cm) wide; fox scat thinner",
+"packed with fur, bone, berries, or seeds"
+],
+"use": "Scat on a trail or at a junction is a territory marker. It tells you which predators use the area.",
+"not": "Do not touch or sniff scat with bare hands; use a stick, and wash your hands after. Do not camp next to a latrine or fresh bear sign. Canine scat can carry tapeworm eggs.",
+"alike": [
+"Domestic dog: usually smooth, uniform, kibble-based, without hair",
+"Bobcat scat: segmented, blunt ends, often partly buried"
+],
+"rel": [
+"canine_track"
+],
+"src": [
+"nps",
+"cdc"
+],
+"ask": "Tell me about coyote or fox scat"
+},
+{
+"id": "moose_scat",
+"title": "Moose scat",
+"domain": "sign",
+"also": [
+"moose droppings",
+"moose poop",
+"moose nuggets",
+"moose pellets"
+],
+"def": "Moose scat is a pile of large oval pellets of compressed wood fiber in winter, or soft clumps like a cow pie in summer.",
+"look": [
+"pellets about 1 to 1 1/2 inches (2.5 to 4 cm) long, much bigger than deer",
+"sawdust-like texture when broken"
+],
+"use": "Fresh piles mean moose are using the area; give any moose plenty of room.",
+"not": "Do not touch or sniff scat with bare hands; use a stick, and wash your hands after. Do not camp next to a latrine or fresh bear sign.",
+"alike": [
+"Deer scat: same shape, about half the size"
+],
+"rel": [
+"moose_track",
+"deer_scat"
+],
+"src": [
+"nps",
+"usfs"
+],
+"ask": "Tell me about moose scat"
+},
+{
+"id": "raccoon_scat",
+"title": "Raccoon scat",
+"domain": "sign",
+"also": [
+"raccoon droppings",
+"raccoon poop",
+"raccoon latrine",
+"coon scat"
+],
+"def": "Raccoon scat is a blunt-ended, tubular dropping often full of seeds and shell bits, left in piles called latrines on logs, rocks, roofs, or at tree bases.",
+"look": [
+"dark tubes about 3/4 inch (2 cm) wide with blunt ends",
+"many droppings of different ages in one spot"
+],
+"use": "A latrine means raccoons use the site regularly. Keep food and trash locked away.",
+"not": "Raccoon latrines can carry roundworm eggs that seriously harm people. Do not touch, sweep, or kick them; keep children and pets away. Clean up only with gloves and a mask and follow CDC guidance.",
+"alike": [
+"Coyote scat: twisted with hair and bone, single on trails",
+"Skunk scat: similar but smaller and more often full of insect parts"
+],
+"rel": [
+"raccoon_track"
+],
+"src": [
+"cdc",
+"nps"
+],
+"ask": "Tell me about raccoon scat"
+},
+{
+"id": "rabbit_scat",
+"title": "Rabbit or hare scat",
+"domain": "sign",
+"also": [
+"rabbit droppings",
+"rabbit poop",
+"rabbit pellets",
+"hare droppings",
+"bunny poop"
+],
+"def": "Rabbit and hare scat is a scatter of round, slightly flattened, pea-sized pellets of chewed plant fiber.",
+"look": [
+"round, about 1/4 to 1/2 inch (0.6 to 1.3 cm) across, flattened like a thick coin",
+"light brown and fibrous inside"
+],
+"use": "Lots of pellets near brush and browsed twigs mean rabbits or hares feed and hide there.",
+"not": "Do not touch or sniff scat with bare hands; use a stick, and wash your hands after. Do not camp next to a latrine or fresh bear sign. Wear gloves when handling rabbits or hares, because of tularemia.",
+"alike": [
+"Deer scat: oval or acorn-shaped with a point, larger and darker",
+"Woodchuck or squirrel: smaller, more oblong"
+],
+"rel": [
+"rabbit_track"
+],
+"src": [
+"nps",
+"cdc"
+],
+"ask": "Tell me about rabbit or hare scat"
+},
+{
+"id": "bear_track",
+"title": "Bear tracks",
+"domain": "sign",
+"also": [
+"bear track",
+"bear prints",
+"bear paw print",
+"black bear track",
+"bear sign"
+],
+"def": "A black bear track is a wide print with five toes in an arc and a broad pad, the hind print looking like a flat-footed human foot.",
+"look": [
+"front print about 4 to 6 inches (10 to 15 cm) wide with claw dots",
+"hind print longer, up to about 7 inches (18 cm), with a heel"
+],
+"use": "Fresh tracks mean a bear is close. Make noise, keep food sealed, and keep dogs leashed.",
+"not": "Do not follow fresh bear tracks, especially to a carcass or with cubs nearby.",
+"alike": [
+"Human barefoot print: big toe on the inside and an arch",
+"Raccoon: much smaller, long fingers"
+],
+"rel": [
+"bear_scat",
+"black_bear"
+],
+"src": [
+"nps",
+"usfs"
+],
+"ask": "Tell me about bear tracks"
+},
+{
+"id": "canine_track",
+"title": "Coyote, fox, or dog tracks",
+"domain": "sign",
+"also": [
+"coyote track",
+"fox track",
+"dog track",
+"canine prints",
+"wolf track"
+],
+"def": "A canine track has four toes with claw marks around a triangular pad, and an X shape can be drawn through the space between toes and pad.",
+"look": [
+"oval print; coyote about 2 1/2 inches (6 cm) long, fox smaller",
+"wild canines walk in a straight, direct line; dogs wander"
+],
+"use": "A straight, purposeful line of oval prints is usually a coyote or fox; a zigzagging line beside a person's tracks is usually a dog.",
+"not": "Track size alone does not separate a big fox from a small coyote or dog.",
+"alike": [
+"Bobcat: round print, no claw marks, three-lobed pad",
+"Raccoon: five long fingers"
+],
+"rel": [
+"coyote_scat",
+"coyote"
+],
+"src": [
+"nps",
+"usfs"
+],
+"ask": "Tell me about coyote, fox, or dog tracks"
+},
+{
+"id": "raccoon_track",
+"title": "Raccoon tracks",
+"domain": "sign",
+"also": [
+"raccoon track",
+"raccoon prints",
+"coon track"
+],
+"def": "A raccoon track has five long, finger-like toes, like a small human handprint, usually in mud near water.",
+"look": [
+"front print about 2 to 3 inches (5 to 8 cm) with separated fingers",
+"hind print longer, like a small foot"
+],
+"use": "Raccoon tracks near camp mean you should lock up food at night.",
+"not": "Do not handle a raccoon that is active by day and acting oddly; it may have rabies.",
+"alike": [
+"Opossum: hind foot has a thumb pointing sideways",
+"Skunk: shorter toes, five in an arc"
+],
+"rel": [
+"raccoon_scat",
+"raccoon"
+],
+"src": [
+"nps",
+"cdc"
+],
+"ask": "Tell me about raccoon tracks"
+},
+{
+"id": "moose_track",
+"title": "Moose tracks",
+"domain": "sign",
+"also": [
+"moose track",
+"moose prints",
+"moose hoof print"
+],
+"def": "A moose track is a large split-hoof print over 4 inches (10 cm) long, shaped like a deer track but much bigger.",
+"look": [
+"blunt or pointed heart shape, about 4 to 6 inches (10 to 15 cm) long",
+"deep in mud or snow, with dewclaws often showing"
+],
+"use": "Fresh tracks mean moose are near; give them room, especially in fall and in calving season.",
+"not": "Do not follow fresh moose tracks into thick cover.",
+"alike": [
+"Deer track: same shape but under about 3 1/2 inches (9 cm)",
+"Cattle: rounder, wider toes"
+],
+"rel": [
+"moose_scat",
+"moose",
+"deer_track"
+],
+"src": [
+"nps",
+"usfs"
+],
+"ask": "Tell me about moose tracks"
+},
+{
+"id": "turkey_track",
+"title": "Turkey tracks",
+"domain": "sign",
+"also": [
+"turkey track",
+"turkey prints",
+"bird tracks"
+],
+"def": "A wild turkey track is a large bird print with three long forward toes and a short back toe, about 4 to 5 inches (10 to 13 cm) long.",
+"look": [
+"middle toe longest and straight ahead",
+"long stride of many prints in a line"
+],
+"use": "Fresh tracks near fields, roosts, or dusting spots mean turkeys use the area.",
+"not": "Tracks do not tell a tom from a hen reliably; large tracks over about 4 1/2 inches are more often toms.",
+"alike": [
+"Great blue heron: longer back toe and slimmer toes",
+"Grouse: smaller, about 2 inches (5 cm)"
+],
+"rel": [
+"wild_turkey"
+],
+"src": [
+"usfs",
+"fws"
+],
+"ask": "Tell me about turkey tracks"
+},
+{
+"id": "bobcat_track",
+"title": "Bobcat tracks",
+"domain": "sign",
+"also": [
+"bobcat track",
+"cat track",
+"lynx track",
+"bobcat prints"
+],
+"def": "A bobcat track is a round print about 2 inches (5 cm) across with four toes, no claw marks, and a three-lobed pad.",
+"look": [
+"round, not oval like a canine",
+"leading edge of the pad has two notches making three lobes"
+],
+"use": "A round print with no claws is a cat; bobcats often walk with hind feet placed in the front prints.",
+"not": "Do not track a bobcat closely to a den.",
+"alike": [
+"Canine: oval with claw marks and a triangular pad",
+"House cat: smaller, about 1 1/2 inches (4 cm)"
+],
+"rel": [
+"bobcat"
+],
+"src": [
+"nps",
+"usfs"
+],
+"ask": "Tell me about bobcat tracks"
+},
+{
+"id": "rabbit_track",
+"title": "Rabbit or hare tracks",
+"domain": "sign",
+"also": [
+"rabbit track",
+"hare track",
+"bunny prints",
+"snowshoe hare track"
+],
+"def": "Rabbit and hare tracks come in groups of four: two long hind feet side by side in front of two small front feet, one behind the other.",
+"look": [
+"Y-shaped or triangle-shaped track group",
+"snowshoe hare hind prints very large and splayed in snow"
+],
+"use": "The big hind prints land ahead of the front prints, so the wide end of the group points the way the animal went.",
+"not": "Do not mistake the order: the large prints are in front because the hind feet swing past.",
+"alike": [
+"Squirrel: front prints side by side too, with clear toes and claws"
+],
+"rel": [
+"rabbit_scat",
+"snowshoe_hare"
+],
+"src": [
+"nps",
+"usfs"
+],
+"ask": "Tell me about rabbit or hare tracks"
+}
+]

@@ -20,7 +20,7 @@ import { scriptureByMeaning } from "./meaning/scripture_meaning.js";
 import { treatmentGuard } from "./meaning/treatment_guard.js";
 import { fieldGuideAnswer } from "./field_guide.js";
 import { stripFiller } from "./answer_polish.js";
-import { expandKnowledge } from "./entries.js";
+import { expandKnowledge, namedEntryKnowledge, namedNote } from "./entries.js";
 
 function premiseFromKnowledge(question, knowledge) {
   const texts = [knowledge?.text, ...(knowledge?.hits || []).map((hit) => hit?.text)];
@@ -121,6 +121,9 @@ export function ask(input, options = {}) {
       }] : []
     }, options);
   }
+  // A question that only names a thing gets the note with that exact name (the camera's labels too).
+  const named = namedNote(original);
+  if (named?.entry) return finish(question, emotion, null, namedEntryKnowledge(named.entry), options);
   const guide = fieldGuideAnswer(original);
   if (guide) return finish(question, emotion, null, guide, options);
   const defined = dictionaryLookup(original);
@@ -128,9 +131,13 @@ export function ask(input, options = {}) {
     return finish(question, emotion, null, defined, options);
   }
   let knowledge = recallKnowledge(expanded);
+  if (named && knowledge?.symbol !== named.symbol) {
+    const hit = (knowledge?.hits || []).find((item) => item.symbol === named.symbol);
+    if (hit) knowledge = { ...knowledge, kind: hit.kind, symbol: hit.symbol, title: hit.title, source: hit.source, text: hit.text, hits: [hit, ...knowledge.hits.filter((item) => item !== hit)] };
+  }
   const nav = navigationSentence(original, options);
   let meaningInfo = null;
-  if (meaning && !nav?.sentence) {
+  if (meaning && !nav?.sentence && !(named && knowledge?.symbol === named.symbol)) {
     const reply = meaningReply(meaning, original, knowledge);
     meaningInfo = reply.meaning;
     if (reply.text !== (knowledge?.text || null)) {

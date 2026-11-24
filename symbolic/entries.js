@@ -4,6 +4,7 @@
 // Pure data and string work. No I/O, no network, not on the getMappedAction hot path.
 import { ENTRIES, ENTRY_SOURCES } from "./entries_data.js";
 import { LEGACY_LINKS } from "./entries_links.js";
+import { CAMERA_NOTE_NAMES } from "./camera_notes.js";
 
 const BY_ID = new Map(ENTRIES.map((entry) => [entry.id, entry]));
 
@@ -28,6 +29,10 @@ const LABELS = {
   weather: { use: "What it tells you", not: "Do not read it as" },
   foraging: { use: "How it fits", not: "Do not" },
   plants: { use: "How it fits", not: "Do not" },
+  trees: { use: "How it fits", not: "Do not" },
+  fungi: { use: "How it fits", not: "Do not" },
+  animals: { use: "What to do", not: "Keep in mind" },
+  sign: { use: "What it tells you", not: "Keep in mind" },
   spiritual: { use: "How it is used", not: "Keep in mind" },
   default: { use: "When to use it", not: "Limits" }
 };
@@ -107,4 +112,70 @@ export function relatedOffer(symbol) {
 // The plain question that should land on an entry. Tests check it really does.
 export function askFor(entry) {
   return entry.ask || `Tell me about ${entry.title.toLowerCase()}`;
+}
+
+// Which corpus folder, and so which note kind, an entry's passage lives in (tools/build_entries.mjs).
+const DOMAIN_KIND = {
+  firstaid: "medical", weather: "landscape", terrain: "landscape",
+  foraging: "herbology", plants: "herbology", trees: "herbology", fungi: "herbology"
+};
+export function entryKind(entry) {
+  return DOMAIN_KIND[entry?.domain] || "survival";
+}
+export function entrySource(entry) {
+  return `symbolic_books/${entryKind(entry)}/entries_${entry.domain}.json`;
+}
+
+// A glossary of names: each entry's title, the words in its title's brackets, and its other names,
+// plus the names the camera shows for a note. A name that two notes share is left out.
+function normName(text) {
+  return String(text || "").toLowerCase().replace(/[\u2018\u2019]/g, "'").replace(/[^a-z0-9' -]+/g, " ")
+    .replace(/\s+/g, " ").trim().replace(/^(?:a|an|the|some) /, "");
+}
+const NAME_INDEX = (() => {
+  const seen = new Map();
+  const add = (name, symbol) => {
+    const key = normName(name);
+    if (key.length < 3) return;
+    if (!seen.has(key)) seen.set(key, new Set());
+    seen.get(key).add(symbol);
+  };
+  for (const entry of ENTRIES) {
+    add(entry.title.replace(/\s*\([^)]*\)/g, ""), entry.id);
+    for (const inner of entry.title.match(/\(([^)]*)\)/g) || []) add(inner.slice(1, -1), entry.id);
+    for (const name of entry.also || []) add(name, entry.id);
+  }
+  for (const [symbol, names] of Object.entries(CAMERA_NOTE_NAMES)) for (const name of names) add(name, symbol);
+  const index = new Map();
+  for (const [key, symbols] of seen) if (symbols.size === 1) index.set(key, [...symbols][0]);
+  return index;
+})();
+
+const NAME_QUESTION = [
+  /^(?:what(?:'s| is| are)|tell me (?:more )?about|describe|identify|how do i (?:identify|recognize|recognise|spot)|is this|is that|is it|are these|are those|info on|information on)\s+(.+)$/,
+  /^what do(?:es)?\s+(.+?)\s+look like$/
+];
+
+/**
+ * When a question only names a thing ("What is deer scat?", "Tell me about chaga", "Is this deer poop?"),
+ * return the note with that exact name: { symbol, entry } (entry is null for an older note).
+ */
+export function namedNote(question) {
+  const text = normName(String(question || "").replace(/[?.!]+\s*$/, ""));
+  for (const pattern of NAME_QUESTION) {
+    const match = text.match(pattern);
+    if (!match) continue;
+    const subject = normName(match[1]);
+    for (const key of [subject, subject.replace(/s$/, ""), `${subject}s`]) {
+      const symbol = NAME_INDEX.get(key);
+      if (symbol) return { symbol, entry: BY_ID.get(symbol) || null };
+    }
+  }
+  return null;
+}
+
+// The knowledge record Ask uses for a named entry, already in its full form.
+export function namedEntryKnowledge(entry) {
+  const hit = { kind: entryKind(entry), symbol: entry.id, title: entry.title, source: entrySource(entry), text: entry.def, score: 100 };
+  return expandKnowledge({ ...hit, hits: [hit] });
 }

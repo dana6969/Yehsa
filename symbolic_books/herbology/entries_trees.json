@@ -1,0 +1,147 @@
+[
+ {
+  "symbol": "common_juniper",
+  "title": "Common juniper",
+  "context": "Common juniper is a low, spreading evergreen shrub with sharp needles in threes and blue berry-like cones. Also called juniper, Juniperus communis, juniper berries. Look for low spreading evergreen shrub with sharp needles in threes and blue berry-like cones; needles have a white stripe on top. Knowing the tree helps you pick firewood, shelter sites, and landmarks. Do not mix it up with yew, which is deadly."
+ },
+ {
+  "symbol": "yew",
+  "title": "Yew (Canada yew)",
+  "context": "Canada yew is a low evergreen shrub with flat needles and red fleshy berries whose seeds, needles, and bark are deadly. Also called Canada yew, ground hemlock, Taxus, yew berries, Taxus canadensis. Look for flat dark green needles with two pale lines underneath, red fleshy cup berries; low shrub. Knowing the tree helps you pick firewood, shelter sites, and landmarks. Needles, seeds and bark are deadly."
+ },
+ {
+  "symbol": "balsam_fir",
+  "title": "Balsam fir",
+  "context": "Balsam fir is a northern evergreen with flat, blunt, fragrant needles and resin blisters on smooth bark. Also called fir, Abies balsamea, Christmas tree fir, balsam. Look for flat blunt needles with two white lines underneath, upright cones, smooth bark with resin blisters, spicy smell; cones sit upright on top branches. Resin blisters burn well as fire starter, and boughs make soft bedding."
+ },
+ {
+  "symbol": "red_spruce",
+  "title": "Red spruce",
+  "context": "Red spruce is a northern evergreen with stiff, square needles that roll between the fingers and small hanging cones. Also called spruce, Picea rubens, eastern spruce. Look for square four-sided stiff needles that roll between your fingers, hanging cones, reddish scaly bark; sharp needles on small woody pegs. Spruce boughs make shelter roofing and bedding; resin helps start fires."
+ },
+ {
+  "symbol": "white_spruce",
+  "title": "White spruce",
+  "context": "White spruce is a northern evergreen with blue-green four-sided needles that smell strong when crushed. Also called Picea glauca, cat spruce, skunk spruce. Look for four-sided blue-green needles, slim hanging cones; needles smell strongly when crushed. Spruce boughs make shelter roofing and bedding; spruce roots make cordage."
+ },
+ {
+  "symbol": "black_spruce",
+  "title": "Black spruce",
+  "context": "Black spruce is a slim bog spruce with short needles and small round cones that stay on the tree for years. Also called bog spruce, Picea mariana. Look for bog tree with a thin top, short needles, small round cones that stay on the tree; club-like dense top. Its presence usually means wet, boggy ground, so plan a route around it."
+ },
+ {
+  "symbol": "white_pine",
+  "title": "Eastern white pine",
+  "context": "Eastern white pine is a tall evergreen with soft needles in bundles of five and long slim cones. Also called white pine, Pinus strobus, eastern pine. Look for soft needles in bundles of five, long slim cones, tiered branches; one needle bundle has five needles, like the letters in white. Pitch from wounds is a fire starter, and inner bark is a famine food."
+ },
+ {
+  "symbol": "red_pine",
+  "title": "Red pine",
+  "context": "Red pine is an evergreen with long needles in pairs that snap cleanly when bent and orange-red flaky bark. Also called Norway pine, Pinus resinosa. Look for long needles in bundles of two that snap cleanly, orange-red flaky bark; often in straight planted rows. Dead lower limbs are dry fuel, and fatwood makes strong tinder."
+ },
+ {
+  "symbol": "eastern_hemlock",
+  "title": "Eastern hemlock (the tree)",
+  "context": "Eastern hemlock is a shade-loving evergreen tree with short flat needles; it is not the poisonous hemlock plants. Also called hemlock tree, Tsuga canadensis, Canada hemlock. Look for flat short needles with two white lines underneath on tiny stalks, tiny cones, drooping top; tiny cones at the branch tips. Dense hemlock gives good shelter from wind and snow. The tree is not the poison hemlock plants. Poison and water hemlock are herbs with umbrella flowers."
+ },
+ {
+  "symbol": "eastern_red_cedar",
+  "title": "Eastern red cedar",
+  "context": "Eastern red cedar is a juniper tree with scaly leaves, blue berry-like cones, and fragrant reddish wood. Also called red cedar, Juniperus virginiana, aromatic cedar. Look for scaly green leaves or sharp awls, blue berry-like cones, shredding reddish bark; narrow cone shape in old fields. Shredded bark makes good tinder."
+ },
+ {
+  "symbol": "northern_white_cedar",
+  "title": "Northern white cedar",
+  "context": "Northern white cedar is an evergreen with flat fans of scale-like leaves and stringy bark, common in wet ground. Also called arborvitae, Thuja, swamp cedar, Thuja occidentalis. Look for flat fans of scale-like leaves, small cones, stringy bark; wet ground. Its inner bark makes cordage and tinder."
+ },
+ {
+  "symbol": "tamarack",
+  "title": "Tamarack (larch)",
+  "context": "Tamarack is a larch, a conifer whose soft tufted needles turn gold and drop each fall. Also called larch, eastern larch, Larix laricina, hackmatack. Look for soft needles in tufts that turn gold and drop in autumn; bare in winter, unlike other conifers. It marks wet, boggy ground."
+ },
+ {
+  "symbol": "sugar_maple",
+  "title": "Sugar maple",
+  "context": "Sugar maple is a hardwood with five-lobed leaves and rounded gaps, tapped in late winter for maple syrup. Also called hard maple, rock maple, Acer saccharum. Look for five-lobed leaf with smooth rounded gaps, opposite branches, grey furrowed bark; winged seeds in pairs. It is excellent firewood and the classic syrup tree."
+ },
+ {
+  "symbol": "red_maple",
+  "title": "Red maple",
+  "context": "Red maple is a common hardwood with three- to five-lobed toothed leaves and red twigs, buds, and fall color. Also called swamp maple, soft maple, Acer rubrum. Look for three- to five-lobed leaf with toothed edges and sharp gaps, red twigs and buds; red flowers before the leaves in spring. Its sap can be boiled for syrup too, with a lower sugar content."
+ },
+ {
+  "symbol": "paper_birch",
+  "title": "Paper birch",
+  "context": "Paper birch is a hardwood with white bark that peels in papery sheets and burns even when damp. Also called white birch, canoe birch, Betula papyrifera. Look for white bark peeling in papery sheets with dark marks; toothed oval leaves. Peel bark only from dead or downed trees; it is one of the best natural tinders."
+ },
+ {
+  "symbol": "yellow_birch",
+  "title": "Yellow birch",
+  "context": "Yellow birch is a hardwood with silver-yellow bark peeling in curly strips and twigs that smell of wintergreen. Also called Betula alleghaniensis, gold birch. Look for silver-yellow bark that peels in curly strips; twigs smell of wintergreen when scratched. Curly bark shreds catch a spark and burn wet."
+ },
+ {
+  "symbol": "american_beech",
+  "title": "American beech",
+  "context": "American beech is a hardwood with smooth gray bark and pale papery leaves that cling through winter. Also called beech, Fagus grandifolia, beechnut tree. Look for smooth blue-grey bark, toothed oval leaves with straight veins, pale leaves that stay in winter; long pointed cigar-shaped buds. Its small triangular beechnuts are edible in fall."
+ },
+ {
+  "symbol": "white_oak",
+  "title": "White oak",
+  "context": "White oak is a hardwood with rounded leaf lobes and pale, scaly bark. Also called Quercus alba, white oaks. Look for rounded leaf lobes, pale scaly bark; acorns mature in one year and are less bitter. Acorns need leaching before eating."
+ },
+ {
+  "symbol": "red_oak",
+  "title": "Red oak",
+  "context": "Northern red oak is a hardwood with pointed, bristle-tipped leaf lobes and ridged bark with shiny stripes. Also called northern red oak, Quercus rubra. Look for pointed leaf lobes with bristle tips, ridged bark with pale stripes; acorns take two years to ripen and are bitter. Acorns need long leaching before eating."
+ },
+ {
+  "symbol": "american_elm",
+  "title": "American elm",
+  "context": "American elm is a hardwood with lopsided, double-toothed leaves and a vase-shaped crown. Also called elm, Ulmus americana, white elm. Look for leaves with uneven bases and double teeth, vase shape; many killed by Dutch elm disease. Inner bark makes cordage."
+ },
+ {
+  "symbol": "white_ash",
+  "title": "White ash",
+  "context": "White ash is a hardwood with opposite compound leaves and bark ridged in a diamond pattern. Also called ash, Fraxinus americana, American ash. Look for opposite compound leaves, diamond-pattern bark; opposite branches, unlike most trees. Ash splits easily and burns well even when fairly green."
+ },
+ {
+  "symbol": "quaking_aspen",
+  "title": "Quaking aspen",
+  "context": "Quaking aspen is a hardwood with round leaves that tremble on flat stalks and smooth pale green-white bark. Also called aspen, trembling aspen, popple, Populus tremuloides. Look for round leaves on flat stalks that tremble, smooth pale green-white bark; grows in clones of many trunks. Its bark rubs off a white powder some use as sunblock in a pinch."
+ },
+ {
+  "symbol": "black_cherry",
+  "title": "Black cherry",
+  "context": "Black cherry is a hardwood with dark, flaky bark like burnt potato chips; its wilted leaves, pits, and bark are poisonous. Also called wild black cherry, Prunus serotina, rum cherry. Look for dark scaly bark like burnt potato chips, glossy toothed leaves, dark berries; almond smell when a twig is scratched. Only the ripe fruit flesh is eaten, never the pits. Leaves, pits and bark contain cyanide compounds. Wilted leaves are dangerous."
+ },
+ {
+  "symbol": "shagbark_hickory",
+  "title": "Shagbark hickory",
+  "context": "Shagbark hickory is a hardwood whose bark hangs in long loose plates and whose nuts are sweet and edible. Also called hickory, Carya ovata. Look for long loose plates of bark curling at the ends; compound leaves. Hickory is top firewood and smoking wood."
+ },
+ {
+  "symbol": "basswood",
+  "title": "Basswood (linden)",
+  "context": "Basswood is a hardwood with large lopsided heart-shaped leaves and fragrant summer flowers. Also called linden, lime tree, Tilia americana, bee tree. Look for large heart-shaped lopsided leaves, nut-like balls hanging from a leafy strip; nutlets hang from a leaf-like strip. Its inner bark is one of the best natural cordage fibers."
+ },
+ {
+  "symbol": "black_walnut",
+  "title": "Black walnut",
+  "context": "Black walnut is a hardwood with long compound leaves and round green-husked nuts whose meat is edible. Also called walnut, Juglans nigra. Look for compound leaves of many leaflets, dark ridged bark, round green husked nuts; husks stain hands dark brown. Its roots release a chemical that stunts many plants beneath it."
+ },
+ {
+  "symbol": "sassafras",
+  "title": "Sassafras",
+  "context": "Sassafras is a small tree with three leaf shapes on one tree and a spicy, root-beer smell when crushed. Also called Sassafras albidum, mitten tree. Look for leaves of three shapes on one tree (oval, mitten, three-lobed); spicy smell when crushed. The root contains safrole, which FDA has banned as a food additive, so do not brew it."
+ },
+ {
+  "symbol": "sycamore",
+  "title": "American sycamore",
+  "context": "American sycamore is a large streamside tree whose bark flakes off in white, green, and brown patches. Also called buttonwood, plane tree, Platanus occidentalis. Look for bark flaking off in patches of white and brown, big lobed leaves, ball fruits; white upper limbs visible from far away. It almost always grows near water."
+ },
+ {
+  "symbol": "witch_hazel",
+  "title": "Witch hazel",
+  "context": "Witch hazel is an understory shrub with wavy-edged leaves and yellow ribbon flowers in late fall. Also called Hamamelis, winterbloom, Hamamelis virginiana. Look for wavy-edged uneven leaves, yellow ribbon flowers in late autumn; flowers after the leaves drop. Knowing the tree helps you pick firewood, shelter sites, and landmarks."
+ }
+]
