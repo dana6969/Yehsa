@@ -37,7 +37,21 @@ const TYPES = {
   json: /^application\/(?:[a-z.+-]*\+)?json\b/i,
   html: /^text\/html\b/i,
   text: /^text\/plain\b/i,
-  xml: /^(?:application|text)\/(?:rss\+)?xml\b/i
+  xml: /^(?:application|text)\/(?:rss\+)?xml\b/i,
+  // Documents (Dana, Nov 24: "find and download documents I ask it and learn from those").
+  // A PDF, an EPUB, plain text or a web page. octet-stream is let through only to be checked by its
+  // first bytes (doc_check.js); programs and archives are refused there.
+  pdf: /^(?:application\/(?:x-)?pdf|application\/(?:octet-stream|download|force-download)|binary\/octet-stream)\b/i,
+  doc: /^(?:application\/(?:x-)?pdf|application\/epub\+zip|text\/plain|text\/html|application\/xhtml\+xml|application\/(?:octet-stream|download|force-download)|binary\/octet-stream)\b/i
+};
+
+const BINARY_KINDS = new Set(["pdf", "doc"]);
+const ACCEPT = {
+  json: "application/json",
+  xml: "application/rss+xml, text/xml",
+  html: "text/html",
+  pdf: "application/pdf",
+  doc: "application/pdf, application/epub+zip, text/plain, text/html;q=0.8"
 };
 
 function hostAllowed(host, group) {
@@ -91,7 +105,7 @@ function withTimeout(promise, ms, abort) {
   return Promise.race([promise, clock]).finally(() => clearTimeout(timer));
 }
 
-async function readCapped(response, maxBytes) {
+async function readCapped(response, maxBytes, binary = false) {
   const length = Number(response.headers?.get?.("content-length"));
   if (Number.isFinite(length) && length > maxBytes) throw new Error("too-big");
   const reader = response.body?.getReader?.();
@@ -118,7 +132,12 @@ async function readCapped(response, maxBytes) {
       all.set(chunk, at);
       at += chunk.length;
     }
-    return new TextDecoder("utf-8").decode(all);
+    return binary ? all : new TextDecoder("utf-8").decode(all);
+  }
+  if (binary) {
+    const buffer = new Uint8Array(await response.arrayBuffer());
+    if (buffer.length > maxBytes) throw new Error("too-big");
+    return buffer;
   }
   const text = await response.text();
   if (text.length > maxBytes) throw new Error("too-big");
@@ -126,7 +145,7 @@ async function readCapped(response, maxBytes) {
 }
 
 /**
- * Fetch one allowed URL. kind is "json" | "html". Returns { ok, text, finalUrl } or { ok: false, reason }.
+ * Fetch one allowed URL. kind is "json" | "html" | "xml", or "pdf" | "doc" for bytes ({ ok, bytes, type, finalUrl }). Returns { ok, text, finalUrl } or { ok: false, reason }.
  * Nothing is read from a response whose host is off the list, whose type is wrong, or that is too big.
  */
 export async function guardedFetch({ fetchImpl, url, group, kind = "json", limits = {} }) {
@@ -145,7 +164,7 @@ export async function guardedFetch({ fetchImpl, url, group, kind = "json", limit
           credentials: "omit",
           cache: "no-store",
           signal: controller?.signal,
-          headers: { Accept: kind === "json" ? "application/json" : kind === "xml" ? "application/rss+xml, text/xml" : "text/html", "User-Agent": USER_AGENT }
+          headers: { Accept: ACCEPT[kind] || "text/html", "User-Agent": USER_AGENT }
         }),
         cap.timeoutMs,
         () => controller?.abort()
@@ -164,6 +183,10 @@ export async function guardedFetch({ fetchImpl, url, group, kind = "json", limit
       if (!TYPES[kind].test(type) && !(kind === "html" && TYPES.text.test(type))) {
         return { ok: false, reason: "That is not the kind of page I read. Nothing was kept." };
       }
+      if (BINARY_KINDS.has(kind)) {
+        const bytes = await withTimeout(readCapped(response, cap.maxBytes, true), cap.timeoutMs, () => controller?.abort());
+        return { ok: true, bytes, type, finalUrl: landed.url };
+      }
       const text = await withTimeout(readCapped(response, cap.maxBytes), cap.timeoutMs, () => controller?.abort());
       return { ok: true, text, finalUrl: landed.url };
     }
@@ -172,5 +195,45 @@ export async function guardedFetch({ fetchImpl, url, group, kind = "json", limit
     if (err?.message === "too-big") return { ok: false, reason: "That page is bigger than I will read. Nothing was kept." };
     if (err?.message === "timeout") return { ok: false, reason: "The site took too long. Nothing was kept." };
     return { ok: false, reason: "I couldn't reach the site. Nothing was kept." };
+  }
+}
+
+/**
+ * Ask a site what a link is without downloading it: { ok, type, length, modified, finalUrl }.
+ * Same rules as guardedFetch (https, public hosts, redirects re-checked). Some sites refuse HEAD;
+ * then ok is false and the caller shows the link without a size.
+ */
+export async function guardedHead({ fetchImpl, url, group = "open", limits = {} }) {
+  const cap = { ...LIMITS, timeoutMs: 6000, ...limits };
+  if (typeof fetchImpl !== "function") return { ok: false, reason: "No network is available here." };
+  let current = checkUrl(url, group);
+  if (!current.ok) return { ok: false, reason: current.reason };
+  try {
+    for (let hop = 0; hop <= cap.maxRedirects + 1; hop += 1) {
+      const controller = typeof AbortController === "function" ? new AbortController() : null;
+      const response = await withTimeout(
+        fetchImpl(current.url, { method: "HEAD", redirect: "manual", credentials: "omit", cache: "no-store", signal: controller?.signal, headers: { "User-Agent": USER_AGENT } }),
+        cap.timeoutMs,
+        () => controller?.abort()
+      );
+      if (response.status >= 300 && response.status < 400) {
+        const next = checkUrl(new URL(response.headers?.get?.("location") || "", current.url).toString(), group);
+        if (!next.ok) return { ok: false, reason: "That link sends me somewhere I do not fetch from." };
+        current = next;
+        continue;
+      }
+      if (!response.ok) return { ok: false, reason: `The site answered ${response.status}.` };
+      const length = Number(response.headers?.get?.("content-length"));
+      return {
+        ok: true,
+        type: String(response.headers?.get?.("content-type") || ""),
+        length: Number.isFinite(length) && length > 0 ? length : null,
+        modified: response.headers?.get?.("last-modified") || null,
+        finalUrl: current.url
+      };
+    }
+    return { ok: false, reason: "Too many redirects." };
+  } catch (err) {
+    return { ok: false, reason: err?.message === "timeout" ? "The site took too long." : "I couldn't reach the site." };
   }
 }

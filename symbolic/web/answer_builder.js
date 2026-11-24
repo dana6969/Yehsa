@@ -11,10 +11,10 @@ export const MAX_SENTENCES = 3;
 export const MAX_PER_SOURCE = 2;
 export const MAX_ANSWER_CHARS = 700;
 
-const PRIORITY = { pack: 0, gov: 1, web: 1, wikipedia: 2 };
+const PRIORITY = { pack: 0, doc: 0, gov: 1, web: 1, wikipedia: 2 };
 // The Army manuals and the agencies come first when they say it; an encyclopedia page gets one line.
-const BONUS = { pack: 0.4, gov: 0.2, wikipedia: 0 };
-const PER_SOURCE = { pack: MAX_PER_SOURCE, gov: MAX_PER_SOURCE, web: MAX_PER_SOURCE, wikipedia: 1 };
+const BONUS = { pack: 0.4, doc: 0.3, gov: 0.2, wikipedia: 0 };
+const PER_SOURCE = { pack: MAX_PER_SOURCE, doc: MAX_PER_SOURCE, gov: MAX_PER_SOURCE, web: MAX_PER_SOURCE, wikipedia: 1 };
 // Open-web pages earn their bonus from the site: state and federal sites most, unknown sites least.
 function bonusFor(candidate) {
   if (candidate.kind === "web") return 0.4 * Math.max(0, Math.min(1, Number(candidate.authority) || 0));
