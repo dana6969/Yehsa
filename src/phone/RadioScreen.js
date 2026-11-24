@@ -27,7 +27,7 @@ import {
   stateName
 } from "./radio_data.js";
 import { INTERNET_RADIO_LABEL, INTERNET_RADIO_PRIVACY, openFavorites, searchStations, toggleFavorite } from "./internet_radio.js";
-import { playStream, radioPlayerAvailable, stopStream } from "./radio_player.js";
+import { getPlayback, playStream, radioPlayerAvailable, stopStream, subscribePlayback } from "./radio_player.js";
 import { openPhoneFmApp } from "./fm_app.js";
 import { parsePair } from "../../symbolic/phone_land.js";
 import { formatDistance } from "./compass_math.js";
@@ -70,7 +70,9 @@ export default function RadioScreen({ position, onBack, onOpenMorse }) {
 
   useEffect(() => {
     AsyncStorage.getItem(FAV_KEY).then((raw) => setFavorites(openFavorites(raw))).catch(() => {});
-    return () => stopStream();
+    const current = getPlayback();
+    if (current?.id) setPlaying(current.id);
+    return subscribePlayback((next) => setPlaying(next?.id || null));
   }, []);
 
   const saveFavorites = (next) => {
@@ -100,7 +102,7 @@ export default function RadioScreen({ position, onBack, onOpenMorse }) {
   const play = async (station) => {
     setPlayError("");
     try {
-      await playStream(station.url);
+      await playStream(station.url, { id: station.id, name: station.name });
       setPlaying(station.id);
     } catch (err) {
       setPlaying(null);
@@ -211,6 +213,7 @@ export default function RadioScreen({ position, onBack, onOpenMorse }) {
       <View style={styles.card}>
         <Text style={[styles.body, { fontSize: display.size(16) }]}>{INTERNET_RADIO_LABEL} Not available offline.</Text>
         <Quiet>{INTERNET_RADIO_PRIVACY}</Quiet>
+        <Quiet>A station keeps playing when the phone is locked or you leave this screen. Use the notification or Stop to end it.</Quiet>
         <Field label="Station name (optional)" value={dirName} onChangeText={setDirName} placeholder="news" />
         <Field label="State (optional)" value={dirState} onChangeText={setDirState} placeholder={state ? stateName(state) : "Rhode Island"} />
         <Action label={dirBusy ? "Searching" : "Search stations (needs signal)"} onPress={search} disabled={dirBusy} />

@@ -268,12 +268,12 @@ function CalculatorTool({ onBack }) {
   const [result, setResult] = useState(null);
   function run() {
     const answer = calculate(input.trim());
-    setResult(answer?.text || "That was not read as math or a unit change. Try 12 * 7 + 3 or 2 km in miles.");
+    setResult(answer?.text || "That was not read as math or a unit change. Try 12 * 7 + 3 or 300 yards to feet.");
   }
   return (
     <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader title="Calculator" lead="Units and field math." onBack={onBack} backLabel="Field" />
-      <Field label="Math or a unit change" value={input} onChangeText={setInput} placeholder="12 * 7 + 3 or 2 km in miles" />
+      <Field label="Math or a unit change" value={input} onChangeText={setInput} placeholder="12 * 7 + 3 or 300 yards to feet" />
       <Action label="Work it out" onPress={run} />
       {result ? <Quiet live>{result}</Quiet> : null}
     </ScrollView>

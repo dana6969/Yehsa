@@ -8,3 +8,16 @@ export async function playStream() {
 }
 
 export function stopStream() {}
+
+export function pauseStream() {}
+
+export function resumeStream() {}
+
+export function getPlayback() {
+  return null;
+}
+
+export function subscribePlayback(fn) {
+  try { fn(null); } catch {}
+  return () => {};
+}

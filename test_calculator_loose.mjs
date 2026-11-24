@@ -28,3 +28,27 @@ test("an ambiguous percent wording does not invent a number", () => {
   assert.match(mixed.text, /more than one way/);
   assert.equal(mixed.text.match(/\b16\b|\b64\b/), null);
 });
+
+test("length converts yards, feet, inches, meters, and miles in every direction", () => {
+  assert.match(calculate("300 yards to feet").text, /\b900\b/);
+  assert.match(calculate("how many feet in 2 miles").text, /\b10560\b/);
+  assert.match(calculate("50 m in yards").text, /54\.680665/);
+  assert.match(calculate("how many yards are in 3 miles").text, /\b5280\b/);
+  assert.match(calculate("how many inches are in 3 feet").text, /\b36\b/);
+  assert.match(calculate("convert 2 km to meters").text, /\b2000\b/);
+  assert.match(calculate("100 centimeters to meters").text, /\b1\b/);
+  assert.match(calculate("2 nautical miles in meters").text, /\b3704\b/);
+  assert.match(calculate("how many feet are there in 1 yard").text, /\b3\b/);
+  assert.match(calculate("9 feet to yards").text, /\b3\b/);
+  assert.match(calculate("1760 yards in miles").text, /\b1\b/);
+});
+
+test("weight, volume, and temperature conversions fill the family gaps", () => {
+  assert.match(calculate("4 pounds to ounces").text, /\b64\b/);
+  assert.match(calculate("how many grams in 2 kg").text, /\b2000\b/);
+  assert.match(calculate("1 gallon to quarts").text, /\b4\b/);
+  assert.match(calculate("2 quarts in pints").text, /\b4\b/);
+  assert.match(calculate("500 ml to liters").text, /\b0\.5\b/);
+  assert.match(calculate("32 Fahrenheit in Celsius").text, /\b0\b/);
+  assert.match(calculate("100 Celsius to Fahrenheit").text, /\b212\b/);
+});

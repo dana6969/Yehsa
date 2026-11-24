@@ -1,9 +1,26 @@
 // Exact field arithmetic and unit conversion. No eval of arbitrary text.
 
-const LENGTH = { mm: 0.001, cm: 0.01, m: 1, meter: 1, meters: 1, km: 1000, kilometer: 1000, kilometers: 1000, in: 0.0254, inch: 0.0254, inches: 0.0254, ft: 0.3048, foot: 0.3048, feet: 0.3048, mi: 1609.344, mile: 1609.344, miles: 1609.344, nmi: 1852, nm: 1852 };
+const LENGTH = {
+  mm: 0.001,
+  cm: 0.01, centimeter: 0.01, centimeters: 0.01, centimetre: 0.01, centimetres: 0.01,
+  m: 1, meter: 1, meters: 1, metre: 1, metres: 1,
+  km: 1000, kilometer: 1000, kilometers: 1000, kilometre: 1000, kilometres: 1000,
+  in: 0.0254, inch: 0.0254, inches: 0.0254,
+  ft: 0.3048, foot: 0.3048, feet: 0.3048,
+  yd: 0.9144, yds: 0.9144, yard: 0.9144, yards: 0.9144,
+  mi: 1609.344, mile: 1609.344, miles: 1609.344,
+  nmi: 1852, nm: 1852
+};
 const AREA = { sqm: 1, m2: 1, hectare: 10000, hectares: 10000, acre: 4046.8564224, acres: 4046.8564224, sqft: 0.09290304, ft2: 0.09290304 };
 const MASS = { mg: 0.001, g: 1, gram: 1, grams: 1, kg: 1000, kilogram: 1000, kilograms: 1000, oz: 28.349523125, ounce: 28.349523125, ounces: 28.349523125, lb: 453.59237, lbs: 453.59237, pound: 453.59237, pounds: 453.59237 };
-const VOLUME = { ml: 1, milliliter: 1, milliliters: 1, l: 1000, liter: 1000, liters: 1000, gal: 3785.411784, gallon: 3785.411784, gallons: 3785.411784, cup: 240, cups: 240, tbsp: 15, tablespoon: 15, tablespoons: 15, tsp: 5, teaspoon: 5, teaspoons: 5 };
+const VOLUME = {
+  ml: 1, milliliter: 1, milliliters: 1, millilitre: 1, millilitres: 1,
+  l: 1000, liter: 1000, liters: 1000, litre: 1000, litres: 1000,
+  gal: 3785.411784, gallon: 3785.411784, gallons: 3785.411784,
+  qt: 946.352946, quart: 946.352946, quarts: 946.352946,
+  pt: 473.176473, pint: 473.176473, pints: 473.176473,
+  cup: 240, cups: 240, tbsp: 15, tablespoon: 15, tablespoons: 15, tsp: 5, teaspoon: 5, teaspoons: 5
+};
 const TIME = { s: 1, sec: 1, secs: 1, second: 1, seconds: 1, min: 60, mins: 60, minute: 60, minutes: 60, h: 3600, hr: 3600, hrs: 3600, hour: 3600, hours: 3600 };
 const SPEED = { mps: 1, kph: 1000 / 3600, mph: 1609.344 / 3600, fps: 0.3048, knot: 1852 / 3600, knots: 1852 / 3600 };
 
@@ -68,7 +85,7 @@ function normalizeUnits(text) {
 
 function convert(text) {
   const spoken = normalizeUnits(text);
-  const match = spoken.match(/how many ([a-z]+) (?:are in|is in|in|is) (-?\d+(?:\.\d+)?) ([a-z]+)|(?:what is |convert )?(-?\d+(?:\.\d+)?) ([a-z]+) (?:into|in|to) ([a-z]+)/);
+  const match = spoken.match(/how many ([a-z]+) (?:are there in|are in|is in|in|is) (-?\d+(?:\.\d+)?) ([a-z]+)|(?:what is |convert )?(-?\d+(?:\.\d+)?) ([a-z]+) (?:into|in|to) ([a-z]+)/);
   if (!match) return null;
   const [amount, fromName, toName] = match[1]
     ? [Number(match[2]), match[3], match[1]]
@@ -87,7 +104,7 @@ function convert(text) {
   const family = families.find((table) => table[fromName] && table[toName]);
   if (!family) return null;
   const value = amount * family[fromName] / family[toName];
-  const label = { sqm: "square meters", sqft: "square feet", nmi: "nautical miles" };
+  const label = { sqm: "square meters", sqft: "square feet", nmi: "nautical miles", yd: "yards", yds: "yards", ft: "feet", in: "inches", mi: "miles", km: "kilometers", m: "meters", cm: "centimeters", qt: "quarts", pt: "pints", gal: "gallons", l: "liters", ml: "milliliters", lb: "pounds", lbs: "pounds", oz: "ounces", kg: "kilograms", g: "grams" };
   const fromLabel = label[fromName] || fromName;
   const toLabel = label[toName] || toName;
   return { text: `${formatNumber(amount)} ${fromLabel} is ${formatNumber(value)} ${toLabel}.` };
