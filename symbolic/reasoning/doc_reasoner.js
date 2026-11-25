@@ -18,7 +18,9 @@ const NOT_FACTOR = new Set(("century centuries year years time times period peri
   + "would could might shall must upon thus therefore hence western eastern west east north south ancient modern age ages "
   + "together without beyond rather toward towards everything anything something nothing whole thing things men man every "
   + "almost already always often never perhaps probably indeed instead quite really soon whom whose order sort kind case fact "
-  + "force forces spirit living name names place places land lands "
+  + "force forces spirit living name names place places land lands peninsula river rivers sea seas city cities region regions "
+  + "throughout across around along beneath beside despite whereas whether neither either ever amid amidst onward "
+  + "province provinces country countries coast island islands valley mountain mountains town towns "
   + "able unable little less least more most better best worse worst high higher low lower good evil true real other others").split(" ").map(stem));
 
 const YEAR = /\b(?:(?:A\.?\s?D\.?|C\.?E\.?)\s*)?(\d{3,4})(?:\s*(?:A\.?\s?D\.?|C\.?E\.?|B\.?\s?C\.?(?:E\.?)?))?(?=[\s,.;:)]|$)/g;
@@ -128,19 +130,22 @@ function bestQuote(sentences, topic) {
 function nounLike(term, sentences) {
   const forms = [];
   let capitalMid = 0;
+  let starts = 0;
   for (const s of sentences) {
-    const words = s.text.split(/[^A-Za-z'-]+/);
+    const words = s.text.split(/[^A-Za-z'-]+/).filter(Boolean);
     words.forEach((w, i) => {
-      if (!w || stem(w.toLowerCase()) !== term) return;
+      if (stem(w.toLowerCase()) !== term) return;
       forms.push(w.toLowerCase());
       if (i > 0 && /^[A-Z]/.test(w)) capitalMid += 1;
+      if (i === 0) starts += 1;
     });
   }
   if (!forms.length) return 0;
+  if (starts === forms.length) return 0.15; // only ever the first word of a sentence ("Throughout ...")
   const verbish = forms.filter((f) => /(?:ed|ing|ly)$/.test(f)).length / forms.length;
   if (verbish > 0.5) return 0;
   // Mostly capitalised mid-sentence: a name (a place, a person), weaker as a "factor".
-  return capitalMid / forms.length > 0.6 ? 0.3 : 1;
+  return capitalMid / forms.length > 0.6 ? 0.15 : 1;
 }
 
 /** "Three biggest factors in X": recurring causes across the passages about X, each with quotes. */
@@ -172,8 +177,10 @@ export function findFactors(sources, topic, n = 3) {
     .sort((a, b) => b.score - a.score || a.t.localeCompare(b.t));
   const chosen = [];
   const used = new Set();
+  const floor = (scored[0]?.score || 0) * 0.3;
   for (const x of scored) {
     if (chosen.length >= n) break;
+    if (x.score < floor) break;
     const fresh = x.ss.filter((s) => !used.has(s.text));
     if (fresh.length < Math.max(1, x.ss.length * 0.5)) continue;
     const quote = bestQuote(fresh, topic);
