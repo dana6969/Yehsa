@@ -28,23 +28,40 @@ export function landStyleFor({ style = "standard", mode = "field", night = "red"
   return style === "simple" ? LAND.simple : LAND.standard;
 }
 
-// MapLibre raster paint for a style. Night follows the display mode and dims the picture so it
-// does not flood a dark-adapted eye; a tint of the night color sits above it.
-export function rasterPaintFor({ style = "standard", mode = "field", night = "red" } = {}) {
+// MapLibre raster paint for a style. Every raster property is always set: the native layer only
+// changes the properties it is given, so a property left out keeps its old value. (In R6, Standard
+// sent {} after Terrain, and the switch between them barely changed the picture.)
+// shading: the Terrain shading switch. The packs and areas carry hillshade, contours and height
+// colors drawn into the tiles; on, that relief is brought out; off, the picture is flat and light.
+const NEUTRAL = { rasterOpacity: 1, rasterContrast: 0, rasterSaturation: 0, rasterBrightnessMin: 0, rasterBrightnessMax: 1, rasterHueRotate: 0 };
+const FLAT = { rasterContrast: -0.55, rasterSaturation: -0.45, rasterBrightnessMin: 0.38, rasterBrightnessMax: 1 };
+
+export function rasterPaintFor({ style = "standard", mode = "field", night = "red", shading = true } = {}) {
+  const flat = shading === false ? FLAT : {};
   if (mode === "night" || style === "night") {
     return {
-      paint: { rasterSaturation: -0.9, rasterBrightnessMax: 0.5, rasterContrast: 0.05 },
+      paint: { ...NEUTRAL, rasterSaturation: -0.9, rasterBrightnessMax: 0.5, rasterContrast: shading === false ? -0.3 : 0.05 },
       tint: { color: NIGHT_TINT[night] || NIGHT_TINT.red, opacity: 0.32 },
       label: "Night"
     };
   }
   if (style === "terrain") {
-    return { paint: { rasterContrast: 0.18, rasterSaturation: 0.2 }, tint: null, label: "Terrain" };
+    return { paint: { ...NEUTRAL, rasterContrast: 0.45, rasterSaturation: 0.2, rasterBrightnessMax: 0.95, ...flat }, tint: null, label: "Terrain" };
   }
   if (style === "simple") {
-    return { paint: { rasterContrast: 0.35, rasterSaturation: 0.2 }, tint: null, label: "Simple" };
+    return { paint: { ...NEUTRAL, rasterContrast: 0.35, rasterSaturation: 0.2, ...flat }, tint: null, label: "Simple" };
   }
-  return { paint: {}, tint: null, label: "Standard" };
+  return { paint: { ...NEUTRAL, rasterContrast: 0.2, rasterSaturation: 0.1, ...flat }, tint: null, label: "Standard" };
+}
+
+// Is there terrain (relief) in what the map draws? Yehsa's packs and "Download this area" areas
+// have it drawn in; an imported pack might not.
+export function terrainIn({ tiled = [], drawn = [] } = {}) {
+  const terrainPacks = tiled.filter((pack) => /elevation|terrain|hillshade|relief/i.test(`${pack.attribution || ""} ${pack.license || ""} ${pack.note || ""}`) || pack.catalogId);
+  const ok = terrainPacks.length > 0 || drawn.length > 0;
+  let why = "";
+  if (!ok) why = tiled.length ? "Your map packs here have no terrain data" : "Add a map pack or download an area for terrain";
+  return { ok, why };
 }
 
 function tilePacks(packs) {
@@ -59,7 +76,7 @@ function zoomRange(items) {
 
 // store: the pack store. areas: saved areas. port: loopback tile server port (null until bound).
 // roads: { on, shape } for the road layer (GeoJSON lines on screen; off unless given).
-export function mapLayers({ store, areas = [], port = null, style = "standard", mode = "field", night = "red", roads = null } = {}) {
+export function mapLayers({ store, areas = [], port = null, style = "standard", mode = "field", night = "red", roads = null, shading = true } = {}) {
   const packs = store?.packs || [];
   const tiled = tilePacks(packs);
   const drawn = (areas || []).filter((area) => area && area.rendered && area.box);
@@ -93,7 +110,8 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
   const roadsWanted = Boolean(roads?.on && port);
   const empty = !tiled.length && !drawn.length && !shapes.length && !archivePack && !roadsWanted;
   const hasLand = shapes.some((line) => line.ring);
-  const look = rasterPaintFor({ style, mode, night });
+  const look = rasterPaintFor({ style, mode, night, shading });
+  const terrain = terrainIn({ tiled, drawn });
   const sources = [];
   if (tiled.length) sources.push(...packs.filter((pack) => tiled.includes(pack)));
   const credit = aboutThisMap({ packs, drawn, roads: Boolean(roadLayer) }).credit;
@@ -114,6 +132,8 @@ export function mapLayers({ store, areas = [], port = null, style = "standard", 
     paint: look.paint,
     tint: look.tint,
     styleLabel: look.label,
+    // The Terrain shading switch only works where tiles with relief are drawn.
+    terrain: { ok: terrain.ok && rasters.length > 0, why: terrain.ok && !rasters.length ? "Terrain shows once the map tiles load" : terrain.why, shading: shading !== false },
     attribution: empty ? "No map pack yet." : credit,
     firstFocus: focusOf(tiled, drawn)
   };

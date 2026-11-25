@@ -61,6 +61,7 @@ test("a route is framed once and never during Start (reroutes do not zoom out)",
 test("any pan or pinch drops follow; Recenter turns it back on", () => {
   assert.equal(isUserGesture({ properties: { isUserInteraction: true } }), true);
   assert.equal(isUserGesture({ properties: { isUserInteraction: false } }), false);
+  assert.equal(isUserGesture({ properties: { isUserInteraction: true, animated: true } }), false, "the app's own animation is not a gesture");
   assert.equal(isUserGesture(null), false);
   let gps = applyGpsSample(grantGpsConsent(initialGpsMap()), { latitude: 44.55, longitude: -69.63, accuracy: 8 });
   assert.equal(gps.follow, true);
@@ -120,16 +121,15 @@ test("the app wires one setting: no map-only GPS switch, no silent consent", () 
   assert.match(helpers, /requestLocation\(/);
 });
 
-test("native map: no fit on layer rebuilds, follow without zoom, gestures drop follow", () => {
-  assert.doesNotMatch(nativeMap, /\[focusKey, layers\?\.firstFocus\]/);
-  assert.match(nativeMap, /\[focusKey, firstKey\]/);
-  assert.match(nativeMap, /onRegionWillChange/);
-  assert.match(nativeMap, /isUserGesture\(event\)\) onUserPan/);
-  assert.match(nativeMap, /shouldFitRoute\(/);
-  const follow = nativeMap.slice(nativeMap.indexOf("if (!follow || !fix"), nativeMap.indexOf("if (!follow || !fix") + 300);
-  assert.doesNotMatch(follow, /zoomLevel/);
-  assert.match(nativeMap, /defaultSettings=\{start\}/, "the start camera is only the default, never a bound prop");
-  assert.doesNotMatch(nativeMap, /<Camera[^>]*(zoomLevel|centerCoordinate)=/);
+test("native map: one uncontrolled camera, moves only through the controller", () => {
+  assert.doesNotMatch(nativeMap, /<Camera[\s>]/, "no library <Camera>: its setNativeProps stop is replayed on Fabric");
+  assert.match(nativeMap, /const NATIVE_CAMERA = "MLRNCamera"/);
+  assert.match(nativeMap, /createCameraController\(/);
+  assert.match(nativeMap, /setNativeProps\?\.\(\{ stop: null \}\)/, "the kept stop is cleared after each move");
+  assert.doesNotMatch(nativeMap, /fitBounds\(|setCamera\(/, "no direct camera calls outside the controller");
+  assert.match(nativeMap, /useMemo\(\(\) => React\.createElement\(NATIVE_CAMERA/, "the camera element is built once and never re-rendered");
+  assert.match(nativeMap, /onTouchMove=/);
+  assert.match(nativeMap, /isUserGesture\(event\)\) userMoved/);
 });
 
 test("full screen hides the tabs and keeps SOS; the rail has the map controls", () => {
@@ -139,4 +139,224 @@ test("full screen hides the tabs and keeps SOS; the rail has the map controls", 
   for (const word of ["Layers", "North", "Wind", "Marks", "Full", "Exit", "SOS", "Lock"]) assert.match(rail, new RegExp(`"${word}"|${word}`));
   assert.match(rail, /full && onSos/);
   assert.match(app, /<MapRail/);
+});
+
+// ---- R7: a simulated native camera with the New Architecture's kept-stop replay ----------------
+import { createCameraController, nativeStop, touchIsGesture } from "./symbolic/map_camera.js";
+
+function fakeNative() {
+  // Models Fabric: setNativeProps({ stop }) is kept and sent again on every later clone of the
+  // view (each GPS tick, road reload or mark changes the map's children, which clones the camera).
+  const timers = [];
+  const native = {
+    kept: undefined,
+    moves: [],
+    send(stop) { native.kept = stop; native.moves.push(stop); },
+    clear() { native.kept = null; },
+    clone() { if (native.kept) native.moves.push(native.kept); },
+    schedule(fn) { const t = { fn, done: false }; timers.push(t); return t; },
+    cancel(t) { if (t) t.done = true; },
+    flush() { for (const t of timers.splice(0)) if (!t.done) t.fn(); }
+  };
+  return native;
+}
+
+function rig(extra = {}) {
+  const n = fakeNative();
+  const ctl = createCameraController({ send: n.send, clear: n.clear, schedule: n.schedule, cancel: n.cancel });
+  const base = { fix: null, follow: false, focus: null, focusKey: 0, firstFocus: { west: -71, south: 43, east: -67, north: 47 }, hasInitialCamera: false, route: null, navOn: false, recenterKey: 0, northKey: 0, ...extra };
+  return { n, ctl, base };
+}
+
+function tick(i) {
+  return { latitude: 44.55 + i * 0.0001, longitude: -69.63 - i * 0.0001, accuracy: 6 };
+}
+
+test("Map: after a pan, GPS ticks, layer rebuilds and view clones never move the camera", () => {
+  const { n, ctl, base } = rig();
+  let p = { ...base };
+  ctl.update(p); // first frame
+  p = { ...p, fix: tick(0), follow: true };
+  ctl.update(p); // location on: follow starts
+  n.flush();
+  const before = n.moves.length;
+  assert.ok(before >= 1);
+  // The user pinches in and pans away.
+  ctl.gesture();
+  ctl.region({ properties: { zoomLevel: 16.4 } });
+  p = { ...p, follow: false };
+  for (let i = 1; i <= 30; i++) {
+    p = { ...p, fix: tick(i), firstFocus: { ...p.firstFocus }, focus: p.focus, layersVersion: i };
+    ctl.update(p); // GPS tick + layers rebuilt (new firstFocus object)
+    n.clone(); // the native camera view is cloned (children changed)
+    if (i % 5 === 0) n.flush();
+  }
+  assert.equal(n.moves.length, before, "no camera move after the user's pan or pinch");
+});
+
+test("the R6 bug, reproduced: without clearing, every clone replays the last move", () => {
+  const n = fakeNative();
+  const ctl = createCameraController({ send: n.send, clear: () => {}, schedule: n.schedule, cancel: n.cancel });
+  ctl.update({ fix: tick(0), follow: true, focusKey: 0, recenterKey: 0, northKey: 0 });
+  const before = n.moves.length;
+  ctl.gesture();
+  for (let i = 0; i < 5; i++) n.clone();
+  assert.equal(n.moves.length, before + 5, "the kept stop jumps the map back on each clone");
+});
+
+test("a race: a GPS tick before the app drops follow does not move the map after a pan", () => {
+  const { n, ctl, base } = rig();
+  let p = { ...base, fix: tick(0), follow: true };
+  ctl.update(p);
+  n.flush();
+  const before = n.moves.length;
+  ctl.gesture(); // follow is still true in props for a moment
+  ctl.update({ ...p, fix: tick(1) });
+  ctl.update({ ...p, fix: tick(2) });
+  assert.equal(n.moves.length, before);
+});
+
+test("Recenter: one move at the user's zoom, then follow resumes; a pan stops it again", () => {
+  const { n, ctl, base } = rig();
+  let p = { ...base, fix: tick(0), follow: false };
+  ctl.update(p);
+  ctl.region({ properties: { zoomLevel: 15.2 } });
+  const before = n.moves.length;
+  p = { ...p, follow: true, recenterKey: 1 };
+  ctl.update(p);
+  assert.equal(n.moves.length, before + 1);
+  const re = n.moves.at(-1);
+  assert.ok(re.centerCoordinate && !("zoomLevel" in re), "recenter keeps the zoom");
+  p = { ...p, fix: tick(1) };
+  ctl.update(p);
+  assert.equal(n.moves.length, before + 2, "following: the next fix moves the center");
+  assert.equal("zoomLevel" in n.moves.at(-1), false);
+  n.flush(); // the kept stop is cleared a moment after each move
+  ctl.gesture();
+  p = { ...p, follow: false, fix: tick(2) };
+  ctl.update(p);
+  n.clone();
+  n.flush();
+  n.clone();
+  assert.equal(n.moves.length, before + 2);
+});
+
+test("Hunt map: Hunt framing runs once; marks, parcels and wind updates never re-frame", () => {
+  const { n, ctl, base } = rig({ fix: tick(0) });
+  let p = { ...base };
+  ctl.update(p);
+  const huntBox = { west: -69.64, south: 44.54, east: -69.62, north: 44.56 };
+  p = { ...p, focus: huntBox, focusKey: 1 };
+  ctl.update(p);
+  assert.equal(n.moves.at(-1).bounds.ne[0], -69.62);
+  n.flush();
+  const before = n.moves.length;
+  ctl.gesture();
+  for (let i = 0; i < 10; i++) {
+    p = { ...p, focus: { ...huntBox }, firstFocus: { ...p.firstFocus }, fix: tick(i) };
+    ctl.update(p);
+    n.clone();
+  }
+  n.flush();
+  assert.equal(n.moves.length, before);
+  // A rebuilt view (back to the tab) at the remembered camera does not re-frame either.
+  const again = rig({ fix: tick(3), focus: huntBox, focusKey: 1, hasInitialCamera: true, initialZoom: 15 });
+  again.ctl.update(again.base);
+  assert.equal(again.n.moves.length, 0);
+});
+
+test("Start mode: follow keeps the zoom, a pan pauses it, reroutes never zoom out, Recenter resumes", () => {
+  const { n, ctl, base } = rig({ fix: tick(0) });
+  const box = { west: -70, south: 44, east: -69, north: 45 };
+  let p = { ...base, route: { box, fitKey: 1 } };
+  ctl.update(p);
+  assert.ok(n.moves.at(-1).bounds, "a new route is framed once");
+  ctl.region({ properties: { zoomLevel: 16 } });
+  p = { ...p, navOn: true, follow: true, followCourse: true, headingDeg: 90, recenterKey: 1 };
+  ctl.update(p);
+  for (let i = 1; i <= 3; i++) {
+    p = { ...p, fix: tick(i), headingDeg: 90 + i };
+    ctl.update(p);
+  }
+  const follows = n.moves.slice(-3);
+  for (const m of follows) {
+    assert.equal("zoomLevel" in m, false);
+    assert.ok(Number.isFinite(m.heading));
+  }
+  n.flush();
+  const before = n.moves.length;
+  ctl.gesture();
+  p = { ...p, follow: false };
+  for (let i = 4; i <= 8; i++) {
+    p = { ...p, fix: tick(i), route: { box: { ...box, west: -70.5 }, fitKey: 1 + i } }; // reroutes
+    ctl.update(p);
+    n.clone();
+  }
+  n.flush();
+  assert.equal(n.moves.length, before, "paused: no move, and no route fit during Start");
+  p = { ...p, follow: true, recenterKey: 2 };
+  ctl.update(p);
+  assert.equal(n.moves.length, before + 1);
+});
+
+test("nativeStop matches the maplibre camera's native shape", () => {
+  const c = nativeStop({ centerCoordinate: [-69.6, 44.5], zoomLevel: 14, animationDuration: 500, heading: 0 });
+  assert.equal(c.zoom, 14);
+  assert.equal(c.duration, 500);
+  assert.equal(JSON.parse(c.centerCoordinate).geometry.coordinates[0], -69.6);
+  const b = nativeStop({ bounds: { ne: [-69, 45], sw: [-70, 44] }, padding: 40, animationDuration: 700 });
+  assert.equal(JSON.parse(b.bounds).features.length, 2);
+  assert.equal(b.paddingLeft, 40);
+  assert.equal(nativeStop(null), null);
+});
+
+test("touch: a tap is not a gesture; a drag or two fingers is", () => {
+  const start = { x: 100, y: 100 };
+  assert.equal(touchIsGesture(start, { nativeEvent: { pageX: 103, pageY: 102, touches: [{}] } }), false);
+  assert.equal(touchIsGesture(start, { nativeEvent: { pageX: 130, pageY: 100, touches: [{}] } }), true);
+  assert.equal(touchIsGesture(start, { nativeEvent: { pageX: 100, pageY: 100, touches: [{}, {}] } }), true);
+});
+
+// ---- R7: Terrain shading ------------------------------------------------------------------------
+import { mapLayers, rasterPaintFor, terrainIn } from "./symbolic/map_layers.js";
+
+const RASTER_KEYS = ["rasterOpacity", "rasterContrast", "rasterSaturation", "rasterBrightnessMin", "rasterBrightnessMax", "rasterHueRotate"];
+
+test("terrain shading: every raster property is always set, so switching resets the native layer", () => {
+  for (const style of ["standard", "terrain", "simple", "night"]) {
+    for (const shading of [true, false]) {
+      const { paint } = rasterPaintFor({ style, shading });
+      for (const key of RASTER_KEYS) assert.ok(Number.isFinite(paint[key]), `${style}/${shading} sets ${key}`);
+    }
+  }
+});
+
+test("terrain shading: off and on look clearly different (not a dead switch)", () => {
+  const on = rasterPaintFor({ shading: true }).paint;
+  const off = rasterPaintFor({ shading: false }).paint;
+  assert.ok(on.rasterContrast - off.rasterContrast >= 0.5, "relief contrast drops a lot when off");
+  assert.ok(off.rasterBrightnessMin - on.rasterBrightnessMin >= 0.3, "shadows lift when off");
+  const strong = rasterPaintFor({ style: "terrain", shading: true }).paint;
+  assert.ok(strong.rasterContrast > on.rasterContrast, "the Terrain style brings out relief more");
+});
+
+test("terrain shading: the panel says when there is no terrain instead of a dead switch", () => {
+  const yehsaPack = { id: "p", catalogId: "me-southern", kind: "mbtiles", file: "p.mbtiles", attribution: "Elevation: AWS Terrain Tiles", bounds: { west: -71, south: 43, east: -69, north: 45 }, minZoom: 6, maxZoom: 12 };
+  const imported = { id: "q", kind: "mbtiles", file: "q.mbtiles", attribution: "My scan", bounds: { west: -71, south: 43, east: -69, north: 45 } };
+  assert.equal(terrainIn({ tiled: [yehsaPack] }).ok, true);
+  assert.equal(terrainIn({ tiled: [imported] }).ok, false);
+  assert.match(terrainIn({ tiled: [imported] }).why, /no terrain/);
+  assert.match(terrainIn({}).why, /map pack/);
+  const withPack = mapLayers({ store: { packs: [yehsaPack] }, port: 4000, shading: false });
+  assert.equal(withPack.terrain.ok, true);
+  assert.equal(withPack.terrain.shading, false);
+  assert.equal(withPack.paint.rasterBrightnessMin, rasterPaintFor({ shading: false }).paint.rasterBrightnessMin);
+  const waiting = mapLayers({ store: { packs: [yehsaPack] }, port: null });
+  assert.equal(waiting.terrain.ok, false);
+  const none = mapLayers({ store: { packs: [imported] }, port: 4000 });
+  assert.equal(none.terrain.ok, false);
+  // The Layers row reads that state.
+  assert.match(app, /id: "terrain", label: "Terrain shading", on: layers\.terrain\?\.ok/);
+  assert.match(app, /available: Boolean\(layers\.terrain\?\.ok\), why: layers\.terrain\?\.why/);
+  assert.match(nativeMap, /style=\{\{ rasterOpacity: 1, \.\.\.paint \}\}/);
 });
