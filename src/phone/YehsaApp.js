@@ -1363,9 +1363,12 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
       // Downloaded documents answer after the notes miss, or when the question names one ("in the canning guide").
       const runWithDocs = async () => {
         // R10: "what does section 3 of the canning guide say": that exact heading in a downloaded document.
-        if (parseSectionRef(text)) {
+        const partRef = parseSectionRef(text);
+        if (partRef) {
           try {
-            const part = await documents.section(text);
+            // "article 1 section 8" with no document that has it: the Constitution on the phone.
+            const book = partRef.kind === "article" ? await loadBook(CONSTITUTION_BOOK_ID).catch(() => null) : null;
+            const part = await documents.section(text, { constitutionPages: book?.pages || null });
             if (part) return part;
           } catch {
             // fall through to the notes
