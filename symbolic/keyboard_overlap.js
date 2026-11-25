@@ -1,4 +1,19 @@
-// R10/R11: pure layout math for the keyboard inset (src/phone/keyboard_inset.js). All values in dp.
+// R10-R12: pure layout math for the keyboard inset (src/phone/keyboard_inset.js). All values in dp.
+
+/**
+ * R12: what keyboard-controller's KeyboardAvoidingView pads (behavior "padding"): the part of the frame
+ * below the keyboard's top edge. frameBottom comes from onLayout (parent coordinates; the frame is the
+ * root's first child at y 0) and windowHeight from keyboard-controller's own native window size, so both
+ * are in the same frame. (R10/R11 used measureInWindow, which on Android subtracts the visible display
+ * frame's top, the status bar under edge-to-edge, and so came up one status bar short.)
+ */
+export function frameLift({ frameBottom, windowHeight, keyboardHeight }) {
+  const h = Number(keyboardHeight) || 0;
+  const win = Number(windowHeight) || 0;
+  if (h <= 0 || win <= 0) return 0;
+  const bottom = Number.isFinite(frameBottom) && frameBottom > 0 ? frameBottom : win;
+  return Math.max(0, Math.round(bottom - (win - h)));
+}
 
 /**
  * R11: how far to lift the app so its bottom edge sits on the keyboard's top edge, from the window's
@@ -30,4 +45,21 @@ export function keyboardOverlap({ viewBottom, keyboardTop, keyboardHeight, scree
   const bottom = Number.isFinite(viewBottom) && viewBottom > 0 ? viewBottom : screen;
   const most = screen > 0 ? screen : h + nav;
   return Math.max(0, Math.min(most, Math.round(bottom - top)));
+}
+
+/** R12: the developer keyboard overlay text (More > About > Developer > Show keyboard debug). */
+export function keyboardDebugLines({ win, screen, kbd, dbg }) {
+  const kbcHeight = dbg.kbc?.height ?? 0;
+  const frameBottom = dbg.frame ? dbg.frame.y + dbg.frame.height : null;
+  const lift = frameLift({ frameBottom, windowHeight: win?.height, keyboardHeight: kbd.open ? kbcHeight : 0 });
+  const r = (v) => (v == null || !Number.isFinite(Number(v)) ? "-" : String(Math.round(Number(v) * 10) / 10));
+  return [
+    `source ${kbd.source}${dbg.kbcEvents ? "" : " (no keyboard-controller events yet)"}`,
+    `open ${kbd.open ? "yes" : "no"}  lift ${r(lift)}  pad ${r(kbd.pad)}`,
+    `kbc ${dbg.kbc?.type || "-"} height ${r(dbg.kbc?.height)}  events ${dbg.kbcEvents}`,
+    `rn ${dbg.rn?.type || "-"} height ${r(dbg.rn?.height)} screenY ${r(dbg.rn?.screenY)}  events ${dbg.rnEvents}`,
+    `window ${r(win?.width)}x${r(win?.height)}  screen ${r(screen?.height)}`,
+    `r11 math would lift ${r(dbg.rn && dbg.rootInWindow ? keyboardOverlap({ viewBottom: dbg.rootInWindow.bottom, keyboardTop: dbg.rn.screenY, keyboardHeight: dbg.rn.height, screenHeight: screen?.height }) : null)} (root measureInWindow vs keyboard top)`,
+    `frame y ${r(dbg.frame?.y)} h ${r(dbg.frame?.height)}  root inWindow y ${r(dbg.rootInWindow?.y)} bottom ${r(dbg.rootInWindow?.bottom)}`
+  ];
 }

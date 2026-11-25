@@ -31,17 +31,11 @@ test("the React Native fallback is no longer capped at the event height (R10 cam
   assert.equal(keyboardOverlap({ viewBottom: 915, keyboardTop: 579, keyboardHeight: 0, screenHeight: 915 }), 0);
 });
 
-test("one keyboard store: the native IME module first, the frame and hidden rows re-render alone", () => {
+test("one keyboard store feeds the frame and the hidden rows (R12: through keyboard-controller)", () => {
   const ki = src("src/phone/keyboard_inset.js");
-  assert.match(ki, /requireOptionalNativeModule\?\.\("YehsaIme"\)/);
-  assert.match(ki, /addListener\("onIme", fromNative\)/);
   assert.match(ki, /export function KeyboardFrame/);
   assert.match(ki, /export function KeyboardHidden/);
-  const kt = src("modules/yehsa-ime/android/src/main/java/com/dana6969/axi0net/ime/ImeModule.kt");
-  assert.match(kt, /WindowInsetsCompat\.Type\.ime\(\)/);
-  assert.match(kt, /Name\("YehsaIme"\)/);
-  assert.match(kt, /setWindowInsetsAnimationCallback/);
-  assert.deepEqual(JSON.parse(src("modules/yehsa-ime/expo-module.config.json")).android.modules, ["com.dana6969.axi0net.ime.ImeModule"]);
+  assert.match(ki, /export function onKeyboardChange/);
   const app = src("src/phone/YehsaApp.js");
   assert.doesNotMatch(app, /useKeyboardInset\(/);
   assert.doesNotMatch(app, /keyboard\.(open|pad)/);
