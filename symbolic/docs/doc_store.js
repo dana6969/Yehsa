@@ -9,6 +9,7 @@ import { coverage, questionGroups, splitSentences } from "../web/answer_builder.
 import { looksLikeInstruction, sensitiveKind } from "../web/sanitize.js";
 import { ADVICE_LINE, adviceKind } from "../web/web_search.js";
 import { sectionRef } from "./doc_sections.js";
+import { cleanDocTitle } from "./doc_title.js";
 
 export const DOC_VERSION = 1;
 export const MAX_DOCS = 60;
@@ -21,7 +22,8 @@ export function emptyDocCatalog() {
 
 export function openDocCatalog(value) {
   if (!value || value.v !== DOC_VERSION || !Array.isArray(value.docs)) return emptyDocCatalog();
-  return { v: DOC_VERSION, docs: value.docs.filter((d) => d && typeof d.id === "string") };
+  // R8: titles saved before the cleanup ("First Children s Encyclopedia") read properly too.
+  return { v: DOC_VERSION, docs: value.docs.filter((d) => d && typeof d.id === "string").map((d) => (d.title ? { ...d, title: cleanDocTitle(d.title) } : d)) };
 }
 
 export function newDocId(now = Date.now(), rand = Math.random) {
@@ -31,7 +33,7 @@ export function newDocId(now = Date.now(), rand = Math.random) {
 function cleanTitle(text, fallback) {
   const t = String(text || "").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, 120);
   if (!t || /^(?:microsoft word - |untitled|document\d*$)/i.test(t) && t.length < 12) return fallback;
-  return t.replace(/^Microsoft Word - /i, "").replace(/\.(?:docx?|indd|pdf)$/i, "").trim() || fallback;
+  return cleanDocTitle(t.replace(/^Microsoft Word - /i, "").replace(/\.(?:docx?|indd|pdf)$/i, "").trim()) || fallback;
 }
 
 /** The catalog row for a freshly read document. */
