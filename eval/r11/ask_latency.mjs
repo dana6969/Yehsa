@@ -91,6 +91,7 @@ async function answerOne(text) {
   if (isLibraryQuestion?.(text)) return { answered: true };
   const spiritual = routesToSpiritual(text, parseQuestion(expandParaphrase(text)));
   const lexical = askField(text, books.passages, { session: { consent: false, position: null, waypoints: [] }, spiritualIndex: null, learned: [] });
+  if (lexical?.settled && lexical.answered && !documents.names?.(text)) return lexical;
   let meaning = null;
   if (meaningNode.prepareMeaning) {
     try {

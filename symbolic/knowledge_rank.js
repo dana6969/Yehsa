@@ -107,12 +107,14 @@ export function rankKnowledge(parsed, corpora) {
     }
   }
   const glossScan = plantScan || typeof lookupHeadword !== "function";
+  // R11: the plant-use test needs no gloss text, so most headwords return before the gloss is lowercased.
+  const plantQuestion = (parsed.intent === "use" || tokens.some((token) => PLANT_PARTS.has(token))) && subject.length >= 5;
   const visitGloss = (key, text) => {
-      const gloss = String(text).toLowerCase();
       const namedInQuestion = key === phrase || tokens.includes(key);
       const related = namedInQuestion || (longest && textHasToken(key, longest));
-      const plantUse = (parsed.intent === "use" || tokens.some((token) => PLANT_PARTS.has(token)))
-        && subject.length >= 5
+      if (!related && !(plantQuestion && !namedInQuestion)) return;
+      const gloss = String(text).toLowerCase();
+      const plantUse = plantQuestion
         && !namedInQuestion
         && textHasToken(gloss, subject)
         && /\b(salix|analgesic|astringent|tannin|poultice|from a |from the )\b/.test(gloss);

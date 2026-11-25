@@ -1,0 +1,11 @@
+{
+  "name": "yehsa-ime",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The system keyboard's real height (WindowInsets IME inset) for Yehsa's edge-to-edge layout.",
+  "main": "index.js",
+  "peerDependencies": {
+    "expo": "*",
+    "react-native": "*"
+  }
+}
