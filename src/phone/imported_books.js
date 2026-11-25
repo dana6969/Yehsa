@@ -71,3 +71,9 @@ export async function removeBook(bookId) {
   const current = currentImported() || (await bootImportedBooks());
   return save(deleteBook(current, bookId));
 }
+
+/** R13: remove every imported book (the file shrinks to an empty store, the index empties). */
+export async function removeAllImported() {
+  await bootImportedBooks();
+  return save(emptyImported());
+}

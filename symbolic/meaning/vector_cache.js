@@ -28,3 +28,9 @@ export function hasVector(text) {
 export function clearVectors() {
   cache.clear();
 }
+
+/** R13: drop cached vectors whose key starts with prefix ("p:" = passages), e.g. after a book is removed. */
+export function dropVectors(prefix = "") {
+  const want = String(prefix || "");
+  for (const key of [...cache.keys()]) if (key.startsWith(want)) cache.delete(key);
+}
