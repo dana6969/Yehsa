@@ -65,6 +65,7 @@ export function openLearned(stored, deviceId) {
   if (stored.deviceId && deviceId && stored.deviceId !== deviceId) {
     return { ...emptyLearned(deviceId), rejected: true };
   }
+  // R8: notes saved with web page chrome in them stay hidden from answers (see noteHasJunk).
   const notes = (stored.notes || []).map(cleanNote);
   const phrases = (stored.phrases || []).filter((pair) => pair?.from && pair?.to).slice(-80);
   return {
@@ -153,7 +154,7 @@ function firstSentence(text) {
  */
 export function saveHelpfulAnswer(store, answer) {
   const current = store || emptyLearned();
-  const text = String(answer?.text || "").trim();
+  const text = scrubNoteText(answerBody(answer?.text));
   if (!text) return current;
   const question = String(answer?.question || "").trim().slice(0, 300);
   const key = question.toLowerCase();
@@ -247,15 +248,54 @@ export function conflictsTrustedSafety(noteText) {
   return Boolean(modelDangerWarning(noteText));
 }
 
+// R8: a learned note answers only when it is about what was asked. Words that say what kind of
+// answer is wanted ("explain", "factors", "patterns", "use", "saved") do not count as overlap,
+// and most of the question's subject words must be in the note, so a long question cannot be
+// "answered" by a hunting note that shares two stray words.
+const NOT_SUBJECT = new Set(("explain explained explaining describe tell give show list identify answer answers question questions "
+  + "use using used saved save read reading just source sources primary document documents encyclopedia encyclopedias book books "
+  + "manual pdf note notes chat yehsa please brief briefly each every biggest greatest most least main major three two four five "
+  + "first second third factor factors reason reasons cause causes contributed contribute impact believe think approximately "
+  + "about when what which where why how who whose different across look patterns pattern repeatedly consistently emerge "
+  + "conclusions conclusion draw explicitly stated actually distinguish facts deductions own yet understand understood humanity "
+  + "human humans knowledge things thing kind kinds way ways time times really also know say says").split(" "));
+
+/** The subject words of a question (what it is about), for matching saved notes. */
+export function subjectTokens(question) {
+  return queryTokens(question).filter((t) => !NOT_SUBJECT.has(t));
+}
+
+// Page chrome saved with an old web answer ("com, Nov 24, 2026. _=1795557549451").
+const JUNK_NOTE = /(?:^|\s)_=\d{6,}|\b\d{12,13}\b|\b(?:com|org|net|gov),\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},\s+\d{4}/i;
+
+export function noteHasJunk(note) {
+  return JUNK_NOTE.test(`${note?.title || ""} ${note?.text || ""}`);
+}
+
+/** Strip page chrome from a note's text before it is shown. */
+export function scrubNoteText(text) {
+  return String(text || "")
+    .replace(/(?:^|\s)_=\d+\b/g, " ")
+    .replace(/\b\d{12,13}\b/g, " ")
+    .replace(/\s*,?\s*\b(?:[a-z0-9-]+\.)*(?:com|org|net|gov|edu)\b,?\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2},\s+\d{4}\.?/gi, ".")
+    .replace(/\s+([,.;:!?])/g, "$1")
+    .replace(/\.{2,}/g, ".")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 export function retrieveLearned(question, store) {
   const current = store || emptyLearned();
-  const tokens = queryTokens(question);
+  const tokens = subjectTokens(question);
   if (!tokens.length) return null;
+  // A long, many-part question is not a lookup of one saved answer.
+  if (queryTokens(question).length > 14) return null;
   let best = null;
   let bestScore = 0;
   for (const note of current.notes || []) {
     if (note.hidden || note.confidence === "hidden") continue;
     if (conflictsTrustedSafety(note.text)) continue;
+    if (noteHasJunk(note)) continue;
     const hay = `${note.title} ${note.text} ${note.question} ${(note.tags || []).join(" ")}`;
     let score = 0;
     for (const token of tokens) {
@@ -266,7 +306,7 @@ export function retrieveLearned(question, store) {
       bestScore = score;
     }
   }
-  const need = tokens.length === 1 ? 1 : Math.min(2, tokens.length);
+  const need = tokens.length === 1 ? 1 : Math.max(Math.min(2, tokens.length), Math.ceil(tokens.length * 0.6));
   if (!best || bestScore < need) return null;
   return best;
 }
@@ -276,7 +316,22 @@ export function learnedShareText(note) {
 }
 
 export function formatLearned(note) {
-  return `Learned on this device from ${note.source}. ${note.text}`;
+  return `Learned on this device from ${note.source}. ${scrubNoteText(note.text)}`;
+}
+
+// Kinds of answer that are not kept as a new learned note on Yes: they already live in a saved
+// document, a book, the web review queue, or are a learned note themselves.
+const NOT_SAVED_KINDS = new Set(["web", "live", "document", "library", "learned", "synthesis", "doc-reasoned", "imported", "spiritual"]);
+
+export function savesAsLearned(kind) {
+  return !NOT_SAVED_KINDS.has(String(kind || ""));
+}
+
+/** The answer text to keep: no "Here is what I have." opener, no follow-up offer line. */
+export function answerBody(text) {
+  const lines = String(text || "").split(/\n+/).map((l) => l.trim()).filter(Boolean);
+  const kept = lines.filter((l, i) => !(i === lines.length - 1 && lines.length > 1 && /^(?:want me to|shall i|would you like|should i)\b.*\?$/i.test(l)));
+  return kept.join("\n").replace(/^(?:okay, )?(?:here is what (?:i have|the notes say)|from what you have told me before:|staying with that, here is more)[.:]?\s*/i, "").trim();
 }
 
 export function editLearned(store, id, patch) {

@@ -297,9 +297,11 @@ export function voiceReply(result, question, thread = newThread()) {
     else if (state.lastDomain && state.lastDomain === domain && domain && turns > 0) opener = "Staying with that, here is more.";
     else opener = pick(OPENERS[domain] || OPENERS.general, turns);
   }
+  // R8: a learned note or a document answer offers no field follow-up ("firearm safety" after a
+  // history question); the follow-up must come from the question's own domain.
   const offer = result.kind === "spiritual"
     ? { label: "Want another passage on this, or a different theme?", ask: null }
-    : offerFor(domain, result.symbol);
+    : result.kind === "learned" || result.noOffer || (domain && domainOf(question) && domainOf(question) !== domain) ? null : offerFor(domain, result.symbol);
   // Never offer the same follow-up twice in a row.
   const repeat = offer && state.offer && state.offer.label === offer.label;
   const chosen = repeat ? null : offer;
