@@ -58,7 +58,8 @@ function profileOf(entry) {
   const entities = new Set(found);
   const groups = new Set([...entities].map(groupOf).filter(Boolean));
   const kinds = new Set([...groups].map(kindOf).filter(Boolean));
-  return { id: entry.id, title: entry.title, domain: entry.domain, actions, details: new Set(detailsOf(entry)), entities, groups, kinds, steps: entry.steps?.length || 0 };
+  const phrases = (entry.also || []).map((x) => String(x).toLowerCase().replace(/[^a-z0-9' ]+/g, " ").replace(/\s+/g, " ").trim()).filter((x) => x.split(" ").length >= 2);
+  return { id: entry.id, title: entry.title, domain: entry.domain, actions, phrases, details: new Set(detailsOf(entry)), entities, groups, kinds, steps: entry.steps?.length || 0 };
 }
 
 const PROFILES = new Map();

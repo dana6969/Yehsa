@@ -30,6 +30,8 @@ function score(profile, u, action) {
     if (profile.groups.has(g) || profile.entities.has(g)) best = Math.max(best, 8 - 2 * i);
   });
   if (!best) return 0;
+  // The note's author listed this very wording as one of its names ("quarter a deer", "clean a turkey").
+  if (profile.phrases.some((phrase) => u.text.includes(` ${phrase} `))) best += 3;
   // The finer point: "venison jerky" wants the jerky note, "wounded deer" the blood-trail note.
   if (u.detail && profile.details.has(u.detail)) best += 5;
   else if (u.detail && profile.details.size) best -= 3;

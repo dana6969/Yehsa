@@ -38,3 +38,11 @@ for (const f of flows) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why ||
 const flowWrong = flows.filter((f) => !f.pass).length;
 console.log(JSON.stringify({ r8Flows: flows.length, correct: flows.length - flowWrong, wrong: flowWrong }));
 if (flowWrong) process.exitCode = 1;
+
+// R9: Dana's 25 Nov screenshots (question understanding, follow-ups, "Muslims and Romans") and an audit sample.
+const { runR9Flows } = await import("./dev_r9_flows.mjs");
+const r9 = runR9Flows();
+for (const f of r9) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why || "").replace(/\s+/g, " ").slice(0, 180)}`);
+const r9Wrong = r9.filter((f) => !f.pass).length;
+console.log(JSON.stringify({ r9Flows: r9.length, correct: r9.length - r9Wrong, wrong: r9Wrong }));
+if (r9Wrong) process.exitCode = 1;

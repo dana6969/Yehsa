@@ -62,6 +62,7 @@ export function understand(question) {
   const detail = (DETAILS[action] || []).find(([, re]) => re.test(t))?.[0] || null;
   const group = entity ? groupOf(entity) : null;
   return {
+    text: ` ${t.replace(/[^a-z0-9' ]+/g, " ").replace(/\s+/g, " ").trim()} `,
     action,
     howto: HOWTO_ACTIONS.has(action),
     exactOnly: EXACT_ACTIONS.has(action),
