@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { filterDestinations, looksLikeQuestion } from "./nav_model.js";
 import { colors, themedStyles, useDisplay } from "./ui.js";
 import { useBackLayer } from "./back_layers.js";
+import VoiceSearchButton from "./VoiceSearchButton.js";
 
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
@@ -11,6 +12,7 @@ const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 export default function CommandSheet({ onGo, onAsk, onClose }) {
   const display = useDisplay();
   const [query, setQuery] = useState("");
+  const [voiceNote, setVoiceNote] = useState("");
   const matches = filterDestinations(query);
   const text = query.trim();
   const askFirst = looksLikeQuestion(text);
@@ -41,10 +43,23 @@ export default function CommandSheet({ onGo, onAsk, onClose }) {
             returnKeyType="go"
             style={[styles.input, { fontSize: display.size(17) }]}
           />
+          <VoiceSearchButton
+            label="Say it"
+            onText={setQuery}
+            onNote={setVoiceNote}
+            onDone={(spoken) => {
+              setQuery(spoken);
+              setVoiceNote("");
+              const found = filterDestinations(spoken);
+              if (looksLikeQuestion(spoken) || found.length === 0) onAsk(spoken);
+              else onGo(found[0]);
+            }}
+          />
           <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={onClose} style={[styles.close, webPointer]}>
             <Ionicons name="close" size={22} color={colors.ink} />
           </Pressable>
         </View>
+        {voiceNote ? <Text accessibilityLiveRegion="polite" style={{ color: colors.muted, paddingHorizontal: 16, paddingBottom: 6 }}>{voiceNote}</Text> : null}
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.list}>
           {askFirst ? askRow : null}
           {matches.map((item) => (

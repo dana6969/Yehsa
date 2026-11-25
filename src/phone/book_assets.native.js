@@ -11,7 +11,8 @@ const FILES = {
   kjv: require("../../assets/books/kjv.ybk"),
   great_war_vol_v: require("../../assets/books/great_war_vol_v.ybk"),
   hermetica_mead_vol2: require("../../assets/books/hermetica_mead_vol2.ybk"),
-  barddas: require("../../assets/books/barddas.ybk")
+  barddas: require("../../assets/books/barddas.ybk"),
+  us_constitution: require("../../assets/books/us_constitution.ybk")
 };
 
 export const bookAssetsAvailable = true;

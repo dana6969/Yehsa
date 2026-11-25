@@ -19,6 +19,7 @@ export const BUNDLED_BOOKS = [
   { id: "book:kjv", file: "kjv", title: "The Bible, King James Version", author: "", aliases: ["bible", "kjv", "king james"], headings: "kjv" },
   { id: "book:great-war-5", file: "great_war_vol_v", title: "The Story of the Great War, Volume V", author: "", aliases: ["great war", "story of the great war"] },
   { id: "book:hermetica", file: "hermetica_mead_vol2", title: "Thrice-Greatest Hermes, Volume II", author: "G. R. S. Mead", aliases: ["hermes", "hermetica", "thrice greatest hermes"], ocr: true },
+  { id: "book:us-constitution", file: "us_constitution", title: "The Constitution of the United States", author: "National Archives transcription", aliases: ["constitution", "us constitution", "u.s. constitution", "united states constitution", "bill of rights", "constitution of the united states"] },
   { id: "book:barddas", file: "barddas", title: "Barddas", author: "ed. J. Williams Ab Ithel", aliases: ["barddas"], ocr: true }
 ];
 

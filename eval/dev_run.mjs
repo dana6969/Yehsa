@@ -46,3 +46,11 @@ for (const f of r9) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why || ""
 const r9Wrong = r9.filter((f) => !f.pass).length;
 console.log(JSON.stringify({ r9Flows: r9.length, correct: r9.length - r9Wrong, wrong: r9Wrong }));
 if (r9Wrong) process.exitCode = 1;
+
+// R10: "What's my second amendment" after downloading GovInfo's Constitution, and the section audit.
+const { runR10Flows } = await import("./dev_r10_flows.mjs");
+const r10 = runR10Flows();
+for (const f of r10) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why || "").replace(/\s+/g, " ").slice(0, 180)}`);
+const r10Wrong = r10.filter((f) => !f.pass).length;
+console.log(JSON.stringify({ r10Flows: r10.length, correct: r10.length - r10Wrong, wrong: r10Wrong }));
+if (r10Wrong) process.exitCode = 1;

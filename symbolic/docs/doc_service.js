@@ -16,6 +16,7 @@ import {
   namedDocument, newDocId, openDocCatalog, renameDocument, sectionDocument, updateDocument, withoutDocName
 } from "./doc_store.js";
 import { documentText } from "./doc_text.js";
+import { documentSectionAnswer } from "./section_answer.js";
 
 export const MAX_VECTOR_SECTIONS = 1500;
 
@@ -208,6 +209,13 @@ export function createDocService(io) {
     },
     names(question) {
       return namedDocument(catalog, question);
+    },
+    /** R10: the exact part a question names ("second amendment", "section 3 of the canning guide"), or null. */
+    async section(question, { constitutionPages = null } = {}) {
+      await load();
+      const named = catalog.docs.length ? namedDocument(catalog, question) : null;
+      const entries = catalog.docs.length ? await allEntries(named) : [];
+      return documentSectionAnswer(question, { entries, named, constitutionPages });
     },
     async pages(id) {
       const b = await body(id);

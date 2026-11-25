@@ -222,6 +222,11 @@ function MorseTool({ onBack }) {
       <ScreenHeader title="Morse" lead="Text to code, for a light or a tone." onBack={onBack} backLabel="Field" />
       <View style={styles.morseCard}>
         <Field label="Words" value={text} onChangeText={setText} placeholder="SOS" />
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+          {["SOS", "HELP", "OK", "NEED WATER"].map((preset) => (
+            <Action key={preset} label={preset} tone="quiet" onPress={() => setText(preset)} accessibilityHint={preset === "SOS" ? "Sets the distress signal: three short, three long, three short, run together." : `Sets the words to ${preset}.`} />
+          ))}
+        </View>
       </View>
       <View style={styles.morseCard}>
         <Text style={styles.groupLabel}>CODE</Text>
@@ -230,7 +235,7 @@ function MorseTool({ onBack }) {
       </View>
       <View style={styles.morseExplain}>
         <Text style={styles.groupLabel}>HOW THE TIMING WORKS</Text>
-        <Quiet>Short is one unit, long is three. One unit between marks, three between letters, seven between words. SOS is three short, three long, three short.</Quiet>
+        <Quiet>Short is one unit, long is three. One unit between marks, three between letters, seven between words. SOS is three short, three long, three short, sent run together. One unit is 1200 divided by the words per minute, in milliseconds.</Quiet>
       </View>
     </ScrollView>
   );

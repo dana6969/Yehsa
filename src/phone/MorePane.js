@@ -1,7 +1,9 @@
-import React from "react";
-import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MORE_ITEMS } from "./nav_model.js";
+import VoiceSearchButton from "./VoiceSearchButton.js";
+import { filterMoreItems } from "../../symbolic/voice_search.js";
 import { Quiet, ScreenHeader, colors, tokens, useDisplay, themedStyles } from "./ui.js";
 
 const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
@@ -10,11 +12,40 @@ const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 // control and the hardware back key does the same.
 export default function MorePane({ onOpen, onBack, backLabel, items = MORE_ITEMS }) {
   const display = useDisplay();
+  const [query, setQuery] = useState("");
+  const [note, setNote] = useState("");
+  const shown = filterMoreItems(items, query);
   return (
-    <ScrollView contentContainerStyle={styles.scroll}>
+    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
       <ScreenHeader title="More" lead="Display, privacy, and the rest of the tools that don't need a tab." onBack={onBack} backLabel={backLabel} />
+      {/* R10: type or say what you want; the list narrows to it. */}
+      <View style={[styles.search, { borderColor: display.line }]}>
+        <Ionicons name="search" size={18} color={display.muted} />
+        <TextInput
+          accessibilityLabel="Search More"
+          value={query}
+          onChangeText={(t) => { setQuery(t); setNote(""); }}
+          onSubmitEditing={() => { if (shown.length === 1) onOpen(shown[0].id); }}
+          placeholder="Search More"
+          placeholderTextColor={display.muted}
+          returnKeyType="search"
+          style={[styles.searchInput, { fontSize: display.size(16) }]}
+        />
+        <VoiceSearchButton
+          label="Search More by voice"
+          onText={setQuery}
+          onNote={setNote}
+          onDone={(spoken) => {
+            setQuery(spoken);
+            const found = filterMoreItems(items, spoken);
+            if (found.length === 1) { setNote(""); onOpen(found[0].id); }
+            else setNote(found.length ? `${found.length} matches for "${spoken}".` : `Nothing in More matches "${spoken}".`);
+          }}
+        />
+      </View>
+      {note ? <Quiet live>{note}</Quiet> : null}
       <View style={[styles.list, { borderColor: display.line }]}>
-        {items.map((item, index) => (
+        {shown.map((item, index) => (
           <Pressable
             key={item.id}
             accessibilityRole="button"
@@ -57,6 +88,8 @@ const styles = themedStyles((colors) => ({
     gap: 12
   },
   copy: { flex: 1 },
+  search: { flexDirection: "row", alignItems: "center", gap: 8, borderWidth: 1, borderRadius: tokens.radius.lg, backgroundColor: colors.surface, paddingLeft: 12, marginBottom: 12, minHeight: 48 },
+  searchInput: { flex: 1, color: colors.ink, minHeight: 48 },
   label: { color: colors.ink, fontWeight: "600" },
   hint: { marginTop: 2, lineHeight: 18 },
   pressed: { opacity: 0.82 }

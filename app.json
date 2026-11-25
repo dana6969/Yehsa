@@ -34,7 +34,8 @@
         "FOREGROUND_SERVICE_MEDIA_PLAYBACK",
         "WAKE_LOCK",
         "POST_NOTIFICATIONS"
-      ]
+      ],
+      "softwareKeyboardLayoutMode": "resize"
     },
     "ios": {
       "bundleIdentifier": "com.dana6969.axi0net",

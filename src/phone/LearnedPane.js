@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import VoiceSearchButton from "./VoiceSearchButton.js";
 import { Platform, Pressable, ScrollView, Share, Text, TextInput, View } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
@@ -93,7 +94,7 @@ export default function LearnedPane({ store, deviceId, onChange, onShare, onBack
       />
       {store?.rejected ? <Quiet>Notes from another phone can't be opened here.</Quiet> : null}
       {total > 0 ? (
-        <TextInput accessibilityLabel="Search saved notes" value={query} onChangeText={setQuery} placeholder="Search saved notes" placeholderTextColor={colors.muted} style={styles.input} />
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}><View style={{ flex: 1 }}><TextInput accessibilityLabel="Search saved notes" value={query} onChangeText={setQuery} placeholder="Search saved notes" placeholderTextColor={colors.muted} style={styles.input} /></View><VoiceSearchButton label="Search saved notes by voice" onText={setQuery} onDone={setQuery} /></View>
       ) : null}
       {total === 0 ? (
         <View style={styles.empty}>

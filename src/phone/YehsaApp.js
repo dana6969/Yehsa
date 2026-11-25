@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   BackHandler,
+  Keyboard,
   Platform,
   Pressable,
   ScrollView,
@@ -13,6 +14,9 @@ import {
   View
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useKeyboardInset } from "./keyboard_inset";
+import { parseSectionRef } from "../../symbolic/docs/section_ref.js";
+import { CONSTITUTION_BOOK_ID } from "../../symbolic/docs/section_answer.js";
 import books from "../../symbolic_memory/books_index.json";
 import { askField } from "../../symbolic/phone_field.js";
 import { expandParaphrase } from "../../symbolic/paraphrase.js";
@@ -176,6 +180,8 @@ const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
 export default function YehsaApp() {
   const [nav, setNav] = useState(initialNav);
+  const rootRef = useRef(null);
+  const keyboard = useKeyboardInset(rootRef);
   const [display, setDisplay] = useState(defaultDisplay);
   const [onboarding, setOnboarding] = useState(false);
   const [huntRequest, setHuntRequest] = useState(0);
@@ -393,8 +399,10 @@ export default function YehsaApp() {
     <BackLayers.Provider value={layers}>
     <DisplayContext.Provider value={display}>
     <ShellContext.Provider value={shell}>
-    <View style={styles.root}>
+    <View style={styles.root} ref={rootRef} collapsable={false}>
       <StatusBar style={themeKey === "sunlight" ? "dark" : "light"} />
+      {/* R10: everything sits above the system keyboard (edge-to-edge does not resize the window). */}
+      <View style={[styles.keyboardFrame, keyboard.pad ? { marginBottom: keyboard.pad } : null]}>
       <View style={styles.column}>
       <View style={styles.body}>
         <View {...pane("ask")}>
@@ -662,10 +670,10 @@ export default function YehsaApp() {
         </View>
         {onboarding ? <Onboarding onDone={finishOnboarding} /> : null}
       </View>
-      {chipVisible && !onboarding && !fullMap ? (
+      {chipVisible && !onboarding && !fullMap && !keyboard.open ? (
         <AskChip summary={askSummary} onPress={() => (askSummary?.pending ? setTab("ask") : go({ type: "openCommand" }))} />
       ) : null}
-      <View style={[styles.tabs, fullMap && styles.hidden]} accessibilityRole="tablist" accessibilityElementsHidden={fullMap} importantForAccessibility={fullMap ? "no-hide-descendants" : "auto"}>
+      <View style={[styles.tabs, (fullMap || keyboard.open) && styles.hidden]} accessibilityRole="tablist" accessibilityElementsHidden={fullMap} importantForAccessibility={fullMap ? "no-hide-descendants" : "auto"}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="SOS emergency"
@@ -711,6 +719,7 @@ export default function YehsaApp() {
           }}
         />
       ) : null}
+      </View>
     </View>
     </ShellContext.Provider>
     </DisplayContext.Provider>
@@ -830,6 +839,14 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
     stopProse();
     return undefined;
   }, [active]);
+
+  // R10: when the keyboard opens, the thread shrinks above it; keep the latest message in view.
+  useEffect(() => {
+    const sub = Keyboard.addListener(Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow", () => {
+      setTimeout(() => threadRef.current?.scrollToEnd?.({ animated: true }), 80);
+    });
+    return () => sub.remove();
+  }, []);
 
   const messageSeq = useRef(0);
   function pushMessage(message) {
@@ -1192,6 +1209,25 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
     }
     // R9: "Muslims and Romans": how the two relate, from what is on the phone; then the web if live look-ups are on;
     // otherwise one short clarifying question. Never random scripture lines for a book-title word.
+    // R10: "what's my second amendment", "article 1 section 8", "the preamble": the exact text, quoted
+    // first from a downloaded Constitution, else from the one bundled on the phone.
+    if (route?.kind === "section") {
+      stopProse();
+      setQuestion("");
+      setNotice(null);
+      pushMessage({ role: "you", text: typed });
+      setPhase("ready");
+      const msg = pushMessage({ role: "yehsa", text: `Finding ${route.section.label}...` });
+      loadBook(CONSTITUTION_BOOK_ID).catch(() => null).then((book) => documents.section(effective, { constitutionPages: book?.pages || null })).then((got) => {
+        if (got) {
+          patchMessage(msg, { text: got.text, source: got.source, chips: sourceChips(got), reader: got.reader, feedbackEligible: false, resultKind: got.kind });
+          if (speak) speakProse(got.text, { onDone: () => setVoiceNote(null), onError: () => setVoiceNote(null) });
+          return;
+        }
+        patchMessage(msg, { text: `I couldn't find ${route.section.label} on this phone. Ask "download the Constitution from GovInfo" and I'll read it from there.` });
+      }).catch(() => patchMessage(msg, { text: `I couldn't open the Constitution on this phone just now.` }));
+      return;
+    }
     if (route?.kind === "relation") {
       stopProse();
       setQuestion("");
@@ -1326,6 +1362,18 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
       };
       // Downloaded documents answer after the notes miss, or when the question names one ("in the canning guide").
       const runWithDocs = async () => {
+        // R10: "what does section 3 of the canning guide say": that exact heading in a downloaded document.
+        const partRef = parseSectionRef(text);
+        if (partRef) {
+          try {
+            // "article 1 section 8" with no document that has it: the Constitution on the phone.
+            const book = partRef.kind === "article" ? await loadBook(CONSTITUTION_BOOK_ID).catch(() => null) : null;
+            const part = await documents.section(text, { constitutionPages: book?.pages || null });
+            if (part) return part;
+          } catch {
+            // fall through to the notes
+          }
+        }
         const found = await run();
         try {
           const fromDoc = await documents.answer(text, { queryVector: questionVector(text), notesAnswered: found?.answered === true });
@@ -1436,7 +1484,8 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
           symbol: result?.symbol || null,
           learnedId: result?.learnedId || null,
           resultKind: result?.kind || null,
-          answerText: result?.text || null
+          answerText: result?.text || null,
+          reader: result?.reader || null
         });
         if (speak && result?.text) {
           speakProse(voiced.spoken || result.text, {
@@ -2832,6 +2881,11 @@ const styles = themedStyles((colors) => ({
   root: {
     flex: 1,
     backgroundColor: colors.bg,
+    alignItems: "center"
+  },
+  keyboardFrame: {
+    flex: 1,
+    width: "100%",
     alignItems: "center"
   },
   column: {
