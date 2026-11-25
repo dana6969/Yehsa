@@ -264,6 +264,7 @@ export function createDocService(io) {
     },
     /** Rebuild sections from the kept text, then the meaning vectors. */
     async reindex(id) {
+      await load();
       if (!catalog.docs.some((d) => d.id === id)) return { ok: false, reason: "That document was removed. Download it again from its link." };
       const b = await body(id);
       if (!b?.pages) return { ok: false, reason: "That document's text is missing. Download it again from its link." };
