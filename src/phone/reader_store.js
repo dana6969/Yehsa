@@ -19,6 +19,11 @@ export function openLibrary() {
   emit();
 }
 
+/** R13: the book the reader shows now, or null. */
+export function readerBookId() {
+  return state?.bookId || null;
+}
+
 export function closeReader() {
   state = null;
   emit();

@@ -33,6 +33,14 @@ export function withPlace(prefs, bookId, page, now = Date.now()) {
   return { ...prefs, places };
 }
 
+/** R13: forget the saved page for a removed book. */
+export function withoutPlace(prefs, bookId) {
+  if (!prefs?.places || !(bookId in prefs.places)) return prefs;
+  const places = { ...prefs.places };
+  delete places[bookId];
+  return { ...prefs, places };
+}
+
 export function withSize(prefs, step) {
   const i = Math.max(0, TEXT_SIZES.indexOf(prefs.size));
   const next = TEXT_SIZES[Math.max(0, Math.min(TEXT_SIZES.length - 1, i + step))];

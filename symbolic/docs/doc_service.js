@@ -139,6 +139,12 @@ export function createDocService(io) {
         return false; // deleted while indexing
       }
     }
+    // R13: removed while the last batch ran: don't write the sealed body back (the space stays freed).
+    if (!catalog.docs.some((d) => d.id === id)) {
+      indexing.delete(id);
+      emit();
+      return false;
+    }
     const next = attachSectionVectors({ ...b, sections: b.sections }, vectors, model);
     await saveBody(id, next);
     indexing.delete(id);
@@ -233,6 +239,7 @@ export function createDocService(io) {
       return { ok: true };
     },
     async remove(id) {
+      await load();
       bodies.delete(id);
       indexing.delete(id);
       await saveCatalog(deleteDocument(catalog, id));
@@ -241,10 +248,23 @@ export function createDocService(io) {
       } catch {
         // Already gone.
       }
+      bodies.delete(id);
+      emit();
       return { ok: true };
+    },
+    /** R13: bytes the sealed document takes on disk, or null when storage can't tell. */
+    async diskBytes(id) {
+      if (typeof io.fileSize !== "function") return null;
+      try {
+        const n = await io.fileSize(`doc-${id}.v1`);
+        return Number.isFinite(n) ? n : null;
+      } catch {
+        return null;
+      }
     },
     /** Rebuild sections from the kept text, then the meaning vectors. */
     async reindex(id) {
+      if (!catalog.docs.some((d) => d.id === id)) return { ok: false, reason: "That document was removed. Download it again from its link." };
       const b = await body(id);
       if (!b?.pages) return { ok: false, reason: "That document's text is missing. Download it again from its link." };
       indexing.set(id, { phase: "sections", done: 0, total: 0 });

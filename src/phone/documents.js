@@ -18,6 +18,7 @@ export const documents = createDocService({
   readFile: docFiles.readFile,
   writeFile: docFiles.writeFile,
   deleteFile: docFiles.deleteFile,
+  fileSize: docFiles.fileSize,
   get fetchImpl() {
     return globalThis.fetch ? globalThis.fetch.bind(globalThis) : null;
   },

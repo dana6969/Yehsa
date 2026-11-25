@@ -36,6 +36,10 @@ export async function pickFile({ types = ["application/epub+zip", "text/plain", 
       await FileSystem.makeDirectoryAsync(dir, { intermediates: true }).catch(() => {});
       const to = `${dir}${(asset.name || "library.zim").replace(/[^a-zA-Z0-9._-]/g, "_")}`;
       await FileSystem.copyAsync({ from: uri, to });
+      // R13: the picker's cache copy is not needed once Yehsa has its own; a ZIM can be gigabytes.
+      if (FileSystem.cacheDirectory && String(uri).startsWith(FileSystem.cacheDirectory)) {
+        await FileSystem.deleteAsync(uri, { idempotent: true }).catch(() => {});
+      }
       return to;
     }
   };

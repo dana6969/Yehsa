@@ -11,9 +11,17 @@ import { Action, Quiet, colors, themedStyles } from "./ui.js";
 import { useBackLayer } from "./back_layers.js";
 import { closeReader, openLibrary, openReader, useReaderState } from "./reader_store.js";
 import { libraryEntries, loadBook } from "./library_source.js";
-import { chapterAt, emptyReaderPrefs, findPages, loadReaderPrefs, saveReaderPrefs, withPlace, withSize } from "../../symbolic/library/reader_prefs.js";
+import { chapterAt, emptyReaderPrefs, findPages, loadReaderPrefs, saveReaderPrefs, withPlace, withSize, withoutPlace } from "../../symbolic/library/reader_prefs.js";
 
 let prefsCache = null;
+
+/** R13: forget the saved page of a book removed from the phone. */
+export async function forgetReaderPlace(bookId) {
+  const prefs = prefsCache || (await loadReaderPrefs(AsyncStorage));
+  const next = withoutPlace(prefs, bookId);
+  prefsCache = next;
+  if (next !== prefs) await saveReaderPrefs(AsyncStorage, next);
+}
 
 function usePrefs() {
   const [prefs, setPrefs] = useState(prefsCache || emptyReaderPrefs());

@@ -10,5 +10,9 @@ export const docFiles = {
   },
   async deleteFile(name) {
     files.delete(name);
+  },
+  async fileSize(name) {
+    const text = files.get(name);
+    return text == null ? null : text.length;
   }
 };

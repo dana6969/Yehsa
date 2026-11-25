@@ -12,7 +12,9 @@ let docsSeen = null;
 
 function dropDocsIfChanged() {
   const docs = documents.snapshot().catalog?.docs || [];
-  const key = docs.map((d) => `${d.id}:${d.title}:${d.sections}`).join("|");
+  const imported = currentImported()?.books || [];
+  // R13: imported books are in the key too, so removing one drops its cached reader copy.
+  const key = `${docs.map((d) => `${d.id}:${d.title}:${d.sections}`).join("|")}#${imported.map((b) => b.id).join("|")}`;
   if (key !== docsSeen) {
     for (const id of [...cache.keys()]) if (id.startsWith("doc:") || id.startsWith("imported:")) cache.delete(id);
     docsSeen = key;
@@ -61,4 +63,10 @@ export async function loadBook(id) {
 /** The library list from what is loaded right now (no waiting), for matching a name in Ask. */
 export function libraryEntriesNow() {
   return libraryList({ docs: documents.snapshot().catalog?.docs || [], imported: currentImported() });
+}
+
+/** R13: drop one book from the reader's session cache (after it is removed from the phone). */
+export function forgetBook(id) {
+  cache.delete(String(id || ""));
+  docsSeen = null;
 }

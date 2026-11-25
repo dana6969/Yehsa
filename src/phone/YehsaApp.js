@@ -159,6 +159,7 @@ import FieldPane from "./FieldPane.js";
 import MorePane from "./MorePane.js";
 import { BooksPane, DownloadArea, HotspotGuide, SatSosGuide, TrustScreen } from "./screens_index.js";
 import CommandSheet from "./CommandSheet.js";
+import DownloadedBooksPane from "./DownloadedBooksPane.js";
 import Onboarding, { ONBOARDED_KEY } from "./Onboarding.js";
 import { TRUST_EVAL, TRUST_LINES } from "./trust_copy.js";
 import { DISPLAY_KEY, DISPLAY_MODES, NIGHT_TINTS, defaultDisplay, openDisplay, packDisplay, setMode, themeKeyFor } from "./display_model.js";
@@ -580,7 +581,13 @@ export default function YehsaApp() {
               <Quiet>Spiritual texts open only when you ask a spiritual question in Ask. They are kept separate from field notes.</Quiet>
               <Prose>Read the books and manuals on this phone, with chapters, find, and your place kept. Works offline.</Prose>
               <Action label="Open the reader" onPress={openLibrary} accessibilityHint="Opens the library: the Army manuals, the books in the app, books you imported, and documents you downloaded." />
+              <Action label="Downloaded books: sizes and remove" tone="quiet" onPress={() => openScreen("downloads")} accessibilityHint="Lists what you downloaded or imported with its size, and removes a book to free space." />
             </BooksPane>
+          </View>
+        ) : null}
+        {stackOpen("downloads") ? (
+          <View {...pane("downloads")}>
+            <DownloadedBooksPane onBack={popScreen} backLabel={back} />
           </View>
         ) : null}
         {stackOpen("trust") ? (

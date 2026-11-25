@@ -39,5 +39,12 @@ export const docFiles = {
   },
   async deleteFile(name) {
     await FileSystem.deleteAsync(pathOf(name), { idempotent: true });
+    // A crash mid-write can leave the temporary copy; it goes too.
+    await FileSystem.deleteAsync(`${pathOf(name)}.tmp`, { idempotent: true }).catch(() => {});
+  },
+  async fileSize(name) {
+    await ensureDir();
+    const info = await FileSystem.getInfoAsync(pathOf(name), { size: true });
+    return info.exists && Number.isFinite(info.size) ? info.size : null;
   }
 };
