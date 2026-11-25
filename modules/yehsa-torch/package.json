@@ -1,0 +1,11 @@
+{
+  "name": "yehsa-torch",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Phone flashlight (torch) for Yehsa's Morse light signal, with no camera preview.",
+  "main": "index.js",
+  "peerDependencies": {
+    "expo": "*",
+    "react-native": "*"
+  }
+}
