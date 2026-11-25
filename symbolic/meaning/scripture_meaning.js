@@ -4,11 +4,14 @@
 
 import { exactVerse, namedBook } from "../spiritual_quote.js";
 import { rankScripture, scriptureVectorScore, THRESHOLDS } from "./meaning_layer.js";
+import { onSubject, titleWordOnly } from "../scripture_guard.js";
+import { isSpiritualQuestion } from "../spiritual_route.js";
+import { cleanQuote } from "../reasoning/quote_clean.js";
 
 const FILL_FLOOR = 0.58;
 
 function format(chosen) {
-  const quotes = chosen.map((passage) => `${passage.title}, ${passage.ref}: "${passage.text}"`);
+  const quotes = chosen.map((passage) => `${passage.title}, ${passage.ref}: "${cleanQuote(passage.text)}"`);
   return {
     text: ["These lines are what the texts say. They are not a verdict.", ...quotes, "This is what these texts say, not a verdict from Yehsa."].join(" "),
     symbol: chosen[0].ref,
@@ -21,9 +24,16 @@ function format(chosen) {
 export function scriptureByMeaning(ctx, raw, lexical, passages) {
   if (!ctx?.scripture || !Array.isArray(passages)) return lexical;
   if (exactVerse(raw, passages)) return lexical;
-  const book = namedBook(raw);
+  const found = namedBook(raw);
+  const book = found && !titleWordOnly(raw, found[0]) ? found : null;
   const filter = book ? (passage) => book[1].test(`${passage.title} ${passage.ref}`) : null;
-  const ranked = rankScripture(ctx, raw, filter, 3);
+  let ranked = rankScripture(ctx, raw, filter, 3);
+  // R9: a question that is not plainly about the texts is quoted only where a passage has its subject words.
+  if (!isSpiritualQuestion(raw) && ranked?.length) {
+    const keep = new Set(onSubject(raw, ranked.map((item) => item.passage)));
+    ranked = ranked.filter((item) => keep.has(item.passage));
+    if (!ranked.length) return lexical;
+  }
   if (!ranked?.length) return lexical;
   const best = ranked[0].score;
   const lexicalText = lexical?.hits?.[0]?.text;

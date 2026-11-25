@@ -4,10 +4,12 @@
 //   1. a whole-book request ("summary of kubark", "chapters of ATP 3-50.21", "open the Bible")
 //   2. a named saved document ("using The Encyclopedia of World History you just read: ...")
 //   3. a broad many-part analysis question (synthesis across everything on the phone)
+//   4. R9: a short two-sided history question ("Muslims and Romans"): how the two relate
 //   null: the ordinary path (field notes, then documents, learned notes, the web)
 import { planBookRequest } from "../library/book_request.js";
 import { docReference } from "./doc_reference.js";
 import { isSynthesisQuestion } from "./question_parts.js";
+import { relationQuestion } from "./relation.js";
 
 export function routeAsk(text, { entries = [], recentFound = null, docs = [] } = {}) {
   const book = planBookRequest(text, { entries, recentFound });
@@ -15,5 +17,7 @@ export function routeAsk(text, { entries = [], recentFound = null, docs = [] } =
   const named = docReference(text, docs);
   if (named) return { kind: "named-doc", named };
   if (isSynthesisQuestion(text)) return { kind: "synthesis" };
+  const relation = relationQuestion(text);
+  if (relation) return { kind: "relation", relation };
   return null;
 }

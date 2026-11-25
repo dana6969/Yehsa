@@ -1,5 +1,8 @@
 // Quote indexed lines. No filesystem, so the phone can use the same words.
 import { queryTokens, textHasToken } from "./book_search.js";
+import { onSubject, titleWordOnly } from "./scripture_guard.js";
+import { isSpiritualQuestion } from "./spiritual_route.js";
+import { cleanQuote } from "./reasoning/quote_clean.js";
 
 const BOOKS = [
   ["gita", /gita/i],
@@ -19,7 +22,15 @@ const BOOKS = [
   ["luke", /luke/i],
   ["john", /john/i],
   ["isaiah", /isaiah/i],
-  ["proverbs", /proverbs/i]
+  ["proverbs", /proverbs/i],
+  ["romans", /to the romans/i],
+  ["acts", /acts of the apostles/i],
+  ["corinthians", /corinthians/i],
+  ["galatians", /galatians/i],
+  ["ephesians", /ephesians/i],
+  ["hebrews", /hebrews/i],
+  ["revelation", /revelation/i],
+  ["kings", /book of the kings|kings/i]
 ];
 
 export function namedBook(raw) {
@@ -69,10 +80,12 @@ function scorePassage(passage, tokens, raw) {
   const blob = `${passage.title} ${passage.ref} ${passage.text}`;
   let score = 0;
   for (const token of tokens) {
-    if (textHasToken(blob, token)) score += token.length > 4 ? 3 : 2;
+    // "Romans" in "Muslims and Romans" is a people, not the Epistle: a title word counts in the text only.
+    const hay = titleWordOnly(raw, token) ? passage.text : blob;
+    if (textHasToken(hay, token)) score += token.length > 4 ? 3 : 2;
   }
   const book = namedBook(raw);
-  if (book && book[1].test(`${passage.title} ${passage.ref}`)) score += 12;
+  if (book && !titleWordOnly(raw, book[0]) && book[1].test(`${passage.title} ${passage.ref}`)) score += 12;
   if (/\bbegat\b/i.test(passage.text) && !/\b(begat|genealog)/i.test(raw)) score -= 20;
   if (/\b(grief|grieving|heartbroken|angry|anger)\b/i.test(raw)) {
     if (/\b(comfort|peace|sorrow|merciful|forgiv|wrath)\b/i.test(passage.text)) score += 8;
@@ -94,7 +107,7 @@ export function quoteSpiritual(raw, passages) {
   if (!list.length) return null;
   const exact = exactVerse(raw, list);
   if (exact) {
-    const quotes = [`${exact.title}, ${exact.ref}: "${exact.text}"`];
+    const quotes = [`${exact.title}, ${exact.ref}: "${cleanQuote(exact.text)}"`];
     return {
       text: `These lines are what the texts say. They are not a verdict. ${quotes[0]} This is what these texts say, not a verdict from Yehsa.`,
       symbol: exact.ref,
@@ -110,6 +123,19 @@ export function quoteSpiritual(raw, passages) {
     if (score > 0) ranked.push({ passage, score });
   }
   ranked.sort((a, b) => b.score - a.score || a.passage.text.length - b.passage.text.length);
+  // A question that is not plainly about the texts gets only passages that contain its subject.
+  if (!isSpiritualQuestion(raw)) {
+    const keep = new Set(onSubject(raw, ranked.map((item) => item.passage)));
+    for (let i = ranked.length - 1; i >= 0; i -= 1) if (!keep.has(ranked[i].passage)) ranked.splice(i, 1);
+  }
+  // "Romans chapter 8": that book's chapter first.
+  const book = namedBook(raw);
+  const chapter = String(raw || "").match(/\bchapter\s+(\d{1,3})\b/i);
+  if (book && chapter && !/\bstanza\b/i.test(raw)) {
+    const inChapter = (p) => book[1].test(`${p.title} ${p.ref}`) && new RegExp(`(?:^|\\D)${chapter[1]}:\\d`).test(p.ref);
+    const hits = ranked.filter((item) => inChapter(item.passage));
+    if (hits.length) ranked.splice(0, ranked.length, ...hits, ...ranked.filter((item) => !inChapter(item.passage)));
+  }
   const chosen = [];
   const seenTitle = new Set();
   for (const item of ranked) {
@@ -119,7 +145,7 @@ export function quoteSpiritual(raw, passages) {
     if (chosen.length === 3) break;
   }
   if (!chosen.length) return null;
-  const quotes = chosen.map((passage) => `${passage.title}, ${passage.ref}: "${passage.text}"`);
+  const quotes = chosen.map((passage) => `${passage.title}, ${passage.ref}: "${cleanQuote(passage.text)}"`);
   const text = [
     "These lines are what the texts say. They are not a verdict.",
     ...quotes,
