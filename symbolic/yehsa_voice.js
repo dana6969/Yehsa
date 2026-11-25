@@ -4,7 +4,7 @@
 // plain "yes" means "yes, that offer". Safety lines are never removed. The frozen test
 // does not load this file, and the answer text under the wrapper is untouched.
 
-import { relatedOffer } from "./entries.js";
+import { relatedOffer, strictOffer } from "./entries.js";
 import { warmFiller } from "./answer_polish.js";
 import { readEmotion } from "./emotion_read.js";
 import { shapeAnswer } from "./answer_shape.js";
@@ -74,11 +74,13 @@ const SYMBOL_OFFERS = {
   tourniquet_apply: { label: "Want to go back over direct pressure first?", ask: "How do I stop heavy bleeding?" }
 };
 
-export function offerFor(domain, symbol = null) {
+export function offerFor(domain, symbol = null, recent = []) {
   if (symbol && SYMBOL_OFFERS[symbol]) return SYMBOL_OFFERS[symbol];
-  // A field entry offers the next entry it links to.
-  const related = symbol ? relatedOffer(symbol) : null;
+  // A field entry offers the next entry it links to, never the one just answered.
+  const related = symbol ? relatedOffer(symbol, recent) : null;
   if (related) return { label: related.label, ask: related.ask };
+  // An animal-care answer with nothing fitting to follow offers nothing ("purify water" after cleaning a fish).
+  if (symbol && strictOffer(symbol)) return null;
   return OFFERS[domain] || null;
 }
 
@@ -301,7 +303,7 @@ export function voiceReply(result, question, thread = newThread()) {
   // history question); the follow-up must come from the question's own domain.
   const offer = result.kind === "spiritual"
     ? { label: "Want another passage on this, or a different theme?", ask: null }
-    : result.kind === "learned" || result.noOffer || (domain && domainOf(question) && domainOf(question) !== domain) ? null : offerFor(domain, result.symbol);
+    : result.kind === "learned" || result.noOffer || (domain && domainOf(question) && domainOf(question) !== domain) ? null : offerFor(domain, result.symbol, [state.lastSymbol, ...(state.symbols || []), ...(result.composed || [])]);
   // Never offer the same follow-up twice in a row.
   const repeat = offer && state.offer && state.offer.label === offer.label;
   const chosen = repeat ? null : offer;
@@ -313,6 +315,7 @@ export function voiceReply(result, question, thread = newThread()) {
   if (chosen?.go === "kit") suggestions.push({ label: "Open the pack list", go: "kit" }, { label: "Open Before you go", go: "before" });
   next.lastDomain = domain;
   next.lastSymbol = result.symbol || null;
+  next.symbols = [...(state.symbols || []), result.symbol].filter(Boolean).slice(-6);
   next.topics = [...state.topics, domain].filter(Boolean).slice(-6);
   next.offer = chosen && (chosen.ask || chosen.go) ? chosen : null;
   const spoken = result.voiced && result.sections ? [opener, ...result.sections.map((section) => section.text)].filter(Boolean).join(" ") : [opener, body].filter(Boolean).join(" ");

@@ -21,6 +21,7 @@ import { treatmentGuard } from "./meaning/treatment_guard.js";
 import { fieldGuideAnswer } from "./field_guide.js";
 import { stripFiller } from "./answer_polish.js";
 import { expandKnowledge, namedEntryKnowledge, namedNote } from "./entries.js";
+import { intentAnswer } from "./understanding/pick.js";
 
 function premiseFromKnowledge(question, knowledge) {
   const texts = [knowledge?.text, ...(knowledge?.hits || []).map((hit) => hit?.text)];
@@ -121,6 +122,10 @@ export function ask(input, options = {}) {
       }] : []
     }, options);
   }
+  // R9: a how-to on an animal (gut, pluck, skin, butcher, cook, keep) gets the note for that action on
+  // that animal or its group, ahead of a name match: "how to gut a partridge" is not the grouse ID card.
+  const howTo = intentAnswer(original);
+  if (howTo) return finish(question, emotion, null, howTo, options);
   // A question that only names a thing gets the note with that exact name (the camera's labels too).
   const named = namedNote(original);
   if (named?.entry) return finish(question, emotion, null, namedEntryKnowledge(named.entry), options);

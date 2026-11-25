@@ -25,6 +25,7 @@ import { currentImportIndex, currentImported } from "./imported_registry.js";
 import { fieldGuideAnswer } from "./field_guide.js";
 import { stripFiller } from "./answer_polish.js";
 import { expandKnowledge, namedEntryKnowledge, namedNote } from "./entries.js";
+import { intentAnswer } from "./understanding/pick.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -164,6 +165,22 @@ export function askField(input, passages, options = {}) {
         source: safety.source,
         text: safety.text
       }] : []
+    });
+  }
+  // R9: a how-to on an animal gets the note for that action on that animal or its group (same rule as ask.js).
+  const howTo = intentAnswer(raw);
+  if (howTo) {
+    return fieldResult({
+      answered: true,
+      text: howTo.text,
+      cue: null,
+      emotion: { understood: false, emotion: "neutral" },
+      miss: null,
+      kind: howTo.kind,
+      symbol: howTo.symbol,
+      title: howTo.title,
+      hits: howTo.hits,
+      understanding: howTo.understanding
     });
   }
   // A question that only names a thing gets the note with that exact name (same rule as ask.js).
