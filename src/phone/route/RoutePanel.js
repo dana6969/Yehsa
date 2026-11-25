@@ -9,6 +9,7 @@ import { formatDistance, formatDuration } from "../../../symbolic/routing/geo.js
 import { ROAD_NOTE } from "./useRoute.js";
 import { ROUTE_CREDIT } from "../../../symbolic/routing/route_online.js";
 import { GEOCODE_CREDIT } from "../../../symbolic/routing/geocode.js";
+import VoiceSearchButton from "../VoiceSearchButton.js";
 
 export function RouteSearchBar({ r, onFocus }) {
   const display = useDisplay();
@@ -31,6 +32,7 @@ export function RouteSearchBar({ r, onFocus }) {
           <Ionicons name="close" size={18} color={colors.ink} />
         </Pressable>
       ) : null}
+      <VoiceSearchButton label="Search by voice" size={18} onText={r.setQuery} onDone={(spoken) => r.runSearch(spoken)} />
       <Pressable accessibilityRole="button" accessibilityLabel="Search" onPress={() => r.runSearch()} style={styles.goBtn}>
         <Text style={styles.goText}>{r.searching ? "…" : "Search"}</Text>
       </Pressable>

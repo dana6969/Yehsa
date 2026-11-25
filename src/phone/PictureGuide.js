@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import VoiceSearchButton from "./VoiceSearchButton.js";
 import { FlatList, Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import manifest from "../../assets/pictures/manifest.json";
 import { pictureSource } from "../../symbolic/picture_assets.js";
@@ -46,7 +47,7 @@ export default function PictureGuide({ onBack, backLabel, initialDomain = "", in
         lead="Real pictures, with credits when you ask."
       />
       <Quiet>{decision.text} Budget {Math.round(PICTURE_BUDGET_BYTES / (1024 * 1024))} MB.</Quiet>
-      <TextInput accessibilityLabel="Search pictures" value={query} onChangeText={setQuery} placeholder="Search" placeholderTextColor={colors.muted} style={styles.input} />
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}><View style={{ flex: 1 }}><TextInput accessibilityLabel="Search pictures" value={query} onChangeText={setQuery} placeholder="Search" placeholderTextColor={colors.muted} style={styles.input} /></View><VoiceSearchButton label="Search pictures by voice" onText={setQuery} onDone={setQuery} /></View>
       <View style={styles.row}>
         {DOMAINS.map((item) => (
           <Pressable key={item || "all"} accessibilityRole="button" accessibilityLabel={item || "All pictures"} onPress={() => setDomain(item)} style={[styles.chip, domain === item && styles.chipOn]}>

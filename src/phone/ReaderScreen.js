@@ -3,6 +3,7 @@
 // your place in every book, kept on this phone. Works offline: every book is already on the phone.
 // Text is shown as plain text only; nothing in a book is run or followed.
 
+import VoiceSearchButton from "./VoiceSearchButton.js";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FlatList, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -140,8 +141,9 @@ function BookView({ bookId, startPage, prefs, setPrefs, onLibrary }) {
   const total = book.pages.length;
   const chapter = book.chapters[chapterAt(book.chapters, page)];
   const go = (p) => setPage(Math.max(1, Math.min(total, p)));
-  const runFind = () => {
-    const found = findPages(book.pages, query, page);
+  const runFind = (spoken) => {
+    const words = typeof spoken === "string" ? spoken : query;
+    const found = findPages(book.pages, words, page);
     setHits(found);
     if (found.length) go(found[0] === page && found.length > 1 ? found[1] : found[0]);
   };
@@ -165,9 +167,10 @@ function BookView({ bookId, startPage, prefs, setPrefs, onLibrary }) {
         </View>
         {panel === "find" ? (
           <View style={styles.findRow}>
-            <TextInput accessibilityLabel="Find in this book" value={query} onChangeText={(t) => { setQuery(t); setHits(null); }} onSubmitEditing={runFind} placeholder="Find a word or phrase" placeholderTextColor={colors.muted} style={styles.input} returnKeyType="search" autoFocus />
+            <TextInput accessibilityLabel="Find in this book" value={query} onChangeText={(t) => { setQuery(t); setHits(null); }} onSubmitEditing={() => runFind()} placeholder="Find a word or phrase" placeholderTextColor={colors.muted} style={styles.input} returnKeyType="search" autoFocus />
             <View style={styles.row}>
-              <Action label="Search" onPress={runFind} disabled={query.trim().length < 2} />
+              <Action label="Search" onPress={() => runFind()} disabled={query.trim().length < 2} />
+              <VoiceSearchButton label="Find by voice" onText={(t) => { setQuery(t); setHits(null); }} onDone={(t) => { setQuery(t); runFind(t); }} />
               {hits?.length > 1 ? <Action label="Next match" tone="quiet" onPress={nextHit} /> : null}
               {hits ? <Text style={styles.meta}>{hits.length ? `Found on ${hits.length} ${hits.length === 1 ? "page" : "pages"}` : "Not in this book"}</Text> : null}
             </View>

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   BackHandler,
+  Keyboard,
   Platform,
   Pressable,
   ScrollView,
@@ -13,6 +14,7 @@ import {
   View
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { useKeyboardInset } from "./keyboard_inset";
 import books from "../../symbolic_memory/books_index.json";
 import { askField } from "../../symbolic/phone_field.js";
 import { expandParaphrase } from "../../symbolic/paraphrase.js";
@@ -176,6 +178,8 @@ const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 
 export default function YehsaApp() {
   const [nav, setNav] = useState(initialNav);
+  const rootRef = useRef(null);
+  const keyboard = useKeyboardInset(rootRef);
   const [display, setDisplay] = useState(defaultDisplay);
   const [onboarding, setOnboarding] = useState(false);
   const [huntRequest, setHuntRequest] = useState(0);
@@ -393,8 +397,10 @@ export default function YehsaApp() {
     <BackLayers.Provider value={layers}>
     <DisplayContext.Provider value={display}>
     <ShellContext.Provider value={shell}>
-    <View style={styles.root}>
+    <View style={styles.root} ref={rootRef} collapsable={false}>
       <StatusBar style={themeKey === "sunlight" ? "dark" : "light"} />
+      {/* R10: everything sits above the system keyboard (edge-to-edge does not resize the window). */}
+      <View style={[styles.keyboardFrame, keyboard.pad ? { marginBottom: keyboard.pad } : null]}>
       <View style={styles.column}>
       <View style={styles.body}>
         <View {...pane("ask")}>
@@ -662,10 +668,10 @@ export default function YehsaApp() {
         </View>
         {onboarding ? <Onboarding onDone={finishOnboarding} /> : null}
       </View>
-      {chipVisible && !onboarding && !fullMap ? (
+      {chipVisible && !onboarding && !fullMap && !keyboard.open ? (
         <AskChip summary={askSummary} onPress={() => (askSummary?.pending ? setTab("ask") : go({ type: "openCommand" }))} />
       ) : null}
-      <View style={[styles.tabs, fullMap && styles.hidden]} accessibilityRole="tablist" accessibilityElementsHidden={fullMap} importantForAccessibility={fullMap ? "no-hide-descendants" : "auto"}>
+      <View style={[styles.tabs, (fullMap || keyboard.open) && styles.hidden]} accessibilityRole="tablist" accessibilityElementsHidden={fullMap} importantForAccessibility={fullMap ? "no-hide-descendants" : "auto"}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="SOS emergency"
@@ -711,6 +717,7 @@ export default function YehsaApp() {
           }}
         />
       ) : null}
+      </View>
     </View>
     </ShellContext.Provider>
     </DisplayContext.Provider>
@@ -830,6 +837,14 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
     stopProse();
     return undefined;
   }, [active]);
+
+  // R10: when the keyboard opens, the thread shrinks above it; keep the latest message in view.
+  useEffect(() => {
+    const sub = Keyboard.addListener(Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow", () => {
+      setTimeout(() => threadRef.current?.scrollToEnd?.({ animated: true }), 80);
+    });
+    return () => sub.remove();
+  }, []);
 
   const messageSeq = useRef(0);
   function pushMessage(message) {
@@ -2832,6 +2847,11 @@ const styles = themedStyles((colors) => ({
   root: {
     flex: 1,
     backgroundColor: colors.bg,
+    alignItems: "center"
+  },
+  keyboardFrame: {
+    flex: 1,
+    width: "100%",
     alignItems: "center"
   },
   column: {

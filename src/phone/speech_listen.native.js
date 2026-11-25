@@ -11,6 +11,7 @@ import {
 } from "../../symbolic/voice_adapter.js";
 
 let modulePromise = null;
+const ON_DEVICE_RETRY = new Set(["language-not-supported", "service-not-allowed", "network", "audio-capture", "client"]);
 
 function loadModule() {
   if (!modulePromise) {
@@ -112,6 +113,9 @@ export async function openRecognizer({ onDevice, onTranscript, onEnd, onError } 
   }
 
   let state = { finals: [], interim: "" };
+  let onDeviceTry = onDevice === true;
+  let retried = false;
+  let restartPending = false;
   let finished = false;
   let accepted = false;
   let resultText = "";
@@ -163,13 +167,35 @@ export async function openRecognizer({ onDevice, onTranscript, onEnd, onError } 
     }
   });
   listen("error", (event) => {
+    // R10: Android says it can recognize on the device even when the offline language pack is not
+    // downloaded, then fails at once. Before anything is heard, start again once with the phone's
+    // regular recognizer instead of leaving the mic dead.
+    const code = event?.error || "unknown";
+    if (onDeviceTry && !retried && !transcriptText(state) && ON_DEVICE_RETRY.has(code)) {
+      retried = true;
+      onDeviceTry = false;
+      restartPending = true;
+      return;
+    }
     try {
       onError?.(event?.error || "unknown");
     } catch {
       // The screen reports the code.
     }
   });
-  listen("end", () => finish());
+  listen("end", () => {
+    // The end of the failed on-device try is not the end of listening: start the regular one now.
+    if (restartPending) {
+      restartPending = false;
+      try {
+        speech.start(recognitionStartOptions({ onDevice: false }));
+        return;
+      } catch {
+        // could not start again; finish below
+      }
+    }
+    finish();
+  });
 
   try {
     speech.start(recognitionStartOptions({ onDevice: onDevice === true }));
