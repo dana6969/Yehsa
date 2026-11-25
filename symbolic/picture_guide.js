@@ -1,5 +1,7 @@
 // Picture guide metadata. This module does not read image bytes.
 // A picture is never treated as a safe identification.
+import { entryProfile } from "./understanding/profiles.js";
+import { HOWTO_ACTIONS } from "./understanding/understand.js";
 
 import { FIELD_GUIDE_ENTRIES } from "./picture_guide_field.js";
 import { HUNTING_GUIDE_ENTRIES } from "./picture_guide_hunting.js";
@@ -69,8 +71,13 @@ export function picturesFor(manifest, symbol) {
 
 // Pictures shown under an Ask answer: up to three of the note's own photos, then one look-alike or example,
 // so a chat bubble stays short. The picture guide shows all of them.
+// R9: a how-to answer (field dressing, cooking, butchering) shows how it is done, not the animal's
+// ID photo. Pictures of the animal stay on the ID card and in the picture guide.
+const HOWTO_ROLES = new Set(["process", "technique", "tool", "diagram"]);
+
 export function answerPictures(manifest, symbol, limit = 4) {
-  const all = picturesFor(manifest, symbol);
+  const howTo = entryProfile(symbol)?.actions?.some((action) => HOWTO_ACTIONS.has(action));
+  const all = picturesFor(manifest, symbol).filter((image) => !howTo || HOWTO_ROLES.has(image.role));
   const own = all.filter((image) => image.role !== "lookalike" && image.role !== "example");
   const other = all.filter((image) => image.role === "lookalike" || image.role === "example");
   const pick = own.slice(0, Math.max(1, limit - (other.length ? 1 : 0)));

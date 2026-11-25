@@ -4,7 +4,7 @@
 import { stem } from "./bm25.js";
 
 const RAW = {
-  "war and conquest": "war wars warfare conquest conquer conquered battle battles army armies invasion invaders soldiers",
+  "war and conquest": "war wars warfare conquest conquer conquered battle battles army armies invasion invaders soldiers attack attacked defeat defeated fought siege besieged fleet captured",
   "power and empire": "empire empires emperor king kings power rulers tyranny tyrant domination autocrat dynasty",
   "rise and collapse": "decline decay collapse fall fell ruin downfall disintegration crumbled",
   "cycles and repetition": "cycle cycles rhythm repeat repeated recur again pendulum swing periodic",

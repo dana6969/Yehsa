@@ -145,6 +145,7 @@ import { openLibrary, openReader } from "./reader_store.js";
 import { libraryEntriesNow, loadBook } from "./library_source.js";
 import { pendingLine } from "../../symbolic/library/book_request.js";
 import { libraryAnswer as bookAnswer } from "../../symbolic/library/library_answer.js";
+import { relationAnswer, relationClarify } from "../../symbolic/reasoning/relation.js";
 import { routeAsk } from "../../symbolic/reasoning/ask_route.js";
 import { reasonedAnswer, synthesize } from "../../symbolic/reasoning/doc_reasoner.js";
 import { allSources, docSource, savedDocs } from "./reasoning_sources.js";
@@ -1187,6 +1188,31 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
           ? { text: got.text, source: got.source, chips: sourceChips(got), reader: got.reader, feedbackEligible: false, resultKind: got.kind }
           : { text: "I couldn't find enough in what I've read to answer this honestly. Download a few documents on the topic first (for example \"find an encyclopedia of world history\")." });
       }).catch(() => patchMessage(msg, { text: "I couldn't read across the sources just now." }));
+      return;
+    }
+    // R9: "Muslims and Romans": how the two relate, from what is on the phone; then the web if live look-ups are on;
+    // otherwise one short clarifying question. Never random scripture lines for a book-title word.
+    if (route?.kind === "relation") {
+      stopProse();
+      setQuestion("");
+      setNotice(null);
+      pushMessage({ role: "you", text: typed });
+      setPhase("ready");
+      const msg = pushMessage({ role: "yehsa", text: `Looking for what I've read about ${route.relation.labels.join(" and ")}...` });
+      allSources(books.passages).then((sources) => {
+        const got = relationAnswer(effective, sources, route.relation);
+        if (got) {
+          patchMessage(msg, { text: got.text, source: got.source, chips: sourceChips(got), reader: got.reader, feedbackEligible: false, resultKind: got.kind });
+          return;
+        }
+        const query = `${route.relation.labels.join(" and ")} history`;
+        if (web.store.enabled && queryAllowed(outboundQuery(query)).ok) {
+          patchMessage(msg, { text: `Nothing on this phone names both. Searching the web now. Only the words "${webLearn.query(query, { homeState: homeStateNow() })}" leave this phone.` });
+          lookUpLive(query, msg);
+          return;
+        }
+        patchMessage(msg, { text: relationClarify(route.relation), lookupOffer: queryAllowed(outboundQuery(query)).ok ? { question: query } : null });
+      }).catch(() => patchMessage(msg, { text: relationClarify(route.relation) }));
       return;
     }
     // "Download FM 21-76", "find the Maine hunting regulations PDF": search for documents; nothing downloads until a tap.

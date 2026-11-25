@@ -8,6 +8,7 @@ import { splitSentences } from "../web/answer_builder.js";
 import { STOP, cachedIndex, idf, search, stem, terms } from "./bm25.js";
 import { ASK_WORDS, expandTerms, questionParts } from "./question_parts.js";
 import { CONCEPTS, conceptsIn, partHints } from "./concepts.js";
+import { quoted } from "./quote_clean.js";
 
 const CAUSE = /\b(?:decay\w*|disintegrat\w*|weakness\w*|misfortune\w*|ruin\w*|corrupt\w*|broke through|invad\w*|invasions?|because|due to|caus(?:e|ed|es|ing)|led to|leading to|lead to|contribut\w*|result(?:ed|ing)? (?:of|from|in)|weaken\w*|undermin\w*|declin\w*|collaps\w*|pressure\w*|drain\w*|exhaust\w*|crisis|crises|factors?|reasons?|brought (?:about|down)|helped (?:to )?bring|responsible for|blamed?|threat\w*|could no longer|unable to|failed to|burden\w*|strain\w*)\b/i;
 const NOT_FACTOR = new Set(("century centuries year years time times period periods people peoples many much great greater greatest new later early "
@@ -25,11 +26,11 @@ const NOT_FACTOR = new Set(("century centuries year years time times period peri
 
 const YEAR = /\b(?:(?:A\.?\s?D\.?|C\.?E\.?)\s*)?(\d{3,4})(?:\s*(?:A\.?\s?D\.?|C\.?E\.?|B\.?\s?C\.?(?:E\.?)?))?(?=[\s,.;:)]|$)/g;
 
-function pageWord(source) {
+export function pageWord(source) {
   return source.pageKind && source.pageKind !== "page" ? source.pageKind : "page";
 }
 
-function cite(source, page) {
+export function cite(source, page) {
   return `${source.title}, ${pageWord(source)} ${page}`;
 }
 
@@ -49,7 +50,7 @@ function quotable(s) {
   return caps / words.length < 0.3;
 }
 
-function sentencesOfHit(source, hit) {
+export function sentencesOfHit(source, hit) {
   return splitSentences(hit.chunk.text).filter((s) => s.length >= 40 && s.length <= 420 && quotable(s)).map((text) => ({ text, page: hit.chunk.page, source, chunk: hit.chunk.id }));
 }
 
@@ -243,8 +244,8 @@ export function findQuotes(sources, wanted, { n = 2, distinctSources = false } =
   return picked;
 }
 
-function q(s) {
-  return `"${s.text.replace(/^["“]+|["”]+$/g, "")}" (${cite(s.source, s.page)})`;
+export function q(s) {
+  return `${quoted(s.text)} (${cite(s.source, s.page)})`;
 }
 
 function partTitle(part) {

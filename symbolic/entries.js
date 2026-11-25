@@ -5,6 +5,7 @@
 import { ENTRIES, ENTRY_SOURCES } from "./entries_data.js";
 import { LEGACY_LINKS } from "./entries_links.js";
 import { CAMERA_NOTE_NAMES } from "./camera_notes.js";
+import { nextOffer } from "./understanding/followups.js";
 
 const BY_ID = new Map(ENTRIES.map((entry) => [entry.id, entry]));
 
@@ -97,16 +98,15 @@ export function expandKnowledge(knowledge) {
   return { ...knowledge, text, hits, entry: entry.id, entryDomain: entry.domain };
 }
 
-export function relatedOffer(symbol) {
-  const entry = BY_ID.get(String(symbol || ""));
-  if (!entry?.rel?.length) return null;
-  for (const id of entry.rel) {
-    const next = BY_ID.get(id);
-    if (next) return { label: `Want me to go on to ${next.title.toLowerCase()}?`, ask: askFor(next), entry: next.id };
-    const legacy = LEGACY_LINKS[id];
-    if (legacy) return { label: `Want me to go on to ${legacy.title}?`, ask: legacy.ask, entry: id };
-  }
-  return null;
+// R9: the follow-up skips the topic just answered and stays on the same sort of animal (see
+// understanding/followups.js). `recent`: symbols already answered in this thread.
+export function relatedOffer(symbol, recent = []) {
+  return nextOffer(symbol, recent).offer;
+}
+
+// True when an answer is an animal-care note whose follow-ups must come from its own notes only.
+export function strictOffer(symbol) {
+  return nextOffer(symbol).strict;
 }
 
 // The plain question that should land on an entry. Tests check it really does.
@@ -154,12 +154,25 @@ const NAME_INDEX = (() => {
 // Names that count as the entry's own name: its title (with and without the bracket), the bracket words,
 // and its other names. Used by the meaning matcher's title boost.
 const HEAD_STOP = new Set("and the for with from what when your into how not are can".split(" "));
-function headStem(word) { return word.replace(/(?:ies)$/, "y").replace(/(?:es|s)$/, ""); }
+function headStem(word) {
+  const base = word.replace(/(?:ies)$/, "y").replace(/(?:es|s)$/, "");
+  // R9: "removal" and "remove", "collecting" and "collect" are one word for naming a note.
+  const root = base.replace(/(?:ing|al|ion|ed|e)$/, "");
+  return root.length >= 5 ? root : base;
+}
+// Title words that say what kind of note it is, not what it is about ("Blister care", "Fire safety").
+const HEAD_GENERIC = new Set(["care", "basics", "basic", "signs", "safety", "safely", "tips", "rules", "method", "using", "what", "they", "their", "proper", "need", "needs", "completely", "choosing", "spots"]);
 // A one-word name that many entries share ("deer" in "Blacklegged (deer) tick") does not name one entry.
 const WORD_USE = new Map();
 for (const entry of ENTRIES) {
   const words = new Set(normName(`${entry.title} ${(entry.also || []).join(" ")}`).split(/[ -]+/));
   for (const word of words) WORD_USE.set(word, (WORD_USE.get(word) || 0) + 1);
+}
+// How many entries use a word anywhere in their text: a title word others also talk about ("scrape") is not rare.
+const TEXT_USE = new Map();
+for (const entry of ENTRIES) {
+  const stems = new Set(normName(`${entry.title} ${(entry.also || []).join(" ")} ${entry.def || ""} ${entry.use || ""} ${entry.not || ""}`).split(/[ -]+/).filter((w) => w.length >= 6).map(headStem));
+  for (const stem of stems) TEXT_USE.set(stem, (TEXT_USE.get(stem) || 0) + 1);
 }
 // A name that two entries share ("deer sign" on every deer-sign entry) names neither of them.
 const NAME_USE = new Map();
@@ -172,8 +185,11 @@ const ownsName = (entry, name) => (TITLE_OWNER.has(name) ? TITLE_OWNER.get(name)
 const ENTRY_HEADS = new Map(ENTRIES.map((entry) => {
   const names = headNames(entry)
     .filter((name) => name.length >= 3 && ownsName(entry, name) && (/[ -]/.test(name) || (WORD_USE.get(name) || 0) < 4));
-  const words = new Set(normName(entry.title.replace(/\s*\([^)]*\)/g, "")).split(/[ -]+/).filter((w) => w.length >= 4 && !HEAD_STOP.has(w)).map(headStem));
-  return [entry.id, { names, words }];
+  const all = normName(entry.title.replace(/\s*\([^)]*\)/g, "")).split(/[ -]+/).filter((w) => w.length >= 4 && !HEAD_STOP.has(w));
+  const topical = all.filter((w) => !HEAD_GENERIC.has(w));
+  const words = new Set((topical.length ? topical : all).map(headStem));
+  const rare = new Set(topical.filter((w) => w.length >= 6 && (WORD_USE.get(w) || 0) === 1 && (TEXT_USE.get(headStem(w)) || 0) <= 1).map(headStem));
+  return [entry.id, { names, words, rare }];
 }));
 
 /**
@@ -193,7 +209,9 @@ export function entryHeadHit(symbol, question) {
   const asked = new Set(plain.split(/[ -]+/).filter(Boolean).map(headStem));
   let hits = 0;
   for (const word of head.words) if (asked.has(word)) hits += 1;
-  return hits >= Math.max(1, Math.ceil(head.words.size * 2 / 3));
+  if (hits >= Math.max(1, Math.ceil(head.words.size * 2 / 3))) return true;
+  // R9: one long title word that no other note uses names the note on its own ("signs of a concussion").
+  return [...head.rare].some((word) => asked.has(word));
 }
 
 const NAME_QUESTION = [
