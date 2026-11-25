@@ -133,7 +133,7 @@ test("native map: one uncontrolled camera, moves only through the controller", (
 });
 
 test("full screen hides the tabs and keeps SOS; the rail has the map controls", () => {
-  assert.match(app, /fullMap && styles\.hidden/);
+  assert.match(app, /\(?fullMap(?: \|\| keyboard\.open\))? && styles\.hidden/);
   assert.match(app, /onSos=\{\(\) => go\(\{ type: "openSos" \}\)\}/);
   const rail = readFileSync("./src/phone/MapRail.js", "utf8");
   for (const word of ["Layers", "North", "Wind", "Marks", "Full", "Exit", "SOS", "Lock"]) assert.match(rail, new RegExp(`"${word}"|${word}`));
