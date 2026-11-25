@@ -5,11 +5,17 @@ import fs from "node:fs";
 import { ask, askWithMeaning } from "../../symbolic/ask.js";
 import { modelAvailable } from "../../symbolic/meaning/embed_node.js";
 import { auditSet } from "./audit_set.mjs";
+import { routeAsk } from "../../symbolic/reasoning/ask_route.js";
 
 export async function runAudit({ lexical = process.argv.includes("--lexical") } = {}) {
   const meaning = !lexical && modelAvailable();
   const rows = [];
   for (const item of auditSet()) {
+    if (item.area === "history") {
+      const kind = routeAsk(item.question, { entries: [], docs: [] })?.kind || null;
+      rows.push({ ...item, got: kind, pass: (kind === "relation") === item.relation });
+      continue;
+    }
     const r = meaning ? await askWithMeaning(item.question, { agents: false }) : ask(item.question, { agents: false });
     const symbol = r?.answered ? r.symbol : null;
     // A hand-checked older note on the same topic counts too (the topic pattern is on the note's id).

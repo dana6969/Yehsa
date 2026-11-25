@@ -1,6 +1,7 @@
 // Choose the field entry for a how-to question by what it asks: the action first, then the animal,
 // then the animal's group. An ID card never answers a how-to. When the exact animal has no note of
 // its own, the group's note answers with one line that says so.
+import { entitiesIn } from "./taxonomy.js";
 import { entryFor, formatEntry, entryKind, entrySource } from "../entries.js";
 import { understand } from "./understand.js";
 import { allProfiles } from "./profiles.js";
@@ -31,7 +32,15 @@ function score(profile, u, action) {
   });
   if (!best) return 0;
   // The note's author listed this very wording as one of its names ("quarter a deer", "clean a turkey").
-  if (profile.phrases.some((phrase) => u.text.includes(` ${phrase} `))) best += 3;
+  // A listed wording that names this animal counts most; a bare one ("field dress") only breaks ties,
+  // so it never lifts the deer note over the hog note for a hog.
+  let bonus = 0;
+  for (const phrase of profile.phrases) {
+    if (!u.text.includes(` ${phrase} `)) continue;
+    const named = entitiesIn(phrase).map((e) => e.entity);
+    bonus = Math.max(bonus, named.includes(u.entity) ? 3 : named.length ? 0 : 1);
+  }
+  best += bonus;
   // The finer point: "venison jerky" wants the jerky note, "wounded deer" the blood-trail note.
   if (u.detail && profile.details.has(u.detail)) best += 5;
   else if (u.detail && profile.details.size) best -= 3;

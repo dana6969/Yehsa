@@ -158,6 +158,19 @@ const OTHER = [
   ["what are the duck hunting rules", ["waterfowl_rules_link"], "what", "hunting", /waterfowl/]
 ];
 
+// Two-sided history questions (Dana's "Muslim and romans", 25 Nov): true means it should be read as
+// "how did X and Y relate?", false means it is a field question or a pair that is not about peoples.
+const HISTORY = [
+  ["Muslim and romans", true], ["Muslims and Romans", true], ["muslims vs romans", true], ["Romans and Muslims", true],
+  ["Vikings and Saxons", true], ["vikings vs saxons", true], ["Greeks and Persians", true], ["greeks vs persians", true],
+  ["Mongols and Chinese", true], ["Arabs and Byzantines", true], ["Romans and Carthaginians", true], ["Christians and Muslims", true],
+  ["Jews and Romans", true], ["Turks and Byzantines", true], ["Egyptians and Hebrews", true], ["Normans and English", true],
+  ["what was the relationship between the Greeks and the Persians?", true], ["Romans and Gauls", true], ["Huns and Romans", true], ["Franks and Moors", true],
+  ["deer and elk", false], ["fire and water", false], ["salt and pepper", false], ["kings and queens", false],
+  ["bleach and water", false], ["ducks and geese", false], ["Romans chapter 8", false], ["what does Romans say about sin", false],
+  ["north and south", false], ["sun and moon", false]
+];
+
 export function auditSet() {
   const out = [];
   for (const [s, want] of Object.entries(DRESS)) {
@@ -167,6 +180,7 @@ export function auditSet() {
   for (const s of COOK_S) COOK_T.forEach((t, i) => out.push({ id: `cook-${s.replace(/\s+/g, "_")}-${i}`, question: t(s), want: COOK, action: "cook", entity: s, area: "cooking" }));
   for (const [s, want] of Object.entries(ID)) ID_T.forEach((t, i) => out.push({ id: `id-${s.replace(/\s+/g, "_")}-${i}`, question: t(s), want, action: "identify", entity: s, area: "animals" }));
   for (const [s, want] of Object.entries(TRACK)) TRACK_T.forEach((t, i) => out.push({ id: `track-${s}-${i}`, question: t(s), want, action: "track", entity: s, area: "hunting" }));
+  HISTORY.forEach(([question, relation], i) => out.push({ id: `history-${i}`, question, want: [relation ? "relation" : "not relation"], action: "relate", area: "history", relation }));
   OTHER.forEach(([question, want, action, area, topic], i) => out.push({ id: `other-${i}`, question, want, action, area, topic }));
   return out;
 }

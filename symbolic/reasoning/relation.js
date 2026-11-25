@@ -24,6 +24,7 @@ const PEOPLES = {
   franks: { label: "Franks", words: "frank franks frankish charlemagne gaul gauls" },
   goths: { label: "Goths", words: "goth goths gothic visigoths ostrogoths" },
   huns: { label: "Huns", words: "huns attila" },
+  moors: { label: "Moors", words: "moor moors moorish andalus" },
   celts: { label: "Celts", words: "celt celts celtic britons druids" },
   normans: { label: "Normans", words: "norman normans normandy" },
   saxons: { label: "Saxons", words: "saxon saxons anglo" },
@@ -66,7 +67,8 @@ export function relationQuestion(text) {
   const m = raw.match(PAIR);
   if (!m) return null;
   // A field question that happens to say "and" ("deer and elk", "fire and water") is not history.
-  if (entitiesIn(raw).length) return null;
+  // ("Huns" is also hunters' slang for Hungarian partridge, so a people's own name does not count.)
+  if (entitiesIn(raw).some((e) => !peopleOf(e.name))) return null;
   const a = peopleOf(m[1]);
   const b = peopleOf(m[2]);
   if (!a || !b || a === b) return null;

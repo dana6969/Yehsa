@@ -36,8 +36,12 @@ function plain(text) {
 }
 
 /** The action a text asks for, or null. `hasThing` says whether an animal or fish is named. */
+// "Keep bears away from my cooking area" is about keeping animals off, not about cooking or cleaning them.
+const KEEP_OFF = /\b(away from|keep(?:ing)? (?:\w+ )?(?:away|out|off)|deter|scare (?:\w+ )?(?:off|away)|repel|attract(?:s|ed|ing)?|cooking (?:area|site|spot|place)|camp kitchen)\b/;
+
 export function actionOf(text, hasThing = true) {
   const t = plain(text);
+  if (KEEP_OFF.test(t)) return null;
   for (const [action, re] of ACTION_RULES) {
     const m = t.match(re);
     if (!m) continue;

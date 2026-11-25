@@ -158,7 +158,7 @@ function headStem(word) {
   const base = word.replace(/(?:ies)$/, "y").replace(/(?:es|s)$/, "");
   // R9: "removal" and "remove", "collecting" and "collect" are one word for naming a note.
   const root = base.replace(/(?:ing|al|ion|ed|e)$/, "");
-  return root.length >= 4 ? root : base;
+  return root.length >= 5 ? root : base;
 }
 // Title words that say what kind of note it is, not what it is about ("Blister care", "Fire safety").
 const HEAD_GENERIC = new Set(["care", "basics", "basic", "signs", "safety", "safely", "tips", "rules", "method", "using", "what", "they", "their", "proper", "need", "needs", "completely", "choosing", "spots"]);

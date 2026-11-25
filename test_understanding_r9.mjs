@@ -98,3 +98,11 @@ test("the understanding layer stays off the hot path and offline", () => {
   assert.match(app, /route\?\.kind === "relation"/);
   assert.match(app, /relationClarify\(route\.relation\)/);
 });
+
+test("keeping animals off is not cooking them; a bare listed wording never beats the right animal", () => {
+  assert.equal(understand("How do I keep bears away from my cooking area?").action, null);
+  assert.equal(intentAnswer("how do I field dress a feral hog?").symbol, "field_dressing_wild_hog");
+  assert.equal(intentAnswer("how do I field dress a deer").symbol, "field_dressing_deer");
+  assert.deepEqual(relationQuestion("Huns and Romans").labels, ["Huns", "Romans"]);
+  assert.equal(relationQuestion("huns and pheasants"), null);
+});
