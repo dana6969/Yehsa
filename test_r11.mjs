@@ -70,3 +70,29 @@ test("the faster word matcher gives the same answer as before on every word and 
   const passages = [{ symbol: "willow_bark", title: "Willow bark", context: "Inner bark of willows (salix) for aches.", source: "herbology" }];
   assert.equal(searchPassages(passages, "willow bark", 3)[0]?.symbol, "willow_bark");
 });
+
+test("the Second Amendment quote is exactly the amendment sentence, with the copy's own page (House Manual and GovInfo)", async () => {
+  const { documentSectionAnswer } = await import("./symbolic/docs/section_answer.js");
+  const { bookFromText } = await import("./symbolic/library/library.js");
+  const bundled = bookFromText({ id: "book:us-constitution", title: "Constitution", raw: src("assets/books/us_constitution.ybk") }).pages;
+  const sentence = "A well regulated Militia, being necessary to the security of a free State, the right of the people to keep and bear Arms, shall not be infringed.";
+  for (const [file, page] of [["eval/fixtures/r11/hman117_constitution_pages.json", 109], ["eval/fixtures/r10/govinfo_constitution_pages.json", 19]]) {
+    const pages = JSON.parse(src(file));
+    const entries = [{ meta: { id: "c", title: "CONSTITUTION - GovInfo", url: "https://www.govinfo.gov/" }, body: { pages } }];
+    const a = documentSectionAnswer("What's my second amendment", { entries, constitutionPages: bundled });
+    const quoted = /^"(.*)" \[1\]/m.exec(a.text)[1];
+    assert.equal(quoted, sentence, file);
+    assert.doesNotMatch(a.text, /Roosevelt|20th amendment|executive Power/);
+    assert.equal(a.reader.bookId, "doc:c");
+    assert.equal(a.reader.page, page, file);
+    assert.match(a.text, new RegExp(`page ${page}: Amendment II`));
+    assert.match(a.text, /Ratified December 15, 1791/);
+  }
+});
+
+test("every Constitution part in both GovInfo layouts quotes the National Archives text and the copy's page", async () => {
+  const { results } = await import("./eval/r11/section_quote_audit.mjs");
+  const bad = results.filter((r) => !r.ok);
+  assert.equal(bad.length, 0, JSON.stringify(bad.slice(0, 5)));
+  assert.ok(results.length >= 84);
+});

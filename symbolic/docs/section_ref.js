@@ -136,7 +136,7 @@ export function refLabel(ref) {
 
 // ---------- finding the heading in the text ----------
 
-const NOISE = [/^VerDate\b/, /^\(\d{1,3}\)$/, /^\d{1,3}\s+CONSTITUTION OF THE UNITED STATES$/i, /^CONSTITUTION OF THE UNITED STATES\s+\d{1,3}$/i, /^Continued$/i, /^\d{1,4}$/, /^Page \d+( of \d+)?$/i];
+const NOISE = [/^VerDate\b/, /^\(\d{1,3}\)$/, /^\[\d{1,4}\]$/, /^§\s?\d{1,4}\s?[–-]\s?§?\s?\d{1,4}\s+\[/, /^§\s?\d{1,4}\s+\[[A-Z ,–-]+\]$/, /^\d{1,3}\s+CONSTITUTION OF THE UNITED STATES$/i, /^CONSTITUTION OF THE UNITED STATES\s+\d{1,3}$/i, /^Continued$/i, /^\d{1,4}$/, /^Page \d+( of \d+)?$/i];
 const ORD_ALT = ORD_UNITS.slice(1).join("|");
 
 function classify(line) {
@@ -146,14 +146,20 @@ function classify(line) {
   // The 1789 resolution runs each article into its text on one line: "Article the fourth... A well regulated".
   if ((m = new RegExp(`^article the (${ORD_ALT})\\b[.…\\s]*(.*)$`, "i").exec(t))) return { type: "articleThe", n: numberValue(m[1]), rest: m[2] };
   if (!t || t.length > 160) return null;
-  if ((m = /^amendment\s+\[?([ivxlc]+|\d{1,2})\.?\]?\.?(?:\s+\d{1,2})?$/i.exec(t))) return { type: "amend", n: numberValue(m[1]) };
+  // "AMENDMENT XIV.5": the House Manual glues a footnote number after the period.
+  if ((m = /^amendment\s+\[?([ivxlc]+|\d{1,2})(?:\]?\.\]?\d{0,2}|\]?(?:\s+\d{1,2})?)$/i.exec(t))) return { type: "amend", n: numberValue(m[1]) };
   if ((m = new RegExp(`^(${ORD_ALT}|twenty-(?:${ORD_UNITS.slice(1, 8).join("|")}))\\s+amendment\\b.{0,40}$`, "i").exec(t)) && t === t.toUpperCase()) return { type: "amend", n: numberValue(m[1]) };
   if ((m = /^article\.?\s+(\[)?([ivxlc]+|\d{1,2})\.?\]?\.?(?:\s+\d{1,2})?$/i.exec(t))) return { type: "article", n: numberValue(m[2]), bracketed: Boolean(m[1]) };
-  if ((m = /^(?:section|sec)\.?\s*(\d{1,3})\.?\s*(.*)$/i.exec(t)) || (m = /^§\s*(\d{1,3})\.?\s*(.*)$/.exec(t))) return { type: "section", n: Number(m[1]), rest: m[2] };
+  if ((m = /^(?:section|sec)\.?\s*(\d{1,3})\.?\s*(.*)$/i.exec(t))) return { type: "section", n: Number(m[1]), rest: m[2] };
+  // "§209. The right to bear arms.": a margin note in the House Manual, or a § section in a manual.
+  if ((m = /^§\s*(\d{1,4})\.?\s*(.*)$/.exec(t))) return { type: "section", n: Number(m[1]), rest: m[2], sign: true };
   if ((m = new RegExp(`^chapter\\s+([ivxlc]+|\\d{1,3}|${WORDS})\\b[.:\\s-]*(.{0,80})$`, "i").exec(t))) return { type: "chapter", n: numberValue(m[1]), rest: m[2] };
   if ((m = new RegExp(`^part\\s+([ivxlc]+|\\d{1,3}|${WORDS})\\b[.:\\s-]*(.{0,80})$`, "i").exec(t))) return { type: "part", n: numberValue(m[1]), rest: m[2] };
   if ((m = new RegExp(`^title\\s+([ivxlc]+|\\d{1,3})\\b[.:\\s-]*(.{0,80})$`, "i").exec(t))) return { type: "title", n: numberValue(m[1]), rest: m[2] };
-  if (/^(?:articles in addition to,? and amendments? of|amendments? to the constitution|the bill of rights$|amendments (?:xi|11)\b)/i.test(t)) return { type: "amendStart" };
+  // R11: a marker is a heading line (capitals, or the phrase alone), not "amendment to the Constitution
+  // (which changed..." inside a House Manual note.
+  if (/^(?:articles in addition to,? and amendments? of|amendments? to the constitution|the bill of rights$|amendments (?:xi|11)\b)/i.test(t)
+    && (t === t.toUpperCase() || /^(?:amendments? to the constitution(?: of the united states)?\.?|the bill of rights)$/i.test(t))) return { type: "amendStart" };
   if (/^preamble$/i.test(t) || /^we the people of the united states/i.test(t)) return { type: "preamble", rest: /^preamble$/i.test(t) ? "" : t };
   return null;
 }
@@ -182,7 +188,7 @@ function bodyFrom(lines, at, stopTypes, rest = "") {
   let chars = rest.length;
   for (let k = at + 1; k < lines.length; k += 1) {
     const line = lines[k];
-    if (line.head && stopTypes.has(line.head.type)) break;
+    if (line.head && (stopTypes.has(line.head.type) || (line.head.sign && stopTypes.has("sign")))) break;
     if (NOTE.test(line.text)) {
       const r = RATIFIED.exec(line.text);
       if (r && !ratified) ratified = r[1];
@@ -218,7 +224,9 @@ function bestOf(cands, lines, stops) {
     // A table of contents line or an empty heading has no body to quote.
     if (body.text.length < 25) continue;
     const toc = /(?:\.{3,}|\s)\d{1,4}$/.test(lines[c.at].text) ? 1 : 0;
-    const score = Math.min(body.text.length, 600) - toc * 500 + (c.bonus || 0);
+    // R11: the tier first (an AMENDMENT II heading beats an ARTICLE II that only follows a marker),
+    // then the body length.
+    const score = (c.tier || 0) * 10000 + Math.min(body.text.length, 600) - toc * 500 + (c.bonus || 0);
     if (!best || score > best.score) best = { ...c, body, score };
   }
   return best;
@@ -229,7 +237,14 @@ export function findSection(pages, ref) {
   if (!ref) return null;
   const lines = linesOf(pages);
   if (!lines.length) return null;
-  const amendStart = lines.findIndex((l) => l.head?.type === "amendStart");
+  // R11: the amendments start at the first marker after the real Article VII (a contents page can
+  // carry "AMENDMENTS TO THE CONSTITUTION" long before the articles, as in the House Manual).
+  const isToc = (i) => /(?:\.{3,}|\s)\d{1,4}$/.test(lines[i].text);
+  const art7 = lines.findIndex((l, i) => l.head?.type === "article" && l.head.n === 7 && !l.head.bracketed && !isToc(i)
+    && bodyFrom(lines, i, HEAD_STOPS).text.length >= 25);
+  const amendStart = art7 >= 0
+    ? lines.findIndex((l, i) => i > art7 && l.head?.type === "amendStart")
+    : lines.findIndex((l) => l.head?.type === "amendStart");
   // Without a marker, the amendments start where article numbering starts again at I.
   let restart = -1;
   if (amendStart < 0) {
@@ -245,12 +260,12 @@ export function findSection(pages, ref) {
   let hit = null;
   if (ref.kind === "amendment") {
     const cands = [
-      ...at((h) => h.type === "amend" && h.n === ref.n).map((c) => ({ ...c, bonus: 50 })),
-      ...at((h, i) => h.type === "article" && h.n === ref.n && (h.bracketed || (amendFrom >= 0 && i > amendFrom))),
+      ...at((h) => h.type === "amend" && h.n === ref.n).map((c) => ({ ...c, bonus: 50, tier: 3 })),
+      ...at((h, i) => h.type === "article" && h.n === ref.n && (h.bracketed || (amendFrom >= 0 && i > amendFrom))).map((c) => ({ ...c, tier: lines[c.at].head.bracketed ? 2 : 1 })),
       // The 1789 resolution: Article the third is the First Amendment ... the twelfth is the Tenth.
-      ...(ref.n <= 10 ? at((h) => h.type === "articleThe" && h.n === ref.n + 2) : [])
+      ...(ref.n <= 10 ? at((h) => h.type === "articleThe" && h.n === ref.n + 2).map((c) => ({ ...c, tier: 2 })) : [])
     ];
-    hit = bestOf(cands, lines, new Set([...HEAD_STOPS, "preamble"]));
+    hit = bestOf(cands, lines, new Set([...HEAD_STOPS, "preamble", "sign"]));
     if (hit && !hit.body.ratified && ref.n <= 10) {
       const note = lines.map((l) => l.text).join(" ");
       const m = /(?:ratification was completed on|amendments were ratified|amendments? (?:were|was) ratified by three-fourths of the state legislatures on|ratified)\s+((?:December) 15, 1791)/i.exec(note);
@@ -259,14 +274,14 @@ export function findSection(pages, ref) {
   } else if (ref.kind === "article") {
     const cands = at((h, i) => h.type === "article" && h.n === ref.n && !h.bracketed && (amendFrom < 0 || i < amendFrom));
     if (ref.section) {
-      const art = bestOf(cands, lines, HEAD_STOPS);
+      const art = bestOf(cands, lines, new Set([...HEAD_STOPS, "sign"]));
       if (art) {
         const end = lines.findIndex((l, i) => i > art.at && l.head && HEAD_STOPS.has(l.head.type));
         const secs = at((h, i) => h.type === "section" && h.n === ref.section && i > art.at && (end < 0 || i < end));
-        hit = bestOf(secs, lines, new Set([...HEAD_STOPS, "section"]));
+        hit = bestOf(secs.filter((c) => !lines[c.at].head.sign), lines, new Set([...HEAD_STOPS, "section", "sign"]));
       }
     } else {
-      hit = bestOf(cands, lines, new Set([...HEAD_STOPS]));
+      hit = bestOf(cands, lines, new Set([...HEAD_STOPS, "sign"]));
     }
   } else if (ref.kind === "preamble") {
     const i = lines.findIndex((l) => l.head?.type === "preamble" && l.head.rest);

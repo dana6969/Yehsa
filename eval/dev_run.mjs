@@ -54,3 +54,9 @@ for (const f of r10) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why || "
 const r10Wrong = r10.filter((f) => !f.pass).length;
 console.log(JSON.stringify({ r10Flows: r10.length, correct: r10.length - r10Wrong, wrong: r10Wrong }));
 if (r10Wrong) process.exitCode = 1;
+const { runR11Flows } = await import("./dev_r11_flows.mjs");
+const r11 = runR11Flows();
+for (const f of r11) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why || "").replace(/\s+/g, " ").slice(0, 180)}`);
+const r11Wrong = r11.filter((f) => !f.pass).length;
+console.log(JSON.stringify({ r11Flows: r11.length, correct: r11.length - r11Wrong, wrong: r11Wrong }));
+if (r11Wrong) process.exitCode = 1;
