@@ -158,7 +158,7 @@ test("the reader keeps your place and text size, and finds words across pages", 
 
 test("the app wires it: book requests before document search, the reader mounted, books bundled offline", () => {
   const app = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
-  assert.ok(app.indexOf("planBookRequest(effective") > 0 && app.indexOf("planBookRequest(effective") < app.indexOf("documentIntent(effective)"));
+  assert.ok(app.indexOf("routeAsk(effective") > 0 && app.indexOf("routeAsk(effective") < app.indexOf("documentIntent(effective)"));
   assert.match(app, /<ReaderScreen \/>/);
   assert.match(app, /Open in reader at page \$\{item\.reader\.page\}/);
   assert.match(app, /onSaved=\{item\.pendingDoc/);

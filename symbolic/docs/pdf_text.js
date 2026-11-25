@@ -931,6 +931,12 @@ function finish(doc, list, pages) {
   const title = doc.info().title.trim();
   if (list.length === 0) return { ok: false, pages: [], title, pageCount: 0, reason: "I couldn't find any pages in that PDF." };
   if (chars < 40) return { ok: false, pages, title, pageCount: list.length, scanned: true, reason: "That PDF is pictures of pages (a scan) with no text layer, so there's nothing I can read." };
+  // R8: a long scan with a text cover or a few typed pages is still a scan: say so, don't keep a
+  // 1500-page document with 12 readable pages and answer as if it were read.
+  const textPages = pages.filter((p) => p.replace(/\s+/g, "").length >= 200).length;
+  if (list.length >= 20 && textPages < Math.max(3, list.length * 0.1)) {
+    return { ok: false, pages, title, pageCount: list.length, scanned: true, reason: `That PDF is mostly pictures of pages (a scan): only ${textPages} of its ${list.length} pages have a text layer, so I can't read it properly. Try another copy, ideally one with selectable text.` };
+  }
   let outline = [];
   try {
     outline = doc.outline(list);

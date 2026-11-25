@@ -30,3 +30,11 @@ console.log(JSON.stringify({ mode: useMeaning ? "meaning" : "lexical", questions
 if (breakdown.incorrectConfident || breakdown.incorrectHedged || breakdown.unnecessaryRefusal || breakdown.total !== DEV_SET.length) {
   process.exitCode = 1;
 }
+
+// R8: Dana's screenshot flows, through the phone's routing and answer code (eval/dev_r8_flows.mjs).
+const { runR8Flows } = await import("./dev_r8_flows.mjs");
+const flows = runR8Flows();
+for (const f of flows) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why || "").replace(/\s+/g, " ").slice(0, 180)}`);
+const flowWrong = flows.filter((f) => !f.pass).length;
+console.log(JSON.stringify({ r8Flows: flows.length, correct: flows.length - flowWrong, wrong: flowWrong }));
+if (flowWrong) process.exitCode = 1;

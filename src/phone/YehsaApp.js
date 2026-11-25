@@ -102,7 +102,8 @@ import {
   recordFeedback,
   recordModelAsk,
   rememberPhrase,
-  saveHelpfulAnswer
+  saveHelpfulAnswer,
+  savesAsLearned
 } from "../../symbolic/learned_notes.js";
 import { domainOf, mergeCompound, newThread, socialTurn, splitCompound, tripResult, voiceReply } from "../../symbolic/yehsa_voice.js";
 import { answerWeatherQuestion, weatherIntent } from "./weather_ask.js";
@@ -142,8 +143,11 @@ import EmergencyScreen from "./EmergencyScreen.js";
 import ReaderScreen from "./ReaderScreen.js";
 import { openLibrary, openReader } from "./reader_store.js";
 import { libraryEntriesNow, loadBook } from "./library_source.js";
-import { pendingLine, planBookRequest } from "../../symbolic/library/book_request.js";
+import { pendingLine } from "../../symbolic/library/book_request.js";
 import { libraryAnswer as bookAnswer } from "../../symbolic/library/library_answer.js";
+import { routeAsk } from "../../symbolic/reasoning/ask_route.js";
+import { reasonedAnswer, synthesize } from "../../symbolic/reasoning/doc_reasoner.js";
+import { allSources, docSource, savedDocs } from "./reasoning_sources.js";
 import { BackLayers, useBackLayer } from "./back_layers.js";
 import { MORE_ITEMS, TABS, destinationActions, backAction, backLabel, createBackLayers, initialNav, navReduce, topScreen } from "./nav_model.js";
 import FieldPane from "./FieldPane.js";
@@ -1110,7 +1114,8 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
     }
     // "Summary of kubark", "chapters of ATP 3-50.21", "chapter 2 of the Kybalion", "open the Bible":
     // answered from the book or document itself, never from a web search.
-    const wantsBook = planBookRequest(effective, { entries: libraryEntriesNow(), recentFound: lastFound.current });
+    const route = routeAsk(effective, { entries: libraryEntriesNow(), recentFound: lastFound.current, docs: savedDocs() });
+    const wantsBook = route?.kind === "book" ? route.book : null;
     if (wantsBook) {
       stopProse();
       setQuestion("");
@@ -1142,6 +1147,46 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
           ? { text: pendingLine(req, req.target), docFound: found, pendingDoc: req }
           : { text: found.reason });
       }).catch(() => patchMessage(searchMsg, { text: "I couldn't search for documents just now. Nothing was downloaded." }));
+      return;
+    }
+    // R8: "using The Encyclopedia of World History you just read: ...", "use your saved encyclopedia":
+    // answered from that saved document, part by part, before any note or learned-note lookup.
+    const namedDoc = route?.kind === "named-doc" ? route.named : null;
+    if (namedDoc) {
+      stopProse();
+      setQuestion("");
+      setNotice(null);
+      pushMessage({ role: "you", text: typed });
+      setPhase("ready");
+      const title = namedDoc.doc.title;
+      const msg = pushMessage({ role: "yehsa", text: `Reading "${title}" for this...` });
+      docSource(namedDoc.doc).then((source) => {
+        if (!source || source.empty) {
+          patchMessage(msg, { text: `"${title}" has no readable text on this phone. It may be scanned pictures of pages. Try downloading another copy of it.` });
+          return;
+        }
+        const got = reasonedAnswer(effective, [source]);
+        patchMessage(msg, got
+          ? { text: got.text, source: got.source, chips: sourceChips(got), reader: got.reader, feedbackEligible: false, resultKind: got.kind }
+          : { text: `I looked through "${title}" and didn't find passages that answer this. I won't guess from elsewhere and call it the encyclopedia.`, reader: { bookId: source.readerId, page: 1, title } });
+      }).catch(() => patchMessage(msg, { text: `I couldn't open "${title}" just now.` }));
+      return;
+    }
+    // R8: a broad, many-part question asking for analysis ("look across eras ... what patterns
+    // emerge?") is answered by synthesis across everything on the phone, never by one saved note.
+    if (route?.kind === "synthesis") {
+      stopProse();
+      setQuestion("");
+      setNotice(null);
+      pushMessage({ role: "you", text: typed });
+      setPhase("ready");
+      const msg = pushMessage({ role: "yehsa", text: "Reading across the documents, books and notes on this phone. This can take a little while..." });
+      allSources(books.passages).then((sources) => {
+        const got = synthesize(effective, sources);
+        patchMessage(msg, got
+          ? { text: got.text, source: got.source, chips: sourceChips(got), reader: got.reader, feedbackEligible: false, resultKind: got.kind }
+          : { text: "I couldn't find enough in what I've read to answer this honestly. Download a few documents on the topic first (for example \"find an encyclopedia of world history\")." });
+      }).catch(() => patchMessage(msg, { text: "I couldn't read across the sources just now." }));
       return;
     }
     // "Download FM 21-76", "find the Maine hunting regulations PDF": search for documents; nothing downloads until a tap.
@@ -1363,7 +1408,9 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
           })),
           question: text,
           symbol: result?.symbol || null,
-          learnedId: result?.learnedId || null
+          learnedId: result?.learnedId || null,
+          resultKind: result?.kind || null,
+          answerText: result?.text || null
         });
         if (speak && result?.text) {
           speakProse(voiced.spoken || result.text, {
@@ -1538,16 +1585,19 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
 
   // Yes: saved quietly as a learned note, thanked in place. No new bubble.
   function onHelpful(item) {
-    let next = item.learnedId ? markHelpful(learned, item.learnedId) : saveHelpfulAnswer(learned, {
+    // R8: a Yes keeps the answer as a learned note only for the field notes' own answers. Web,
+    // document, book and learned-note answers are already kept where they came from.
+    const keep = !item.learnedId && savesAsLearned(item.resultKind);
+    let next = item.learnedId ? markHelpful(learned, item.learnedId) : keep ? saveHelpfulAnswer(learned, {
       question: item.question,
-      text: item.text,
+      text: item.answerText || item.text,
       title: item.title,
       symbol: item.symbol
-    });
+    }) : learned;
     const pair = phraseFromFeedback(item.question, item.symbol);
     if (pair) next = rememberPhrase(next, pair.from, pair.to);
     setLearned(next);
-    patchMessage(item.id, { feedback: "thanks" });
+    patchMessage(item.id, { feedback: keep ? "thanks" : "thanks-only" });
   }
 
   // Not quite: opens the reason box under that answer. Nothing posts to the thread.
@@ -1748,6 +1798,9 @@ const FEEDBACK_REASONS = ["Didn't answer my question", "Too vague", "Something w
 function FeedbackNote({ item, onYes, onNotQuite, onReason, onDetail, onSend, onCancel }) {
   if (item.feedback === "thanks") {
     return <Text accessibilityLiveRegion="polite" style={styles.feedbackThanks}>Thanks. I saved that on this phone.</Text>;
+  }
+  if (item.feedback === "thanks-only") {
+    return <Text accessibilityLiveRegion="polite" style={styles.feedbackThanks}>Thanks.</Text>;
   }
   if (item.feedback === "asking") {
     return (

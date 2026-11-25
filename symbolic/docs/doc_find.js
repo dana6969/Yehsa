@@ -13,6 +13,9 @@ import { guardedFetch, guardedHead } from "../web/fetch_guard.js";
 import { outboundQuery, queryAllowed } from "../web/sources.js";
 import { authority, searchWeb } from "../web/web_search.js";
 import { blockedType, kindFromUrl, sniffDocument } from "./doc_check.js";
+import { cleanDocTitle } from "./doc_title.js";
+
+export { cleanDocTitle };
 
 export const DOC_LIMITS = { maxBytes: 50 * 1024 * 1024, timeoutMs: 120000, maxRedirects: 3 };
 export const MAX_CANDIDATES = 5;
@@ -89,7 +92,7 @@ export function rankDocResults(results, query) {
     const fileBonus = kind === "pdf" ? 0.35 : kind === "epub" || kind === "text" ? 0.25 : 0;
     out.push({
       url: result.url,
-      title: String(result.title || file || host).replace(/^\s*\[?(?:PDF|EPUB|TXT)\]?\s+/i, ""),
+      title: cleanDocTitle(result.title || file || host),
       site: host,
       format: kind,
       snippet: result.snippet || "",

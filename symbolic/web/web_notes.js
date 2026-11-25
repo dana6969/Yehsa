@@ -12,6 +12,7 @@
 //   * Dosing and edible or toxic plant claims can never be approved. They can only be kept as unverified.
 //   * The text is a quote with its source. It never changes a rule or a setting.
 
+import { noteHasJunk, scrubNoteText, subjectTokens } from "../learned_notes.js";
 import { queryTokens, textHasToken } from "../book_search.js";
 import { cleanFetched, sensitiveKind } from "./sanitize.js";
 import { checkUrl } from "./fetch_guard.js";
@@ -260,7 +261,7 @@ export function adviceWarning(kind) {
 
 /** A quote with its source, never a bare statement. */
 export function quoteNote(note) {
-  const body = firstSentences(note.text);
+  const body = scrubNoteText(firstSentences(note.text));
   const warning = note.locked === "dosing"
     ? " Do not use this for a dose. Ask a pharmacist, a doctor or Poison Control."
     : note.locked === "plant-toxicity"
@@ -295,6 +296,13 @@ export function findWebNote(store, question, { vectorScores = null } = {}) {
     }
     const need = tokens.length === 1 ? 2 : 3;
     const vector = vectorScores?.get?.(note.id) ?? 0;
+    // R8: most of the question's subject words must be in the note, and a note saved with page
+    // junk in it ("_=1795557549451") is not used.
+    const exact = score >= 10;
+    if (!exact && noteHasJunk(note)) continue;
+    const subject = subjectTokens(question);
+    const hits = subject.filter((t) => textHasToken(`${note.title} ${note.text}`, t)).length;
+    if (!exact && vector < 0.72 && (subject.length === 0 || hits < Math.max(1, Math.ceil(subject.length * 0.6)))) continue;
     const strong = score >= need || vector >= 0.72;
     if (!strong) continue;
     const total = score + vector * 4;
