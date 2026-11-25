@@ -27,8 +27,46 @@ export function splitSentences(text) {
   return String(text || "")
     .split(/\n+/)
     .flatMap((block) => block.replace(/\s+/g, " ").split(/(?<=[.!?])\s+(?=[A-Z0-9"(])|\s*•\s*/))
-    .map((part) => part.trim())
+    .map((part) => cleanQuote(part.trim()))
     .filter((part) => part.length >= 30 && part.length <= 420 && proseLike(part));
+}
+
+const MONTH = "(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\\.?";
+// R7: page chrome that leaked into quotes ("... example.com, Nov 24, 2026. _=1795557549451"):
+// cache-busters, bare addresses, link placeholders, epoch timestamps, and a trailing "site, date".
+const JUNK = [
+  [/[?&#][\w.-]*=[^\s]*/g, " "],
+  [/(?:^|\s)_=\d+\b/g, " "],
+  [/\[link removed\]/gi, " "],
+  [/\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com|org|gov|net|edu|us|io|info|mil|co|uk|ca)\b(?:\/[^\s]*)?/gi, " "],
+  [/\b\d{10,13}\b/g, " "],
+  [new RegExp(`[,;|·–—-]?\\s*${MONTH}\\s+\\d{1,2},\\s+\\d{4}\\.?\\s*$`, "i"), "."],
+  [/\s+([,.;:!?])/g, "$1"],
+  [/([,;:])(?:\s*[,;:.])+/g, "$1"],
+  [/\s{2,}/g, " "]
+];
+export function cleanQuote(sentence) {
+  let text = String(sentence || "");
+  for (const [rule, swap] of JUNK) text = text.replace(rule, swap);
+  text = text.replace(/[\s,;:]+\.$/, ".").replace(/\.{2,}$/, ".").trim();
+  // "... officials said on." once the address after "on" is gone.
+  text = text.replace(/\s+(?:on|at|by|from|via|visit|see)\.$/i, ".");
+  return text;
+}
+
+// Words that say what kind of answer is wanted, not what it is about. A quote must match a
+// subject word, never only these (R7: "chapters of kubark" quoted a burns manual's "chapter").
+export const GENERIC_WORDS = new Set([
+  "chapter", "chapters", "summary", "summarize", "summarise", "summaries", "overview", "outline", "section", "sections",
+  "contents", "content", "table", "toc", "page", "pages", "part", "parts", "book", "books", "manual", "manuals", "guide",
+  "document", "documents", "pdf", "file", "copy", "first", "second", "third", "last", "next", "give", "show", "list",
+  "read", "open", "say", "says", "said", "about", "explain", "describe", "define", "meaning", "mean", "full", "text",
+  "short", "brief", "quick", "main", "points", "point", "key", "idea", "ideas", "version"
+]);
+
+/** The subject groups of a question: its topic words minus the answer-kind words. */
+export function subjectGroups(groups) {
+  return groups.filter((group) => !group.every((token) => GENERIC_WORDS.has(token)));
 }
 
 // Captions, menus and lists of names are mostly capitalised words. Prose is mostly lower case.
@@ -71,9 +109,15 @@ export function buildAnswer({ question, query = "", candidates = [], link = null
   const groups = questionGroups(question);
   if (groups.length === 0) return null;
   const need = groups.length === 1 ? 1 : 0.5;
+  // R7: a quote has to be about the subject. With one or two subject words, each must appear in
+  // the source it is quoted from; and every quoted sentence must name at least one of them.
+  const subject = subjectGroups(groups);
+  if (!subject.length) return null;
   const pool = [];
   candidates.forEach((candidate, ci) => {
-    const context = coverage(`${candidate.title || ""} ${candidate.section || ""} ${candidate.text}`, groups);
+    const whole = `${candidate.title || ""} ${candidate.section || ""} ${candidate.text}`;
+    if (subject.length <= 2 && coverage(whole, subject) < 1) return;
+    const context = coverage(whole, groups);
     // A page named for the topic ("Moose" for "what is a moose") leads with its definition.
     const named = coverage(candidate.title || "", groups) === 1 ? 0.4 : 0;
     const found = [];
@@ -84,6 +128,7 @@ export function buildAnswer({ question, query = "", candidates = [], link = null
       // Headings and list labels from open-web pages ("Influenza outbreaks.") are not answers.
       if (candidate.kind === "web" && sentence.split(/\s+/).length < 8) return;
       const words = coverage(sentence, groups);
+      if (coverage(sentence, subject) === 0 && coverage(`${candidate.title || ""} ${candidate.section || ""}`, subject) < 1) return;
       // The on-device meaning matcher (when it ran) can lift a sentence that says it in other words.
       const sim = meaning?.get?.(sentence);
       const lift = Number.isFinite(sim) ? Math.max(-0.2, Math.min(0.4, (sim - 0.6) * 1.5)) : 0;
