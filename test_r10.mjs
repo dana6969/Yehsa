@@ -20,10 +20,10 @@ test("the keyboard overlap is added once: full when the window did not resize, z
 
 test("the shell lifts everything above the keyboard and hides the tab bar and SOS row while typing", () => {
   const app = src("src/phone/YehsaApp.js");
-  assert.match(app, /const keyboard = useKeyboardInset\(rootRef\)/);
-  assert.match(app, /styles\.keyboardFrame, keyboard\.pad \? \{ marginBottom: keyboard\.pad \}/);
-  assert.match(app, /\(fullMap \|\| keyboard\.open\) && styles\.hidden/);
-  assert.match(app, /keyboardDidShow[\s\S]{0,120}scrollToEnd/);
+  // R11: the lift and the hiding live in small components fed by one keyboard store.
+  assert.match(app, /<KeyboardFrame root=\{rootRef\} style=\{styles\.keyboardFrame\}>/);
+  assert.match(app, /<KeyboardHidden>\s*<View style=\{\[styles\.tabs, fullMap && styles\.hidden\]\}/);
+  assert.match(app, /onKeyboardChange\(\(\{ open \}\)[\s\S]{0,160}scrollToEnd/);
   // Every text box in the app is inside the shell (no separate Modal window with a text box).
   for (const f of fs.readdirSync("src/phone").filter((n) => n.endsWith(".js"))) {
     const s = src(`src/phone/${f}`);

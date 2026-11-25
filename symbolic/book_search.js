@@ -26,15 +26,36 @@ export function tokenForms(token) {
   return forms;
 }
 
+// R11: the same answers as before, computed once. A word can only match a form f of the token if the
+// text contains f minus its last letter ("berries" for "berry", "mosquitoes" for "mosquito"), so a
+// text without any of those is skipped without splitting it into words.
+const FORMS = new Map();
+function formsOf(token) {
+  let forms = FORMS.get(token);
+  if (!forms) {
+    forms = tokenForms(token);
+    if (FORMS.size > 50000) FORMS.clear();
+    FORMS.set(token, forms);
+  }
+  return forms;
+}
+
+function mayHold(lower, forms) {
+  for (const form of forms) if (lower.includes(form.slice(0, -1))) return true;
+  return false;
+}
+
 export function textHasToken(text, token) {
-  const forms = new Set(tokenForms(token));
-  if (forms.size === 0) return false;
-  const words = String(text || "").toLowerCase().split(/[^a-z0-9+]+/);
+  const forms = formsOf(String(token || "").toLowerCase());
+  if (forms.length === 0) return false;
+  const lower = String(text || "").toLowerCase();
+  if (!mayHold(lower, forms)) return false;
+  const words = lower.split(/[^a-z0-9+]+/);
   for (const word of words) {
     if (!word) continue;
-    if (forms.has(word)) return true;
-    for (const form of tokenForms(word)) {
-      if (forms.has(form)) return true;
+    if (forms.includes(word)) return true;
+    for (const form of formsOf(word)) {
+      if (forms.includes(form)) return true;
     }
   }
   return false;
@@ -44,17 +65,40 @@ function wordSet(text) {
   return new Set(String(text || "").toLowerCase().split(/[^a-z0-9+]+/).filter(Boolean));
 }
 
-function setHasToken(words, token) {
-  const forms = tokenForms(token);
-  for (const form of forms) {
-    if (words.has(form)) return true;
+// Every form of every word in a set ("berries" adds "berry"), kept beside the set.
+const SET_FORMS = new WeakMap();
+function formsInSet(words) {
+  let all = SET_FORMS.get(words);
+  if (!all) {
+    all = new Set();
+    for (const word of words) for (const form of formsOf(word)) all.add(form);
+    SET_FORMS.set(words, all);
   }
-  for (const word of words) {
-    for (const form of tokenForms(word)) {
-      if (forms.includes(form)) return true;
-    }
+  return all;
+}
+
+function setHasToken(words, token) {
+  const forms = formsOf(token);
+  const all = formsInSet(words);
+  for (const form of forms) {
+    if (words.has(form) || all.has(form)) return true;
   }
   return false;
+}
+
+// A passage's lowercased head and body and their word sets, built once per passage object.
+const PASSAGE_WORDS = new WeakMap();
+function passageWords(passage) {
+  let got = PASSAGE_WORDS.get(passage);
+  if (!got) {
+    const symbol = String(passage.symbol || "").toLowerCase();
+    const title = String(passage.title || "").toLowerCase();
+    const context = String(passage.context || "").toLowerCase();
+    const head = `${symbol} ${title}`;
+    got = { symbol, title, context, head, headWords: wordSet(head), bodyWords: wordSet(context) };
+    if (passage && typeof passage === "object") PASSAGE_WORDS.set(passage, got);
+  }
+  return got;
 }
 
 export function sourceKind(source) {
@@ -78,12 +122,7 @@ function domainWeight(source) {
 }
 
 function scorePassage(passage, phrase, tokens) {
-  const symbol = String(passage.symbol || "").toLowerCase();
-  const title = String(passage.title || "").toLowerCase();
-  const context = String(passage.context || "").toLowerCase();
-  const head = `${symbol} ${title}`;
-  const headWords = wordSet(head);
-  const bodyWords = wordSet(context);
+  const { symbol, title, context, head, headWords, bodyWords } = passageWords(passage);
   const phraseInHead = phrase.length > 2 && head.includes(phrase);
   const phraseInBody = phrase.length > 2 && context.includes(phrase);
   const tokensInHead = tokens.filter((token) => setHasToken(headWords, token));

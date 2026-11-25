@@ -62,18 +62,25 @@ function profileOf(entry) {
   return { id: entry.id, title: entry.title, domain: entry.domain, actions, phrases, details: new Set(detailsOf(entry)), entities, groups, kinds, steps: entry.steps?.length || 0 };
 }
 
-const PROFILES = new Map();
-for (const entry of ENTRIES) {
-  const p = profileOf(entry);
-  if (p) PROFILES.set(entry.id, p);
+// R11: built on first use (the first how-to question or answer picture), not while the app starts.
+let PROFILES = null;
+function profiles() {
+  if (!PROFILES) {
+    PROFILES = new Map();
+    for (const entry of ENTRIES) {
+      const p = profileOf(entry);
+      if (p) PROFILES.set(entry.id, p);
+    }
+  }
+  return PROFILES;
 }
 
 export function entryProfile(id) {
-  return PROFILES.get(String(id || "")) || null;
+  return profiles().get(String(id || "")) || null;
 }
 
 export function allProfiles() {
-  return PROFILES.values();
+  return profiles().values();
 }
 
 /** True when two profiles answer the same action for the same animals or a group above or below them. */

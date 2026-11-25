@@ -27,27 +27,51 @@ function ratifiedLine(ref, found, fallback) {
     : `Ratified ${date}${from}.`;
 }
 
+const norm = (t) => String(t || "").toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, " ").replace(/(^| )\d{1,2}(?= |$)/g, "").replace(/ +/g, " ").trim();
+
+/**
+ * R11: does the downloaded copy carry the same words under that heading? The first ten words of the
+ * National Archives text must open the copy's text there. Notes and annotations around it do not matter.
+ */
+export function sameSectionText(docText, canonicalText) {
+  const words = norm(canonicalText).split(" ").slice(0, 10).join(" ");
+  if (words.length < 12) return false;
+  return norm(docText).slice(0, 900).includes(words);
+}
+
 /**
  * source: { title, url, bookId, docId, pages, bundled }. fallbackPages: the bundled Constitution's
  * pages, for a ratification date the download does not print. Returns an answer or null.
  */
-export function sectionAnswer(question, source, { ref = parseSectionRef(question), fallbackPages = null } = {}) {
+export function sectionAnswer(question, source, { ref = parseSectionRef(question), fallbackPages = null, canonicalPages = null } = {}) {
   if (!ref || !source?.pages) return null;
-  const found = findSection(source.pages, ref);
-  if (!found) return null;
+  const located = findSection(source.pages, ref);
+  if (!located) return null;
+  let found = located;
+  let canonical = false;
+  // R11: a downloaded Constitution (GovInfo, the House Manual) prints notes and annotations around and
+  // between the clauses. The quote is the National Archives text; the copy gives the page and the
+  // reader link, only when its heading has the same words. Otherwise the caller uses the bundled text.
+  if (!source.bundled && canonicalPages) {
+    const canon = findSection(canonicalPages, ref);
+    if (!canon || !sameSectionText(located.text, canon.text)) return null;
+    found = { ...located, text: canon.text, ratified: canon.ratified || located.ratified || null };
+    canonical = true;
+  }
   const fallback = fallbackPages && !found.ratified && ref.kind === "amendment" ? findSection(fallbackPages, ref) : null;
   const { text: quoteText, more } = sectionQuote(found.text, ref.kind === "bill-of-rights" ? 420 : 900);
   const where = source.bundled
     ? `From the U.S. Constitution on this phone (National Archives transcription), page ${found.page}`
     : `From downloaded document "${source.title}", page ${found.page}`;
   const heading = ref.kind === "bill-of-rights" ? "the Bill of Rights, beginning with Amendment I" : ref.label;
-  const lines = [`${where}: ${heading}`, `"${quoteText}" [1]${more ? " (continues in the reader)" : ""}`];
+  const lines = [`${where}: ${heading}`, `"${quoteText}" [1]${canonical ? "[2]" : ""}${more ? " (continues in the reader)" : ""}`];
   const rat = ratifiedLine(ref, found, fallback);
   const usedFallback = Boolean(rat && !found.ratified && fallback?.ratified);
-  if (rat) lines.push(`${rat} [${usedFallback ? 2 : 1}]`);
+  if (rat) lines.push(`${rat} [${usedFallback || canonical ? 2 : 1}]`);
   if (ref.kind === "bill-of-rights") lines.push("Ask for any one by number, for example \"the fourth amendment\".");
   let cite = `[1] "${source.title}", page ${found.page}${source.url ? `. ${source.url}` : ""}`;
-  if (usedFallback) cite += `\n[2] "${CONSTITUTION_TITLE}", page ${fallback.page}. https://www.archives.gov/founding-docs`;
+  if (canonical) cite += `\n[2] "${CONSTITUTION_TITLE}" (the wording quoted). https://www.archives.gov/founding-docs`;
+  else if (usedFallback) cite += `\n[2] "${CONSTITUTION_TITLE}", page ${fallback.page}. https://www.archives.gov/founding-docs`;
   lines.push(`Sources:\n${cite}`);
   if (source.bundled && ref.constitution) lines.push(DOWNLOAD_OFFER);
   const text = lines.join("\n\n");
@@ -69,9 +93,11 @@ export function sectionAnswer(question, source, { ref = parseSectionRef(question
 }
 
 /** Which downloaded documents to look in, best first. entries: [{ meta, body }]. */
+const CONSTITUTION_KINDS = new Set(["amendment", "article", "preamble", "bill-of-rights"]);
+const isConstitution = (e) => /constitution/i.test(e?.meta?.title || "") || /constitution of the united states/i.test(String((e?.body?.pages || []).slice(0, 12).join(" ")));
+
 export function sectionCandidates(entries, ref, named = null) {
   const list = entries.filter((e) => e?.body?.pages?.length);
-  const isConstitution = (e) => /constitution/i.test(e.meta?.title || "") || /constitution of the united states/i.test(String(e.body.pages.slice(0, 12).join(" ")));
   if (named) return list.filter((e) => e.meta.id === named);
   if (ref.constitution) return list.filter(isConstitution);
   return list;
@@ -82,12 +108,19 @@ export function documentSectionAnswer(question, { entries = [], named = null, co
   const ref = parseSectionRef(question);
   if (!ref || !sectionLookup(question, ref)) return null;
   for (const e of sectionCandidates(entries, ref, named)) {
-    const got = sectionAnswer(question, { title: e.meta.title, url: e.meta.url, bookId: `doc:${e.meta.id}`, docId: e.meta.id, pages: e.body.pages }, { ref, fallbackPages: ref.constitution ? constitutionPages : null });
+    const got = sectionAnswer(question, { title: e.meta.title, url: e.meta.url, bookId: `doc:${e.meta.id}`, docId: e.meta.id, pages: e.body.pages }, {
+      ref,
+      fallbackPages: ref.constitution ? constitutionPages : null,
+      canonicalPages: ref.constitution || (CONSTITUTION_KINDS.has(ref.kind) && isConstitution(e)) ? constitutionPages : null
+    });
     if (got) return got;
   }
   // "article 1 section 8" with no downloaded document that has it: the Constitution on the phone.
-  if ((ref.constitution || ref.kind === "article") && constitutionPages && !named) {
-    return sectionAnswer(question, { title: CONSTITUTION_TITLE, url: "https://www.archives.gov/founding-docs", bookId: CONSTITUTION_BOOK_ID, pages: constitutionPages, bundled: true }, { ref });
+  if ((ref.constitution || ref.kind === "article") && constitutionPages && (!named || ref.constitution)) {
+    const got = sectionAnswer(question, { title: CONSTITUTION_TITLE, url: "https://www.archives.gov/founding-docs", bookId: CONSTITUTION_BOOK_ID, pages: constitutionPages, bundled: true }, { ref });
+    // A Constitution is downloaded but its page did not match: no offer to download another.
+    if (got && sectionCandidates(entries, ref, named).length) got.text = got.text.replace(`\n\n${DOWNLOAD_OFFER}`, "");
+    return got;
   }
   return null;
 }

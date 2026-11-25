@@ -16,7 +16,8 @@ export const R10_FLOWS = [
       if (!a) return "no answer";
       const [head, quote, rat] = a.text.split("\n\n");
       if (!/^From downloaded document "CONSTITUTION - GovInfo", page 19: Amendment II/.test(head)) return `head: ${head}`;
-      if (quote !== `"${MILITIA}" [1]`) return `quote: ${quote}`;
+      // R11: the words are the National Archives text [2], at the copy's own page [1].
+      if (quote !== `"${MILITIA}" [1][2]`) return `quote: ${quote}`;
       if (!/^Ratified December 15, 1791, as part of the Bill of Rights/.test(rat)) return `ratified: ${rat}`;
       if (/twelfth|Eighth Congress|in lieu of/i.test(a.text)) return "quoted the 12th amendment note";
       if (a.reader?.bookId !== "doc:govinfo" || a.reader.page !== 19) return "no Open in reader at page 19";

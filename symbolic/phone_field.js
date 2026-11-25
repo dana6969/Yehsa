@@ -129,6 +129,8 @@ function fieldResult(partial) {
  * options.session: { consent, fix, waypoints } for "from here" courses. Never assumed.
  * options.corpora: optional { search, lookupMedical, lexical } when a test supplies the full maps.
  * options.meaning: optional context from src/phone/meaning_provider (on-device meaning matcher).
+ * R11: result.settled is true when the answer came from a rule the meaning matcher never changes
+ * (safety, how-to on an animal, field guide, calculator), so the phone can skip the embedder.
  */
 export function askField(input, passages, options = {}) {
   const raw = String(input ?? "");
@@ -150,6 +152,7 @@ export function askField(input, passages, options = {}) {
   const safety = safetyAnswer(raw, (query, limit) => searchPassages(passages, query, limit));
   if (safety?.abstain || safety?.text) {
     return fieldResult({
+      settled: true,
       answered: Boolean(safety.text),
       text: safety.text || null,
       cue: null,
@@ -171,6 +174,7 @@ export function askField(input, passages, options = {}) {
   const howTo = intentAnswer(raw);
   if (howTo) {
     return fieldResult({
+      settled: true,
       answered: true,
       text: howTo.text,
       cue: null,
@@ -188,6 +192,7 @@ export function askField(input, passages, options = {}) {
   const guide = named?.entry ? null : fieldGuideAnswer(raw);
   if (guide) {
     return fieldResult({
+      settled: true,
       answered: true,
       text: guide.text,
       cue: null,
@@ -202,6 +207,7 @@ export function askField(input, passages, options = {}) {
   const calc = calculate(raw);
   if (calc) {
     return fieldResult({
+      settled: true,
       answered: true,
       text: calc.text,
       cue: null,

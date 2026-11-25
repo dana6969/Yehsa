@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   BackHandler,
-  Keyboard,
   Platform,
   Pressable,
   ScrollView,
@@ -14,7 +13,7 @@ import {
   View
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useKeyboardInset } from "./keyboard_inset";
+import { KeyboardFrame, KeyboardHidden, onKeyboardChange } from "./keyboard_inset";
 import { parseSectionRef } from "../../symbolic/docs/section_ref.js";
 import { CONSTITUTION_BOOK_ID } from "../../symbolic/docs/section_answer.js";
 import books from "../../symbolic_memory/books_index.json";
@@ -181,7 +180,6 @@ const webPointer = Platform.OS === "web" ? { cursor: "pointer" } : null;
 export default function YehsaApp() {
   const [nav, setNav] = useState(initialNav);
   const rootRef = useRef(null);
-  const keyboard = useKeyboardInset(rootRef);
   const [display, setDisplay] = useState(defaultDisplay);
   const [onboarding, setOnboarding] = useState(false);
   const [huntRequest, setHuntRequest] = useState(0);
@@ -401,8 +399,9 @@ export default function YehsaApp() {
     <ShellContext.Provider value={shell}>
     <View style={styles.root} ref={rootRef} collapsable={false}>
       <StatusBar style={themeKey === "sunlight" ? "dark" : "light"} />
-      {/* R10: everything sits above the system keyboard (edge-to-edge does not resize the window). */}
-      <View style={[styles.keyboardFrame, keyboard.pad ? { marginBottom: keyboard.pad } : null]}>
+      {/* R11: everything sits right on the system keyboard (edge-to-edge does not resize the window);
+          only KeyboardFrame re-renders when the keyboard moves. */}
+      <KeyboardFrame root={rootRef} style={styles.keyboardFrame}>
       <View style={styles.column}>
       <View style={styles.body}>
         <View {...pane("ask")}>
@@ -670,10 +669,13 @@ export default function YehsaApp() {
         </View>
         {onboarding ? <Onboarding onDone={finishOnboarding} /> : null}
       </View>
-      {chipVisible && !onboarding && !fullMap && !keyboard.open ? (
-        <AskChip summary={askSummary} onPress={() => (askSummary?.pending ? setTab("ask") : go({ type: "openCommand" }))} />
+      {chipVisible && !onboarding && !fullMap ? (
+        <KeyboardHidden>
+          <AskChip summary={askSummary} onPress={() => (askSummary?.pending ? setTab("ask") : go({ type: "openCommand" }))} />
+        </KeyboardHidden>
       ) : null}
-      <View style={[styles.tabs, (fullMap || keyboard.open) && styles.hidden]} accessibilityRole="tablist" accessibilityElementsHidden={fullMap} importantForAccessibility={fullMap ? "no-hide-descendants" : "auto"}>
+      <KeyboardHidden>
+      <View style={[styles.tabs, fullMap && styles.hidden]} accessibilityRole="tablist" accessibilityElementsHidden={fullMap} importantForAccessibility={fullMap ? "no-hide-descendants" : "auto"}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="SOS emergency"
@@ -702,6 +704,7 @@ export default function YehsaApp() {
           );
         })}
       </View>
+      </KeyboardHidden>
       </View>
       {nav.command && !nav.sos ? (
         <CommandSheet onGo={goDestination} onAsk={askFromAnywhere} onClose={() => go({ type: "closeCommand" })} />
@@ -719,7 +722,7 @@ export default function YehsaApp() {
           }}
         />
       ) : null}
-      </View>
+      </KeyboardFrame>
     </View>
     </ShellContext.Provider>
     </DisplayContext.Provider>
@@ -842,10 +845,12 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
 
   // R10: when the keyboard opens, the thread shrinks above it; keep the latest message in view.
   useEffect(() => {
-    const sub = Keyboard.addListener(Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow", () => {
-      setTimeout(() => threadRef.current?.scrollToEnd?.({ animated: true }), 80);
+    // R11: on the same keyboard store as the lift, after the frame has moved.
+    let wasOpen = false;
+    return onKeyboardChange(({ open }) => {
+      if (open && !wasOpen) setTimeout(() => threadRef.current?.scrollToEnd?.({ animated: true }), 60);
+      wasOpen = open;
     });
-    return () => sub.remove();
   }, []);
 
   const messageSeq = useRef(0);
@@ -1331,6 +1336,9 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
         const spiritual = routesToSpiritual(text, parseQuestion(expandParaphrase(text)));
         let spiritualIndex = spiritual ? await loadScriptureIndex() : null;
         const lexical = askField(text, books.passages, { session, spiritualIndex, learned });
+        // R11: a rule answer (safety, calculator, field guide, how-to) never changes with meaning, so the
+        // embedder is skipped for it. A named document still gets the question vector.
+        if (lexical?.settled && lexical.answered && !documents.names(text)) return lexical;
         // Offline meaning matcher: loads on the first question, then checks or fills the lexical note.
         let meaning = null;
         try {

@@ -162,42 +162,48 @@ function headStem(word) {
 }
 // Title words that say what kind of note it is, not what it is about ("Blister care", "Fire safety").
 const HEAD_GENERIC = new Set(["care", "basics", "basic", "signs", "safety", "safely", "tips", "rules", "method", "using", "what", "they", "their", "proper", "need", "needs", "completely", "choosing", "spots"]);
-// A one-word name that many entries share ("deer" in "Blacklegged (deer) tick") does not name one entry.
-const WORD_USE = new Map();
-for (const entry of ENTRIES) {
-  const words = new Set(normName(`${entry.title} ${(entry.also || []).join(" ")}`).split(/[ -]+/));
-  for (const word of words) WORD_USE.set(word, (WORD_USE.get(word) || 0) + 1);
+// R11: the head-name index is built on the first name check, not while the app starts.
+let ENTRY_HEADS = null;
+function entryHeads() {
+  if (ENTRY_HEADS) return ENTRY_HEADS;
+  // A one-word name that many entries share ("deer" in "Blacklegged (deer) tick") does not name one entry.
+  const WORD_USE = new Map();
+  for (const entry of ENTRIES) {
+    const words = new Set(normName(`${entry.title} ${(entry.also || []).join(" ")}`).split(/[ -]+/));
+    for (const word of words) WORD_USE.set(word, (WORD_USE.get(word) || 0) + 1);
+  }
+  // How many entries use a word anywhere in their text: a title word others also talk about ("scrape") is not rare.
+  const TEXT_USE = new Map();
+  for (const entry of ENTRIES) {
+    const stems = new Set(normName(`${entry.title} ${(entry.also || []).join(" ")} ${entry.def || ""} ${entry.use || ""} ${entry.not || ""}`).split(/[ -]+/).filter((w) => w.length >= 6).map(headStem));
+    for (const stem of stems) TEXT_USE.set(stem, (TEXT_USE.get(stem) || 0) + 1);
+  }
+  // A name that two entries share ("deer sign" on every deer-sign entry) names neither of them.
+  const NAME_USE = new Map();
+  const headNames = (entry) => [...new Set([entry.title.replace(/\s*\([^)]*\)/g, ""), ...(entry.title.match(/\(([^)]*)\)/g) || []).map((x) => x.slice(1, -1)), ...(entry.also || [])]
+    .map(normName))];
+  for (const entry of ENTRIES) for (const name of headNames(entry)) NAME_USE.set(name, (NAME_USE.get(name) || 0) + 1);
+  // ...unless it is one entry's own title ("Baneberry"), which keeps it.
+  const TITLE_OWNER = new Map(ENTRIES.map((entry) => [normName(entry.title.replace(/\s*\([^)]*\)/g, "")), entry.id]));
+  const ownsName = (entry, name) => (TITLE_OWNER.has(name) ? TITLE_OWNER.get(name) === entry.id : NAME_USE.get(name) === 1);
+  ENTRY_HEADS = new Map(ENTRIES.map((entry) => {
+    const names = headNames(entry)
+      .filter((name) => name.length >= 3 && ownsName(entry, name) && (/[ -]/.test(name) || (WORD_USE.get(name) || 0) < 4));
+    const all = normName(entry.title.replace(/\s*\([^)]*\)/g, "")).split(/[ -]+/).filter((w) => w.length >= 4 && !HEAD_STOP.has(w));
+    const topical = all.filter((w) => !HEAD_GENERIC.has(w));
+    const words = new Set((topical.length ? topical : all).map(headStem));
+    const rare = new Set(topical.filter((w) => w.length >= 6 && (WORD_USE.get(w) || 0) === 1 && (TEXT_USE.get(headStem(w)) || 0) <= 1).map(headStem));
+    return [entry.id, { names, words, rare }];
+  }));
+  return ENTRY_HEADS;
 }
-// How many entries use a word anywhere in their text: a title word others also talk about ("scrape") is not rare.
-const TEXT_USE = new Map();
-for (const entry of ENTRIES) {
-  const stems = new Set(normName(`${entry.title} ${(entry.also || []).join(" ")} ${entry.def || ""} ${entry.use || ""} ${entry.not || ""}`).split(/[ -]+/).filter((w) => w.length >= 6).map(headStem));
-  for (const stem of stems) TEXT_USE.set(stem, (TEXT_USE.get(stem) || 0) + 1);
-}
-// A name that two entries share ("deer sign" on every deer-sign entry) names neither of them.
-const NAME_USE = new Map();
-const headNames = (entry) => [...new Set([entry.title.replace(/\s*\([^)]*\)/g, ""), ...(entry.title.match(/\(([^)]*)\)/g) || []).map((x) => x.slice(1, -1)), ...(entry.also || [])]
-  .map(normName))];
-for (const entry of ENTRIES) for (const name of headNames(entry)) NAME_USE.set(name, (NAME_USE.get(name) || 0) + 1);
-// ...unless it is one entry's own title ("Baneberry"), which keeps it.
-const TITLE_OWNER = new Map(ENTRIES.map((entry) => [normName(entry.title.replace(/\s*\([^)]*\)/g, "")), entry.id]));
-const ownsName = (entry, name) => (TITLE_OWNER.has(name) ? TITLE_OWNER.get(name) === entry.id : NAME_USE.get(name) === 1);
-const ENTRY_HEADS = new Map(ENTRIES.map((entry) => {
-  const names = headNames(entry)
-    .filter((name) => name.length >= 3 && ownsName(entry, name) && (/[ -]/.test(name) || (WORD_USE.get(name) || 0) < 4));
-  const all = normName(entry.title.replace(/\s*\([^)]*\)/g, "")).split(/[ -]+/).filter((w) => w.length >= 4 && !HEAD_STOP.has(w));
-  const topical = all.filter((w) => !HEAD_GENERIC.has(w));
-  const words = new Set((topical.length ? topical : all).map(headStem));
-  const rare = new Set(topical.filter((w) => w.length >= 6 && (WORD_USE.get(w) || 0) === 1 && (TEXT_USE.get(headStem(w)) || 0) <= 1).map(headStem));
-  return [entry.id, { names, words, rare }];
-}));
 
 /**
  * null when symbol is not a field entry. Otherwise true when the question says one of the entry's names
  * (title, bracket words, or other names), or at least half of its title's words.
  */
 export function entryHeadHit(symbol, question) {
-  const head = ENTRY_HEADS.get(symbol);
+  const head = entryHeads().get(symbol);
   if (!head) return null;
   const text = ` ${normName(question)} `;
   const plain = text.replace(/'s\b/g, "");
