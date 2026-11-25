@@ -1,6 +1,0 @@
-{
-  "platforms": ["android"],
-  "android": {
-    "modules": ["com.dana6969.axi0net.ime.ImeModule"]
-  }
-}

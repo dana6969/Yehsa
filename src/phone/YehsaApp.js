@@ -13,7 +13,8 @@ import {
   View
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { KeyboardFrame, KeyboardHidden, onKeyboardChange } from "./keyboard_inset";
+import { KeyboardProvider } from "react-native-keyboard-controller";
+import { KEYBOARD_DEBUG_KEY, KeyboardDebugOverlay, KeyboardFrame, KeyboardHidden, onKeyboardChange, setKeyboardDebug, useKeyboardDebugOn } from "./keyboard_inset";
 import { parseSectionRef } from "../../symbolic/docs/section_ref.js";
 import { CONSTITUTION_BOOK_ID } from "../../symbolic/docs/section_answer.js";
 import books from "../../symbolic_memory/books_index.json";
@@ -333,6 +334,9 @@ export default function YehsaApp() {
     AsyncStorage.getItem(ONBOARDED_KEY).then((raw) => {
       if (live && raw !== "done") setOnboarding(true);
     }).catch(() => {});
+    AsyncStorage.getItem(KEYBOARD_DEBUG_KEY).then((raw) => {
+      if (live && raw === "on") setKeyboardDebug(true);
+    }).catch(() => {});
     return () => {
       live = false;
     };
@@ -394,13 +398,14 @@ export default function YehsaApp() {
   }
 
   return (
+    <KeyboardProvider statusBarTranslucent navigationBarTranslucent>
     <BackLayers.Provider value={layers}>
     <DisplayContext.Provider value={display}>
     <ShellContext.Provider value={shell}>
     <View style={styles.root} ref={rootRef} collapsable={false}>
       <StatusBar style={themeKey === "sunlight" ? "dark" : "light"} />
-      {/* R11: everything sits right on the system keyboard (edge-to-edge does not resize the window);
-          only KeyboardFrame re-renders when the keyboard moves. */}
+      {/* R12: everything sits right on the system keyboard through react-native-keyboard-controller
+          (KeyboardFrame is its avoiding view); every text box is inside this frame. */}
       <KeyboardFrame root={rootRef} style={styles.keyboardFrame}>
       <View style={styles.column}>
       <View style={styles.body}>
@@ -723,10 +728,12 @@ export default function YehsaApp() {
         />
       ) : null}
       </KeyboardFrame>
+      <KeyboardDebugOverlay />
     </View>
     </ShellContext.Provider>
     </DisplayContext.Provider>
     </BackLayers.Provider>
+    </KeyboardProvider>
   );
 }
 
@@ -2387,6 +2394,26 @@ function DeveloperRow() {
         <Switch accessibilityLabel="Show developer checks" value={on} onValueChange={setOn} />
       </View>
       {on ? <CorpusHealth /> : <Quiet>Checks for the people who build Yehsa. Off by default.</Quiet>}
+      <KeyboardDebugSwitch />
+    </View>
+  );
+}
+
+// R12: prints the keyboard numbers (source, keyboard height, window, frame, lift) at the top of the
+// screen, so a screenshot shows why if a text box ever sits under the keyboard. Off by default; saved.
+function KeyboardDebugSwitch() {
+  const on = useKeyboardDebugOn();
+  return (
+    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", minHeight: 48 }}>
+      <Text style={styles.bubbleText}>Show keyboard debug</Text>
+      <Switch
+        accessibilityLabel="Show keyboard debug"
+        value={on}
+        onValueChange={(next) => {
+          setKeyboardDebug(next);
+          AsyncStorage.setItem(KEYBOARD_DEBUG_KEY, next ? "on" : "off").catch(() => {});
+        }}
+      />
     </View>
   );
 }
