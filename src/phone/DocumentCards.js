@@ -60,6 +60,7 @@ export function DocumentResults({ found, onSaved }) {
         <View key={c.id} style={styles.item}>
           <Text style={styles.title}>{c.title}</Text>
           <Text style={styles.meta}>{c.line}</Text>
+          {c.pageUrl ? <Quiet>File from the catalog page {c.pageUrl}</Quiet> : null}
           <Pressable accessibilityRole="link" accessibilityLabel={`Open link to ${c.site}`} onPress={() => Linking.openURL(c.url).catch(() => {})}>
             <Text style={styles.link} numberOfLines={2}>{c.url}</Text>
           </Pressable>
@@ -67,6 +68,10 @@ export function DocumentResults({ found, onSaved }) {
             <View style={styles.row}>
               <Quiet live>{done[c.id].line}</Quiet>
               <Action label="Read it" tone="quiet" onPress={() => openReader(`doc:${done[c.id].id}`)} />
+            </View>
+          ) : c.downloadable === false ? (
+            <View style={styles.row}>
+              <Action label="Open in browser" tone="quiet" onPress={() => Linking.openURL(c.url).catch(() => {})} accessibilityHint="This is a library web page, not a file. It opens in your browser; nothing is saved." />
             </View>
           ) : c.tooBig ? (
             <Quiet>Over 50 MB, so I won't download it.</Quiet>
