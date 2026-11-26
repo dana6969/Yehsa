@@ -14,6 +14,7 @@ import { outboundQuery, queryAllowed } from "../web/sources.js";
 import { authority, searchWeb } from "../web/web_search.js";
 import { blockedType, kindFromUrl, sniffDocument } from "./doc_check.js";
 import { cleanDocTitle } from "./doc_title.js";
+import { catalogItem, isLandingPage, resolveItem, volumeOf } from "./doc_resolve.js";
 
 export { cleanDocTitle };
 
@@ -68,6 +69,81 @@ function hostOf(url) {
   }
 }
 
+// ---------- R14: title matching ----------
+// "Download the encyclopedia of the world" must not list "The Encyclopedia of WORLD RELIGIONS" or
+// "Encyclopedia of American Indian Contributions to the World": every key word of the asked title has
+// to be in the result's title, and a subject word the person did not ask for ("religions",
+// "American Indian") counts against it. Exact and near-exact titles come first.
+
+const TITLE_STOP = new Set("the a an of and or in on for to with by from at its his her their our your my".split(" "));
+const FORMAT_WORDS = new Set("pdf epub ebook e-book txt text copy download free full online scan scanned version".split(" "));
+// Words that change nothing about which book it is.
+const GENERIC = new Set("vol vols volume volumes v part parts set series edition editions ed eds new complete illustrated revised unabridged abridged original reprint first second third fourth fifth sixth seventh eighth ninth tenth".split(" "));
+const REFERENCE = /\b(?:encyclop(?:a)?edia|dictionar(?:y|ies)|almanac|atlas|thesaurus|gazetteer|anthology|compendium|history of|book of|bible)\b/i;
+
+function stem(word) {
+  let w = String(word || "").toLowerCase().replace(/[’']s$/, "").replace(/encyclopaedia/g, "encyclopedia");
+  if (w.length > 4 && /ies$/.test(w)) w = `${w.slice(0, -3)}y`;
+  else if (w.length > 4 && /s$/.test(w) && !/ss$/.test(w)) w = w.slice(0, -1);
+  return w;
+}
+
+function wordsOf(text) {
+  return String(text || "").toLowerCase().replace(/encyclopaedia/g, "encyclopedia").split(/[^a-z0-9’']+/).map((w) => w.replace(/^[’']+|[’']+$/g, "")).filter(Boolean);
+}
+
+function isRoman(w) {
+  return /^[ivxlc]{1,6}$/.test(w) && w !== "civil" && w !== "ill";
+}
+
+/** The asked-for title's key words: "the encyclopedia of the world" -> ["encyclopedia", "world"]. */
+export function keyTitleWords(query) {
+  return [...new Set(wordsOf(query).filter((w) => !TITLE_STOP.has(w) && !FORMAT_WORDS.has(w)).map(stem))];
+}
+
+/** The title before its subtitle, author or volume: "The world encyclopedia; a library of..." -> "The world encyclopedia". */
+export function mainTitle(title) {
+  const t = String(title || "");
+  const cut = t.split(/\s*[:;/]\s*|\s+[-–—|]\s+|-\s+(?=vol)|,\s*(?=(?:vol|volume|v\.)\b)|\s*\((?=\s*vol)/i)[0];
+  return cut.replace(/[\s,.-]*\b(?:vol(?:ume)?\.?|v\.)\s*(?:\d+|[ivxl]+)\s*$/i, "").trim() || t.trim();
+}
+
+/** { all, hit, missing, extras, exact } for one result title against the asked title. */
+export function titleMatch(title, query) {
+  const keys = keyTitleWords(query);
+  const have = new Set(wordsOf(title).map(stem));
+  const hit = keys.filter((k) => have.has(k));
+  const missing = keys.filter((k) => !have.has(k));
+  const keySet = new Set(keys);
+  const main = wordsOf(mainTitle(title)).filter((w) => !TITLE_STOP.has(w) && !FORMAT_WORDS.has(w));
+  const extras = [...new Set(main.map(stem).filter((w) => !keySet.has(w) && !GENERIC.has(w) && !/^\d+$/.test(w) && !isRoman(w)))];
+  const allowMiss = keys.length >= 4 ? 1 : 0;
+  return { all: keys.length > 0 && missing.length <= allowMiss, hit: hit.length, missing, extras, exact: missing.length === 0 && extras.length === 0 };
+}
+
+/** A title that says nothing ("Encyclopedia Of", "Untitled", "Document"). */
+export function isVagueTitle(title) {
+  const words = wordsOf(title);
+  if (!words.length) return true;
+  if (TITLE_STOP.has(words[words.length - 1])) return true;
+  const content = words.filter((w) => !TITLE_STOP.has(w) && !FORMAT_WORDS.has(w));
+  return content.length < 2 || /^(?:untitled|document|file|download|pdf)$/i.test(String(title || "").trim());
+}
+
+/** Is this a search for one named book (strict title matching), not a topic? */
+export function isTitleQuery(query, { book = false } = {}) {
+  if (PUB_CODE.test(String(query || ""))) return false;
+  return book || REFERENCE.test(String(query || ""));
+}
+
+/** "Encyclopedia of World History- Volume 4" -> "Encyclopedia of World History, Volume 4". */
+export function displayTitle(title, volume = null) {
+  let t = cleanDocTitle(title).replace(/\s*\[\d+\]\s*$/, "").replace(/\s+\/\s+[^/]+$/, "").replace(/\s*-\s*(?=(?:vol(?:ume)?\.?|v\.)\s*\d)/i, ", ").replace(/\s+/g, " ").trim();
+  t = t.replace(/\b[Vv]ol\.?\s*(\d+)\b/, "Volume $1").replace(/^[\s\-–—|:;,.]+/, "");
+  if (volume && !/\bvolume\s*\d+/i.test(t)) t = `${t}, Volume ${volume}`;
+  return t;
+}
+
 /** Search results -> document candidates, files first, official sites first, one copy of each file. */
 export function rankDocResults(results, query) {
   const words = String(query || "").toLowerCase().split(/[^a-z0-9.-]+/).filter((w) => w.length > 2 && w !== "pdf");
@@ -90,13 +166,17 @@ export function rankDocResults(results, query) {
     const text = `${result.title} ${file}`.toLowerCase();
     const match = words.length ? words.filter((w) => text.includes(w)).length / words.length : 0;
     const fileBonus = kind === "pdf" ? 0.35 : kind === "epub" || kind === "text" ? 0.25 : 0;
+    const title = cleanDocTitle(result.title || file || host);
+    const tm = titleMatch(title, query);
     out.push({
       url: result.url,
-      title: cleanDocTitle(result.title || file || host),
+      title,
       site: host,
       format: kind,
       snippet: result.snippet || "",
-      score: authority(result.url) + fileBonus + match * 0.4 - rank * 0.03
+      vague: isVagueTitle(title),
+      volume: volumeOf(title) || volumeOf(file) || null,
+      score: authority(result.url) + fileBonus + match * 0.4 - rank * 0.03 + (tm.exact ? 0.5 : tm.all ? 0.2 - Math.min(0.3, tm.extras.length * 0.1) : 0)
     });
   });
   return out.sort((a, b) => b.score - a.score);
@@ -109,12 +189,13 @@ function prettySize(bytes) {
 }
 
 export function candidateLine(c) {
-  const kind = c.format === "pdf" ? "PDF" : c.format === "epub" ? "EPUB" : c.format === "text" ? "Text" : "Web page";
+  const kind = c.format === "pdf" ? "PDF" : c.format === "epub" ? "EPUB" : c.format === "text" ? "Text" : c.downloadable === false ? "Web page, opens in browser" : "Web page";
   const date = c.modified ? (() => {
     const d = new Date(c.modified);
     return Number.isNaN(d.getTime()) ? null : d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
   })() : null;
-  return [kind, c.site, prettySize(c.size), date ? `updated ${date}` : null].filter(Boolean).join(" · ");
+  const volume = c.volume ? `Volume ${c.volume} of a multi-volume set` : null;
+  return [kind, c.site, prettySize(c.size), volume, date ? `updated ${date}` : null].filter(Boolean).join(" · ");
 }
 
 export function findDisclosure(sent, engineName) {
@@ -139,30 +220,43 @@ export async function findDocuments({ fetchImpl, intent, maxCandidates = MAX_CAN
       reason: reached ? `I searched for "${sent}" and found no documents. Try other words, like the exact title or number.` : "I couldn't reach the internet, so I can't search for documents right now."
     };
   }
-  const ranked = rankDocResults(search.results, intent.query).slice(0, maxCandidates + 2);
-  const heads = await Promise.all(ranked.map((c) => guardedHead({ fetchImpl, url: c.url, limits: { maxRedirects: DOC_LIMITS.maxRedirects } })));
+  const strict = isTitleQuery(intent.query, { book: Boolean(intent.book) });
+  const ranked = rankDocResults(search.results, intent.query).slice(0, maxCandidates + (strict ? 6 : 2));
+  // R14: a catalog item page (loc.gov/item, archive.org/details) is resolved to its real PDF first.
+  const resolved = await Promise.all(ranked.map((c) => (catalogItem(c.url) ? resolveItem({ fetchImpl, url: c.url }).catch(() => ({ ok: false })) : null)));
+  const heads = await Promise.all(ranked.map((c, i) => guardedHead({ fetchImpl, url: resolved[i]?.ok ? resolved[i].url : c.url, limits: { maxRedirects: DOC_LIMITS.maxRedirects } })));
   const candidates = [];
   ranked.forEach((c, i) => {
     const head = heads[i];
+    const res = resolved[i];
     if (head.ok && blockedType(head.type)) return;
     const type = head.ok ? head.type.toLowerCase() : "";
-    const format = /pdf/.test(type) ? "pdf" : /epub/.test(type) ? "epub" : /text\/plain/.test(type) ? "text" : /html/.test(type) && c.format === "page" ? "page" : c.format;
-    const size = head.ok ? head.length : null;
+    const url = res?.ok ? res.url : c.url;
+    let format = res?.ok ? "pdf" : /pdf/.test(type) ? "pdf" : /epub/.test(type) ? "epub" : /text\/plain/.test(type) ? "text" : /html/.test(type) && c.format === "page" ? "page" : c.format;
+    if (res?.ok && head.ok && type && !/pdf|octet-stream/.test(type)) format = "page"; // the "PDF" was not one
+    const landing = format === "page" && isLandingPage(c.url);
+    const size = head.ok && head.length ? head.length : res?.ok ? res.size : null;
+    const volume = res?.volume || c.volume || null;
+    const better = res?.title && (c.vague || res.ok || titleMatch(res.title, intent.query).hit >= titleMatch(c.title, intent.query).hit) ? res.title : null;
     const row = {
-      id: `cand-${i}-${Math.abs(hashCode(c.url)).toString(36)}`,
-      url: c.url,
-      title: c.title.slice(0, 140),
+      id: `cand-${i}-${Math.abs(hashCode(url)).toString(36)}`,
+      url,
+      pageUrl: res?.ok ? c.url : null,
+      title: displayTitle(better || c.title, volume).slice(0, 140),
       site: c.site,
       format,
       size,
+      volume,
+      downloadable: !landing,
       modified: head.ok ? head.modified : null,
       tooBig: Number.isFinite(size) && size > DOC_LIMITS.maxBytes,
-      query: intent.query
+      query: intent.query,
+      score: c.score + (res?.ok ? 0.35 : 0)
     };
     row.line = candidateLine(row);
     candidates.push(row);
   });
-  const shown = candidates.slice(0, maxCandidates);
+  const shown = filterByTitle(candidates, intent.query, { strict }).slice(0, maxCandidates);
   return {
     ok: shown.length > 0,
     sent,
@@ -170,8 +264,25 @@ export async function findDocuments({ fetchImpl, intent, maxCandidates = MAX_CAN
     candidates: shown,
     tried: search.tried,
     disclosure: findDisclosure(sent, search.engine ? `${search.engine.name} search` : null),
-    reason: shown.length ? null : `I searched for "${sent}" but none of the results were documents I can read.`
+    reason: shown.length ? null : strict && candidates.length ? `I searched for "${sent}", but none of the results was that book, only books with other titles.` : `I searched for "${sent}" but none of the results were documents I can read.`
   };
+}
+
+/**
+ * R14: for a named book, keep the results whose title has every key word; an exact or near-exact
+ * title first; one with a subject word that was not asked for only when nothing exact was found,
+ * and never one with several. Downloadable files before web pages. Topic searches are only re-sorted.
+ */
+export function filterByTitle(rows, query, { strict = false } = {}) {
+  const scored = rows.map((r) => ({ r, m: titleMatch(r.title, query) }));
+  let keep = scored;
+  if (strict) {
+    keep = scored.filter(({ m }) => m.all);
+    const anyExact = keep.some(({ m }) => m.extras.length === 0);
+    keep = keep.filter(({ m }) => (anyExact ? m.extras.length === 0 : m.extras.length <= 1));
+  }
+  const rank = ({ r, m }) => (m.exact ? 2 : m.all ? 1 - Math.min(0.9, m.extras.length * 0.3) : 0) + (r.downloadable === false ? -1 : 0) + (r.tooBig ? -0.3 : 0) + (r.score || 0) * 0.1;
+  return keep.sort((a, b) => rank(b) - rank(a)).map(({ r }) => r);
 }
 
 function hashCode(text) {
@@ -187,6 +298,9 @@ function hashCode(text) {
 export async function downloadDocument({ fetchImpl, candidate, limits = {} }) {
   if (candidate.tooBig) return { ok: false, reason: "That file is over 50 MB, so I won't download it." };
   if (!kindFromUrl(candidate.url)) return { ok: false, reason: "That link isn't a document I can read." };
+  if (candidate.downloadable === false || (kindFromUrl(candidate.url) === "page" && isLandingPage(candidate.url))) {
+    return { ok: false, reason: "That's a library catalog page, not the book file, and I couldn't find its file. Open it in the browser to see it." };
+  }
   const got = await guardedFetch({ fetchImpl, url: candidate.url, group: "open", kind: "doc", limits: { ...DOC_LIMITS, ...limits } });
   if (!got.ok) {
     return { ok: false, reason: /bigger than/.test(got.reason) ? "That file is over 50 MB, so I stopped. Nothing was kept." : got.reason };
