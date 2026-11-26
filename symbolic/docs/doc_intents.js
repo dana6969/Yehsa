@@ -50,21 +50,24 @@ export function pageRequest(text) {
   if (raw.length < 8 || raw.length > 220) return null;
   const body = raw.replace(LEAD, "").trim();
   const P = "(\\d{1,2}(?:,\\d{3})|\\d{1,5})";
+  // [pattern, number group, title group, open the reader, only for a title already known]
   const tries = [
-    [new RegExp(`^(?:on |at )?(?:the )?page (?:number |no\\.? )?${P} (?:of|in|from) (.+?)(?: say| says| show| contain)?$`, "i"), 1, 2, false],
-    [new RegExp(`^(?:what (?:does|is on|'s on|is written on) )?page ${P} (?:of|in) (.+?)(?: say| says)?$`, "i"), 1, 2, false],
-    [new RegExp(`^(?:open|read|show)(?: me)?(?: up)? (?:the )?(.+?) (?:at|to|on) page ${P}$`, "i"), 2, 1, true],
-    [new RegExp(`^(?:open|read|show)(?: me)? page ${P} (?:of|in|from) (.+)$`, "i"), 1, 2, true],
-    [new RegExp(`^(.+?),? (?:on )?page ${P}$`, "i"), 2, 1, false]
+    [new RegExp(`^(?:open|read|show)(?: me)?(?: up)? (?:the )?(.+?) (?:at|to|on) page ${P}$`, "i"), 2, 1, true, false],
+    [new RegExp(`^(?:open|read|show)(?: me)? page ${P} (?:of|in|from) (.+)$`, "i"), 1, 2, true, false],
+    [new RegExp(`^(?:on |at )?(?:the )?page (?:number |no\\.? )?${P} (?:of|in|from) (.+?)(?: say| says| show| contain)?$`, "i"), 1, 2, false, false],
+    [new RegExp(`^(?:what (?:does|is on|'s on|is written on) )?page ${P} (?:of|in) (.+?)(?: say| says)?$`, "i"), 1, 2, false, false],
+    // "Kybalion page 12" is loose ("I am on page 5" has the same shape): only for a known title.
+    [new RegExp(`^(.+?),? (?:on )?page ${P}$`, "i"), 2, 1, false, true]
   ];
-  for (const [re, ni, ti, open] of tries) {
+  for (const [re, ni, ti, open, needsMatch] of tries) {
     const m = re.exec(raw) || re.exec(body);
     if (!m) continue;
     const n = pageNumber(m[ni]);
     const target = ok(String(m[ti] || "").replace(/^(?:what(?:'s| is) on|on|at)\s+/i, ""));
     if (!n || !target || PAGE_NOT_BOOK.test(target)) continue;
     if (/^(?:what|how|why|who|where|when|go|turn|flip|skip|jump)\b/i.test(target)) continue;
-    return { kind: "page", n, target, open, needsMatch: false };
+    if (needsMatch && /^(?:i|we|you|he|she|they|it|i'm|i am|we're|we are|back|still|now|here|there|my|our)\b/i.test(target)) continue;
+    return { kind: "page", n, target, open, needsMatch };
   }
   return null;
 }

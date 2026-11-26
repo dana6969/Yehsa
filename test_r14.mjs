@@ -64,7 +64,11 @@ test("'What's on page 789 of the encyclopedia of world history' is a page lookup
     assert.equal(docRequest(q).kind, "page", q);
   }
   assert.equal(pageRequest("open the canning guide at page 7").open, true);
-  for (const plain of ["go to page 5", "show me page 2 of the results", "what page is the map on", "turn the page"]) assert.equal(pageRequest(plain), null, plain);
+  for (const plain of ["go to page 5", "show me page 2 of the results", "what page is the map on", "turn the page", "I am on page 5", "we are on page 3", "back to page 4"]) assert.equal(pageRequest(plain), null, plain);
+  // "Kybalion page 12" has the same shape as "my notes page 2": only for a title already on the phone.
+  assert.equal(pageRequest("Kybalion page 12").needsMatch, true);
+  assert.equal(routeAsk("my notes page 2", { entries: [] }), null);
+  assert.equal(pageRequest("read page 3 of kubark").open, true);
   // The route never reaches web-learn: missing book -> document search for that title.
   const route = routeAsk("What's on page 789 of the encyclopedia of world history", { entries: [] });
   assert.equal(route.kind, "book");
