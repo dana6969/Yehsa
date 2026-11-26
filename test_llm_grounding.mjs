@@ -155,6 +155,9 @@ test("the model is bundled by a config plugin with a pinned hash, and is not com
   const plugin = read("plugins/withYehsaLlm.js");
   for (const v of [LLM_MODEL.file, LLM_MODEL.sha256, LLM_MODEL.url, String(LLM_MODEL.bytes)]) assert.ok(plugin.includes(v), v);
   assert.match(plugin, /noCompress/);
+  // AGP reads each asset into the Gradle heap; 2 GB fails on a 1 GB model ("Java heap space").
+  assert.match(plugin, /org\.gradle\.jvmargs/);
+  assert.match(plugin, /-Xmx6g/);
   assert.match(read(".gitignore"), /^\*\.gguf$/m);
   assert.equal(LLM_MODEL.license, "Apache-2.0");
   assert.ok(LLM_MODEL.bytes < 1.2e9);

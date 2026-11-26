@@ -12,7 +12,7 @@ const os = require("os");
 const path = require("path");
 const crypto = require("crypto");
 const https = require("https");
-const { withAppBuildGradle, withDangerousMod } = require("@expo/config-plugins");
+const { withAppBuildGradle, withDangerousMod, withGradleProperties } = require("@expo/config-plugins");
 
 const MODEL = {
   file: "qwen2.5-1.5b-instruct-q4_0.gguf",
@@ -107,7 +107,20 @@ function withNoCompress(config) {
   });
 }
 
+// AGP's compressReleaseAssets reads each asset into the Gradle heap, even a stored one, so a
+// 1 GB model fails with "Java heap space" at the default 2 GB. Give Gradle 6 GB (EAS Android
+// workers have 16 GB; the box has 15 GB).
+const JVM_ARGS = "-Xmx6g -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8";
+function withGradleHeap(config) {
+  return withGradleProperties(config, (mod) => {
+    const items = mod.modResults.filter((item) => !(item.type === "property" && item.key === "org.gradle.jvmargs"));
+    items.push({ type: "property", key: "org.gradle.jvmargs", value: JVM_ARGS });
+    mod.modResults = items;
+    return mod;
+  });
+}
+
 module.exports = function withYehsaLlm(config) {
-  return withNoCompress(withModelAsset(config));
+  return withGradleHeap(withNoCompress(withModelAsset(config)));
 };
 module.exports.MODEL = MODEL;

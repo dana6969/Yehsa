@@ -1,0 +1,18 @@
+<lint-module
+    format="1"
+    dir="/workspace/yehsa-ai/modules/yehsa-llm-asset/android"
+    name=":yehsa-llm-asset"
+    type="LIBRARY"
+    maven="com.dana6969.axi0net:yehsa-llm-asset:1.0.0"
+    agpVersion="8.8.2"
+    buildFolder="build"
+    bootClassPath="/workspace/android-sdk/platforms/android-35/android.jar:/workspace/android-sdk/build-tools/35.0.0/core-lambda-stubs.jar"
+    javaSourceLevel="17"
+    compileTarget="android-35"
+    neverShrinking="true">
+  <lintOptions
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>
