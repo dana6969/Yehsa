@@ -1,8 +1,11 @@
 // One fresh process. Prints nothing but writes a JSON result file.
 import fs from "fs";
-import { buildQuestions } from "./questions.mjs";
+import { loadRegressionV1 } from "./regression/v1/load.mjs";
 import { judge } from "./score.mjs";
-import { ask } from "../symbolic/ask.js";
+import { ask, askWithMeaning } from "../symbolic/ask.js";
+import { modelAvailable } from "../symbolic/meaning/embed_node.js";
+
+const useMeaning = modelAvailable();
 
 const args = new Map();
 for (let i = 2; i < process.argv.length; i += 2) args.set(process.argv[i], process.argv[i + 1]);
@@ -10,7 +13,7 @@ const ids = new Set(String(args.get("--ids") || "").split(",").filter(Boolean));
 const out = args.get("--out");
 if (!out || ids.size === 0) throw new Error("usage: node eval/worker.mjs --ids a,b --out file.json");
 
-const questions = buildQuestions().filter((question) => ids.has(question.id));
+const questions = loadRegressionV1().questions.filter((question) => ids.has(question.id));
 if (questions.length !== ids.size) {
   throw new Error(`worker missing questions: wanted ${ids.size}, found ${questions.length}`);
 }
@@ -19,7 +22,7 @@ let peak = rssStart;
 const items = [];
 for (const question of questions) {
   const started = process.hrtime.bigint();
-  const result = ask(question.prompt);
+  const result = useMeaning ? await askWithMeaning(question.prompt) : ask(question.prompt);
   const ms = Number(process.hrtime.bigint() - started) / 1e6;
   const memory = rss();
   if (memory > peak) peak = memory;

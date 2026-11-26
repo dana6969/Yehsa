@@ -1,0 +1,890 @@
+[
+{
+"id": "wound_cleaning",
+"title": "Cleaning a wound",
+"domain": "firstaid",
+"also": [
+"wash a cut",
+"rinse a scrape",
+"irrigate a wound"
+],
+"def": "Cleaning a wound means flushing dirt and germs out with plenty of clean running water after bleeding is under control.",
+"look": [
+"bleeding has stopped or is controlled",
+"visible dirt or grit in the wound",
+"edges you can see clearly"
+],
+"use": "Rinse for several minutes with clean water, use mild soap on the skin around it, and lift out loose grit with clean tweezers. Pat dry and cover.",
+"not": "Do not scrub a deep wound, pour in hydrogen peroxide or alcohol, or pack it with plants or soil. Do not clean first if bleeding is heavy; stop the bleeding first.",
+"steps": [
+"Wash your hands or put on gloves.",
+"Control any bleeding with direct pressure first.",
+"Flush with clean, drinkable or boiled-and-cooled water for at least several minutes.",
+"Wash the skin around it with soap, not inside a deep wound.",
+"Dry gently and cover with a clean dressing."
+],
+"call": "Get medical care for deep, gaping, dirty, animal-bite or puncture wounds, or wounds that show spreading redness, pus, or fever. Call emergency services for bleeding that will not stop.",
+"rel": [
+"wound_infection_signs",
+"bandaging_basics"
+],
+"src": [
+"atp4-02-11",
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "wound_infection_signs",
+"title": "Signs a wound is infected",
+"domain": "firstaid",
+"also": [
+"infected cut",
+"cellulitis",
+"pus in a wound",
+"red streaks"
+],
+"def": "A wound is likely infected when it gets worse over days instead of better, with growing redness, warmth, swelling, pus, or pain.",
+"look": [
+"redness that spreads outward from the wound",
+"warmth, swelling, and increasing pain after the first day or two",
+"pus or a bad smell",
+"red streaks running toward the body, or fever"
+],
+"use": "Keep the wound clean and covered, and get it seen by a clinician the same day if you see these signs. Red streaks, fever, or a fast-spreading red area need urgent care.",
+"not": "Do not squeeze or cut open a swollen wound, and do not rely on plant remedies or leftover antibiotics when you have signs of spreading infection.",
+"call": "Call emergency services or get urgent care for red streaks, fever with chills, confusion, a rapidly spreading red area, or a wound over a joint that is swollen and very painful.",
+"rel": [
+"sepsis_signs",
+"wound_cleaning"
+],
+"src": [
+"cdc",
+"nih-medline",
+"atp4-02-11"
+]
+},
+{
+"id": "sepsis_signs",
+"title": "Sepsis warning signs",
+"domain": "firstaid",
+"also": [
+"blood poisoning",
+"septic",
+"infection spreading through the body"
+],
+"def": "Sepsis is the body's dangerous overreaction to an infection, and it can quickly harm organs and cause death if not treated.",
+"look": [
+"fever or shivering, or feeling very cold",
+"fast heartbeat and fast breathing",
+"confusion, sleepiness, or hard to wake",
+"clammy or mottled skin, very low urine, or severe pain"
+],
+"use": "Treat it as an emergency in anyone with a known or suspected infection who has these signs. Get to hospital care fast; sepsis needs medical treatment.",
+"not": "Do not wait to see if it passes, and do not treat it at home with food, water, or herbs alone.",
+"call": "Call emergency services right away. Say you are worried about sepsis.",
+"rel": [
+"wound_infection_signs",
+"fever_adult"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "bandaging_basics",
+"title": "Bandaging a wound",
+"domain": "firstaid",
+"also": [
+"dressing a wound",
+"wrap a cut",
+"cover a wound",
+"gauze"
+],
+"def": "A dressing is the clean pad that sits on the wound, and a bandage is what holds it in place without cutting off blood flow.",
+"look": [
+"clean, non-stick or gauze pad",
+"wrap snug but loose enough for a finger beneath",
+"fingers or toes beyond the wrap stay warm and pink"
+],
+"use": "Cover the wound with a clean dressing, wrap over it firmly, and check the fingers or toes beyond it for color, warmth, and feeling every little while.",
+"not": "Do not wrap so tightly that the skin beyond turns pale, blue, cold, or numb. Do not reuse a wet, dirty dressing.",
+"steps": [
+"Place a clean dressing over the wound.",
+"Wrap the bandage from beyond the wound toward the heart, overlapping each turn.",
+"Tie or tape it off on the side, not on the wound.",
+"Check feeling, warmth, and color beyond the wrap."
+],
+"call": "Call emergency services if blood soaks through and keeps coming, or if the limb below the wrap turns pale, blue, or numb.",
+"rel": [
+"pressure_bandage",
+"wound_cleaning"
+],
+"src": [
+"atp4-02-11",
+"cdc"
+]
+},
+{
+"id": "pressure_bandage",
+"title": "Pressure bandage",
+"domain": "firstaid",
+"also": [
+"emergency bandage",
+"israeli bandage",
+"wrap that stops bleeding"
+],
+"def": "A pressure bandage is a thick pad held over a bleeding wound with a firm wrap, so you can keep pressure on without your hands.",
+"look": [
+"thick pad directly on the wound",
+"firm wrap that presses the pad down",
+"pad is not pulled off when blood soaks it"
+],
+"use": "Use it after direct pressure when bleeding is steady and you need your hands free. Add more padding on top if blood soaks through; do not remove the first layer.",
+"not": "Do not use it as a tourniquet, and do not wrap so tight that it cuts off circulation to the limb below. Do not peel off a soaked dressing to look.",
+"call": "Call emergency services for any bleeding that soaks through a pressure bandage or comes in spurts.",
+"rel": [
+"bleeding_pressure",
+"tourniquet_last_resort"
+],
+"src": [
+"atp4-02-11"
+]
+},
+{
+"id": "arterial_bleeding",
+"title": "Arterial bleeding",
+"domain": "firstaid",
+"also": [
+"spurting blood",
+"bright red bleeding",
+"life-threatening bleeding"
+],
+"def": "Arterial bleeding is blood from an artery: bright red and often spurting with each heartbeat, and it can be fatal within minutes.",
+"look": [
+"bright red blood that spurts or pulses",
+"blood that quickly pools or soaks clothing",
+"pale, cold, clammy skin and fast pulse as blood is lost"
+],
+"use": "Press hard with both hands directly on the wound with a thick pad or cloth, keep pressing, and call emergency services. If pressure cannot stop bleeding on an arm or leg, a tourniquet is the last resort.",
+"not": "Do not stop pressing to look at the wound, do not remove soaked cloth (add more on top), and do not use a tourniquet for minor bleeding.",
+"call": "Call emergency services now. Keep the person lying down and warm until help arrives.",
+"rel": [
+"bleeding_pressure",
+"tourniquet_last_resort",
+"shock_position"
+],
+"src": [
+"atp4-02-11",
+"cdc"
+]
+},
+{
+"id": "internal_bleeding",
+"title": "Internal bleeding",
+"domain": "firstaid",
+"also": [
+"bleeding inside the body",
+"hidden bleeding",
+"blood loss you cannot see"
+],
+"def": "Internal bleeding is blood loss inside the body that you cannot see, often after a hard blow, a fall, a crash, or a deep injury to the torso.",
+"look": [
+"bruising, swelling, or a hard painful belly after a blow",
+"pale, cold, clammy skin, fast weak pulse, dizziness",
+"vomiting or coughing blood, or blood in stool or urine",
+"growing confusion or collapse"
+],
+"use": "Lay the person down, keep them still and warm, raise the legs only if no head, spine, or leg injury is suspected, and get emergency help. Do not give food or drink.",
+"not": "Do not give anything to eat or drink, do not let them walk it off, and do not assume a lack of visible blood means a lack of danger.",
+"call": "Call emergency services immediately; internal bleeding needs a hospital.",
+"rel": [
+"shock_position",
+"abdominal_injury"
+],
+"src": [
+"atp4-02-11",
+"nih-medline"
+]
+},
+{
+"id": "abdominal_injury",
+"title": "Belly (abdominal) wound or injury",
+"domain": "firstaid",
+"also": [
+"stomach wound",
+"bowel sticking out",
+"gut injury",
+"blow to the belly"
+],
+"def": "A serious belly injury can damage organs and bleed inside, and an open wound can let intestines show.",
+"look": [
+"open wound or protruding bowel",
+"a rigid, swollen, very painful belly",
+"vomiting, pale clammy skin, fast pulse"
+],
+"use": "Keep the person lying on their back with knees bent if comfortable, cover any exposed organs loosely with a clean moist cloth, and get emergency help.",
+"not": "Do not push organs back in, do not press on the wound, and do not give food or drink.",
+"call": "Call emergency services immediately.",
+"rel": [
+"internal_bleeding",
+"shock_position"
+],
+"src": [
+"atp4-02-11"
+]
+},
+{
+"id": "chest_wound",
+"title": "Chest wound (sucking chest wound)",
+"domain": "firstaid",
+"also": [
+"punctured lung",
+"stab to the chest",
+"penetrating chest injury",
+"pneumothorax"
+],
+"def": "A penetrating chest wound can let air into the chest around the lung, making breathing hard and getting worse.",
+"look": [
+"hole in the chest, sometimes with a sucking sound or bubbling blood",
+"trouble breathing and chest pain",
+"blue lips, fast breathing, anxiety"
+],
+"use": "Cover the hole with a chest seal or a piece of plastic taped on three sides so air can escape on the way out but not in. Sit the person up if they can breathe better that way. Get emergency help.",
+"not": "Do not remove an object stuck in the chest, and do not seal all four sides if you have no vented seal and breathing is getting worse; release the tape briefly.",
+"call": "Call emergency services immediately.",
+"rel": [
+"impaled_object",
+"shock_position"
+],
+"src": [
+"atp4-02-11"
+]
+},
+{
+"id": "impaled_object",
+"title": "Object stuck in a wound",
+"domain": "firstaid",
+"also": [
+"impaled object",
+"stabbed",
+"something stuck in the leg",
+"embedded object"
+],
+"def": "An embedded object plugs the wound it caused, and pulling it out can release heavy bleeding.",
+"look": [
+"object visibly stuck in the body",
+"bleeding around, not through, the object",
+"pain with movement"
+],
+"use": "Leave it in place. Pad around it to hold it still and stop it moving, control bleeding by pressing around it, and get emergency help.",
+"not": "Do not pull it out, do not push it deeper, and do not cut it unless it must be shortened to move the person. Never remove an object from the eye, neck, or chest.",
+"call": "Call emergency services immediately.",
+"rel": [
+"chest_wound",
+"bleeding_pressure"
+],
+"src": [
+"atp4-02-11"
+]
+},
+{
+"id": "amputation_care",
+"title": "Amputation: care of the person and the part",
+"domain": "firstaid",
+"also": [
+"severed finger",
+"cut off hand",
+"body part cut off",
+"avulsion"
+],
+"def": "After an amputation, the first job is to stop the bleeding and treat shock; the severed part is saved wrapped and cool so it might be reattached.",
+"look": [
+"heavy bleeding from the stump",
+"a separated finger, hand, or limb",
+"pale clammy skin and fast pulse"
+],
+"use": "Press hard on the stump, use a tourniquet if pressure does not stop life-threatening bleeding, lay the person down and keep them warm. Wrap the part in clean damp gauze, put it in a plastic bag, and keep that bag cool on ice, not touching it.",
+"not": "Do not put the part directly on ice or in water, do not wash it hard, and do not delay getting help to look for it.",
+"call": "Call emergency services immediately and send the part with the person.",
+"rel": [
+"tourniquet_last_resort",
+"shock_position"
+],
+"src": [
+"atp4-02-11",
+"nih-medline"
+]
+},
+{
+"id": "crush_injury",
+"title": "Crush injury",
+"domain": "firstaid",
+"also": [
+"pinned under something",
+"trapped limb",
+"crushed leg",
+"building collapse injury"
+],
+"def": "A crush injury is damage from a heavy weight pressing a body part, and releasing a long-trapped limb can suddenly cause shock or kidney trouble.",
+"look": [
+"limb pinned under a heavy object",
+"swelling, numbness, and pain",
+"dark urine or weakness after a long entrapment"
+],
+"use": "Get emergency help first. If trapped less than about 15 minutes and the load is safe to lift, free the person, control bleeding, and treat for shock. Keep them still.",
+"not": "Do not free someone who has been crushed for hours without medical direction if you can avoid it, and do not massage the limb.",
+"call": "Call emergency services immediately and tell them how long the person was trapped.",
+"rel": [
+"shock_position",
+"splint_immobilize"
+],
+"src": [
+"atp4-02-11",
+"fema"
+]
+},
+{
+"id": "broken_bone_signs",
+"title": "Signs of a broken bone",
+"domain": "firstaid",
+"also": [
+"fracture",
+"broken arm",
+"broken leg",
+"did I break it",
+"cracked bone"
+],
+"def": "A fracture is a break or crack in a bone, and the signs are pain that is worse with movement, swelling, bruising, and an odd shape or loss of use.",
+"look": [
+"sharp pain at one spot that is worse with use",
+"swelling, bruising, and a limb that looks bent or short",
+"a grinding feeling or sound, or a bone end through the skin"
+],
+"use": "Keep the limb still, splint it in the position found, treat bleeding, and get medical care. Check feeling and color beyond the injury before and after splinting.",
+"not": "Do not try to straighten a bent limb, push a bone end back in, or let the person walk on a suspected leg or hip fracture.",
+"call": "Call emergency services for an open fracture, a limb that is pale, blue, or numb beyond the break, a suspected hip, thigh, pelvis, neck or back fracture, or heavy bleeding.",
+"rel": [
+"splint_immobilize",
+"sling_and_swathe",
+"open_fracture"
+],
+"src": [
+"atp4-02-11",
+"nih-medline"
+]
+},
+{
+"id": "open_fracture",
+"title": "Open (compound) fracture",
+"domain": "firstaid",
+"also": [
+"bone sticking out",
+"compound fracture",
+"bone through skin"
+],
+"def": "An open fracture is a broken bone with an open wound, which means a high risk of infection and bleeding.",
+"look": [
+"bone end visible or a wound over a deformed limb",
+"bleeding at the break",
+"severe pain and swelling"
+],
+"use": "Control bleeding with pressure around the bone, not on it. Cover the wound loosely with a clean moist dressing, splint without pushing the bone back, and get emergency help.",
+"not": "Do not push the bone back under the skin, do not wash the exposed bone hard, and do not pull on the limb to line it up.",
+"call": "Call emergency services immediately.",
+"rel": [
+"broken_bone_signs",
+"splint_immobilize"
+],
+"src": [
+"atp4-02-11"
+]
+},
+{
+"id": "sling_and_swathe",
+"title": "Sling and swathe",
+"domain": "firstaid",
+"also": [
+"arm sling",
+"triangle bandage sling",
+"broken collarbone sling",
+"shoulder injury support"
+],
+"def": "A sling holds the forearm up, and a swathe is a second bandage that binds the arm against the chest so it cannot swing.",
+"look": [
+"a triangular bandage or a shirt tail",
+"forearm rests higher than the elbow",
+"knot placed at the side of the neck, not on the spine"
+],
+"use": "Use it for a broken arm, collarbone, shoulder or dislocation, after you have checked the fingers for color and feeling. Put padding between the arm and body.",
+"not": "Do not use it to hold a bone in a position that hurts more; support it as found. Do not tie it so tight that the fingers go pale or numb.",
+"steps": [
+"Support the injured arm in a comfortable position, elbow bent.",
+"Slide the triangular bandage under the forearm and tie it behind the neck on the side.",
+"Pad the knot and secure the elbow end.",
+"Tie a second band around the chest and the arm to hold it still."
+],
+"call": "Call emergency services for an open fracture, a pale, blue, or numb hand, or severe pain.",
+"rel": [
+"broken_bone_signs",
+"dislocation"
+],
+"src": [
+"atp4-02-11"
+]
+},
+{
+"id": "dislocation",
+"title": "Dislocated joint",
+"domain": "firstaid",
+"also": [
+"dislocated shoulder",
+"dislocated finger",
+"joint out of place",
+"popped out of socket"
+],
+"def": "A dislocation is when the ends of the bones in a joint are forced out of place, leaving the joint looking wrong and unable to move.",
+"look": [
+"joint looks deformed or out of position",
+"severe pain and swelling and unable to move it",
+"numbness or tingling beyond the joint"
+],
+"use": "Support the joint in the position found with padding and a sling or splint, apply a cool pack for pain, and get it put back by a clinician.",
+"not": "Do not try to force the joint back in yourself, and do not massage or move it to test it.",
+"call": "Call emergency services if the limb below is pale, blue, cold, or numb, or if the joint is the hip, knee, neck or back.",
+"rel": [
+"sling_and_swathe",
+"sprain_rice"
+],
+"src": [
+"atp4-02-11",
+"nih-medline"
+]
+},
+{
+"id": "concussion_signs",
+"title": "Concussion and head injury",
+"domain": "firstaid",
+"also": [
+"hit head",
+"bump on the head",
+"knocked out",
+"head trauma",
+"brain injury"
+],
+"def": "A concussion is a mild brain injury from a blow or jolt to the head, and the danger is that a serious bleed can build slowly.",
+"look": [
+"headache, dizziness, confusion, or memory gaps",
+"nausea or vomiting, or blurred vision",
+"a brief loss of consciousness, or sleepiness",
+"clear fluid or blood from the nose or ears"
+],
+"use": "Keep the person resting and watch them closely for the next day or two. Stay with them. Get checked by a clinician after any significant blow, loss of consciousness, or confusion.",
+"not": "Do not leave them alone, do not let them return to sport or hard activity the same day, and do not give alcohol.",
+"call": "Call emergency services for loss of consciousness, repeated vomiting, a seizure, worsening headache, confusion, weakness, unequal pupils, or clear fluid from the ears or nose.",
+"rel": [
+"spinal_still",
+"unconscious_person"
+],
+"src": [
+"cdc",
+"nih-medline",
+"atp4-02-11"
+]
+},
+{
+"id": "unconscious_person",
+"title": "Person who is unconscious but breathing",
+"domain": "firstaid",
+"also": [
+"passed out",
+"fainted",
+"not waking up",
+"unresponsive"
+],
+"def": "An unresponsive person who is still breathing normally needs their airway kept open and an ambulance, because they can choke on their own tongue or vomit.",
+"look": [
+"does not respond to voice or a shoulder tap",
+"chest rises and falls with normal breathing",
+"no obvious neck or spine injury"
+],
+"use": "Call for emergency help, check breathing, and place the person in the recovery position unless a spine injury is suspected. Stay with them and recheck breathing often.",
+"not": "Do not give food or drink, do not leave them alone, and do not move them if a neck or spine injury is suspected unless you must open the airway.",
+"call": "Call emergency services; if breathing stops, begin CPR.",
+"rel": [
+"recovery_position",
+"cpr_rate_depth"
+],
+"src": [
+"atp4-02-11",
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "fainting",
+"title": "Fainting",
+"domain": "firstaid",
+"also": [
+"passing out",
+"about to faint",
+"blacked out",
+"lightheaded and dizzy"
+],
+"def": "Fainting is a short loss of consciousness when the brain briefly gets too little blood, often from standing too long, heat, fear, pain, or dehydration.",
+"look": [
+"lightheaded, pale, sweaty, vision narrowing",
+"collapse that lasts under a minute or two",
+"wakes quickly and recovers"
+],
+"use": "Lay the person flat and raise their legs, loosen tight clothing, and give fresh air. Let them sit up slowly after they have recovered, and offer a drink if awake.",
+"not": "Do not sit them up quickly, do not splash water in the face, and do not ignore a faint with chest pain, an irregular heartbeat, injury, or pregnancy.",
+"call": "Call emergency services if they do not wake within a minute or two, hit their head, have chest pain or trouble breathing, or faint again.",
+"rel": [
+"unconscious_person",
+"heat_exhaustion_signs"
+],
+"src": [
+"nih-medline",
+"atp4-02-11"
+]
+},
+{
+"id": "eye_object",
+"title": "Something in the eye",
+"domain": "firstaid",
+"also": [
+"speck in eye",
+"grit in eye",
+"eyelash in eye",
+"foreign body in eye",
+"eye pain"
+],
+"def": "A speck or grit in the eye usually washes out with tears or clean water, and anything stuck or sharp needs a clinician.",
+"look": [
+"watering, blinking, redness, a gritty feel",
+"pain that is worse when blinking",
+"something visible on the white of the eye or under the lid"
+],
+"use": "Do not rub. Blink, then flush the eye with clean water or saline for several minutes. Pull the upper lid over the lower to let lashes sweep it out.",
+"not": "Do not rub the eye, do not try to dig out an embedded object, and do not remove a stuck or impaled object.",
+"call": "Call emergency services or get urgent care for an embedded object, a chemical splash that is still painful after flushing, vision loss, or a cut on the eyeball.",
+"rel": [
+"chemical_eye_flush",
+"snow_blindness"
+],
+"src": [
+"nih-medline",
+"atp4-02-11"
+]
+},
+{
+"id": "snow_blindness",
+"title": "Snow blindness",
+"domain": "firstaid",
+"also": [
+"sun burned eyes",
+"photokeratitis",
+"eye sunburn",
+"welder flash"
+],
+"def": "Snow blindness is a painful sunburn of the surface of the eye from bright ultraviolet light reflecting off snow, ice, or water.",
+"look": [
+"gritty, burning pain and tears hours after exposure",
+"red, swollen lids and sensitivity to light",
+"blurry vision that usually clears in a day or two"
+],
+"use": "Get out of the light, cover both eyes with a dark soft cloth, rest, and use cool damp cloths for comfort. Prevent it with dark tinted glasses with side shields.",
+"not": "Do not rub the eyes or keep going on the glare. Do not treat it with leaf or herb poultices.",
+"call": "Get medical care if the pain is severe or sight does not improve in a day or two.",
+"rel": [
+"eye_object",
+"sunburn"
+],
+"src": [
+"atp3-50-21",
+"nih-medline"
+]
+},
+{
+"id": "tooth_knocked_out",
+"title": "Knocked-out tooth",
+"domain": "firstaid",
+"also": [
+"lost a tooth",
+"avulsed tooth",
+"broken tooth",
+"tooth fell out"
+],
+"def": "A knocked-out adult tooth can sometimes be saved if it is kept moist and put back or seen by a dentist within about an hour.",
+"look": [
+"a whole tooth out with the root attached",
+"bleeding in the socket",
+"pain and swelling"
+],
+"use": "Pick up the tooth by the crown, not the root. Rinse gently with milk or saline if dirty and try to push it back into the socket; otherwise keep it in milk or against the cheek. See a dentist right away.",
+"not": "Do not scrub the tooth, touch the root, or put a baby tooth back in. Do not store it dry.",
+"call": "Call emergency services if there is other injury to the head, face or neck, or heavy bleeding.",
+"rel": [
+"toothache_field",
+"concussion_signs"
+],
+"src": [
+"nih-medline",
+"cdc"
+]
+},
+{
+"id": "toothache_field",
+"title": "Toothache in the field",
+"domain": "firstaid",
+"also": [
+"tooth pain",
+"abscess",
+"swollen gum",
+"dental pain"
+],
+"def": "A toothache is pain from decay, a crack, or an abscess, and swelling or fever means the infection may be spreading.",
+"look": [
+"steady throbbing pain, worse with hot or cold",
+"swollen gum or cheek, a bad taste",
+"fever or swelling of the face or neck"
+],
+"use": "Rinse with warm salt water, keep the mouth clean, and use over-the-counter pain relievers as directed on the label. See a dentist as soon as you can.",
+"not": "Do not put aspirin on the gum, and do not drain or poke an abscess yourself.",
+"call": "Call emergency services for swelling that spreads to the eye, neck or floor of the mouth, trouble swallowing or breathing, or fever with a swollen face.",
+"rel": [
+"tooth_knocked_out",
+"wound_infection_signs"
+],
+"src": [
+"nih-medline",
+"cdc"
+]
+},
+{
+"id": "fishhook_removal",
+"title": "Fishhook removal",
+"domain": "firstaid",
+"also": [
+"hook in finger",
+"fish hook stuck",
+"hook in skin"
+],
+"def": "A fishhook is barbed, so pulling straight back tears the skin; it is pushed through or backed out along its curve.",
+"look": [
+"hook embedded in finger, arm, or face",
+"barb under the skin",
+"small bleeding point at the entry"
+],
+"use": "For a shallow hook, push the point through, snip off the barb with clippers, and back the shaft out. Clean the wound and cover it. Check your tetanus status.",
+"not": "Do not try to remove a hook from the eye, face near the eye, or a deep joint; get medical help. Do not yank it straight back.",
+"call": "Call emergency services or go to an emergency room for hooks in the eye, face, a joint, or a vein.",
+"rel": [
+"wound_cleaning",
+"tetanus_shot"
+],
+"src": [
+"nih-medline",
+"atp4-02-11"
+]
+},
+{
+"id": "tetanus_shot",
+"title": "Tetanus and wounds",
+"domain": "firstaid",
+"also": [
+"lockjaw",
+"tetanus booster",
+"rusty nail",
+"dirty wound vaccine"
+],
+"def": "Tetanus is a serious infection from bacteria in soil and dirt that enter a wound, and it is prevented by vaccination with boosters.",
+"look": [
+"a dirty, deep, or puncture wound",
+"animal bite or rusty or soil-contaminated injury",
+"no booster in the last five to ten years"
+],
+"use": "Ask a clinician about a booster after a dirty or deep wound, usually if you have not had one in the last five years for dirty wounds or ten years for clean ones.",
+"not": "Do not rely on rinsing alone to prevent it, and do not assume the rust itself causes it; the germ is in soil and dirt.",
+"call": "Call emergency services for muscle stiffness, jaw spasms, or trouble swallowing after a wound.",
+"rel": [
+"wound_cleaning",
+"animal_bite"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "animal_bite",
+"title": "Animal bite",
+"domain": "firstaid",
+"also": [
+"dog bite",
+"cat bite",
+"bitten by a wild animal",
+"rabies exposure",
+"bat in the house"
+],
+"def": "An animal bite can cause infection and, from wild animals, rabies, so it needs washing and a call to a clinician or health department.",
+"look": [
+"puncture or torn skin from teeth or claws",
+"a wild, strange-acting, or unprovoked animal",
+"a bat found in a room with a sleeping person or child"
+],
+"use": "Wash with soap and running water for several minutes, control bleeding, and cover. Get medical care the same day and report the animal. Rabies shots are most effective when started early.",
+"not": "Do not wait for symptoms. Do not try to catch or kill the animal with your hands.",
+"call": "Call emergency services for severe bleeding or a face, neck or hand bite; call a clinician or health department for any wild-animal bite or bat exposure.",
+"rel": [
+"wound_cleaning",
+"tetanus_shot"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "splinter_removal",
+"title": "Splinter removal",
+"domain": "firstaid",
+"also": [
+"sliver",
+"thorn in the skin",
+"wood splinter",
+"cactus spines"
+],
+"def": "A splinter is a small piece of wood, thorn, or glass in the skin that is removed with clean tweezers along the angle it went in.",
+"look": [
+"a visible end sticking out",
+"tenderness at the spot",
+"redness only around the entry point"
+],
+"use": "Wash the skin, clean the tweezers with alcohol or boiling water, pull the splinter out in the line it entered, and wash again. Tape can lift fine cactus spines.",
+"not": "Do not dig around with a dirty needle or squeeze it. Do not remove a deep, long, or glass splinter near an eye or joint yourself.",
+"call": "Get medical care for a deep splinter, signs of infection, or one close to the eye.",
+"rel": [
+"wound_cleaning",
+"tetanus_shot"
+],
+"src": [
+"nih-medline",
+"cdc"
+]
+},
+{
+"id": "blister_care",
+"title": "Blisters and hot spots",
+"domain": "firstaid",
+"also": [
+"foot blister",
+"rubbing boot",
+"hot spot on heel",
+"blister on foot"
+],
+"def": "A blister is a fluid-filled pocket from friction or heat, and a hot spot is the warm, tender patch that warns one is coming.",
+"look": [
+"a warm, red, tender patch where a boot rubs",
+"a raised bubble of clear fluid",
+"torn skin or a blood blister"
+],
+"use": "Stop and treat hot spots early with tape or a friction pad. Leave an intact blister covered with a donut pad. If it is large and in the way, drain it with a clean pin at the edge, leave the roof, and cover it.",
+"not": "Do not rip off the roof of a blister, and do not keep hiking in the same wet socks. Do not cover signs of infection.",
+"call": "Get medical care for redness spreading, pus, fever, or a blister in someone with diabetes or poor circulation.",
+"rel": [
+"trench_foot",
+"foot_care_hiking"
+],
+"src": [
+"nps",
+"nih-medline",
+"atp3-50-21"
+]
+},
+{
+"id": "foot_care_hiking",
+"title": "Foot care on the trail",
+"domain": "firstaid",
+"also": [
+"sore feet",
+"care for feet when hiking",
+"preventing blisters",
+"dry socks"
+],
+"def": "Foot care is keeping feet dry, clean, and padded so friction, wet, and cold do not disable you.",
+"look": [
+"changing to dry socks at breaks",
+"trimmed toenails and well-fitting boots",
+"treating hot spots the moment they start"
+],
+"use": "Stop at the first hot spot, dry feet at rests, rotate socks, and use powder or tape where you rub. Air feet at night and dry socks against your body.",
+"not": "Do not break in new boots on a long trip, and do not hike on wet feet all day.",
+"call": "Get medical care for infection signs, numb or pale toes, or foot pain that is not going away.",
+"rel": [
+"blister_care",
+"trench_foot"
+],
+"src": [
+"atp3-50-21",
+"nps"
+]
+},
+{
+"id": "trench_foot",
+"title": "Trench foot (immersion foot)",
+"domain": "firstaid",
+"also": [
+"wet foot injury",
+"immersion foot",
+"feet numb and swollen from wet"
+],
+"def": "Trench foot is damage to the feet from long exposure to wet and cold, even above freezing, and it can lead to tissue loss.",
+"look": [
+"cold, numb, tingling feet that may look pale, blue, or red",
+"swelling and a heavy, 'wooden' feel",
+"blisters or open sores after warming"
+],
+"use": "Get out of wet footwear, dry and gently warm the feet, keep them raised and clean, and get medical care. Prevent it with dry socks and regular foot checks.",
+"not": "Do not rub or massage the feet, do not walk on them if badly injured, and do not warm with high heat or a fire.",
+"call": "Call emergency services or get care for numb, blue, or blistering feet.",
+"rel": [
+"frostbite_warming",
+"foot_care_hiking"
+],
+"src": [
+"atp3-50-21",
+"atp4-02-11",
+"cdc"
+]
+},
+{
+"id": "sunburn",
+"title": "Sunburn",
+"domain": "firstaid",
+"also": [
+"burned by the sun",
+"red skin",
+"sun poisoning"
+],
+"def": "Sunburn is skin damage from ultraviolet light that shows up as red, painful skin hours after exposure.",
+"look": [
+"red, hot, painful skin that appears hours later",
+"blisters on bad burns",
+"fever, chills, or nausea with a severe burn"
+],
+"use": "Get out of the sun, cool the skin with cool water, drink fluids, and use moisturizer. Cover up and keep burned skin out of the sun. Prevent it with shade, clothing, a hat, and sunscreen.",
+"not": "Do not break blisters, do not use butter or petroleum on a fresh burn, and do not go back in the sun.",
+"call": "Call emergency services or get care for blistering over a large area, fever, confusion, or severe pain, and for any sunburn on a baby under one year.",
+"rel": [
+"heat_exhaustion_signs",
+"burn_cool_water"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+}
+]

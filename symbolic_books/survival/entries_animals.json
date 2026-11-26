@@ -1,0 +1,147 @@
+[
+ {
+  "symbol": "white_tailed_deer",
+  "title": "White-tailed deer",
+  "context": "The white-tailed deer is the common deer of the East, brown with a white belly and a tail it raises like a white flag when alarmed. Also called whitetail, white-tail deer, deer, buck, doe. Look for brown coat, white underside, tail raised like a white flag; bucks carry antlers from late summer to winter. Deer are the main big-game animal in New England; check your state's season and tag rules before hunting."
+ },
+ {
+  "symbol": "moose",
+  "title": "Moose",
+  "context": "The moose is the largest deer, with a long face, a hanging dewlap, and broad flat antlers on bulls. Also called Alces, bull moose, cow moose. Look for huge with a long face, dewlap, and broad flat antlers on bulls; dark body on long pale legs. Watch from at least 50 yards (about 45 m). If one lays its ears back or raises its hackles, back away and put a tree between you."
+ },
+ {
+  "symbol": "elk",
+  "title": "Elk",
+  "context": "The elk is a large deer with a pale rump, a dark neck, and branching antlers on bulls. Also called wapiti, Cervus canadensis, bull elk. Look for large with a pale rump and branching antlers; bugling calls in fall. Elk are rare in New England; a big brown deer there is more likely a moose or white-tailed deer."
+ },
+ {
+  "symbol": "black_bear",
+  "title": "Black bear",
+  "context": "The black bear is the only bear in the East, black or brown, with a straight face profile and no shoulder hump. Also called bear, American black bear, Ursus americanus. Look for black or brown with a straight muzzle and no shoulder hump; tall pointed ears. Make noise on the trail, store food and trash away from camp, and if you meet one, stand tall, talk firmly, and back away slowly."
+ },
+ {
+  "symbol": "coyote",
+  "title": "Coyote",
+  "context": "The eastern coyote is a slim, dog-like wild canine with a bushy tail carried low and pointed ears. Also called eastern coyote, coywolf, Canis latrans, brush wolf. Look for slim dog-like with a bushy low tail and pointed ears; yips and howls at night. If one comes close, make yourself big, shout, and throw something toward it."
+ },
+ {
+  "symbol": "red_fox",
+  "title": "Red fox",
+  "context": "The red fox is a small wild canine with a red coat, black legs, and a white tail tip. Also called fox, Vulpes vulpes. Look for red coat, black legs, white tail tip; bushy tail longer than half its body. Watch from a distance; foxes are usually shy."
+ },
+ {
+  "symbol": "bobcat",
+  "title": "Bobcat",
+  "context": "The bobcat is a medium wild cat with a short bobbed tail, tufted ears, and a spotted coat. Also called wildcat, Lynx rufus, bay lynx. Look for short tail with a black tip, tufted ears, spotted coat; tail tip black on top, white below. Bobcats avoid people; enjoy the sighting from where you are."
+ },
+ {
+  "symbol": "porcupine",
+  "title": "Porcupine",
+  "context": "The porcupine is a slow, round rodent covered in barbed quills. Also called porky, Erethizon dorsatum, quill pig. Look for round quill-covered body, slow waddle; chewed bark high on trees. Leave it alone and keep dogs away. A pet with quills needs a vet."
+ },
+ {
+  "symbol": "raccoon",
+  "title": "Raccoon",
+  "context": "The raccoon is a gray, masked, ring-tailed animal that raids camps and trash at night. Also called coon, Procyon lotor, trash panda. Look for black mask and ringed tail; handprint-like tracks near water. Lock food away at night and keep a clean camp."
+ },
+ {
+  "symbol": "striped_skunk",
+  "title": "Striped skunk",
+  "context": "The striped skunk is a black animal with white stripes down its back that sprays a strong musk when threatened. Also called skunk, Mephitis. Look for black with white stripes down the back; stamps its feet and raises its tail before spraying. Back away slowly if it stamps or turns."
+ },
+ {
+  "symbol": "beaver",
+  "title": "Beaver",
+  "context": "The beaver is a large water rodent with a flat paddle tail that builds dams and lodges. Also called American beaver, Castor canadensis. Look for flat paddle tail, dam and cut sapling stumps; tooth-chewed pointed stumps near water. Beaver ponds flood trails and make routes longer; plan around them."
+ },
+ {
+  "symbol": "snowshoe_hare",
+  "title": "Snowshoe hare",
+  "context": "The snowshoe hare is a northern hare with huge furry hind feet whose coat turns white in winter. Also called varying hare, Lepus americanus, snowshoe rabbit. Look for large back feet, coat white in winter and brown in summer; brown in summer, white in winter. Hares are legal small game in many states; check your state's rules."
+ },
+ {
+  "symbol": "wild_turkey",
+  "title": "Wild turkey",
+  "context": "The wild turkey is a large dark bird with a bare red-blue head and a fanned tail. Also called turkey, Meleagris gallopavo, gobbler, tom turkey. Look for large dark bird with a bare head and fanned tail; toms gobble in spring. Turkey season has its own rules; identify the bird and what is beyond it before every shot."
+ },
+ {
+  "symbol": "ruffed_grouse",
+  "title": "Ruffed grouse",
+  "context": "The ruffed grouse is a brown or gray barred woodland bird with a fan tail and a dark neck ruff. Also called partridge, Bonasa umbellus, grouse, pa'tridge. Look for brown barred bird with a fan tail and dark neck ruff; drumming sound like a starting engine in spring. Grouse are upland game in New England; check season rules."
+ },
+ {
+  "symbol": "bald_eagle",
+  "title": "Bald eagle",
+  "context": "The bald eagle is a large raptor whose adults have a white head and tail and a yellow bill. Also called eagle, Haliaeetus leucocephalus, American eagle. Look for large dark bird with a white head and tail on adults; young birds are mottled brown for four years. Watch and photograph from a distance, especially near nests."
+ },
+ {
+  "symbol": "great_horned_owl",
+  "title": "Great horned owl",
+  "context": "The great horned owl is a large owl with ear tufts, yellow eyes, and a deep hooting call. Also called hoot owl, Bubo virginianus, cat owl. Look for large owl with ear tufts and yellow eyes; white throat patch. Enjoy it from a distance, especially near nests in late winter."
+ },
+ {
+  "symbol": "canada_goose",
+  "title": "Canada goose",
+  "context": "The Canada goose is a large goose with a black neck and head and a white chin strap. Also called honker, Branta canadensis, goose. Look for black neck and head with a white chin strap; V-shaped flocks with loud honking. Geese are migratory birds with federal and state season rules; check both."
+ },
+ {
+  "symbol": "rattlesnake",
+  "title": "Rattlesnake",
+  "context": "The timber rattlesnake is a heavy-bodied venomous snake with a broad triangular head and a rattle on its tail. Also called timber rattlesnake, rattler, Crotalus horridus. Look for thick body, triangular head, a rattle on the tail; dark crossbands on a yellow or dark body. Rattlesnakes are rare and protected in much of New England. Back away slowly and walk around."
+ },
+ {
+  "symbol": "copperhead",
+  "title": "Copperhead",
+  "context": "The copperhead is a venomous snake with a copper-colored head and tan hourglass bands. Also called Agkistrodon contortrix, highland moccasin. Look for copper head, tan body with hourglass bands; bands narrow on the back and wide on the sides. Copperheads live in southern New England's rocky woods. Back away slowly."
+ },
+ {
+  "symbol": "cottonmouth",
+  "title": "Cottonmouth",
+  "context": "The cottonmouth is a heavy, dark venomous water snake that gapes to show a white mouth. Also called water moccasin, Agkistrodon piscivorus. Look for heavy dark water snake with a white mouth when it gapes; swims with its body high on the water. Cottonmouths do not live in New England; a dark snake in water there is almost always a northern water snake."
+ },
+ {
+  "symbol": "eastern_garter_snake",
+  "title": "Garter snake",
+  "context": "The eastern garter snake is a slim, harmless snake with three pale stripes along its body. Also called garter snake, garden snake, Thamnophis sirtalis. Look for slim, three pale stripes along the body; often basks on paths and rocks. It is harmless; let it go on its way."
+ },
+ {
+  "symbol": "northern_water_snake",
+  "title": "Northern water snake",
+  "context": "The northern water snake is a common, non-venomous banded brown snake found in and near water. Also called water snake, Nerodia sipedon. Look for banded brown snake near water; round pupils. It is not venomous; give it room."
+ },
+ {
+  "symbol": "blacklegged_tick",
+  "title": "Blacklegged (deer) tick",
+  "context": "The blacklegged tick, or deer tick, is a tiny dark tick that spreads Lyme disease, anaplasmosis, and babesiosis. Also called deer tick, Ixodes scapularis, Lyme tick. Look for tiny dark tick; adult females have an orange-red body and black plate. Check your whole body after time outside, and remove ticks with fine tweezers pulled straight out."
+ },
+ {
+  "symbol": "american_dog_tick",
+  "title": "American dog tick",
+  "context": "The American dog tick is a larger brown tick with cream markings that can carry Rocky Mountain spotted fever. Also called dog tick, wood tick, Dermacentor variabilis. Look for larger brown tick with white-cream markings on the back; common in grassy fields and trail edges. Remove it with fine tweezers close to the skin and wash the bite."
+ },
+ {
+  "symbol": "lone_star_tick",
+  "title": "Lone star tick",
+  "context": "The lone star tick is a reddish-brown tick whose females have one white dot on the back; its bites are linked to a red-meat allergy. Also called Amblyomma americanum, turkey tick. Look for reddish-brown tick with one white dot on the back of females; aggressive biter, spreading north. Remove it with fine tweezers close to the skin."
+ },
+ {
+  "symbol": "black_widow",
+  "title": "Black widow",
+  "context": "The black widow is a shiny black spider with a red hourglass under its belly whose bite needs medical care. Also called widow spider, Latrodectus. Look for shiny black spider with a red hourglass underneath; messy webs under rocks, logs, and outhouse seats. Shake out gloves, boots, and firewood before use."
+ },
+ {
+  "symbol": "bald_faced_hornet",
+  "title": "Bald-faced hornet",
+  "context": "The bald-faced hornet is a black-and-white wasp that builds a gray paper nest in trees and defends it fiercely. Also called white-faced hornet, Dolichovespula maculata. Look for black and white wasp with a grey paper nest the size of a football; nests hang from branches or eaves. Walk wide around nests."
+ },
+ {
+  "symbol": "yellowjacket",
+  "title": "Yellowjacket",
+  "context": "The yellowjacket is a black-and-yellow wasp that nests in the ground and stings repeatedly. Also called yellow jacket, ground wasp, Vespula. Look for black and yellow wasp that nests underground; busy hole in the ground. Watch for ground nests when clearing a camp or trail."
+ },
+ {
+  "symbol": "wild_boar",
+  "title": "Wild boar (feral hog)",
+  "context": "The wild boar, or feral hog, is a dark bristly pig with a long snout that can be aggressive. Also called feral hog, feral pig, wild pig, Sus scrofa. Look for dark bristly pig with a long snout; rooted-up ground. Feral hogs are not established in New England; report one to your state wildlife agency."
+ }
+]

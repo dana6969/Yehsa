@@ -1,0 +1,109 @@
+[
+{
+"id": "spiritual_practice_own",
+"title": "Prayer, quiet, or ritual as your own tool",
+"domain": "spiritual",
+"also": [
+"pray in an emergency",
+"spiritual comfort",
+"meditation outdoors",
+"quiet time",
+"finding peace"
+],
+"def": "Many people find steadiness in prayer, silence, a familiar verse, or a small ritual; it is a personal practice, used in the person's own way or not at all.",
+"look": [
+"what the person already finds comforting",
+"a short quiet moment before acting",
+"words or silence the person chooses"
+],
+"use": "If you want, take a minute of quiet, prayer, or slow breathing, then return to the practical steps.",
+"not": "This is not medical treatment and does not replace calling for help.",
+"rel": [
+"gratitude_meaning_hardship",
+"scared_lost_calm"
+],
+"src": [
+"va-ptsd",
+"atp3-50-21"
+]
+},
+{
+"id": "gratitude_meaning_hardship",
+"title": "Gratitude and meaning in hard times",
+"domain": "spiritual",
+"also": [
+"finding meaning",
+"gratitude practice",
+"hope in hard times",
+"will to survive"
+],
+"def": "Remembering what you are grateful for and who you are living for can strengthen the will to keep going through hardship.",
+"look": [
+"thinking of family, friends, or faith",
+"small wins noticed each day",
+"a reason to get through the night"
+],
+"use": "Name three things you are grateful for, or the people waiting for you, and set one small goal for the next hour.",
+"not": "Do not force cheerfulness on someone who is grieving; follow their lead.",
+"rel": [
+"spiritual_practice_own"
+],
+"src": [
+"atp3-50-21",
+"va-ptsd"
+]
+},
+{
+"id": "respect_after_harvest",
+"title": "A moment of respect after a harvest",
+"domain": "spiritual",
+"also": [
+"after killing a deer",
+"respect for the animal",
+"thanks after a kill"
+],
+"def": "Many hunters pause after a kill to thank or honor the animal; it is a personal custom that often goes with using the meat well and wasting nothing.",
+"look": [
+"a quiet moment with the animal",
+"care in handling and dressing",
+"a plan to use the meat"
+],
+"use": "Take a moment in your own way, then handle the animal with care and get the meat cool quickly.",
+"not": "Do not waste usable meat or leave the animal unrecovered without every effort.",
+"rel": [
+"field_dressing_deer",
+"grief_after_loss"
+],
+"src": [
+"ihea"
+]
+},
+{
+"id": "faith_contacts_card",
+"title": "Faith-community and support contacts on your card",
+"domain": "spiritual",
+"also": [
+"pastor contact",
+"faith community",
+"support contacts",
+"who to call for support"
+],
+"def": "A family card can hold contacts for the people who support you, such as a faith leader, a friend, or a counselor, along with crisis lines.",
+"look": [
+"names and numbers written on paper as well as in the phone",
+"988 and the Veterans Crisis Line",
+"a neighbor or friend who can check in"
+],
+"use": "Add supporters to your family emergency card, ask them ahead of time whether you can call in a crisis, and keep a paper copy.",
+"not": "Do not rely on one phone for every number.",
+"call": "Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
+"rel": [
+"family_emergency_plan",
+"when_get_help"
+],
+"src": [
+"988",
+"ready"
+]
+}
+]

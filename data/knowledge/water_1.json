@@ -1,0 +1,547 @@
+[
+{
+"id": "water_how_much",
+"title": "How much drinking water to plan for",
+"domain": "water",
+"also": [
+"how much water do I need",
+"gallon per day",
+"dehydration signs",
+"water per person"
+],
+"def": "Plan on at least one gallon (about 4 liters) of drinking water per person per day for emergencies, and more in heat, with illness, or for children and nursing mothers.",
+"look": [
+"pale yellow urine means you are drinking enough",
+"dark urine, dry mouth, headache, and dizziness mean you need more",
+"very little urine for many hours is dangerous"
+],
+"use": "Store at least three days of water for each person at home. In the field, carry what you need for the day plus a way to treat more, and sip steadily.",
+"not": "Do not ration water by waiting until you are thirsty; do not drink too much plain water all at once.",
+"call": "Call 911 for confusion, fainting, or no urination for many hours.",
+"rel": [
+"hydration_basics",
+"water_safe_to_drink"
+],
+"src": [
+"ready",
+"cdc"
+]
+},
+{
+"id": "water_safe_to_drink",
+"title": "Is this water safe to drink?",
+"domain": "water",
+"also": [
+"can I drink from the stream",
+"is creek water safe",
+"clear water safe",
+"wild water"
+],
+"def": "Clear water from a stream, lake, or spring can still carry germs, so treat it unless you know it is safe; clear does not mean clean.",
+"look": [
+"clear but untreated water can hold Giardia, Cryptosporidium, bacteria, and viruses",
+"fuel, chemical, or flood water is not made safe by boiling",
+"dead animals, farms, and campsites upstream raise the risk"
+],
+"use": "Treat all wild water before drinking: boil, use a filter, or use a disinfectant, and strain cloudy water first. Choose the clearest, moving source.",
+"not": "Do not drink from radiator or boiler water, seawater, or urine, and do not trust clear water on sight.",
+"call": "Get care for severe diarrhea, vomiting, or fever after drinking untreated water.",
+"rel": [
+"boil_water_method",
+"water_filter_use"
+],
+"src": [
+"cdc",
+"epa",
+"atp3-50-21"
+]
+},
+{
+"id": "boil_water_method",
+"title": "How to boil water",
+"domain": "water",
+"also": [
+"boil water to make it safe",
+"rolling boil",
+"how long to boil",
+"boil at altitude"
+],
+"def": "Boiling is the most reliable way to kill germs: bring water to a rolling boil for one minute, or three minutes above 6,500 feet (2,000 m).",
+"look": [
+"large bubbles breaking the surface",
+"settle or strain cloudy water first",
+"let it cool in the covered pot"
+],
+"use": "Strain cloudy water through a clean cloth or coffee filter, bring it to a rolling boil for 1 minute (3 minutes above 6,500 feet), let it cool, and store it in a clean, covered container.",
+"not": "Do not use boiling to make fuel, chemical, or seawater safe; it will not remove them.",
+"steps": [
+"Strain cloudy water through a clean cloth or coffee filter.",
+"Bring it to a rolling boil.",
+"Hold the boil for 1 minute, or 3 minutes above 6,500 feet.",
+"Cool it covered and pour into a clean container."
+],
+"call": "Use a boil-water notice from your health department as the rule when there is one.",
+"rel": [
+"water_bleach_disinfect"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "water_bleach_disinfect",
+"title": "Disinfecting water with household bleach",
+"domain": "water",
+"also": [
+"bleach to purify water",
+"drops of bleach per gallon",
+"chlorine bleach water"
+],
+"def": "Plain unscented household bleach can disinfect clear water, but it works less well than boiling against Giardia and Cryptosporidium.",
+"look": [
+"8 drops of 6% bleach per gallon (6 drops of 8.25%), double for cloudy water",
+"wait 30 minutes",
+"a slight chlorine smell afterward"
+],
+"use": "Strain cloudy water, add the right drops of regular unscented bleach (not scented, color-safe, or with additives) per gallon, stir, and wait 30 minutes. If there is no chlorine smell, repeat once and wait 15 minutes more.",
+"not": "Do not use scented, splash-less, or color-safe bleach. Do not use bleach as your only method when you can boil.",
+"call": "Call your health department if the water source may be contaminated by sewage or chemicals.",
+"rel": [
+"boil_water_method",
+"water_filter_use"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "water_filter_use",
+"title": "Portable water filters: what they remove",
+"domain": "water",
+"also": [
+"water filter",
+"straw filter",
+"pump filter",
+"how fine a filter",
+"backpacking filter"
+],
+"def": "A portable filter strains out parasites and bacteria; most do not remove viruses or chemicals.",
+"look": [
+"pore size about 1 micron or less stops Giardia and Cryptosporidium",
+"0.3 micron or less also stops most bacteria",
+"a filter rated as a purifier may handle viruses"
+],
+"use": "Pre-filter cloudy water through cloth, then run it through the filter, and follow the maker's directions for cleaning. Disinfect or boil afterward if viruses or unknown sources are a concern.",
+"not": "Do not freeze a wet hollow-fiber filter, and do not assume a filter removes chemicals, fuel, or salt.",
+"rel": [
+"water_filter_then_disinfect",
+"water_safe_to_drink"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "water_filter_then_disinfect",
+"title": "Filter first, then disinfect",
+"domain": "water",
+"also": [
+"filter and treat",
+"layer treatment",
+"virus protection water"
+],
+"def": "Filtering removes parasites and bacteria and clears the water, and a disinfectant afterward handles viruses that pass through.",
+"look": [
+"filter or settle first",
+"then boil, or add bleach or a chlorine dioxide tablet",
+"wait the full contact time"
+],
+"use": "When you are in doubt or in a place with viruses of concern, filter first and then disinfect the filtered water. This also saves disinfectant and gives it more reliable contact.",
+"not": "Do not use a disinfectant on very cloudy water without filtering first.",
+"rel": [
+"water_filter_use",
+"water_bleach_disinfect"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "water_cloudy_pretreat",
+"title": "Cloudy water: settle or pre-filter",
+"domain": "water",
+"also": [
+"muddy water",
+"silty water",
+"turbid water",
+"clear up cloudy water"
+],
+"def": "Cloudy water hides germs from disinfectant and clogs filters, so let it settle and strain it first.",
+"look": [
+"silt or particles in the water",
+"a clean cloth or coffee filter",
+"a settled layer at the bottom"
+],
+"use": "Let the water sit until the silt sinks, pour the clear top through a clean cloth or coffee filter, then boil, filter, or disinfect.",
+"not": "Do not skip the pre-filter and just add more disinfectant.",
+"rel": [
+"boil_water_method",
+"water_filter_use"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "water_contaminated_no",
+"title": "Water that cannot be made safe in the field",
+"domain": "water",
+"also": [
+"fuel in the water",
+"flood water",
+"chemical spill water",
+"dead animal in stream"
+],
+"def": "Water contaminated with fuel, chemicals, sewage, or flood debris cannot be made safe by boiling or bleach, so do not use it to drink.",
+"look": [
+"an oily sheen or fuel smell",
+"flood water with sewage or farm runoff",
+"water near an industrial spill or a dead animal"
+],
+"use": "Find another source, use bottled water, or follow your local health department's instructions. Use contaminated water only for flushing or cleaning, not for drinking or washing dishes.",
+"not": "Do not drink it, brush teeth with it, or use it for baby formula.",
+"call": "Call Poison Control at 1-800-222-1222 if someone swallowed it.",
+"rel": [
+"water_safe_to_drink"
+],
+"src": [
+"cdc",
+"epa",
+"fema"
+]
+},
+{
+"id": "water_container_storage",
+"title": "Containers and storing treated water",
+"domain": "water",
+"also": [
+"what to use for a water bottle",
+"store clean water",
+"water jug",
+"hydration bladder"
+],
+"def": "Store treated water in clean, food-grade containers with tight lids, away from sun and heat.",
+"look": [
+"food-grade plastic or stainless steel",
+"a lid that seals",
+"a cool, dark place"
+],
+"use": "Wash containers with soap and rinse, fill with treated water, label them with the date, and replace commercial water as the package says. In the field, use a pot, a bottle, or a clean bag.",
+"not": "Do not use a container that held chemicals, fuel, or milk.",
+"rel": [
+"water_how_much",
+"boil_water_method"
+],
+"src": [
+"cdc",
+"ready"
+]
+},
+{
+"id": "water_find_new_england",
+"title": "Finding water in New England woods",
+"domain": "water",
+"also": [
+"where to find water in the woods",
+"stream or spring",
+"snow for water",
+"water in Maine"
+],
+"def": "In New England, water is usually near: look for streams in valley bottoms, springs, ponds, and melted snow; moving water is better than still.",
+"look": [
+"valley bottoms and seeps where several slopes meet",
+"springs and clear running streams",
+"packed snow and ice, melted first"
+],
+"use": "Follow downhill and listen for running water, collect from the clearest moving source, and treat it. Melt snow or ice in a pot; do not eat it raw.",
+"not": "Do not drink from radiators, boilers, seawater, or urine, and do not eat snow to get water because it lowers your body temperature.",
+"region": "Beaver ponds, farm fields, and campsites upstream are common contamination sources in New England; Giardia is widespread in surface water.",
+"rel": [
+"water_safe_to_drink",
+"snow_melt_water"
+],
+"src": [
+"atp3-50-21",
+"cdc"
+]
+},
+{
+"id": "snow_melt_water",
+"title": "Melting snow and ice for water",
+"domain": "water",
+"also": [
+"melt snow",
+"eat snow",
+"drink from snow"
+],
+"def": "Melt snow or ice in a pot and treat the water; eating snow lowers body temperature and uses energy.",
+"look": [
+"a pot with a little water in it to start",
+"clean white snow, not yellow or near a road",
+"ice yields more water than fluffy snow"
+],
+"use": "Start with a little water in the pot so it doesn't scorch, add snow gradually, and boil it. Melt it with a stove or fire, or in a bag against the body only if needed.",
+"not": "Do not eat large amounts of snow in the cold.",
+"rel": [
+"boil_water_method",
+"water_find_new_england"
+],
+"src": [
+"atp3-50-21",
+"cdc"
+]
+},
+{
+"id": "rain_collect_water",
+"title": "Collecting rain",
+"domain": "water",
+"also": [
+"catch rain water",
+"tarp water catchment",
+"rain barrel"
+],
+"def": "Rain is a good source if you collect it in clean containers, and you should treat it if it passed over roofs or leaves.",
+"look": [
+"a tarp funneling water into a clean pot",
+"rain caught directly is cleaner",
+"roof runoff can have debris"
+],
+"use": "Set clean containers out, rig a tarp to funnel rain into them, and let the first few minutes of rain wash dust off. Treat the water if it is for drinking.",
+"not": "Do not drink water from a roof treated with chemicals or stored in dirty containers.",
+"rel": [
+"boil_water_method"
+],
+"src": [
+"atp3-50-21",
+"epa"
+]
+},
+{
+"id": "giardia_crypto",
+"title": "Giardia and Cryptosporidium",
+"domain": "water",
+"also": [
+"beaver fever",
+"parasite in water",
+"cryptosporidium",
+"giardia"
+],
+"def": "Giardia and Cryptosporidium are tiny parasites in surface water that cause days of diarrhea, cramps, and nausea; boiling or the right filter stops them.",
+"look": [
+"watery diarrhea, gas, cramps, and nausea one to two weeks after drinking",
+"found in streams, lakes, and ponds, even clear ones",
+"chlorine alone works poorly on Cryptosporidium"
+],
+"use": "Boil water or use a filter rated for 1 micron or smaller. Wash your hands with soap and clean water before eating.",
+"not": "Do not rely on bleach alone for Cryptosporidium.",
+"call": "Get care for diarrhea that lasts more than a few days, or with fever, blood, or dehydration.",
+"rel": [
+"boil_water_method",
+"vomiting_diarrhea"
+],
+"src": [
+"cdc"
+]
+},
+{
+"id": "water_chemical_tablets",
+"title": "Iodine and chlorine dioxide tablets",
+"domain": "water",
+"also": [
+"water purification tablets",
+"iodine tablets",
+"micropur",
+"aquamira drops"
+],
+"def": "Tablets disinfect water when boiling is not possible; follow the label for dose and wait time.",
+"look": [
+"chlorine dioxide tablets kill most germs including Cryptosporidium after the label wait time",
+"iodine tablets are less reliable against Cryptosporidium",
+"taste and color changes"
+],
+"use": "Read the label, pre-filter cloudy water, add the tablet, and wait the full time (often 30 minutes to 4 hours for Cryptosporidium).",
+"not": "Do not use iodine for pregnant women, people with thyroid problems, or long-term use.",
+"rel": [
+"water_bleach_disinfect",
+"water_filter_then_disinfect"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "water_uv_solar",
+"title": "UV purifiers and solar disinfection",
+"domain": "water",
+"also": [
+"steripen",
+"UV light water",
+"sodis",
+"solar water disinfection"
+],
+"def": "UV treatment works only on clear water in a working unit, and solar disinfection needs clear plastic bottles in strong sun for many hours.",
+"look": [
+"clear, not cloudy, water",
+"a charged, working UV unit",
+"clear PET bottles in full sun for 6 hours or two days in cloudy weather"
+],
+"use": "Pre-filter, treat with the UV unit as directed, and carry a backup like tablets or a pot. Use solar disinfection only as a last resort.",
+"not": "Do not trust UV in cloudy water or with low batteries.",
+"rel": [
+"water_cloudy_pretreat",
+"water_chemical_tablets"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "water_hygiene_scarce",
+"title": "Washing hands, dishes, and wounds when water is scarce",
+"domain": "water",
+"also": [
+"wash hands without water",
+"hand sanitizer",
+"dishes in the field",
+"hygiene when water is short"
+],
+"def": "When water is short, use the cleanest water for drinking and wound care, and a little soap and treated water for hands.",
+"look": [
+"a small amount of soap and water for hands",
+"alcohol-based sanitizer when hands are not greasy",
+"dishes washed away from streams"
+],
+"use": "Wash hands before eating and after the toilet, use treated water for wounds, and use hand sanitizer if there is no water. Wash dishes well away from streams.",
+"not": "Do not use contaminated water on wounds.",
+"rel": [
+"wound_cleaning",
+"latrine_placement"
+],
+"src": [
+"cdc",
+"atp3-50-21"
+]
+},
+{
+"id": "latrine_placement",
+"title": "Latrine placement away from water",
+"domain": "water",
+"also": [
+"where to go to the bathroom outdoors",
+"cathole",
+"toilet in the woods",
+"poop in the woods"
+],
+"def": "Dig a latrine or cathole at least 200 feet (60 m) from water, trails, and camp to keep your drinking water clean.",
+"look": [
+"a hole 6 to 8 inches (15 to 20 cm) deep",
+"200 feet from any stream, pond, or spring",
+"downhill and downstream from camp"
+],
+"use": "Dig a small hole, use it, cover it with soil, and wash your hands. Pack out toilet paper if the rules require it.",
+"not": "Do not go near water, and do not use areas near a drainage.",
+"rel": [
+"water_hygiene_scarce"
+],
+"src": [
+"atp3-50-21",
+"nps"
+]
+},
+{
+"id": "formula_unsafe_water",
+"title": "Baby formula when tap water is unsafe",
+"domain": "water",
+"also": [
+"infant formula and boil water",
+"safe water for baby",
+"mix formula"
+],
+"def": "Mix infant formula with bottled, boiled-and-cooled, or properly treated water when the tap is unsafe.",
+"look": [
+"a boil-water notice or a flood",
+"bottled water for babies",
+"ready-to-feed formula needs no water"
+],
+"use": "Use bottled or boiled water (cooled to room temperature before mixing, per the label), wash bottles with safe water, and use ready-to-feed formula if you can.",
+"not": "Do not use untreated or contaminated water, and do not dilute formula to stretch it.",
+"call": "Call a pediatrician or 911 if a baby is vomiting, lethargic, or not feeding.",
+"rel": [
+"vomiting_diarrhea"
+],
+"src": [
+"cdc",
+"fema"
+]
+},
+{
+"id": "water_no_go_sources",
+"title": "Water sources never to drink",
+"domain": "water",
+"also": [
+"radiator water",
+"urine",
+"seawater",
+"toilet tank"
+],
+"def": "Never drink radiator or boiler water, seawater, urine, or water that has fuel or chemicals in it.",
+"look": [
+"antifreeze in radiators",
+"salt in seawater and urine",
+"chemicals in pool or flood water"
+],
+"use": "Use another source; if you must use pool water, treat and filter it, and use a toilet tank only if it is clean, not a bowl.",
+"not": "Do not drink seawater or urine; the salt makes you more dehydrated.",
+"call": "Call Poison Control at 1-800-222-1222 if anyone drinks antifreeze or chemical water.",
+"rel": [
+"water_contaminated_no",
+"water_safe_to_drink"
+],
+"src": [
+"cdc",
+"atp3-50-21"
+]
+},
+{
+"id": "well_flood_disinfect",
+"title": "Well disinfection after a flood",
+"domain": "water",
+"also": [
+"flooded well",
+"shock chlorinate a well",
+"well water after flood"
+],
+"def": "A flooded well must be tested and disinfected following health-department or EPA directions; do not invent a mix.",
+"look": [
+"flood water over the wellhead",
+"cloudy or odd-tasting water",
+"a pump that was underwater"
+],
+"use": "Use bottled or boiled water until the well is tested and cleared. Contact your health department or a certified lab, and follow their disinfection steps.",
+"not": "Do not drink or cook with the water until it is tested.",
+"rel": [
+"water_contaminated_no"
+],
+"src": [
+"cdc",
+"epa"
+]
+}
+]

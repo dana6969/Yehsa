@@ -1,0 +1,107 @@
+[
+ {
+  "symbol": "poison_hemlock",
+  "title": "Poison hemlock",
+  "context": "Poison hemlock is a deadly poisonous plant in the carrot family, often mistaken for wild carrot, parsley, or parsnip. Also called Conium maculatum, poison parsley, tall white umbrella flower, hemlock plant. Look for smooth, hairless, hollow stalk with purple blotches; fern-like, finely divided leaves that smell musty when crushed."
+ },
+ {
+  "symbol": "wild_carrot_lookalike",
+  "title": "Wild carrot (Queen Anne's lace)",
+  "context": "Wild carrot is a common white umbrella wildflower with hairy stems and a carrot-smelling root, and it is easy to confuse with deadly hemlocks. Also called Daucus carota, Queen Anne's lace, bird's nest flower, wild carrot. Look for hairy, solid stems; carrot smell from a crushed root or leaf. Use it only as an identification lesson. A beginner should not eat any carrot-family plant from the wild."
+ },
+ {
+  "symbol": "water_hemlock",
+  "title": "Water hemlock",
+  "context": "Water hemlock is one of the most poisonous plants in North America; a small amount of the root can cause fatal seizures. Also called Cicuta maculata, spotted water hemlock, cowbane, deadly umbrella plant in wet ground. Look for grows in wet ground: stream banks, ditches, marshes; smooth hollow stems streaked or spotted with purple. Use only as a warning. Stay out of wet-ground carrot-family plants."
+ },
+ {
+  "symbol": "poison_ivy_id",
+  "title": "Poison ivy",
+  "context": "Poison ivy is a common plant of New England with three-leaflet leaves and an oil, urushiol, that causes an itchy, blistering rash on contact. Also called leaves of three, Toxicodendron radicans, hairy rope vine, itchy vine, three leaf plant. Look for three leaflets, with the middle leaflet on a longer stalk; grows as a vine with hairy aerial roots, a shrub, or ground cover."
+ },
+ {
+  "symbol": "poison_sumac",
+  "title": "Poison sumac and poison oak",
+  "context": "Poison sumac is a swamp shrub with 7 to 13 smooth-edged leaflets and white berries; it causes the same rash as poison ivy. Also called Toxicodendron vernix, poison oak, swamp sumac, white berries sumac. Look for leaves of 7 to 13 smooth leaflets on a red stem; grows in wet swamps and bogs. Stay out of swamp shrubs you cannot name, and wash after contact like poison ivy."
+ },
+ {
+  "symbol": "mushrooms_never_from_photo",
+  "title": "Never eat a wild mushroom from a photo",
+  "context": "A photo, an app, or a camera match can never confirm a wild mushroom is safe; deadly species resemble edible ones, and cooking does not remove most toxins. Also called can I eat this mushroom, is this mushroom edible, mushroom identification app, identify a mushroom. Look for many deadly species look like edible ones; key features like spore print, base, and habitat do not show in a photo."
+ },
+ {
+  "symbol": "jack_o_lantern_mushroom",
+  "title": "Jack-o'-lantern mushroom (not a chanterelle)",
+  "context": "The Jack-o'-lantern is an orange, poisonous mushroom that grows in clusters on wood and causes severe vomiting and cramps; it is often mistaken for a chanterelle. Also called Omphalotus illudens, orange poisonous mushroom, false chanterelle, orange mushroom on a stump. Look for orange, funnel-shaped caps growing in clusters from wood or buried roots; true, thin, sharp-edged gills running down the stem."
+ },
+ {
+  "symbol": "chanterelle_vs_lookalikes",
+  "title": "Chanterelle and its look-alikes",
+  "context": "True chanterelles are golden, funnel-shaped mushrooms with blunt, forked ridges instead of thin gills, but only an expert should confirm them. Also called Cantharellus, golden chanterelle, false chanterelle, chanterelles in New England. Look for blunt, forked ridges that run down the stem and look like folds; grows from soil near trees, usually singly or scattered. Learn them in person with a local expert or society, never from a photo."
+ },
+ {
+  "symbol": "amanita_death_cap",
+  "title": "Destroying angel and death cap (deadly amanitas)",
+  "context": "Destroying angels and death caps are deadly mushrooms; a small bite can destroy the liver, and symptoms may be delayed for hours. Also called Amanita bisporigera, Amanita phalloides, death cap, destroying angel, white mushroom in the woods. Look for white or greenish cap with white gills; a skirt-like ring on the stem and a cup or sac (volva) at the base, which may be buried."
+ },
+ {
+  "symbol": "eaten_poison_plant_what_to_do",
+  "title": "Someone may have eaten a poisonous plant or mushroom",
+  "context": "If someone may have eaten a poisonous plant or mushroom, call Poison Control or 911 immediately, before symptoms appear. Also called ate a wild plant, child ate a berry, ate a mushroom and sick, pet ate a mushroom. Look for any wild plant or mushroom swallowed by a child or pet; vomiting, belly pain, drooling, confusion, or seizures."
+ },
+ {
+  "symbol": "plant_safe_positive_id",
+  "title": "Is this plant safe to eat?",
+  "context": "A wild plant is only safe to eat when a person has positively identified it by several features and ruled out its poisonous look-alikes; if you are unsure, the answer is no. Also called can I eat this plant, is this berry safe, wild plant edible, hungry and found a plant. Look for more than one feature checked: leaf, flower, fruit, stem, habitat; look-alikes ruled out."
+ },
+ {
+  "symbol": "foraging_false_rules",
+  "title": "False rules about wild food",
+  "context": "Rules of thumb such as 'animals eat it', 'boiling makes it safe', or 'avoid red plants' are false and have killed people. Also called universal edibility test, animals eat it so it is safe, red berries rule, boiling removes poison, taste test. Look for animals can eat plants that poison people; boiling does not destroy many toxins."
+ },
+ {
+  "symbol": "toxic_berries_new_england",
+  "title": "Toxic berries and fruits in New England",
+  "context": "Several New England berries are poisonous, including baneberry, pokeweed, bittersweet nightshade, yew, and Virginia creeper. Also called baneberry, doll's eyes, pokeweed berries, nightshade, yew berries. Look for baneberry: white or red berries with a dark dot on stalks; pokeweed: dark purple berries on pink stems. Teach children not to eat any wild berry, and keep these plants out of reach. Leave unknown berries alone."
+ },
+ {
+  "symbol": "berries_edible_new_england",
+  "title": "Blueberries, blackberries, and raspberries",
+  "context": "Wild blueberries, blackberries, and raspberries are common New England fruits with few dangerous look-alikes, but always confirm them in person. Also called wild blueberries, blackberries, raspberry canes, wild berries Maine. Look for blueberry: small blue berry with a five-pointed crown on the end; blackberry and raspberry: clusters of tiny drupelets on thorny canes; raspberries pull off hollow."
+ },
+ {
+  "symbol": "morel_true_vs_false",
+  "title": "True morel versus false morel",
+  "context": "True morels have a honeycomb cap attached to a hollow stem, while false morels have a wrinkled, brain-like cap and cottony or chambered inside and can be toxic. Also called Morchella, false morel, Gyromitra, brain mushroom, morel hunting. Look for true morel: pitted honeycomb cap, hollow from tip to base when cut lengthwise; false morel: wrinkled, lobed cap that hangs free, with cottony or chambered interior."
+ },
+ {
+  "symbol": "fiddleheads_ostrich_fern",
+  "title": "Fiddleheads (ostrich fern)",
+  "context": "Fiddleheads are the coiled young fronds of the ostrich fern, a spring food in Maine; they must be identified correctly and cooked thoroughly or they can cause illness. Also called fiddlehead fern, ostrich fern, bracken fern, edible ferns. Look for a smooth stem with a deep U-shaped groove on the inside; brown papery scales on the coil."
+ },
+ {
+  "symbol": "acorns_leaching",
+  "title": "Acorns need proper leaching",
+  "context": "Acorns are high in tannins that taste bitter and upset the stomach, so they must be shelled, ground, and leached in many changes of water before use. Also called eat acorns, acorn flour, tannins in acorns, white oak acorns. Look for bitter, astringent taste when raw; white oak acorns have less tannin. If you want to use acorns, follow a sourced method and expect hours of leaching. In a survival situation, they are not a first food."
+ },
+ {
+  "symbol": "wild_nuts_new_england",
+  "title": "Wild nuts: hazelnut, beechnut, walnut, butternut",
+  "context": "Hazelnuts, beechnuts, hickory nuts, black walnuts, and butternuts are native New England nuts, but they need positive identification and proper processing. Also called nuts you can eat, black walnut, butternut, beechnut, hickory. Look for each tree has distinct leaves, bark, and husk; black walnut and butternut have thick, stain-prone husks. Identify the tree in person, check for allergies, shell and eat only sound nuts."
+ },
+ {
+  "symbol": "cattail_lookalikes",
+  "title": "Cattail and its look-alikes",
+  "context": "Cattails are tall wetland plants with brown sausage-shaped spikes, but young shoots can be confused with poisonous wild iris. Also called Typha, bulrush, cattail shoots, wild iris lookalike. Look for brown cylindrical flower spike above long flat leaves; grows in standing water or marshes. Learn them with an expert; cattails absorb pollutants, so use only from clean water."
+ },
+ {
+  "symbol": "dandelion_greens",
+  "title": "Dandelion and plantain greens",
+  "context": "Dandelion and broadleaf plantain are common lawn and field weeds that can be eaten as greens when picked from clean, unsprayed places. Also called dandelion, edible weeds, plantain leaves. Look for dandelion: toothed rosette leaves and a single hollow stem with one yellow flower; plantain: oval ribbed leaves in a rosette with a spike of seeds. Pick young leaves from clean, unsprayed ground, wash them, and cook or eat as a small addition, not as free calories."
+ },
+ {
+  "symbol": "poison_contact_eating_smoke",
+  "title": "Plants that poison by contact, eating, or smoke",
+  "context": "Plants can harm by contact (poison ivy, wild parsnip, giant hogweed), by eating (hemlocks, baneberry), or by smoke (burning poison ivy). Also called giant hogweed, wild parsnip burns, stinging nettle, poisonous plants overview. Look for wild parsnip and giant hogweed sap causes burns in sunlight; poison ivy oil causes a rash. Learn the plants of your area, wear long sleeves and gloves in brush, and wash exposed skin after contact. Keep children and pets from unknown plants."
+ }
+]

@@ -1,0 +1,62 @@
+// Score the development set. Not used by the frozen v1 runner or the gate.
+import { ask, askWithMeaning } from "../symbolic/ask.js";
+import { modelAvailable } from "../symbolic/meaning/embed_node.js";
+import { classifyOutcome, judge, tallyOutcomes } from "./score.mjs";
+import { DEV_SET } from "./dev_set.mjs";
+
+// Pass --lexical (or set YEHSA_MEANING_OFF=1) to score without the meaning matcher.
+const useMeaning = !process.argv.includes("--lexical") && modelAvailable();
+const long = [];
+for (const question of DEV_SET) {
+  const result = useMeaning ? await askWithMeaning(question.prompt, { agents: false }) : ask(question.prompt, { agents: false });
+  const scored = judge(question, result);
+  const outcome = classifyOutcome(question, { ...result, ...scored });
+  long.push({
+    id: question.id,
+    category: question.category,
+    outcome,
+    pass: scored.pass,
+    reason: scored.reason,
+    text: result.text
+  });
+  if (!scored.pass) {
+    const shown = String(result.text || "(silent)").replace(/\s+/g, " ").slice(0, 180);
+    console.log(`FAIL ${question.id} ${scored.reason}: ${shown}`);
+  }
+}
+
+const breakdown = tallyOutcomes(long.map((item) => ({ ...item, expectKind: DEV_SET.find((q) => q.id === item.id).expect.kind })));
+console.log(JSON.stringify({ mode: useMeaning ? "meaning" : "lexical", questions: DEV_SET.length, ...breakdown }, null, 2));
+if (breakdown.incorrectConfident || breakdown.incorrectHedged || breakdown.unnecessaryRefusal || breakdown.total !== DEV_SET.length) {
+  process.exitCode = 1;
+}
+
+// R8: Dana's screenshot flows, through the phone's routing and answer code (eval/dev_r8_flows.mjs).
+const { runR8Flows } = await import("./dev_r8_flows.mjs");
+const flows = runR8Flows();
+for (const f of flows) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why || "").replace(/\s+/g, " ").slice(0, 180)}`);
+const flowWrong = flows.filter((f) => !f.pass).length;
+console.log(JSON.stringify({ r8Flows: flows.length, correct: flows.length - flowWrong, wrong: flowWrong }));
+if (flowWrong) process.exitCode = 1;
+
+// R9: Dana's 25 Nov screenshots (question understanding, follow-ups, "Muslims and Romans") and an audit sample.
+const { runR9Flows } = await import("./dev_r9_flows.mjs");
+const r9 = runR9Flows();
+for (const f of r9) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why || "").replace(/\s+/g, " ").slice(0, 180)}`);
+const r9Wrong = r9.filter((f) => !f.pass).length;
+console.log(JSON.stringify({ r9Flows: r9.length, correct: r9.length - r9Wrong, wrong: r9Wrong }));
+if (r9Wrong) process.exitCode = 1;
+
+// R10: "What's my second amendment" after downloading GovInfo's Constitution, and the section audit.
+const { runR10Flows } = await import("./dev_r10_flows.mjs");
+const r10 = runR10Flows();
+for (const f of r10) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why || "").replace(/\s+/g, " ").slice(0, 180)}`);
+const r10Wrong = r10.filter((f) => !f.pass).length;
+console.log(JSON.stringify({ r10Flows: r10.length, correct: r10.length - r10Wrong, wrong: r10Wrong }));
+if (r10Wrong) process.exitCode = 1;
+const { runR11Flows } = await import("./dev_r11_flows.mjs");
+const r11 = runR11Flows();
+for (const f of r11) if (!f.pass) console.log(`FAIL ${f.id}: ${String(f.why || "").replace(/\s+/g, " ").slice(0, 180)}`);
+const r11Wrong = r11.filter((f) => !f.pass).length;
+console.log(JSON.stringify({ r11Flows: r11.length, correct: r11.length - r11Wrong, wrong: r11Wrong }));
+if (r11Wrong) process.exitCode = 1;

@@ -1,3 +1,4 @@
+import "./src/phone/install_prng.js";
 import { registerRootComponent } from 'expo';
 
 import App from './App';

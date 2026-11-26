@@ -11,7 +11,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#141a16"
+      "backgroundColor": "#0d0a07"
     },
     "android": {
       "package": "com.dana6969.axi0net",
@@ -19,7 +19,7 @@
       "edgeToEdgeEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#141a16"
+        "backgroundColor": "#0d0a07"
       },
       "permissions": [
         "ACCESS_COARSE_LOCATION",
@@ -28,8 +28,14 @@
         "BLUETOOTH_ADMIN",
         "BLUETOOTH_CONNECT",
         "BLUETOOTH_SCAN",
-        "RECORD_AUDIO"
-      ]
+        "RECORD_AUDIO",
+        "CAMERA",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "WAKE_LOCK",
+        "POST_NOTIFICATIONS"
+      ],
+      "softwareKeyboardLayoutMode": "resize"
     },
     "ios": {
       "bundleIdentifier": "com.dana6969.axi0net",
@@ -38,10 +44,22 @@
         "NSBluetoothAlwaysUsageDescription": "Yehsa scans for nearby Yehsa peers only after you tap Scan. It does not scan at launch.",
         "NSBluetoothPeripheralUsageDescription": "Yehsa connects to a Yehsa peer you choose. It does not disconnect a link already held.",
         "NSMicrophoneUsageDescription": "Yehsa uses the microphone only while you hold or tap to talk on Ask.",
-        "NSSpeechRecognitionUsageDescription": "Yehsa turns that question into text on this device when the recognizer can do that."
+        "NSSpeechRecognitionUsageDescription": "Yehsa turns that question into text on this device when the recognizer can do that.",
+        "UIBackgroundModes": [
+          "audio"
+        ]
       }
     },
     "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 240,
+          "resizeMode": "contain",
+          "backgroundColor": "#0d0a07"
+        }
+      ],
       [
         "expo-location",
         {
@@ -63,7 +81,40 @@
           ]
         }
       ],
-      "./plugins/withYehsaVoice.js"
+      "./plugins/withYehsaVoice.js",
+      "expo-secure-store",
+      "./plugins/withPeerKeyBackup.js",
+      "@maplibre/maplibre-react-native",
+      "expo-sqlite",
+      "expo-asset",
+      "onnxruntime-react-native",
+      "./plugins/withOrtVersion.js",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Yehsa uses the camera only when you tap Take photo on Identify. The photo stays on this phone.",
+          "photosPermission": "Yehsa opens a photo only when you choose one on Identify. The photo stays on this phone.",
+          "microphonePermission": false
+        }
+      ],
+      "./plugins/withFmAppQueries.js",
+      "./plugins/withArm64Only.js",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false
+        }
+      ],
+      "./plugins/withRadioBackground.js",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Yehsa uses the camera only when you ask it to flash a signal or identify what you photograph.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      "./plugins/withLoopbackCleartext.js"
     ],
     "extra": {
       "eas": {

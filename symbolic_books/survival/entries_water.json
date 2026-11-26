@@ -1,0 +1,102 @@
+[
+ {
+  "symbol": "water_how_much",
+  "title": "How much drinking water to plan for",
+  "context": "Plan on at least one gallon (about 4 liters) of drinking water per person per day for emergencies, and more in heat, with illness, or for children and nursing mothers. Also called how much water do I need, gallon per day, dehydration signs, water per person. Look for pale yellow urine means you are drinking enough; dark urine, dry mouth, headache, and dizziness mean you need more."
+ },
+ {
+  "symbol": "water_safe_to_drink",
+  "title": "Is this water safe to drink?",
+  "context": "Clear water from a stream, lake, or spring can still carry germs, so treat it unless you know it is safe; clear does not mean clean. Also called can I drink from the stream, is creek water safe, clear water safe, wild water. Look for clear but untreated water can hold Giardia, Cryptosporidium, bacteria, and viruses; fuel, chemical, or flood water is not made safe by boiling."
+ },
+ {
+  "symbol": "boil_water_method",
+  "title": "How to boil water",
+  "context": "Boiling is the most reliable way to kill germs: bring water to a rolling boil for one minute, or three minutes above 6,500 feet (2,000 m). Also called boil water to make it safe, rolling boil, how long to boil, boil at altitude. Look for large bubbles breaking the surface; settle or strain cloudy water first."
+ },
+ {
+  "symbol": "water_bleach_disinfect",
+  "title": "Disinfecting water with household bleach",
+  "context": "Plain unscented household bleach can disinfect clear water, but it works less well than boiling against Giardia and Cryptosporidium. Also called bleach to purify water, drops of bleach per gallon, chlorine bleach water. Look for 8 drops of 6% bleach per gallon (6 drops of 8.25%), double for cloudy water; wait 30 minutes."
+ },
+ {
+  "symbol": "water_filter_use",
+  "title": "Portable water filters: what they remove",
+  "context": "A portable filter strains out parasites and bacteria; most do not remove viruses or chemicals. Also called water filter, straw filter, pump filter, how fine a filter, backpacking filter. Look for pore size about 1 micron or less stops Giardia and Cryptosporidium; 0.3 micron or less also stops most bacteria."
+ },
+ {
+  "symbol": "water_filter_then_disinfect",
+  "title": "Filter first, then disinfect",
+  "context": "Filtering removes parasites and bacteria and clears the water, and a disinfectant afterward handles viruses that pass through. Also called filter and treat, layer treatment, virus protection water. Look for filter or settle first; then boil, or add bleach or a chlorine dioxide tablet. When you are in doubt or in a place with viruses of concern, filter first and then disinfect the filtered water. This also saves disinfectant and gives it more reliable contact."
+ },
+ {
+  "symbol": "water_cloudy_pretreat",
+  "title": "Cloudy water: settle or pre-filter",
+  "context": "Cloudy water hides germs from disinfectant and clogs filters, so let it settle and strain it first. Also called muddy water, silty water, turbid water, clear up cloudy water. Look for silt or particles in the water; a clean cloth or coffee filter. Let the water sit until the silt sinks, pour the clear top through a clean cloth or coffee filter, then boil, filter, or disinfect."
+ },
+ {
+  "symbol": "water_contaminated_no",
+  "title": "Water that cannot be made safe in the field",
+  "context": "Water contaminated with fuel, chemicals, sewage, or flood debris cannot be made safe by boiling or bleach, so do not use it to drink. Also called fuel in the water, flood water, chemical spill water, dead animal in stream. Look for an oily sheen or fuel smell; flood water with sewage or farm runoff."
+ },
+ {
+  "symbol": "water_container_storage",
+  "title": "Containers and storing treated water",
+  "context": "Store treated water in clean, food-grade containers with tight lids, away from sun and heat. Also called what to use for a water bottle, store clean water, water jug, hydration bladder. Look for food-grade plastic or stainless steel; a lid that seals. Wash containers with soap and rinse, fill with treated water, label them with the date, and replace commercial water as the package says. In the field, use a pot, a bottle, or a clean bag."
+ },
+ {
+  "symbol": "water_find_new_england",
+  "title": "Finding water in New England woods",
+  "context": "In New England, water is usually near: look for streams in valley bottoms, springs, ponds, and melted snow; moving water is better than still. Also called where to find water in the woods, stream or spring, snow for water, water in Maine. Look for valley bottoms and seeps where several slopes meet; springs and clear running streams."
+ },
+ {
+  "symbol": "snow_melt_water",
+  "title": "Melting snow and ice for water",
+  "context": "Melt snow or ice in a pot and treat the water; eating snow lowers body temperature and uses energy. Also called melt snow, eat snow, drink from snow. Look for a pot with a little water in it to start; clean white snow, not yellow or near a road. Start with a little water in the pot so it doesn't scorch, add snow gradually, and boil it. Melt it with a stove or fire, or in a bag against the body only if needed."
+ },
+ {
+  "symbol": "rain_collect_water",
+  "title": "Collecting rain",
+  "context": "Rain is a good source if you collect it in clean containers, and you should treat it if it passed over roofs or leaves. Also called catch rain water, tarp water catchment, rain barrel. Look for a tarp funneling water into a clean pot; rain caught directly is cleaner. Set clean containers out, rig a tarp to funnel rain into them, and let the first few minutes of rain wash dust off. Treat the water if it is for drinking."
+ },
+ {
+  "symbol": "giardia_crypto",
+  "title": "Giardia and Cryptosporidium",
+  "context": "Giardia and Cryptosporidium are tiny parasites in surface water that cause days of diarrhea, cramps, and nausea; boiling or the right filter stops them. Also called beaver fever, parasite in water, cryptosporidium, giardia. Look for watery diarrhea, gas, cramps, and nausea one to two weeks after drinking; found in streams, lakes, and ponds, even clear ones. Boil water or use a filter rated for 1 micron or smaller. Wash your hands with soap and clean water before eating."
+ },
+ {
+  "symbol": "water_chemical_tablets",
+  "title": "Iodine and chlorine dioxide tablets",
+  "context": "Tablets disinfect water when boiling is not possible; follow the label for dose and wait time. Also called water purification tablets, iodine tablets, micropur, aquamira drops. Look for chlorine dioxide tablets kill most germs including Cryptosporidium after the label wait time; iodine tablets are less reliable against Cryptosporidium. Read the label, pre-filter cloudy water, add the tablet, and wait the full time (often 30 minutes to 4 hours for Cryptosporidium)."
+ },
+ {
+  "symbol": "water_uv_solar",
+  "title": "UV purifiers and solar disinfection",
+  "context": "UV treatment works only on clear water in a working unit, and solar disinfection needs clear plastic bottles in strong sun for many hours. Also called steripen, UV light water, sodis, solar water disinfection. Look for clear, not cloudy, water; a charged, working UV unit. Pre-filter, treat with the UV unit as directed, and carry a backup like tablets or a pot. Use solar disinfection only as a last resort."
+ },
+ {
+  "symbol": "water_hygiene_scarce",
+  "title": "Washing hands, dishes, and wounds when water is scarce",
+  "context": "When water is short, use the cleanest water for drinking and wound care, and a little soap and treated water for hands. Also called wash hands without water, hand sanitizer, dishes in the field, hygiene when water is short. Look for a small amount of soap and water for hands; alcohol-based sanitizer when hands are not greasy."
+ },
+ {
+  "symbol": "latrine_placement",
+  "title": "Latrine placement away from water",
+  "context": "Dig a latrine or cathole at least 200 feet (60 m) from water, trails, and camp to keep your drinking water clean. Also called where to go to the bathroom outdoors, cathole, toilet in the woods, poop in the woods. Look for a hole 6 to 8 inches (15 to 20 cm) deep; 200 feet from any stream, pond, or spring. Dig a small hole, use it, cover it with soil, and wash your hands. Pack out toilet paper if the rules require it."
+ },
+ {
+  "symbol": "formula_unsafe_water",
+  "title": "Baby formula when tap water is unsafe",
+  "context": "Mix infant formula with bottled, boiled-and-cooled, or properly treated water when the tap is unsafe. Also called infant formula and boil water, safe water for baby, mix formula. Look for a boil-water notice or a flood; bottled water for babies. Use bottled or boiled water (cooled to room temperature before mixing, per the label), wash bottles with safe water, and use ready-to-feed formula if you can."
+ },
+ {
+  "symbol": "water_no_go_sources",
+  "title": "Water sources never to drink",
+  "context": "Never drink radiator or boiler water, seawater, urine, or water that has fuel or chemicals in it. Also called radiator water, urine, seawater, toilet tank. Look for antifreeze in radiators; salt in seawater and urine. Use another source; if you must use pool water, treat and filter it, and use a toilet tank only if it is clean, not a bowl."
+ },
+ {
+  "symbol": "well_flood_disinfect",
+  "title": "Well disinfection after a flood",
+  "context": "A flooded well must be tested and disinfected following health-department or EPA directions; do not invent a mix. Also called flooded well, shock chlorinate a well, well water after flood. Look for flood water over the wellhead; cloudy or odd-tasting water. Use bottled or boiled water until the well is tested and cleared. Contact your health department or a certified lab, and follow their disinfection steps."
+ }
+]

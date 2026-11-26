@@ -15,6 +15,17 @@ import { routesToSpiritual } from "./spiritual_route.js";
 import { quoteSpiritual } from "./spiritual_quote.js";
 import { searchPassages } from "./book_search.js";
 import { safetyAnswer } from "./safety.js";
+import { formatLearned, retrieveLearned } from "./learned_notes.js";
+import { formatAnswerSource } from "./answer_source.js";
+import { detectEmergency, meaningReply, meaningRoutesScripture } from "./meaning/meaning_layer.js";
+import { scriptureByMeaning } from "./meaning/scripture_meaning.js";
+import { treatmentGuard } from "./meaning/treatment_guard.js";
+import { formatImported, isCareQuestion, retrieveImported } from "./book_import.js";
+import { currentImportIndex, currentImported } from "./imported_registry.js";
+import { fieldGuideAnswer } from "./field_guide.js";
+import { stripFiller } from "./answer_polish.js";
+import { expandKnowledge, namedEntryKnowledge, namedNote } from "./entries.js";
+import { intentAnswer } from "./understanding/pick.js";
 
 function pointOf(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -96,24 +107,42 @@ function corporaFor(passages, override) {
   };
 }
 
+function fieldResult(partial) {
+  const result = {
+    answered: false,
+    empty: false,
+    text: null,
+    cue: null,
+    emotion: null,
+    miss: null,
+    corpus: phoneCorpusMeta,
+    ...partial
+  };
+  if (typeof result.text === "string") result.text = stripFiller(result.text);
+  result.source = formatAnswerSource(result);
+  return result;
+}
+
 /**
  * One short answer for the phone screen.
  * passages: the field-note index (books_index.json passages).
  * options.session: { consent, fix, waypoints } for "from here" courses. Never assumed.
  * options.corpora: optional { search, lookupMedical, lexical } when a test supplies the full maps.
+ * options.meaning: optional context from src/phone/meaning_provider (on-device meaning matcher).
+ * R11: result.settled is true when the answer came from a rule the meaning matcher never changes
+ * (safety, how-to on an animal, field guide, calculator), so the phone can skip the embedder.
  */
 export function askField(input, passages, options = {}) {
   const raw = String(input ?? "");
   if (!raw.trim()) {
-    return {
+    return fieldResult({
       answered: false,
       empty: true,
       text: null,
       cue: null,
       emotion: null,
-      miss: null,
-      corpus: phoneCorpusMeta
-    };
+      miss: null
+    });
   }
   if (!Array.isArray(passages)) {
     const error = new Error("Field notes could not be read offline.");
@@ -122,90 +151,210 @@ export function askField(input, passages, options = {}) {
   }
   const safety = safetyAnswer(raw, (query, limit) => searchPassages(passages, query, limit));
   if (safety?.abstain || safety?.text) {
-    return {
+    return fieldResult({
+      settled: true,
       answered: Boolean(safety.text),
-      empty: false,
       text: safety.text || null,
       cue: null,
       emotion: { understood: false, emotion: "neutral" },
       miss: safety.text ? null : "No offline note answered that.",
-      corpus: phoneCorpusMeta,
-      kind: safety.kind || null
-    };
+      kind: safety.kind || null,
+      symbol: safety.symbol || null,
+      title: safety.title || null,
+      hits: safety.source ? [{
+        kind: safety.kind,
+        symbol: safety.symbol,
+        title: safety.title || "",
+        source: safety.source,
+        text: safety.text
+      }] : []
+    });
+  }
+  // R9: a how-to on an animal gets the note for that action on that animal or its group (same rule as ask.js).
+  const howTo = intentAnswer(raw);
+  if (howTo) {
+    return fieldResult({
+      settled: true,
+      answered: true,
+      text: howTo.text,
+      cue: null,
+      emotion: { understood: false, emotion: "neutral" },
+      miss: null,
+      kind: howTo.kind,
+      symbol: howTo.symbol,
+      title: howTo.title,
+      hits: howTo.hits,
+      understanding: howTo.understanding
+    });
+  }
+  // A question that only names a thing gets the note with that exact name (same rule as ask.js).
+  const named = namedNote(raw);
+  const guide = named?.entry ? null : fieldGuideAnswer(raw);
+  if (guide) {
+    return fieldResult({
+      settled: true,
+      answered: true,
+      text: guide.text,
+      cue: null,
+      emotion: { understood: false, emotion: "neutral" },
+      miss: null,
+      kind: guide.kind,
+      symbol: guide.symbol,
+      title: guide.title,
+      hits: guide.hits
+    });
   }
   const calc = calculate(raw);
   if (calc) {
-    return {
+    return fieldResult({
+      settled: true,
       answered: true,
-      empty: false,
       text: calc.text,
       cue: null,
       emotion: { understood: false, emotion: "neutral" },
       miss: null,
-      corpus: phoneCorpusMeta,
       kind: "calculator"
-    };
+    });
   }
-  const expanded = expandParaphrase(raw);
+  const expanded = expandParaphrase(raw, options.learned?.phrases);
   const question = parseQuestion(expanded);
+  const meaning = options.meaning || null;
+  const scriptureList = options.spiritualIndex?.passages || options.spiritualIndex;
   if (routesToSpiritual(raw, question)) {
-    const passages = options.spiritualIndex?.passages || options.spiritualIndex;
-    const spiritual = Array.isArray(passages) ? quoteSpiritual(raw, passages) : null;
+    const passages = scriptureList;
+    let spiritual = Array.isArray(passages) ? quoteSpiritual(raw, passages) : null;
+    if (meaning?.scripture && Array.isArray(passages)) spiritual = scriptureByMeaning(meaning, raw, spiritual, passages);
     if (!spiritual) {
-      return {
+      return fieldResult({
         answered: false,
-        empty: false,
         text: null,
         cue: null,
         emotion: { understood: false, emotion: "neutral" },
         miss: "The scripture index is not loaded yet, so there is no quoted passage for that.",
-        corpus: phoneCorpusMeta,
         kind: "spiritual"
-      };
+      });
     }
-    return {
+    return fieldResult({
       answered: true,
-      empty: false,
       text: spiritual.text,
       cue: null,
       emotion: { understood: false, emotion: "neutral" },
       miss: null,
-      corpus: phoneCorpusMeta,
-      kind: "spiritual"
-    };
+      kind: "spiritual",
+      symbol: spiritual.symbol || null,
+      title: spiritual.title || spiritual.hits?.[0]?.title || null,
+      hits: spiritual.hits || []
+    });
   }
   const emotion = readEmotion(question.raw);
   let knowledge = null;
   if (question.topic) {
     knowledge = recallFromCorpora(expanded, corporaFor(passages, options.corpora));
   }
+  if (named?.entry) {
+    knowledge = namedEntryKnowledge(named.entry);
+  } else if (named && knowledge?.symbol !== named.symbol) {
+    const hit = (knowledge?.hits || []).find((item) => item.symbol === named.symbol);
+    if (hit) knowledge = { ...knowledge, kind: hit.kind, symbol: hit.symbol, title: hit.title, source: hit.source, text: hit.text, hits: [hit, ...knowledge.hits.filter((item) => item !== hit)] };
+  }
   const nav = navigationSentence(raw, {
     consent: options.session?.consent === true,
     ingress: "local"
   }, sessionIo(options.session));
+  let meaningInfo = null;
+  if (meaning && !nav?.sentence && !named) {
+    const reply = meaningReply(meaning, raw, knowledge);
+    meaningInfo = reply.meaning;
+    if (reply.text !== (knowledge?.text || null)) {
+      knowledge = reply.text ? { ...(knowledge || {}), text: reply.text, symbol: reply.symbol, kind: reply.kind, hits: reply.hits } : null;
+    }
+  } else if (knowledge?.symbol && treatmentGuard(raw, knowledge.symbol)) {
+    knowledge = null;
+  }
+  if (knowledge?.symbol) knowledge = expandKnowledge(knowledge);
+  const emergency = meaning ? detectEmergency(meaning, raw).emergency : false;
   const premise = premiseFromKnowledge(raw, knowledge);
-  const note = [premise, knowledge?.text, nav?.sentence].filter(Boolean).join(" ");
-  const fromFeeling = !note && emotion.understood ? emotion.deduction : null;
+  const note = nav?.sentence || [premise, knowledge?.text].filter(Boolean).join(" ");
+  const fromFeeling = !note && emotion.understood && meaningInfo?.action !== "abstain" ? emotion.deduction : null;
   const text = note || fromFeeling;
-  if (!text) {
+  const learnedHit = options.learned ? retrieveLearned(expanded, options.learned) : null;
+  if (!text && learnedHit) {
+    return fieldResult({
+      answered: true,
+      text: formatLearned(learnedHit),
+      cue: null,
+      emotion: { understood: emotion.understood, emotion: emotion.emotion },
+      miss: null,
+      kind: "learned",
+      symbol: learnedHit.id,
+      title: learnedHit.title || "Learned note",
+      learnedId: learnedHit.id,
+      hits: [{
+        kind: "learned",
+        symbol: learnedHit.id,
+        title: learnedHit.title || "Learned note",
+        source: learnedHit.source || "this phone",
+        text: learnedHit.text
+      }]
+    });
+  }
+  if (!text && meaning?.scripture && Array.isArray(scriptureList) && meaningRoutesScripture(meaning, raw)) {
+    // The field notes had nothing, and the question reads as a question about the texts.
+    const routed = scriptureByMeaning(meaning, raw, quoteSpiritual(raw, scriptureList), scriptureList);
+    if (routed?.text) {
+      return fieldResult({
+        answered: true,
+        text: routed.text,
+        cue: null,
+        emotion: { understood: false, emotion: "neutral" },
+        miss: null,
+        kind: "spiritual",
+        symbol: routed.symbol || null,
+        title: routed.title || null
+      });
+    }
+  }
+  // Your imported books: last, lowest trust, never ahead of a checked note or a safety rule.
+  const importedStore = options.imported === undefined ? currentImported() : options.imported;
+  const importedHit = !text && importedStore?.notes?.length
+    ? retrieveImported(expanded, importedStore, options.importedIndex ?? currentImportIndex())
+    : null;
+  if (!text && importedHit) {
     return {
-      answered: false,
+      answered: true,
       empty: false,
+      text: formatImported(importedHit, { care: isCareQuestion(raw) }),
+      cue: null,
+      emotion: { understood: emotion.understood, emotion: emotion.emotion },
+      miss: null,
+      corpus: phoneCorpusMeta,
+      kind: "imported",
+      symbol: importedHit.symbol,
+      importedBookId: importedHit.bookId,
+      trust: "imported"
+    };
+  }
+  if (!text) {
+    return fieldResult({
+      answered: false,
       text: null,
       cue: null,
       emotion: { understood: false, emotion: "neutral" },
-      miss: "No offline note answered that.",
-      corpus: phoneCorpusMeta
-    };
+      miss: "No offline note answered that."
+    });
   }
-  return {
+  const kind = knowledge?.kind || (nav?.sentence ? "landscape" : (fromFeeling ? "emotion" : null));
+  return fieldResult({
     answered: true,
-    empty: false,
     text,
     cue: cueFor(emotion, Boolean(note)),
     emotion: { understood: emotion.understood, emotion: emotion.emotion },
     miss: null,
-    corpus: phoneCorpusMeta,
-    kind: knowledge?.kind || null
-  };
+    kind,
+    symbol: knowledge?.symbol || (nav?.sentence ? "landscape_nav" : (fromFeeling ? emotion.emotion : null)),
+    title: knowledge?.title || null,
+    hits: knowledge?.hits || [],
+    emergency,
+    meaning: meaningInfo
+  });
 }

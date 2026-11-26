@@ -1,0 +1,3 @@
+# second review of refilled plates, 2026-11-24
+dogbane-2 burdock-3 japanese-knotweed-2 cleavers-2 deer-track-2 moose-scat-2 coyote-0 coyote-1 red-fox-1 porcupine-1 elk-1 white-tailed-deer-1 canada-goose-1 great-horned-owl-1 rattlesnake-1 northern-water-snake-0
+# third pass (no refill): white-tailed-deer-1 coyote-1 red-fox-1 porcupine-1 great-horned-owl-1 rattlesnake-1

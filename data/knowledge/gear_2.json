@@ -1,0 +1,367 @@
+[
+{
+"id": "boot_fit_blisters",
+"title": "Boot fit and blister prevention",
+"domain": "gear",
+"also": [
+"blisters hiking",
+"hiking boot fit",
+"hot spot on foot",
+"prevent blisters"
+],
+"def": "Blisters come from friction, heat, and moisture; boots that fit, dry socks, and treating hot spots early prevent most of them.",
+"look": [
+"a warm, rubbing hot spot",
+"heel lifting in the boot",
+"wet socks"
+],
+"use": "Break boots in before a trip, wear wool or synthetic socks, stop at the first hot spot, and cover it with tape or moleskin.",
+"not": "Do not keep walking on a hot spot, or pop a blister without clean hands and a clean cover.",
+"call": "See a clinician for a blister that is red, hot, swollen, or draining pus, especially with diabetes.",
+"rel": [
+"day_hike_essentials"
+],
+"src": [
+"nps",
+"cdc"
+]
+},
+{
+"id": "sleeping_bag_ratings",
+"title": "Sleeping bag temperature ratings",
+"domain": "gear",
+"also": [
+"sleeping bag rating",
+"how warm a sleeping bag",
+"sleeping pad R value",
+"cold at night camping"
+],
+"def": "A sleeping bag's temperature rating is a lab estimate; most people need a bag rated colder than the night, plus an insulated pad under them.",
+"look": [
+"the comfort versus limit rating",
+"a pad's insulation (R-value) for cold ground",
+"damp or compressed insulation"
+],
+"use": "Choose a bag rated below the expected low, add a warm pad, wear a dry hat and base layer, and eat before bed.",
+"not": "Do not sleep in sweaty clothes or put a down bag in a damp stuff sack for days.",
+"rel": [
+"clothing_layers_wet"
+],
+"src": [
+"nps",
+"atp3-50-21"
+]
+},
+{
+"id": "pack_fit",
+"title": "Fitting a backpack",
+"domain": "gear",
+"also": [
+"backpack fit",
+"hip belt",
+"pack hurts shoulders",
+"adjust a pack"
+],
+"def": "A pack fits when the hip belt carries most of the weight on the hip bones and the shoulder straps hug without carrying the load.",
+"look": [
+"hip belt centered on the hip bones",
+"load lifters snug at an angle",
+"heavy items close to the back"
+],
+"use": "Loosen everything, buckle the hip belt first, then snug the shoulder straps, load lifters, and sternum strap. Pack heavy items close to your spine.",
+"not": "Do not carry the weight on your shoulders alone or overload for a day trip.",
+"rel": [
+"day_hike_essentials"
+],
+"src": [
+"nps"
+]
+},
+{
+"id": "field_repair_kit",
+"title": "Field repair: tape, cord, and needle",
+"domain": "gear",
+"also": [
+"repair kit",
+"fix a torn jacket",
+"broken strap",
+"duct tape repair"
+],
+"def": "A small repair kit of tape, cord, a needle and strong thread, safety pins, and a few zip ties fixes most broken straps, torn shells, and gear failures.",
+"look": [
+"duct or repair tape wrapped on a bottle or pole",
+"spare cord and a buckle",
+"a needle with heavy thread"
+],
+"use": "Patch holes with tape on both sides, sew or pin torn straps, lash broken parts with cord, and keep a wet sleeping bag in a dry bag.",
+"not": "Do not ignore a small tear in a shell before rain; tape it now.",
+"rel": [
+"day_hike_essentials",
+"knife_safety_edge"
+],
+"src": [
+"atp3-50-21"
+]
+},
+{
+"id": "rope_cordage_basics",
+"title": "Rope and cordage basics",
+"domain": "gear",
+"also": [
+"paracord",
+"what rope to carry",
+"cordage",
+"rope for camping"
+],
+"def": "A length of strong cord lets you hang a tarp, rig a clothesline, lash a splint, or hang food; knowing a few knots makes it useful.",
+"look": [
+"about 50 feet of thin, strong cord",
+"rope rated for the job if it holds people",
+"fraying or melted spots"
+],
+"use": "Carry cord for camp jobs and learn a bowline, a taut-line hitch, and two half hitches.",
+"not": "Do not use utility cord for climbing, rappelling, or holding a person.",
+"rel": [
+"field_repair_kit"
+],
+"src": [
+"atp3-50-21"
+]
+},
+{
+"id": "binoculars_rangefinder",
+"title": "Binoculars and rangefinders in practice",
+"domain": "gear",
+"also": [
+"binoculars",
+"rangefinder",
+"glassing",
+"how far is that deer"
+],
+"def": "Binoculars help you identify animals and people before acting; a rangefinder measures distance to keep shots within your practiced range.",
+"look": [
+"a steady rest when glassing",
+"identifying the whole animal",
+"range checks on landmarks before game appears"
+],
+"use": "Glass from a rest, range a few landmarks around your stand, and use binoculars, not a rifle scope, to look at things you are not sure of.",
+"not": "Do not use a rifle scope to scan people or unknown movement.",
+"rel": [
+"hunt_target_beyond"
+],
+"src": [
+"ihea"
+]
+},
+{
+"id": "trekking_poles",
+"title": "Trekking poles",
+"domain": "gear",
+"also": [
+"hiking poles",
+"walking sticks",
+"trekking pole height"
+],
+"def": "Trekking poles take strain off knees on descents, add balance on stream crossings and ice, and can hold up a tarp.",
+"look": [
+"elbow at about a right angle on flat ground",
+"longer for downhill, shorter for uphill",
+"tips and baskets for snow"
+],
+"use": "Adjust the length to the slope, use the straps correctly, and plant poles ahead on crossings.",
+"not": "Do not rely on poles to stop a slide on steep ice; turn back or use proper traction.",
+"rel": [
+"stream_crossing_choice"
+],
+"src": [
+"nps"
+]
+},
+{
+"id": "saw_hatchet_safety",
+"title": "Saw and hatchet safety",
+"domain": "gear",
+"also": [
+"hatchet safety",
+"folding saw",
+"chopping wood safely",
+"axe safety"
+],
+"def": "A folding saw is safer and more efficient than a hatchet for most camp wood; both need a clear swing zone and a stable work position.",
+"look": [
+"a clear arc with no people or branches",
+"wood on a stable base, not held by your foot",
+"sharp tool with a sheath or guard"
+],
+"use": "Saw dead, down wood, kneel or stand so a missed swing goes into the ground, and sheath tools when done.",
+"not": "Do not chop toward your legs, swing while tired, or cut standing live trees where it is not allowed.",
+"call": "Press firmly on a deep cut and get medical care; call 911 for bleeding that will not stop.",
+"rel": [
+"knife_safety_edge"
+],
+"src": [
+"atp3-50-21",
+"usfs"
+]
+},
+{
+"id": "winter_travel_gear",
+"title": "Winter travel gear",
+"domain": "gear",
+"also": [
+"snowshoes",
+"microspikes",
+"ice cleats",
+"winter hiking gear"
+],
+"def": "Winter trails need traction such as microspikes or snowshoes, insulated boots, extra layers, and more daylight planning.",
+"look": [
+"ice under snow on trails",
+"deep snow that makes you posthole",
+"short daylight and fast cooling"
+],
+"use": "Carry traction, a warm spare layer, an insulated bottle, and a headlamp, and turn back early.",
+"not": "Do not walk on frozen lakes or rivers unless you know the ice is safe and thick.",
+"rel": [
+"clothing_layers_wet",
+"turnaround_time"
+],
+"src": [
+"nps",
+"nws"
+]
+},
+{
+"id": "phone_battery_backup",
+"title": "Phone battery and backup power",
+"domain": "gear",
+"also": [
+"phone battery dying",
+"power bank",
+"save phone battery",
+"charge phone outdoors"
+],
+"def": "A phone drains fast in cold and when searching for signal; a charged power bank and battery-saving settings keep it working for calls and maps.",
+"look": [
+"battery level and temperature",
+"airplane mode when you don't need signal",
+"a power bank and cable in a dry bag"
+],
+"use": "Keep the phone warm in an inside pocket, turn on low-power or airplane mode, dim the screen, and carry a charged power bank.",
+"not": "Do not let the phone die before you send a location or call for help when you need it.",
+"rel": [
+"gps_vs_map",
+"satellite_sos_messenger"
+],
+"src": [
+"ready",
+"nps"
+]
+},
+{
+"id": "satellite_sos_messenger",
+"title": "Satellite SOS and messengers",
+"domain": "gear",
+"also": [
+"satellite SOS",
+"personal locator beacon",
+"PLB",
+"inReach",
+"emergency beacon"
+],
+"def": "Satellite SOS devices and some phones can send an emergency message from places with no cell signal; a personal locator beacon alerts search and rescue directly.",
+"look": [
+"a clear view of the sky",
+"the device registered and tested before the trip",
+"battery charged"
+],
+"use": "Learn how to send an SOS before you need it, keep it on your body, and use it only for real emergencies.",
+"not": "Do not assume a phone has satellite service in your area without checking.",
+"call": "Use SOS for life-threatening emergencies; otherwise text or call when you can.",
+"rel": [
+"phone_battery_backup"
+],
+"src": [
+"noaa",
+"nps"
+]
+},
+{
+"id": "whistle_mirror_signal",
+"title": "Whistle and signal mirror",
+"domain": "gear",
+"also": [
+"emergency whistle",
+"signal mirror",
+"three whistle blasts"
+],
+"def": "A whistle carries farther than your voice and takes little energy; a signal mirror flashes sunlight to aircraft or searchers miles away.",
+"look": [
+"three blasts or three flashes as a distress signal",
+"a whistle on the pack strap or jacket",
+"sunlight for a mirror"
+],
+"use": "Blow three blasts and repeat; aim the mirror flash at aircraft or distant searchers using your fingers as a sight.",
+"not": "Do not use distress signals as a joke or game near other people.",
+"rel": [
+"day_hike_essentials"
+],
+"src": [
+"atp3-50-21",
+"nps"
+]
+},
+{
+"id": "insect_repellent_use",
+"title": "Insect repellent and tick-treated clothing",
+"domain": "gear",
+"also": [
+"bug spray",
+"DEET",
+"permethrin",
+"picaridin",
+"mosquito repellent"
+],
+"def": "EPA-registered repellents such as DEET, picaridin, or oil of lemon eucalyptus on skin, and permethrin on clothing, reduce tick and mosquito bites.",
+"look": [
+"the EPA registration on the label",
+"permethrin for clothes and gear, never skin",
+"age limits on the label for children"
+],
+"use": "Use repellent on exposed skin as the label directs, treat boots and pants with permethrin, and do a tick check after.",
+"not": "Do not put permethrin on skin, spray repellent on a child's hands, or use oil of lemon eucalyptus on children under three.",
+"rel": [
+"kids_prevention_rules"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "water_carry_capacity",
+"title": "How much water to carry",
+"domain": "gear",
+"also": [
+"how much water hiking",
+"water bottles",
+"hydration bladder"
+],
+"def": "How much water you need depends on heat, effort, and distance; a rough start is about a half liter per hour of moderate hiking, more in heat.",
+"look": [
+"dark urine or thirst",
+"hot, dry, or high-altitude conditions",
+"reliable water sources along the route"
+],
+"use": "Carry enough to reach the next sure source plus extra, and a filter or tablets to treat more.",
+"not": "Do not ration water to the point of dehydration in heat; drink and plan a shorter trip.",
+"rel": [
+"water_filter_care",
+"day_hike_essentials"
+],
+"src": [
+"nps",
+"cdc"
+]
+}
+]

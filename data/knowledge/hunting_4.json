@@ -1,0 +1,556 @@
+[
+{
+"id": "field_dress_tools",
+"title": "Field dressing tools",
+"domain": "hunting",
+"also": [
+"field dressing kit",
+"what do I need to field dress",
+"game bags",
+"dressing knife"
+],
+"def": "A field dressing kit is a sharp knife and a spare blade, disposable gloves, clean cloths or paper towels, a tag, game bags, and a way to keep meat clean, dry, and cool.",
+"look": [
+"a sharp knife, a spare blade, and a small sharpener",
+"disposable or rubber gloves, and eye protection for hogs and other high-risk game",
+"clean game bags, a tarp to keep meat off the dirt, rope, and ice or a cooler in warm weather"
+],
+"use": "Pack the kit before the hunt so you can tag the animal, dress or quarter it, bag the meat, and start cooling it as soon as it is down.",
+"not": "Do not start with a dull knife or bare hands, and do not put warm meat in a sealed plastic trash bag where air cannot reach it.",
+"steps": [
+"Pack a sharp knife, a spare, gloves, cloths or paper towels, and the tag before you hunt.",
+"Add game bags, a tarp, and rope if you may quarter or pack the animal out.",
+"In warm weather, bring ice or a cooler, and a way to prop the body cavity open.",
+"Clean the knife after gutting, or switch to a clean blade, before you cut meat.",
+"Keep meat in clean, dry, breathable game bags, not sealed plastic, until it is cold."
+],
+"rel": [
+"field_dressing_deer",
+"meat_care_temperature"
+],
+"src": [
+"ndsu-game",
+"adfg-gutless",
+"ncwildlife-dress",
+"cdc"
+],
+"ask": "What do I need to field dress game?"
+},
+{
+"id": "field_dressing_elk",
+"title": "Field dressing an elk",
+"domain": "hunting",
+"also": [
+"field dress an elk",
+"how to field dress an elk",
+"gut an elk",
+"dress an elk",
+"elk field dressing"
+],
+"def": "Elk are large and hold heat, so the meat must be opened or quartered soon after the kill and cooled; many hunters use the gutless method to pack an elk out.",
+"look": [
+"a carcass too heavy to drag far, with thick quarters and a lot of body heat",
+"clean game bags, a sharp knife, gloves, and a pack frame for several loads",
+"shade and airflow, or ice, because a whole elk cools slowly even in cold weather"
+],
+"use": "Tag the elk if your state requires it, wear gloves, then either gut it and prop the cavity open or use the gutless method to take quarters, backstraps, and tenderloins, bag them, and hang them to cool. Check evidence-of-sex and salvage rules before you separate parts.",
+"not": "Do not leave an elk intact with the hide on overnight, even in freezing weather, and do not leave bagged meat stacked or in the sun. Do not shoot, handle, or eat an elk that looks sick, and do not eat meat from an animal that tests positive for chronic wasting disease.",
+"steps": [
+"Tag the animal if required, put on gloves, and work on a clean tarp or hide.",
+"For a pack-out, use the gutless method: skin one side, take the quarters, backstraps, and tenderloins, then roll the animal and repeat.",
+"If you gut it instead, open the belly shallow with the blade up, free the organs, and prop the cavity open.",
+"Bag each piece in a clean, dry game bag and hang the bags so air can move around them.",
+"Leave evidence of sex naturally attached to a quarter if your state requires it, and get the meat below 40 °F (4 °C) as soon as you can."
+],
+"rel": [
+"gutless_method",
+"cwd_awareness",
+"game_cooking_temps"
+],
+"src": [
+"adfg-gutless",
+"idfg-field",
+"ndsu-game",
+"cdc",
+"state-regs-link"
+],
+"ask": "How do I field dress an elk?"
+},
+{
+"id": "field_dressing_moose",
+"title": "Field dressing a moose",
+"domain": "hunting",
+"also": [
+"field dress a moose",
+"how to field dress a moose",
+"gut a moose",
+"dress a moose",
+"moose field dressing"
+],
+"def": "A moose is too large to cool as a whole carcass; the usual field care is to skin and quarter it, often with the gutless method, and hang the meat in clean game bags the same day.",
+"look": [
+"a very large, heavily muscled carcass that stays warm inside for hours",
+"several game bags, gloves, a sharp knife, a saw or axe, rope, and a way to pack heavy loads",
+"hair that can taint meat if it is left on the cuts, especially during the rut"
+],
+"use": "Validate the harvest tag or permit first, wear gloves, skin one side, remove the quarters, backstraps, neck meat, and tenderloins, bag them, and hang them clean, dry, and well ventilated. If you cannot remove the meat the same day, gut the moose so the body heat can escape.",
+"not": "Do not leave the guts in overnight, do not wrap quarters in plastic, and do not treat antlers as proof of sex where your state requires evidence of sex on the meat. Do not handle or eat a moose that looks sick, and test and follow your state's chronic wasting disease rules.",
+"steps": [
+"Tag or validate the harvest as required, then put on gloves.",
+"Use the gutless method unless you must leave the carcass overnight, in which case gut it first so it can cool.",
+"Skin one side, take the front and hind quarters, backstraps, tenderloins, and neck meat, and keep hair off the meat.",
+"Bag each piece in a clean, dry game bag and hang the bags apart so air can circulate.",
+"Leave evidence of sex naturally attached if required — antlers alone may not count — and get the meat cooling the same day."
+],
+"rel": [
+"gutless_method",
+"cwd_awareness",
+"evidence_of_sex_tag"
+],
+"src": [
+"adfg-gutless",
+"idfg-field",
+"ndsu-game",
+"cdc",
+"state-regs-link"
+],
+"ask": "How do I field dress a moose?"
+},
+{
+"id": "field_dressing_pronghorn",
+"title": "Field dressing a pronghorn",
+"domain": "hunting",
+"also": [
+"field dress a pronghorn",
+"field dress an antelope",
+"gut a pronghorn",
+"pronghorn field care",
+"clean a pronghorn"
+],
+"def": "A pronghorn is a small, thin-skinned plains animal that spoils quickly in heat, so it should be field dressed or skinned soon after the kill, kept free of hair, and cooled the same day.",
+"look": [
+"a slim carcass and a thin hide whose hair slips and sticks to meat easily",
+"warm, open country with little shade",
+"a sharp knife, gloves, clean bags, and ice or a cooler"
+],
+"use": "Tag it if required, wear gloves, gut it or skin and quarter it promptly, keep hair and dirt off the meat, and get the meat on ice or hanging below 40 °F (4 °C) the same day. A pronghorn is small enough that many hunters hang and skin it once it is out of the field.",
+"not": "Do not leave a pronghorn in the sun, on a hot vehicle, or unskinned in warm weather, and do not eat an animal that looked sick. Check your state's tagging and evidence-of-sex rules before you separate parts.",
+"steps": [
+"Tag the animal if required and put on gloves.",
+"Open the belly shallow with the blade up, or skin and quarter it, and keep hair off the meat.",
+"Wipe the cavity; prop it open or bag the quarters.",
+"Get the meat into shade, then into a cooler with ice or cold storage the same day.",
+"Cook pronghorn as venison, to 160 °F (71 °C) on a thermometer."
+],
+"rel": [
+"field_dressing_deer",
+"meat_care_temperature",
+"game_cooking_temps"
+],
+"src": [
+"idfg-field",
+"ndsu-game",
+"ncwildlife-dress",
+"foodsafety-gov",
+"state-regs-link"
+],
+"ask": "How do I field dress a pronghorn?"
+},
+{
+"id": "field_dressing_black_bear",
+"title": "Field dressing a black bear",
+"domain": "hunting",
+"also": [
+"field dress a bear",
+"field dress a black bear",
+"gut a bear",
+"bear trichinella",
+"cook bear meat"
+],
+"def": "Black bear meat must be handled with gloves, cooled after the thick fat is dealt with, and cooked to a measured 165 °F (74 °C) because bears can carry Trichinella; freezing does not reliably kill it.",
+"look": [
+"a thick hide and a heavy fat layer that holds heat in the carcass",
+"gloves on, and a clean knife kept off the gut contents",
+"a food thermometer later; color is not a test for doneness"
+],
+"use": "Tag the bear if required, wear gloves, field dress or skin and quarter it promptly so the meat can cool, keep the carcass away from camp and sleeping areas, and cook every piece of bear meat to at least 165 °F (74 °C) in the thickest part.",
+"not": "Do not eat undercooked bear, do not rely on freezing, drying, smoking, or jerky-style drying alone to make it safe, and do not camp next to the carcass or the gut pile. Curing, drying, smoking, or microwaving alone does not consistently kill Trichinella.",
+"steps": [
+"Tag the bear if required and put on gloves.",
+"Dress or skin and quarter it soon, because the fat layer slows cooling.",
+"Keep meat clean, bag it, and hang or ice it away from tents and food.",
+"Wash hands and tools after, and keep raw bear meat separate from other food.",
+"Cook all bear meat, including sausage and leftovers, to at least 165 °F (74 °C) on a thermometer."
+],
+"call": "See a doctor if you have fever, muscle pain, or swelling after eating undercooked bear, and say you ate bear meat.",
+"rel": [
+"game_cooking_temps",
+"bear_moose_camp_safety",
+"meat_care_temperature"
+],
+"src": [
+"cdc",
+"foodsafety-gov",
+"usda-fsis",
+"state-regs-link"
+],
+"ask": "How do I field dress a black bear?"
+},
+{
+"id": "field_dressing_wild_hog",
+"title": "Field dressing a wild hog",
+"domain": "hunting",
+"also": [
+"field dress a hog",
+"field dress a wild boar",
+"gut a hog",
+"feral hog brucellosis",
+"clean a wild hog"
+],
+"def": "Wild hogs, or feral swine, can carry brucellosis and Trichinella, so you should wear gloves and eye protection while dressing them, keep bare skin off fluids and organs, and cook the meat thoroughly.",
+"look": [
+"a bristly hog with a thick hide and, often, sharp tusks",
+"gloves and eye protection on before you open the carcass",
+"no bare-hand contact with blood, fluids, or organs"
+],
+"use": "Wear disposable gloves and eye protection, use a clean sharp knife, dress the hog, bag waste you will not eat, wash your hands with soap and warm water for 20 seconds, disinfect tools, and cook the meat thoroughly. Cook hog meat as you would other Trichinella-risk game, to a measured 165 °F (74 °C).",
+"not": "Do not dress a hog bare-handed, do not touch a hunting dog that just contacted the carcass with bare skin, and do not feed dogs raw hog meat or scraps. Freezing, smoking, drying, or pickling does not kill Brucella, and freezing does not reliably kill Trichinella in wild game.",
+"steps": [
+"Put on disposable gloves and eye protection before you touch the carcass.",
+"Use a clean, sharp knife and keep bare skin off blood, fluids, and organs.",
+"Remove the organs, keep the meat clean, and start cooling it.",
+"Bag disposable gloves and unused parts, wash your hands with soap and warm water for 20 seconds, and disinfect knives and reusable gloves, for example with dilute bleach as the label directs.",
+"Cook all hog meat to at least 165 °F (74 °C) on a thermometer, and keep raw meat apart from other food."
+],
+"call": "See a doctor for fever, sweats, or aches after dressing or eating a wild hog, and say you handled or ate feral swine.",
+"rel": [
+"game_cooking_temps",
+"field_dress_tools"
+],
+"src": [
+"cdc",
+"usda-fsis",
+"foodsafety-gov",
+"state-regs-link"
+],
+"ask": "How do I field dress a wild hog?"
+},
+{
+"id": "field_dressing_rabbit",
+"title": "Cleaning a rabbit or hare",
+"domain": "hunting",
+"also": [
+"clean a rabbit",
+"gut a rabbit",
+"field dress a rabbit",
+"clean a hare",
+"how to clean a rabbit"
+],
+"def": "Cleaning a rabbit or hare means skinning and gutting it with gloves on, checking the liver, cooling the meat, and cooking it to 160 °F (71 °C), because rabbits and hares can carry tularemia.",
+"look": [
+"gloves on before you skin or gut the animal",
+"a liver without white spots; white spots are a warning",
+"an animal that was lively when taken, not one found sick or dead"
+],
+"use": "Wear gloves, case-skin or otherwise remove the hide, open the belly carefully, remove the entrails, look at the liver, rinse or wipe the body if you will dry it promptly, and cool the meat. Cook rabbit or hare to 160 °F (71 °C).",
+"not": "Do not handle a rabbit or hare bare-handed, do not clean one that was found dead or looked sick, and do not eat the meat if the liver is spotted or the animal looked ill. Do not eat rabbit undercooked.",
+"steps": [
+"Put on gloves, and skip any rabbit or hare that looked sick or was found dead.",
+"Skin the animal, then open the belly and remove the entrails without cutting the gut if you can avoid it.",
+"Look at the liver: white spots are a reason to discard the animal and wash up carefully.",
+"Cool the carcass promptly and wash your hands and tools.",
+"Cook the meat to 160 °F (71 °C) on a thermometer."
+],
+"call": "See a doctor for fever, a sore that will not heal, or swollen glands after handling rabbits or hares, and say you handled game.",
+"rel": [
+"small_game_tularemia",
+"game_cooking_temps",
+"game_disease_field_signs"
+],
+"src": [
+"cdc",
+"foodsafety-gov",
+"usda-fsis"
+],
+"ask": "How do I clean a rabbit?"
+},
+{
+"id": "field_dressing_squirrel",
+"title": "Cleaning a squirrel",
+"domain": "hunting",
+"also": [
+"clean a squirrel",
+"gut a squirrel",
+"field dress a squirrel",
+"how to clean a squirrel"
+],
+"def": "Cleaning a squirrel means skinning and gutting it with gloves on, cooling the meat, and cooking it thoroughly, because squirrels and other rodents can carry tularemia.",
+"look": [
+"gloves on before you skin or gut the squirrel",
+"a liver without white spots",
+"an animal that was not found sick or dead"
+],
+"use": "Wear gloves, skin the squirrel, remove the entrails, inspect the liver, cool the meat, and cook it thoroughly. FoodSafety.gov lists rabbit at 160 °F (71 °C); cook squirrel at least that hot, and do not eat it undercooked.",
+"not": "Do not handle a squirrel bare-handed, and do not clean or eat one that looked sick, was found dead, or has white spots on the liver.",
+"steps": [
+"Put on gloves, and skip any squirrel that looked sick or was found dead.",
+"Skin the squirrel and remove the entrails.",
+"Check the liver for white spots; if you see them, do not eat the animal.",
+"Cool the meat and wash your hands and tools.",
+"Cook it thoroughly, at least to 160 °F (71 °C) on a thermometer."
+],
+"call": "See a doctor for fever or swollen glands after handling squirrels, and say you handled game.",
+"rel": [
+"small_game_tularemia",
+"field_dressing_rabbit",
+"game_cooking_temps"
+],
+"src": [
+"cdc",
+"foodsafety-gov",
+"usda-fsis"
+],
+"ask": "How do I clean a squirrel?"
+},
+{
+"id": "field_dressing_turkey",
+"title": "Field dressing a turkey",
+"domain": "hunting",
+"also": [
+"gut a turkey",
+"field dress a turkey",
+"how to gut a turkey",
+"dress a turkey"
+],
+"def": "Field dressing a turkey means removing the entrails and the crop soon after the kill, cooling the bird, and later cooking all turkey meat to 165 °F (74 °C).",
+"look": [
+"gloves on, and a way to open the body cavity without bursting the gut or the crop",
+"the crop emptied or removed at the base of the neck",
+"the bird kept cool and dry, not left in a warm vest or a closed bag"
+],
+"use": "Wear gloves, remove the entrails and the crop, wipe the cavity, and cool the bird quickly. You can pluck or skin it at home. Check your state's tagging or check-in rules. Cook all turkey meat to 165 °F (74 °C).",
+"not": "Do not leave a turkey in a warm vest, a pile, or a closed bag in warm weather, and do not eat undercooked wild turkey.",
+"steps": [
+"Put on gloves and follow your state's tagging or check-in rules.",
+"Open the body cavity and remove the entrails without cutting the gut if you can avoid it.",
+"Remove or empty the crop at the base of the neck.",
+"Wipe the cavity, keep the bird clean and dry, and cool it promptly.",
+"Cook all turkey meat, including stuffing if you use it, to 165 °F (74 °C) on a thermometer."
+],
+"rel": [
+"field_dressing_birds",
+"game_cooking_temps",
+"turkey_hunting_safety"
+],
+"src": [
+"usda-fsis",
+"foodsafety-gov",
+"ncwildlife-dress",
+"state-regs-link"
+],
+"ask": "How do I gut a turkey?"
+},
+{
+"id": "field_dressing_upland_birds",
+"title": "Field dressing grouse, pheasant, and quail",
+"domain": "hunting",
+"also": [
+"gut a pheasant",
+"field dress grouse",
+"clean a quail",
+"field dress a pheasant",
+"gut a grouse",
+"dress a quail"
+],
+"def": "Upland birds such as grouse, pheasant, and quail keep best when the crop and entrails come out soon after the kill and the birds are cooled, then cooked to 165 °F (74 °C).",
+"look": [
+"gloves on, and entrails and crop removed while the bird is still fresh",
+"birds kept separate, cool, and dry, not in a warm pile",
+"a clean cavity with no sour smell"
+],
+"use": "Wear gloves, remove the entrails and the crop, wipe the cavity, and cool each bird quickly. You can pluck or skin them later. Cook all wild birds to 165 °F (74 °C).",
+"not": "Do not leave birds in a warm vest or stuff them together in a closed bag in warm weather, and do not handle or eat a bird that looked sick.",
+"steps": [
+"Put on gloves.",
+"Open the body and remove the entrails, then the crop.",
+"Wipe the cavity and keep each bird clean and dry.",
+"Cool the birds as soon as you can; in warm weather, get them onto ice.",
+"Cook all upland bird meat to 165 °F (74 °C) on a thermometer."
+],
+"rel": [
+"field_dressing_birds",
+"field_dressing_turkey",
+"game_cooking_temps"
+],
+"src": [
+"usda-fsis",
+"foodsafety-gov",
+"ncwildlife-dress",
+"cdc"
+],
+"ask": "How do I gut a pheasant?"
+},
+{
+"id": "field_dressing_waterfowl",
+"title": "Field dressing ducks and geese",
+"domain": "hunting",
+"also": [
+"dress a duck",
+"field dress a duck",
+"gut a goose",
+"clean a duck",
+"field dress a goose",
+"waterfowl wing attached"
+],
+"def": "Ducks and geese should be gutted and cooled soon after the kill, cooked to 165 °F (74 °C), and transported with the head or one fully feathered wing still attached until you are home, unless a stated exception applies.",
+"look": [
+"gloves on, entrails removed, and the bird kept cool and dry",
+"the head or one fully feathered wing still on the bird during transport from the field",
+"birds not piled in a warm, closed bag"
+],
+"use": "Wear gloves, remove the entrails, and cool the birds. Federal rules say you may not transport most migratory game birds in the United States unless the head or one fully feathered wing stays attached from the field until the bird reaches your home or a migratory bird preservation facility; doves and band-tailed pigeons are excepted. Check this year's federal and state rules, which can be stricter.",
+"not": "Do not strip a duck or goose completely in the field if you still have to transport it, and do not leave waterfowl in a warm pile. Do not handle or eat birds that looked sick.",
+"steps": [
+"Put on gloves and gut the bird soon after the kill.",
+"Leave the head or one fully feathered wing attached until you are home or at a legal processing place, and check current federal and state rules.",
+"Wipe the cavity and keep the birds cool and dry; use ice in warm weather.",
+"Pluck or skin them at home, and keep wild bird carcasses away from domestic poultry.",
+"Cook all duck and goose meat to 165 °F (74 °C) on a thermometer."
+],
+"rel": [
+"waterfowl_rules_link",
+"field_dressing_birds",
+"game_cooking_temps",
+"evidence_of_sex_tag"
+],
+"src": [
+"ecfr-mbta",
+"fws",
+"foodsafety-gov",
+"usda-fsis",
+"cdc",
+"state-regs-link"
+],
+"ask": "How do I field dress a duck?"
+},
+{
+"id": "gutless_method",
+"title": "Gutless method",
+"domain": "hunting",
+"also": [
+"gutless quartering",
+"quarter an elk",
+"quarter a moose",
+"bone out an elk",
+"gutless field dressing"
+],
+"def": "The gutless method is a way to skin and quarter a large animal, such as an elk or a moose, without first removing the guts, so the meat can be packed out in loads and cooled the same day.",
+"look": [
+"the animal on its side, one half of the hide skinned back as a clean work surface",
+"front and hind quarters, backstraps, and tenderloins going into clean, dry game bags",
+"evidence of sex left naturally attached to a quarter if the hunt requires it"
+],
+"use": "After you tag the animal, skin one side, remove the front quarter, hind quarter, backstrap, and tenderloins, bag each piece, roll the animal onto the skinned hide, and repeat on the other side. Take the tenderloins from along the inside of the backbone without spilling the gut. Hang the bags so they stay cool, clean, and dry.",
+"not": "Do not use this method if you will leave the carcass intact overnight; gut the animal instead so it can cool. Do not stack bags or wrap meat in plastic. Check your state's salvage, tagging, and evidence-of-sex rules before you separate parts; antlers alone may not prove sex.",
+"steps": [
+"Tag the animal if required, put on gloves, and skin one side, using the hide as a clean pad.",
+"Take the front quarter (it lifts free at the shoulder without cutting through bone) and the hind quarter at the hip joint, and bag each one.",
+"Fillet the backstrap along the spine, then make a shallow cut inside the cavity and free the tenderloin without puncturing the gut.",
+"Roll the animal onto the skinned hide and repeat on the other side; add neck meat and any other meat your salvage rules require.",
+"Hang the bags apart in the shade with airflow; if you cannot remove the meat the same day, gut the animal instead."
+],
+"rel": [
+"quartering_packing_out",
+"field_dressing_elk",
+"field_dressing_moose",
+"evidence_of_sex_tag"
+],
+"src": [
+"adfg-gutless",
+"idfg-field",
+"state-regs-link",
+"ndsu-game"
+],
+"ask": "How do I quarter an elk?"
+},
+{
+"id": "evidence_of_sex_tag",
+"title": "Evidence of sex, tagging, and the waterfowl wing rule",
+"domain": "hunting",
+"also": [
+"evidence of sex",
+"leave proof of sex",
+"fully feathered wing",
+"tagging and evidence of sex",
+"proof of sex on a quarter"
+],
+"def": "Many hunts require you to tag the animal promptly and leave evidence of sex naturally attached to the meat, and federal migratory-bird rules require the head or one fully feathered wing to stay on most waterfowl during transport.",
+"look": [
+"the tag filled out and attached the way your state requires",
+"for some single-sex hunts, genitals, udder, or other required evidence left naturally attached to a quarter; antlers alone may not count",
+"on ducks and geese, the head or one fully feathered wing still attached until you reach home or a legal processor"
+],
+"use": "Read this year's state page for tagging, check-in, salvage, and evidence of sex before you hunt, and follow it before you bone out or split an animal. For ducks, geese, and most other migratory game birds, keep the head or one fully feathered wing attached while you transport the bird from the field, and check both the federal rule and your state rules.",
+"not": "Do not assume last year's rule still applies, and do not treat antlers as proof of sex unless your state says they are. Do not copy bag limits or season dates from memory; they change.",
+"steps": [
+"Tag the animal in the field if your state requires it.",
+"Before you quarter or bone the animal, check whether evidence of sex must stay naturally attached to a piece of meat.",
+"For waterfowl, leave the head or one fully feathered wing attached until you are home or at a preservation facility, unless a current rule says otherwise.",
+"Keep the tag with the meat during transport, and complete any check-in or reporting on time."
+],
+"rel": [
+"tag_transport_checkin",
+"field_dressing_waterfowl",
+"hunt_before_you_go"
+],
+"src": [
+"state-regs-link",
+"ecfr-mbta",
+"fws",
+"adfg-gutless"
+],
+"ask": "What is evidence of sex on game?"
+},
+{
+"id": "game_disease_field_signs",
+"title": "Disease signs while dressing game",
+"domain": "hunting",
+"also": [
+"white spots on the liver",
+"liver spots on game",
+"sick looking game",
+"inspect the liver",
+"spots on a deer liver",
+"what do white spots on a game liver mean",
+"white spots on a game liver"
+],
+"def": "While you dress game, look at the animal and its organs for signs of disease: a thin, stumbling, or unafraid deer, an animal found dead, or a liver with white spots, and do not eat a suspect animal.",
+"look": [
+"an animal that looked skinny, drooling, uncoordinated, or unusually tame before the shot, or that was found dead",
+"white spots on the liver of a rabbit, hare, or rodent, a tularemia warning",
+"pus, a bad smell, or organs that look clearly abnormal"
+],
+"use": "Wear gloves, look at the liver and other organs as you dress, and do not eat an animal that looked sick or was found dead. In chronic wasting disease areas, avoid the brain and spine, consider testing, and do not eat a positive animal. Report a sick-looking deer, elk, or moose to your state wildlife agency.",
+"not": "Do not eat meat from an animal that tests positive for chronic wasting disease, and do not handle sick or found-dead animals bare-handed. Cooking does not make a CWD-positive animal recommended to eat, and it does not make spoiled meat safe.",
+"steps": [
+"Do not shoot or handle an animal that looks sick or was found dead.",
+"Wear gloves, and look at the liver and other organs as you dress.",
+"If a rabbit, hare, or rodent liver has white spots, do not eat that animal, and wash up carefully.",
+"In CWD areas, avoid the brain, spine, eyes, spleen, and lymph nodes, and test before you eat.",
+"If the meat smells sour or the animal looked ill, do not eat it; report sick deer, elk, or moose to the state agency."
+],
+"call": "Report a sick-looking deer, elk, or moose to your state wildlife agency. See a doctor for fever after handling rabbits, rodents, or hogs, and say you handled game.",
+"rel": [
+"cwd_awareness",
+"small_game_tularemia",
+"field_dressing_wild_hog"
+],
+"src": [
+"cdc",
+"ndsu-game",
+"usda-fsis",
+"state-regs-link"
+],
+"ask": "Tell me about white spots on the liver"
+}
+]

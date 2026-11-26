@@ -1,0 +1,298 @@
+[
+{
+"id": "anxiety_before_event",
+"title": "Anxiety before a storm, trip, or hunt",
+"domain": "mental",
+"also": [
+"nervous before trip",
+"storm anxiety",
+"worried about hunt",
+"pre-trip anxiety"
+],
+"def": "Worry before a storm or a big trip is common; preparing, planning, and calming the body bring it down to a useful level.",
+"look": [
+"racing thoughts at night",
+"tight chest or upset stomach",
+"checking the forecast over and over"
+],
+"use": "Make a short checklist, do one preparation step, then do something calming such as slow breathing or a walk.",
+"not": "Do not let worry push you into skipping sleep or food before a trip.",
+"call": "Talk to a clinician if anxiety gets in the way of daily life. Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
+"rel": [
+"grounding_breathing"
+],
+"src": [
+"nimh",
+"samhsa"
+]
+},
+{
+"id": "grounding_breathing",
+"title": "Slow breathing and grounding",
+"domain": "mental",
+"also": [
+"breathing exercise",
+"grounding technique",
+"5 4 3 2 1",
+"calm my nerves"
+],
+"def": "Slow breathing and grounding are simple ways to calm a racing body and mind: breathe out longer than in, and notice what is around you.",
+"look": [
+"breathing in for about four counts, out for six",
+"naming five things you see, four you hear, three you can touch",
+"shoulders dropping as the body settles"
+],
+"use": "Sit or stand steady, breathe slowly for a few minutes, and name what you sense around you.",
+"not": "This does not replace medical care for chest pain or trouble breathing.",
+"rel": [
+"panic_attack_help",
+"anxiety_before_event"
+],
+"src": [
+"nimh",
+"va-ptsd"
+]
+},
+{
+"id": "low_mood_winter",
+"title": "Low mood in short winter days or isolation",
+"domain": "mental",
+"also": [
+"winter blues",
+"seasonal depression",
+"SAD",
+"sad in winter"
+],
+"def": "Many people feel lower in short, dark days or in isolation; some have seasonal affective disorder, a form of depression that returns each winter.",
+"look": [
+"low energy, oversleeping, and craving carbohydrates in winter",
+"loss of interest that lasts weeks",
+"pulling away from people"
+],
+"use": "Get outside in daylight, move your body, keep regular sleep and meals, and stay in touch with people.",
+"not": "Do not ignore weeks of low mood or thoughts of self-harm.",
+"call": "See a clinician if low mood lasts two weeks or more. Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
+"rel": [
+"when_get_help",
+"loneliness_help"
+],
+"src": [
+"nimh"
+]
+},
+{
+"id": "loneliness_help",
+"title": "Loneliness",
+"domain": "mental",
+"also": [
+"lonely",
+"isolated",
+"no one to talk to"
+],
+"def": "Loneliness is the painful feeling of being disconnected; it is common and it affects health, and small regular contact helps.",
+"look": [
+"long stretches without talking to anyone",
+"feeling unseen even around people",
+"low mood or poor sleep"
+],
+"use": "Reach out to one person today, join a regular activity, help someone else, and keep in touch on a schedule.",
+"not": "Do not wait for others to reach out first.",
+"call": "988 is also there if you just need to talk. Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
+"rel": [
+"low_mood_winter"
+],
+"src": [
+"samhsa",
+"nimh"
+]
+},
+{
+"id": "anger_conflict_group",
+"title": "Anger and conflict in a family or group under stress",
+"domain": "mental",
+"also": [
+"arguing in group",
+"family fighting during outage",
+"hunt party conflict",
+"losing temper"
+],
+"def": "Stress, hunger, cold, and fatigue shorten tempers; groups do better when they pause, meet basic needs, and decide calmly.",
+"look": [
+"raised voices and blame",
+"people splitting off",
+"decisions made in anger"
+],
+"use": "Take a break, eat and warm up, let each person speak, and agree on one next step together.",
+"not": "Do not make safety decisions in the middle of a fight, and keep firearms unloaded when tempers rise.",
+"call": "Call 911 if anyone is threatened or hurt.",
+"rel": [
+"exhaustion_bad_decisions"
+],
+"src": [
+"samhsa",
+"atp3-50-21"
+]
+},
+{
+"id": "shame_after_mistake",
+"title": "Shame after a mistake",
+"domain": "mental",
+"also": [
+"I messed up",
+"feel ashamed",
+"my fault",
+"guilt after mistake"
+],
+"def": "After a mistake, shame can feel overwhelming; owning what happened, making it right where you can, and learning from it is healthier than self-punishment.",
+"look": [
+"replaying the mistake",
+"hiding it from others",
+"harsh self-talk"
+],
+"use": "Name what happened, take one step to repair or learn, and talk to someone you trust.",
+"not": "Do not punish yourself with risky behavior or isolation.",
+"call": "Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
+"rel": [
+"acute_stress_close_call",
+"when_get_help"
+],
+"src": [
+"samhsa",
+"va-ptsd"
+]
+},
+{
+"id": "caregiver_burnout",
+"title": "Caregiver or parent burnout in a long outage",
+"domain": "mental",
+"also": [
+"burned out parent",
+"caregiver stress",
+"exhausted caring for family"
+],
+"def": "Caring for others through a long outage or crisis drains people; burnout shows up as exhaustion, irritability, and feeling numb.",
+"look": [
+"no time to eat or sleep yourself",
+"snapping at people you care for",
+"feeling hopeless or numb"
+],
+"use": "Share tasks, take short breaks, eat and sleep when you can, and ask neighbors or relatives for help.",
+"not": "Do not skip your own medicines, food, or rest.",
+"call": "Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
+"rel": [
+"power_outage_first_steps",
+"check_older_relatives"
+],
+"src": [
+"samhsa",
+"cdc"
+]
+},
+{
+"id": "trauma_find_clinician",
+"title": "Finding help for lasting trauma",
+"domain": "mental",
+"also": [
+"PTSD",
+"trauma therapy",
+"find a therapist",
+"nightmares months later"
+],
+"def": "When nightmares, flashbacks, or avoidance last more than a month after a frightening event, it may be post-traumatic stress, and effective treatment exists.",
+"look": [
+"flashbacks or nightmares",
+"avoiding reminders",
+"feeling on edge most of the time"
+],
+"use": "Talk to a doctor or a licensed mental health professional; veterans can use VA services, and SAMHSA's helpline can point to local care.",
+"not": "Do not try to manage it alone with alcohol or drugs.",
+"call": "SAMHSA's National Helpline, 1-800-662-4357. Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
+"rel": [
+"acute_stress_close_call",
+"when_get_help"
+],
+"src": [
+"va-ptsd",
+"samhsa",
+"nimh"
+]
+},
+{
+"id": "morale_routines",
+"title": "Routines that keep morale up",
+"domain": "mental",
+"also": [
+"keep spirits up",
+"morale in survival",
+"daily routine crisis"
+],
+"def": "Simple routines such as regular meals, daylight, movement, shared tasks, and time with others keep morale steady through long hard periods.",
+"look": [
+"meals at regular times",
+"a daily walk or chore outside",
+"a moment to talk or laugh together"
+],
+"use": "Set a daily rhythm, give everyone a job, and mark small successes.",
+"not": "Do not let days blur into no structure for weeks.",
+"rel": [
+"low_mood_winter",
+"gratitude_meaning_hardship"
+],
+"src": [
+"atp3-50-21",
+"samhsa"
+]
+},
+{
+"id": "veterans_support",
+"title": "Support for veterans",
+"domain": "mental",
+"also": [
+"veterans crisis line",
+"veteran struggling",
+"VA mental health"
+],
+"def": "Veterans and their families can reach the Veterans Crisis Line by calling 988 and pressing 1, by text, or by chat, and VA offers mental health care.",
+"look": [
+"a veteran withdrawing or drinking more",
+"anniversary dates of hard events",
+"talk of hopelessness"
+],
+"use": "Call 988 and press 1, or text 838255, and connect with VA mental health services.",
+"not": "Do not wait for a crisis to reach out.",
+"call": "Veterans Crisis Line: dial 988 then press 1, or text 838255. Call 911 if someone is in immediate danger.",
+"rel": [
+"suicidal_thoughts_help"
+],
+"src": [
+"vcl",
+"va-ptsd"
+]
+},
+{
+"id": "stress_after_disaster",
+"title": "Stress after a disaster",
+"domain": "mental",
+"also": [
+"disaster stress",
+"after the storm stress",
+"can't cope after flood"
+],
+"def": "After a disaster, people often feel anxious, sad, angry, or numb, have trouble sleeping, and worry about money and home; support and time help most recover.",
+"look": [
+"trouble sleeping or concentrating",
+"headaches or stomach upset",
+"feeling overwhelmed by cleanup and paperwork"
+],
+"use": "Take care of basics, stay connected, limit news, take breaks from cleanup, and use crisis counseling if you need it.",
+"not": "Do not ignore lasting distress or thoughts of self-harm.",
+"call": "SAMHSA's Disaster Distress Helpline: call or text 1-800-985-5990. Call or text 988 any time for the Suicide & Crisis Lifeline; veterans can press 1. Call 911 if someone is in immediate danger.",
+"rel": [
+"acute_stress_close_call"
+],
+"src": [
+"samhsa",
+"fema"
+]
+}
+]

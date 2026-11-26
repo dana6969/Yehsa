@@ -186,9 +186,9 @@ test("the ask screen uses the same path for speech and keeps typing", () => {
   const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
   const askBody = home.slice(home.indexOf("function AskPane"), home.indexOf("function LandPane"));
   assert.match(askBody, /askField\(text, books\.passages/);
-  assert.match(askBody, /speakProse\(result\.text/);
+  assert.match(askBody, /speakProse\(voiced\.spoken \|\| result\.text/);
   assert.doesNotMatch(askBody, /speakProse\(result\.cue/);
-  assert.match(askBody, /label="Question"/);
+  assert.match(askBody, /accessibilityLabel="Message"/);
   assert.match(askBody, /Hold to talk/);
   assert.match(askBody, /function ask\(\)/);
   assert.match(askBody, /probeVoice/);

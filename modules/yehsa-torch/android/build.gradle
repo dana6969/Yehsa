@@ -1,0 +1,15 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'com.dana6969.axi0net'
+version = '1.0.0'
+
+android {
+  namespace "com.dana6969.axi0net.torch"
+  defaultConfig {
+    versionCode 1
+    versionName "1.0.0"
+  }
+}

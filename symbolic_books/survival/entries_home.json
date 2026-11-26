@@ -1,0 +1,137 @@
+[
+ {
+  "symbol": "power_outage_first_steps",
+  "title": "Power outage: first steps",
+  "context": "When the power goes out, safety comes first: use flashlights, keep fridge and freezer doors shut, unplug electronics, and never run fuel-burning devices indoors. Also called power outage, lights went out, blackout what to do, electricity out. Look for the neighborhood is dark too, or only your home; outside temperature and how long it may last."
+ },
+ {
+  "symbol": "generator_safety",
+  "title": "Generator safety",
+  "context": "A portable generator makes deadly carbon monoxide, so it must run only outdoors, at least 20 feet from doors, windows, and vents, with the exhaust pointed away from the house. Also called portable generator, generator in garage, where to put a generator, generator carbon monoxide. Look for the generator outside, far from openings; a working CO alarm inside."
+ },
+ {
+  "symbol": "co_alarms_indoor_fuel",
+  "title": "Carbon monoxide: alarms, symptoms, and indoor fuel",
+  "context": "Carbon monoxide is an invisible, odorless gas from burning fuel; it causes headache, dizziness, nausea, and confusion, and can kill people as they sleep. Also called carbon monoxide, CO alarm, CO detector, grill indoors, heating with a stove. Look for several people or pets sick at once; symptoms that improve outside. Put CO alarms on every level and outside sleeping areas, test them monthly, and get everyone outside at once if an alarm sounds."
+ },
+ {
+  "symbol": "water_when_pump_down",
+  "title": "Drinking water when the well pump or city water is down",
+  "context": "When the pump or city supply fails, use stored water first, then water from the hot water heater or ice, and treat any other water before drinking. Also called no water power outage, well pump no power, boil water notice, emergency drinking water. Look for stored water, at least a gallon per person per day; the water heater tank as a reserve."
+ },
+ {
+  "symbol": "safe_heat_no_power",
+  "title": "Staying warm without power, and space-heater risk",
+  "context": "To stay warm without power, gather in one small room, layer clothing and blankets, and use only heaters rated for indoor use, kept away from anything that burns. Also called no heat in winter outage, space heater safety, how to stay warm without electricity. Look for one room with doors closed and windows covered; hats, layers, and sleeping bags."
+ },
+ {
+  "symbol": "pipes_freezing",
+  "title": "Keeping pipes from freezing",
+  "context": "Pipes freeze where cold air reaches them, such as outside walls, crawl spaces, and garages; a frozen pipe can burst when it thaws. Also called frozen pipes, pipes freezing, burst pipe cold, thaw a pipe. Look for little or no water from a tap in very cold weather; frost on exposed pipes. Let faucets drip, open cabinet doors under sinks, and warm a frozen pipe gently with a hair dryer or warm towels, starting at the tap end."
+ },
+ {
+  "symbol": "downed_power_lines",
+  "title": "Downed power lines",
+  "context": "Treat every downed line as live and deadly; electricity can travel through wet ground and water around it. Also called power line down, wire on my car, fallen power line. Look for a sagging or fallen wire; sparking or buzzing. Stay at least 35 feet away and call 911 and the utility. If a line is on your car, stay inside and wait for help unless the car is on fire."
+ },
+ {
+  "symbol": "flashlights_not_candles",
+  "title": "Flashlights versus candles",
+  "context": "Battery flashlights and lanterns are far safer than candles during an outage; candles start many home fires. Also called candles power outage, candle fire, light during outage. Look for fresh batteries and spare flashlights; candles near curtains, bedding, or children. Use flashlights or battery lanterns, keep spare batteries, and if you must use a candle, keep it in a sturdy holder, away from anything that burns, and never leave it alone."
+ },
+ {
+  "symbol": "home_fire_escape",
+  "title": "Home fire escape plan",
+  "context": "A home fire escape plan gives every room two ways out and an outside meeting spot; in a fire you may have only a couple of minutes to escape. Also called fire escape plan, house fire what to do, smoke alarm going off, get out of a fire. Look for working smoke alarms on every level and in sleeping areas; two exits from each room. Practice the plan twice a year, get out fast and stay out, crawl low under smoke, and call 911 from outside."
+ },
+ {
+  "symbol": "gas_smell_leave",
+  "title": "If you smell gas",
+  "context": "A rotten-egg smell can mean a natural gas or propane leak, which can explode from a single spark. Also called smell gas, gas leak, rotten egg smell, propane leak. Look for a rotten-egg or sulfur smell; hissing near a gas line or appliance. Leave right away, leaving doors open behind you, then call the gas utility or 911 from a safe distance outside."
+ },
+ {
+  "symbol": "power_medical_devices",
+  "title": "Medicines and medical devices during an outage",
+  "context": "People who rely on powered medical devices or refrigerated medicines need a plan for outages: backup power, a cooler, and a place to go. Also called oxygen machine power outage, insulin no fridge, medical device battery, CPAP outage. Look for oxygen, CPAP, dialysis, or other powered equipment; insulin or other medicines that need cold. Register with your utility as a medical priority if offered, keep backup batteries charged, and plan where to go if power will be out long."
+ },
+ {
+  "symbol": "stay_or_leave_home",
+  "title": "When to stay home and when to leave",
+  "context": "Stay home when it is safe, warm or cool enough, and supplied; leave when officials order an evacuation or when your home is no longer safe. Also called evacuate or shelter in place, should I evacuate, stay home in storm, leave home in outage. Look for an evacuation order from local officials; no heat in freezing weather or no cooling in extreme heat. Follow local officials, leave early if you need extra time, and take your kit, medicines, documents, and pets."
+ },
+ {
+  "symbol": "outage_toilet_sanitation",
+  "title": "Toilet and sanitation when water is off",
+  "context": "When water is off, a toilet can be flushed by pouring a bucket of water into the bowl, or a lined bucket can be used as an emergency toilet to keep waste contained. Also called toilet won't flush, no water toilet, bucket toilet, emergency toilet. Look for no water from taps; a stored bucket of non-drinking water."
+ },
+ {
+  "symbol": "water_storage_home",
+  "title": "Storing drinking water at home",
+  "context": "A common rule is to store at least one gallon of water per person per day for several days, in clean, food-grade containers kept cool and dark. Also called how much water to store, store water for emergency, water storage. Look for sealed store-bought water or clean food-grade jugs; a date written on each container. Store at least a three-day supply, replace self-filled water about every six months, and keep containers away from chemicals and sunlight."
+ },
+ {
+  "symbol": "food_after_outage",
+  "title": "Is the refrigerator food still safe after an outage?",
+  "context": "A closed refrigerator keeps food safe about 4 hours and a full closed freezer about 48 hours; after that, perishable food above 40°F for over 2 hours should be thrown out. Also called fridge food after power outage, freezer thawed, food safe without power. Look for a fridge or freezer thermometer; how long the power was out. Keep doors closed, check temperatures when power returns, refreeze food that still has ice crystals or is at 40°F or below, and discard warm perishables."
+ },
+ {
+  "symbol": "phone_charging_outage",
+  "title": "Keeping phones charged in an outage",
+  "context": "In an outage, save phone battery with low-power mode and limited use, and recharge from power banks, a car, or solar chargers. Also called charge phone no power, phone dying in outage, charge phone in car. Look for a charged power bank; a car charger. Turn on low-power mode, text instead of calling, close apps, and charge from a power bank or a running car in an open area."
+ },
+ {
+  "symbol": "no_backfeeding_generator",
+  "title": "Never plug a generator into a wall outlet",
+  "context": "Backfeeding, plugging a generator into a wall outlet or the panel without a transfer switch, can send power into the lines and kill utility workers or neighbors. Also called backfeed generator, generator into house wiring, suicide cord, connect generator to house. Look for a cord with plugs on both ends; no transfer switch or interlock. Plug appliances directly into the generator with outdoor-rated cords, or have an electrician install a transfer switch."
+ },
+ {
+  "symbol": "fuel_storage_safe",
+  "title": "Storing gasoline and fuel safely",
+  "context": "Gasoline and other fuels should be stored in approved containers, outside living spaces, away from heat and flame, and in small amounts. Also called store gasoline, gas can storage, fuel storage, propane tank storage. Look for approved, labeled fuel cans; a detached shed or well-ventilated area. Store fuel in approved cans away from the house, keep propane tanks outdoors upright, and let engines cool before refueling."
+ },
+ {
+  "symbol": "heat_wave_no_ac",
+  "title": "Staying cool in a heat wave without air conditioning",
+  "context": "During extreme heat, fans alone may not prevent heat illness; cooling centers, cool showers, shade, and water lower the risk. Also called heat wave, no air conditioning, too hot at home, cooling center. Look for indoor temperatures above the 90s °F; older adults, babies, or ill people at home. Go to an air-conditioned place or cooling center during the hottest hours, drink water, take cool showers, close blinds by day, and check on others."
+ },
+ {
+  "symbol": "wood_stove_fireplace_safe",
+  "title": "Using a wood stove or fireplace safely",
+  "context": "Wood stoves and fireplaces need a clean, inspected chimney, dry wood, clearance from things that burn, and working smoke and CO alarms. Also called wood stove safety, fireplace safety, chimney fire, heat with wood. Look for a chimney inspected each year; dry, seasoned wood. Burn only dry wood, keep a screen in place, store ashes in a covered metal can outdoors, and test smoke and CO alarms."
+ },
+ {
+  "symbol": "basement_flooding_sump",
+  "title": "Basement flooding or a failed sump pump",
+  "context": "A flooded basement can hide electrical shock danger; power to the area should be off before anyone steps into the water. Also called basement flooding, sump pump failed, water in basement, flooded basement electrical. Look for water near outlets, the panel, or appliances; a sump pump that stopped. Stay out of standing water until power to the basement is shut off by the main breaker from a dry spot or by the utility; then pump out, dry, and clean."
+ },
+ {
+  "symbol": "well_disinfection_flood",
+  "title": "Well water after a flood",
+  "context": "A private well that was flooded may be contaminated and should not be used for drinking until it is disinfected and tested. Also called well flooded, private well after flood, shock chlorinate well, well water safe. Look for floodwater over or near the wellhead; cloudy or changed water. Use bottled or boiled water, contact the local health department for testing and disinfection guidance, and test again before drinking."
+ },
+ {
+  "symbol": "documents_cash_ready",
+  "title": "Important documents and cash for emergencies",
+  "context": "Copies of IDs, insurance, medical records, and some small bills make it easier to evacuate, get help, and recover after a disaster. Also called important documents, grab and go documents, emergency cash, insurance papers. Look for copies in a waterproof bag; a digital copy saved securely. Keep copies of IDs, insurance, prescriptions, deeds, and contacts in a waterproof pouch with your kit, plus some cash."
+ },
+ {
+  "symbol": "smoke_alarm_testing",
+  "title": "Testing smoke and CO alarms",
+  "context": "Smoke and carbon monoxide alarms should be tested monthly, batteries changed as the maker says, and units replaced about every 10 years. Also called test smoke alarm, smoke detector chirping, replace smoke alarm, CO detector test. Look for a chirp that means a low battery; the date printed on the alarm. Press the test button monthly, replace batteries or the unit when it chirps, and replace alarms older than 10 years."
+ },
+ {
+  "symbol": "burst_pipe_shutoff",
+  "title": "Burst pipe: shutting off the water",
+  "context": "When a pipe bursts, shutting the main water valve quickly limits damage; it is often where the water line enters the house. Also called pipe burst, water leak flooding house, main water shutoff, turn off water to house. Look for water spraying or pooling; the main valve near the meter or entry point. Turn off the main water valve, shut off power to wet areas if it is safe to reach the breaker, open a faucet to drain, and call a plumber."
+ },
+ {
+  "symbol": "stuck_car_snow",
+  "title": "Stuck in a car in snow",
+  "context": "If stranded in a vehicle in a snowstorm, it is usually safest to stay with the car, keep the exhaust pipe clear, and run the engine only briefly for heat. Also called stranded in car snow, stuck in snowstorm car, car stuck in blizzard. Look for deep snow and no visibility; the exhaust pipe buried. Stay in the car, tie a bright cloth to the antenna, clear the exhaust pipe, run the engine about 10 minutes each hour with a window cracked, and move arms and legs to stay warm."
+ },
+ {
+  "symbol": "car_wont_start_cold",
+  "title": "Car won't start in the cold",
+  "context": "Cold weather weakens car batteries; a jump start, done in the right order, often gets the car going. Also called dead battery cold, jump start car, car won't start. Look for clicking but no crank; dim dash lights. Connect red to the dead battery's positive, red to the good positive, black to the good negative, and black to bare metal on the dead car away from the battery; start the good car, then the dead one."
+ }
+]

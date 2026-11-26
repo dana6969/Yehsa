@@ -5,9 +5,16 @@
 import {
   compassLabel,
   destinationPoint,
+  contourClimbM,
+  declinationAdjust,
   haversineKm,
   initialBearingDeg,
+  mapScaleMeters,
+  naismithHours,
+  paceCount,
   reverseBearingDeg,
+  slopePercent,
+  sunFingerMinutes,
   sunriseSunset
 } from "./landscape_math.js";
 
@@ -75,8 +82,17 @@ export function navigationSentence(raw, options = {}, io = {}) {
   const tripToWaypoint = io.tripToWaypoint || missing("tripToWaypoint");
   const elevationFromLock = io.elevationFromLock || missing("elevationFromLock");
   const text = String(raw || "");
-  const tool = /\b(distance|how far|bearing|course|heading|waypoint|goto|go to|sunrise|sunset|great[- ]circle|destination|declination|altitude|elevation)\b/i.test(text);
+  const tool = /\b(distance|how far|bearing|course|heading|waypoint|goto|go to|sunrise|sunset|great[- ]circle|destination|declination|altitude|elevation|pace|map scale|scale\s+1|contour|slope|grade|naismith|finger widths?|back bearing|climb|walking time|straight[- ]line|grid)\b/i.test(text);
   if (!tool) return null;
+  const grids = [...text.matchAll(/\bgrid\s+(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)/gi)];
+  if (grids.length >= 2) {
+    const x1 = Number(grids[0][1]);
+    const y1 = Number(grids[0][2]);
+    const x2 = Number(grids[1][1]);
+    const y2 = Number(grids[1][2]);
+    const meters = Math.hypot(x2 - x1, y2 - y1);
+    return { sentence: `The straight-line distance between those grid points is ${roundTo(meters, 1)} in the same units as the grid. This is not a road route.` };
+  }
   const pairs = parseLatLonPairs(text);
   const here = wantsHere(text);
   const sunAsked = /\b(sunrise|sunset)\b/i.test(text);
@@ -163,14 +179,64 @@ export function navigationSentence(raw, options = {}, io = {}) {
     return { sentence: courseSentence(course.distanceKm, course.bearingDeg, "from the consented position lock") };
   }
 
+  const back = text.match(/\bback bearing(?: of| is| for)?\s+(-?\d+(?:\.\d+)?)/i);
+  if (back) {
+    const reverse = reverseBearingDeg(Number(back[1]));
+    return { sentence: `The back bearing of ${back[1]}° is ${roundTo(reverse, 0)}°.` };
+  }
+  const pace = text.match(/(\d+(?:\.\d+)?)\s+meters?.{0,40}pace(?: length)?(?: of| is)?\s+(\d+(?:\.\d+)?)\s+meters?/i);
+  if (pace) {
+    const count = paceCount(Number(pace[1]), Number(pace[2]));
+    return { sentence: `${pace[1]} meters at a ${pace[2]} m pace is about ${roundTo(count, 0)} paces.` };
+  }
+  const paceRate = text.match(/(\d+(?:\.\d+)?)\s+paces?\s+per\s+(\d+(?:\.\d+)?)\s+meters?/);
+  const paceAsked = text.match(/(\d+(?:\.\d+)?)\s+paces?\b(?!\s+per)/);
+  if (paceRate && paceAsked) {
+    const paces = Number(paceAsked[1]);
+    const per = Number(paceRate[1]);
+    const meters = Number(paceRate[2]);
+    if (per > 0) {
+      const distance = paces / per * meters;
+      return { sentence: `${paceAsked[1]} paces, at ${paceRate[1]} paces per ${paceRate[2]} m, is about ${roundTo(distance, 1)} m.` };
+    }
+  }
+  const scale = text.match(/scale\s+1\s*(?:to|:)\s*(\d+(?:\.\d+)?).{0,80}(\d+(?:\.\d+)?)\s+centimeters?/i);
+  if (scale) {
+    const meters = mapScaleMeters(Number(scale[2]), Number(scale[1]));
+    return { sentence: `At 1:${scale[1]}, ${scale[2]} cm on the map is ${roundTo(meters, 1)} m on the ground.` };
+  }
+  const contours = text.match(/(\d+)\s+contours?.{0,40}interval(?:\s+of)?\s+(\d+(?:\.\d+)?)\s+meters?/i);
+  if (contours) {
+    const climb = contourClimbM(Number(contours[1]), Number(contours[2]));
+    return { sentence: `Crossing ${contours[1]} contours at a ${contours[2]} m interval is ${roundTo(climb, 0)} m of climb.` };
+  }
+  const slope = text.match(/rise(?:\s+of)?\s+(\d+(?:\.\d+)?).{0,40}run(?:\s+of)?\s+(\d+(?:\.\d+)?)/i);
+  if (slope) {
+    const percent = slopePercent(Number(slope[1]), Number(slope[2]));
+    return { sentence: `A rise of ${slope[1]} over a run of ${slope[2]} is a ${roundTo(percent, 1)} percent grade.` };
+  }
+  const walk = text.match(/(\d+(?:\.\d+)?)\s+km\b.{0,80}?(\d+(?:\.\d+)?)\s+meters?\s+of\s+climb/i);
+  if (walk) {
+    const hours = naismithHours(Number(walk[1]), Number(walk[2]));
+    return { sentence: `Naismith's rule gives about ${roundTo(hours, 2)} hours for ${walk[1]} km and ${walk[2]} m of climb. That is a walking estimate, not a trail promise.` };
+  }
+  const fingers = text.match(/(\d+(?:\.\d+)?)\s+finger widths?/i);
+  if (fingers && /\b(sun|horizon)\b/i.test(text)) {
+    const minutes = sunFingerMinutes(Number(fingers[1]));
+    return { sentence: `${fingers[1]} finger widths from the sun to the horizon is about ${roundTo(minutes, 0)} minutes. This is a rough field estimate.` };
+  }
+
   if (/\bdeclination\b/i.test(text)) {
     const numbers = [...text.matchAll(/(-?\d+(?:\.\d+)?)\s*(?:°|degrees)/gi)].map((item) => Number(item[1]));
-    const decl = text.match(/\bdeclination\s+(-?\d+(?:\.\d+)?)/i);
+    const decl = text.match(/\bdeclination\s+(?:of\s+)?(-?\d+(?:\.\d+)?)(?:\s*(east|west))?/i);
+    const west = /\bwest\b/i.test(text) && !/\beast\b/i.test(text);
     if (decl && numbers.length) {
       const magnetic = numbers.find((value) => value !== Number(decl[1]));
       if (magnetic != null) {
-        const trueDeg = ((magnetic + Number(decl[1])) % 360 + 360) % 360;
-        return { sentence: `With declination ${Number(decl[1])}° (east positive), magnetic ${magnetic}° plots as true ${trueDeg.toFixed(0)}°. This does not look up the local angle; use the value printed on your map.` };
+        const signed = west || decl[2] === "west" ? -Math.abs(Number(decl[1])) : Number(decl[1]);
+        const trueDeg = declinationAdjust(magnetic, Math.abs(signed), signed >= 0);
+        const side = signed < 0 ? "west" : "east";
+        return { sentence: `With declination ${Math.abs(signed)}° ${side}, magnetic ${magnetic}° plots as true ${trueDeg.toFixed(0)}°. East is added and west is subtracted. This does not look up the local angle; use the value printed on your map.` };
       }
     }
   }

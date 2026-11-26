@@ -1,0 +1,11 @@
+{
+  "name": "yehsa-radio-playback",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Foreground media service so Yehsa internet radio keeps playing when the phone is locked.",
+  "main": "index.js",
+  "peerDependencies": {
+    "expo": "*",
+    "react-native": "*"
+  }
+}

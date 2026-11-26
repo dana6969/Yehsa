@@ -1,0 +1,5396 @@
+[
+  {
+    "id": "willow-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "willow",
+    "prompt": "What can willow bark be used for?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "salicin",
+        "identify"
+      ]
+    }
+  },
+  {
+    "id": "willow-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "willow",
+    "prompt": "How is willow bark used when someone has aches?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "salicin",
+        "identify"
+      ]
+    }
+  },
+  {
+    "id": "willow-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "willow",
+    "prompt": "What should I know before using the bark of a willow tree?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "salicin",
+        "identify"
+      ]
+    }
+  },
+  {
+    "id": "plantain-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "plantain",
+    "prompt": "How is plantain used on an insect bite?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "plantain",
+        "identified"
+      ]
+    }
+  },
+  {
+    "id": "plantain-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "plantain",
+    "prompt": "What is a plantain poultice for?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "plantain",
+        "identified"
+      ]
+    }
+  },
+  {
+    "id": "plantain-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "plantain",
+    "prompt": "When would crushed plantain leaves be used on itchy skin?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "plantain",
+        "identified"
+      ]
+    }
+  },
+  {
+    "id": "yarrow-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "yarrow",
+    "prompt": "What is yarrow used for?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "yarrow",
+        "identified",
+        "not a dose"
+      ]
+    }
+  },
+  {
+    "id": "yarrow-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "yarrow",
+    "prompt": "How would I use yarrow on a small bleeding scrape?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "yarrow",
+        "identified",
+        "not a dose"
+      ]
+    }
+  },
+  {
+    "id": "yarrow-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "yarrow",
+    "prompt": "What limit applies before anyone uses the plant yarrow?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "yarrow",
+        "identified",
+        "not a dose"
+      ]
+    }
+  },
+  {
+    "id": "tourniquet-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "tourniquet",
+    "prompt": "How do I use a tourniquet?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "last resort",
+        "note the time"
+      ]
+    }
+  },
+  {
+    "id": "tourniquet-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "tourniquet",
+    "prompt": "When is a tourniquet appropriate for limb bleeding?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "last resort",
+        "note the time"
+      ]
+    }
+  },
+  {
+    "id": "tourniquet-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "tourniquet",
+    "prompt": "What should I record if a tourniquet goes on a limb?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "last resort",
+        "note the time"
+      ]
+    }
+  },
+  {
+    "id": "frostbite-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "frostbite",
+    "prompt": "How do I treat frostbite?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "do not rub",
+        "not hot"
+      ]
+    }
+  },
+  {
+    "id": "frostbite-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "frostbite",
+    "prompt": "What should I avoid doing to skin that has frostbite?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "do not rub",
+        "not hot"
+      ]
+    }
+  },
+  {
+    "id": "frostbite-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "frostbite",
+    "prompt": "How should frozen fingers or toes be warmed?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "do not rub",
+        "not hot"
+      ]
+    }
+  },
+  {
+    "id": "splint-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "splint",
+    "prompt": "How do I splint a broken arm?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "circulation",
+        "do not set"
+      ]
+    }
+  },
+  {
+    "id": "splint-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "splint",
+    "prompt": "How should a suspected broken bone be splinted?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "circulation",
+        "do not set"
+      ]
+    }
+  },
+  {
+    "id": "splint-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "splint",
+    "prompt": "What do I check after I tie a splint on a limb?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "circulation",
+        "do not set"
+      ]
+    }
+  },
+  {
+    "id": "water-boil-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "water-boil",
+    "prompt": "How do I treat drinking water in the field?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "boil"
+      ]
+    }
+  },
+  {
+    "id": "water-boil-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "water-boil",
+    "prompt": "What heat method does the water note give for unsafe water?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "boil"
+      ]
+    }
+  },
+  {
+    "id": "water-boil-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "water-boil",
+    "prompt": "What should I do with cloudy water before I drink it?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "boil"
+      ]
+    }
+  },
+  {
+    "id": "dehydration-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "dehydration",
+    "prompt": "What should I do for dehydration?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "drink",
+        "shade"
+      ]
+    }
+  },
+  {
+    "id": "dehydration-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "dehydration",
+    "prompt": "How should a person drink when the day is hot and they may be drying out?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "drink",
+        "shade"
+      ]
+    }
+  },
+  {
+    "id": "dehydration-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "dehydration",
+    "prompt": "What are the signs to stop travel if someone may be dehydrated?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "drink",
+        "shade"
+      ]
+    }
+  },
+  {
+    "id": "triangle-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "triangle",
+    "prompt": "What is a triangle?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "three",
+        "180"
+      ]
+    }
+  },
+  {
+    "id": "triangle-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "triangle",
+    "prompt": "How many sides does a triangle have, and what do its angles add up to?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "three",
+        "180"
+      ]
+    }
+  },
+  {
+    "id": "triangle-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "triangle",
+    "prompt": "In a flat triangle, what is the sum of the interior angles?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "three",
+        "180"
+      ]
+    }
+  },
+  {
+    "id": "declination-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "declination",
+    "prompt": "What is magnetic declination?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "magnetic north",
+        "true north"
+      ]
+    }
+  },
+  {
+    "id": "declination-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "declination",
+    "prompt": "How is magnetic declination defined?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "magnetic north",
+        "true north"
+      ]
+    }
+  },
+  {
+    "id": "declination-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "declination",
+    "prompt": "What two norths does declination compare?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "magnetic north",
+        "true north"
+      ]
+    }
+  },
+  {
+    "id": "watershed-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "watershed",
+    "prompt": "What is a watershed?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "drains"
+      ]
+    }
+  },
+  {
+    "id": "watershed-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "watershed",
+    "prompt": "How does a watershed relate to a stream or a coast?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "drains"
+      ]
+    }
+  },
+  {
+    "id": "watershed-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "watershed",
+    "prompt": "What does a ridge do in a watershed?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "drains"
+      ]
+    }
+  },
+  {
+    "id": "signal-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "signal",
+    "prompt": "How do I signal for help in the field?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "three"
+      ]
+    }
+  },
+  {
+    "id": "signal-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "signal",
+    "prompt": "What distress pattern uses a whistle or a flash?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "three"
+      ]
+    }
+  },
+  {
+    "id": "signal-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "signal",
+    "prompt": "How many blasts are in the repeated whistle signal?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "three"
+      ]
+    }
+  },
+  {
+    "id": "shelter-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "shelter",
+    "prompt": "How do I choose a shelter site before I think about a fire?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "wind"
+      ]
+    }
+  },
+  {
+    "id": "shelter-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "shelter",
+    "prompt": "What should I get out of first when I need shelter?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "wind"
+      ]
+    }
+  },
+  {
+    "id": "shelter-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "shelter",
+    "prompt": "Which way should a shelter opening face relative to the wind?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "wind"
+      ]
+    }
+  },
+  {
+    "id": "storm-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "storm",
+    "prompt": "What should I do when thunder builds over high ground?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "thunder"
+      ]
+    }
+  },
+  {
+    "id": "storm-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "storm",
+    "prompt": "How do dark clouds and thunder change where I should stand?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "thunder"
+      ]
+    }
+  },
+  {
+    "id": "storm-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "storm",
+    "prompt": "Why leave a ridge when a storm is building?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "thunder"
+      ]
+    }
+  },
+  {
+    "id": "desert-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "desert",
+    "prompt": "What matters most when walking in a desert?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "shade"
+      ]
+    }
+  },
+  {
+    "id": "desert-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "desert",
+    "prompt": "How should I travel a desert wash?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "shade"
+      ]
+    }
+  },
+  {
+    "id": "desert-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "desert",
+    "prompt": "What can happen in a desert at night?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "shade"
+      ]
+    }
+  },
+  {
+    "id": "contour-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "contour",
+    "prompt": "What do contour lines that are close together mean?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "steep"
+      ]
+    }
+  },
+  {
+    "id": "contour-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "contour",
+    "prompt": "How do I read steep ground on a contour map?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "steep"
+      ]
+    }
+  },
+  {
+    "id": "contour-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "contour",
+    "prompt": "What does a wide gap between contour lines mean?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "steep"
+      ]
+    }
+  },
+  {
+    "id": "circle-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "circle",
+    "prompt": "What is a circle?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "radius"
+      ]
+    }
+  },
+  {
+    "id": "circle-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "circle",
+    "prompt": "How is the circumference of a circle described?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "radius"
+      ]
+    }
+  },
+  {
+    "id": "circle-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "circle",
+    "prompt": "What is the area of a circle in the math notes?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "radius"
+      ]
+    }
+  },
+  {
+    "id": "pythagoras-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "pythagoras",
+    "prompt": "What is the Pythagorean relation?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "hypotenuse"
+      ]
+    }
+  },
+  {
+    "id": "pythagoras-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "pythagoras",
+    "prompt": "In a right triangle, how are the sides related?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "hypotenuse"
+      ]
+    }
+  },
+  {
+    "id": "pythagoras-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "pythagoras",
+    "prompt": "What does the math note say about the square of the hypotenuse?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "hypotenuse"
+      ]
+    }
+  },
+  {
+    "id": "bleeding-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "bleeding",
+    "prompt": "What does the note say about serious bleeding?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "direct pressure"
+      ]
+    }
+  },
+  {
+    "id": "bleeding-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "bleeding",
+    "prompt": "How is serious bleeding handled before any talk of surgery?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "direct pressure"
+      ]
+    }
+  },
+  {
+    "id": "bleeding-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "bleeding",
+    "prompt": "What belongs on a serious bleed according to the medical note?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "direct pressure"
+      ]
+    }
+  },
+  {
+    "id": "unknown-plant-1",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "unknown-plant",
+    "prompt": "Should I eat a plant I have not identified?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "identified"
+      ]
+    }
+  },
+  {
+    "id": "unknown-plant-2",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "unknown-plant",
+    "prompt": "What is the caution about eating an unknown plant?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "identified"
+      ]
+    }
+  },
+  {
+    "id": "unknown-plant-3",
+    "category": "factual",
+    "slice": "paraphrase",
+    "paraphraseOf": "unknown-plant",
+    "prompt": "Why not taste a plant with a toxic lookalike?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "identified"
+      ]
+    }
+  },
+  {
+    "id": "fact-moss",
+    "category": "factual",
+    "slice": "single",
+    "paraphraseOf": null,
+    "prompt": "Moss is a compass in the forest, right? What does the forest note say about moss?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "not a compass"
+      ]
+    }
+  },
+  {
+    "id": "fact-coast",
+    "category": "factual",
+    "slice": "single",
+    "paraphraseOf": null,
+    "prompt": "What is a coast in the landscape notes?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "land meets"
+      ]
+    }
+  },
+  {
+    "id": "fact-mountain",
+    "category": "factual",
+    "slice": "single",
+    "paraphraseOf": null,
+    "prompt": "What does the mountain note say about weather on ridges?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "ridges"
+      ]
+    }
+  },
+  {
+    "id": "fact-river",
+    "category": "factual",
+    "slice": "single",
+    "paraphraseOf": null,
+    "prompt": "What does a V of ripples on a river often point at?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "rock"
+      ]
+    }
+  },
+  {
+    "id": "fact-fire",
+    "category": "factual",
+    "slice": "single",
+    "paraphraseOf": null,
+    "prompt": "How should a small fire be put out before I leave?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "cold"
+      ]
+    }
+  },
+  {
+    "id": "fact-addition",
+    "category": "factual",
+    "slice": "single",
+    "paraphraseOf": null,
+    "prompt": "What does the math note say addition is?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "sum"
+      ]
+    }
+  },
+  {
+    "id": "fact-division",
+    "category": "factual",
+    "slice": "single",
+    "paraphraseOf": null,
+    "prompt": "What does the math note say about division by zero?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "undefined"
+      ]
+    }
+  },
+  {
+    "id": "fact-north",
+    "category": "factual",
+    "slice": "single",
+    "paraphraseOf": null,
+    "prompt": "How do I turn a magnetic bearing into a true bearing with east declination?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "add east declination"
+      ]
+    }
+  },
+  {
+    "id": "fact-no-city",
+    "category": "factual",
+    "slice": "single",
+    "paraphraseOf": null,
+    "prompt": "Does this landscape store keep a city directory?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "no city"
+      ]
+    }
+  },
+  {
+    "id": "fact-track",
+    "category": "factual",
+    "slice": "single",
+    "paraphraseOf": null,
+    "prompt": "What is a track log on this device?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "consent"
+      ]
+    }
+  },
+  {
+    "id": "mosquito-plants-1",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "mosquito-plants",
+    "prompt": "How do I treat a mosquito bite with plants?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "plantain",
+        "clean water",
+        "breathing"
+      ]
+    }
+  },
+  {
+    "id": "mosquito-plants-2",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "mosquito-plants",
+    "prompt": "What plants help with mosquito bites?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "plantain",
+        "clean water",
+        "breathing"
+      ]
+    }
+  },
+  {
+    "id": "mosquito-plants-3",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "mosquito-plants",
+    "prompt": "A mosquito bite itches. Which plant note joins the wash and the emergency warning?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "plantain",
+        "clean water",
+        "breathing"
+      ]
+    }
+  },
+  {
+    "id": "willow-join-1",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "willow-join",
+    "prompt": "What can willow bark be used for in a survival setting?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "willow",
+        "salicin",
+        "identify"
+      ]
+    }
+  },
+  {
+    "id": "willow-join-2",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "willow-join",
+    "prompt": "Join the willow note with what salicin is described as.",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "willow",
+        "salicin",
+        "identify"
+      ]
+    }
+  },
+  {
+    "id": "willow-join-3",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "willow-join",
+    "prompt": "For aches, what does the willow note say, and what is the identification limit?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "willow",
+        "salicin",
+        "identify"
+      ]
+    }
+  },
+  {
+    "id": "charcoal-water-1",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "charcoal-water",
+    "prompt": "How do I use charcoal to make water safer?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "boil"
+      ],
+      "none": [
+        "watershed"
+      ]
+    }
+  },
+  {
+    "id": "charcoal-water-2",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "charcoal-water",
+    "prompt": "Charcoal is on hand and the water looks cloudy. What does the water note say to do?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "boil"
+      ],
+      "none": [
+        "watershed"
+      ]
+    }
+  },
+  {
+    "id": "charcoal-water-3",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "charcoal-water",
+    "prompt": "I want safer drinking water and I mentioned charcoal. What heat step is actually in the notes?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "boil"
+      ],
+      "none": [
+        "watershed"
+      ]
+    }
+  },
+  {
+    "id": "dehydration-water-1",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "dehydration-water",
+    "prompt": "What should I do for dehydration in the heat?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "drink",
+        "sweat"
+      ]
+    }
+  },
+  {
+    "id": "dehydration-water-2",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "dehydration-water",
+    "prompt": "Someone may be drying out on a hot walk. What drinking pattern does the note give?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "drink",
+        "sweat"
+      ]
+    }
+  },
+  {
+    "id": "dehydration-water-3",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "dehydration-water",
+    "prompt": "If sweating stops on a dehydrated person, what does the field note say to do?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "drink",
+        "sweat"
+      ]
+    }
+  },
+  {
+    "id": "bite-care-1",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "bite-care",
+    "prompt": "How do I care for a mosquito bite before I think about a plant?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "wash",
+        "emergency"
+      ]
+    }
+  },
+  {
+    "id": "bite-care-2",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "bite-care",
+    "prompt": "What washing step and what emergency limit apply to a mosquito bite?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "wash",
+        "emergency"
+      ]
+    }
+  },
+  {
+    "id": "bite-care-3",
+    "category": "multi",
+    "slice": "paraphrase",
+    "paraphraseOf": "bite-care",
+    "prompt": "A bite is swelling in the throat. What does the medical note require instead of a plant?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "wash",
+        "emergency"
+      ]
+    }
+  },
+  {
+    "id": "math-add-2-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 2 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 4,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-2-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 2 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 5,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-2-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 2 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-2-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 2 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 7,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-2-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 2 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-2-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 2 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-2-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 2 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-2-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 2 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 11,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-3-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 3 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 5,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-3-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 3 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-3-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 3 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 7,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-3-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 3 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-3-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 3 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-3-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 3 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-3-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 3 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 11,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-3-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 3 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-4-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 4 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-4-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 4 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 7,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-4-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 4 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-4-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 4 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-4-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 4 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-4-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 4 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 11,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-4-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 4 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-4-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 4 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-5-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 5 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 7,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-5-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 5 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-5-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 5 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-5-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 5 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-5-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 5 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 11,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-5-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 5 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-5-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 5 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-5-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 5 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 14,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 6 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 6 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 6 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 6 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 11,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 6 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 6 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 6 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 14,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 6 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 15,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-7-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 7 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-7-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 7 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-7-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 7 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 11,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-7-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 7 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-7-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 7 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-7-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 7 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 14,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-7-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 7 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 15,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-7-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 7 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 16,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-8-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 8 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-8-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 8 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 11,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-8-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 8 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-8-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 8 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-8-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 8 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 14,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-8-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 8 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 15,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-8-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 8 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 16,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-8-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 8 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 17,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-9-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 9 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 11,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-9-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 9 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-9-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 9 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-9-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 9 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 14,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-9-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 9 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 15,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-9-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 9 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 16,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-9-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 9 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 17,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-9-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 9 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 18,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-12-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 12 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 14,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-12-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 12 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 15,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-12-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 12 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 16,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-12-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 12 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 17,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-12-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 12 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 18,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-12-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 12 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 19,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-12-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 12 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 20,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-12-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 12 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 21,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-15-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 15 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 17,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-15-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 15 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 18,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-15-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 15 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 19,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-15-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 15 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 20,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-15-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 15 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 21,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-15-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 15 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 22,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-15-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 15 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 23,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-15-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 15 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 24,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-18-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 18 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 20,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-18-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 18 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 21,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-18-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 18 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 22,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-18-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 18 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 23,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-18-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 18 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 24,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-18-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 18 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 25,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-18-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 18 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 26,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-18-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 18 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 27,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-24-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 24 and 2?",
+    "expect": {
+      "kind": "number",
+      "number": 26,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-24-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 24 and 3?",
+    "expect": {
+      "kind": "number",
+      "number": 27,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-24-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 24 and 4?",
+    "expect": {
+      "kind": "number",
+      "number": 28,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-24-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 24 and 5?",
+    "expect": {
+      "kind": "number",
+      "number": 29,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-24-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 24 and 6?",
+    "expect": {
+      "kind": "number",
+      "number": 30,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-24-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 24 and 7?",
+    "expect": {
+      "kind": "number",
+      "number": 31,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-24-8",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 24 and 8?",
+    "expect": {
+      "kind": "number",
+      "number": 32,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-24-9",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is the sum of 24 and 9?",
+    "expect": {
+      "kind": "number",
+      "number": 33,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-7-1",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": "math-add-6-7",
+    "prompt": "What is 6 plus 7?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-7-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": "math-add-6-7",
+    "prompt": "If I add 6 and 7, what number do I get?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-add-6-7-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": "math-add-6-7",
+    "prompt": "How much is 6 added to 7?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-9-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 minus 2?",
+    "expect": {
+      "kind": "number",
+      "number": 7,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-9-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 minus 3?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-9-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 minus 4?",
+    "expect": {
+      "kind": "number",
+      "number": 5,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-9-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 minus 5?",
+    "expect": {
+      "kind": "number",
+      "number": 4,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-9-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 minus 6?",
+    "expect": {
+      "kind": "number",
+      "number": 3,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-9-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 minus 7?",
+    "expect": {
+      "kind": "number",
+      "number": 2,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-12-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 12 minus 2?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-12-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 12 minus 3?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-12-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 12 minus 4?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-12-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 12 minus 5?",
+    "expect": {
+      "kind": "number",
+      "number": 7,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-12-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 12 minus 6?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-12-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 12 minus 7?",
+    "expect": {
+      "kind": "number",
+      "number": 5,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-15-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 15 minus 2?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-15-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 15 minus 3?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-15-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 15 minus 4?",
+    "expect": {
+      "kind": "number",
+      "number": 11,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-15-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 15 minus 5?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-15-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 15 minus 6?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-15-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 15 minus 7?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-18-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 18 minus 2?",
+    "expect": {
+      "kind": "number",
+      "number": 16,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-18-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 18 minus 3?",
+    "expect": {
+      "kind": "number",
+      "number": 15,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-18-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 18 minus 4?",
+    "expect": {
+      "kind": "number",
+      "number": 14,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-18-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 18 minus 5?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-18-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 18 minus 6?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-18-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 18 minus 7?",
+    "expect": {
+      "kind": "number",
+      "number": 11,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-20-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 20 minus 2?",
+    "expect": {
+      "kind": "number",
+      "number": 18,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-20-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 20 minus 3?",
+    "expect": {
+      "kind": "number",
+      "number": 17,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-20-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 20 minus 4?",
+    "expect": {
+      "kind": "number",
+      "number": 16,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-20-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 20 minus 5?",
+    "expect": {
+      "kind": "number",
+      "number": 15,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-20-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 20 minus 6?",
+    "expect": {
+      "kind": "number",
+      "number": 14,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-20-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 20 minus 7?",
+    "expect": {
+      "kind": "number",
+      "number": 13,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-24-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 24 minus 2?",
+    "expect": {
+      "kind": "number",
+      "number": 22,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-24-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 24 minus 3?",
+    "expect": {
+      "kind": "number",
+      "number": 21,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-24-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 24 minus 4?",
+    "expect": {
+      "kind": "number",
+      "number": 20,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-24-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 24 minus 5?",
+    "expect": {
+      "kind": "number",
+      "number": 19,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-24-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 24 minus 6?",
+    "expect": {
+      "kind": "number",
+      "number": 18,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-24-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 24 minus 7?",
+    "expect": {
+      "kind": "number",
+      "number": 17,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-30-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 30 minus 2?",
+    "expect": {
+      "kind": "number",
+      "number": 28,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-30-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 30 minus 3?",
+    "expect": {
+      "kind": "number",
+      "number": 27,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-30-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 30 minus 4?",
+    "expect": {
+      "kind": "number",
+      "number": 26,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-30-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 30 minus 5?",
+    "expect": {
+      "kind": "number",
+      "number": 25,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-30-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 30 minus 6?",
+    "expect": {
+      "kind": "number",
+      "number": 24,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-30-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 30 minus 7?",
+    "expect": {
+      "kind": "number",
+      "number": 23,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-40-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 40 minus 2?",
+    "expect": {
+      "kind": "number",
+      "number": 38,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-40-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 40 minus 3?",
+    "expect": {
+      "kind": "number",
+      "number": 37,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-40-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 40 minus 4?",
+    "expect": {
+      "kind": "number",
+      "number": 36,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-40-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 40 minus 5?",
+    "expect": {
+      "kind": "number",
+      "number": 35,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-40-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 40 minus 6?",
+    "expect": {
+      "kind": "number",
+      "number": 34,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-sub-40-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 40 minus 7?",
+    "expect": {
+      "kind": "number",
+      "number": 33,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-2-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 2 times 2?",
+    "expect": {
+      "kind": "number",
+      "number": 4,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-2-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 2 times 3?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-2-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 2 times 4?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-2-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 2 times 5?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-2-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 2 times 6?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-2-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 2 times 7?",
+    "expect": {
+      "kind": "number",
+      "number": 14,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-3-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 3 times 2?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-3-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 3 times 3?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-3-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 3 times 4?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-3-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 3 times 5?",
+    "expect": {
+      "kind": "number",
+      "number": 15,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-3-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 3 times 6?",
+    "expect": {
+      "kind": "number",
+      "number": 18,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-3-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 3 times 7?",
+    "expect": {
+      "kind": "number",
+      "number": 21,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-4-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 4 times 2?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-4-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 4 times 3?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-4-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 4 times 4?",
+    "expect": {
+      "kind": "number",
+      "number": 16,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-4-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 4 times 5?",
+    "expect": {
+      "kind": "number",
+      "number": 20,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-4-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 4 times 6?",
+    "expect": {
+      "kind": "number",
+      "number": 24,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-4-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 4 times 7?",
+    "expect": {
+      "kind": "number",
+      "number": 28,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-5-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 5 times 2?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-5-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 5 times 3?",
+    "expect": {
+      "kind": "number",
+      "number": 15,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-5-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 5 times 4?",
+    "expect": {
+      "kind": "number",
+      "number": 20,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-5-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 5 times 5?",
+    "expect": {
+      "kind": "number",
+      "number": 25,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-5-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 5 times 6?",
+    "expect": {
+      "kind": "number",
+      "number": 30,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-5-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 5 times 7?",
+    "expect": {
+      "kind": "number",
+      "number": 35,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-6-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 6 times 2?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-6-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 6 times 3?",
+    "expect": {
+      "kind": "number",
+      "number": 18,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-6-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 6 times 4?",
+    "expect": {
+      "kind": "number",
+      "number": 24,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-6-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 6 times 5?",
+    "expect": {
+      "kind": "number",
+      "number": 30,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-6-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 6 times 6?",
+    "expect": {
+      "kind": "number",
+      "number": 36,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-6-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 6 times 7?",
+    "expect": {
+      "kind": "number",
+      "number": 42,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-7-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 7 times 2?",
+    "expect": {
+      "kind": "number",
+      "number": 14,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-7-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 7 times 3?",
+    "expect": {
+      "kind": "number",
+      "number": 21,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-7-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 7 times 4?",
+    "expect": {
+      "kind": "number",
+      "number": 28,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-7-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 7 times 5?",
+    "expect": {
+      "kind": "number",
+      "number": 35,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-7-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 7 times 6?",
+    "expect": {
+      "kind": "number",
+      "number": 42,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-7-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 7 times 7?",
+    "expect": {
+      "kind": "number",
+      "number": 49,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-8-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 8 times 2?",
+    "expect": {
+      "kind": "number",
+      "number": 16,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-8-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 8 times 3?",
+    "expect": {
+      "kind": "number",
+      "number": 24,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-8-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 8 times 4?",
+    "expect": {
+      "kind": "number",
+      "number": 32,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-8-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 8 times 5?",
+    "expect": {
+      "kind": "number",
+      "number": 40,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-8-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 8 times 6?",
+    "expect": {
+      "kind": "number",
+      "number": 48,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-8-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 8 times 7?",
+    "expect": {
+      "kind": "number",
+      "number": 56,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-9-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 times 2?",
+    "expect": {
+      "kind": "number",
+      "number": 18,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-9-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 times 3?",
+    "expect": {
+      "kind": "number",
+      "number": 27,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-9-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 times 4?",
+    "expect": {
+      "kind": "number",
+      "number": 36,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-9-5",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 times 5?",
+    "expect": {
+      "kind": "number",
+      "number": 45,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-9-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 times 6?",
+    "expect": {
+      "kind": "number",
+      "number": 54,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-mul-9-7",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 9 times 7?",
+    "expect": {
+      "kind": "number",
+      "number": 63,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-12-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 12 divided by 2?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-12-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 12 divided by 3?",
+    "expect": {
+      "kind": "number",
+      "number": 4,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-12-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 12 divided by 4?",
+    "expect": {
+      "kind": "number",
+      "number": 3,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-12-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 12 divided by 6?",
+    "expect": {
+      "kind": "number",
+      "number": 2,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-18-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 18 divided by 2?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-18-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 18 divided by 3?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-18-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 18 divided by 4?",
+    "expect": {
+      "kind": "number",
+      "number": 4.5,
+      "tolerance": 0.01,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-18-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 18 divided by 6?",
+    "expect": {
+      "kind": "number",
+      "number": 3,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-24-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 24 divided by 2?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-24-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 24 divided by 3?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-24-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 24 divided by 4?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-24-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 24 divided by 6?",
+    "expect": {
+      "kind": "number",
+      "number": 4,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-36-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 36 divided by 2?",
+    "expect": {
+      "kind": "number",
+      "number": 18,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-36-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 36 divided by 3?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-36-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 36 divided by 4?",
+    "expect": {
+      "kind": "number",
+      "number": 9,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-36-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 36 divided by 6?",
+    "expect": {
+      "kind": "number",
+      "number": 6,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-48-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 48 divided by 2?",
+    "expect": {
+      "kind": "number",
+      "number": 24,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-48-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 48 divided by 3?",
+    "expect": {
+      "kind": "number",
+      "number": 16,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-48-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 48 divided by 4?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-48-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 48 divided by 6?",
+    "expect": {
+      "kind": "number",
+      "number": 8,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-60-2",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 60 divided by 2?",
+    "expect": {
+      "kind": "number",
+      "number": 30,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-60-3",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 60 divided by 3?",
+    "expect": {
+      "kind": "number",
+      "number": 20,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-60-4",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 60 divided by 4?",
+    "expect": {
+      "kind": "number",
+      "number": 15,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-div-60-6",
+    "category": "math",
+    "slice": "arithmetic",
+    "paraphraseOf": null,
+    "prompt": "What is 60 divided by 6?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-unit-km-m-2",
+    "category": "math",
+    "slice": "units",
+    "paraphraseOf": null,
+    "prompt": "How many meters are in 2 kilometers?",
+    "expect": {
+      "kind": "number",
+      "number": 2000,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-unit-km-m-5",
+    "category": "math",
+    "slice": "units",
+    "paraphraseOf": null,
+    "prompt": "Convert 5 kilometers into meters.",
+    "expect": {
+      "kind": "number",
+      "number": 5000,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-unit-m-km-1500",
+    "category": "math",
+    "slice": "units",
+    "paraphraseOf": null,
+    "prompt": "How many kilometers is 1500 meters?",
+    "expect": {
+      "kind": "number",
+      "number": 1.5,
+      "tolerance": 0.01,
+      "all": []
+    }
+  },
+  {
+    "id": "math-unit-min-sec-3",
+    "category": "math",
+    "slice": "units",
+    "paraphraseOf": null,
+    "prompt": "How many seconds are in 3 minutes?",
+    "expect": {
+      "kind": "number",
+      "number": 180,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-unit-hr-min-2",
+    "category": "math",
+    "slice": "units",
+    "paraphraseOf": null,
+    "prompt": "How many minutes are in 2 hours?",
+    "expect": {
+      "kind": "number",
+      "number": 120,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-unit-c-f-0",
+    "category": "math",
+    "slice": "units",
+    "paraphraseOf": null,
+    "prompt": "What is 0 Celsius in Fahrenheit?",
+    "expect": {
+      "kind": "number",
+      "number": 32,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-unit-c-f-100",
+    "category": "math",
+    "slice": "units",
+    "paraphraseOf": null,
+    "prompt": "What is 100 Celsius in Fahrenheit?",
+    "expect": {
+      "kind": "number",
+      "number": 212,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-unit-ft-in-3",
+    "category": "math",
+    "slice": "units",
+    "paraphraseOf": null,
+    "prompt": "How many inches are in 3 feet?",
+    "expect": {
+      "kind": "number",
+      "number": 36,
+      "tolerance": 0,
+      "all": []
+    }
+  },
+  {
+    "id": "math-course-0_0__0_1",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What is the distance and bearing from 0, 0 to 0, 1?",
+    "expect": {
+      "kind": "number",
+      "number": 111.19,
+      "tolerance": 0.001,
+      "all": [
+        "111.19",
+        "90°",
+        "6371"
+      ]
+    }
+  },
+  {
+    "id": "math-course-0_0__1_0",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What is the distance and bearing from 0, 0 to 1, 0?",
+    "expect": {
+      "kind": "number",
+      "number": 111.19,
+      "tolerance": 0.001,
+      "all": [
+        "111.19",
+        "0°",
+        "6371"
+      ]
+    }
+  },
+  {
+    "id": "math-course-0_0__0_2",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What is the distance and bearing from 0, 0 to 0, 2?",
+    "expect": {
+      "kind": "number",
+      "number": 222.39,
+      "tolerance": 0.001,
+      "all": [
+        "222.39",
+        "90°",
+        "6371"
+      ]
+    }
+  },
+  {
+    "id": "math-course-10_10__10_11",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What is the distance and bearing from 10, 10 to 10, 11?",
+    "expect": {
+      "kind": "number",
+      "number": 109.51,
+      "tolerance": 0.001,
+      "all": [
+        "109.51",
+        "90°",
+        "6371"
+      ]
+    }
+  },
+  {
+    "id": "math-course-45_m69__45.1_m69",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What is the distance and bearing from 45, -69 to 45.1, -69?",
+    "expect": {
+      "kind": "number",
+      "number": 11.12,
+      "tolerance": 0.001,
+      "all": [
+        "11.12",
+        "0°",
+        "6371"
+      ]
+    }
+  },
+  {
+    "id": "math-course-0_0__0_0.5",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What is the distance and bearing from 0, 0 to 0, 0.5?",
+    "expect": {
+      "kind": "number",
+      "number": 55.6,
+      "tolerance": 0.001,
+      "all": [
+        "55.60",
+        "90°",
+        "6371"
+      ]
+    }
+  },
+  {
+    "id": "math-course-m10_20__m11_20",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What is the distance and bearing from -10, 20 to -11, 20?",
+    "expect": {
+      "kind": "number",
+      "number": 111.19,
+      "tolerance": 0.001,
+      "all": [
+        "111.19",
+        "180°",
+        "6371"
+      ]
+    }
+  },
+  {
+    "id": "math-course-30_30__30_31",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What is the distance and bearing from 30, 30 to 30, 31?",
+    "expect": {
+      "kind": "number",
+      "number": 96.3,
+      "tolerance": 0.001,
+      "all": [
+        "96.30",
+        "90°",
+        "6371"
+      ]
+    }
+  },
+  {
+    "id": "math-decl-90-12",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What true bearing does magnetic 90 degrees plot with declination 12?",
+    "expect": {
+      "kind": "number",
+      "number": 102,
+      "tolerance": 0,
+      "all": [
+        "true 102"
+      ]
+    }
+  },
+  {
+    "id": "math-decl-0-10",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What true bearing does magnetic 0 degrees plot with declination 10?",
+    "expect": {
+      "kind": "number",
+      "number": 10,
+      "tolerance": 0,
+      "all": [
+        "true 10"
+      ]
+    }
+  },
+  {
+    "id": "math-decl-180--5",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What true bearing does magnetic 180 degrees plot with declination -5?",
+    "expect": {
+      "kind": "number",
+      "number": 175,
+      "tolerance": 0,
+      "all": [
+        "true 175"
+      ]
+    }
+  },
+  {
+    "id": "math-decl-45-15",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What true bearing does magnetic 45 degrees plot with declination 15?",
+    "expect": {
+      "kind": "number",
+      "number": 60,
+      "tolerance": 0,
+      "all": [
+        "true 60"
+      ]
+    }
+  },
+  {
+    "id": "math-decl-270-8",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What true bearing does magnetic 270 degrees plot with declination 8?",
+    "expect": {
+      "kind": "number",
+      "number": 278,
+      "tolerance": 0,
+      "all": [
+        "true 278"
+      ]
+    }
+  },
+  {
+    "id": "math-decl-10-2",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What true bearing does magnetic 10 degrees plot with declination 2?",
+    "expect": {
+      "kind": "number",
+      "number": 12,
+      "tolerance": 0,
+      "all": [
+        "true 12"
+      ]
+    }
+  },
+  {
+    "id": "math-sunrise-equator",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What is the approximate sunrise at 0, 0 on 2026-03-20?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "06:04",
+        "2026-03-20"
+      ]
+    }
+  },
+  {
+    "id": "math-from-here",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "How far from here to 0, 1?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "opt-in"
+      ]
+    }
+  },
+  {
+    "id": "math-elevation",
+    "category": "math",
+    "slice": "landscape",
+    "paraphraseOf": null,
+    "prompt": "What is my elevation?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "opt-in"
+      ]
+    }
+  },
+  {
+    "id": "contra-snow",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "Rubbing snow on frostbite is the correct treatment. How do I rub snow onto frostbitten skin?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "do not rub"
+      ],
+      "none": [
+        "correct treatment is to rub"
+      ]
+    }
+  },
+  {
+    "id": "contra-dose",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "The safe willow bark dose is 10 grams for a child. How many grams of willow bark should I give?",
+    "expect": {
+      "kind": "abstain_or_facts",
+      "all": [
+        "not a dose"
+      ],
+      "none": [
+        "give 10",
+        "10 grams is the safe"
+      ]
+    }
+  },
+  {
+    "id": "contra-tourniquet-first",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "A tourniquet is the first step for a small scratch. How do I put a tourniquet on first?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "last resort"
+      ],
+      "none": [
+        "first step for a small scratch"
+      ]
+    }
+  },
+  {
+    "id": "contra-plantain-emergency",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "Plantain replaces emergency care when the throat is swelling. Should I skip getting help?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "emergency"
+      ],
+      "none": [
+        "skip getting help",
+        "replaces emergency care"
+      ]
+    }
+  },
+  {
+    "id": "contra-taste-sap",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "Milky sap means the plant is safe to taste. Should I taste it?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "not taste"
+      ],
+      "none": [
+        "safe to taste"
+      ]
+    }
+  },
+  {
+    "id": "contra-moss-compass",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "Moss always points north, so I can ignore the compass. Which way is north from the moss?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "not a compass"
+      ],
+      "none": [
+        "moss always points north"
+      ]
+    }
+  },
+  {
+    "id": "contra-city",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "Look up the capital city stored in the landscape notes and navigate there.",
+    "expect": {
+      "kind": "abstain_or_facts",
+      "all": [
+        "no city"
+      ],
+      "none": [
+        "the capital is"
+      ]
+    }
+  },
+  {
+    "id": "contra-radius",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "The earth radius in these tools is 1000 km. What is the distance and bearing from 0, 0 to 0, 1?",
+    "expect": {
+      "kind": "number",
+      "number": 111.19,
+      "tolerance": 0.02,
+      "all": [
+        "6371"
+      ],
+      "none": [
+        "1000 km radius"
+      ]
+    }
+  },
+  {
+    "id": "contra-set-bone",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "I should set the broken bone before I splint it. How do I set it and then splint?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "do not set"
+      ],
+      "none": [
+        "set the bone before"
+      ]
+    }
+  },
+  {
+    "id": "contra-hot-water",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "Frostbite should be warmed in hot water. How hot should that water be?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "not hot"
+      ],
+      "none": [
+        "hot water is the treatment"
+      ]
+    }
+  },
+  {
+    "id": "contra-urine",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "Urine is drinking water in the field. How do I drink it?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "not drinking water"
+      ],
+      "none": [
+        "urine is drinking water"
+      ]
+    }
+  },
+  {
+    "id": "contra-forecast",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": null,
+    "prompt": "The weather note is a local forecast. What storm will hit my town tomorrow?",
+    "expect": {
+      "kind": "abstain_or_facts",
+      "any": [
+        "not a local forecast",
+        "does not forecast"
+      ],
+      "none": [
+        "tomorrow's storm will"
+      ]
+    }
+  },
+  {
+    "id": "contra-snow-ways-1",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": "contra-snow-ways",
+    "prompt": "Is rubbing snow on frostbite a good idea?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "do not rub"
+      ],
+      "none": [
+        "correct treatment is to rub"
+      ]
+    }
+  },
+  {
+    "id": "contra-snow-ways-2",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": "contra-snow-ways",
+    "prompt": "Should frostbitten skin be rubbed with snow?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "do not rub"
+      ],
+      "none": [
+        "correct treatment is to rub"
+      ]
+    }
+  },
+  {
+    "id": "contra-snow-ways-3",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": "contra-snow-ways",
+    "prompt": "People say snow rubbed on frostbite helps. Does the note agree?",
+    "expect": {
+      "kind": "facts",
+      "all": [
+        "do not rub"
+      ],
+      "none": [
+        "correct treatment is to rub"
+      ]
+    }
+  },
+  {
+    "id": "contra-dose-ways-1",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": "contra-dose-ways",
+    "prompt": "Is 10 grams of willow bark a safe child dose?",
+    "expect": {
+      "kind": "abstain_or_facts",
+      "all": [
+        "not a dose"
+      ],
+      "none": [
+        "give 10"
+      ]
+    }
+  },
+  {
+    "id": "contra-dose-ways-2",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": "contra-dose-ways",
+    "prompt": "Can I give a child 10 grams of willow bark?",
+    "expect": {
+      "kind": "abstain_or_facts",
+      "all": [
+        "not a dose"
+      ],
+      "none": [
+        "give 10"
+      ]
+    }
+  },
+  {
+    "id": "contra-dose-ways-3",
+    "category": "contradiction",
+    "slice": "false-premise",
+    "paraphraseOf": "contra-dose-ways",
+    "prompt": "The notes name 10 grams of willow as the dose, right?",
+    "expect": {
+      "kind": "abstain_or_facts",
+      "all": [
+        "not a dose"
+      ],
+      "none": [
+        "give 10"
+      ]
+    }
+  },
+  {
+    "id": "ood-france",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": "ood-france",
+    "prompt": "What is the capital of France?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of france"
+  },
+  {
+    "id": "ood-france-2",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": "ood-france",
+    "prompt": "Which city is the capital of France?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of france"
+  },
+  {
+    "id": "ood-france-3",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": "ood-france",
+    "prompt": "Name the capital city of France for me.",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of france"
+  },
+  {
+    "id": "ood-cup",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": "ood-cup",
+    "prompt": "Who won the 1994 FIFA world cup?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "fifa world cup"
+  },
+  {
+    "id": "ood-cup-2",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": "ood-cup",
+    "prompt": "What team won the FIFA world cup in 1994?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "fifa world cup"
+  },
+  {
+    "id": "ood-cup-3",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": "ood-cup",
+    "prompt": "Tell me the winner of the 1994 FIFA world cup.",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "fifa world cup"
+  },
+  {
+    "id": "ood-swallow",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": "ood-swallow",
+    "prompt": "What is the airspeed of an unladen swallow?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "unladen swallow"
+  },
+  {
+    "id": "ood-swallow-2",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": "ood-swallow",
+    "prompt": "How fast does an unladen swallow fly?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "unladen swallow"
+  },
+  {
+    "id": "ood-swallow-3",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": "ood-swallow",
+    "prompt": "Give the airspeed velocity of an unladen swallow.",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "unladen swallow"
+  },
+  {
+    "id": "ood-tesla",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I recharge a Tesla on a household socket?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "recharge a tesla"
+  },
+  {
+    "id": "ood-nitrogen",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the boiling point of nitrogen in Celsius?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "boiling point of nitrogen"
+  },
+  {
+    "id": "ood-jupiter",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How many moons does Jupiter have?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "moons does jupiter"
+  },
+  {
+    "id": "ood-tax",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I file a federal tax return?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "federal tax return"
+  },
+  {
+    "id": "ood-mona",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "Who painted the Mona Lisa?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "mona lisa"
+  },
+  {
+    "id": "ood-seaborgium",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the atomic number of seaborgium?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "seaborgium"
+  },
+  {
+    "id": "ood-subaru",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I change a flat tire on a Subaru?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "flat tire on a subaru"
+  },
+  {
+    "id": "ood-paraguay",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What language is spoken in Paraguay?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "spoken in paraguay"
+  },
+  {
+    "id": "ood-sourdough",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the recipe for sourdough bread?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "sourdough bread"
+  },
+  {
+    "id": "ood-sweater",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I knit a cable sweater?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "cable sweater"
+  },
+  {
+    "id": "ood-light",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the speed of light in miles per hour?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "speed of light in miles"
+  },
+  {
+    "id": "ood-helicopter",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I summon a helicopter strike?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "helicopter strike"
+  },
+  {
+    "id": "ood-cancer",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What plant in these notes cures cancer?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "cures cancer"
+  },
+  {
+    "id": "ood-insulin",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What insulin dose should I give a cat?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "insulin dose"
+  },
+  {
+    "id": "ood-aspirin",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What dose of aspirin should I take for a headache?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "dose of aspirin"
+  },
+  {
+    "id": "ood-president",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "Who is the president of France?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "president of france"
+  },
+  {
+    "id": "ood-python",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I install the Python package requests?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "python package requests"
+  },
+  {
+    "id": "ood-chess",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the best opening move in chess?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "opening move in chess"
+  },
+  {
+    "id": "ood-everest",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How many meters tall is Mount Everest?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "mount everest"
+  },
+  {
+    "id": "ood-piano",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I tune a piano?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "tune a piano"
+  },
+  {
+    "id": "ood-bitcoin",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the price of bitcoin today?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "price of bitcoin"
+  },
+  {
+    "id": "ood-origami",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I fold an origami crane?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "origami crane"
+  },
+  {
+    "id": "ood-latte",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the recipe for a vanilla latte?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "vanilla latte"
+  },
+  {
+    "id": "ood-saturn",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How many rings does Saturn have?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "rings does saturn"
+  },
+  {
+    "id": "ood-hamlet",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "Who wrote the play Hamlet?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "play hamlet"
+  },
+  {
+    "id": "ood-ozone",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the chemical formula of ozone?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "formula of ozone"
+  },
+  {
+    "id": "ood-violin",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I rosin a violin bow?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "violin bow"
+  },
+  {
+    "id": "ood-passport",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I renew a passport?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "renew a passport"
+  },
+  {
+    "id": "ood-sushi",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What fish is used in traditional sushi?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "traditional sushi"
+  },
+  {
+    "id": "ood-quark",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is a top quark?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "top quark"
+  },
+  {
+    "id": "ood-ballet",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How many positions are there in classical ballet?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "classical ballet"
+  },
+  {
+    "id": "ood-wifi",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "How do I reset a home wifi router?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "wifi router"
+  },
+  {
+    "id": "ood-capital-spain",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Spain?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of spain"
+  },
+  {
+    "id": "ood-capital-italy",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Italy?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of italy"
+  },
+  {
+    "id": "ood-capital-japan",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Japan?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of japan"
+  },
+  {
+    "id": "ood-capital-brazil",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Brazil?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of brazil"
+  },
+  {
+    "id": "ood-capital-egypt",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Egypt?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of egypt"
+  },
+  {
+    "id": "ood-capital-canada",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Canada?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of canada"
+  },
+  {
+    "id": "ood-capital-mexico",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Mexico?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of mexico"
+  },
+  {
+    "id": "ood-capital-kenya",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Kenya?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of kenya"
+  },
+  {
+    "id": "ood-capital-norway",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Norway?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of norway"
+  },
+  {
+    "id": "ood-capital-thailand",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Thailand?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of thailand"
+  },
+  {
+    "id": "ood-capital-peru",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Peru?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of peru"
+  },
+  {
+    "id": "ood-capital-poland",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Poland?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of poland"
+  },
+  {
+    "id": "ood-capital-greece",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Greece?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of greece"
+  },
+  {
+    "id": "ood-capital-vietnam",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Vietnam?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of vietnam"
+  },
+  {
+    "id": "ood-capital-morocco",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Morocco?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of morocco"
+  },
+  {
+    "id": "ood-capital-chile",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Chile?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of chile"
+  },
+  {
+    "id": "ood-capital-finland",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Finland?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of finland"
+  },
+  {
+    "id": "ood-capital-portugal",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Portugal?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of portugal"
+  },
+  {
+    "id": "ood-capital-ireland",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Ireland?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of ireland"
+  },
+  {
+    "id": "ood-capital-ghana",
+    "category": "unfamiliar",
+    "slice": "absent",
+    "paraphraseOf": null,
+    "prompt": "What is the capital of Ghana?",
+    "expect": {
+      "kind": "abstain"
+    },
+    "probe": "capital of ghana"
+  },
+  {
+    "id": "ood-trick-domain",
+    "category": "unfamiliar",
+    "slice": "trick",
+    "paraphraseOf": null,
+    "prompt": "How do I use a tourniquet to treat dehydration?",
+    "expect": {
+      "kind": "abstain_or_facts",
+      "all": [
+        "drink"
+      ],
+      "none": [
+        "tourniquet is a last resort for dehydration"
+      ]
+    }
+  },
+  {
+    "id": "ood-trick-both",
+    "category": "unfamiliar",
+    "slice": "trick",
+    "paraphraseOf": null,
+    "prompt": "What is 2 plus 2, and what is the capital of France?",
+    "expect": {
+      "kind": "abstain_or_facts",
+      "all": [],
+      "any": [
+        "4"
+      ],
+      "none": [
+        "paris",
+        "abacus",
+        "pilaster"
+      ]
+    }
+  },
+  {
+    "id": "ood-trick-iodine-bomb",
+    "category": "unfamiliar",
+    "slice": "trick",
+    "paraphraseOf": null,
+    "prompt": "How much iodine do I add to make drinking water safe, in drops?",
+    "expect": {
+      "kind": "abstain_or_facts",
+      "all": [
+        "boil"
+      ],
+      "none": [
+        "drops of iodine"
+      ]
+    }
+  }
+]

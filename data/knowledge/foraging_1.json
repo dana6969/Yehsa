@@ -1,0 +1,672 @@
+[
+{
+"id": "poison_hemlock",
+"title": "Poison hemlock",
+"domain": "foraging",
+"also": [
+"Conium maculatum",
+"poison parsley",
+"tall white umbrella flower",
+"hemlock plant"
+],
+"def": "Poison hemlock is a deadly poisonous plant in the carrot family, often mistaken for wild carrot, parsley, or parsnip.",
+"look": [
+"smooth, hairless, hollow stalk with purple blotches",
+"fern-like, finely divided leaves that smell musty when crushed",
+"clusters of small white flowers in umbrella shapes, up to 6 to 10 feet tall"
+],
+"use": "Use this entry for identification and warnings only. Treat every wild carrot-family plant as dangerous unless an expert has confirmed it, and keep children and pets away.",
+"not": "Never eat, brew, or taste any part, and do not rely on boiling to make it safe.",
+"alike": [
+"Wild carrot (Queen Anne's lace): hairy stem, carrot-smelling root, not blotched",
+"Water hemlock: grows in wet ground, with chambered roots and veins running to leaf notches",
+"Fool's parsley and wild parsnip: also unpleasant or harmful; do not guess"
+],
+"region": "Poison hemlock is established across much of New England along roadsides, ditches, and field edges.",
+"call": "If someone may have eaten it, call 911 if they are very sick or Poison Control at 1-800-222-1222; do not wait for symptoms.",
+"rel": [
+"wild_carrot_lookalike",
+"water_hemlock"
+],
+"src": [
+"atp3-50-21",
+"nih-medline",
+"poison-control"
+]
+},
+{
+"id": "wild_carrot_lookalike",
+"title": "Wild carrot (Queen Anne's lace)",
+"domain": "foraging",
+"also": [
+"Daucus carota",
+"Queen Anne's lace",
+"bird's nest flower",
+"wild carrot"
+],
+"def": "Wild carrot is a common white umbrella wildflower with hairy stems and a carrot-smelling root, and it is easy to confuse with deadly hemlocks.",
+"look": [
+"hairy, solid stems",
+"carrot smell from a crushed root or leaf",
+"flat white flower head, sometimes with a single dark center floret, curling into a bird's nest when seeding"
+],
+"use": "Use it only as an identification lesson. A beginner should not eat any carrot-family plant from the wild.",
+"not": "Do not eat it unless you can positively tell it from poison hemlock and water hemlock; a carrot smell alone is not enough when guessing.",
+"alike": [
+"Poison hemlock: smooth, hairless, purple-blotched hollow stems; musty smell",
+"Water hemlock: wet ground, chambered roots",
+"Giant hogweed and wild parsnip: sap can cause severe skin burns in sunlight"
+],
+"call": "If someone may have eaten a hemlock, call 911 if very sick, or Poison Control at 1-800-222-1222.",
+"rel": [
+"poison_hemlock",
+"water_hemlock"
+],
+"src": [
+"atp3-50-21",
+"poison-control"
+]
+},
+{
+"id": "water_hemlock",
+"title": "Water hemlock",
+"domain": "foraging",
+"also": [
+"Cicuta maculata",
+"spotted water hemlock",
+"cowbane",
+"deadly umbrella plant in wet ground"
+],
+"def": "Water hemlock is one of the most poisonous plants in North America; a small amount of the root can cause fatal seizures.",
+"look": [
+"grows in wet ground: stream banks, ditches, marshes",
+"smooth hollow stems streaked or spotted with purple",
+"doubly compound leaves with toothed leaflets whose veins run to the notches",
+"a chambered root that oozes yellowish liquid when cut"
+],
+"use": "Use only as a warning. Stay out of wet-ground carrot-family plants.",
+"not": "Never eat, taste, or handle the roots, and do not use it for a whistle or a straw.",
+"alike": [
+"Wild carrot and poison hemlock: also in the carrot family",
+"Wild parsnip and angelica: similar flowers and leaves",
+"Edible-looking tubers or roots in wet ground: never eat them from the wild"
+],
+"call": "Call 911 immediately for any ingestion; seizures can start within an hour.",
+"rel": [
+"poison_hemlock",
+"wild_carrot_lookalike"
+],
+"src": [
+"atp3-50-21",
+"poison-control"
+]
+},
+{
+"id": "poison_ivy_id",
+"title": "Poison ivy",
+"domain": "foraging",
+"also": [
+"leaves of three",
+"Toxicodendron radicans",
+"hairy rope vine",
+"itchy vine",
+"three leaf plant"
+],
+"def": "Poison ivy is a common plant of New England with three-leaflet leaves and an oil, urushiol, that causes an itchy, blistering rash on contact.",
+"look": [
+"three leaflets, with the middle leaflet on a longer stalk",
+"grows as a vine with hairy aerial roots, a shrub, or ground cover",
+"leaves shiny or dull, edges smooth or notched, red in fall; white berries"
+],
+"use": "Wash skin and clothing within minutes of contact and keep from touching your face. Learn it by sight, and look before you touch brush.",
+"not": "Never burn it; the smoke can injure the lungs. Do not pet a dog that has been in it without washing the coat.",
+"alike": [
+"Virginia creeper: five leaflets",
+"Box elder seedlings: leaflets in threes but opposite branching",
+"Wild raspberry and blackberry: thorny stems",
+"Poison sumac: swamp shrub with 7 to 13 leaflets"
+],
+"region": "Poison ivy is abundant in New England woods, edges, and dunes; poison oak does not occur there.",
+"call": "Get care for a rash on the face or genitals, over much of the body, or with swelling or trouble breathing.",
+"rel": [
+"poison_ivy_rash",
+"poison_sumac"
+],
+"src": [
+"nih-medline",
+"cdc",
+"atp3-50-21"
+]
+},
+{
+"id": "poison_sumac",
+"title": "Poison sumac and poison oak",
+"domain": "foraging",
+"also": [
+"Toxicodendron vernix",
+"poison oak",
+"swamp sumac",
+"white berries sumac"
+],
+"def": "Poison sumac is a swamp shrub with 7 to 13 smooth-edged leaflets and white berries; it causes the same rash as poison ivy.",
+"look": [
+"leaves of 7 to 13 smooth leaflets on a red stem",
+"grows in wet swamps and bogs",
+"drooping clusters of white-gray berries"
+],
+"use": "Stay out of swamp shrubs you cannot name, and wash after contact like poison ivy.",
+"not": "Never burn it, and do not confuse it with harmless red-berried staghorn sumac.",
+"alike": [
+"Staghorn sumac: upright red berry cones, toothed leaflets, dry ground",
+"Poison ivy: three leaflets, vine or shrub",
+"Poison oak: a western and southeastern plant, not in New England"
+],
+"call": "Get care for a severe, facial, or widespread rash.",
+"rel": [
+"poison_ivy_id",
+"poison_ivy_rash"
+],
+"src": [
+"nih-medline",
+"cdc"
+]
+},
+{
+"id": "mushrooms_never_from_photo",
+"title": "Never eat a wild mushroom from a photo",
+"domain": "foraging",
+"also": [
+"can I eat this mushroom",
+"is this mushroom edible",
+"mushroom identification app",
+"identify a mushroom"
+],
+"def": "A photo, an app, or a camera match can never confirm a wild mushroom is safe; deadly species resemble edible ones, and cooking does not remove most toxins.",
+"look": [
+"many deadly species look like edible ones",
+"key features like spore print, base, and habitat do not show in a photo",
+"apps and AI make mistakes"
+],
+"use": "If you want to forage, learn from a local expert or a mycological society, and have every mushroom confirmed in person. If you are hungry and in trouble, use packed food and do not experiment.",
+"not": "Do not eat any wild mushroom from a photo, an app, a color rule, or a taste test, and do not give one to a child or pet.",
+"call": "Call Poison Control at 1-800-222-1222, or 911 if very sick, for any wild mushroom eaten by mistake; keep a sample.",
+"rel": [
+"amanita_death_cap",
+"jack_o_lantern_mushroom"
+],
+"src": [
+"atp3-50-21",
+"poison-control",
+"nih-medline"
+]
+},
+{
+"id": "jack_o_lantern_mushroom",
+"title": "Jack-o'-lantern mushroom (not a chanterelle)",
+"domain": "foraging",
+"also": [
+"Omphalotus illudens",
+"orange poisonous mushroom",
+"false chanterelle",
+"orange mushroom on a stump"
+],
+"def": "The Jack-o'-lantern is an orange, poisonous mushroom that grows in clusters on wood and causes severe vomiting and cramps; it is often mistaken for a chanterelle.",
+"look": [
+"orange, funnel-shaped caps growing in clusters from wood or buried roots",
+"true, thin, sharp-edged gills running down the stem",
+"grows on stumps or at the base of trees"
+],
+"use": "Use as a warning example. If you find an orange mushroom, leave it, and do not eat anything you cannot confirm with an expert.",
+"not": "Do not eat any orange mushroom, and do not think a color or a glow in the dark confirms it.",
+"alike": [
+"Chanterelle: single, from soil, blunt forked ridges (false gills), apricot smell, solid white flesh",
+"Orange grocery produce and signs: not mushrooms; Yehsa does not identify them",
+"Other orange mushrooms: do not guess"
+],
+"region": "Jack-o'-lanterns are common in the eastern US in late summer and fall, on stumps and oak roots.",
+"call": "Call Poison Control at 1-800-222-1222 for any ingestion; call 911 if severely ill.",
+"rel": [
+"chanterelle_vs_lookalikes",
+"mushrooms_never_from_photo"
+],
+"src": [
+"poison-control",
+"nih-medline"
+]
+},
+{
+"id": "chanterelle_vs_lookalikes",
+"title": "Chanterelle and its look-alikes",
+"domain": "foraging",
+"also": [
+"Cantharellus",
+"golden chanterelle",
+"false chanterelle",
+"chanterelles in New England"
+],
+"def": "True chanterelles are golden, funnel-shaped mushrooms with blunt, forked ridges instead of thin gills, but only an expert should confirm them.",
+"look": [
+"blunt, forked ridges that run down the stem and look like folds",
+"grows from soil near trees, usually singly or scattered",
+"fruity, apricot-like smell and solid white flesh inside"
+],
+"use": "Learn them in person with a local expert or society, never from a photo.",
+"not": "Do not eat one that grows in dense clusters on wood, has thin sharp gills, or that you are not certain of.",
+"alike": [
+"Jack-o'-lantern: clusters on wood, thin true gills",
+"False chanterelle (Hygrophoropsis): thin, orange, forked true gills",
+"Other orange mushrooms: do not guess"
+],
+"call": "Call Poison Control at 1-800-222-1222 for any mistake; call 911 if very sick.",
+"rel": [
+"jack_o_lantern_mushroom",
+"mushrooms_never_from_photo"
+],
+"src": [
+"poison-control"
+]
+},
+{
+"id": "amanita_death_cap",
+"title": "Destroying angel and death cap (deadly amanitas)",
+"domain": "foraging",
+"also": [
+"Amanita bisporigera",
+"Amanita phalloides",
+"death cap",
+"destroying angel",
+"white mushroom in the woods"
+],
+"def": "Destroying angels and death caps are deadly mushrooms; a small bite can destroy the liver, and symptoms may be delayed for hours.",
+"look": [
+"white or greenish cap with white gills",
+"a skirt-like ring on the stem and a cup or sac (volva) at the base, which may be buried",
+"white spore print"
+],
+"use": "Use as a warning: do not eat white woodland mushrooms, and dig, never cut, if you are learning with an expert.",
+"not": "Do not eat any mushroom with white gills, a ring, and a swollen base. A white 'button' in the woods is not a grocery mushroom.",
+"alike": [
+"Grocery button mushrooms: pink to brown gills, no cup at the base",
+"Edible puffballs: solid white inside, no gills or stem outline",
+"Other white Amanita: all may be poisonous"
+],
+"region": "Amanita species and the introduced death cap occur in New England woodlands, often near oaks and pines.",
+"call": "Call 911 or Poison Control at 1-800-222-1222 at once; stomach pain may pass, but the liver may fail days later.",
+"rel": [
+"mushrooms_never_from_photo",
+"jack_o_lantern_mushroom"
+],
+"src": [
+"poison-control",
+"nih-medline"
+]
+},
+{
+"id": "eaten_poison_plant_what_to_do",
+"title": "Someone may have eaten a poisonous plant or mushroom",
+"domain": "foraging",
+"also": [
+"ate a wild plant",
+"child ate a berry",
+"ate a mushroom and sick",
+"pet ate a mushroom"
+],
+"def": "If someone may have eaten a poisonous plant or mushroom, call Poison Control or 911 immediately, before symptoms appear.",
+"look": [
+"any wild plant or mushroom swallowed by a child or pet",
+"vomiting, belly pain, drooling, confusion, or seizures",
+"delayed symptoms hours later with deadly mushrooms"
+],
+"use": "Call 911 if the person is very sick, unresponsive, or having a seizure; otherwise call Poison Control at 1-800-222-1222. Keep a sample or a photo and note the time and amount. Rinse the mouth and keep the person calm.",
+"not": "Do not make the person vomit, and do not wait for symptoms or a plant-ID app.",
+"call": "Call 911 or Poison Control at 1-800-222-1222 right away; for pets call a veterinarian or a pet poison line.",
+"rel": [
+"poisoning_swallowed",
+"mushrooms_never_from_photo"
+],
+"src": [
+"poison-control",
+"cdc"
+]
+},
+{
+"id": "plant_safe_positive_id",
+"title": "Is this plant safe to eat?",
+"domain": "foraging",
+"also": [
+"can I eat this plant",
+"is this berry safe",
+"wild plant edible",
+"hungry and found a plant"
+],
+"def": "A wild plant is only safe to eat when a person has positively identified it by several features and ruled out its poisonous look-alikes; if you are unsure, the answer is no.",
+"look": [
+"more than one feature checked: leaf, flower, fruit, stem, habitat",
+"look-alikes ruled out",
+"legal to harvest where you are"
+],
+"use": "Use food you carried first. If you want to learn foraging, go with a local expert, use a regional guide, and start with the few plants that have no deadly look-alikes.",
+"not": "Do not eat unknown plants, do not use a camera or app as a yes, and do not use a taste test.",
+"call": "Call Poison Control at 1-800-222-1222 for any mistaken ingestion.",
+"rel": [
+"foraging_false_rules",
+"eaten_poison_plant_what_to_do"
+],
+"src": [
+"atp3-50-21",
+"poison-control"
+]
+},
+{
+"id": "foraging_false_rules",
+"title": "False rules about wild food",
+"domain": "foraging",
+"also": [
+"universal edibility test",
+"animals eat it so it is safe",
+"red berries rule",
+"boiling removes poison",
+"taste test",
+"color rule"
+],
+"def": "Rules of thumb such as 'animals eat it', 'boiling makes it safe', or 'avoid red plants' are false and have killed people.",
+"look": [
+"animals can eat plants that poison people",
+"boiling does not destroy many toxins",
+"berry color is not a safety rule"
+],
+"use": "Do not use a universal edibility test for unknown plants. In a real emergency, focus on water, shelter, and signaling; people can go weeks without food.",
+"not": "Do not rely on color, taste, smell, animal behavior, or cooking.",
+"call": "Call Poison Control at 1-800-222-1222 for any mistake.",
+"rel": [
+"plant_safe_positive_id",
+"hungry_in_woods"
+],
+"src": [
+"atp3-50-21",
+"poison-control"
+]
+},
+{
+"id": "toxic_berries_new_england",
+"title": "Toxic berries and fruits in New England",
+"domain": "foraging",
+"also": [
+"baneberry",
+"doll's eyes",
+"pokeweed berries",
+"nightshade",
+"yew berries",
+"virginia creeper berries"
+],
+"def": "Several New England berries are poisonous, including baneberry, pokeweed, bittersweet nightshade, yew, and Virginia creeper.",
+"look": [
+"baneberry: white or red berries with a dark dot on stalks",
+"pokeweed: dark purple berries on pink stems",
+"bittersweet nightshade: red egg-shaped berries on a vine",
+"yew: red cup-shaped fruit with a toxic seed"
+],
+"use": "Teach children not to eat any wild berry, and keep these plants out of reach. Leave unknown berries alone.",
+"not": "Do not eat unknown berries or pokeweed, and do not use berry color as a rule.",
+"alike": [
+"Blueberries and blackberries: well-known edibles with a crown on blueberries",
+"Wild raspberries: hollow when picked, thorny canes",
+"Do not guess; confirm in person"
+],
+"call": "Call Poison Control at 1-800-222-1222 for any berry eaten by mistake.",
+"rel": [
+"berries_edible_new_england",
+"plant_safe_positive_id"
+],
+"src": [
+"poison-control",
+"atp3-50-21"
+]
+},
+{
+"id": "berries_edible_new_england",
+"title": "Blueberries, blackberries, and raspberries",
+"domain": "foraging",
+"also": [
+"wild blueberries",
+"blackberries",
+"raspberry canes",
+"wild berries Maine"
+],
+"def": "Wild blueberries, blackberries, and raspberries are common New England fruits with few dangerous look-alikes, but always confirm them in person.",
+"look": [
+"blueberry: small blue berry with a five-pointed crown on the end",
+"blackberry and raspberry: clusters of tiny drupelets on thorny canes; raspberries pull off hollow",
+"grows in sunny clearings, edges, and bogs"
+],
+"use": "Pick only fruits you recognized in person, wash them, and pick where it is legal and where there is no spray.",
+"not": "Do not eat berries that do not match all features, and do not pick on private land without permission.",
+"alike": [
+"Bittersweet nightshade: red egg-shaped berries on a vine",
+"Pokeweed: purple berries on pink stems",
+"Baneberry: white or red berries with dots"
+],
+"region": "Wild lowbush blueberry barrens are a Maine specialty; check the land rules before you pick.",
+"call": "Call Poison Control at 1-800-222-1222 for mistaken ingestion.",
+"rel": [
+"toxic_berries_new_england",
+"plant_safe_positive_id"
+],
+"src": [
+"atp3-50-21",
+"poison-control"
+]
+},
+{
+"id": "morel_true_vs_false",
+"title": "True morel versus false morel",
+"domain": "foraging",
+"also": [
+"Morchella",
+"false morel",
+"Gyromitra",
+"brain mushroom",
+"morel hunting"
+],
+"def": "True morels have a honeycomb cap attached to a hollow stem, while false morels have a wrinkled, brain-like cap and cottony or chambered inside and can be toxic.",
+"look": [
+"true morel: pitted honeycomb cap, hollow from tip to base when cut lengthwise",
+"false morel: wrinkled, lobed cap that hangs free, with cottony or chambered interior",
+"grows in spring under trees"
+],
+"use": "Have an expert show you in person, and cut every specimen in half lengthwise. Cook any morel thoroughly; never eat raw.",
+"not": "Do not eat a morel-like mushroom whose inside is not fully hollow, and do not eat it raw.",
+"alike": [
+"False morel (Gyromitra): toxic, cap hangs free",
+"Half-free morel: edible but easy to confuse"
+],
+"call": "Call Poison Control at 1-800-222-1222 after a mistaken ingestion.",
+"rel": [
+"mushrooms_never_from_photo",
+"amanita_death_cap"
+],
+"src": [
+"poison-control",
+"atp3-50-21"
+]
+},
+{
+"id": "fiddleheads_ostrich_fern",
+"title": "Fiddleheads (ostrich fern)",
+"domain": "foraging",
+"also": [
+"fiddlehead fern",
+"ostrich fern",
+"bracken fern",
+"edible ferns"
+],
+"def": "Fiddleheads are the coiled young fronds of the ostrich fern, a spring food in Maine; they must be identified correctly and cooked thoroughly or they can cause illness.",
+"look": [
+"a smooth stem with a deep U-shaped groove on the inside",
+"brown papery scales on the coil",
+"grows in clumps of about three from a single crown, near rivers"
+],
+"use": "Learn them in person, pick small amounts, rinse off the brown scales, and cook thoroughly per public-health guidance (boil about 15 minutes or steam 10 to 12). If you are unsure, skip them.",
+"not": "Do not eat them raw or undercooked, and do not eat other fern species.",
+"alike": [
+"Bracken fern: hairy stem with no deep groove, not recommended",
+"Cinnamon fern: woolly coil with hairs",
+"Other ferns: do not eat"
+],
+"region": "Maine and the Northeast have a spring fiddlehead season along rivers; check state rules on harvest on public land.",
+"call": "Get care for vomiting or diarrhea after eating fiddleheads.",
+"rel": [
+"plant_safe_positive_id",
+"mushrooms_never_from_photo"
+],
+"src": [
+"cdc",
+"atp3-50-21"
+]
+},
+{
+"id": "acorns_leaching",
+"title": "Acorns need proper leaching",
+"domain": "foraging",
+"also": [
+"eat acorns",
+"acorn flour",
+"tannins in acorns",
+"white oak acorns"
+],
+"def": "Acorns are high in tannins that taste bitter and upset the stomach, so they must be shelled, ground, and leached in many changes of water before use.",
+"look": [
+"bitter, astringent taste when raw",
+"white oak acorns have less tannin",
+"process with a sourced method only"
+],
+"use": "If you want to use acorns, follow a sourced method and expect hours of leaching. In a survival situation, they are not a first food.",
+"not": "Do not eat acorns raw or with a short soak.",
+"rel": [
+"wild_nuts_new_england",
+"hungry_in_woods"
+],
+"src": [
+"atp3-50-21"
+]
+},
+{
+"id": "wild_nuts_new_england",
+"title": "Wild nuts: hazelnut, beechnut, walnut, butternut",
+"domain": "foraging",
+"also": [
+"nuts you can eat",
+"black walnut",
+"butternut",
+"beechnut",
+"hickory"
+],
+"def": "Hazelnuts, beechnuts, hickory nuts, black walnuts, and butternuts are native New England nuts, but they need positive identification and proper processing.",
+"look": [
+"each tree has distinct leaves, bark, and husk",
+"black walnut and butternut have thick, stain-prone husks",
+"many nuts need drying and shelling"
+],
+"use": "Identify the tree in person, check for allergies, shell and eat only sound nuts.",
+"not": "Do not eat moldy or discolored nuts, and do not eat a nut unless you know the tree.",
+"region": "Butternut is threatened by canker and is protected in some places; check local rules.",
+"rel": [
+"acorns_leaching",
+"plant_safe_positive_id"
+],
+"src": [
+"atp3-50-21",
+"usfs"
+]
+},
+{
+"id": "cattail_lookalikes",
+"title": "Cattail and its look-alikes",
+"domain": "foraging",
+"also": [
+"Typha",
+"bulrush",
+"cattail shoots",
+"wild iris lookalike"
+],
+"def": "Cattails are tall wetland plants with brown sausage-shaped spikes, but young shoots can be confused with poisonous wild iris.",
+"look": [
+"brown cylindrical flower spike above long flat leaves",
+"grows in standing water or marshes",
+"young shoots smell like cucumber, not musty"
+],
+"use": "Learn them with an expert; cattails absorb pollutants, so use only from clean water.",
+"not": "Do not eat anything from polluted water, and do not eat a plant you cannot tell from iris.",
+"alike": [
+"Wild iris (blue flag): flat, blue-green fans, no spike, toxic",
+"Other marsh plants: do not guess"
+],
+"call": "Call Poison Control at 1-800-222-1222 for a mistaken ingestion.",
+"rel": [
+"plant_safe_positive_id",
+"water_hemlock"
+],
+"src": [
+"atp3-50-21",
+"poison-control"
+]
+},
+{
+"id": "dandelion_greens",
+"title": "Dandelion and plantain greens",
+"domain": "foraging",
+"also": [
+"dandelion",
+"edible weeds",
+"plantain leaves"
+],
+"def": "Dandelion and broadleaf plantain are common lawn and field weeds that can be eaten as greens when picked from clean, unsprayed places.",
+"look": [
+"dandelion: toothed rosette leaves and a single hollow stem with one yellow flower",
+"plantain: oval ribbed leaves in a rosette with a spike of seeds",
+"picked far from roads, pets, and chemicals"
+],
+"use": "Pick young leaves from clean, unsprayed ground, wash them, and cook or eat as a small addition, not as free calories.",
+"not": "Do not pick from roadsides, treated lawns, or dog areas.",
+"alike": [
+"Cat's ear and hawkweed: look similar and are less well studied",
+"Other rosette plants: confirm in person"
+],
+"rel": [
+"plant_safe_positive_id"
+],
+"src": [
+"atp3-50-21",
+"usda-nrcs"
+]
+},
+{
+"id": "poison_contact_eating_smoke",
+"title": "Plants that poison by contact, eating, or smoke",
+"domain": "foraging",
+"also": [
+"giant hogweed",
+"wild parsnip burns",
+"stinging nettle",
+"poisonous plants overview"
+],
+"def": "Plants can harm by contact (poison ivy, wild parsnip, giant hogweed), by eating (hemlocks, baneberry), or by smoke (burning poison ivy).",
+"look": [
+"wild parsnip and giant hogweed sap causes burns in sunlight",
+"poison ivy oil causes a rash",
+"hemlocks and baneberry are poisonous when eaten"
+],
+"use": "Learn the plants of your area, wear long sleeves and gloves in brush, and wash exposed skin after contact. Keep children and pets from unknown plants.",
+"not": "Do not burn unknown brush, and do not touch sap from large umbrella plants without gloves.",
+"region": "Giant hogweed and wild parsnip occur in New England; avoid contact with their sap and sunlight.",
+"call": "Call 911 for trouble breathing or severe reactions; call Poison Control at 1-800-222-1222.",
+"rel": [
+"poison_ivy_id",
+"poison_hemlock"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+}
+]

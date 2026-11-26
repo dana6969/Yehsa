@@ -55,7 +55,8 @@ test("a full survival question is parsed and answered from several sources", () 
   assert.match(answer.symbol.toLowerCase(), /willow/);
   assert.doesNotMatch(answer.symbol.toLowerCase(), /suede/);
   assert.match(answer.text.toLowerCase(), /willow/);
-  assert.match(answer.text.toLowerCase(), /survival/);
+  // Copy fix (17 Nov): no "In a survival setting," opener; the answer leads with the action.
+  assert.doesNotMatch(answer.text, /^In a \w+ setting,/);
   assert.match(answer.text.toLowerCase(), /analgesic|ache|salicin/);
   assert.doesNotMatch(answer.text, / \| /);
   assert.doesNotMatch(answer.text, /forsaken|Sir W/);

@@ -1,0 +1,310 @@
+[
+{
+"id": "hungry_in_woods",
+"title": "Hungry in the woods",
+"domain": "food",
+"also": [
+"I am hungry",
+"no food in the woods",
+"need to eat",
+"starving lost"
+],
+"def": "If you are hungry in the woods, eat the food you carried and focus first on water, shelter, warmth, and being found, because a person can go weeks without food but only days without water.",
+"look": [
+"a hunger that feels urgent but is not an emergency",
+"packed food, even small amounts",
+"water, warmth, and signals come first"
+],
+"use": "Eat what you carried in small amounts, keep warm and hydrated, and stop to make a plan. Save energy and signal for help. Fish or known foods only if you know how.",
+"not": "Do not start by eating wild plants or mushrooms; mistakes can be deadly.",
+"call": "Call 911 or use satellite SOS if you are lost or hurt.",
+"rel": [
+"plant_safe_positive_id",
+"foraging_false_rules"
+],
+"src": [
+"atp3-50-21",
+"ready"
+]
+},
+{
+"id": "food_danger_zone",
+"title": "Danger zone: 40 to 140 F",
+"domain": "food",
+"also": [
+"how long can food sit out",
+"bacteria grow in food",
+"two hour rule",
+"food temperature danger zone"
+],
+"def": "The danger zone is 40 to 140 F (4 to 60 C), where bacteria multiply fast, so perishable food should not stay out more than two hours, or one hour above 90 F.",
+"look": [
+"perishable food left out on a counter or picnic table",
+"food not kept cold in a cooler",
+"hot food that cooled slowly"
+],
+"use": "Keep cold food at or below 40 F and hot food at or above 140 F. Put leftovers in the fridge or cooler within two hours (one hour if it is above 90 F). Use ice packs and a thermometer in the cooler.",
+"not": "Do not leave perishable food out for more than two hours, and do not taste it to see whether it is safe.",
+"rel": [
+"food_leftovers_safety",
+"food_safe_cook_temps"
+],
+"src": [
+"usda-fsis"
+]
+},
+{
+"id": "food_safe_cook_temps",
+"title": "Safe minimum cooking temperatures",
+"domain": "food",
+"also": [
+"what temperature to cook chicken",
+"how done should venison be",
+"meat thermometer",
+"ground meat temperature"
+],
+"def": "Use a food thermometer: 165 F (74 C) for poultry and leftovers, 160 F (71 C) for ground meats and egg dishes, and 145 F (63 C) for whole cuts of meat and fish with a three-minute rest.",
+"look": [
+"poultry and reheated food: 165 F",
+"ground beef, pork, and ground game: 160 F",
+"whole beef, pork, lamb, venison, and fish: 145 F"
+],
+"use": "Insert the thermometer into the thickest part, away from bone, and let the temperature settle. Do not rely on color.",
+"not": "Do not judge doneness by color or juice; ground meat can be brown before it is safe.",
+"rel": [
+"food_danger_zone"
+],
+"src": [
+"usda-fsis"
+]
+},
+{
+"id": "food_leftovers_safety",
+"title": "Are leftovers, picnic food, or cooler food still safe?",
+"domain": "food",
+"also": [
+"is this food still good",
+"leftovers how long",
+"cooler food melted ice",
+"can I eat this"
+],
+"def": "Leftovers are safe for three to four days in the fridge and picnic or cooler food is safe only if it stayed at 40 F or below; when in doubt, throw it out.",
+"look": [
+"how long it sat in the danger zone",
+"a cooler with ice still present and food cold",
+"smell is not a reliable test"
+],
+"use": "Reheat leftovers to 165 F, keep coolers full of ice or ice packs, and discard perishable food that was out over two hours (one hour above 90 F).",
+"not": "Do not rely on smell or taste; harmful bacteria often do not change them.",
+"rel": [
+"food_danger_zone",
+"food_outage"
+],
+"src": [
+"usda-fsis"
+]
+},
+{
+"id": "food_field_hygiene",
+"title": "Food hygiene in the field",
+"domain": "food",
+"also": [
+"wash hands before eating",
+"keep raw meat separate",
+"clean cutting board outdoors"
+],
+"def": "Wash hands and tools, keep raw meat separate from ready-to-eat food, and cook to a safe temperature.",
+"look": [
+"hands washed with soap or sanitizer",
+"separate cutting boards and knives",
+"cooler kept cold"
+],
+"use": "Wash hands with soap and treated water before touching food, bag raw meat separately, wash utensils, and keep the cooler in shade.",
+"not": "Do not reuse a plate or knife that touched raw meat without washing.",
+"rel": [
+"food_danger_zone",
+"water_hygiene_scarce"
+],
+"src": [
+"usda-fsis",
+"cdc"
+]
+},
+{
+"id": "food_outage",
+"title": "Food in the fridge and freezer during an outage",
+"domain": "food",
+"also": [
+"power outage food",
+"how long does a fridge stay cold",
+"freezer without power",
+"throw out food"
+],
+"def": "A closed refrigerator keeps food safe about 4 hours without power; a full freezer holds for about 48 hours (24 if half full) if the door stays shut.",
+"look": [
+"a thermometer in the fridge at 40 F or below",
+"ice crystals still in the freezer food",
+"a cooler with ice for backup"
+],
+"use": "Keep doors closed, group food together, use ice or dry ice carefully, and check temperatures. Discard perishable food above 40 F for more than two hours.",
+"not": "Do not taste food to test it, and do not refreeze food that fully thawed.",
+"rel": [
+"power_out_safety",
+"food_danger_zone"
+],
+"src": [
+"usda-fsis",
+"cdc",
+"ready"
+]
+},
+{
+"id": "jerky_drying_meat",
+"title": "Making jerky safely",
+"domain": "food",
+"also": [
+"dry meat",
+"venison jerky",
+"dehydrating meat"
+],
+"def": "Safe jerky starts with heating the meat to a safe internal temperature before or during drying, and the drying alone does not kill bacteria.",
+"look": [
+"lean meat sliced thin",
+"heat to 160 F (71 C), poultry to 165 F, then dry at 130 to 140 F (54 to 60 C)",
+"a dry, leathery finish that bends but does not break"
+],
+"use": "Follow USDA guidance: marinate in the fridge, steam or oven-heat to the right internal temperature, then dry. Store in a cool dry place.",
+"not": "Do not rely on drying alone or dry at too low a temperature.",
+"rel": [
+"food_safe_cook_temps"
+],
+"src": [
+"usda-fsis"
+]
+},
+{
+"id": "home_canning_safe",
+"title": "Home canning: pressure canner for meat and vegetables",
+"domain": "food",
+"also": [
+"canning venison",
+"botulism",
+"low-acid canning",
+"pressure canner"
+],
+"def": "Low-acid foods such as meat and vegetables must be canned in a pressure canner following the USDA guide, because boiling-water canning cannot make them safe from botulism.",
+"look": [
+"a pressure canner with a tested gauge",
+"a bulging lid, spurting liquid, or a bad smell",
+"USDA tested processing times"
+],
+"use": "Follow the USDA Complete Guide to Home Canning for your food, jar size, and altitude. Check each jar seal before storage.",
+"not": "Do not taste food from a jar that bulges, leaks, or smells off; throw it away carefully.",
+"call": "Call 911 for double vision, drooping eyelids, or trouble swallowing or breathing after eating home-canned food.",
+"rel": [
+"food_danger_zone",
+"jerky_drying_meat"
+],
+"src": [
+"usda-canning",
+"usda-fsis"
+]
+},
+{
+"id": "food_allergies",
+"title": "Allergies to wild or familiar foods",
+"domain": "food",
+"also": [
+"food allergy outdoors",
+"allergic reaction to nuts",
+"epinephrine on a trip"
+],
+"def": "Food allergies can cause hives, swelling, or trouble breathing within minutes; carry any prescribed epinephrine and tell your group.",
+"look": [
+"hives, swelling of the lips or tongue, wheezing",
+"vomiting or dizziness after eating",
+"exposure to a known allergen"
+],
+"use": "Know your allergens, tell your group, carry medicine, and avoid new wild foods. Use epinephrine as prescribed and call 911.",
+"not": "Do not try a wild food if you have a known allergy.",
+"call": "Call 911 for any signs of a severe reaction.",
+"rel": [
+"anaphylaxis_signs",
+"epinephrine_auto"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "fish_cleaning_spoilage",
+"title": "Cleaning fish and spoilage signs",
+"domain": "food",
+"also": [
+"how to clean a fish",
+"is the fish bad",
+"fish smell",
+"clean a fish",
+"gut a fish",
+"fish cleaning",
+"how to gut a fish"
+],
+"def": "Cleaning a fish means gutting it soon after the catch, keeping it cold, and cooking it to 145 °F (63 °C); spoiled fish smells sour, feels slimy, and has cloudy or sunken eyes.",
+"look": [
+"fresh fish: clear eyes, firm flesh, and a mild smell",
+"spoiled fish: a sour smell, slime, and sunken or cloudy eyes",
+"the fish on ice, not left in the sun"
+],
+"use": "Gut the fish soon after catching it, keep it on ice, wash your hands, and cook it to 145 °F (63 °C), until the flesh is no longer translucent and separates easily with a fork. Check the state health department's fish advisories for mercury and other contaminants.",
+"not": "Do not eat fish that smells off, and do not leave it in the sun. Cooking does not make spoiled fish safe.",
+"region": "Maine and Rhode Island post fish consumption advisories; check them before you eat what you catch.",
+"rel": [
+"food_danger_zone",
+"food_safe_cook_temps",
+"game_cooking_temps"
+],
+"src": [
+"usda-fsis",
+"cdc",
+"foodsafety-gov"
+],
+"steps": [
+"Keep the fish cool from the moment you land it; use ice if you can.",
+"Make a shallow cut from the vent toward the head and remove the entrails without spilling the gut contents over the meat.",
+"Remove the gills if you will keep the head on, and rinse the cavity with clean water, then keep the fish on ice.",
+"Cook fish to 145 °F (63 °C) on a thermometer, or until the flesh is opaque and flakes easily.",
+"Check your state's fish-consumption advisories before you eat what you catch."
+],
+"ask": "How do I clean a fish?"
+},
+{
+"id": "shellfish_closures",
+"title": "Shellfish closures and red tide",
+"domain": "food",
+"also": [
+"clams closed",
+"paralytic shellfish poisoning",
+"red tide",
+"mussels safe"
+],
+"def": "Shellfish can carry toxins from algal blooms, and cooking does not remove them, so follow the official closure notices.",
+"look": [
+"a posted closure or red tide notice",
+"numbness around the mouth after eating shellfish",
+"state marine resources pages"
+],
+"use": "Check the state shellfish closure page before you harvest; if you cannot confirm that the area is open, do not eat shellfish from it.",
+"not": "Do not rely on cooking or on the look of the water.",
+"region": "Maine DMR and Rhode Island DEM post closure notices; link, never guess.",
+"call": "Call 911 for numbness, weakness, or trouble breathing after eating shellfish.",
+"rel": [
+"fish_cleaning_spoilage",
+"poisoning_swallowed"
+],
+"src": [
+"cdc",
+"state-regs-link"
+]
+}
+]

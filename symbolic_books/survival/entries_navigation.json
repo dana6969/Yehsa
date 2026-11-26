@@ -1,0 +1,117 @@
+[
+ {
+  "symbol": "map_orient_compass",
+  "title": "Orienting a map with a compass",
+  "context": "Orienting a map means turning it so north on the map points to north on the ground, after allowing for declination, so the map matches what you see. Also called set the map, orient the map, line up map and compass, turn the map to north, map and compass basics. Look for the map's north arrow or meridian lines; the compass needle settled and away from metal."
+ },
+ {
+  "symbol": "declination_basics",
+  "title": "Declination: magnetic versus true north",
+  "context": "Declination is the angle between where a compass needle points (magnetic north) and true north on the map; it differs by place and slowly changes over the years. Also called compass doesn't match the map, compass and map disagree, magnetic variation, declination angle, adjust for declination. Look for the declination diagram and year printed on the map; a compass with an adjustable declination setting."
+ },
+ {
+  "symbol": "north_types",
+  "title": "True north, magnetic north, and grid north",
+  "context": "True north points to the North Pole, magnetic north is where a compass needle points, and grid north follows the vertical grid lines printed on a map; the small angles between them matter over distance. Also called grid north, true north vs magnetic north, three norths, which north. Look for the three-arrow diagram in a topographic map's margin; grid lines (UTM) on the map."
+ },
+ {
+  "symbol": "bearing_take_follow",
+  "title": "Taking and following a compass bearing",
+  "context": "A bearing is the direction to a target measured in degrees clockwise from north; you take it from the map or a landmark, then walk it by sighting from object to object. Also called follow a bearing, take a bearing, walk a compass heading, shoot a bearing, azimuth. Look for the direction-of-travel arrow on the compass; the needle boxed in the orienting arrow."
+ },
+ {
+  "symbol": "contour_terrain_features",
+  "title": "Contour lines and terrain features",
+  "context": "Contour lines join points of equal elevation, so their shape and spacing show the land: close lines are steep, wide lines are gentle, and Vs pointing uphill mark streams and draws. Also called contour lines, topo map lines, reading a topographic map, saddle ridge valley, squiggly lines on a map. Look for contour interval printed in the margin; closed rings for hilltops, with tick marks for depressions."
+ },
+ {
+  "symbol": "map_distance_pace",
+  "title": "Measuring distance and keeping a pace count",
+  "context": "Distance on a map is measured against its scale bar, and on the ground you track it with a pace count: the number of your double steps in 100 meters on your normal stride. Also called pace count, how far have I walked, measure distance on a map, pacing. Look for the scale bar in the map margin; your own tested pace count. Measure your pace count on a known 100 m course, count every second step while walking, and tie a knot or move a bead at each 100 m."
+ },
+ {
+  "symbol": "gps_vs_map",
+  "title": "GPS and phone versus map and compass",
+  "context": "A GPS or phone gives a fast position but needs battery and sky view; a paper map and baseplate compass keep working when the screen dies or the signal drops. Also called GPS not working, phone died navigation, do I need a compass if I have a phone, GPS in canyon. Look for battery below half on a long day; deep canyons, heavy cover, or cliffs blocking the fix."
+ },
+ {
+  "symbol": "lost_stop_plan",
+  "title": "Lost? Stop, think, observe, plan",
+  "context": "When you realize you are lost, the first job is to stop moving, calm down, and work from your last known point; staying put is usually safest if you cannot work it out. Also called I'm lost, what to do if lost, turned around in the woods, don't know where I am, STOP lost. Look for the last place you were sure of; streams, ridges, or roads you crossed."
+ },
+ {
+  "symbol": "aiming_off_handrails",
+  "title": "Handrails, catching features, and aiming off",
+  "context": "Terrain association uses long features to guide you: a handrail is something you walk alongside, a catching feature stops you if you overshoot, and aiming off means deliberately aiming to one side of a target on a line feature. Also called handrail navigation, catching feature, aiming off, terrain association, follow a ridgeline. Look for a stream, ridge, trail, or field edge running your way; a road, river, or lake beyond your target."
+ },
+ {
+  "symbol": "phone_compass_unreliable",
+  "title": "When a phone compass is unreliable",
+  "context": "A phone's compass is a magnetic sensor that metal, magnets in cases, vehicles, and a skipped calibration can throw off by many degrees. Also called phone compass wrong, calibrate phone compass, compass app not accurate. Look for a magnetic phone case or mount; readings that swing when you move near a truck or rifle. Calibrate by moving the phone in a figure-eight away from metal, remove magnetic cases, and cross-check against a baseplate compass or the sun."
+ },
+ {
+  "symbol": "stream_crossing_choice",
+  "title": "Stream crossings: when to go around",
+  "context": "A stream is safe to cross only when it is shallow, slow, and has a clear landing; knee-deep fast water can knock an adult down. Also called crossing a river, ford a stream, safe to cross a creek, fast water crossing. Look for water above the knee or moving faster than a walk; muddy, rising water after rain. Scout for a wide, shallow, braided spot, unbuckle the pack's hip belt, face upstream with a stick or partner, and shuffle your feet."
+ },
+ {
+  "symbol": "compass_parts",
+  "title": "Parts of a baseplate compass",
+  "context": "A baseplate compass has a clear base with a direction-of-travel arrow, a rotating housing marked in degrees with an orienting arrow and lines, and a magnetic needle whose red end points to magnetic north. Also called baseplate compass, orienting arrow, compass housing, direction of travel arrow. Look for the red end of the needle; the degree ring on the housing."
+ },
+ {
+  "symbol": "night_navigation",
+  "title": "Navigating at night",
+  "context": "Moving at night is slower and riskier; it works only on a known trail or a sure handrail with a good light and a careful bearing. Also called walking in the dark, night hike navigation, lost at night. Look for a bright headlamp and spare batteries; a trail, road, or stream edge to follow. Shorten legs between landmarks, count paces, check the compass often, and stop and camp if the ground gets rough."
+ },
+ {
+  "symbol": "sun_direction_rough",
+  "title": "Rough direction from the sun",
+  "context": "The sun gives only a rough direction: it rises in the east, sets in the west, and in the northern hemisphere is generally to the south at midday, with big seasonal shifts. Also called sun direction, find north without compass, shadow stick, which way is east. Look for a stick's shadow tip moving from west to east over 15-20 minutes; time of day and season."
+ },
+ {
+  "symbol": "stars_north",
+  "title": "Stars as a rough north reference",
+  "context": "In the northern hemisphere the North Star, Polaris, sits almost due north; the two outer stars of the Big Dipper's cup point to it. Also called north star, Polaris, big dipper north, find north at night. Look for the Big Dipper's pointer stars; a moderately bright star alone in its area. Follow the pointer stars about five times their gap to Polaris, then pick a ground landmark below it to hold your direction."
+ },
+ {
+  "symbol": "mark_route_self",
+  "title": "Marking a route for yourself",
+  "context": "Marking your own route with removable flagging or noted landmarks makes the return trip easier, especially in thick woods or snow. Also called mark my trail, flagging tape, find my way back, blaze a trail. Look for bright, removable flagging tape; waypoints saved only if you chose to. Tie flagging at eye level where you can see the next one, look back often so you know the return view, and remove the flagging on your way out."
+ },
+ {
+  "symbol": "whiteout_fog_navigation",
+  "title": "Whiteout or fog: stay put or follow a sure handrail",
+  "context": "In fog or a whiteout you lose landmarks and depth; most often the safest choice is to stop, shelter, and wait unless a sure handrail leads you out. Also called lost in fog, whiteout, can't see in snowstorm, fog navigation. Look for no visible landmarks beyond a few yards; snow or fog hiding drop-offs. Stop, get warm and sheltered, and wait it out, or follow a known handrail with compass and pace count, staying together."
+ },
+ {
+  "symbol": "altimeter_navigation",
+  "title": "Altimeter or barometer as a rough navigation aid",
+  "context": "An altimeter estimates your height from air pressure, and matching that height to a contour on the map helps narrow down where you are along a trail or slope. Also called altimeter navigation, barometer altitude, elevation to find location. Look for a known elevation to calibrate at the trailhead; weather changes shifting the reading. Calibrate at a known height, recheck at known points, and combine the reading with the trail, stream, or ridge you are on."
+ },
+ {
+  "symbol": "map_scale_limits",
+  "title": "Map scale and what a map does not show",
+  "context": "A map's scale sets how much detail it can show; a 1:24,000 topographic map shows small streams and contours, while a small-scale map leaves out trails, cliffs, and new roads. Also called map scale, 1:24000, zoom limits, what a map pack shows. Look for the scale and date in the margin; missing new trails, logging roads, or beaver flooding. Use the largest-scale map you can get for foot travel and expect changes on the ground since the map's date."
+ },
+ {
+  "symbol": "vehicle_vs_foot_travel",
+  "title": "Driving versus walking when the road is not on the map",
+  "context": "On unmapped back roads the vehicle is shelter, a big visible target, and a supply cache, so staying with it is often safer than walking out. Also called car stuck on back road, leave the car or walk, unmarked forest road. Look for fuel, weather, and daylight left; distance to the last known road or house. Stay with the vehicle when stuck unless help is close and the way is sure; walking out is safer by daylight on a known road."
+ },
+ {
+  "symbol": "resection_intersection",
+  "title": "Resection and intersection",
+  "context": "Resection finds your own position by taking bearings to two or three landmarks you can identify on the map and drawing back-bearings; intersection finds a distant point from two known spots. Also called triangulation, resection, find my position with compass, intersection navigation. Look for two or three distinct, mapped landmarks far apart in direction; back-bearings: add or subtract 180°."
+ },
+ {
+  "symbol": "grid_coordinates",
+  "title": "Reading grid coordinates on a map",
+  "context": "Grid coordinates locate a point using the map's grid lines: read the easting (left to right) first, then the northing (bottom to top). Also called UTM coordinates, grid reference, read right then up, give my location coordinates. Look for the grid line labels along the map edges; a coordinate scale or ruler. Read right, then up; give the coordinates and the datum to rescuers if asked, or read latitude and longitude from your phone."
+ },
+ {
+  "symbol": "turnaround_time",
+  "title": "Turnaround time and trip plans",
+  "context": "A turnaround time is the hour you turn back no matter where you are, set so you are out before dark or bad weather; a trip plan tells someone your route and return. Also called turnaround time, trip plan, leave a plan, how late to hike. Look for sunset time and forecast; your pace on the way in. Set the turnaround time before you start, keep it, and leave your route and return time with someone who will call for help."
+ }
+]

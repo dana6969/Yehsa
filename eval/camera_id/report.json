@@ -1,0 +1,1128 @@
+{
+ "date": "2026-11-24",
+ "model": "DINOv2-small weight-only int8 ONNX, CLS token, 384-d, mean of photo and mirror",
+ "head": "multinomial logistic regression C=10.0",
+ "classes": 186,
+ "photos": 10323,
+ "split": {
+  "ref": 6337,
+  "cal": 1962,
+  "test": 2024
+ },
+ "thresholds": {
+  "weak": 0.41,
+  "possible": 0.46,
+  "toxic": 0.55,
+  "toxicEverydayCap": 0.11
+ },
+ "heldout": {
+  "n_pos": 1385,
+  "n_neg": 639,
+  "n_everyday": 221,
+  "top1_all": 0.7574007220216606,
+  "top3_all": 0.8902527075812274,
+  "answered_pos": 0.6606498194945848,
+  "top1_answered": 0.9103825136612022,
+  "top3_answered": 0.9737704918032787,
+  "possible_share": 0.6252707581227437,
+  "top1_possible": 0.9318706697459584,
+  "neg_declined": 0.9123630672926447,
+  "neg_accept": 0.08763693270735524,
+  "everyday_declined": 1.0,
+  "everyday_called_toxic": 0.0,
+  "neg_deadly_top1_accepted": 0.003129890453834116,
+  "deadly_photos_with_deadly_top3": 0.9615384615384616,
+  "deadly_top1_is_nondeadly_answered": 0.023076923076923078,
+  "everyday_called_toxic_photos": []
+ },
+ "per_group": {
+  "plant": {
+   "n": 617,
+   "top1": 0.8460291734197731,
+   "top3": 0.9303079416531604,
+   "answered": 0.7147487844408428
+  },
+  "tree": {
+   "n": 216,
+   "top1": 0.6620370370370371,
+   "top3": 0.8611111111111112,
+   "answered": 0.5370370370370371
+  },
+  "mushroom": {
+   "n": 196,
+   "top1": 0.8571428571428571,
+   "top3": 0.9591836734693877,
+   "answered": 0.6887755102040817
+  },
+  "animal": {
+   "n": 257,
+   "top1": 0.6731517509727627,
+   "top3": 0.8365758754863813,
+   "answered": 0.6653696498054474
+  },
+  "track": {
+   "n": 48,
+   "top1": 0.2916666666666667,
+   "top3": 0.6666666666666666,
+   "answered": 0.4375
+  },
+  "scat": {
+   "n": 51,
+   "top1": 0.5686274509803921,
+   "top3": 0.7450980392156863,
+   "answered": 0.6078431372549019
+  }
+ },
+ "per_class": {
+  "yarrow": {
+   "n": 5,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "plantain": {
+   "n": 6,
+   "top1": 0.67,
+   "top3": 0.83
+  },
+  "willow": {
+   "n": 9,
+   "top1": 0.89,
+   "top3": 0.89
+  },
+  "wild_carrot": {
+   "n": 11,
+   "top1": 0.91,
+   "top3": 1.0
+  },
+  "poison_hemlock": {
+   "n": 6,
+   "top1": 0.83,
+   "top3": 1.0
+  },
+  "water_hemlock": {
+   "n": 9,
+   "top1": 0.89,
+   "top3": 0.89
+  },
+  "wild_onion": {
+   "n": 9,
+   "top1": 0.89,
+   "top3": 1.0
+  },
+  "death_camas": {
+   "n": 10,
+   "top1": 0.9,
+   "top3": 1.0
+  },
+  "ramps": {
+   "n": 12,
+   "top1": 0.75,
+   "top3": 0.83
+  },
+  "false_hellebore": {
+   "n": 8,
+   "top1": 0.75,
+   "top3": 1.0
+  },
+  "lily_of_valley": {
+   "n": 10,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "dandelion": {
+   "n": 13,
+   "top1": 0.85,
+   "top3": 0.92
+  },
+  "chicory": {
+   "n": 10,
+   "top1": 0.9,
+   "top3": 0.9
+  },
+  "red_clover": {
+   "n": 9,
+   "top1": 0.89,
+   "top3": 1.0
+  },
+  "white_clover": {
+   "n": 12,
+   "top1": 0.92,
+   "top3": 1.0
+  },
+  "burdock": {
+   "n": 10,
+   "top1": 0.8,
+   "top3": 0.9
+  },
+  "foxglove": {
+   "n": 11,
+   "top1": 0.64,
+   "top3": 0.91
+  },
+  "comfrey": {
+   "n": 10,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "cattail": {
+   "n": 8,
+   "top1": 0.88,
+   "top3": 1.0
+  },
+  "iris_flag": {
+   "n": 5,
+   "top1": 0.8,
+   "top3": 1.0
+  },
+  "wild_strawberry": {
+   "n": 14,
+   "top1": 0.93,
+   "top3": 1.0
+  },
+  "brambles": {
+   "n": 5,
+   "top1": 0.6,
+   "top3": 0.6
+  },
+  "blueberry": {
+   "n": 11,
+   "top1": 0.64,
+   "top3": 0.91
+  },
+  "cranberry": {
+   "n": 5,
+   "top1": 0.8,
+   "top3": 0.8
+  },
+  "elderberry": {
+   "n": 4,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "pokeweed": {
+   "n": 16,
+   "top1": 0.5,
+   "top3": 0.81
+  },
+  "staghorn_sumac": {
+   "n": 11,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "poison_sumac": {
+   "n": 6,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "poison_ivy": {
+   "n": 3,
+   "top1": 0.67,
+   "top3": 1.0
+  },
+  "virginia_creeper": {
+   "n": 2,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "stinging_nettle": {
+   "n": 8,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "lambsquarters": {
+   "n": 7,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "wood_sorrel": {
+   "n": 10,
+   "top1": 0.8,
+   "top3": 0.9
+  },
+  "jewelweed": {
+   "n": 8,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "ostrich_fern": {
+   "n": 8,
+   "top1": 0.88,
+   "top3": 0.88
+  },
+  "bracken": {
+   "n": 12,
+   "top1": 0.58,
+   "top3": 0.58
+  },
+  "common_milkweed": {
+   "n": 10,
+   "top1": 0.8,
+   "top3": 0.9
+  },
+  "dogbane": {
+   "n": 6,
+   "top1": 0.83,
+   "top3": 1.0
+  },
+  "mullein": {
+   "n": 8,
+   "top1": 0.88,
+   "top3": 1.0
+  },
+  "st_johns_wort": {
+   "n": 12,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "self_heal": {
+   "n": 9,
+   "top1": 0.56,
+   "top3": 0.78
+  },
+  "goldenrod": {
+   "n": 3,
+   "top1": 0.67,
+   "top3": 0.67
+  },
+  "white_snakeroot": {
+   "n": 8,
+   "top1": 0.88,
+   "top3": 0.88
+  },
+  "jerusalem_artichoke": {
+   "n": 7,
+   "top1": 0.57,
+   "top3": 0.71
+  },
+  "evening_primrose": {
+   "n": 5,
+   "top1": 0.8,
+   "top3": 1.0
+  },
+  "pineapple_weed": {
+   "n": 9,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "wild_bergamot": {
+   "n": 11,
+   "top1": 0.82,
+   "top3": 0.91
+  },
+  "mayapple": {
+   "n": 9,
+   "top1": 0.78,
+   "top3": 0.89
+  },
+  "bloodroot": {
+   "n": 7,
+   "top1": 0.71,
+   "top3": 1.0
+  },
+  "baneberry": {
+   "n": 5,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "jimsonweed": {
+   "n": 7,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "bittersweet_nightshade": {
+   "n": 11,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "monkshood": {
+   "n": 10,
+   "top1": 0.9,
+   "top3": 0.9
+  },
+  "giant_hogweed": {
+   "n": 11,
+   "top1": 0.82,
+   "top3": 0.91
+  },
+  "cow_parsnip": {
+   "n": 7,
+   "top1": 0.71,
+   "top3": 1.0
+  },
+  "wild_parsnip": {
+   "n": 10,
+   "top1": 0.9,
+   "top3": 1.0
+  },
+  "skunk_cabbage": {
+   "n": 6,
+   "top1": 0.83,
+   "top3": 0.83
+  },
+  "japanese_knotweed": {
+   "n": 6,
+   "top1": 0.5,
+   "top3": 0.67
+  },
+  "curly_dock": {
+   "n": 7,
+   "top1": 0.86,
+   "top3": 0.86
+  },
+  "wintergreen": {
+   "n": 9,
+   "top1": 0.78,
+   "top3": 0.89
+  },
+  "wild_rose": {
+   "n": 9,
+   "top1": 0.89,
+   "top3": 0.89
+  },
+  "hawthorn": {
+   "n": 7,
+   "top1": 0.71,
+   "top3": 0.86
+  },
+  "mountain_laurel": {
+   "n": 15,
+   "top1": 0.87,
+   "top3": 1.0
+  },
+  "sphagnum": {
+   "n": 8,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "usnea": {
+   "n": 13,
+   "top1": 0.92,
+   "top3": 0.92
+  },
+  "cleavers": {
+   "n": 8,
+   "top1": 0.75,
+   "top3": 0.88
+  },
+  "moonseed": {
+   "n": 7,
+   "top1": 0.86,
+   "top3": 1.0
+  },
+  "wild_grape": {
+   "n": 3,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "thistle": {
+   "n": 7,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "spurge": {
+   "n": 8,
+   "top1": 0.88,
+   "top3": 1.0
+  },
+  "purslane": {
+   "n": 11,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "chickweed": {
+   "n": 5,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "common_mallow": {
+   "n": 11,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "garlic_mustard": {
+   "n": 8,
+   "top1": 0.75,
+   "top3": 0.88
+  },
+  "common_juniper": {
+   "n": 5,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "yew": {
+   "n": 8,
+   "top1": 0.62,
+   "top3": 0.88
+  },
+  "balsam_fir": {
+   "n": 11,
+   "top1": 0.55,
+   "top3": 0.82
+  },
+  "red_spruce": {
+   "n": 10,
+   "top1": 0.4,
+   "top3": 1.0
+  },
+  "white_spruce": {
+   "n": 8,
+   "top1": 0.62,
+   "top3": 0.62
+  },
+  "black_spruce": {
+   "n": 10,
+   "top1": 0.4,
+   "top3": 0.8
+  },
+  "white_pine": {
+   "n": 11,
+   "top1": 0.45,
+   "top3": 0.73
+  },
+  "red_pine": {
+   "n": 7,
+   "top1": 0.43,
+   "top3": 0.71
+  },
+  "eastern_hemlock": {
+   "n": 5,
+   "top1": 0.4,
+   "top3": 0.6
+  },
+  "eastern_red_cedar": {
+   "n": 7,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "northern_white_cedar": {
+   "n": 6,
+   "top1": 0.67,
+   "top3": 0.67
+  },
+  "tamarack": {
+   "n": 8,
+   "top1": 0.88,
+   "top3": 1.0
+  },
+  "sugar_maple": {
+   "n": 7,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "red_maple": {
+   "n": 7,
+   "top1": 0.86,
+   "top3": 1.0
+  },
+  "paper_birch": {
+   "n": 7,
+   "top1": 0.57,
+   "top3": 0.86
+  },
+  "yellow_birch": {
+   "n": 12,
+   "top1": 0.67,
+   "top3": 1.0
+  },
+  "american_beech": {
+   "n": 10,
+   "top1": 0.7,
+   "top3": 0.8
+  },
+  "white_oak": {
+   "n": 7,
+   "top1": 0.71,
+   "top3": 1.0
+  },
+  "red_oak": {
+   "n": 6,
+   "top1": 0.67,
+   "top3": 0.83
+  },
+  "american_elm": {
+   "n": 5,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "white_ash": {
+   "n": 7,
+   "top1": 0.43,
+   "top3": 0.86
+  },
+  "quaking_aspen": {
+   "n": 5,
+   "top1": 0.8,
+   "top3": 0.8
+  },
+  "black_cherry": {
+   "n": 7,
+   "top1": 0.57,
+   "top3": 0.71
+  },
+  "shagbark_hickory": {
+   "n": 9,
+   "top1": 0.67,
+   "top3": 0.78
+  },
+  "basswood": {
+   "n": 7,
+   "top1": 0.71,
+   "top3": 0.86
+  },
+  "black_walnut": {
+   "n": 5,
+   "top1": 0.6,
+   "top3": 0.8
+  },
+  "sassafras": {
+   "n": 1,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "sycamore": {
+   "n": 4,
+   "top1": 0.75,
+   "top3": 1.0
+  },
+  "witch_hazel": {
+   "n": 5,
+   "top1": 0.6,
+   "top3": 1.0
+  },
+  "fly_agaric": {
+   "n": 9,
+   "top1": 0.67,
+   "top3": 1.0
+  },
+  "death_cap": {
+   "n": 8,
+   "top1": 0.75,
+   "top3": 0.88
+  },
+  "destroying_angel": {
+   "n": 10,
+   "top1": 0.7,
+   "top3": 0.9
+  },
+  "deadly_galerina": {
+   "n": 6,
+   "top1": 0.83,
+   "top3": 1.0
+  },
+  "webcaps": {
+   "n": 6,
+   "top1": 0.67,
+   "top3": 0.83
+  },
+  "chanterelle": {
+   "n": 10,
+   "top1": 0.9,
+   "top3": 1.0
+  },
+  "jack_o_lantern": {
+   "n": 13,
+   "top1": 0.92,
+   "top3": 0.92
+  },
+  "chicken_of_the_woods": {
+   "n": 8,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "hen_of_the_woods": {
+   "n": 7,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "morel": {
+   "n": 7,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "false_morel": {
+   "n": 9,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "giant_puffball": {
+   "n": 7,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "lions_mane": {
+   "n": 6,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "oyster_mushroom": {
+   "n": 7,
+   "top1": 0.57,
+   "top3": 0.86
+  },
+  "turkey_tail": {
+   "n": 11,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "birch_polypore": {
+   "n": 5,
+   "top1": 0.8,
+   "top3": 1.0
+  },
+  "reishi": {
+   "n": 8,
+   "top1": 0.88,
+   "top3": 1.0
+  },
+  "honey_mushroom": {
+   "n": 4,
+   "top1": 0.5,
+   "top3": 1.0
+  },
+  "shaggy_mane": {
+   "n": 6,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "bolete": {
+   "n": 10,
+   "top1": 0.8,
+   "top3": 0.9
+  },
+  "green_spored_parasol": {
+   "n": 9,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "hedgehog_mushroom": {
+   "n": 14,
+   "top1": 0.79,
+   "top3": 0.93
+  },
+  "tinder_fungus": {
+   "n": 7,
+   "top1": 0.71,
+   "top3": 1.0
+  },
+  "chaga": {
+   "n": 9,
+   "top1": 0.89,
+   "top3": 0.89
+  },
+  "white_tailed_deer": {
+   "n": 12,
+   "top1": 0.67,
+   "top3": 0.67
+  },
+  "moose": {
+   "n": 10,
+   "top1": 0.3,
+   "top3": 0.6
+  },
+  "elk": {
+   "n": 8,
+   "top1": 0.75,
+   "top3": 0.88
+  },
+  "black_bear": {
+   "n": 9,
+   "top1": 0.89,
+   "top3": 0.89
+  },
+  "coyote": {
+   "n": 8,
+   "top1": 0.62,
+   "top3": 0.88
+  },
+  "red_fox": {
+   "n": 20,
+   "top1": 0.8,
+   "top3": 0.85
+  },
+  "bobcat": {
+   "n": 8,
+   "top1": 0.38,
+   "top3": 0.88
+  },
+  "porcupine": {
+   "n": 7,
+   "top1": 0.43,
+   "top3": 0.71
+  },
+  "raccoon": {
+   "n": 6,
+   "top1": 0.5,
+   "top3": 0.67
+  },
+  "striped_skunk": {
+   "n": 7,
+   "top1": 0.57,
+   "top3": 0.86
+  },
+  "beaver": {
+   "n": 13,
+   "top1": 0.46,
+   "top3": 0.85
+  },
+  "snowshoe_hare": {
+   "n": 5,
+   "top1": 0.2,
+   "top3": 0.4
+  },
+  "wild_turkey": {
+   "n": 8,
+   "top1": 0.38,
+   "top3": 0.75
+  },
+  "ruffed_grouse": {
+   "n": 10,
+   "top1": 0.5,
+   "top3": 0.5
+  },
+  "bald_eagle": {
+   "n": 7,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "great_horned_owl": {
+   "n": 11,
+   "top1": 0.91,
+   "top3": 0.91
+  },
+  "canada_goose": {
+   "n": 12,
+   "top1": 0.83,
+   "top3": 0.92
+  },
+  "rattlesnake": {
+   "n": 11,
+   "top1": 0.64,
+   "top3": 0.82
+  },
+  "copperhead": {
+   "n": 6,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "cottonmouth": {
+   "n": 6,
+   "top1": 0.5,
+   "top3": 0.83
+  },
+  "eastern_garter_snake": {
+   "n": 10,
+   "top1": 0.9,
+   "top3": 0.9
+  },
+  "northern_water_snake": {
+   "n": 4,
+   "top1": 0.5,
+   "top3": 1.0
+  },
+  "blacklegged_tick": {
+   "n": 10,
+   "top1": 0.6,
+   "top3": 0.9
+  },
+  "american_dog_tick": {
+   "n": 5,
+   "top1": 0.2,
+   "top3": 0.8
+  },
+  "lone_star_tick": {
+   "n": 12,
+   "top1": 0.92,
+   "top3": 1.0
+  },
+  "black_widow": {
+   "n": 9,
+   "top1": 1.0,
+   "top3": 1.0
+  },
+  "bald_faced_hornet": {
+   "n": 4,
+   "top1": 0.75,
+   "top3": 0.75
+  },
+  "yellowjacket": {
+   "n": 11,
+   "top1": 0.82,
+   "top3": 1.0
+  },
+  "wild_boar": {
+   "n": 8,
+   "top1": 0.75,
+   "top3": 0.88
+  },
+  "deer_track": {
+   "n": 6,
+   "top1": 0.33,
+   "top3": 1.0
+  },
+  "bear_track": {
+   "n": 9,
+   "top1": 0.11,
+   "top3": 0.44
+  },
+  "canine_track": {
+   "n": 4,
+   "top1": 0.25,
+   "top3": 0.5
+  },
+  "raccoon_track": {
+   "n": 6,
+   "top1": 0.33,
+   "top3": 0.67
+  },
+  "moose_track": {
+   "n": 5,
+   "top1": 0.8,
+   "top3": 0.8
+  },
+  "turkey_track": {
+   "n": 7,
+   "top1": 0.0,
+   "top3": 0.57
+  },
+  "bobcat_track": {
+   "n": 5,
+   "top1": 0.0,
+   "top3": 0.6
+  },
+  "rabbit_track": {
+   "n": 6,
+   "top1": 0.67,
+   "top3": 0.83
+  },
+  "deer_scat": {
+   "n": 7,
+   "top1": 0.86,
+   "top3": 0.86
+  },
+  "bear_scat": {
+   "n": 6,
+   "top1": 0.33,
+   "top3": 0.67
+  },
+  "coyote_scat": {
+   "n": 12,
+   "top1": 0.75,
+   "top3": 0.83
+  },
+  "moose_scat": {
+   "n": 10,
+   "top1": 0.5,
+   "top3": 0.7
+  },
+  "raccoon_scat": {
+   "n": 6,
+   "top1": 0.5,
+   "top3": 0.67
+  },
+  "rabbit_scat": {
+   "n": 10,
+   "top1": 0.4,
+   "top3": 0.7
+  }
+ },
+ "weakest": [
+  [
+   "turkey_track",
+   {
+    "n": 7,
+    "top1": 0.0,
+    "top3": 0.57
+   }
+  ],
+  [
+   "bobcat_track",
+   {
+    "n": 5,
+    "top1": 0.0,
+    "top3": 0.6
+   }
+  ],
+  [
+   "bear_track",
+   {
+    "n": 9,
+    "top1": 0.11,
+    "top3": 0.44
+   }
+  ],
+  [
+   "snowshoe_hare",
+   {
+    "n": 5,
+    "top1": 0.2,
+    "top3": 0.4
+   }
+  ],
+  [
+   "american_dog_tick",
+   {
+    "n": 5,
+    "top1": 0.2,
+    "top3": 0.8
+   }
+  ],
+  [
+   "canine_track",
+   {
+    "n": 4,
+    "top1": 0.25,
+    "top3": 0.5
+   }
+  ],
+  [
+   "moose",
+   {
+    "n": 10,
+    "top1": 0.3,
+    "top3": 0.6
+   }
+  ],
+  [
+   "deer_track",
+   {
+    "n": 6,
+    "top1": 0.33,
+    "top3": 1.0
+   }
+  ],
+  [
+   "raccoon_track",
+   {
+    "n": 6,
+    "top1": 0.33,
+    "top3": 0.67
+   }
+  ],
+  [
+   "bear_scat",
+   {
+    "n": 6,
+    "top1": 0.33,
+    "top3": 0.67
+   }
+  ],
+  [
+   "bobcat",
+   {
+    "n": 8,
+    "top1": 0.38,
+    "top3": 0.88
+   }
+  ],
+  [
+   "wild_turkey",
+   {
+    "n": 8,
+    "top1": 0.38,
+    "top3": 0.75
+   }
+  ]
+ ],
+ "top_confusions": [
+  [
+   "wild_turkey",
+   "great_horned_owl",
+   4
+  ],
+  [
+   "moose_scat",
+   "deer_scat",
+   4
+  ],
+  [
+   "balsam_fir",
+   "white_spruce",
+   3
+  ],
+  [
+   "red_spruce",
+   "white_spruce",
+   3
+  ],
+  [
+   "deer_track",
+   "canine_track",
+   3
+  ],
+  [
+   "bear_track",
+   "moose_track",
+   3
+  ],
+  [
+   "foxglove",
+   "mullein",
+   2
+  ],
+  [
+   "pokeweed",
+   "comfrey",
+   2
+  ],
+  [
+   "pokeweed",
+   "japanese_knotweed",
+   2
+  ],
+  [
+   "cow_parsnip",
+   "giant_hogweed",
+   2
+  ],
+  [
+   "garlic_mustard",
+   "white_snakeroot",
+   2
+  ],
+  [
+   "red_spruce",
+   "white_pine",
+   2
+  ],
+  [
+   "black_spruce",
+   "red_spruce",
+   2
+  ],
+  [
+   "white_pine",
+   "red_pine",
+   2
+  ],
+  [
+   "red_pine",
+   "black_spruce",
+   2
+  ],
+  [
+   "paper_birch",
+   "quaking_aspen",
+   2
+  ],
+  [
+   "basswood",
+   "quaking_aspen",
+   2
+  ],
+  [
+   "tinder_fungus",
+   "reishi",
+   2
+  ],
+  [
+   "moose",
+   "black_bear",
+   2
+  ],
+  [
+   "moose",
+   "elk",
+   2
+  ]
+ ]
+}

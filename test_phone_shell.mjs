@@ -455,3 +455,207 @@ test("native ble is real on android and ios and a scan does not cancel a held li
   assert.equal(eas.build.preview.distribution, "internal");
   assert.equal(eas.build.preview.android.buildType, "apk");
 });
+
+test("the shell has a back stack, a hardware back key, and Back on stacked screens", async () => {
+  const nav = await import("./src/phone/nav_model.js");
+  let state = nav.initialNav();
+  state = nav.navReduce(state, { type: "tab", tab: "map" });
+  state = nav.navReduce(state, { type: "push", screen: "more" });
+  state = nav.navReduce(state, { type: "push", screen: "models" });
+  assert.deepEqual(state.stack, ["more", "models"]);
+  assert.equal(nav.topScreen(state), "models");
+  assert.equal(nav.backLabel(state), "More");
+  let step = nav.backAction(state);
+  assert.equal(step.handled, true);
+  assert.deepEqual(step.state.stack, ["more"]);
+  step = nav.backAction(step.state);
+  assert.deepEqual(step.state.stack, []);
+  assert.equal(step.state.tab, "map");
+  step = nav.backAction(step.state);
+  assert.equal(step.state.tab, "ask");
+  step = nav.backAction(step.state);
+  assert.equal(step.handled, false);
+
+  const sos = nav.navReduce({ ...state }, { type: "openSos" });
+  const closed = nav.backAction(sos);
+  assert.equal(closed.state.sos, false);
+  assert.deepEqual(closed.state.stack, ["more", "models"], "closing SOS returns to the same screen");
+
+  const layers = nav.createBackLayers();
+  let closedSheet = false;
+  const drop = layers.push(() => { closedSheet = true; return true; });
+  assert.equal(layers.run(), true);
+  assert.equal(closedSheet, true);
+  drop();
+  assert.equal(layers.run(), false);
+
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.match(home, /BackHandler\.addEventListener\("hardwareBackPress"/);
+  assert.doesNotMatch(home, /expo-router|@react-navigation/);
+  assert.match(fs.readFileSync("src/phone/ModelsPane.js", "utf8"), /onBack=\{onBack\}/);
+  assert.match(fs.readFileSync("src/phone/LearnedPane.js", "utf8"), /onBack=\{onBack\}/);
+  const ui = fs.readFileSync("src/phone/ui.js", "utf8");
+  assert.match(ui, /export function BackBar/);
+  assert.match(ui, /brandMark/, "the logo mark stays in the shared header");
+});
+
+test("the SOS bumper opens an emergency screen that asks before calling or sending", async () => {
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.match(home, /accessibilityLabel="SOS emergency"/);
+  assert.match(home, /<EmergencyScreen/);
+  const sosStyle = home.slice(home.indexOf("  sos: {"), home.indexOf("  sosPressed"));
+  assert.match(sosStyle, /minHeight: 64/);
+  const screen = fs.readFileSync("src/phone/EmergencyScreen.js", "utf8");
+  assert.match(screen, /Speak coordinates/);
+  assert.match(screen, /speakProse/);
+  assert.doesNotMatch(screen, /askField|getMappedAction|sendToModel/, "no model prompts and no knowledge path in the panic view");
+  assert.doesNotMatch(screen, /military|unbreakable|guarantee/i);
+
+  const em = await import("./src/phone/emergency_model.js");
+  const none = em.coordinateText({ consent: false, status: "unlocked", fix: null });
+  assert.equal(none.held, false);
+  const held = em.coordinateText({ consent: true, status: "locked", fix: { latitude: 45.1, longitude: -69.2, accuracy: 8.4 } });
+  assert.equal(held.big, "45.10000, -69.20000");
+  assert.match(held.detail, /about 8 m/);
+  assert.match(held.spoken, /69\.20000 degrees west/);
+});
+
+test("four tabs: Ask, Map, Field, People, with settings under More", async () => {
+  const nav = await import("./src/phone/nav_model.js");
+  assert.deepEqual(nav.TABS.map((item) => item.label), ["Ask", "Map", "Field", "People"]);
+  assert.equal(nav.TABS.some((item) => /^(Me|Mesh|Guide|Chat)$/.test(item.label)), false, "the Me tab is gone");
+  for (const id of ["location", "actions", "models", "learned", "keys", "about"]) {
+    assert.ok(nav.MORE_ITEMS.some((item) => item.id === id), `${id} lives under More`);
+  }
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.doesNotMatch(home, /styles\.dock\b|dockHost/, "the docked composer is replaced by the Ask chip");
+  assert.match(home, /function AskChip/);
+  assert.match(home, /<FieldPane/);
+  assert.match(home, /<MorePane/);
+  assert.match(home, /Layers and packs/);
+  assert.match(home, /<LandscapeMap\n\s+fill/);
+  const people = home.slice(home.indexOf("function PeoplePane"), home.indexOf("const styles = StyleSheet.create"));
+  assert.match(people, /<PeerChat/, "People opens on chat");
+  assert.match(people, /Scan and radio/);
+  assert.match(home, /chipVisible = !screen && tab !== "ask" && !\(tab === "people" && peopleChat\)/, "no chip inside an open peer conversation");
+  const field = fs.readFileSync("src/phone/FieldPane.js", "utf8");
+  assert.match(field, /id: "pictures", label: "Pictures"/);
+  assert.ok(field.indexOf('"pictures"') < field.indexOf('"course"'), "Pictures is the first tile");
+  const ui = fs.readFileSync("src/phone/ui.js", "utf8");
+  assert.match(ui, /label="More"/);
+  assert.match(ui, /export const tokens/);
+});
+
+test("emergency actions need a 1.5 s hold and a 3 s countdown, never a tap", async () => {
+  const em = await import("./src/phone/emergency_model.js");
+  assert.equal(em.HOLD_MS, 1500);
+  assert.equal(em.COUNTDOWN_SEC, 3);
+  let hold = em.pressHold(em.idleHold(), "call:911", 0);
+  assert.equal(em.stepHold(hold, 300, { released: true }).phase, "idle", "a short press does nothing");
+  assert.equal(em.dialFor(em.stepHold(hold, 300, { released: true })), null);
+  hold = em.stepHold(hold, 1500);
+  assert.equal(hold.phase, "countdown");
+  assert.equal(em.secondsLeft(hold, 1600), 3);
+  assert.equal(em.dialFor(hold), null, "nothing dials during the countdown");
+  assert.equal(em.cancelHold().phase, "idle");
+  hold = em.stepHold(hold, 4500);
+  assert.equal(hold.phase, "fire");
+  assert.equal(em.dialFor(hold), "tel:911");
+  assert.equal(em.dialFor({ phase: "fire", target: "call:5551234" }), null, "only 911 or 112");
+  assert.equal(em.beatIntervalMs(110), 545);
+  assert.ok(em.beatIntervalMs(400) >= 500, "the metronome stays within 100 to 120 a minute");
+
+  const off = em.meshSosText({ consent: false, status: "locked", fix: { latitude: 1, longitude: 2 } }, true);
+  assert.equal(off.placeIncluded, false, "mesh SOS respects the location opt-in");
+  const leftOut = em.meshSosText({ consent: true, status: "locked", fix: { latitude: 1, longitude: 2 } }, false);
+  assert.equal(leftOut.placeIncluded, false);
+  const included = em.meshSosText({ consent: true, status: "locked", fix: { latitude: 1, longitude: 2 } }, true);
+  assert.match(included.text, /1\.00000, 2\.00000/);
+
+  const screen = fs.readFileSync("src/phone/EmergencyScreen.js", "utf8");
+  assert.match(screen, /Hold to call 911/);
+  assert.match(screen, /Hold to call 112/);
+  assert.match(screen, /Hold to send mesh SOS/);
+  assert.match(screen, /Satellite SOS guide/);
+  assert.match(screen, /CPR steps/);
+  assert.match(screen, /Bleeding steps/);
+  assert.match(screen, /Linking\.openURL\(url\)/);
+  assert.doesNotMatch(screen, /onPress=\{\(\) => dial/, "no single-tap dial");
+  assert.match(em.SATELLITE_GUIDE[0], /does not send a satellite signal itself/);
+});
+
+test("display modes: Field default, Sunlight, Night red by default, saved on the device", async () => {
+  const dm = await import("./src/phone/display_model.js");
+  const base = dm.defaultDisplay();
+  assert.equal(base.mode, "field");
+  assert.equal(base.night, "red");
+  assert.equal(dm.themeKeyFor(base), "field");
+  assert.equal(dm.themeKeyFor(dm.setMode(base, "night")), "nightRed");
+  assert.equal(dm.themeKeyFor({ ...base, mode: "night", night: "amber" }), "nightAmber");
+  assert.equal(dm.themeKeyFor(dm.setMode(base, "sunlight")), "sunlight");
+  assert.equal(dm.nextMode(base).mode, "sunlight", "one tap moves to the next mode");
+  assert.deepEqual(dm.openDisplay(dm.packDisplay({ mode: "night", night: "amber", largeText: true })), { mode: "night", night: "amber", largeText: true });
+  assert.deepEqual(dm.openDisplay("not json"), base);
+  assert.equal(dm.modeLabel(dm.setMode(base, "night")), "Night · Red", "mode shows as a word, not color alone");
+
+  const ui = fs.readFileSync("src/phone/ui.js", "utf8");
+  assert.match(ui, /brass: "#e2b15a"/);
+  assert.match(ui, /lineStrong: "#6f8678"/);
+  assert.match(ui, /sos: "#C62828"/);
+  assert.match(ui, /nightRed:/);
+  assert.match(ui, /nightAmber:/);
+  assert.match(ui, /sosHoldMs: 1500/);
+  assert.doesNotMatch(ui, /fontFamily/, "system font");
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.match(home, /AsyncStorage\.setItem\(DISPLAY_KEY/);
+  assert.match(home, /applyTheme\(themeKey\)/);
+  const sosStyle = home.slice(home.indexOf("  sos: {"), home.indexOf("  sosCap"));
+  assert.match(sosStyle, /backgroundColor: colors\.sos/);
+  assert.match(sosStyle, /borderColor: colors\.ink/);
+  assert.ok(home.indexOf('accessibilityLabel="SOS emergency"') < home.indexOf("{TABS.map((item) =>"), "SOS sits at the left edge, before the tabs");
+  const manifest = JSON.parse(fs.readFileSync("app.json", "utf8"));
+  assert.equal(String(manifest.expo.splash?.backgroundColor || "").toUpperCase(), "#0D0A07");
+  for (const file of ["YehsaApp.js", "FieldPane.js", "MorePane.js", "CommandSheet.js", "Onboarding.js", "EmergencyScreen.js"]) {
+    const text = fs.readFileSync(`src/phone/${file}`, "utf8");
+    assert.doesNotMatch(text, /military|unbreakable|guarantee|perfect/i, `${file} makes no such claims`);
+  }
+});
+
+test("Ask or go, onboarding, Trust, Hunt view, grouped Field, and the revised More list", async () => {
+  const nav = await import("./src/phone/nav_model.js");
+  assert.equal(nav.filterDestinations("night")[0].id, "display");
+  assert.equal(nav.filterDestinations("pict")[0].id, "pictures");
+  assert.deepEqual(nav.destinationActions(nav.DESTINATIONS.find((d) => d.id === "models")), [{ type: "push", screen: "models" }]);
+  assert.deepEqual(nav.destinationActions(nav.DESTINATIONS.find((d) => d.id === "sos")), [{ type: "openSos" }]);
+  assert.equal(nav.looksLikeQuestion("how do I purify water"), true);
+  assert.equal(nav.looksLikeQuestion("map"), false);
+  const ids = nav.MORE_ITEMS.map((item) => item.id);
+  for (const id of ["display", "privacy", "helpers", "actions", "did", "family", "about"]) assert.ok(ids.includes(id), id);
+  assert.equal(nav.MORE_ITEMS.find((item) => item.id === "privacy").label, "Privacy");
+
+  const onboarding = fs.readFileSync("src/phone/Onboarding.js", "utf8");
+  assert.match(onboarding, /label="Skip"/);
+  assert.match(onboarding, /A pledge, not a login/);
+  assert.doesNotMatch(onboarding, /requestPermissions|readPlatformFix|scanWithPlatform|openMic/, "onboarding demands nothing");
+  const home = fs.readFileSync("src/phone/YehsaApp.js", "utf8");
+  assert.match(home, /\{onboarding \? <Onboarding onDone=\{finishOnboarding\} \/> : null\}\n      <\/View>/, "onboarding sits above the body so the SOS bumper stays live");
+  assert.match(home, /<CommandSheet/);
+  assert.match(home, /title=\{hunt \? "Hunt" : "Map"\}/);
+  assert.match(fs.readFileSync("src/phone/HuntHud.js", "utf8"), /Moon: context only, never counted/);
+  assert.match(fs.readFileSync("src/phone/ui.js", "utf8"), /<ModeChips/, "modes are one tap on every tab header, as three explicit chips");
+  assert.match(home, /title="What Yehsa did"/);
+  assert.match(home, /TRUST_LINES\.map/);
+
+  const trust = await import("./src/phone/trust_copy.js");
+  const results = JSON.parse(fs.readFileSync("eval/results.json", "utf8")).breakdown;
+  assert.match(trust.TRUST_EVAL.summary, new RegExp(`${results.correct} answered correctly`));
+  assert.match(trust.TRUST_EVAL.summary, new RegExp(`${results.incorrectConfident} confident wrong`));
+  assert.match(trust.TRUST_EVAL.summary, new RegExp(`${results.unnecessaryRefusal} needless refusals`));
+
+  const src = fs.readFileSync("src/phone/FieldPane.js", "utf8");
+  assert.match(src, /label: "Everyday"/);
+  assert.match(src, /label: "Hunt"/);
+  assert.match(src, /label: "More tools"/);
+  assert.match(src, /label: "Before you go"/);
+  assert.match(src, /label: "Morse"/);
+});

@@ -1,0 +1,356 @@
+[
+{
+"id": "fire_site_choice",
+"title": "Choosing a fire site",
+"domain": "fire",
+"also": [
+"where to build a fire",
+"fire ring",
+"keep a fire from spreading",
+"fire pit"
+],
+"def": "A safe fire site is on bare mineral soil, clear of overhanging branches, dry grass, and roots, and downwind from your shelter.",
+"look": [
+"bare soil or sand, or an existing ring",
+"a cleared circle about 10 feet (3 m) wide",
+"water nearby to put it out"
+],
+"use": "Scrape away leaves and duff to bare soil, build a ring of rocks, keep water or a shovel at hand, and keep it small. Check local rules first.",
+"not": "Do not build under low branches, on peat or roots, or on dry grass in wind.",
+"rel": [
+"fire_legal_ban",
+"fire_out_completely"
+],
+"src": [
+"usfs",
+"nps",
+"atp3-50-21"
+]
+},
+{
+"id": "fire_tinder_kindling_fuel",
+"title": "Tinder, kindling, and fuel",
+"domain": "fire",
+"also": [
+"what is tinder",
+"what burns best",
+"fire materials",
+"birch bark",
+"fatwood"
+],
+"def": "Tinder is fine dry material that catches a spark, kindling is pencil-sized sticks that carry the flame, and fuel is the larger wood that burns for hours.",
+"look": [
+"tinder: birch bark, fatwood shavings, dry grass, cattail fluff, cotton with petroleum jelly",
+"kindling: dry twigs from pencil lead to thumb thick",
+"fuel: wrist-thick and larger dead dry wood"
+],
+"use": "Gather three piles before you light: a double handful of tinder, twice as much kindling, and plenty of fuel. Use dead, standing, dry wood, which snaps when it is dry.",
+"not": "Do not use damp wood, treated lumber, or trash.",
+"region": "Birch bark and eastern white pine fatwood from dead stumps are classic New England tinder; check the rules on what you may take.",
+"rel": [
+"fire_build_teepee",
+"fire_wet_wood"
+],
+"src": [
+"atp3-50-21",
+"usfs"
+]
+},
+{
+"id": "fire_build_teepee",
+"title": "Building and lighting a basic fire (teepee)",
+"domain": "fire",
+"also": [
+"how to start a campfire",
+"teepee fire lay",
+"start a fire"
+],
+"def": "A teepee fire is a cone of kindling leaned over a nest of tinder, lit from the windward side so the flame climbs.",
+"look": [
+"tinder bundle in the center",
+"kindling leaning inward like a tent",
+"fuel stacked nearby"
+],
+"use": "Place the tinder bundle, lean kindling around it, leave a gap on the windward side, light the tinder, and add small fuel as it catches. Blow gently at the base and add bigger pieces slowly.",
+"not": "Do not smother the flame with too much fuel too early.",
+"steps": [
+"Clear a bare spot and ring it with rocks.",
+"Place a handful of tinder in the center.",
+"Lean kindling over it in a teepee with an opening to light.",
+"Light the tinder from the upwind side.",
+"Add bigger sticks as the fire grows."
+],
+"call": "Keep water nearby and never leave a fire unattended.",
+"rel": [
+"fire_wet_wood",
+"fire_out_completely"
+],
+"src": [
+"atp3-50-21",
+"usfs"
+]
+},
+{
+"id": "fire_wet_wood",
+"title": "Starting a fire in rain or with wet wood",
+"domain": "fire",
+"also": [
+"fire in the rain",
+"wet wood fire",
+"damp tinder",
+"fire in snow"
+],
+"def": "In rain, use dry material from under cover: dead branches still on trees, inner bark, and shaved wood, and protect the flame under a tarp.",
+"look": [
+"dead lower branches that snap",
+"split wet logs to reach dry centers",
+"fatwood or a dry starter you carried"
+],
+"use": "Look for dry tinder under logs and evergreen boughs, split wood to reach its dry inside, and shave fine curls. Build on a platform of sticks in snow or wet ground and shield the fire from rain.",
+"not": "Do not use wet bark or green wood, and do not light in a closed shelter.",
+"rel": [
+"fire_tinder_kindling_fuel",
+"fire_snow"
+],
+"src": [
+"atp3-50-21",
+"usfs"
+]
+},
+{
+"id": "fire_snow",
+"title": "Starting a fire in snow",
+"domain": "fire",
+"also": [
+"fire on snow",
+"build a platform for a fire"
+],
+"def": "A fire in snow needs a platform of green logs or stones so it does not sink and go out.",
+"look": [
+"a platform of green logs, flat rocks, or a layer of sticks",
+"a windbreak",
+"dry tinder you kept inside your jacket"
+],
+"use": "Stamp down the snow, lay a log platform, and build the fire on top. Keep dry tinder against your body, and feed it slowly.",
+"not": "Do not build under a snow-laden branch that can fall onto the fire.",
+"rel": [
+"fire_wet_wood",
+"fire_build_teepee"
+],
+"src": [
+"atp3-50-21"
+]
+},
+{
+"id": "fire_out_completely",
+"title": "Putting a fire out completely",
+"domain": "fire",
+"also": [
+"put out the campfire",
+"drown the fire",
+"cold fire",
+"douse"
+],
+"def": "A fire is out only when the ashes are cold to the touch; drown it, stir it, and drown it again.",
+"look": [
+"steam or hissing means it is still hot",
+"no glowing embers",
+"back of your hand feels no heat"
+],
+"use": "Let the fire burn down, pour water on the embers, stir the ashes and soil with a stick, and add more water until nothing hisses. Feel for heat with the back of your hand.",
+"not": "Do not just bury a hot fire or leave it smoldering, and do not leave until it is cold.",
+"call": "Call 911 if a fire gets away from you.",
+"rel": [
+"fire_site_choice"
+],
+"src": [
+"usfs",
+"nps"
+]
+},
+{
+"id": "stove_vs_open_fire",
+"title": "Camp stove versus open fire",
+"domain": "fire",
+"also": [
+"cook on a stove",
+"charcoal grill indoors",
+"camping stove safety"
+],
+"def": "A camp stove is more controlled and leaves less trace than an open fire, but any stove, grill, or charcoal burner must never be used indoors, in a tent, or in a garage.",
+"look": [
+"stoves burn liquid or gas fuel",
+"charcoal makes carbon monoxide",
+"fuel should be stored away from heat"
+],
+"use": "Cook outdoors on a stable, flat surface, away from tents and dry grass, and have water handy. Let it cool before refueling.",
+"not": "Do not use a camp stove, grill, or generator in a house, garage, or tent.",
+"call": "Get out into fresh air for headache or dizziness; call 911 for carbon monoxide symptoms.",
+"rel": [
+"carbon_monoxide_poisoning",
+"fuel_in_closed_shelter"
+],
+"src": [
+"cpsc",
+"cdc",
+"usfs"
+]
+},
+{
+"id": "fire_legal_ban",
+"title": "Is a fire legal here? Fire bans and permits",
+"domain": "fire",
+"also": [
+"can I build a fire",
+"burn ban",
+"campfire permit"
+],
+"def": "Fire rules vary by state, town, and land, and bans are common in dry or windy weather, so check the official source before you light one.",
+"look": [
+"a burn ban or a red flag warning",
+"state, town, or land-manager rules",
+"a campfire permit requirement"
+],
+"use": "Check with the local fire department, the state forest service, or the land manager, and follow any ban. If fires are banned, use a stove only if rules allow.",
+"not": "Do not guess; do not light a fire during a ban.",
+"region": "Check the Maine Forest Service, your state forestry office, and the town for burn permits and bans.",
+"rel": [
+"red_flag_fire_weather",
+"fire_site_choice"
+],
+"src": [
+"usfs",
+"nps",
+"state-regs-link"
+]
+},
+{
+"id": "fire_dont_burn",
+"title": "What not to burn",
+"domain": "fire",
+"also": [
+"toxic smoke",
+"burn poison ivy",
+"treated lumber",
+"trash fire"
+],
+"def": "Never burn poison ivy, treated lumber, painted wood, plastic, or trash; the smoke is toxic.",
+"look": [
+"poison ivy smoke carries irritating oil",
+"treated lumber has chemicals",
+"plastics make toxic fumes"
+],
+"use": "Burn only clean, dry, untreated wood. Pack out trash.",
+"not": "Do not burn poison ivy, pressure-treated wood, or plastics, and do not breathe the smoke.",
+"call": "Call 911 for trouble breathing after smoke exposure.",
+"rel": [
+"poison_ivy_rash",
+"smoke_inhalation"
+],
+"src": [
+"epa",
+"cdc"
+]
+},
+{
+"id": "fire_smoke_wind",
+"title": "Smoke, wind, and where to sit",
+"domain": "fire",
+"also": [
+"smoke in my face",
+"sit upwind of a fire",
+"smoky fire"
+],
+"def": "Smoke drifts downwind, so sit upwind or to the side, and dry wood burns cleaner.",
+"look": [
+"smoke blowing toward your seat",
+"a smoky fire from wet wood",
+"wind shifts"
+],
+"use": "Move your seat upwind, burn dry wood, and keep the fire small. If it keeps smoking, stir and add dry fuel.",
+"not": "Do not sit in the smoke or breathe it for long.",
+"rel": [
+"fire_build_teepee",
+"smoke_inhalation"
+],
+"src": [
+"usfs",
+"epa"
+]
+},
+{
+"id": "fire_signal",
+"title": "Signal fire",
+"domain": "fire",
+"also": [
+"fire to be found",
+"smoke signal",
+"three fires"
+],
+"def": "A signal fire is a fire built to be seen from a distance, with green boughs for white smoke by day and bright fuel at night.",
+"look": [
+"three fires in a triangle is a distress signal",
+"green leaves make dense smoke",
+"a clearing for visibility"
+],
+"use": "Build it on an open spot, keep tinder dry and ready, and light it when an aircraft or searchers are close. Add green boughs for smoke by day.",
+"not": "Do not leave it unattended or start it near dry grass.",
+"rel": [
+"fire_out_completely"
+],
+"src": [
+"atp3-50-21",
+"usfs"
+]
+},
+{
+"id": "fire_lighters_ferro",
+"title": "Ferro rod, matches, and lighters",
+"domain": "fire",
+"also": [
+"how to use a ferro rod",
+"fire steel",
+"waterproof matches",
+"bic lighter"
+],
+"def": "A ferrocerium rod throws hot sparks when scraped, and it works wet; matches and lighters are easier but fail when wet or empty.",
+"look": [
+"scrape the rod down with a sharp spine, keeping it close to the tinder",
+"carry two ways to light",
+"a lighter kept dry in a pocket"
+],
+"use": "Hold the rod near the tinder and pull the striker backward fast. Carry a lighter, matches in a waterproof case, and a ferro rod as a backup.",
+"not": "Do not rely on one ignition source, and do not use a bow drill until all else fails.",
+"rel": [
+"fire_tinder_kindling_fuel",
+"fire_build_teepee"
+],
+"src": [
+"atp3-50-21"
+]
+},
+{
+"id": "fire_bank_ember",
+"title": "Keeping and moving an ember",
+"domain": "fire",
+"also": [
+"viable ember",
+"char cloth",
+"keep a fire overnight"
+],
+"def": "A viable ember is glowing red and spreads when you blow on it; a dead ember is black and cool.",
+"look": [
+"a bright orange glow when blown on",
+"char cloth or punky wood catches a spark",
+"an ember in dry tinder can be blown into flame"
+],
+"use": "Place the ember in a nest of fine tinder, fold the tinder around it, and blow gently until it flames. Bank a fire at night with large logs and ash.",
+"not": "Do not leave a fire banked unattended in wind.",
+"rel": [
+"fire_build_teepee"
+],
+"src": [
+"atp3-50-21"
+]
+}
+]

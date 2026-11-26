@@ -1,0 +1,62 @@
+[
+ {
+  "symbol": "bear_scat",
+  "title": "Bear scat",
+  "context": "Black bear scat is a large tubular or piled dropping, often full of berries, seeds, nut shells, grass, or hair, that means a bear has been in the area. Also called bear droppings, bear poop, bear dung, black bear scat, bear sign. Look for thick tubes about 1.5 to 2 inches (4 to 5 cm) wide, or loose piles; packed with berries, seeds, or grass in summer and fall."
+ },
+ {
+  "symbol": "coyote_scat",
+  "title": "Coyote or fox scat",
+  "context": "Coyote and fox scat is a twisted, rope-like dropping full of hair and small bones, with a tapered end, often left in the middle of a trail. Also called coyote droppings, fox scat, fox poop, coyote poop, canine scat. Look for coyote scat about 3/4 to 1 inch (2 to 2.5 cm) wide; fox scat thinner; packed with fur, bone, berries, or seeds. Scat on a trail or at a junction is a territory marker. It tells you which predators use the area."
+ },
+ {
+  "symbol": "moose_scat",
+  "title": "Moose scat",
+  "context": "Moose scat is a pile of large oval pellets of compressed wood fiber in winter, or soft clumps like a cow pie in summer. Also called moose droppings, moose poop, moose nuggets, moose pellets. Look for pellets about 1 to 1 1/2 inches (2.5 to 4 cm) long, much bigger than deer; sawdust-like texture when broken. Fresh piles mean moose are using the area; give any moose plenty of room."
+ },
+ {
+  "symbol": "raccoon_scat",
+  "title": "Raccoon scat",
+  "context": "Raccoon scat is a blunt-ended, tubular dropping often full of seeds and shell bits, left in piles called latrines on logs, rocks, roofs, or at tree bases. Also called raccoon droppings, raccoon poop, raccoon latrine, coon scat. Look for dark tubes about 3/4 inch (2 cm) wide with blunt ends; many droppings of different ages in one spot. A latrine means raccoons use the site regularly. Keep food and trash locked away."
+ },
+ {
+  "symbol": "rabbit_scat",
+  "title": "Rabbit or hare scat",
+  "context": "Rabbit and hare scat is a scatter of round, slightly flattened, pea-sized pellets of chewed plant fiber. Also called rabbit droppings, rabbit poop, rabbit pellets, hare droppings, bunny poop. Look for round, about 1/4 to 1/2 inch (0.6 to 1.3 cm) across, flattened like a thick coin; light brown and fibrous inside. Lots of pellets near brush and browsed twigs mean rabbits or hares feed and hide there."
+ },
+ {
+  "symbol": "bear_track",
+  "title": "Bear tracks",
+  "context": "A black bear track is a wide print with five toes in an arc and a broad pad, the hind print looking like a flat-footed human foot. Also called bear track, bear prints, bear paw print, black bear track, bear sign. Look for front print about 4 to 6 inches (10 to 15 cm) wide with claw dots; hind print longer, up to about 7 inches (18 cm), with a heel. Fresh tracks mean a bear is close. Make noise, keep food sealed, and keep dogs leashed."
+ },
+ {
+  "symbol": "canine_track",
+  "title": "Coyote, fox, or dog tracks",
+  "context": "A canine track has four toes with claw marks around a triangular pad, and an X shape can be drawn through the space between toes and pad. Also called coyote track, fox track, dog track, canine prints, wolf track. Look for oval print; coyote about 2 1/2 inches (6 cm) long, fox smaller; wild canines walk in a straight, direct line; dogs wander. A straight, purposeful line of oval prints is usually a coyote or fox; a zigzagging line beside a person's tracks is usually a dog."
+ },
+ {
+  "symbol": "raccoon_track",
+  "title": "Raccoon tracks",
+  "context": "A raccoon track has five long, finger-like toes, like a small human handprint, usually in mud near water. Also called raccoon track, raccoon prints, coon track. Look for front print about 2 to 3 inches (5 to 8 cm) with separated fingers; hind print longer, like a small foot. Raccoon tracks near camp mean you should lock up food at night."
+ },
+ {
+  "symbol": "moose_track",
+  "title": "Moose tracks",
+  "context": "A moose track is a large split-hoof print over 4 inches (10 cm) long, shaped like a deer track but much bigger. Also called moose track, moose prints, moose hoof print. Look for blunt or pointed heart shape, about 4 to 6 inches (10 to 15 cm) long; deep in mud or snow, with dewclaws often showing. Fresh tracks mean moose are near; give them room, especially in fall and in calving season."
+ },
+ {
+  "symbol": "turkey_track",
+  "title": "Turkey tracks",
+  "context": "A wild turkey track is a large bird print with three long forward toes and a short back toe, about 4 to 5 inches (10 to 13 cm) long. Also called turkey track, turkey prints, bird tracks. Look for middle toe longest and straight ahead; long stride of many prints in a line. Fresh tracks near fields, roosts, or dusting spots mean turkeys use the area."
+ },
+ {
+  "symbol": "bobcat_track",
+  "title": "Bobcat tracks",
+  "context": "A bobcat track is a round print about 2 inches (5 cm) across with four toes, no claw marks, and a three-lobed pad. Also called bobcat track, cat track, lynx track, bobcat prints. Look for round, not oval like a canine; leading edge of the pad has two notches making three lobes. A round print with no claws is a cat; bobcats often walk with hind feet placed in the front prints."
+ },
+ {
+  "symbol": "rabbit_track",
+  "title": "Rabbit or hare tracks",
+  "context": "Rabbit and hare tracks come in groups of four: two long hind feet side by side in front of two small front feet, one behind the other. Also called rabbit track, hare track, bunny prints, snowshoe hare track. Look for Y-shaped or triangle-shaped track group; snowshoe hare hind prints very large and splayed in snow. The big hind prints land ahead of the front prints, so the wide end of the group points the way the animal went."
+ }
+]

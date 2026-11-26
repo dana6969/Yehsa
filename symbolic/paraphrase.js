@@ -14,8 +14,17 @@ const PHRASES = [
   [/\btreat(?:ing)? water\b/g, "boil water"]
 ];
 
-export function expandParaphrase(input) {
+export function expandParaphrase(input, extra = []) {
   let text = String(input || "");
+  if (Array.isArray(extra)) {
+    for (const pair of extra) {
+      const from = String(pair?.from || "").trim();
+      const to = String(pair?.to || "").trim();
+      if (!/^[a-z0-9][a-z0-9 '-]{1,40}$/i.test(from) || !/^[a-z0-9][a-z0-9 '-]{1,40}$/i.test(to)) continue;
+      const pattern = new RegExp(`\\b${from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "gi");
+      text = text.replace(pattern, to);
+    }
+  }
   for (const [pattern, replacement] of PHRASES) text = text.replace(pattern, replacement);
   const waterSafety = /\b(?:treat(?:ing)?|purif\w*|disinfect\w*|safer|unsafe|cloudy|creek|charcoal|boil(?:ing)?)\b(?:\W+\w+){0,4}\W+water\b/i.test(text)
     || /\bwater\b(?:\W+\w+){0,4}\W+(?:safer|unsafe|cloudy|boil(?:ing)?)\b/i.test(text);

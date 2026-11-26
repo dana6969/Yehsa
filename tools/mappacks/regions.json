@@ -1,0 +1,24 @@
+{
+  "_comment": "Pack definitions. bbox is [west, south, east, north]. state is the Natural Earth name used to clip tiles to the state outline. pbf is the Geofabrik extract. maxZoom sets detail: 12 is about 15 m per pixel at 512 px tiles, 10 is about 60 m.",
+  "builtFor": "Yehsa offline map packs",
+  "regions": [
+    {"id": "me-southern", "name": "Maine, Southern and Midcoast", "region": "Maine", "state": "Maine", "pbf": "maine", "bbox": [-71.2, 42.9, -68.9, 44.7], "minZoom": 6, "maxZoom": 12},
+    {"id": "me-western-mountains", "name": "Maine, Western Mountains", "region": "Maine", "state": "Maine", "pbf": "maine", "bbox": [-71.2, 44.4, -69.6, 46.2], "minZoom": 6, "maxZoom": 12},
+    {"id": "me-downeast", "name": "Maine, Downeast", "region": "Maine", "state": "Maine", "pbf": "maine", "bbox": [-69.0, 43.8, -66.8, 45.7], "minZoom": 6, "maxZoom": 12},
+    {"id": "me-north-woods", "name": "Maine, North Woods", "region": "Maine", "state": "Maine", "pbf": "maine", "bbox": [-69.7, 45.2, -66.9, 47.5], "minZoom": 6, "maxZoom": 11},
+    {"id": "ri", "name": "Rhode Island", "region": "Rhode Island", "state": "Rhode Island", "pbf": "rhode-island", "bbox": [-71.95, 41.05, -71.05, 42.05], "minZoom": 6, "maxZoom": 12},
+    {"id": "nh", "name": "New Hampshire", "region": "New Hampshire", "state": "New Hampshire", "pbf": "new-hampshire", "bbox": [-72.6, 42.65, -70.5, 45.4], "minZoom": 6, "maxZoom": 12},
+    {"id": "vt", "name": "Vermont", "region": "Vermont", "state": "Vermont", "pbf": "vermont", "bbox": [-73.5, 42.7, -71.4, 45.1], "minZoom": 6, "maxZoom": 12},
+    {"id": "ma", "name": "Massachusetts", "region": "Massachusetts", "state": "Massachusetts", "pbf": "massachusetts", "bbox": [-73.6, 41.2, -69.9, 42.95], "minZoom": 6, "maxZoom": 12},
+    {"id": "ct", "name": "Connecticut", "region": "Connecticut", "state": "Connecticut", "pbf": "connecticut", "bbox": [-73.8, 40.95, -71.75, 42.1], "minZoom": 6, "maxZoom": 12},
+    {"id": "ny", "name": "New York", "region": "New York", "state": "New York", "pbf": "new-york", "bbox": [-79.8, 40.45, -71.8, 45.05], "minZoom": 6, "maxZoom": 11},
+    {"id": "pa", "name": "Pennsylvania", "region": "Pennsylvania", "state": "Pennsylvania", "pbf": "pennsylvania", "bbox": [-80.6, 39.7, -74.65, 42.3], "minZoom": 6, "maxZoom": 11},
+    {"id": "mi", "name": "Michigan", "region": "Michigan", "state": "Michigan", "pbf": "michigan", "bbox": [-90.5, 41.65, -82.1, 48.35], "minZoom": 6, "maxZoom": 10},
+    {"id": "wi", "name": "Wisconsin", "region": "Wisconsin", "state": "Wisconsin", "pbf": "wisconsin", "bbox": [-92.95, 42.45, -86.7, 47.1], "minZoom": 6, "maxZoom": 10},
+    {"id": "mn", "name": "Minnesota", "region": "Minnesota", "state": "Minnesota", "pbf": "minnesota", "bbox": [-97.3, 43.45, -89.45, 49.4], "minZoom": 6, "maxZoom": 10},
+    {"id": "co", "name": "Colorado", "region": "Colorado", "state": "Colorado", "pbf": "colorado", "bbox": [-109.1, 36.95, -102.0, 41.05], "minZoom": 6, "maxZoom": 10},
+    {"id": "mt", "name": "Montana", "region": "Montana", "state": "Montana", "pbf": "montana", "bbox": [-116.1, 44.3, -104.0, 49.05], "minZoom": 6, "maxZoom": 10},
+    {"id": "id", "name": "Idaho", "region": "Idaho", "state": "Idaho", "pbf": "idaho", "bbox": [-117.3, 41.95, -111.0, 49.05], "minZoom": 6, "maxZoom": 10},
+    {"id": "wy", "name": "Wyoming", "region": "Wyoming", "state": "Wyoming", "pbf": "wyoming", "bbox": [-111.1, 40.95, -104.0, 45.05], "minZoom": 6, "maxZoom": 10}
+  ]
+}

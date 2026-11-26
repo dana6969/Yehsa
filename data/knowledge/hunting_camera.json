@@ -1,0 +1,208 @@
+[
+{
+"id": "deer_scat",
+"title": "Deer scat",
+"domain": "hunting",
+"also": [
+"deer droppings",
+"deer poop",
+"deer pellets",
+"deer poo",
+"deer dung",
+"deer sign"
+],
+"def": "Deer scat is a pile of small, dark, oval or acorn-shaped pellets, often 20 to 50 together, that shows where deer have fed or bedded.",
+"look": [
+"pellets about 1/2 to 3/4 inch (1.5 to 2 cm) long, often with a small point or dimple at one end",
+"dark and shiny when fresh, dull and dry or crumbly when old",
+"in winter pellets are hard and separate; on spring and summer greens they can clump into a soft mass"
+],
+"use": "Fresh, glossy pellets mean deer were there within a day or so. Many piles near trails, food, and thick cover suggest a regular use area, and piles in a bedding area mean deer rest there. Use it with tracks, rubs, and scrapes, not alone.",
+"not": "Scat cannot tell you a buck from a doe or how big the deer is. Do not touch or sniff scat with bare hands; use a stick, and wash your hands after. Do not camp next to a latrine or fresh bear sign.",
+"steps": [
+"Check freshness: shiny and moist means recent, dry and faded means days or weeks.",
+"Look for more piles along a line to find a travel route.",
+"Note nearby food (acorns, browse) and bedding cover.",
+"Note the spot if you want to come back."
+],
+"alike": [
+"Rabbit scat: round, flattened pea-sized balls, not oval with a point",
+"Moose scat: same shape but much larger, about an inch (2.5 cm) or more, and woody",
+"Elk scat: larger and rounder than deer, rare in New England"
+],
+"rel": [
+"deer_track",
+"deer_rub",
+"deer_scrape"
+],
+"src": [
+"usfs",
+"nps",
+"cdc"
+],
+"ask": "Tell me about deer scat"
+},
+{
+"id": "deer_track",
+"title": "Deer tracks",
+"domain": "hunting",
+"also": [
+"deer track",
+"deer prints",
+"deer hoof print",
+"whitetail track",
+"deer sign",
+"slot"
+],
+"def": "A deer track is a split, heart-shaped hoof print made by two pointed toes, about 2 to 3 1/2 inches (5 to 9 cm) long.",
+"look": [
+"two teardrop toes forming a heart with the point toward travel",
+"two dewclaw dots behind the print in mud, snow, or when running",
+"an alternating walking line, with hind feet landing in or near the front prints"
+],
+"use": "The pointed end shows the direction of travel. Sharp edges and loose crumbs mean a fresh track; rounded, rained-on, or leaf-filled edges mean an old one. Many tracks in a line usually mark a travel route between bedding and food.",
+"not": "Track size alone does not reliably tell a buck from a doe. Do not follow a track onto land where you do not have permission.",
+"steps": [
+"Find the pointed end to tell direction.",
+"Check the edges for freshness.",
+"Follow the line a short way to see if it joins a trail.",
+"Look for scat, rubs, and scrapes along it."
+],
+"alike": [
+"Moose track: same shape but over 4 inches (10 cm) long",
+"Domestic goat, sheep, or pig: rounder toes; pigs leave dewclaws set wide",
+"Turkey or dog: toes and claws, not two hooves"
+],
+"rel": [
+"deer_scat",
+"deer_rub",
+"deer_scrape"
+],
+"src": [
+"usfs",
+"nps",
+"state-dnr"
+],
+"ask": "Tell me about deer tracks"
+},
+{
+"id": "deer_rub",
+"title": "Deer rubs",
+"domain": "hunting",
+"also": [
+"buck rub",
+"antler rub",
+"rubs on trees",
+"scraped bark",
+"deer sign",
+"rub line"
+],
+"def": "A rub is a sapling or small tree where a buck has scraped off bark with his antlers, mostly in fall before and during the rut.",
+"look": [
+"bark stripped from one side of a small tree, often 1 to 4 inches (2.5 to 10 cm) thick, from knee to waist height",
+"pale fresh wood, shredded bark curls on the ground, and broken twigs",
+"several rubs in a line along a trail, called a rub line"
+],
+"use": "Fresh rubs mean a buck has used the area this season. A line of rubs often shows a travel route, and the rubbed side tends to face the direction he was coming from. Big rubs on thick trees usually come from mature bucks.",
+"not": "Rubs do not mean a buck is there now. Last year's rubs are gray and healed.",
+"steps": [
+"Check if the wood is pale and moist (fresh) or gray (old).",
+"Look for more rubs in a line.",
+"Note which side is rubbed to guess direction of travel.",
+"Check nearby for scrapes and tracks."
+],
+"alike": [
+"Beaver chewing: tooth marks and chips, often cut through near the ground",
+"Porcupine feeding: patches chewed high on trees, with tooth marks",
+"Moose rubs: much higher and on bigger trees"
+],
+"rel": [
+"deer_scrape",
+"deer_track",
+"deer_scat"
+],
+"src": [
+"usfs",
+"state-dnr"
+],
+"ask": "Tell me about deer rubs"
+},
+{
+"id": "deer_scrape",
+"title": "Deer scrapes",
+"domain": "hunting",
+"also": [
+"buck scrape",
+"deer scrape",
+"scrape under a branch",
+"licking branch",
+"deer sign",
+"mock scrape"
+],
+"def": "A scrape is a patch of bare earth that a buck paws clear under an overhanging branch and marks with scent, mostly in the weeks before the rut.",
+"look": [
+"a pawed oval of bare dirt, often 1 to 3 feet (30 to 90 cm) across",
+"a chewed or broken licking branch about head height above it",
+"fresh tracks and a musky smell in it when it is active"
+],
+"use": "Scrapes are scent posts that bucks and does visit. A fresh, damp scrape clear of leaves shows recent use; scrapes along field edges and trails show travel routes. Many hunters watch them from downwind.",
+"not": "Do not walk through or touch a scrape; your scent can make deer avoid it. Do not assume a buck visits it in daylight.",
+"steps": [
+"Check if leaves have blown back in (older) or the dirt is fresh.",
+"Look for the licking branch above it.",
+"Find tracks in the dirt for direction.",
+"Set up downwind of it, using the scent cone in Hunt."
+],
+"alike": [
+"Turkey scratching: smaller scattered patches with no licking branch",
+"Squirrel digging: small holes, not a pawed oval"
+],
+"rel": [
+"deer_rub",
+"deer_track",
+"deer_scat"
+],
+"src": [
+"usfs",
+"state-dnr"
+],
+"ask": "Tell me about deer scrapes"
+},
+{
+"id": "deer_sign_reading",
+"title": "Reading deer sign",
+"domain": "hunting",
+"also": [
+"deer sign",
+"signs of deer",
+"how to scout for deer",
+"deer scouting",
+"where are the deer"
+],
+"def": "Deer sign is the tracks, scat, rubs, scrapes, beds, and browsed plants that deer leave, and reading it shows where they travel, feed, and rest.",
+"look": [
+"trails and tracks between thick cover and food",
+"scat piles, oval beds pressed in leaves or snow",
+"rubs and scrapes in fall"
+],
+"use": "Sign is strongest where several kinds come together: a trail with fresh tracks, scat, and rubs near food or a pinch point. Fresh sign matters more than old sign.",
+"not": "Do not scout through bedding areas during the season; you will push deer out. Respect property lines and posted land.",
+"steps": [
+"Walk edges between cover and food and look for trails.",
+"Check freshness of tracks and scat.",
+"Look for rub lines and scrapes in fall.",
+"Note what you find, then check the wind before you pick a stand."
+],
+"rel": [
+"deer_scat",
+"deer_track",
+"deer_rub",
+"deer_scrape"
+],
+"src": [
+"usfs",
+"state-dnr"
+],
+"ask": "Tell me about reading deer sign"
+}
+]

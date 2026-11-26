@@ -1,0 +1,205 @@
+
+> Axi0net@1.0.0 test:mesh
+> node --test --test-concurrency=1 test_ble_mesh_discover.mjs test_device_owner.mjs test_mesh_service.mjs
+
+TAP version 13
+# [📡 RADIO RX] Passive BLE listen. The active mesh link is left up.
+# [Mesh Error] no phone identity; access refused
+# Subtest: passive scan arguments do not disconnect or start classic inquiry
+ok 1 - passive scan arguments do not disconnect or start classic inquiry
+  ---
+  duration_ms: 0.840477
+  type: 'test'
+  ...
+# Subtest: mesh utils uses execFile and does not start classic discovery
+ok 2 - mesh utils uses execFile and does not start classic discovery
+  ---
+  duration_ms: 1.022377
+  type: 'test'
+  ...
+# Subtest: degrades when Termux Bluetooth tools are absent
+ok 3 - degrades when Termux Bluetooth tools are absent
+  ---
+  duration_ms: 2.278795
+  type: 'test'
+  ...
+# Subtest: dry-run remembers a distant Yehsa peer and does not call the radio
+ok 4 - dry-run remembers a distant Yehsa peer and does not call the radio
+  ---
+  duration_ms: 1.533361
+  type: 'test'
+  ...
+# Subtest: refuses a classic inquiry helper and leaves the active link up
+ok 5 - refuses a classic inquiry helper and leaves the active link up
+  ---
+  duration_ms: 0.733075
+  type: 'test'
+  ...
+# Subtest: requires the mesh token before a real scan
+ok 6 - requires the mesh token before a real scan
+  ---
+  duration_ms: 0.478613
+  type: 'test'
+  ...
+# Subtest: joins a second peer without replacing the active link
+ok 7 - joins a second peer without replacing the active link
+  ---
+  duration_ms: 1.763619
+  type: 'test'
+  ...
+# Subtest: a failed connect does not clear the primary link
+ok 8 - a failed connect does not clear the primary link
+  ---
+  duration_ms: 0.838748
+  type: 'test'
+  ...
+# Subtest: connect refuses an address that is not a remembered mesh peer
+ok 9 - connect refuses an address that is not a remembered mesh peer
+  ---
+  duration_ms: 0.379354
+  type: 'test'
+  ...
+# Subtest: radio receive discovers without dropping a held link
+ok 10 - radio receive discovers without dropping a held link
+  ---
+  duration_ms: 1.36198
+  type: 'test'
+  ...
+# Subtest: symbol dispatch stays a queue and send, not a scan
+ok 11 - symbol dispatch stays a queue and send, not a scan
+  ---
+  duration_ms: 2.517807
+  type: 'test'
+  ...
+# Subtest: discover CLI degrades cleanly without Termux
+ok 12 - discover CLI degrades cleanly without Termux
+  ---
+  duration_ms: 30.847378
+  type: 'test'
+  ...
+# [exterior denied] refusing mesh command into this device
+# [exterior denied] refusing mesh command into this device
+# Subtest: per-device ownership and exterior deny
+    # Subtest: identity labels are phone-bound and claim no cipher
+    ok 1 - identity labels are phone-bound and claim no cipher
+      ---
+      duration_ms: 0.652603
+      type: 'test'
+      ...
+    # Subtest: unlock, erase, and shutdown refuse when this is not the bound phone
+    ok 2 - unlock, erase, and shutdown refuse when this is not the bound phone
+      ---
+      duration_ms: 6.693363
+      type: 'test'
+      ...
+    # Subtest: a machine without a phone id is refused and no owner file is written
+    ok 3 - a machine without a phone id is refused and no owner file is written
+      ---
+      duration_ms: 2.447246
+      type: 'test'
+      ...
+    # Subtest: each install on this phone gets its own owner id
+    ok 4 - each install on this phone gets its own owner id
+      ---
+      duration_ms: 1.446718
+      type: 'test'
+      ...
+    # Subtest: a copied owner file is not this device and is not rewritten
+    ok 5 - a copied owner file is not this device and is not rewritten
+      ---
+      duration_ms: 0.765931
+      type: 'test'
+      ...
+    # Subtest: listeners cannot bind outside loopback
+    ok 6 - listeners cannot bind outside loopback
+      ---
+      duration_ms: 0.325609
+      type: 'test'
+      ...
+    # Subtest: ingress from outside the device is denied
+    ok 7 - ingress from outside the device is denied
+      ---
+      duration_ms: 2.471518
+      type: 'test'
+      ...
+    # Subtest: a BLE or mesh payload cannot execute inside this install
+    ok 8 - a BLE or mesh payload cannot execute inside this install
+      ---
+      duration_ms: 8.026586
+      type: 'test'
+      ...
+    # Subtest: mesh discovery does not run for a transplanted owner file
+    ok 9 - mesh discovery does not run for a transplanted owner file
+      ---
+      duration_ms: 0.832402
+      type: 'test'
+      ...
+    1..9
+ok 13 - per-device ownership and exterior deny
+  ---
+  duration_ms: 24.862707
+  type: 'suite'
+  ...
+# Subtest: offline phone service stays up without a position lock
+ok 14 - offline phone service stays up without a position lock
+  ---
+  duration_ms: 3.903893
+  type: 'test'
+  ...
+# Subtest: position lock does nothing until local consent
+ok 15 - position lock does nothing until local consent
+  ---
+  duration_ms: 0.661303
+  type: 'test'
+  ...
+# Subtest: consented lock uses the satellite gps provider and does not share
+ok 16 - consented lock uses the satellite gps provider and does not share
+  ---
+  duration_ms: 1.203372
+  type: 'test'
+  ...
+# Subtest: a local coordinate is used when the satellite helper is absent
+ok 17 - a local coordinate is used when the satellite helper is absent
+  ---
+  duration_ms: 0.934307
+  type: 'test'
+  ...
+# Subtest: network and peer fixes are not a position lock
+ok 18 - network and peer fixes are not a position lock
+  ---
+  duration_ms: 0.702234
+  type: 'test'
+  ...
+# Subtest: sharing requires consent and does not drop the held link
+ok 19 - sharing requires consent and does not drop the held link
+  ---
+  duration_ms: 0.722507
+  type: 'test'
+  ...
+# Subtest: a mesh phone message carries no coordinates
+ok 20 - a mesh phone message carries no coordinates
+  ---
+  duration_ms: 0.592012
+  type: 'test'
+  ...
+# Subtest: phone service cli does not lock position
+ok 21 - phone service cli does not lock position
+  ---
+  duration_ms: 33.005257
+  type: 'test'
+  ...
+# Subtest: the phone mesh adapter scans only real peers and keeps the phone hook without a position lock
+ok 22 - the phone mesh adapter scans only real peers and keeps the phone hook without a position lock
+  ---
+  duration_ms: 1.094239
+  type: 'test'
+  ...
+1..22
+# tests 30
+# suites 1
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 459.361188

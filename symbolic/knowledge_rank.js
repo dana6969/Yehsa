@@ -12,6 +12,11 @@ function clip(text, limit) {
   return `${flat.slice(0, limit - 1).trimEnd()}…`;
 }
 
+// A field entry's passage is written to fit; older notes keep the shorter clip.
+function clipFor(source) {
+  return /\/entries_[a-z]+\.json$/.test(String(source || "")) ? 480 : 320;
+}
+
 function addHit(bag, hit) {
   if (!hit || !hit.symbol || !hit.text || !(hit.score > 0)) return;
   const key = `${hit.kind}:${String(hit.symbol).toLowerCase()}`;
@@ -46,7 +51,7 @@ export function rankKnowledge(parsed, corpora) {
     addHit(bag, {
       kind,
       symbol: passage.symbol,
-      text: clip(passage.context, 320),
+      text: clip(passage.context, clipFor(passage.source)),
       title: passage.title || "",
       source: passage.source || "",
       score: boost(kind, passage.score)
@@ -58,7 +63,7 @@ export function rankKnowledge(parsed, corpora) {
       addHit(bag, {
         kind,
         symbol: passage.symbol,
-        text: clip(passage.context, 320),
+        text: clip(passage.context, clipFor(passage.source)),
         title: passage.title || "",
         source: passage.source || "",
         score: boost(kind, passage.score)
@@ -102,12 +107,16 @@ export function rankKnowledge(parsed, corpora) {
     }
   }
   const glossScan = plantScan || typeof lookupHeadword !== "function";
+  // R11: the plant-use test needs no gloss text, so most headwords return before the gloss is lowercased.
+  // Same words as the plant-use test below, case-insensitive, tried before the gloss is lowercased.
+  const PLANT_USE_WORDS = /\b(salix|analgesic|astringent|tannin|poultice|from a |from the )\b/i;
+  const plantQuestion = (parsed.intent === "use" || tokens.some((token) => PLANT_PARTS.has(token))) && subject.length >= 5;
   const visitGloss = (key, text) => {
-      const gloss = String(text).toLowerCase();
       const namedInQuestion = key === phrase || tokens.includes(key);
       const related = namedInQuestion || (longest && textHasToken(key, longest));
-      const plantUse = (parsed.intent === "use" || tokens.some((token) => PLANT_PARTS.has(token)))
-        && subject.length >= 5
+      if (!related && !(plantQuestion && !namedInQuestion && PLANT_USE_WORDS.test(text))) return;
+      const gloss = String(text).toLowerCase();
+      const plantUse = plantQuestion
         && !namedInQuestion
         && textHasToken(gloss, subject)
         && /\b(salix|analgesic|astringent|tannin|poultice|from a |from the )\b/.test(gloss);

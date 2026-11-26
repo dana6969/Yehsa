@@ -1,0 +1,236 @@
+[
+{
+"id": "family_emergency_plan",
+"title": "Family emergency plan and meeting points",
+"domain": "family",
+"also": [
+"family plan",
+"where do we meet",
+"meeting place",
+"family emergency card"
+],
+"def": "A family emergency plan says how you will reach each other, where you will meet near home and out of the neighborhood, and who an out-of-area contact is.",
+"look": [
+"a meeting spot near home and one farther away",
+"an out-of-area contact everyone knows",
+"phone numbers written on paper"
+],
+"use": "Write the plan down, give every family member a card, and practice it twice a year.",
+"not": "Do not rely only on phones; networks fail in disasters.",
+"rel": [
+"child_lost_woods",
+"child_calls_emergency"
+],
+"src": [
+"ready"
+]
+},
+{
+"id": "child_lost_woods",
+"title": "What to teach a child about being lost in the woods",
+"domain": "family",
+"also": [
+"kid lost in woods",
+"hug a tree",
+"child lost hiking",
+"teach kids if lost"
+],
+"def": "A child who is lost should stay in one place, hug a tree, make noise, and answer when called; searchers find children who stay put far faster.",
+"look": [
+"a whistle on the child's jacket",
+"bright clothing",
+"the child knows nobody will be angry"
+],
+"use": "Teach: stop, hug a tree, blow the whistle three times, stay put, and answer anyone calling your name. Practice it as a game.",
+"not": "Do not teach a child to keep walking to find the way, and do not scold them when found.",
+"call": "If a child is missing outdoors, call 911 right away; do not wait.",
+"rel": [
+"family_emergency_plan"
+],
+"src": [
+"nps",
+"ready"
+]
+},
+{
+"id": "child_calls_emergency",
+"title": "How a child calls 911",
+"domain": "family",
+"also": [
+"teach kids to call 911",
+"child emergency call",
+"what to say to 911"
+],
+"def": "Children can call 911 from any phone, even a locked one, and should say what happened, where they are, and stay on the line.",
+"look": [
+"how to reach emergency call on your phone's lock screen",
+"the child knows their address",
+"a calm practice run with a turned-off phone"
+],
+"use": "Teach your address, how to place an emergency call on a locked phone, and to answer the dispatcher's questions and stay on the line.",
+"not": "Do not let children practice on a live line, and do not teach them to hang up if they make a mistake; they should stay and explain.",
+"rel": [
+"family_emergency_plan"
+],
+"src": [
+"ready",
+"fema"
+]
+},
+{
+"id": "child_cold_infant",
+"title": "Keeping children warm and spotting cold stress in infants",
+"domain": "family",
+"also": [
+"baby hypothermia",
+"infant cold",
+"keeping kids warm",
+"child too cold"
+],
+"def": "Children lose heat faster than adults; an infant with hypothermia can have bright red, cold skin and very low energy.",
+"look": [
+"bright red, cold skin in a baby",
+"a quiet, floppy, or very sleepy child",
+"shivering, clumsy hands, or slurred speech in an older child"
+],
+"use": "Dress children in one more layer than adults, cover the head, change wet clothes at once, and warm a cold child against your body in a dry blanket.",
+"not": "Do not use hot water bottles or heaters directly on a child's skin.",
+"call": "Call 911 for an infant with cold, red skin and low energy, or any child who is confused or unresponsive.",
+"rel": [
+"clothing_layers_wet"
+],
+"src": [
+"cdc"
+]
+},
+{
+"id": "child_dehydration_fever",
+"title": "Dehydration and fever in a child",
+"domain": "family",
+"also": [
+"child dehydrated",
+"kid fever",
+"baby dehydration signs",
+"when to take child to doctor"
+],
+"def": "Children dehydrate quickly with vomiting, diarrhea, heat, or fever; a dry mouth, few wet diapers, no tears, and unusual sleepiness are warning signs.",
+"look": [
+"fewer wet diapers or no urine for many hours",
+"no tears when crying, a dry mouth, sunken eyes",
+"fever with a stiff neck, rash, or trouble breathing"
+],
+"use": "Give small, frequent sips of fluid or oral rehydration solution, keep the child cool, and watch urine and alertness.",
+"not": "Do not give aspirin to children, and do not give plain water alone to an infant under six months for dehydration; ask a clinician.",
+"call": "Call a doctor for an infant under 3 months with any fever. Call 911 for a child who is very sleepy, hard to wake, or breathing hard.",
+"rel": [
+"child_cold_infant"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "kids_prevention_rules",
+"title": "Kids outdoors: ticks, poison ivy, water, and firearms",
+"domain": "family",
+"also": [
+"kids safety outdoors",
+"children and guns",
+"kids near water",
+"kids ticks"
+],
+"def": "A few short rules prevent most outdoor harm to children: check for ticks, avoid leaves of three, stay within reach near water, and never touch a gun.",
+"look": [
+"a tick check after every outing",
+"a life jacket on near water",
+"guns stored locked and unloaded"
+],
+"use": "Teach: if you see a gun, don't touch, leave, tell an adult. Keep children within arm's reach near water and do a full tick check at night.",
+"not": "Do not leave children alone near water, even for a moment, or store firearms where a child can reach them.",
+"rel": [
+"family_emergency_plan"
+],
+"src": [
+"cdc",
+"ready"
+]
+},
+{
+"id": "infant_formula_unsafe_water",
+"title": "Infant formula when the water is unsafe",
+"domain": "family",
+"also": [
+"baby formula water",
+"boil water notice baby",
+"formula during outage"
+],
+"def": "When tap water is unsafe, infant formula should be ready-to-feed, or mixed with bottled water or water that was boiled and cooled.",
+"look": [
+"a boil-water notice",
+"flooding near the well",
+"no power to boil water"
+],
+"use": "Use ready-to-feed formula when you can; otherwise use bottled water or water brought to a rolling boil for one minute and cooled. Clean bottles in safe water.",
+"not": "Do not use water from a flooded well or treated only with a filter for an infant without checking with your health department.",
+"rel": [
+"power_outage_first_steps"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "child_in_vehicle",
+"title": "A child left in a vehicle is an emergency",
+"domain": "family",
+"also": [
+"child left in car",
+"kid in hot car",
+"baby in car heat"
+],
+"def": "A closed car heats up fast even on a mild day and can kill a child within minutes; in winter, a running car can fill with exhaust.",
+"look": [
+"a child alone in a car",
+"a sweaty, red, or unresponsive child",
+"a running car with snow blocking the tailpipe"
+],
+"use": "If you see a child alone in a hot car, call 911 at once and follow the dispatcher's directions. Make a habit of checking the back seat every time you leave the car.",
+"not": "Do not leave a child in a car for any time, even with the windows cracked or the engine running.",
+"call": "Call 911 immediately.",
+"rel": [
+"kids_prevention_rules"
+],
+"src": [
+"nhtsa",
+"ready"
+]
+},
+{
+"id": "pet_kit_evacuation",
+"title": "Pet kit, pet evacuation, and pet poisoning",
+"domain": "family",
+"also": [
+"pet emergency kit",
+"evacuate with pets",
+"dog ate something toxic",
+"pet poison"
+],
+"def": "Pets need their own emergency kit and a plan for where they can stay, because many shelters only take service animals.",
+"look": [
+"food, water, medicines, leash, carrier, and records",
+"a list of pet-friendly hotels or friends",
+"an ID tag and microchip"
+],
+"use": "Pack a pet kit, plan pet-friendly places to stay, and take pets with you if you evacuate.",
+"not": "Do not guess about a pet poisoning; call your veterinarian or an animal poison line.",
+"call": "Call your veterinarian or an animal poison control line for any suspected pet poisoning.",
+"rel": [
+"kit_72_hour"
+],
+"src": [
+"ready"
+]
+}
+]

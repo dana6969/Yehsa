@@ -1,0 +1,760 @@
+[
+{
+"id": "common_juniper",
+"title": "Common juniper",
+"domain": "trees",
+"also": [
+"juniper",
+"Juniperus communis",
+"juniper berries"
+],
+"def": "Common juniper is a low, spreading evergreen shrub with sharp needles in threes and blue berry-like cones.",
+"look": [
+"low spreading evergreen shrub with sharp needles in threes and blue berry-like cones",
+"needles have a white stripe on top"
+],
+"use": "Knowing the tree helps you pick firewood, shelter sites, and landmarks. Do not mix it up with yew, which is deadly.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about common juniper"
+},
+{
+"id": "yew",
+"title": "Yew (Canada yew)",
+"domain": "trees",
+"also": [
+"Canada yew",
+"ground hemlock",
+"Taxus",
+"yew berries",
+"Taxus canadensis"
+],
+"def": "Canada yew is a low evergreen shrub with flat needles and red fleshy berries whose seeds, needles, and bark are deadly.",
+"look": [
+"flat dark green needles with two pale lines underneath, red fleshy cup berries",
+"low shrub",
+"red cup-shaped berry with a dark seed showing"
+],
+"use": "Knowing the tree helps you pick firewood, shelter sites, and landmarks. Needles, seeds and bark are deadly.",
+"not": "Never eat or brew any part of it; it is deadly, and children are drawn to the red berries.",
+"alike": [
+"Balsam fir: Flat blunt needles with two white lines underneath, upright cones, smooth bark with resin blisters, spicy smell",
+"Eastern hemlock (the tree): Flat short needles with two white lines underneath on tiny stalks, tiny cones, drooping top. The tree is not the poison hemlock plants. Poison and water hemlock are herbs with umbrella flowers"
+],
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"rel": [
+"balsam_fir",
+"eastern_hemlock"
+],
+"src": [
+"usfs",
+"usda-nrcs",
+"poison-control"
+],
+"ask": "Tell me about yew"
+},
+{
+"id": "balsam_fir",
+"title": "Balsam fir",
+"domain": "trees",
+"also": [
+"fir",
+"Abies balsamea",
+"Christmas tree fir",
+"balsam"
+],
+"def": "Balsam fir is a northern evergreen with flat, blunt, fragrant needles and resin blisters on smooth bark.",
+"look": [
+"flat blunt needles with two white lines underneath, upright cones, smooth bark with resin blisters, spicy smell",
+"cones sit upright on top branches"
+],
+"use": "Resin blisters burn well as fire starter, and boughs make soft bedding.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Red spruce: Square four-sided stiff needles that roll between your fingers, hanging cones, reddish scaly bark",
+"Eastern hemlock (the tree): Flat short needles with two white lines underneath on tiny stalks, tiny cones, drooping top. The tree is not the poison hemlock plants. Poison and water hemlock are herbs with umbrella flowers",
+"Yew (Canada yew): Flat dark green needles with two pale lines underneath, red fleshy cup berries; low shrub. Needles, seeds and bark are deadly"
+],
+"rel": [
+"red_spruce",
+"eastern_hemlock",
+"yew"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about balsam fir"
+},
+{
+"id": "red_spruce",
+"title": "Red spruce",
+"domain": "trees",
+"also": [
+"spruce",
+"Picea rubens",
+"eastern spruce"
+],
+"def": "Red spruce is a northern evergreen with stiff, square needles that roll between the fingers and small hanging cones.",
+"look": [
+"square four-sided stiff needles that roll between your fingers, hanging cones, reddish scaly bark",
+"sharp needles on small woody pegs"
+],
+"use": "Spruce boughs make shelter roofing and bedding; resin helps start fires.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Balsam fir: Flat blunt needles with two white lines underneath, upright cones, smooth bark with resin blisters, spicy smell",
+"White spruce: Four-sided blue-green needles, slim hanging cones; needles smell strongly when crushed"
+],
+"rel": [
+"balsam_fir",
+"white_spruce"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about red spruce"
+},
+{
+"id": "white_spruce",
+"title": "White spruce",
+"domain": "trees",
+"also": [
+"Picea glauca",
+"cat spruce",
+"skunk spruce"
+],
+"def": "White spruce is a northern evergreen with blue-green four-sided needles that smell strong when crushed.",
+"look": [
+"four-sided blue-green needles, slim hanging cones",
+"needles smell strongly when crushed",
+"slender cones that fall whole"
+],
+"use": "Spruce boughs make shelter roofing and bedding; spruce roots make cordage.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Red spruce: Square four-sided stiff needles that roll between your fingers, hanging cones, reddish scaly bark"
+],
+"rel": [
+"red_spruce"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about white spruce"
+},
+{
+"id": "black_spruce",
+"title": "Black spruce",
+"domain": "trees",
+"also": [
+"bog spruce",
+"Picea mariana"
+],
+"def": "Black spruce is a slim bog spruce with short needles and small round cones that stay on the tree for years.",
+"look": [
+"bog tree with a thin top, short needles, small round cones that stay on the tree",
+"club-like dense top"
+],
+"use": "Its presence usually means wet, boggy ground, so plan a route around it.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Red spruce: Square four-sided stiff needles that roll between your fingers, hanging cones, reddish scaly bark"
+],
+"rel": [
+"red_spruce"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about black spruce"
+},
+{
+"id": "white_pine",
+"title": "Eastern white pine",
+"domain": "trees",
+"also": [
+"white pine",
+"Pinus strobus",
+"eastern pine"
+],
+"def": "Eastern white pine is a tall evergreen with soft needles in bundles of five and long slim cones.",
+"look": [
+"soft needles in bundles of five, long slim cones, tiered branches",
+"one needle bundle has five needles, like the letters in white"
+],
+"use": "Pitch from wounds is a fire starter, and inner bark is a famine food.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Red pine: Long needles in bundles of two that snap cleanly, orange-red flaky bark"
+],
+"rel": [
+"red_pine"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about eastern white pine"
+},
+{
+"id": "red_pine",
+"title": "Red pine",
+"domain": "trees",
+"also": [
+"Norway pine",
+"Pinus resinosa"
+],
+"def": "Red pine is an evergreen with long needles in pairs that snap cleanly when bent and orange-red flaky bark.",
+"look": [
+"long needles in bundles of two that snap cleanly, orange-red flaky bark",
+"often in straight planted rows"
+],
+"use": "Dead lower limbs are dry fuel, and fatwood makes strong tinder.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Eastern white pine: Soft needles in bundles of five, long slim cones, tiered branches"
+],
+"rel": [
+"white_pine"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about red pine"
+},
+{
+"id": "eastern_hemlock",
+"title": "Eastern hemlock (the tree)",
+"domain": "trees",
+"also": [
+"hemlock tree",
+"Tsuga canadensis",
+"Canada hemlock"
+],
+"def": "Eastern hemlock is a shade-loving evergreen tree with short flat needles; it is not the poisonous hemlock plants.",
+"look": [
+"flat short needles with two white lines underneath on tiny stalks, tiny cones, drooping top",
+"tiny cones at the branch tips",
+"drooping top leader"
+],
+"use": "Dense hemlock gives good shelter from wind and snow. The tree is not the poison hemlock plants. Poison and water hemlock are herbs with umbrella flowers.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Balsam fir: Flat blunt needles with two white lines underneath, upright cones, smooth bark with resin blisters, spicy smell",
+"Yew (Canada yew): Flat dark green needles with two pale lines underneath, red fleshy cup berries; low shrub. Needles, seeds and bark are deadly",
+"Water hemlock: Wet ground; clustered tuberous roots; leaves with sharp toothed leaflets and side veins that run to the notches. One of the most toxic plants in North America. Every part is deadly"
+],
+"rel": [
+"balsam_fir",
+"yew",
+"water_hemlock"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about eastern hemlock"
+},
+{
+"id": "eastern_red_cedar",
+"title": "Eastern red cedar",
+"domain": "trees",
+"also": [
+"red cedar",
+"Juniperus virginiana",
+"aromatic cedar"
+],
+"def": "Eastern red cedar is a juniper tree with scaly leaves, blue berry-like cones, and fragrant reddish wood.",
+"look": [
+"scaly green leaves or sharp awls, blue berry-like cones, shredding reddish bark",
+"narrow cone shape in old fields"
+],
+"use": "Shredded bark makes good tinder.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Northern white cedar: Flat fans of scale-like leaves, small cones, stringy bark; wet ground"
+],
+"rel": [
+"northern_white_cedar"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about eastern red cedar"
+},
+{
+"id": "northern_white_cedar",
+"title": "Northern white cedar",
+"domain": "trees",
+"also": [
+"arborvitae",
+"Thuja",
+"swamp cedar",
+"Thuja occidentalis"
+],
+"def": "Northern white cedar is an evergreen with flat fans of scale-like leaves and stringy bark, common in wet ground.",
+"look": [
+"flat fans of scale-like leaves, small cones, stringy bark",
+"wet ground",
+"small upright cones"
+],
+"use": "Its inner bark makes cordage and tinder.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Eastern red cedar: Scaly green leaves or sharp awls, blue berry-like cones, shredding reddish bark"
+],
+"rel": [
+"eastern_red_cedar"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about northern white cedar"
+},
+{
+"id": "tamarack",
+"title": "Tamarack (larch)",
+"domain": "trees",
+"also": [
+"larch",
+"eastern larch",
+"Larix laricina",
+"hackmatack"
+],
+"def": "Tamarack is a larch, a conifer whose soft tufted needles turn gold and drop each fall.",
+"look": [
+"soft needles in tufts that turn gold and drop in autumn",
+"bare in winter, unlike other conifers"
+],
+"use": "It marks wet, boggy ground.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about tamarack"
+},
+{
+"id": "sugar_maple",
+"title": "Sugar maple",
+"domain": "trees",
+"also": [
+"hard maple",
+"rock maple",
+"Acer saccharum"
+],
+"def": "Sugar maple is a hardwood with five-lobed leaves and rounded gaps, tapped in late winter for maple syrup.",
+"look": [
+"five-lobed leaf with smooth rounded gaps, opposite branches, grey furrowed bark",
+"winged seeds in pairs"
+],
+"use": "It is excellent firewood and the classic syrup tree.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Red maple: Three- to five-lobed leaf with toothed edges and sharp gaps, red twigs and buds"
+],
+"rel": [
+"red_maple"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about sugar maple"
+},
+{
+"id": "red_maple",
+"title": "Red maple",
+"domain": "trees",
+"also": [
+"swamp maple",
+"soft maple",
+"Acer rubrum"
+],
+"def": "Red maple is a common hardwood with three- to five-lobed toothed leaves and red twigs, buds, and fall color.",
+"look": [
+"three- to five-lobed leaf with toothed edges and sharp gaps, red twigs and buds",
+"red flowers before the leaves in spring"
+],
+"use": "Its sap can be boiled for syrup too, with a lower sugar content.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Sugar maple: Five-lobed leaf with smooth rounded gaps, opposite branches, grey furrowed bark"
+],
+"rel": [
+"sugar_maple"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about red maple"
+},
+{
+"id": "paper_birch",
+"title": "Paper birch",
+"domain": "trees",
+"also": [
+"white birch",
+"canoe birch",
+"Betula papyrifera"
+],
+"def": "Paper birch is a hardwood with white bark that peels in papery sheets and burns even when damp.",
+"look": [
+"white bark peeling in papery sheets with dark marks",
+"toothed oval leaves",
+"dark horizontal lines on the bark"
+],
+"use": "Peel bark only from dead or downed trees; it is one of the best natural tinders.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Yellow birch: Silver-yellow bark that peels in curly strips; twigs smell of wintergreen when scratched"
+],
+"rel": [
+"yellow_birch"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about paper birch"
+},
+{
+"id": "yellow_birch",
+"title": "Yellow birch",
+"domain": "trees",
+"also": [
+"Betula alleghaniensis",
+"gold birch"
+],
+"def": "Yellow birch is a hardwood with silver-yellow bark peeling in curly strips and twigs that smell of wintergreen.",
+"look": [
+"silver-yellow bark that peels in curly strips",
+"twigs smell of wintergreen when scratched",
+"often grows on old stumps with roots like stilts"
+],
+"use": "Curly bark shreds catch a spark and burn wet.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Paper birch: White bark peeling in papery sheets with dark marks; toothed oval leaves"
+],
+"rel": [
+"paper_birch"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about yellow birch"
+},
+{
+"id": "american_beech",
+"title": "American beech",
+"domain": "trees",
+"also": [
+"beech",
+"Fagus grandifolia",
+"beechnut tree"
+],
+"def": "American beech is a hardwood with smooth gray bark and pale papery leaves that cling through winter.",
+"look": [
+"smooth blue-grey bark, toothed oval leaves with straight veins, pale leaves that stay in winter",
+"long pointed cigar-shaped buds"
+],
+"use": "Its small triangular beechnuts are edible in fall.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about american beech"
+},
+{
+"id": "white_oak",
+"title": "White oak",
+"domain": "trees",
+"also": [
+"Quercus alba",
+"white oaks"
+],
+"def": "White oak is a hardwood with rounded leaf lobes and pale, scaly bark.",
+"look": [
+"rounded leaf lobes, pale scaly bark",
+"acorns mature in one year and are less bitter"
+],
+"use": "Acorns need leaching before eating.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"Red oak: Pointed leaf lobes with bristle tips, ridged bark with pale stripes"
+],
+"rel": [
+"red_oak"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about white oak"
+},
+{
+"id": "red_oak",
+"title": "Red oak",
+"domain": "trees",
+"also": [
+"northern red oak",
+"Quercus rubra"
+],
+"def": "Northern red oak is a hardwood with pointed, bristle-tipped leaf lobes and ridged bark with shiny stripes.",
+"look": [
+"pointed leaf lobes with bristle tips, ridged bark with pale stripes",
+"acorns take two years to ripen and are bitter"
+],
+"use": "Acorns need long leaching before eating.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"alike": [
+"White oak: Rounded leaf lobes, pale scaly bark"
+],
+"rel": [
+"white_oak"
+],
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about red oak"
+},
+{
+"id": "american_elm",
+"title": "American elm",
+"domain": "trees",
+"also": [
+"elm",
+"Ulmus americana",
+"white elm"
+],
+"def": "American elm is a hardwood with lopsided, double-toothed leaves and a vase-shaped crown.",
+"look": [
+"leaves with uneven bases and double teeth, vase shape",
+"many killed by Dutch elm disease"
+],
+"use": "Inner bark makes cordage.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about american elm"
+},
+{
+"id": "white_ash",
+"title": "White ash",
+"domain": "trees",
+"also": [
+"ash",
+"Fraxinus americana",
+"American ash"
+],
+"def": "White ash is a hardwood with opposite compound leaves and bark ridged in a diamond pattern.",
+"look": [
+"opposite compound leaves, diamond-pattern bark",
+"opposite branches, unlike most trees"
+],
+"use": "Ash splits easily and burns well even when fairly green.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about white ash"
+},
+{
+"id": "quaking_aspen",
+"title": "Quaking aspen",
+"domain": "trees",
+"also": [
+"aspen",
+"trembling aspen",
+"popple",
+"Populus tremuloides"
+],
+"def": "Quaking aspen is a hardwood with round leaves that tremble on flat stalks and smooth pale green-white bark.",
+"look": [
+"round leaves on flat stalks that tremble, smooth pale green-white bark",
+"grows in clones of many trunks"
+],
+"use": "Its bark rubs off a white powder some use as sunblock in a pinch.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about quaking aspen"
+},
+{
+"id": "black_cherry",
+"title": "Black cherry",
+"domain": "trees",
+"also": [
+"wild black cherry",
+"Prunus serotina",
+"rum cherry"
+],
+"def": "Black cherry is a hardwood with dark, flaky bark like burnt potato chips; its wilted leaves, pits, and bark are poisonous.",
+"look": [
+"dark scaly bark like burnt potato chips, glossy toothed leaves, dark berries",
+"almond smell when a twig is scratched"
+],
+"use": "Only the ripe fruit flesh is eaten, never the pits. Leaves, pits and bark contain cyanide compounds. Wilted leaves are dangerous.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"call": "If someone may have eaten it, call Poison Control at 1-800-222-1222, or 911 for trouble breathing, seizures, or collapse.",
+"src": [
+"usfs",
+"usda-nrcs",
+"poison-control"
+],
+"ask": "Tell me about black cherry"
+},
+{
+"id": "shagbark_hickory",
+"title": "Shagbark hickory",
+"domain": "trees",
+"also": [
+"hickory",
+"Carya ovata"
+],
+"def": "Shagbark hickory is a hardwood whose bark hangs in long loose plates and whose nuts are sweet and edible.",
+"look": [
+"long loose plates of bark curling at the ends",
+"compound leaves",
+"hard nuts in husks",
+"nuts in thick husks that split in four"
+],
+"use": "Hickory is top firewood and smoking wood.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about shagbark hickory"
+},
+{
+"id": "basswood",
+"title": "Basswood (linden)",
+"domain": "trees",
+"also": [
+"linden",
+"lime tree",
+"Tilia americana",
+"bee tree"
+],
+"def": "Basswood is a hardwood with large lopsided heart-shaped leaves and fragrant summer flowers.",
+"look": [
+"large heart-shaped lopsided leaves, nut-like balls hanging from a leafy strip",
+"nutlets hang from a leaf-like strip"
+],
+"use": "Its inner bark is one of the best natural cordage fibers.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about basswood"
+},
+{
+"id": "black_walnut",
+"title": "Black walnut",
+"domain": "trees",
+"also": [
+"walnut",
+"Juglans nigra"
+],
+"def": "Black walnut is a hardwood with long compound leaves and round green-husked nuts whose meat is edible.",
+"look": [
+"compound leaves of many leaflets, dark ridged bark, round green husked nuts",
+"husks stain hands dark brown"
+],
+"use": "Its roots release a chemical that stunts many plants beneath it.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about black walnut"
+},
+{
+"id": "sassafras",
+"title": "Sassafras",
+"domain": "trees",
+"also": [
+"Sassafras albidum",
+"mitten tree"
+],
+"def": "Sassafras is a small tree with three leaf shapes on one tree and a spicy, root-beer smell when crushed.",
+"look": [
+"leaves of three shapes on one tree (oval, mitten, three-lobed)",
+"spicy smell when crushed",
+"green twigs"
+],
+"use": "The root contains safrole, which FDA has banned as a food additive, so do not brew it.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about sassafras"
+},
+{
+"id": "sycamore",
+"title": "American sycamore",
+"domain": "trees",
+"also": [
+"buttonwood",
+"plane tree",
+"Platanus occidentalis"
+],
+"def": "American sycamore is a large streamside tree whose bark flakes off in white, green, and brown patches.",
+"look": [
+"bark flaking off in patches of white and brown, big lobed leaves, ball fruits",
+"white upper limbs visible from far away"
+],
+"use": "It almost always grows near water.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about american sycamore"
+},
+{
+"id": "witch_hazel",
+"title": "Witch hazel",
+"domain": "trees",
+"also": [
+"Hamamelis",
+"winterbloom",
+"Hamamelis virginiana"
+],
+"def": "Witch hazel is an understory shrub with wavy-edged leaves and yellow ribbon flowers in late fall.",
+"look": [
+"wavy-edged uneven leaves, yellow ribbon flowers in late autumn",
+"flowers after the leaves drop"
+],
+"use": "Knowing the tree helps you pick firewood, shelter sites, and landmarks.",
+"not": "Do not eat or brew any part of a tree you have not identified in person; some trees, like yew and wilted cherry leaves, are deadly.",
+"src": [
+"usfs",
+"usda-nrcs"
+],
+"ask": "Tell me about witch hazel"
+}
+]

@@ -1,0 +1,660 @@
+[
+{
+"id": "heavy_vs_minor_bleeding",
+"title": "Heavy bleeding versus a minor cut",
+"domain": "firstaid",
+"also": [
+"is the bleeding serious",
+"how bad is the bleeding",
+"bleeding will not stop",
+"bleeding a lot"
+],
+"def": "Heavy bleeding is blood that spurts, pools, soaks through cloth, or does not slow after 10 minutes of firm pressure; a minor cut slows and stops with pressure.",
+"look": [
+"spurting, pulsing, or fast flowing blood",
+"blood soaking through several layers or pooling on the ground",
+"person pale, clammy, dizzy, or confused",
+"a minor cut oozes and slows within a few minutes of pressure"
+],
+"use": "Put firm direct pressure on the wound: press hard and straight down with a thick pad or both hands and keep pressing. Call 911 for heavy bleeding. If it is a limb and pressure does not control it, put on a tourniquet. For a minor cut, wash, press, and cover.",
+"not": "Do not lift the cloth to check; add more on top. Do not use a tourniquet on a minor cut or on the neck.",
+"call": "Heavy bleeding is urgent: call 911 early and get help on the way for any bleeding that will not stop with firm pressure.",
+"rel": [
+"tourniquet_apply",
+"wound_packing"
+],
+"src": [
+"atp4-02-11",
+"cdc"
+]
+},
+{
+"id": "tourniquet_apply",
+"title": "How to apply a tourniquet",
+"domain": "firstaid",
+"also": [
+"CAT tourniquet",
+"windlass tourniquet",
+"TQ",
+"strap to stop bleeding",
+"tourniquet time"
+],
+"def": "A tourniquet is a tight band, ideally a commercial windlass device, and a last resort for life-threatening bleeding from an arm or leg when firm direct pressure has not stopped it.",
+"look": [
+"life-threatening bleeding from an arm or leg",
+"a traumatic amputation",
+"pressure and packing are not controlling it"
+],
+"use": "Place the tourniquet 2 to 3 inches (5 to 8 cm) above the wound on bare skin, not over a joint. Pull the strap tight, turn the windlass until the bleeding stops, lock it, and note the time it went on by writing it on the band. If you cannot see the wound or are in a hurry, put it high and tight on the limb. Call 911.",
+"not": "Do not use it for a minor cut, on the neck, chest, or belly, or over a joint, a pocket, or a wallet. Do not loosen it once on; only medical staff do that.",
+"steps": [
+"Call 911 and keep pressing on the wound until the tourniquet is ready.",
+"Slip the band around the limb 2 to 3 inches above the wound, on skin, not over a joint.",
+"Pull the strap as tight as you can and twist the windlass until the bleeding stops.",
+"Lock the windlass in its clip and write the time on the tourniquet.",
+"If bleeding continues, put a second one just above the first and tighten both."
+],
+"call": "Call 911; a tourniquet is emergency care, not a replacement for a hospital. Get trained in a Stop the Bleed or first-aid class before you need one.",
+"rel": [
+"heavy_vs_minor_bleeding",
+"tourniquet_bleeding_continues",
+"wound_packing"
+],
+"src": [
+"atp4-02-11",
+"stopthebleed"
+]
+},
+{
+"id": "tourniquet_bleeding_continues",
+"title": "Bleeding continues after a tourniquet",
+"domain": "firstaid",
+"also": [
+"tourniquet not working",
+"still bleeding with tourniquet",
+"second tourniquet",
+"tourniquet too loose"
+],
+"def": "If blood keeps flowing after a tourniquet is on, it is usually not tight enough or not high enough, and the fix is to tighten it or add a second one.",
+"look": [
+"blood still flowing or spurting below the band",
+"a pulse can still be felt below it",
+"the band slips or the windlass is loose"
+],
+"use": "Tighten the windlass more until the bleeding stops. If it still flows, place a second tourniquet right above the first and tighten it. Pack the wound and press while you wait for help.",
+"not": "Do not remove or loosen the tourniquet to check the wound. Do not wait to ask permission; act and keep calling 911.",
+"call": "Call 911 and stay with the person; check for shock.",
+"rel": [
+"tourniquet_apply",
+"shock_position"
+],
+"src": [
+"atp4-02-11"
+]
+},
+{
+"id": "wound_packing",
+"title": "Packing a wound and pressure dressing",
+"domain": "firstaid",
+"also": [
+"pack the wound",
+"gauze in the wound",
+"hemostatic gauze",
+"wound that tourniquet cannot reach",
+"neck bleeding",
+"armpit bleeding",
+"groin bleeding"
+],
+"def": "Packing means pushing gauze or clean cloth deep into a bleeding wound and pressing hard on it; it is used where a tourniquet will not work, such as the neck, armpit, or groin.",
+"look": [
+"deep wound at the neck, armpit, groin, or the top of a limb",
+"blood welling from the depth of the wound",
+"a tourniquet cannot be placed above the wound"
+],
+"use": "Push gauze or a clean cloth deep into the wound, right to the bleeding source. Keep packing until it is full, then press down hard with both hands for at least 3 minutes and then hold on with a wrap. Call 911.",
+"not": "Do not use a limb tourniquet on the neck. Do not remove soaked gauze; pack more on top. Do not wrap so tight around the neck that it blocks breathing.",
+"call": "Call 911; deep wounds to the neck, chest, or belly need a hospital.",
+"rel": [
+"pressure_bandage",
+"arterial_bleeding"
+],
+"src": [
+"atp4-02-11",
+"stopthebleed"
+]
+},
+{
+"id": "child_infant_choking",
+"title": "Choking in a child or infant",
+"domain": "firstaid",
+"also": [
+"baby choking",
+"toddler choking",
+"back blows infant",
+"chest thrusts infant"
+],
+"def": "For an infant under one year, a choking rescue uses five back blows and five chest thrusts, not abdominal thrusts; a child over one uses abdominal thrusts like an adult.",
+"look": [
+"cannot cry, cough, or breathe, silent or high-pitched noise",
+"blue lips or face",
+"grabbing at the throat in a child"
+],
+"use": "Call 911. For an infant, lay the baby face down along your forearm with the head lower than the body and give five back blows, then turn the baby over and give five chest thrusts with two fingers. Repeat until the object comes out or the baby becomes unresponsive. For a child, give abdominal thrusts from behind.",
+"not": "Do not do blind finger sweeps. Do not give abdominal thrusts to an infant. Do not hold an infant upside down by the legs.",
+"call": "Call 911 or your local emergency services; if the child becomes unresponsive, start CPR. Take a pediatric first-aid and CPR class before you need it.",
+"rel": [
+"child_infant_cpr",
+"choking_thrusts"
+],
+"src": [
+"atp4-02-11",
+"cdc"
+]
+},
+{
+"id": "child_infant_cpr",
+"title": "CPR for a child or infant",
+"domain": "firstaid",
+"also": [
+"baby CPR",
+"infant not breathing",
+"child not breathing",
+"rescue breaths for a baby"
+],
+"def": "CPR for children and infants keeps blood and oxygen moving; it is similar to adult CPR but uses less force, and breaths matter more because children often stop breathing first.",
+"look": [
+"not breathing or only gasping",
+"limp and unresponsive",
+"blue or gray color"
+],
+"use": "Call 911, then push hard and fast in the center of the chest at about 100 to 120 per minute: two fingers for an infant, one or two hands for a child, about one third the depth of the chest. Give two gentle breaths after every 30 compressions. Use an AED with child pads if available.",
+"not": "Do not stop until help or an AED takes over or the child breathes. Do not tilt an infant's head back too far.",
+"call": "Call 911 and follow the dispatcher; take a CPR class so you can do it with confidence.",
+"rel": [
+"cpr_rate_depth",
+"child_infant_choking"
+],
+"src": [
+"atp4-02-11",
+"cdc"
+]
+},
+{
+"id": "aed_use",
+"title": "Using an AED",
+"domain": "firstaid",
+"also": [
+"defibrillator",
+"automated external defibrillator",
+"heart paddles",
+"shock machine"
+],
+"def": "An AED is a portable device that checks the heart's rhythm and, if needed, gives a shock; it talks you through each step.",
+"look": [
+"person is unresponsive and not breathing normally",
+"voice prompts after you turn it on",
+"pads show where to be placed on bare chest"
+],
+"use": "Call 911, turn on the AED, bare the chest, dry it if wet, and put the pads where the pictures show. Let it analyze and do exactly what it says; keep everyone clear when it shocks, then resume CPR.",
+"not": "Do not touch the person when it says to stand clear, and do not use pads over a medication patch or a pacemaker bump.",
+"call": "Call 911; anyone can use an AED safely.",
+"rel": [
+"cpr_rate_depth",
+"heart_attack_signs"
+],
+"src": [
+"atp4-02-11",
+"cdc"
+]
+},
+{
+"id": "naloxone_overdose",
+"title": "Opioid overdose and naloxone",
+"domain": "firstaid",
+"also": [
+"narcan",
+"overdose",
+"passed out from pills",
+"blue lips pinpoint pupils",
+"fentanyl overdose"
+],
+"def": "An opioid overdose slows or stops breathing, and naloxone (Narcan) is a medicine that can reverse it for a short time.",
+"look": [
+"will not wake, slow or stopped breathing",
+"blue or gray lips and skin",
+"pinpoint pupils, gurgling or snoring sounds"
+],
+"use": "Call 911 first. If naloxone is on hand, give it as the package directs, start rescue breathing or CPR if not breathing, and put the person on their side if they are breathing. If they wake and then fade, give another dose after two to three minutes.",
+"not": "Do not leave the person alone, and do not assume it has worn off; the drug can outlast the naloxone.",
+"call": "Call 911 even if naloxone works; overdose can return.",
+"rel": [
+"unconscious_person",
+"cpr_rate_depth"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "fracture_sprain_dislocation",
+"title": "Broken bone, sprain, or dislocation?",
+"domain": "firstaid",
+"also": [
+"is it broken or sprained",
+"sprain versus fracture",
+"twisted ankle or broken ankle"
+],
+"def": "A fracture is a broken bone, a sprain is a stretched or torn ligament, and a dislocation is a joint forced out of place; the field answer is the same: stabilize and get care.",
+"look": [
+"fracture: point pain on the bone, deformity, cannot bear weight",
+"sprain: pain and swelling at a joint, some use possible",
+"dislocation: joint visibly out of place and will not move",
+"numbness or a pale limb beyond the injury is an emergency"
+],
+"use": "Stop using the limb, immobilize it in the position found with padding and a splint or sling, and apply a cool pack for swelling. Get X-rays if you cannot walk on it or the pain is intense. For a simple sprain, use rest, a cool pack, gentle compression, and elevation above the heart.",
+"not": "Do not try to straighten a deformity or to pop a joint back in. Do not test it by walking.",
+"call": "Call 911 for an open wound over the break, a limb that is blue, pale, or numb, or a suspected thigh, hip, neck, or back fracture.",
+"rel": [
+"splint_immobilize",
+"sprain_rice"
+],
+"src": [
+"atp4-02-11",
+"nih-medline"
+]
+},
+{
+"id": "infant_hypothermia",
+"title": "Cold baby: infant hypothermia",
+"domain": "firstaid",
+"also": [
+"baby too cold",
+"newborn cold",
+"bright red cold skin baby",
+"low energy baby"
+],
+"def": "Babies lose heat fast, and a cold infant may have bright red, cold skin and very low energy, not just shivering.",
+"look": [
+"bright red, cold skin",
+"very low energy, weak cry, or refusing to feed",
+"cool belly and chest in a cool room"
+],
+"use": "Take the baby indoors, remove damp clothing, and hold the baby skin to skin under dry blankets, with the head and a hat covered. Warm the room. Get urgent care at once.",
+"not": "Do not use a hot bath, heating pad, or a hot water bottle, and do not put a sleeping baby in a cold car or on a cold floor.",
+"call": "Call 911 or get urgent care now for a cold, limp, or hard-to-wake baby.",
+"rel": [
+"hypothermia_stages"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "frostbite_dont",
+"title": "Frostbite: what not to do",
+"domain": "firstaid",
+"also": [
+"rub frostbite",
+"thaw frozen fingers",
+"stove on frostbite",
+"heating pad frostbite"
+],
+"def": "Frostbitten skin is numb and easily damaged; rubbing, high heat, or thawing then re-freezing makes it worse.",
+"look": [
+"pale, waxy, hard, or blotchy skin that is numb",
+"tingling and then loss of feeling",
+"blisters after warming"
+],
+"use": "Get out of the cold, take off wet gloves and boots, and gently warm the area with warm (not hot) water or body heat, such as fingers in the armpits. Do not walk on frostbitten feet if you can avoid it. Cover loosely and get care.",
+"not": "Do not rub with snow or hands, do not use a stove, fire, heating pad, or hot water, and do not thaw it if it might freeze again.",
+"call": "Get medical care for any frostbite; call 911 for confusion, shivering that stops, or deep, hard, or blackened skin.",
+"rel": [
+"frostbite_warming",
+"wind_chill"
+],
+"src": [
+"cdc",
+"atp4-02-11"
+]
+},
+{
+"id": "cold_water_shock",
+"title": "Cold-water shock and near-drowning",
+"domain": "firstaid",
+"also": [
+"fell through the ice",
+"fell in cold water",
+"capsized",
+"cold shock",
+"cold water immersion"
+],
+"def": "Cold-water shock is the gasp and panic in the first minute after falling into very cold water, and it can cause drowning before hypothermia sets in.",
+"look": [
+"a sudden gasp, rapid breathing, and panic",
+"swimming ability lost within minutes",
+"numb hands and arms that will not grip"
+],
+"use": "Float and control your breathing for the first minute before you try to swim or climb out. Keep your head up, get out of the water as soon as you can, and then get dry, warm, and into shelter. Anyone rescued should be seen by a clinician.",
+"not": "Do not thrash or try to swim hard right away, and do not go onto the ice to help without a rope or pole.",
+"call": "Call 911 for anyone who was under water or is unresponsive; start CPR if not breathing.",
+"rel": [
+"drowning_rescue"
+],
+"src": [
+"nws",
+"cdc"
+]
+},
+{
+"id": "call_911_dispatcher",
+"title": "Talking to a 911 dispatcher",
+"domain": "firstaid",
+"also": [
+"what to say when I call 911",
+"how to call for help",
+"emergency call",
+"giving my location"
+],
+"def": "When you call 911, stay on the line and give your location and what happened; the dispatcher will tell you what to do next.",
+"look": [
+"your exact location, with a road, landmark, or GPS coordinates",
+"what happened and how many people are hurt",
+"whether the person is awake and breathing"
+],
+"use": "Call 911, say where you are, and say what happened. Answer the dispatcher's questions, and follow their instructions. Put the phone on speaker so you can help the person while you talk. Do not hang up until they tell you to.",
+"not": "Do not hang up first, and do not assume the call is placed if you have no signal; try text-to-911 or move to a place with signal.",
+"call": "If you have no cell service, try texting 911, move to higher ground, or use the satellite SOS feature of your phone.",
+"rel": [
+"describe_symptoms"
+],
+"src": [
+"cdc",
+"fema"
+]
+},
+{
+"id": "describe_symptoms",
+"title": "Describing symptoms clearly to a clinician",
+"domain": "firstaid",
+"also": [
+"what to tell the doctor",
+"how to explain symptoms",
+"medical history for an emergency crew"
+],
+"def": "Clear information helps a clinician decide fast: when it started, what makes it worse or better, what medicines and allergies the person has.",
+"look": [
+"start time and how it began",
+"what makes it better or worse",
+"medicines taken, allergies, and past conditions"
+],
+"use": "Write down or say the time it started, the main symptom, any change since, medicines and allergies, and any vital signs. Keep a list of medicines and allergies in your phone or on the family card.",
+"not": "Do not guess at a diagnosis; say what you see and feel.",
+"call": "Call 911 for chest pain, trouble breathing, or any sudden severe symptom.",
+"rel": [
+"call_911_dispatcher",
+"medication_questions"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "medication_questions",
+"title": "Medication basics: missed dose, expired, sharing",
+"domain": "firstaid",
+"also": [
+"missed a pill",
+"expired medicine",
+"share a prescription",
+"can I take this with that"
+],
+"def": "For a missed dose, an expired medicine, or a drug interaction, read the label and ask a pharmacist; never share prescription drugs.",
+"look": [
+"label directions for a missed dose",
+"an expiration date",
+"a new medicine alongside others"
+],
+"use": "Check the label or the pharmacist or Poison Control line for a missed dose, and keep medicines in a cool, dry place. Ask a pharmacist before mixing medicines. Keep a list of what you take.",
+"not": "Do not take someone else's prescription, double up without advice, or use a medicine that looks or smells changed.",
+"call": "Call Poison Control at 1-800-222-1222 or 911 for an overdose or a bad reaction.",
+"rel": [
+"poisoning_swallowed",
+"describe_symptoms"
+],
+"src": [
+"fda",
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "lyme_signs",
+"title": "Lyme disease signs after a tick bite",
+"domain": "firstaid",
+"also": [
+"bullseye rash",
+"erythema migrans",
+"tick fever",
+"deer tick bite",
+"Lyme"
+],
+"def": "Lyme disease is spread by blacklegged (deer) ticks, and an expanding red rash, often with fever, chills, and aches, can appear three to thirty days after a bite.",
+"look": [
+"a red expanding rash, sometimes with a clear center",
+"fever, chills, headache, and tiredness",
+"joint pain or facial droop later",
+"a rash is not always a bullseye"
+],
+"use": "Remove the tick with fine-tipped tweezers, clean the bite, and note the date. See a clinician if a rash, fever, or aches follow within about a month, and say you had a tick bite.",
+"not": "Do not use nail polish, heat, or petroleum jelly on a tick, and do not wait for a bullseye.",
+"region": "Blacklegged ticks are common across Maine, Rhode Island and the rest of New England; check yourself, children, and pets after time in leaf litter, brush, and tall grass.",
+"call": "Get care for a rash or fever after a tick bite; call 911 for severe headache, stiff neck, or heart symptoms.",
+"rel": [
+"tick_removal",
+"tick_prevention"
+],
+"src": [
+"cdc"
+]
+},
+{
+"id": "tick_prevention",
+"title": "Preventing tick bites",
+"domain": "firstaid",
+"also": [
+"tick check",
+"permethrin",
+"stay safe from ticks",
+"repellent for ticks"
+],
+"def": "Preventing tick bites means covering skin, using repellent, and checking your whole body after being outdoors.",
+"look": [
+"tick season from spring through fall, with nymphs most active in late spring and summer",
+"brush, leaf litter, and tall grass",
+"small ticks the size of a poppy seed"
+],
+"use": "Wear long pants tucked into socks, use an EPA-registered repellent or permethrin-treated clothing, walk in the center of trails, and check your body, hair, and gear. Shower within two hours and put clothes in a hot dryer.",
+"not": "Do not rely on one check; look again in the days after.",
+"region": "In Maine and Rhode Island the blacklegged tick is active whenever it is above freezing, not only in summer.",
+"call": "Call a clinician for a tick that was attached for more than a day, or any rash or fever after a bite.",
+"rel": [
+"lyme_signs",
+"tick_removal"
+],
+"src": [
+"cdc",
+"epa"
+]
+},
+{
+"id": "snakebite_new_england",
+"title": "Snakebite in New England",
+"domain": "firstaid",
+"also": [
+"timber rattlesnake",
+"northern copperhead",
+"snake bit me",
+"venomous snake",
+"garter snake bite"
+],
+"def": "New England has very few venomous snakes: the timber rattlesnake and the northern copperhead in a few southern areas; most snakes are harmless.",
+"look": [
+"venomous bites leave two puncture marks with swelling and severe pain",
+"timber rattlesnake has a rattle and a heavy body",
+"most bites in New England are from harmless snakes"
+],
+"use": "Move away from the snake, stay calm, remove rings and tight items, and keep the bitten limb still at about heart level. Call 911 or get to a hospital; note the time and the snake's appearance if it is safe.",
+"not": "Do not cut the bite, suck it, apply ice or a tourniquet, drink alcohol, or try to catch the snake.",
+"region": "Timber rattlesnakes are rare and protected in parts of New England, and copperheads occur in southern Connecticut and Massachusetts; check state wildlife agency pages for ranges.",
+"call": "Call 911 or go to an emergency room for any bite you think is venomous.",
+"rel": [
+"wound_cleaning"
+],
+"src": [
+"cdc",
+"nih-medline",
+"atp4-02-11"
+]
+},
+{
+"id": "nail_puncture",
+"title": "Nail or tool puncture wound",
+"domain": "firstaid",
+"also": [
+"stepped on a nail",
+"puncture in the foot",
+"deep puncture"
+],
+"def": "A puncture wound is narrow and deep, closes quickly, and traps germs, so it can get infected and may need a tetanus shot.",
+"look": [
+"a small hole with little bleeding",
+"pain that gets worse in the next days",
+"redness, swelling, or drainage"
+],
+"use": "Let it bleed a little, wash with soap and clean water, and cover. See a clinician the same day for a deep wound, a rusty or dirty object, or a wound in the foot. Ask about a tetanus shot.",
+"not": "Do not seal it with glue or tape, and do not probe it. Do not ignore a puncture through a shoe.",
+"call": "Get care for deep punctures, and for fever, spreading redness, or swelling later.",
+"rel": [
+"tetanus_shot",
+"wound_infection_signs"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "high_blood_sugar",
+"title": "High blood sugar (diabetic emergency)",
+"domain": "firstaid",
+"also": [
+"hyperglycemia",
+"diabetic ketoacidosis",
+"very thirsty and frequent urination",
+"fruity breath"
+],
+"def": "High blood sugar builds slowly with thirst, frequent urination, tiredness, and fruity breath, and it can become a medical emergency.",
+"look": [
+"extreme thirst and frequent urination",
+"nausea, belly pain, and fast deep breathing",
+"fruity breath and confusion"
+],
+"use": "If the person has diabetes, help them follow their own plan and check their blood sugar. Give plain water and get medical help for vomiting, drowsiness, or fast deep breathing.",
+"not": "Do not give sugary drinks if blood sugar is already high, and do not give insulin that is not theirs.",
+"call": "Call 911 for confusion, vomiting, trouble breathing, or unresponsiveness. If you are unsure whether it is high or low and they can swallow, giving sugar is safer.",
+"rel": [
+"low_blood_sugar",
+"hydration_basics"
+],
+"src": [
+"cdc",
+"nih-medline"
+]
+},
+{
+"id": "ear_sinus_pain",
+"title": "Ear or sinus pain after a swim or a cold",
+"domain": "firstaid",
+"also": [
+"swimmer's ear",
+"earache",
+"sinus pressure",
+"ear infection"
+],
+"def": "Ear or sinus pain after swimming or a cold is often a mild infection, but severe pain, fever, or discharge needs a clinician.",
+"look": [
+"ear pain that hurts when you pull on it",
+"stuffy nose and pressure around the eyes",
+"fever, drainage, or hearing loss"
+],
+"use": "Keep the ear dry, use a warm compress, and take over-the-counter pain medicine as the label says. See a clinician if pain lasts more than a day or two or if there is fever or drainage.",
+"not": "Do not put cotton swabs or objects into the ear, and do not use drops if the eardrum might be torn.",
+"call": "Get care for severe pain, high fever, swelling behind the ear, or dizziness.",
+"rel": [
+"fever_adult",
+"wound_infection_signs"
+],
+"src": [
+"nih-medline",
+"cdc"
+]
+},
+{
+"id": "frostnip_vs_frostbite",
+"title": "Frostnip versus frostbite",
+"domain": "firstaid",
+"also": [
+"cold fingers pale",
+"nose turned white",
+"ears numb"
+],
+"def": "Frostnip is a mild cold injury that turns skin pale and numb but is reversible with warming; frostbite is a deeper freeze injury.",
+"look": [
+"frostnip: pale or red skin that tingles and returns to normal when warmed",
+"frostbite: hard, waxy, numb skin that stays white or gray",
+"blisters appear later with deeper injury"
+],
+"use": "Get inside or out of the wind, cover the area with a warm dry glove or hand, and warm it gently. If skin stays numb or hard, treat it as frostbite and get care.",
+"not": "Do not rub the skin, and do not use direct heat.",
+"call": "Get care for numb, hard, or blistered skin, and call 911 if the person is confused or very cold.",
+"rel": [
+"frostbite_warming",
+"frostbite_dont"
+],
+"src": [
+"cdc",
+"nws"
+]
+},
+{
+"id": "cpr_when_to_start",
+"title": "When to start CPR",
+"domain": "firstaid",
+"also": [
+"should I do CPR",
+"no pulse",
+"not breathing what do I do",
+"hands only CPR"
+],
+"def": "Start CPR for anyone who is unresponsive and not breathing, or only gasping, and call 911 first.",
+"look": [
+"no response to a shout or shoulder tap",
+"not breathing, or only occasional gasps",
+"no obvious signs of life"
+],
+"use": "Call 911 or have someone call, push hard and fast in the middle of the chest at 100 to 120 per minute, about 2 inches (5 cm) deep for an adult, and let the chest rise fully. Do not stop until help or an AED takes over.",
+"not": "Do not stop to check for a pulse for long, and do not be afraid of hurting them; chest compressions can save a life. Do not do CPR on someone who is breathing normally.",
+"call": "Call 911, put the phone on speaker, and follow the dispatcher; take a CPR class for hands-on skills.",
+"rel": [
+"cpr_rate_depth",
+"aed_use"
+],
+"src": [
+"atp4-02-11",
+"cdc"
+]
+}
+]
