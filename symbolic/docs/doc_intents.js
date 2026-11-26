@@ -6,6 +6,7 @@
 //   "summary of kubark", "summarize the canning guide", "give me an overview of X" -> summary
 //   "what does kubark say about rapport"                                          -> about
 //   "open kubark", "read the Kybalion"                                             -> open
+//   R14: "what's on page 789 of the encyclopedia of world history"                  -> page n
 // needsMatch: only act when the name matches something in the library or the last document
 // results (so "read the sky" or "summary of how to purify water" stay ordinary questions).
 
@@ -34,10 +35,46 @@ function ok(target) {
   return t;
 }
 
+// R14: "what's on page 789 of the encyclopedia of world history", "page 12 of the Kybalion",
+// "open the canning guide at page 7", "the Bible, page 40": one page, quoted from the book itself.
+const PAGE_NOT_BOOK = /^(?:the )?(?:results?|search|chat|list|map|screen|app|settings|thread|conversation|answers?|this|that|it)$/i;
+
+function pageNumber(text) {
+  const n = Number(String(text || "").replace(/,/g, ""));
+  return Number.isInteger(n) && n >= 1 && n <= 99999 ? n : null;
+}
+
+/** R14: a one-page request, or null. */
+export function pageRequest(text) {
+  const raw = String(text || "").replace(/\s+/g, " ").trim().replace(/[?!.]+$/, "");
+  if (raw.length < 8 || raw.length > 220) return null;
+  const body = raw.replace(LEAD, "").trim();
+  const P = "(\\d{1,2}(?:,\\d{3})|\\d{1,5})";
+  const tries = [
+    [new RegExp(`^(?:on |at )?(?:the )?page (?:number |no\\.? )?${P} (?:of|in|from) (.+?)(?: say| says| show| contain)?$`, "i"), 1, 2, false],
+    [new RegExp(`^(?:what (?:does|is on|'s on|is written on) )?page ${P} (?:of|in) (.+?)(?: say| says)?$`, "i"), 1, 2, false],
+    [new RegExp(`^(?:open|read|show)(?: me)?(?: up)? (?:the )?(.+?) (?:at|to|on) page ${P}$`, "i"), 2, 1, true],
+    [new RegExp(`^(?:open|read|show)(?: me)? page ${P} (?:of|in|from) (.+)$`, "i"), 1, 2, true],
+    [new RegExp(`^(.+?),? (?:on )?page ${P}$`, "i"), 2, 1, false]
+  ];
+  for (const [re, ni, ti, open] of tries) {
+    const m = re.exec(raw) || re.exec(body);
+    if (!m) continue;
+    const n = pageNumber(m[ni]);
+    const target = ok(String(m[ti] || "").replace(/^(?:what(?:'s| is) on|on|at)\s+/i, ""));
+    if (!n || !target || PAGE_NOT_BOOK.test(target)) continue;
+    if (/^(?:what|how|why|who|where|when|go|turn|flip|skip|jump)\b/i.test(target)) continue;
+    return { kind: "page", n, target, open, needsMatch: false };
+  }
+  return null;
+}
+
 /** Returns { kind, target, n?, topic?, needsMatch } or null. */
 export function docRequest(text) {
   const raw = String(text || "").replace(/\s+/g, " ").trim();
   if (raw.length < 6 || raw.length > 220) return null;
+  const page = pageRequest(raw);
+  if (page) return page;
   const body = raw.replace(/[?!.]+$/, "").replace(LEAD, "").trim();
   let m;
   // chapter n
