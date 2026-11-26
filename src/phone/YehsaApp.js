@@ -1186,15 +1186,15 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
         return;
       }
       if (wantsBook.offer) {
-        pushMessage({ role: "yehsa", text: pendingLine(req, wantsBook.offer.query || req.target), docFound: wantsBook.offer, pendingDoc: req });
+        pushMessage({ role: "yehsa", text: pendingLine(req, wantsBook.offer.query || req.target, wantsBook.offer), docFound: wantsBook.offer, pendingDoc: req });
         return;
       }
       const searchMsg = pushMessage({ role: "yehsa", text: `"${req.target}" isn't on this phone yet. Searching for it. Only the words "${req.target}" (plus "pdf") leave this phone.` });
       documents.find(wantsBook.search).then((found) => {
         if (found.ok) lastFound.current = { ...found, query: found.query || req.target };
         patchMessage(searchMsg, found.ok
-          ? { text: pendingLine(req, req.target), docFound: found, pendingDoc: req }
-          : { text: found.reason });
+          ? { text: pendingLine(req, req.target, found), docFound: found, pendingDoc: req }
+          : { text: `"${req.target}" isn't on this phone yet. ${found.reason || "I couldn't find a copy to download."} Nothing was downloaded.` });
       }).catch(() => patchMessage(searchMsg, { text: "I couldn't search for documents just now. Nothing was downloaded." }));
       return;
     }

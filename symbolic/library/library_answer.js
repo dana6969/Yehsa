@@ -118,6 +118,43 @@ export function aboutAnswer(book, topic) {
   return { ...got, reader: { bookId: book.id, page, title: book.title } };
 }
 
+function pageText(text, chars = 1600) {
+  const t = String(text || "").replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+  if (t.length <= chars) return t;
+  const cut = t.lastIndexOf(". ", chars);
+  return `${t.slice(0, cut > chars * 0.5 ? cut + 1 : chars).trim()} …`;
+}
+
+/**
+ * R14: page n of a book, quoted from its own text. A downloaded document's pages are the PDF's
+ * own pages (page n = the PDF's page n); a book in the app is split into reader pages.
+ */
+export function pageAnswer(book, n, { open = false } = {}) {
+  const total = book.pages?.length || 0;
+  const unit = book.kind === "document" ? "page" : "reader page";
+  if (!Number.isInteger(n) || n < 1 || n > total) {
+    const text = `"${book.title}" has ${total} ${total === 1 ? "page" : "pages"} on this phone, so there's no page ${n}. Ask for a page from 1 to ${total}.`;
+    return done(book, { kind: "page-missing", text, sections: [{ title: null, text }], reader: { bookId: book.id, page: Math.max(1, Math.min(total, 1)), title: book.title } });
+  }
+  const body = pageText(book.pages[n - 1]);
+  const where = book.kind === "document" ? `page ${n} of ${total} in the downloaded copy` : `${unit} ${n} of ${total}`;
+  if (body.replace(/\s+/g, "").length < 20) {
+    const text = `Page ${n} of "${book.title}" has no readable text on this phone (it may be a scanned picture of the page). Open it in the reader to see what is there.`;
+    return done(book, { kind: "page-empty", text, sections: [{ title: null, text }], reader: { bookId: book.id, page: n, title: book.title, auto: open } });
+  }
+  const head = `Page ${n} of "${book.title}" (${where}):`;
+  const quote = `"${body}"`;
+  const tail = `${book.kind === "document" ? UNVERIFIED_DOC : "Quoted from the book."} Source: ${book.title}, ${unit} ${n}.`;
+  const got = done(book, {
+    kind: "page",
+    text: `${head}\n\n${quote}\n\n${tail}`,
+    sections: [{ title: null, text: head }, { title: null, text: quote }, { title: null, text: tail }],
+    reader: { bookId: book.id, page: n, title: book.title, auto: open }
+  });
+  got.citations = [{ title: book.title, page: n }];
+  return got;
+}
+
 export function openAnswer(book, page = 1) {
   const text = `Opening "${book.title}" in the reader.`;
   return done(book, { kind: "open", text, sections: [{ title: null, text }], reader: { bookId: book.id, page, title: book.title, auto: true } });
@@ -131,5 +168,6 @@ export function libraryAnswer(req, book) {
   if (req.kind === "summary") return summaryAnswer(book);
   if (req.kind === "about") return aboutAnswer(book, req.topic);
   if (req.kind === "open") return openAnswer(book);
+  if (req.kind === "page") return pageAnswer(book, req.n, { open: Boolean(req.open) });
   return null;
 }

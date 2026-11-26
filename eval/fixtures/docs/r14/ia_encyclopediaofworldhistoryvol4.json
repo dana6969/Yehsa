@@ -1,0 +1,44 @@
+{
+ "metadata": {
+  "identifier": "encyclopediaofworldhistoryvol4",
+  "title": "Encyclopedia of World History- Volume 4",
+  "mediatype": "texts"
+ },
+ "files": [
+  {
+   "name": "Encyclopedia of World History- Vol 4.pdf",
+   "format": "Text PDF",
+   "size": "24013961",
+   "source": "original"
+  },
+  {
+   "name": "Encyclopedia of World History- Vol 4_djvu.txt",
+   "format": "DjVuTXT",
+   "size": "2266271",
+   "source": "derivative"
+  },
+  {
+   "name": "encyclopediaofworldhistoryvol4_archive.torrent",
+   "format": "Archive BitTorrent",
+   "size": "23618",
+   "source": "metadata"
+  },
+  {
+   "name": "encyclopediaofworldhistoryvol4_files.xml",
+   "format": "Metadata",
+   "source": "original"
+  },
+  {
+   "name": "encyclopediaofworldhistoryvol4_meta.sqlite",
+   "format": "Metadata",
+   "size": "15360",
+   "source": "original"
+  },
+  {
+   "name": "encyclopediaofworldhistoryvol4_meta.xml",
+   "format": "Metadata",
+   "size": "1983",
+   "source": "original"
+  }
+ ]
+}
