@@ -114,7 +114,8 @@
           "recordAudioAndroid": false
         }
       ],
-      "./plugins/withLoopbackCleartext.js"
+      "./plugins/withLoopbackCleartext.js",
+      "./plugins/withYehsaLlm.js"
     ],
     "extra": {
       "eas": {

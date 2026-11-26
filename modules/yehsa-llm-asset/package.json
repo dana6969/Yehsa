@@ -1,0 +1,11 @@
+{
+  "name": "yehsa-llm-asset",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Copies Yehsa's bundled on-device AI model out of the APK once, and reports the phone's RAM so low-memory phones skip the model.",
+  "main": "index.js",
+  "peerDependencies": {
+    "expo": "*",
+    "react-native": "*"
+  }
+}

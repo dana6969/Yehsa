@@ -50,3 +50,10 @@ symbolic_memory/track_log.json
 /ios/
 /dist/
 __pycache__/
+
+# Yehsa AI model weights: fetched at prebuild by plugins/withYehsaLlm.js (URL + SHA-256), never committed.
+*.gguf
+*.gguf.part
+
+# Local Gradle output inside the native modules.
+modules/*/android/build/
