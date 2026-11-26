@@ -118,7 +118,7 @@ test("a book request answers from the book on the phone, offers the Download jus
   assert.equal(planBookRequest("open the bible", { entries }).entry.id, "book:kjv");
   const found = { query: "kubark", candidates: [{ id: "c1", title: "CIA Kubark 1-60" }] };
   assert.equal(planBookRequest("Give me a summary of kubark", { entries: libraryList({}), recentFound: found }).offer, found);
-  assert.deepEqual(planBookRequest("chapters of FM 21-76", { entries: libraryList({}) }).search, { query: "FM 21-76", format: "any" });
+  assert.deepEqual(planBookRequest("chapters of FM 21-76", { entries: libraryList({}) }).search, { query: "FM 21-76", format: "any", book: true });
   assert.equal(planBookRequest("read the sky", { entries }), null);
   assert.equal(planBookRequest("summary of how to purify water", { entries }), null);
   assert.equal(planBookRequest("What does the Dhammapada say about hatred?", { entries }), null, "scripture quoting keeps it");
