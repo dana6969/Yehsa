@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
     "web": "expo start --web",
     "yesha": "node yesha_modules/yesha.js",
     "trainer": "bash run_trainer.sh",
