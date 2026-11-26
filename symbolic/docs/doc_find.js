@@ -78,7 +78,7 @@ function hostOf(url) {
 const TITLE_STOP = new Set("the a an of and or in on for to with by from at its his her their our your my".split(" "));
 const FORMAT_WORDS = new Set("pdf epub ebook e-book txt text copy download free full online scan scanned version".split(" "));
 // Words that change nothing about which book it is.
-const GENERIC = new Set("vol vols volume volumes v part parts set series edition editions ed eds new complete illustrated revised unabridged abridged original reprint first second third fourth fifth sixth seventh eighth ninth tenth book books library".split(" "));
+const GENERIC = new Set("vol vols volume volumes v part parts set series edition editions ed eds new complete illustrated revised unabridged abridged original reprint first second third fourth fifth sixth seventh eighth ninth tenth".split(" "));
 const REFERENCE = /\b(?:encyclop(?:a)?edia|dictionar(?:y|ies)|almanac|atlas|thesaurus|gazetteer|anthology|compendium|history of|book of|bible)\b/i;
 
 function stem(word) {
@@ -139,7 +139,7 @@ export function isTitleQuery(query, { book = false } = {}) {
 /** "Encyclopedia of World History- Volume 4" -> "Encyclopedia of World History, Volume 4". */
 export function displayTitle(title, volume = null) {
   let t = cleanDocTitle(title).replace(/\s*\[\d+\]\s*$/, "").replace(/\s+\/\s+[^/]+$/, "").replace(/\s*-\s*(?=(?:vol(?:ume)?\.?|v\.)\s*\d)/i, ", ").replace(/\s+/g, " ").trim();
-  t = t.replace(/\b[Vv]ol\.?\s*(\d+)\b/, "Volume $1");
+  t = t.replace(/\b[Vv]ol\.?\s*(\d+)\b/, "Volume $1").replace(/^[\s\-–—|:;,.]+/, "");
   if (volume && !/\bvolume\s*\d+/i.test(t)) t = `${t}, Volume ${volume}`;
   return t;
 }

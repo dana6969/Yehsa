@@ -151,6 +151,8 @@ test("title words: key words required, extra subject words count against, vague 
   assert.equal(displayTitle(STANFORD), "The encyclopedia of world history: ancient, medieval, and modern, chronologically arranged");
   assert.equal(displayTitle("Encyclopedia of World History- Volume 4"), "Encyclopedia of World History, Volume 4");
   assert.equal(displayTitle("Encyclopedia of World History", 4), "Encyclopedia of World History, Volume 4");
+  assert.equal(displayTitle("- World History Encyclopedia"), "World History Encyclopedia");
+  assert.deepEqual(titleMatch("The World Book Encyclopedia, Volume 1", q).extras, ["book"], "World Book is another title");
   assert.equal(volumeOf("encyclopediaofworldhistoryvol4"), 4);
   assert.equal(volumeOf("Encyclopedia of World History, Vol. IV"), 4);
 });
