@@ -160,6 +160,10 @@ import MorePane from "./MorePane.js";
 import { BooksPane, DownloadArea, HotspotGuide, SatSosGuide, TrustScreen } from "./screens_index.js";
 import CommandSheet from "./CommandSheet.js";
 import DownloadedBooksPane from "./DownloadedBooksPane.js";
+// Yehsa AI (on-device): its own screen, hook, and answer block, so Ask needs only a few lines.
+import AiPane from "./AiPane.js";
+import AiAnswer from "./parts/AiAnswer.js";
+import useYehsaAI from "./useYehsaAI.js";
 import Onboarding, { ONBOARDED_KEY } from "./Onboarding.js";
 import { TRUST_EVAL, TRUST_LINES } from "./trust_copy.js";
 import { DISPLAY_KEY, DISPLAY_MODES, NIGHT_TINTS, defaultDisplay, openDisplay, packDisplay, setMode, themeKeyFor } from "./display_model.js";
@@ -590,6 +594,11 @@ export default function YehsaApp() {
             <DownloadedBooksPane onBack={popScreen} backLabel={back} />
           </View>
         ) : null}
+        {stackOpen("ai") ? (
+          <View {...pane("ai")}>
+            <AiPane onBack={popScreen} backLabel={back} />
+          </View>
+        ) : null}
         {stackOpen("trust") ? (
           <View {...pane("trust")}>
             <TrustScreen onBack={popScreen} backLabel={back} />
@@ -756,6 +765,7 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
   const [question, setQuestion] = useState("");
   const [phase, setPhase] = useState("idle");
   const [messages, setMessages] = useState([]);
+  const yehsaAI = useYehsaAI((id, patch) => patchMessage(id, patch));
   const [gate, setGate] = useState({ settings: { waypoint: true, measure: true, "position-hold": true, "position-unlock": true, "mesh-scan": true, calculate: true, speak: true, "field-note": true }, log: [], pending: null });
   const [notes, setNotes] = useState([]);
   const priorRef = useRef(null);
@@ -892,6 +902,7 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
     const cached = liveAnswers.get(sameKey);
     if (cached) {
       patchMessage(id, { text: liveAnswerText(cached.note), reviewNoteId: cached.note.id, reviewSent: cached.sent });
+      yehsaAI.refineWeb(id, text, cached.note);
       return;
     }
     webLearn.lookUp(text, { homeState: homeStateNow() }).then((result) => {
@@ -899,6 +910,7 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
         liveAnswers.set(sameKey, { note: result.note, sent: result.disclosure || result.sent });
         // Online: the answer shows here in the chat, quoted with its sources and date. Keep or Toss decides if it stays.
         patchMessage(id, { text: liveAnswerText(result.note), reviewNoteId: result.note.id, reviewSent: result.disclosure || result.sent });
+        yehsaAI.refineWeb(id, text, result.note);
       } else if (result.offline) {
         // Offline: only then does it wait in Look it up later.
         webLearn.saveForLater(text).then((saved) => patchMessage(id, {
@@ -1487,7 +1499,7 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
           return;
         }
         setPhase(result?.answered ? "ready" : "miss");
-        pushMessage({
+        const answerId = pushMessage({
           role: "yehsa",
           text: voiced.text,
           parts: result?.kind === "about" || result?.kind === "calculator" ? null : voiced.parts,
@@ -1509,6 +1521,8 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
           answerText: result?.text || null,
           reader: result?.reader || null
         });
+        // Yehsa AI (on-device) adds a grounded explanation under this answer when it is allowed to.
+        if (result?.answered) yehsaAI.refine(answerId, text, result);
         if (speak && result?.text) {
           speakProse(voiced.spoken || result.text, {
             onDone: () => setVoiceNote(null),
@@ -1759,6 +1773,7 @@ function AskPane({ onGo, onRoute, pendingAsk, onSummary, session, owner, active,
         {messages.map((item) => (
           <View key={item.id} style={item.role === "you" ? styles.bubbleYou : styles.bubbleYehsa}>
             {item.role === "yehsa" && item.parts ? <AnswerBody parts={item.parts} /> : <Text style={styles.bubbleText}>{item.text}</Text>}
+            {item.role === "yehsa" && item.ai ? <AiAnswer ai={item.ai} onStop={() => yehsaAI.stop(item.id)} /> : null}
 
             {item.pictures?.length ? (
               <View style={styles.cardRow}>
